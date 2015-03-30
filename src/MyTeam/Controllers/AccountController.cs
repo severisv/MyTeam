@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models;
+using MyTeam.Models.Account;
 
 namespace MyTeam.Controllers
 {

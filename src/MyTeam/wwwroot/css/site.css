@@ -1,8 +1,8 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  background-color: lightblue;
   padding-top: 50px;
   padding-bottom: 20px;
+  text-shadow: 5px;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -24,4 +24,13 @@ textarea {
   .body-content {
     padding: 0;
   }
+}
+/* Nav */
+/* Page Header */
+.mt-page-header {
+  background-color: black;
+  background-image: linear-gradient(to bottom, #333333 0, black 100%);
+  color: orange;
+  padding-top: 2em;
+  padding-bottom: 2em;
 }

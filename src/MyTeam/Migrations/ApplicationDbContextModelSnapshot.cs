@@ -3,6 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations.Infrastructure;
 using MyTeam.Models;
+using MyTeam.Models.Account;
 
 namespace MyTeam.Migrations
 {
