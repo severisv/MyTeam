@@ -1,8 +1,12 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
+  padding-top: 80px;
   padding-bottom: 20px;
   text-shadow: 5px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%), url('../img/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: "jaf-bernino-sans-comp", sans-serif;
+  font-weight: 400;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -25,12 +29,35 @@ textarea {
     padding: 0;
   }
 }
-/* Nav */
+@media screen and (max-width: 1024px) {
+  /* Specific to this particular image */
+  img.bg {
+    left: 50%;
+    margin-left: -512px;
+    /* 50% */
+  }
+}
 /* Page Header */
 .mt-page-header {
-  background-color: black;
-  background-image: linear-gradient(to bottom, #333333 0, black 100%);
-  color: orange;
+  background-image: linear-gradient(to bottom, rgba(255, 153, 0, 0.8) 0, rgba(255, 153, 0, 0.95) 100%);
+  color: white;
+  z-index: 1;
   padding-top: 2em;
   padding-bottom: 2em;
+  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
+  font-weight: 300;
+  margin-bottom: 1em;
+}
+.mt-page-header p {
+  font-size: 150%;
+  color: #f2f2f2;
+}
+/* Mt-containers*/
+.mt-container {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0.9) 100%);
+  padding: 2em;
+  font-size: 1.25em;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.9);
+  box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
 }

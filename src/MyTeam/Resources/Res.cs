@@ -4,7 +4,7 @@ namespace MyTeam.Resources
 {
     public class Res
     {
-        public static string Home = "Hjem";
+        public static string Home = "Nyheter";
         public static string Players = "Spillere";
     }
 }

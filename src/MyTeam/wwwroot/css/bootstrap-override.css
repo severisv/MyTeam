@@ -1,6 +1,24 @@
-.navbar-regular {
-  color: #1a1a1a;
+.navbar h1,
+.navbar h2,
+.navbar h3,
+.navbar h4,
+.navbar h5,
+.navbar p,
+.navbar a {
+  font-size: 150%;
 }
-.navbar-regular a {
-  color: #1a1a1a;
+.navbar .navbar-brand,
+.navbar .navbar-nav li a {
+  line-height: 80px;
+  height: 80px;
+  padding-top: 0;
+}
+.navbar.navbar-inverse {
+  text-shadow: 0 1px 0px rgba(255, 255, 255, 0.1);
+  color: #ffad33;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.navbar.navbar-inverse .navbar-nav a,
+.navbar.navbar-inverse .navbar-header a {
+  color: #ffad33;
 }

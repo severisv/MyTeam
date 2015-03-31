@@ -11,7 +11,10 @@
     <link rel="stylesheet" href="~/css/bootstrap-override.css" />
 </head>
 <body>
-<div class="navbar navbar-regular navbar-fixed-top">
+    <div id="bg-placeholder"></div>
+    
+
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,12 +35,15 @@
 
 @Component.Invoke("PageHeader", ViewBag.Title, ViewBag.Subtext ?? "")
 <div class="container body-content">
-        @RenderBody()
-        <footer>
-        </footer>
-    </div>
-    <script src="~/lib/jquery/js/jquery.js"></script> 
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-    @RenderSection("scripts", required: false)
+    @RenderBody()
+    <footer>
+
+    </footer>
+
+</div>
+
+<script src="~/lib/jquery/js/jquery.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.js"></script>
+@RenderSection("scripts", required: false)
 </body>
 </html>
