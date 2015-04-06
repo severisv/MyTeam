@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Domain;
+using MyTeam.Resources;
 using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Player;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyTeam.Controllers
 {
@@ -17,10 +18,20 @@ namespace MyTeam.Controllers
             _playerRepository = playerRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv)
         {
-            var model = new ShowPlayersViewModel();
+            var players = _playerRepository.Get().Where(p => p.Status == type);
+            ViewBag.PageName = Res.PlayersOfType(type);
+
+            var model = new ShowPlayersViewModel(players);
             return View(model);
+        }
+    
+
+        public IActionResult Show(Guid playerId)
+        {
+            var player = _playerRepository.GetSingle(playerId);
+            return View("_Show", player);
         }
 
     
