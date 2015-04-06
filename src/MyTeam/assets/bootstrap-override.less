@@ -1,6 +1,6 @@
 ﻿@import "colours";
 
-
+/* Navbar */
 
 .navbar {
     h1, h2, h3, h4, h5, p, a {
@@ -12,6 +12,11 @@
         line-height: 80px;
         height: 80px;
         padding-top: 0;
+
+        img {
+            height: 60px;
+            margin-top: 10px;
+        }
     }
 
 
@@ -25,6 +30,57 @@
             }
         }
 
-        background-color: rgba(0,0,0, 0.5);
+        background-color: fade(@team-secondary, 50);
+        border-color: @team-secondary;
     }
+}
+
+
+
+    .nav-list {
+        li {
+            
+            &.nav-header {
+                color: fade(black, 50);
+                text-transform: uppercase;
+                font-size: 95%;
+                font-weight: bold;
+                text-shadow: 0px 1px 0px fade(white, 50);
+                padding-left: 14px;
+            }
+            a {
+                padding: 2px;
+                padding-left: 15px;
+                &:hover {
+                    background-color: fade(@team-primary, 40);
+
+                }
+
+            }
+        }
+    }
+
+
+/* Table */
+
+table.table {
+    tr {
+        td {
+            border-top: 1px solid fade(black, 15);
+        }
+
+        &.br {
+            height: 2em;
+
+            td {
+                border-top: 1px solid transparent;
+            }
+        }
+    }
+}
+
+
+/* Font-awesome */
+i.fa {
+    min-width: 14px;
 }
