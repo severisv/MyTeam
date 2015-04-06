@@ -12,6 +12,7 @@ namespace MyTeam.Services.Repositories
         public TestRepository()
         {
             _repositories = new Dictionary<Type, List<Entity>>();
+            TestData.Addto(this);
         }
 
         public void Add<TType>(params TType[] entities) where TType : Entity

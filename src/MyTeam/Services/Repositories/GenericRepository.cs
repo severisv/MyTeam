@@ -35,5 +35,17 @@ namespace MyTeam.Services.Repositories
         {
             _testRepository.Remove(entities);
         }
+
+        public TEntity GetSingle(Guid id)
+        {
+            try
+            {
+                return _testRepository.GetSingle<TEntity>(id);
+            }
+            catch (InvalidOperationException e)
+            {
+                return _testRepository.Get<TEntity>().First();
+            }
+        }
     }
 }

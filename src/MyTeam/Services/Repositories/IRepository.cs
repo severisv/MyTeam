@@ -10,5 +10,6 @@ namespace MyTeam.Services.Repositories
         IQueryable<T> Get();
         void Add(params T[] entities);
         void Delete(params T[] entities);
+        T GetSingle(Guid id);
     }
 }
