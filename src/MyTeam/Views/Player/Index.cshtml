@@ -6,11 +6,11 @@
 @{
     ViewBag.Title = Res.Players;
 }
-<mt-main inner-id="show-players">
+<div mt-main  inner-id="show-players">
 
     @foreach (var player in Model.Players)
     {
-        <a a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" controller="player" action="show" route-playerid="@player.Id" class="col-lg-3 col-md-4 col-xs-4 text-center mt-player-container">
+        <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" asp-controller="player" asp-action="show" asp-route-playerid="@player.Id" class="col-lg-3 col-md-4 col-xs-4 text-center mt-player-container">
             <div class="image-container">
                 <img src="@Url.Content(player.ImageMedium)" title="@Html.DisplayFor(p => player.Name)" alt="">
             </div>
@@ -23,27 +23,27 @@
     {
         <div class="alert alert-info">@Messages.NoPlayers</div>
     }
-</mt-main>
+</div>
 
-<mt-sidebar>
+<div mt-sidebar>
     <ul class="nav nav-list">
         <li class="nav-header">@Res.Submenu</li>
-        <li><a controller="player" action="index" route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
-        <li><a controller="player" action="index" route-type="@PlayerStatus.Pensjonert"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Pensjonert)</a></li>
+        <li><a asp-controller="player" asp-action="index" route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
+        <li><a asp-controller="player" asp-action="index" route-type="@PlayerStatus.Pensjonert"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Pensjonert)</a></li>
     </ul>
-</mt-sidebar>
+</div>
 @if (Model.Players.Any())
 {
-    <mt-sidebar>
+    <div mt-sidebar>
         <ul class="nav nav-list">
             <li class="nav-header">@ViewBag.PageName</li>
             @foreach (var player in Model.Players)
             {
-                <li><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" controller="player" action="show" route-playerid="@player.Id">@player.Name</a></li>
+                <li><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name</a></li>
 
             }
         </ul>
-    </mt-sidebar>
+    </div>
 }
 
 

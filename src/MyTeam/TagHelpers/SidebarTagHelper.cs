@@ -5,33 +5,36 @@ using Microsoft.AspNet.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("mt-sidebar")]
+    [TargetElement("div", Attributes = Name)]
     public class SidebarTagHelper : TagHelper
     {
 
-       
+        public const string Name = "mt-sidebar";
+        public const string InnerIdName = "inner-id";
+        public const string ClassName = "class";
+
+        [HtmlAttributeName(InnerIdName)]
+        public string InnerId { get; set; }
+
+        [HtmlAttributeName(ClassName)]
+        public string Class { get; set; }
+
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.AddCssClass("col-lg-3 col-md-3 visible-md visible-lg pull-right");
+            output.Attributes["class"] = $"col-lg-3 col-md-3 visible-md visible-lg pull-right {Class}";
+
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");
-            innertag.InnerHtml = output.Content.ToString();
 
-            TagHelperAttribute innerId;
-            output.Attributes.TryGetAttribute("inner-id", out innerId);
-            innertag.Attributes["id"] = innerId.ToString();
+            var content = context.GetChildContentAsync().Result.GetContent();
+            innertag.InnerHtml = content;
 
-            tagBuilder.InnerHtml = innertag.ToString();
+            if (!string.IsNullOrWhiteSpace(InnerId)) innertag.Attributes["id"] = InnerId;
 
-            output.MergeAttributes(tagBuilder);
-            output.Content.Append(tagBuilder.InnerHtml);
-
-            output.TagName = "div";
-
-
+            output.Content.Append(innertag.ToString());
         }
+        
 
     }
 }

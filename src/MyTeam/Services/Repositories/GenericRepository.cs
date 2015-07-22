@@ -42,7 +42,7 @@ namespace MyTeam.Services.Repositories
             {
                 return _testRepository.GetSingle<TEntity>(id);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 return _testRepository.Get<TEntity>().First();
             }

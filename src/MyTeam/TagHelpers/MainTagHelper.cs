@@ -1,37 +1,39 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using System;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.TagHelpers;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("mt-main")]
+    [TargetElement("div", Attributes = Name)]
     public class MainTagHelper : TagHelper
     {
 
-       
+        public const string Name = "mt-main";
+        public const string InnerIdName = "inner-id";
+        public const string ClassName = "class";
 
+        [HtmlAttributeName(InnerIdName)]
+        public string InnerId { get; set; }
 
+        [HtmlAttributeName(ClassName)]
+        public string Class { get; set; }
+
+        
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.AddCssClass("col-lg-9 col-md-9");
+            output.Attributes["class"] = $"col-lg-9 col-md-9 {Class}";
+
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");
-            innertag.InnerHtml = output.Content.GetContent();
 
-            TagHelperAttribute innerId;
-            output.Attributes.TryGetAttribute("inner-id", out innerId);
-            innertag.Attributes["id"] = innerId.Value.ToString();
+            var content = context.GetChildContentAsync().Result.GetContent();
+            innertag.InnerHtml = content;
 
-            tagBuilder.InnerHtml = innertag.ToString();
+            if (!string.IsNullOrWhiteSpace(InnerId)) innertag.Attributes["id"] = InnerId;
 
-            output.MergeAttributes(tagBuilder);
-            output.Content.Append(tagBuilder.InnerHtml);
-
-            output.TagName = "div";
-
-
+            output.Content.Append(innertag.ToString());
         }
 
     }

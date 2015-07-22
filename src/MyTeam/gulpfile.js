@@ -1,5 +1,4 @@
-﻿/// <binding Clean='clean' ProjectOpened='watch' />
-
+/// <binding AfterBuild='copy, less, js' Clean='clean' ProjectOpened='watch' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   fs = require("fs");
@@ -20,27 +19,10 @@ var destPaths = {
 }
 
 
-// Libraries
+// Clean
 gulp.task("clean", function (cb) {
     rimraf(destPaths.scripts, function () { });
     rimraf(destPaths.stylesheets, function () { });
-    rimraf(destPaths.lib, cb);
-});
-
-gulp.task("copy", ["clean"], function () {
-    var bower = {
-        "hammer.js": "hammer.js/hammer*.{min.js,map}",
-        "jquery": "jquery/jquery*.{min.js,map}",
-        "jquery-validation": "jquery-validation/jquery.validate.min.js",
-        "jquery-validation-unobtrusive": "jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
-        "fontawesome": "/fontawesome/*/**.{css,otf,eot,svg,ttf,woff,woff2}"
-
-    }
-
-    for (var destinationDir in bower) {
-        gulp.src(paths.bower + bower[destinationDir])
-          .pipe(gulp.dest(destPaths.lib + destinationDir));
-    }
 });
 
 
@@ -52,8 +34,6 @@ gulp.task('js', function () {
 //      .pipe(uglify())
       .pipe(gulp.dest(destPaths.scripts));
 });
-
-
 
 
 
