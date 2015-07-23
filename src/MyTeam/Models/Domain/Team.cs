@@ -8,7 +8,7 @@ namespace MyTeam.Models.Domain
         public string Name { get; set; }
         public virtual Club Club { get; set; }
         public virtual IList<Event> Events { get; set; }
-        public virtual IEnumerable<Game> Games => Events.OfType<Game>();
-        public virtual IEnumerable<Training> Trainings => Events.OfType<Training>();
+        public virtual IEnumerable<Event> Games => Events.Where(e => e.IsGame);
+        public virtual IEnumerable<Event> Trainings => Events.Where(e => e.IsTraining);
     }
 }

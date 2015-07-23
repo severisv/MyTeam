@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.Services.Repositories;
@@ -12,17 +13,17 @@ using MyTeam.ViewModels.Training;
 
 namespace MyTeam.Controllers
 {
-    public class TrainingController : Controller
+    public class EventController : Controller
     {
         [FromServices]
-        public IEventService<Training> TrainingService { get; set; }
+        public IEventService EventService { get; set; }
 
 
-        public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv)
+        public IActionResult Index(EventType type = EventType.Alle)
         {
-            var trainings = TrainingService.GetUpcoming();
+            var events = EventService.GetUpcoming(type);
 
-            var model = new ShowTrainingsViewModel(trainings);
+            var model = new UpcomingEventsViewModel(events, type);
 
             return View(model);
         }

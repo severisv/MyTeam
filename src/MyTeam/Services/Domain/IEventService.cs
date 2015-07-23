@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 
 namespace MyTeam.Services.Domain
 {
-    public interface IEventService<TType> where TType : Event
+    public interface IEventService
     {
-        TType Get(Guid id);
-        IEnumerable<TType> GetUpcoming();
-        IList<TType> GetAll();
-        IEnumerable<TType> GetPrevious();
+        Event Get(Guid id);
+        IEnumerable<Event> GetUpcoming(EventType type);
+        IList<Event> GetAll(EventType type);
+        IEnumerable<Event> GetPrevious(EventType type);
     }
 }

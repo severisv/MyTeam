@@ -3,37 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Domain
 {
-    public class EventService<TType> : IEventService<TType> where TType : Event
+    public class EventService : IEventService
     {
-        public IRepository<TType> EventRepository { get; set; }
+        public IRepository<Event> EventRepository { get; set; }
 
-        public EventService(IRepository<TType> eventRepository)
+        public EventService(IRepository<Event> eventRepository)
         {
             EventRepository = eventRepository;
         }
 
-        public TType Get(Guid id)
+        public Event Get(Guid id)
         {
             return EventRepository.Get(id).Single();
         }
 
-        public IEnumerable<TType> GetUpcoming()
+        public IEnumerable<Event> GetUpcoming(EventType type)
         {
-            return EventRepository.Get().Where(t => t.Date >= DateTime.Today.Date);
+            return EventRepository.Get()
+                .Where(t => type == EventType.Alle || t.Type == type)
+                .Where(t => t.Date >= DateTime.Today.Date);
         }
 
-        public IList<TType> GetAll()
+        public IList<Event> GetAll(EventType type)
         {
-            return EventRepository.Get().ToList();
+            return EventRepository.Get()
+                .Where(t => type == EventType.Alle || t.Type == type)
+                .ToList();
         }
 
-        public IEnumerable<TType> GetPrevious()
+        public IEnumerable<Event> GetPrevious(EventType type)
         {
-            return EventRepository.Get().Where(t => t.Date < DateTime.Today.Date);
+            return EventRepository.Get()
+                .Where(t => type == EventType.Alle || t.Type == type)
+                .Where(t => t.Date < DateTime.Today.Date);
         }
     }
 }

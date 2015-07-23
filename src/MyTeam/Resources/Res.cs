@@ -5,11 +5,13 @@ namespace MyTeam.Resources
 {
     public class Res
     {
-        public static string Home = "Nyheter";
-        public static string Players = "Spillere";
+        public const string Home = "Nyheter";
+        public const string Players = "Spillere";
+        public const string Events = "Hendelser";
 
-        public static string Games = "Kamper";
-        public static string Table = "Tabell";
+
+        public const string Games = "Kamper";
+        public const string Table = "Tabell";
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
         public const string AssistCount = "Assists";
@@ -19,17 +21,18 @@ namespace MyTeam.Resources
         public const string Email = "E-post";
         public const string Phone = "Telefon";
         public const string Active = "Aktive";
-        public static string ActivePlayers => string.Format("{0} {1}", Active, Players);
+        public static string ActivePlayers => $"{Active} {Players}";
         public const string Retired = "Pensjonerte";
-        public static string RetiredPlayers => string.Format("{0} {1}", Retired, Players);
+        public static string RetiredPlayers => $"{Retired} {Players}";
         public const string HallOfFame = "Hall of Fame";
         public const string Submenu = "Undermeny";
+        public static string Upcoming = "Kommende";
+        public static string Previous = "Tidligere";
 
 
         /* Training */
         public static string Trainings = "Treninger";
-        public static string UpcomingTrainings => $"Kommende {Trainings.ToLowerInvariant()}";
-        public static string PreviousTrainings => $"Tidligere {Trainings.ToLowerInvariant()}";
+
 
 
 

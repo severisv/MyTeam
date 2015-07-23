@@ -68,11 +68,11 @@ namespace MyTeam.Services.Repositories
 
         private static void AddEvents(TestRepository testRepository)
         {
-            testRepository.Add(CreateEvent<Training>(D(-14), location: "Muselunden"));
-            testRepository.Add(CreateEvent<Training>(D(-7), location: "Muselunden"));
-            testRepository.Add(CreateEvent<Training>(D(0), location: "Muselunden"));
-            testRepository.Add(CreateEvent<Training>(D(+7), location: "Muselunden"));
-            testRepository.Add(CreateEvent<Training>(D(+14), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(-14), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(-7), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(0), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(+7), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(+14), location: "Muselunden"));
 
         }
 
@@ -81,13 +81,14 @@ namespace MyTeam.Services.Repositories
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19,30,0).AddDays(offset);
         }
 
-        private static Event CreateEvent<TType>(DateTime dateTime, string description = "", string location = "") where TType : Event, new()
+        private static Event CreateEvent(DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening)
         {
-            var result = new TType()
+            var result = new Event()
             {
                 DateTime = dateTime,
                 Description = description,
-                Location = location
+                Location = location,
+                Type = type
             };
             return result;
         }
