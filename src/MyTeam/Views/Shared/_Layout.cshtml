@@ -29,14 +29,14 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="club" asp-action="index">@Res.Home</a></li>
                     <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
-                    <li><a asp-controller="game">@Res.Games</a></li>
                     <li><a asp-controller="table">@Res.Table</a></li>
+                    <li><a asp-controller="game">@Res.Games</a></li>
+                    <li><a asp-controller="training">@Res.Trainings</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
-
     @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")
     <div class="container body-content">
 

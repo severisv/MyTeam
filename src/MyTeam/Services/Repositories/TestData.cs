@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -18,6 +19,7 @@ namespace MyTeam.Services.Repositories
         {
             AddClub(testRepository);
             AddPlayers(testRepository);
+            AddEvents(testRepository);
         }
 
         private static void AddClub(TestRepository testRepository)
@@ -32,17 +34,19 @@ namespace MyTeam.Services.Repositories
            testRepository.Add(GetPlayer("Fredrik", "Hansen"));
            testRepository.Add(GetPlayer("Tom", "Lund"));
            testRepository.Add(GetPlayer("Freddy", "Dos Santos"));
-           testRepository.Add(GetPlayer("Ole Jørgen", "Grumstad")); 
+           testRepository.Add(GetPlayer("Ole Jorgen", "Grumstad")); 
            testRepository.Add(GetPlayer("Ville", "Borring", "Lande"));
            testRepository.Add(GetPlayer("Snorre", "Edwin", "Lothar von Gohren"));
            testRepository.Add(GetPlayer("Andre", "Uberg"));
            testRepository.Add(GetPlayer("Sindre", "Meldalen", "Granly"));
            testRepository.Add(GetPlayer("Hans Petter", "Olsen"));
            testRepository.Add(GetPlayer("Erik", "Nakkerud"));
+           testRepository.Add(GetPlayer("Oystein", "Bondhus", status: PlayerStatus.Pensjonert));
+  
     
         }
 
-        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null)
+        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null, PlayerStatus status = PlayerStatus.Aktiv)
         {
             var player = new Player()
             {
@@ -50,6 +54,7 @@ namespace MyTeam.Services.Repositories
                 MiddleName = mellomnavn,
                 LastName = etternavn,
                 Imagename = imageName,
+                Status = status,
                 Club = _club,
                 Positions = new List<Position>
                 {
@@ -59,5 +64,34 @@ namespace MyTeam.Services.Repositories
             _club.Players.Add(player);
             return player;
         }
+
+
+        private static void AddEvents(TestRepository testRepository)
+        {
+            testRepository.Add(CreateEvent<Training>(D(-14), location: "Muselunden"));
+            testRepository.Add(CreateEvent<Training>(D(-7), location: "Muselunden"));
+            testRepository.Add(CreateEvent<Training>(D(0), location: "Muselunden"));
+            testRepository.Add(CreateEvent<Training>(D(+7), location: "Muselunden"));
+            testRepository.Add(CreateEvent<Training>(D(+14), location: "Muselunden"));
+
+        }
+
+        private static DateTime D(int offset)
+        {
+            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19,30,0).AddDays(offset);
+        }
+
+        private static Event CreateEvent<TType>(DateTime dateTime, string description = "", string location = "") where TType : Event, new()
+        {
+            var result = new TType()
+            {
+                DateTime = dateTime,
+                Description = description,
+                Location = location
+            };
+            return result;
+        }
     }
+
+
 }

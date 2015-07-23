@@ -11,16 +11,13 @@ namespace MyTeam.Controllers
 {
     public class PlayerController : Controller
     {
-        private readonly IRepository<Player> _playerRepository;
+        [FromServices]
+        public IRepository<Player> PlayerRepository { get; set; }
 
-        public PlayerController(IRepository<Player> playerRepository)
-        {
-            _playerRepository = playerRepository;
-        }
-
+        
         public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv)
         {
-            var players = _playerRepository.Get().Where(p => p.Status == type);
+            var players = PlayerRepository.Get().Where(p => p.Status == type);
             ViewBag.PageName = Res.PlayersOfType(type);
 
             var model = new ShowPlayersViewModel(players);
@@ -30,7 +27,7 @@ namespace MyTeam.Controllers
 
         public IActionResult Show(Guid playerId)
         {
-            var player = _playerRepository.GetSingle(playerId);
+            var player = PlayerRepository.GetSingle(playerId);
             return View("_Show", player);
         }
 

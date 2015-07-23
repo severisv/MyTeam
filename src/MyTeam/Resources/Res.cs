@@ -26,6 +26,13 @@ namespace MyTeam.Resources
         public const string Submenu = "Undermeny";
 
 
+        /* Training */
+        public static string Trainings = "Treninger";
+        public static string UpcomingTrainings => $"Kommende {Trainings.ToLowerInvariant()}";
+        public static string PreviousTrainings => $"Tidligere {Trainings.ToLowerInvariant()}";
+
+
+
         public static string PlayersOfType(PlayerStatus status)
         {
             if (status == PlayerStatus.Aktiv) return string.Format("{0}", ActivePlayers);

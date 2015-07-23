@@ -28,8 +28,8 @@
 <div mt-sidebar>
     <ul class="nav nav-list">
         <li class="nav-header">@Res.Submenu</li>
-        <li><a asp-controller="player" asp-action="index" route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
-        <li><a asp-controller="player" asp-action="index" route-type="@PlayerStatus.Pensjonert"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Pensjonert)</a></li>
+        <li><a asp-controller="player" asp-action="index" asp-route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
+        <li><a asp-controller="player" asp-action="index" asp-route-type="@PlayerStatus.Pensjonert"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Pensjonert)</a></li>
     </ul>
 </div>
 @if (Model.Players.Any())
