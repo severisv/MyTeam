@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
 using Microsoft.AspNet.Mvc;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
-using MyTeam.Resources;
 using MyTeam.Services.Domain;
-using MyTeam.Services.Repositories;
-using MyTeam.ViewModels.Player;
-using MyTeam.ViewModels.Training;
+using MyTeam.ViewModels.Events;
 
 
 namespace MyTeam.Controllers

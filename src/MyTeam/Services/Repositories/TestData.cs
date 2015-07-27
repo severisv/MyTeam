@@ -88,11 +88,10 @@ namespace MyTeam.Services.Repositories
                 DateTime = dateTime,
                 Description = description,
                 Location = location,
-                Type = type
+                Type = type,
+                Attendees = new List<Player>()
             };
             return result;
         }
     }
-
-
 }

@@ -23,7 +23,7 @@ namespace MyTeam.Models.Domain
 
         public bool IsGame => Type == EventType.Kamp;
         public bool IsTraining => Type == EventType.Trening;
-        public bool IsCustom => Type == EventType.Annen;
+        public bool IsCustom => Type == EventType.Diverse;
 
     }
 }

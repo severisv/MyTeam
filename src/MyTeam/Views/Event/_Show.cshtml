@@ -1,0 +1,9 @@
+﻿@using System.Threading.Tasks
+@model MyTeam.Models.Domain.Event
+
+@Model.Attendees.Count()
+@Html.DisplayFor(m => m.Type)
+@Html.DisplayFor(m => m.Date)
+@Html.DisplayFor(m => m.Description)
+
+<hr />

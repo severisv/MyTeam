@@ -1,10 +1,27 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Models.Enums
-@using MyTeam.Resources
-@model MyTeam.ViewModels.Training.UpcomingEventsViewModel
+@model MyTeam.ViewModels.Events.UpcomingEventsViewModel
 
 @{
     ViewBag.Title = Model.Title;
 }
 
-<h2>title</h2>
+<div mt-main>
+    <ul class="nav nav-pills nav-justified">
+        @foreach (EventType type in Enum.GetValues(typeof(EventType)))
+        {
+        <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
+
+    }
+</ul>
+
+
+@foreach (var ev in Model.Events)
+{
+    @Html.Partial("_Show", ev)
+}
+</div>
+
+<div mt-sidebar>
+
+
+</div>

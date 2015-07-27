@@ -2,9 +2,9 @@
 {
     public enum EventType
     {
-        Kamp,
         Trening,
-        Annen,
+        Kamp,
+        Diverse,
         Alle
     }
 }

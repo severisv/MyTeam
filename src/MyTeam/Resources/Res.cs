@@ -7,7 +7,7 @@ namespace MyTeam.Resources
     {
         public const string Home = "Nyheter";
         public const string Players = "Spillere";
-        public const string Events = "Hendelser";
+        public const string Event = "Hendelse";
 
 
         public const string Games = "Kamper";
@@ -28,6 +28,7 @@ namespace MyTeam.Resources
         public const string Submenu = "Undermeny";
         public static string Upcoming = "Kommende";
         public static string Previous = "Tidligere";
+        public static string Pluralise = "er";
 
 
         /* Training */

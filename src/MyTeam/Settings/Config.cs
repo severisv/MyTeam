@@ -8,8 +8,9 @@ namespace MyTeam.Settings
     {
         public static string Title => ClubName;
         public static string ClubName = "Wam-Kam";
+        public static string ClubId = "wamkam";
 
-     
+
 
         public static string PlayerImages(string clubShortname, string imagename, ImageSize imageSize)
         {
