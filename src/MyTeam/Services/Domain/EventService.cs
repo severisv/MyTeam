@@ -26,7 +26,7 @@ namespace MyTeam.Services.Domain
         {
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.Date >= DateTime.Today.Date);
+                .Where(t => t.DateTime.Date >= DateTime.Today.Date);
         }
 
         public IList<Event> GetAll(EventType type)
@@ -40,7 +40,7 @@ namespace MyTeam.Services.Domain
         {
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.Date < DateTime.Today.Date);
+                .Where(t => t.DateTime.Date < DateTime.Today.Date);
         }
     }
 }

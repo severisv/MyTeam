@@ -1,7 +1,8 @@
 /// <binding AfterBuild='copy, less, js' Clean='clean' ProjectOpened='watch' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
-  fs = require("fs");
+  fs = require("fs"),
+    concat = require('gulp-concat');
 
 eval("var project = " + fs.readFileSync("./project.json"));
 
@@ -43,6 +44,7 @@ var less = require('gulp-less');
 gulp.task('less', function () {
     return gulp.src(paths.stylesheets)
       .pipe(less())
+      .pipe(concat('styles.css'))
       .on('error', swallowError)
       .pipe(gulp.dest(destPaths.stylesheets));
 });

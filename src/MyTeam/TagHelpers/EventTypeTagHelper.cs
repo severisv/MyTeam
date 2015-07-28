@@ -6,7 +6,7 @@ using MyTeam.Models.Enums;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("span", Attributes = Name)]
+    [TargetElement("*", Attributes = Name)]
     public class EventTypeTagHelper : TagHelper
     {
 
@@ -14,6 +14,8 @@ namespace MyTeam.TagHelpers
 
         [HtmlAttributeName(Name)]
         public EventType EventType { get; set; }
+        [HtmlAttributeName("mt-hidename")]
+        public bool HideName { get; set; }
 
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -22,7 +24,8 @@ namespace MyTeam.TagHelpers
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{GetIconName(EventType)}");
 
-            output.Content.Append($"{innertag.ToString()}&nbsp;&nbsp;{EventType}");
+            output.Content.Append($"{innertag.ToString()}");
+            if (!HideName) output.Content.Append($"&nbsp;&nbsp;{EventType}");
         }
         
         private string GetIconName(EventType type)

@@ -15,20 +15,33 @@ namespace MyTeam.Controllers
         public IRepository<Player> PlayerRepository { get; set; }
 
         
-        public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv)
+        public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null)
         {
             var players = PlayerRepository.Get().Where(p => p.Status == type);
-            ViewBag.PageName = Res.PlayersOfType(type);
 
-            var model = new ShowPlayersViewModel(players);
-            return View(model);
+            var model = new ShowPlayersViewModel(players)
+            {
+                SelectedPlayerId = playerId
+            };
+
+            ViewBag.PageName = model.SelectedPlayer != null ?
+                model.SelectedPlayer.Name: 
+                Res.PlayersOfType(type);
+
+            return View("Index",model);
         }
     
 
         public IActionResult Show(Guid playerId)
         {
-            var player = PlayerRepository.GetSingle(playerId);
-            return View("_Show", player);
+
+            if (Request.IsAjaxRequest())
+            {
+                var player = PlayerRepository.GetSingle(playerId);
+                return PartialView("_Show", player);
+            }
+            return Index(playerId: playerId);           
+           
         }
 
     

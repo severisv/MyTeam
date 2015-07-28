@@ -1,0 +1,42 @@
+﻿@import "colours";
+
+/* Flex */
+
+.flex {
+    display: flex;
+
+    .flex-1 {
+        flex: 1;
+    }
+
+    .flex-2 {
+        flex: 2;
+    }
+
+    .flex-3 {
+        flex: 3;
+    }
+}
+
+/* Collapse */
+
+.collapse-links {
+    a {
+        &:after {
+            content: "\f0d7";
+            font-family: FontAwesome;
+        }
+
+        &.collapsed:after {
+            content: "\f0da";
+            font-family: FontAwesome;
+        }
+
+        &:focus {
+            text-decoration:none;
+        }
+        &:hover {
+            text-decoration:none;
+        }
+    }
+}

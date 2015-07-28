@@ -1,9 +1,73 @@
 ﻿@using System.Threading.Tasks
-@model MyTeam.Models.Domain.Event
-
-@Model.Attendees.Count()
-@Html.DisplayFor(m => m.Type)
-@Html.DisplayFor(m => m.Date)
-@Html.DisplayFor(m => m.Description)
+@model Event
 
 <hr />
+<div class="show-upcoming-event">
+    <div class="flex">
+        <div class="flex-1 event-icon">
+            <div>
+                <span mt-eventtype="@Model.Type" mt-hidename="true"></span>
+            </div>
+        </div>
+        <div class="flex-2">
+            <p>
+                <i class="fa fa-calendar"></i> @Model.DateTime.ToString("ddd d MMMM")
+            </p>
+            <p>
+                <i class="fa fa-clock-o"></i> @Model.DateTime.ToString("HH:mm")
+            </p>
+            <p>
+                <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Location)
+            </p>
+
+
+        </div>
+        <div class="flex-3 ">
+            <span class="description">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skate
+                @Html.DisplayFor(m => m.Description)
+            </span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="event-signup">
+        <div>
+            <a class="btn btn-lg btn-default">@Res.IsAttending</a>
+            <a class="btn btn-lg btn-danger">@Res.IsNotAttending</a>
+        </div>
+
+        <div id="signups-@Model.Id">
+            <div class="flex collapse-links">
+                <a class="flex-2 collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                    @Res.Attending (@Model.Attending.Count())
+                </a>
+                <a class="flex-3 collapsed" role="button" data-toggle="collapse" href="#non-attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                    @Res.IsNotAttending (@Model.NotAttending.Count())
+                </a>
+            </div>
+            <div class="panel">
+                <div id="attendees-@Model.Id" class="panel-collapse collapse" aria-labelledby="heading-@Model.Id">
+                  <ul class="list-unstyled">
+                      @foreach(var player in Model.Attending)
+                      {
+                          <li>@Html.Partial("Player/_Link", player)</li>
+                      }
+                  </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div id="non-attendees-@Model.Id" class="panel-collapse collapse" aria-labelledby="heading-@Model.Id">
+                    <ul class="list-unstyled">
+                        @foreach (var player in Model.NotAttending)
+                        {
+                            <li>@Html.Partial("Player/_Link", player)</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="clearfix"></div>
+

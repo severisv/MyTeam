@@ -68,9 +68,12 @@ namespace MyTeam.Services.Repositories
 
         private static void AddEvents(TestRepository testRepository)
         {
+            var players = testRepository.Get<Player>();
+
+
             testRepository.Add(CreateEvent(D(-14), location: "Muselunden"));
             testRepository.Add(CreateEvent(D(-7), location: "Muselunden"));
-            testRepository.Add(CreateEvent(D(0), location: "Muselunden"));
+            testRepository.Add(CreateEvent(D(0), location: "Muselunden", players: players));
             testRepository.Add(CreateEvent(D(+7), location: "Muselunden"));
             testRepository.Add(CreateEvent(D(+14), location: "Muselunden"));
 
@@ -81,16 +84,20 @@ namespace MyTeam.Services.Repositories
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19,30,0).AddDays(offset);
         }
 
-        private static Event CreateEvent(DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening)
+        private static Event CreateEvent(DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
         {
+            
+
             var result = new Event()
             {
                 DateTime = dateTime,
                 Description = description,
                 Location = location,
                 Type = type,
-                Attendees = new List<Player>()
+                Attendees = players
             };
+
+            if (result.Attendees == null) result.Attendees = new List<Player>();
             return result;
         }
     }

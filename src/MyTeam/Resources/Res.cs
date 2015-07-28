@@ -8,7 +8,9 @@ namespace MyTeam.Resources
         public const string Home = "Nyheter";
         public const string Players = "Spillere";
         public const string Event = "Hendelse";
-
+        public const string Attending = "Kommer";
+        public const string IsAttending = "Stiller";
+        public const string IsNotAttending = "Kan ikke";
 
         public const string Games = "Kamper";
         public const string Table = "Tabell";

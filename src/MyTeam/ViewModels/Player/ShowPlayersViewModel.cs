@@ -7,7 +7,9 @@ namespace MyTeam.ViewModels.Player
 {
     public class ShowPlayersViewModel
     {
-   
+
+        public Guid? SelectedPlayerId { get; set; }
+        public Models.Domain.Player SelectedPlayer => Players.SingleOrDefault(p => p.Id == SelectedPlayerId);
         public IEnumerable<Models.Domain.Player> Players { get; set; }
 
         public ShowPlayersViewModel(IQueryable<Models.Domain.Player> players)
