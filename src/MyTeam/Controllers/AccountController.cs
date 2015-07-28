@@ -470,7 +470,7 @@ namespace MyTeam.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(ClubController.Index), "Home");
+                return RedirectToAction(nameof(ClubController.Index), "Club");
             }
         }
 

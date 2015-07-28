@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.DependencyInjection;
 using MyTeam.Models.Domain;
+using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.Services.Repositories;
 
@@ -18,6 +19,7 @@ namespace MyTeam.Services
             services.AddTransient<IRepository<EventAttendance>, GenericRepository<EventAttendance>>();
 
             services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IMemoryStore, MemoryStore>();
 
             services.AddSingleton<TestRepository>();
 

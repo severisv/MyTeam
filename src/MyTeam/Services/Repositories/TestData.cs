@@ -30,7 +30,7 @@ namespace MyTeam.Services.Repositories
         private static void AddPlayers(TestRepository testRepository)
         {
            testRepository.Add(GetPlayer("Tom", "Hansen"));
-           testRepository.Add(GetPlayer("Severin", "Sverdvik", imageName: "severin"));
+           testRepository.Add(GetPlayer("Severin", "Sverdvik", imageName: "severin", username: "severin@sverdvik.no"));
            testRepository.Add(GetPlayer("Fredrik", "Hansen"));
            testRepository.Add(GetPlayer("Tom", "Lund"));
            testRepository.Add(GetPlayer("Freddy", "Dos Santos"));
@@ -46,7 +46,7 @@ namespace MyTeam.Services.Repositories
     
         }
 
-        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null, PlayerStatus status = PlayerStatus.Aktiv)
+        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null, PlayerStatus status = PlayerStatus.Aktiv, string username = "")
         {
             var player = new Player()
             {
@@ -56,6 +56,7 @@ namespace MyTeam.Services.Repositories
                 Imagename = imageName,
                 Status = status,
                 Club = _club,
+                UserName = username,
                 Positions = new List<Position>
                 {
                     Position.Spiss, Position.Ving
@@ -71,11 +72,11 @@ namespace MyTeam.Services.Repositories
             var players = testRepository.Get<Player>();
 
 
-            testRepository.Add(CreateEvent(D(-14), location: "Muselunden"));
-            testRepository.Add(CreateEvent(D(-7), location: "Muselunden"));
-            testRepository.Add(CreateEvent(D(0), location: "Muselunden", players: players));
-            testRepository.Add(CreateEvent(D(+7), location: "Muselunden"));
-            testRepository.Add(CreateEvent(D(+14), location: "Muselunden"));
+            testRepository.Add(CreateEvent(testRepository,D(-14), location: "Muselunden"));
+            testRepository.Add(CreateEvent(testRepository,D(-7), location: "Muselunden"));
+            testRepository.Add(CreateEvent(testRepository,D(0), location: "Muselunden", players: players));
+            testRepository.Add(CreateEvent(testRepository,D(+7), location: "Muselunden"));
+            testRepository.Add(CreateEvent(testRepository, D(+14), location: "Muselunden"));
 
         }
 
@@ -84,7 +85,7 @@ namespace MyTeam.Services.Repositories
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19,30,0).AddDays(offset);
         }
 
-        private static Event CreateEvent(DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
+        private static Event CreateEvent(TestRepository testRepository, DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
         {
 
 
@@ -114,7 +115,11 @@ namespace MyTeam.Services.Repositories
                 });
             }
 
+            testRepository.Add(attendees.ToArray());
+
             result.Attendees = attendees;
+
+            
 
             return result;
         }

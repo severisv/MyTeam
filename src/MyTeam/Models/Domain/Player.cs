@@ -11,9 +11,14 @@ namespace MyTeam.Models.Domain
 {
     public class Player : Entity
     {
+        [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+        [Required]
         public string LastName { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = Res.BirthDate)]
@@ -30,7 +35,7 @@ namespace MyTeam.Models.Domain
         [DataType(DataType.EmailAddress)]
         [Display(Name = Res.Email)]
 
-        public string Email { get; set; }
+        public string Email => UserName;
 
 
         public int StartYear => StartDate.Year;
@@ -57,12 +62,5 @@ namespace MyTeam.Models.Domain
 
         public virtual int PracticeCount { get; set; }
         public PlayerStatus Status { get; set; }
-    }
-
-    public enum PlayerStatus
-    {
-        Aktiv,
-        Inaktiv,
-        Pensjonert
     }
 }

@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Add Phone Number";
 }
-
+<div class="mt-container">
 <h2>@ViewData["Title"].</h2>
 <form asp-controller="Manage" asp-action="AddPhoneNumber" method="post" class="form-horizontal" role="form">
     <h4>Add a phone number.</h4>
@@ -21,7 +21,7 @@
         </div>
     </div>
 </form>
-
+</div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 
 namespace MyTeam.Resources
 {
