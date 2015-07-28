@@ -33,7 +33,6 @@
             @foreach (var player in Model.Players)
             {
                 <li><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name</a></li>
-
             }
         </ul>
     </div>

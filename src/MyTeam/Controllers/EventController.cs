@@ -7,7 +7,7 @@ using MyTeam.ViewModels.Events;
 
 namespace MyTeam.Controllers
 {
-    public class EventController : Controller
+    public class EventController : BaseController
     {
         [FromServices]
         public IEventService EventService { get; set; }
@@ -21,7 +21,13 @@ namespace MyTeam.Controllers
 
             return View(model);
         }
-    
+
+        public IActionResult Signup(Guid eventId, bool isAttending)
+        {
+            var ev = EventService.SetAttendanceReturnsEvent(ActivePlayer.Id, eventId, isAttending);
+
+            return PartialView("_Signup", ev);
+        }
 
        
 

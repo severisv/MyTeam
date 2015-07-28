@@ -11,5 +11,6 @@ namespace MyTeam.Services.Repositories
         void Add(params T[] entities);
         void Delete(params T[] entities);
         T GetSingle(Guid id);
+        void Update(T entity);
     }
 }

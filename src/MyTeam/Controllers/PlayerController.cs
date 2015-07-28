@@ -28,6 +28,7 @@ namespace MyTeam.Controllers
                 model.SelectedPlayer.Name: 
                 Res.PlayersOfType(type);
 
+
             return View("Index",model);
         }
     

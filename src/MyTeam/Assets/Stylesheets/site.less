@@ -157,24 +157,41 @@ textarea {
     margin-top: 20px;
     margin-left: 16.66%;
 
-    div {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+ 
 
     .panel {
         background-color: transparent;
         border: 0;
     }
+}
 
-    .collapse-links {
-        a {
-           
-            font-weight:bold;
 
-            &.collapsed {
-                font-weight: normal;
+.attendee-links {
+    a {
+
+        span:last-child {
+            text-align: right;
+
+            &:after {
+                content: "\f078";
+                font-family: FontAwesome;
             }
+        }
+
+
+        &.collapsed {
+            span:last-child:after {
+                content: "\f054";
+                font-family: FontAwesome;
+            }
+        }
+
+        &:focus {
+            text-decoration: none;
+        }
+
+        &:hover {
+            text-decoration: none;
         }
     }
 }

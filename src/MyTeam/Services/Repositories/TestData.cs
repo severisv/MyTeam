@@ -86,6 +86,9 @@ namespace MyTeam.Services.Repositories
 
         private static Event CreateEvent(DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
         {
+
+
+         
             
 
             var result = new Event()
@@ -94,10 +97,25 @@ namespace MyTeam.Services.Repositories
                 Description = description,
                 Location = location,
                 Type = type,
-                Attendees = players
             };
 
-            if (result.Attendees == null) result.Attendees = new List<Player>();
+            var attendees = new List<EventAttendance>();
+
+            players = players ?? new Player[0];
+
+            foreach (var player in players)
+            {
+                attendees.Add(new EventAttendance
+                {
+                    Player = player,
+                    PlayerId = player.Id,
+                    EventId = result.Id,
+                    Event = result
+                });
+            }
+
+            result.Attendees = attendees;
+
             return result;
         }
     }

@@ -12,5 +12,6 @@ namespace MyTeam.Services.Domain
         IEnumerable<Event> GetUpcoming(EventType type);
         IList<Event> GetAll(EventType type);
         IEnumerable<Event> GetPrevious(EventType type);
+        Event SetAttendanceReturnsEvent(Guid id, Guid eventId, bool isAttending);
     }
 }
