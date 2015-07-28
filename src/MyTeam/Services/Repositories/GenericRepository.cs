@@ -50,12 +50,7 @@ namespace MyTeam.Services.Repositories
 
         public void Update(TEntity entity)
         {
-            var et = _testRepository.Get<TEntity>().SingleOrDefault(e => e.Id == entity.Id);
-
-            if (et != null)
-                _testRepository.Remove(et);
-
-            _testRepository.Add(entity);
+           
 
         }
     }
