@@ -12,6 +12,7 @@ namespace MyTeam.Resources
         public const string Attending = "Kommer";
         public const string IsAttending = "Stiller";
         public const string IsNotAttending = "Kan ikke";
+        public const string InvalidInput = "Ugyldig input";
 
         public const string Games = "Kamper";
         public const string Table = "Tabell";
@@ -34,8 +35,8 @@ namespace MyTeam.Resources
         public static string Pluralise = "er";
 
 
-        /* Training */
         public static string Trainings = "Treninger";
+        public static string Unauthorized = "Ingen tilgang";
 
 
 

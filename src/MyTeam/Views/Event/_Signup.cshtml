@@ -5,8 +5,8 @@
 @model MyTeam.Models.Domain.Event
 
 <div>
-    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true" >@Res.IsAttending</a>
-    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false"   >@Res.IsNotAttending</a>
+    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#signups-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true" >@Res.IsAttending</a>
+    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#signups-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false"   >@Res.IsNotAttending</a>
     </div>
     <br />
     <div id="signups-@Model.Id">

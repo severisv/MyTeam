@@ -1,25 +1,25 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
-using MyTeam.Models.Enums;
 using MyTeam.Services.Application;
-using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Events;
 
 
 namespace MyTeam.Controllers
 {
+    [HandleError]
     public class BaseController : Controller
     {
         [FromServices]
         public IMemoryStore MemoryStore { get; set; }
 
-        public Player ActivePlayer => MemoryStore.GetPlayerFromUser(User.Identity.Name);
-        public bool CurrentUserHasPlayer => ActivePlayer != null;
+        public virtual Player CurrentPlayer => MemoryStore.GetPlayerFromUser(User.Identity.Name);
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public bool UserIsPlayer()
         {
-            ViewBag.CurrentUserHasPlayer = CurrentUserHasPlayer;
+            return CurrentPlayer != null;
         }
+
+       
     }
 }

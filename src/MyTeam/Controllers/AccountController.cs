@@ -117,7 +117,7 @@ namespace MyTeam.Controllers
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(ClubController.Index), "Home");
+                    return RedirectToAction(nameof(ClubController.Index), "Club");
                 }
                 AddErrors(result);
             }
@@ -133,7 +133,7 @@ namespace MyTeam.Controllers
         public IActionResult LogOff()
         {
             _signInManager.SignOut();
-            return RedirectToAction(nameof(ClubController.Index), "Home");
+            return RedirectToAction(nameof(ClubController.Index), "Club");
         }
 
         //

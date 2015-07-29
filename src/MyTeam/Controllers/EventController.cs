@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
+using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
@@ -22,10 +23,12 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
+        [RequirePlayer]
+        [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
-            var ev = EventService.SetAttendanceReturnsEvent(ActivePlayer.Id, eventId, isAttending);
-
+            var ev = EventService.SetAttendanceReturnsEvent(CurrentPlayer.Id, eventId, isAttending);
+            
             return PartialView("_Signup", ev);
         }
 

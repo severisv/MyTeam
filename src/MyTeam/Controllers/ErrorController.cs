@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using System;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc;
 
 namespace MyTeam.Controllers
 {
@@ -6,7 +8,17 @@ namespace MyTeam.Controllers
     {
         public IActionResult Index()
         {
-            return View("~/Views/Shared/Error.cshtml");
+            return Error();
+        }
+
+        
+        public IActionResult Error(Exception e = null)
+        {
+            if(Request.IsAjaxRequest())
+                return View("~/Views/Shared/Error/_Error.cshtml", e);
+
+            return View("~/Views/Shared/Error/Error.cshtml", e);
+
         }
     }
 }

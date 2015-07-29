@@ -1,0 +1,10 @@
+﻿@model Exception
+@{
+    ViewData["Title"] = "Error";
+    Layout = null;
+}
+
+<div mt-alert="danger" mt-icon="warning">
+    @Model.Message
+</div>
+

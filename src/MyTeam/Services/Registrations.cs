@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.DependencyInjection;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
@@ -20,10 +21,11 @@ namespace MyTeam.Services
 
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IMemoryStore, MemoryStore>();
+            services.AddTransient<ILogger, Logger>();
 
             services.AddSingleton<TestRepository>();
-
-
+            
+         
         }
     }
 
