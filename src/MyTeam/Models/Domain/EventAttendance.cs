@@ -7,6 +7,7 @@ namespace MyTeam.Models.Domain
         public Guid EventId { get; set; }
         public Guid PlayerId { get; set; }
         public bool IsAttending { get; set; }
+        public bool DidAttend { get; set; }
         public virtual Player Player { get; set; }
         public virtual Event Event { get; set; }
 

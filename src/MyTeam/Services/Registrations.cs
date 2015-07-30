@@ -15,6 +15,7 @@ namespace MyTeam.Services
     {
         public static void Setup(IServiceCollection services)
         {
+            services.AddTransient<IRepository<Club>, GenericRepository<Club>>();
             services.AddTransient<IRepository<Player>, GenericRepository<Player>>();
             services.AddTransient<IRepository<Event>, GenericRepository<Event>>();
             services.AddTransient<IRepository<EventAttendance>, GenericRepository<EventAttendance>>();

@@ -1,14 +1,18 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
+@{
+    var club = Context.GetClub();
+}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@Config.Title - @ViewBag.Title</title>
-    <link rel="icon" type="image/png" href="@Url.Content($"~/img/clubs/{Config.ClubId}/favicon.png")">
+    <title>@club.Name - @ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="@Url.Content($"~/img/clubs/{club.ClubId}/favicon.png")">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles.css" />
     <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.css" />
@@ -23,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-controller="home" class="navbar-brand"><img src="@Url.Content($"~/img/clubs/{Config.ClubId}/wamkam_small.png")" alt="Wam-Kam" /></a>
+                <a asp-controller="home" class="navbar-brand"><img src="@Url.Content($"~/img/clubs/{club.ClubId}/wamkam_small.png")" alt="Wam-Kam" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -39,13 +43,11 @@
     </div>
     @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")
     <div class="container body-content">
-
         @RenderBody()
-
         <footer></footer>
-
     </div>
-
+  
+ 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>

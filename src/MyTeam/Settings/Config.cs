@@ -6,13 +6,9 @@ namespace MyTeam.Settings
 {
     public class Config
     {
-        public static string Title => ClubName;
-        public static string ClubName = "Wam-Kam";
-        public static string ClubId = "wamkam";
         public static int AllowedSignupDays = 7;
         public static int AllowedSignoffHours = 2;
-
-
+        
 
         public static string PlayerImages(string clubShortname, string imagename, ImageSize imageSize)
         {

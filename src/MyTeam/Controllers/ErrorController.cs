@@ -4,7 +4,7 @@ using Microsoft.AspNet.Mvc;
 
 namespace MyTeam.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
         public IActionResult Index()
         {

@@ -5,5 +5,6 @@ namespace MyTeam.Services.Application
     public interface IMemoryStore
     {
         Player GetPlayerFromUser(string name);
+        Club GetClub(string clubId);
     }
 }

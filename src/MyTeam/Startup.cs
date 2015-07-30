@@ -129,7 +129,7 @@ namespace MyTeam
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Club}/{action=Index}/{id?}");
+                    template: "{club=wamkam}/{controller=Club}/{action=Index}/{id?}");
 
                 // Uncomment the following line to add a route for porting Web API 2 controllers.
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");

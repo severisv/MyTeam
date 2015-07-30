@@ -12,6 +12,7 @@ namespace MyTeam.Services.Repositories
             {
                 ShortName = "Wam-Kam",
                 Name = "Wam-Kam FK",
+                ClubId = "wamkam",
                 Players = new List<Player>()
             };
 

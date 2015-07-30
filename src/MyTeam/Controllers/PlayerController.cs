@@ -10,7 +10,7 @@ using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Controllers
 {
-    public class PlayerController : Controller
+    public class PlayerController : BaseController
     {
         [FromServices]
         public IRepository<Player> PlayerRepository { get; set; }

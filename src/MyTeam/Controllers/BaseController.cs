@@ -8,6 +8,7 @@ using MyTeam.Services.Application;
 namespace MyTeam.Controllers
 {
     [HandleError]
+    [LoadClub]
     public class BaseController : Controller
     {
         [FromServices]
