@@ -13,11 +13,11 @@ namespace Microsoft.AspNet.Mvc
         {
             if (httpContext.Request.IsAjaxRequest())
             {
-                this.ViewName = "~/Views/Shared/Error/_Error.cshtml";
+                this.ViewName = "_Error";
             }
             else
             {
-                this.ViewName = "~/Views/Shared/Error/Error.cshtml";
+                this.ViewName = "Error";
                 StatusCode = 500;
             }
 

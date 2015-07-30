@@ -13,25 +13,40 @@ namespace MyTeam.TagHelpers
         public const string Name = "mt-alert";
 
         [HtmlAttributeName(Name)]
-        public string Type { get; set; }
-        [HtmlAttributeName("mt-icon")]
-        public string Icon { get; set; }
+        public AlertType Type { get; set; }
 
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes["class"] = $"alert alert-{Type}";
-            
-            if (!string.IsNullOrWhiteSpace(Icon))
-            {
-                var innertag = new TagBuilder("i");
-                innertag.AddCssClass($"fa fa-{Icon}");
-                output.Content.Append(innertag.ToString());
-            }
+            var content = context.GetChildContentAsync().Result.GetContent();
+            if (string.IsNullOrWhiteSpace(content)) return;
 
-            output.Content.Append(context.GetChildContentAsync().Result.GetContent());
+
+            output.Attributes["class"] = $"alert alert-{Type.ToString().ToLower()}";
+
+            var innertag = new TagBuilder("i");
+            innertag.AddCssClass($"fa fa-{GetIcon(Type)}");
+            output.Content.Append(innertag.ToString());
+
+            output.Content.Append(content);
             output.Content.Append(
                 "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+        }
+
+        private string GetIcon(AlertType type)
+        {
+            switch (type)
+            {
+                case AlertType.Danger:
+                    return "warning";
+                case AlertType.Info:
+                    return "info";
+                case AlertType.Warning:
+                    return "warning";
+                default:
+                    return "info";
+
+            }
         }
     }
 }

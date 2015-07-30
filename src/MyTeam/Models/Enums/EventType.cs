@@ -7,4 +7,12 @@
         Diverse,
         Alle
     }
+
+    public enum AlertType
+    {
+        Info,
+        InfoSubtle,
+        Danger,
+        Warning,
+    }
 }

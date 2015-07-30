@@ -11,11 +11,11 @@ namespace Microsoft.AspNet.Mvc
         {
             if (httpContext.Request.IsAjaxRequest())
             {
-                this.ViewName = "~/Views/Shared/Error/_Unauthorized.cshtml";
+                this.ViewName = "_Unauthorized";
             }
             else
             {
-                this.ViewName = "~/Views/Shared/Error/Unauthorized.cshtml";
+                this.ViewName = "Unauthorized";
             }
 
             this.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())

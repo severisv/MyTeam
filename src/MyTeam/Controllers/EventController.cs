@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
+using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
 
@@ -27,11 +28,23 @@ namespace MyTeam.Controllers
         [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
-            var ev = EventService.SetAttendanceReturnsEvent(CurrentPlayer.Id, eventId, isAttending);
-            
+            var ev = EventService.Get(eventId);
+
+            if (isAttending == false && ev.SignoffHasClosed())
+            {
+                ViewBag.SignupMessage = Res.SignoffClosed;
+            }
+            else if (ev.SignupHasClosed())
+            {
+                return new UnauthorizedResult(Request.HttpContext);
+            }
+            else
+            {
+                EventService.SetAttendance(ev, CurrentPlayer.Id, isAttending);
+            }
+
             return PartialView("_Signup", ev);
         }
-
        
 
     

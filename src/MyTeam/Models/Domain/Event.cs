@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MyTeam.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 
 namespace MyTeam.Models.Domain
 {
@@ -27,5 +28,28 @@ namespace MyTeam.Models.Domain
         public bool IsTraining => Type == EventType.Trening;
         public bool IsCustom => Type == EventType.Diverse;
 
+        public bool IsAttending(ClaimsPrincipal user)
+        {
+            return Attending.Any(a => a.UserName == user.Identity.Name);
+        }
+        public bool IsNotAttending(ClaimsPrincipal user)
+        {
+            return NotAttending.Any(a => a.UserName == user.Identity.Name);
+        }
+
+        public bool SignupHasOpened()
+        {
+            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays);
+        }
+
+        public bool SignupHasClosed()
+        {
+            return DateTime < DateTime.Now;
+        }
+
+        public bool SignoffHasClosed()
+        {
+            return DateTime - DateTime.Now < new TimeSpan(0,Settings.Config.AllowedSignoffHours,0,0);
+        }
     }
 }

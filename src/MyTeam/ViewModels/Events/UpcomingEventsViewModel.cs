@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Data.Entity.Metadata;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -16,7 +17,7 @@ namespace MyTeam.ViewModels.Events
         public UpcomingEventsViewModel(IEnumerable<Event> events, EventType type)
         {
             Type = type;
-            Events = events;
+            Events = events.OrderBy(e => e.DateTime);
         }
     }
 }

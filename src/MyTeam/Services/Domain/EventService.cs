@@ -12,11 +12,13 @@ namespace MyTeam.Services.Domain
     {
         public IRepository<Event> EventRepository { get; set; }
         public IRepository<EventAttendance> EventAttendanceRepository { get; set; }
+        public IRepository<Player> PlayerRepository { get; set; }
 
-        public EventService(IRepository<Event> eventRepository, IRepository<EventAttendance> eventAttendanceRepository)
+        public EventService(IRepository<Event> eventRepository, IRepository<EventAttendance> eventAttendanceRepository, IRepository<Player> playerRepository)
         {
             EventRepository = eventRepository;
             EventAttendanceRepository = eventAttendanceRepository;
+            PlayerRepository = playerRepository;
         }
 
         public Event Get(Guid id)
@@ -45,30 +47,27 @@ namespace MyTeam.Services.Domain
                 .Where(t => t.DateTime.Date < DateTime.Today.Date);
         }
 
-        public Event SetAttendanceReturnsEvent(Guid playerId, Guid eventId, bool isAttending)
+        public void SetAttendance(Event ev, Guid playerId, bool isAttending)
         {
-            var ev = EventRepository.Get(eventId).Single();
 
             var attendance = ev.Attendees.SingleOrDefault(a => a.PlayerId == playerId);
             if (attendance != null)
             {
                 attendance.IsAttending = isAttending;
-                EventAttendanceRepository.Update(attendance);
             }
             else
             {
                 attendance = new EventAttendance
                 {
-                    EventId = eventId,
+                    EventId = ev.Id,
                     PlayerId = playerId,
-                    IsAttending = isAttending
+                    IsAttending = isAttending,
+                    Player = PlayerRepository.GetSingle(playerId),
+                    Event = ev
                 };
                 EventAttendanceRepository.Add(attendance);
-
+                ev.Attendees.Add(attendance);
             }
-
-            ev.Attendees.Add(attendance);
-            return ev;
 
         }
     }

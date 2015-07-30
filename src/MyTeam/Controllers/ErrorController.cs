@@ -15,9 +15,9 @@ namespace MyTeam.Controllers
         public IActionResult Error(Exception e = null)
         {
             if(Request.IsAjaxRequest())
-                return View("~/Views/Shared/Error/_Error.cshtml", e);
+                return View("_Error", e);
 
-            return View("~/Views/Shared/Error/Error.cshtml", e);
+            return View("Error", e);
 
         }
     }

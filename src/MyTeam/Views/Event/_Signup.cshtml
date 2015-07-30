@@ -1,39 +1,47 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
 @using Microsoft.AspNet.Mvc.Rendering
+@using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.Models.Domain.Event
 
-<div>
-    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#signups-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true" >@Res.IsAttending</a>
-    <a class="btn btn-lg btn-default" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#signups-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false"   >@Res.IsNotAttending</a>
-    </div>
-    <br />
-    <div id="signups-@Model.Id">
-        <div class="attendee-links">
-            <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
-                <span class="flex-2">@Res.Attending (@Model.Attending.Count())</span>
-                <span class="flex-2">@Res.IsNotAttending (@Model.NotAttending.Count())</span>
-                <span class="flex-1 pull-right">&nbsp;</span>
-            </a>
-        </div>
-        <div class="panel">
-            <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                <div class="flex">
-                    <ul class="list-unstyled flex-2">
-                        @foreach (var player in Model.Attending)
-                        {
-                            <li>@Html.Partial("Player/_Link", player)</li>
-                        }
-                    </ul>
-                    <ul class="list-unstyled flex-3">
-                        @foreach (var player in Model.NotAttending)
-                        {
-                            <li>@Html.Partial("Player/_Link", player)</li>
-                        }
-                    </ul>
-                </div>
 
+@if (!Model.SignupHasClosed())
+{
+    <div>
+        <a class="btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true">@Res.IsAttending</a>
+        <a class="btn btn-lg btn-@(Model.IsNotAttending(User) ? "danger" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false">@Res.IsNotAttending</a>
+    </div>
+}
+<br/>
+<div mt-alert="@AlertType.Info" >@ViewBag.SignupMessage</div>
+
+
+<div id="signups-@Model.Id">
+    <div class="attendee-links">
+        <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+            <span class="flex-2">@Res.Attending (@Model.Attending.Count())</span>
+            <span class="flex-2">@Res.IsNotAttending (@Model.NotAttending.Count())</span>
+            <span class="flex-1 pull-right">&nbsp;</span>
+        </a>
+    </div>
+    <div class="panel">
+        <div id="attendees-@Model.Id" class="panel-collapse collapse">
+            <div class="flex">
+                <ul class="list-unstyled flex-2">
+                    @foreach (var player in Model.Attending)
+                    {
+                        <li>@Html.Partial("Player/_Link", player)</li>
+                    }
+                </ul>
+                <ul class="list-unstyled flex-3">
+                    @foreach (var player in Model.NotAttending)
+                    {
+                        <li>@Html.Partial("Player/_Link", player)</li>
+                    }
+                </ul>
             </div>
+
         </div>
     </div>
+</div>

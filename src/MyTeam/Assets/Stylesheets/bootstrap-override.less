@@ -37,44 +37,43 @@
 
 
 
-    .nav-list {
-        li {
-            
-            &.nav-header {
-                color: fade(black, 50);
-                text-transform: uppercase;
-                font-size: 95%;
-                font-weight: bold;
-                text-shadow: 0px 1px 0px fade(white, 50);
-                padding-left: 14px;
+.nav-list {
+    li {
+
+        &.nav-header {
+            color: fade(black, 50);
+            text-transform: uppercase;
+            font-size: 95%;
+            font-weight: bold;
+            text-shadow: 0px 1px 0px fade(white, 50);
+            padding-left: 14px;
+        }
+
+        a {
+            padding: 2px;
+            padding-left: 15px;
+
+            &:hover {
+                background-color: fade(@team-primary, 40);
             }
-            a {
-                padding: 2px;
-                padding-left: 15px;
-                &:hover {
-                    background-color: fade(@team-primary, 40);
 
-                }
-
-                 &:focus {
+            &:focus {
                 background-color: fade(@link-color,25);
             }
-
-            }          
-           
         }
     }
+}
 
 
-    /* Pills */
+/* Pills */
 
-    .nav-pills {
-        li {
-            a {
-                border-radius: 0;
-            }
+.nav-pills {
+    li {
+        a {
+            border-radius: 0;
         }
     }
+}
 
 
 /* Table */
@@ -107,11 +106,21 @@ i.fa {
 .alert {
     border-radius: 0px;
     text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .alert-info {
-    border-color: darken(#bce8f1, 25)
+    border-color: darken(#bce8f1, 25);
 }
+
+.alert-infosubtle {
+    color: #31708f;
+    background-color: fade(#d9edf7, 50);
+    border-color: #bce8f1;
+}
+
+
 
 
 /* Btn */

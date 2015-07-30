@@ -9,6 +9,8 @@ namespace MyTeam.Settings
         public static string Title => ClubName;
         public static string ClubName = "Wam-Kam";
         public static string ClubId = "wamkam";
+        public static int AllowedSignupDays = 7;
+        public static int AllowedSignoffHours = 2;
 
 
 

@@ -11,11 +11,11 @@ namespace Microsoft.AspNet.Mvc
         {
             if (httpContext.Request.IsAjaxRequest())
             {
-                this.ViewName = "~/Views/Shared/Error/_InvalidInput.cshtml";
+                this.ViewName = "_InvalidInput.cshtml";
             }
             else
             {
-                this.ViewName = "~/Views/Shared/Error/InvalidInput.cshtml";
+                this.ViewName = "InvalidInput";
             }
 
             this.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())

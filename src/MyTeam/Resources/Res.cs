@@ -6,6 +6,7 @@ namespace MyTeam.Resources
 {
     public class Res
     {
+        public const string Error = "Det oppstod en feil";
         public const string Home = "Nyheter";
         public const string Players = "Spillere";
         public const string Event = "Hendelse";
@@ -29,6 +30,8 @@ namespace MyTeam.Resources
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
         public const string HallOfFame = "Hall of Fame";
+        public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
+        public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
         public const string Submenu = "Undermeny";
         public static string Upcoming = "Kommende";
         public static string Previous = "Tidligere";

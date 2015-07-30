@@ -75,6 +75,8 @@ namespace MyTeam.Services.Repositories
             testRepository.Add(CreateEvent(testRepository,D(-14), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,D(-7), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,D(0), location: "Muselunden", players: players));
+            testRepository.Add(CreateEvent(testRepository,DateTime.Now.AddHours(1), location: "Muselunden"));
+            testRepository.Add(CreateEvent(testRepository,DateTime.Now.AddHours(-1), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,D(+7), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository, D(+14), location: "Muselunden"));
 
@@ -87,11 +89,6 @@ namespace MyTeam.Services.Repositories
 
         private static Event CreateEvent(TestRepository testRepository, DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
         {
-
-
-         
-            
-
             var result = new Event()
             {
                 DateTime = dateTime,
