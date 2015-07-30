@@ -1,0 +1,37 @@
+﻿@using System.Threading.Tasks
+@using Microsoft.Data.Entity.Metadata
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Events.CreateEventViewModel
+
+<form asp-action="Create" method="post" class="form-horizontal" role="form">
+    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    
+    <div class="form-group">
+        <label asp-for="Location" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Date" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Time" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Time" class="form-control" />
+            <span asp-validation-for="Time" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">@Res.Create</button>
+        </div>
+    </div>
+</form>

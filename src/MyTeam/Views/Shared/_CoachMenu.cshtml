@@ -1,0 +1,12 @@
+﻿
+@if (!User.IsInRole(Roles.Coach))
+{
+
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.CoachMenu</li>
+            <li><a asp-action="create"><i class='fa fa-plus'></i> @Res.CreateEvent</a></li>
+        </ul>
+    </div>
+
+}

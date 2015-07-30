@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
@@ -46,7 +47,20 @@ namespace MyTeam.Controllers
             return PartialView("_Signup", ev);
         }
        
+        //[Authorize(Roles = Roles.Coach)]
+        public IActionResult Create()
+        {
+            var model = new CreateEventViewModel();
+            return View(model);
+        }
 
-    
+        //[Authorize(Roles = Roles.Coach)]
+        [HttpPost]
+        public IActionResult Create(CreateEventViewModel model)
+        {
+            
+            return View();
+        }
+
     }
 }

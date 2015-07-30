@@ -6,40 +6,56 @@ namespace MyTeam.Resources
 {
     public class Res
     {
-        public const string Error = "Det oppstod en feil";
-        public const string Home = "Nyheter";
-        public const string Players = "Spillere";
-        public const string Event = "Hendelse";
+
+        public const string Actions = "Handlinger";
         public const string Attending = "Kommer";
+        public const string AssistCount = "Assists";
+        public const string Active = "Aktive";
+        public static string ActivePlayers => $"{Active} {Players}";
+
+        public const string BirthDate = "Født";
+
+
+        public const string Create = "Opprett";
+        public static string CreateEvent => $"{Create} { Event.ToLower()}";
+        public const string CoachMenu = "Trenermeny";
+        public const string Date = "Dato";
+        public const string Error = "Det oppstod en feil";
+        public const string Event = "Hendelse";
+
+        public const string Home = "Nyheter";
+
+
         public const string IsAttending = "Stiller";
         public const string IsNotAttending = "Kan ikke";
         public const string InvalidInput = "Ugyldig input";
 
         public const string Games = "Kamper";
-        public const string Table = "Tabell";
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
-        public const string AssistCount = "Assists";
+        public const string Location = "Sted";
+
+
+        public const string Table = "Tabell";
+
         public const string Positions = "Posisjon";
-        public const string BirthDate = "Født";
         public const string StartDate = "Signerte for";
         public const string Email = "E-post";
         public const string Phone = "Telefon";
-        public const string Active = "Aktive";
-        public static string ActivePlayers => $"{Active} {Players}";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
         public const string HallOfFame = "Hall of Fame";
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
         public const string Submenu = "Undermeny";
-        public static string Upcoming = "Kommende";
-        public static string Previous = "Tidligere";
-        public static string Pluralise = "er";
+        public const string Upcoming = "Kommende";
+        public const string Previous = "Tidligere";
+        public const string Pluralise = "er";
+        public const string Players = "Spillere";
 
-
-        public static string Trainings = "Treninger";
-        public static string Unauthorized = "Ingen tilgang";
+        public const string Time = "Klokkeslett";
+        public const string Trainings = "Treninger";
+        public const string Unauthorized = "Ingen tilgang";
 
 
 

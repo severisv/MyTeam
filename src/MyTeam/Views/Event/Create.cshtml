@@ -1,0 +1,21 @@
+﻿@using System.Threading.Tasks
+@using Microsoft.Data.Entity.Metadata
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Events.CreateEventViewModel
+
+@{
+    ViewBag.Title = Res.CreateEvent;
+}
+
+<div mt-main>
+    @Html.Partial("_CreateEventForm")
+</div>
+
+@Html.Partial("_CoachMenu")
+
+<div mt-sidebar>
+
+
+</div>
+

@@ -10,6 +10,7 @@ namespace MyTeam.Models.Domain
 {
     public class Event : Entity
     {
+
         public EventType Type { get; set; } 
 
         public DateTime DateTime { get; set; }
@@ -17,7 +18,6 @@ namespace MyTeam.Models.Domain
         public string Description { get; set; }
 
         public bool Recurring { get; set; }
-        public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
 
         public virtual IList<EventAttendance> Attendees { get; set; }
