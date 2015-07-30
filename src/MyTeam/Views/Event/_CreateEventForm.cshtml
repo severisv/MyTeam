@@ -4,27 +4,23 @@
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Events.CreateEventViewModel
 
+<ul class="nav nav-pills nav-justified">
+    @foreach (EventType type in Model.EventTypes)
+    {
+        <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
+
+    }
+</ul>
+<br />
+
 <form asp-action="Create" method="post" class="form-horizontal" role="form">
     <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-    
-    <div class="form-group">
-        <label asp-for="Type" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <select asp-for="Type" asp-items="Model.EventTypes" class="form-control">
-            </select>
-        </div>
-    </div>
+
+    <input asp-for="Type" type="hidden" value="@((int)Model.Type)"/>
    
-     <div class="form-group">
-        <label asp-for="Location" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Location" class="form-control" />
-            <span asp-validation-for="Location" class="text-danger"></span>
-        </div>
-    </div>
 
     <div class="form-group">
-        <label asp-for="Date" class="col-md-2 control-label"></label>
+         <label asp-for="Date" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="Date" class="form-control" />
             <span asp-validation-for="Date" class="text-danger"></span>
@@ -33,13 +29,30 @@
     <div class="form-group">
         <label asp-for="Time" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Time" class="form-control" />
+            <input asp-for="Time" class="form-control"/>
             <span asp-validation-for="Time" class="text-danger"></span>
         </div>
     </div>
+    <div class="form-group">
+       <label asp-for="Location" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Location" class="form-control"/>
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+       <label asp-for="Description" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-primary">@Res.Create</button>
         </div>
     </div>
+
+    
 </form>

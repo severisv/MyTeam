@@ -70,5 +70,10 @@ namespace MyTeam.Services.Domain
             }
 
         }
+
+        public void Add(Event ev)
+        {
+            EventRepository.Add(ev);
+        }
     }
 }

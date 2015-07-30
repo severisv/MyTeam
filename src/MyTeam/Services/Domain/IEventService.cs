@@ -13,5 +13,6 @@ namespace MyTeam.Services.Domain
         IList<Event> GetAll(EventType type);
         IEnumerable<Event> GetPrevious(EventType type);
         void SetAttendance(Event ev, Guid playerId,  bool isAttending);
+        void Add(Event ev);
     }
 }

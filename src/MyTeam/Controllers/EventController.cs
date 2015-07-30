@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
@@ -48,9 +49,12 @@ namespace MyTeam.Controllers
         }
        
         //[Authorize(Roles = Roles.Coach)]
-        public IActionResult Create()
+        public IActionResult Create(EventType type = EventType.Trening)
         {
-            var model = new CreateEventViewModel();
+            var model = new CreateEventViewModel()
+            {
+                Type = type
+            };
             return View(model);
         }
 
@@ -58,8 +62,20 @@ namespace MyTeam.Controllers
         [HttpPost]
         public IActionResult Create(CreateEventViewModel model)
         {
-            
-            return View();
+            if (ModelState.IsValid)
+            {
+                var ev = new Event
+                {
+                    Location = model.Location,
+                    Type = model.Type.Value,
+                    DateTime = model.Date + model.Time,
+                    Description = model.Description
+                };
+
+                EventService.Add(ev);
+                return View("CreateSuccess", ev);
+            }
+            return View(model);
         }
 
     }
