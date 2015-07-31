@@ -75,5 +75,11 @@ namespace MyTeam.Services.Domain
         {
             EventRepository.Add(ev);
         }
+
+        public void Delete(Guid eventId)
+        {
+            var ev = EventRepository.Get(eventId).Single();
+            EventRepository.Delete(ev);
+        }
     }
 }

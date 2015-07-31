@@ -4,14 +4,25 @@
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Events.CreateEventViewModel
 
-<ul class="nav nav-pills mt-justified">
-    @foreach (EventType type in Model.EventTypes)
-    {
-        <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
+@if (Model.IsEditMode)
+{
+    <div class="col-xs-offset-1 col-xs-4 no-padding"><h2 class="no-margin" mt-eventtype="@Model.Type"></h2></div>
+    <a class="btn btn-danger pull-right" asp-action="delete" asp-route-eventId="@Model.EventId" title="@Res.Delete"><i class="fa fa-trash"></i></a>
+    <div class="clearfix"></div>
+    <br/>
+}
+else
+{
+    <ul class="nav nav-pills mt-justified">
+        @foreach (EventType type in Model.EventTypes)
+        {
+            <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
 
-    }
-</ul>
-<br />
+        }
+    </ul>
+    <br />
+}
+
 
 <form asp-action="Create" method="post" class="form-horizontal" role="form">
     @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@

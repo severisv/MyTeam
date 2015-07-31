@@ -22,8 +22,8 @@ namespace MyTeam.Controllers
             var events = EventService.GetUpcoming(type);
 
             var model = new UpcomingEventsViewModel(events, type);
-
-            return View(model);
+            
+            return View("Index", model);
         }
 
         [RequirePlayer]
@@ -55,6 +55,9 @@ namespace MyTeam.Controllers
             {
                 Type = type
             };
+
+            ViewBag.Title = Res.CreateEvent;
+
             return View(model);
         }
 
@@ -62,13 +65,14 @@ namespace MyTeam.Controllers
         [HttpPost]
         public IActionResult Create(CreateEventViewModel model)
         {
+            ViewBag.Title = Res.CreateEvent;
+
             if (ModelState.IsValid)
             {
                 var ev = new Event
                 {
                     Location = model.Location,
-                    // ReSharper disable once PossibleInvalidOperationException
-                    Type = model.Type.Value,
+                    Type = model.Type,
                     DateTime = model.Date + model.Time,
                     Description = model.Description
                 };
@@ -77,6 +81,32 @@ namespace MyTeam.Controllers
                 return View("CreateSuccess", ev);
             }
             return View(model);
+        }
+        
+        
+        //[Authorize(Roles = Roles.Coach)]
+        public IActionResult Edit(Guid eventId)
+        {
+            var ev = EventService.Get(eventId);
+
+            if (ev == null) return new NotFoundResult(Context);
+
+            var model = new CreateEventViewModel(ev);
+
+            ViewBag.Title = $"{Res.Edit} {ev.Type.ToString().ToLower()}";
+
+            return View("Create", model);
+        }
+
+        public IActionResult Delete(Guid eventId)
+        {
+            var ev = EventService.Get(eventId);
+
+            if (ev == null) return new NotFoundResult(Context);
+
+            EventService.Delete(eventId);
+            ViewBag.AlertSuccess = $"{ev.Type} {Res.Deleted}";
+            return Index();
         }
 
     }

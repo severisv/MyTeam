@@ -10,13 +10,13 @@
 
 <div mt-main>
     <ul class="nav nav-pills mt-justified">
-        @foreach (EventType type in Enum.GetValues(typeof(EventType)))
+        @foreach (EventType type in Enum.GetValues(typeof (EventType)))
         {
-            <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
+            <li class="@(type == Model.Type ? "active" : "")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
 
         }
     </ul>
-    <br />
+    <br/>
 
     @foreach (var ev in Model.Events)
     {

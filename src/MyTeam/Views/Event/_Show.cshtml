@@ -6,7 +6,10 @@
 @model MyTeam.Models.Domain.Event
 
 <hr/>
-
+@if (!User.IsInRole(Roles.Coach))
+{
+    <a asp-action="edit" asp-route-eventId="@Model.Id" class="ft-md pull-right" title="@Res.Edit" ><i class="fa fa-edit"></i></a>
+}
 <div class="show-upcoming-event">
     <div class="flex">
         <div class="flex-1 event-icon">

@@ -14,5 +14,6 @@ namespace MyTeam.Services.Domain
         IEnumerable<Event> GetPrevious(EventType type);
         void SetAttendance(Event ev, Guid playerId,  bool isAttending);
         void Add(Event ev);
+        void Delete(Guid eventId);
     }
 }

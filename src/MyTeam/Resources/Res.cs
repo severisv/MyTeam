@@ -21,6 +21,9 @@ namespace MyTeam.Resources
         public const string CoachMenu = "Trenermeny";
         public const string Description = "Beskrivelse";
         public const string Date = "Dato";
+        public const string Delete = "Slett";
+        public const string Deleted = "Slettet";
+        public const string Edit = "Rediger";
         public const string Error = "Det oppstod en feil";
         public const string Event = "Hendelse";
         public const string FieldRequired = "Feltet er obligatorisk";
@@ -36,9 +39,10 @@ namespace MyTeam.Resources
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
         public const string Location = "Sted";
-
+        public const string HallOfFame = "Hall of Fame";
         public const string Mandatory = "Obligatorisk oppmøte";
         public const string MandatoryExplaination = "Obligatorisk oppmøte betyr at treningen teller med på oppmøtestatistikken";
+        public const string NotFound = "Siden finnes ikke";
 
 
         public const string Table = "Tabell";
@@ -49,7 +53,7 @@ namespace MyTeam.Resources
         public const string Phone = "Telefon";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
-        public const string HallOfFame = "Hall of Fame";
+
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
         public const string Submenu = "Undermeny";

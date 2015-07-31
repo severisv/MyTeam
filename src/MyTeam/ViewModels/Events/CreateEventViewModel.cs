@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNet.Mvc.Rendering;
+using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 
@@ -11,8 +12,9 @@ namespace MyTeam.ViewModels.Events
 {
     public class CreateEventViewModel : IValidatableObject
     {
+
         [Required]
-        public EventType? Type { get; set; }
+        public EventType Type { get; set; }
         
         [Required]
         [Display(Name = Res.Date)]
@@ -36,8 +38,11 @@ namespace MyTeam.ViewModels.Events
         [Display(Name = Res.Mandatory)]
         public bool Mandatory { get; set; }
 
-        public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
 
+        public bool IsEditMode { get; }
+
+        public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
+        public Guid? EventId { get; }
 
 
         public CreateEventViewModel()
@@ -47,6 +52,18 @@ namespace MyTeam.ViewModels.Events
             Mandatory = true;
         }
 
+        public CreateEventViewModel(Event ev)
+        {
+            Type = ev.Type;
+            Date = ev.DateTime.Date;
+            Time = ev.DateTime.TimeOfDay;
+            Description = ev.Description;
+            Location = ev.Location;
+            Weekly = ev.Recurring;
+            ToDate = ev.ToDate;
+            IsEditMode = true;
+            EventId = ev.Id;
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

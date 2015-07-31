@@ -3,6 +3,8 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.TagHelpers;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Razor.TagHelpers;
+using MyTeam.Models.Enums;
+using MyTeam.Models.Structs;
 
 namespace MyTeam.TagHelpers
 {
@@ -19,7 +21,7 @@ namespace MyTeam.TagHelpers
 
         [HtmlAttributeName(ClassName)]
         public string Class { get; set; }
-
+        
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -35,6 +37,5 @@ namespace MyTeam.TagHelpers
 
             output.Content.Append(innertag.ToString());
         }
-
     }
 }

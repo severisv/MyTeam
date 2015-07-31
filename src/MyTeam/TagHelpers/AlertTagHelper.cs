@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
+﻿using System.Collections.Generic;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.TagHelpers;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Razor.TagHelpers;
 using MyTeam.Models.Enums;
+using MyTeam.Models.Structs;
 
 namespace MyTeam.TagHelpers
 {
@@ -18,36 +20,21 @@ namespace MyTeam.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var content = context.GetChildContentAsync().Result.GetContent();
-            if (string.IsNullOrWhiteSpace(content)) return;
+            var message = context.GetChildContentAsync().Result.GetContent();
+            if (string.IsNullOrWhiteSpace(message)) return;
 
+            var alert = new Alert(Type, message);
 
             output.Attributes["class"] = $"alert alert-{Type.ToString().ToLower()}";
 
             var innertag = new TagBuilder("i");
-            innertag.AddCssClass($"fa fa-{GetIcon(Type)}");
+            innertag.AddCssClass($"fa fa-{alert.Icon}");
             output.Content.Append(innertag.ToString());
-
-            output.Content.Append(content);
-            output.Content.Append(
-                "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+            output.Content.Append($" {alert.Message}");
+            output.Content.Append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
         }
 
-        private string GetIcon(AlertType type)
-        {
-            switch (type)
-            {
-                case AlertType.Danger:
-                    return "warning";
-                case AlertType.Info:
-                    return "info";
-                case AlertType.Warning:
-                    return "warning";
-                default:
-                    return "info";
-
-            }
-        }
+      
     }
 }
 
