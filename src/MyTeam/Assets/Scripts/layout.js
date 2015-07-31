@@ -1,8 +1,4 @@
 ﻿
-window.onpopstate = function (event) {
-
-    location.reload();
-}
 
 
 var layout = layout || {};
@@ -25,6 +21,7 @@ layout.pushState = function (key, value, title) {
     history.pushState('', title, uri);
     layout.setPageName(title)
 };
+
 
 
 

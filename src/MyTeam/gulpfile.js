@@ -32,6 +32,7 @@ var uglify = require('gulp-uglify');
 
 gulp.task('js', function () {
     return gulp.src(paths.scripts)
+        .pipe(concat('site.js'))
 //      .pipe(uglify())
       .pipe(gulp.dest(destPaths.scripts));
 });

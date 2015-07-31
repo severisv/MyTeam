@@ -1,0 +1,19 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Events.CreateEventViewModel
+
+@if (Model.Type == EventType.Trening)
+{
+    <div class="form-group">
+        <label mt-for="Mandatory" mt-icon="asterisk" class="col-xs-3 control-label"></label>
+        <div class="col-xs-9">
+            <input asp-for="Mandatory" type="checkbox" class="form-control"  />
+            <span asp-validation-for="Location" class="text-danger"></span>
+            
+            <a class="pull-right" mt-tooltip="@Res.MandatoryExplaination"></a>
+            @*<a href="javascript:void(0)" class="pull-right mt-popover link-color " data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-question-circle"></i></a>*@
+        </div>
+    </div>
+}
+

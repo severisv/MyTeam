@@ -19,9 +19,11 @@ namespace MyTeam.Resources
         public const string Create = "Opprett";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
         public const string CoachMenu = "Trenermeny";
+        public const string Description = "Beskrivelse";
         public const string Date = "Dato";
         public const string Error = "Det oppstod en feil";
         public const string Event = "Hendelse";
+        public const string FieldRequired = "Feltet er obligatorisk";
 
         public const string Home = "Nyheter";
 
@@ -34,6 +36,9 @@ namespace MyTeam.Resources
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
         public const string Location = "Sted";
+
+        public const string Mandatory = "Obligatorisk oppmøte";
+        public const string MandatoryExplaination = "Obligatorisk oppmøte betyr at treningen teller med på oppmøtestatistikken";
 
 
         public const string Table = "Tabell";

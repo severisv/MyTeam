@@ -45,7 +45,7 @@ namespace MyTeam.Controllers
                 EventService.SetAttendance(ev, CurrentPlayer.Id, isAttending);
             }
 
-            return PartialView("_Signup", ev);
+            return PartialView("_SignupDetails", ev);
         }
        
         //[Authorize(Roles = Roles.Coach)]
@@ -67,6 +67,7 @@ namespace MyTeam.Controllers
                 var ev = new Event
                 {
                     Location = model.Location,
+                    // ReSharper disable once PossibleInvalidOperationException
                     Type = model.Type.Value,
                     DateTime = model.Date + model.Time,
                     Description = model.Description

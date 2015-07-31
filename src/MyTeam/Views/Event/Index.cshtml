@@ -9,7 +9,7 @@
 }
 
 <div mt-main>
-    <ul class="nav nav-pills nav-justified">
+    <ul class="nav nav-pills mt-justified">
         @foreach (EventType type in Enum.GetValues(typeof(EventType)))
         {
             <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
@@ -21,6 +21,7 @@
     @foreach (var ev in Model.Events)
     {
         @Html.Partial("_Show", ev)
+        @Html.Partial("_Signup", ev)
     }
 </div>
 

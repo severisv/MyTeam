@@ -4,7 +4,7 @@
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Events.CreateEventViewModel
 
-<ul class="nav nav-pills nav-justified">
+<ul class="nav nav-pills mt-justified">
     @foreach (EventType type in Model.EventTypes)
     {
         <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
@@ -14,45 +14,54 @@
 <br />
 
 <form asp-action="Create" method="post" class="form-horizontal" role="form">
-    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
-    <input asp-for="Type" type="hidden" value="@((int)Model.Type)"/>
-   
+    <input asp-for="Type" type="hidden" value="@((int) Model.Type)" />
 
-    <div class="form-group">
-         <label asp-for="Date" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Date" class="form-control" />
-            <span asp-validation-for="Date" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Time" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Time" class="form-control"/>
-            <span asp-validation-for="Time" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-       <label asp-for="Location" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Location" class="form-control"/>
-            <span asp-validation-for="Location" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-       <label asp-for="Description" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <textarea asp-for="Description" class="form-control"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-    </div>
+    <div class="col-sm-6 col-xs-12">
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-primary">@Res.Create</button>
+        <div class="form-group">
+            <label mt-for="Date" mt-icon="calendar" class="col-xs-3 control-label"></label>
+            <div class="col-xs-9">
+                <input asp-for="Date" class="form-control datepicker" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label mt-for="Time" mt-icon="clock-o" class="col-xs-3 control-label"></label>
+            <div class="col-xs-9">
+                <input asp-for="Time" class="form-control timepicker" />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label mt-for="Location" mt-icon="map-marker" class="col-xs-3 control-label"></label>
+            <div class="col-xs-9">
+                <input asp-for="Location" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Location)" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
+      
+    </div>
+    <div class="col-sm-6 col-xs-12">
+        @Html.Partial("_TrainingForm")
+        @Html.Partial("_GameForm")
+        @Html.Partial("_CustomEventForm")
+
+        <div class="form-group">
+            <label mt-for="Description" mt-icon="file-text-o" class="col-xs-3 control-label"></label>
+            <div class="col-xs-9">
+                <textarea asp-for="Description" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Description)"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
         </div>
     </div>
-
-    
+    <div class="clearfix"></div>
+    <div class="col-sm-6 col-xs-12">
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-9">
+                <button type="submit" class="btn btn-primary">@Res.Create</button>
+            </div>
+        </div>
+    </div>
 </form>

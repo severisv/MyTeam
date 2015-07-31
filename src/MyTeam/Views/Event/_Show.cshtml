@@ -32,23 +32,11 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <div id="event-signup-@Model.Id" class="event-signup">
-
-        @if (Model.SignupHasOpened())
-        {
-            @Html.Partial("_Signup")
-        }
-        else
-        {
-            <div mt-alert="@AlertType.InfoSubtle">
-                @Res.SignupNotAllowed
-            </div>
-        }
-    </div>
-
-
 </div>
-<div class="clearfix"></div>
+
+
+
+
 
 
 
