@@ -1,14 +1,5 @@
 ﻿$('input.datepicker').datepicker();
 $('a.mt-popover').popover({ trigger: "hover" });
-
-
-
-window.onpopstate = function (event) {
-
-    location.reload();
-}
-
-
 $('a.confirm-dialog').click(function (e) {
     e.preventDefault();
     var element = $(this);
@@ -21,3 +12,10 @@ $('a.confirm-dialog').click(function (e) {
     });
 
 });
+
+
+window.onpopstate = function () {
+    location.reload();
+}
+
+

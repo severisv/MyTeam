@@ -59,7 +59,7 @@
 
             &:focus {
                 background-color: fade(@link-color,25);
-            }      
+            }
         }
     }
 }
@@ -130,21 +130,35 @@ i.fa {
 /* Forms */
 
 form {
-    input.form-control[type='checkbox'] {
-            width:33px;
-            margin:0;
+    input {
+
+        &.form-control[type='checkbox'] {
+            width: 33px;
+            margin: 0;
             display: inline;
+            vertical-align: top;
+        }
     }
+
+    div.form-group {
+        div {
+            i.fa {
+                margin-top:10px;
+            }
+        }
+    }
+
+
 }
 
 
 /* Popover */
-.popover{
+.popover {
     border-radius: 0px;
 }
 
 /* Modal */
-.modal-content{
+.modal-content {
     border-radius: 0;
 }
 

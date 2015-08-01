@@ -52,6 +52,8 @@ namespace MyTeam.Resources
         public const string StartDate = "Signerte for";
         public const string Email = "E-post";
         public const string Phone = "Telefon";
+        public const string Recurring = "Ukentlig";
+        public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes treninger hver uke på samme tidspunkt frem til datoen man spesifiserer";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
         public const string Save = "Lagre";
@@ -66,6 +68,8 @@ namespace MyTeam.Resources
 
         public const string Time = "Klokkeslett";
         public const string Trainings = "Treninger";
+        public const string ToDate = "Til dato";
+        public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
         public const string Unauthorized = "Ingen tilgang";
 
 

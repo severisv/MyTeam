@@ -8,12 +8,28 @@
     <div class="form-group">
         <label mt-for="Mandatory" mt-icon="asterisk" class="col-xs-3 control-label"></label>
         <div class="col-xs-9">
-            <input asp-for="Mandatory" type="checkbox" class="form-control"  />
-            <span asp-validation-for="Location" class="text-danger"></span>
-            
-            <a class="pull-right" mt-tooltip="@Res.MandatoryExplaination"></a>
-            @*<a href="javascript:void(0)" class="pull-right mt-popover link-color " data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-question-circle"></i></a>*@
+
+            <input asp-for="Mandatory" type="checkbox" class="form-control" />
+            <a mt-tooltip="@Res.MandatoryExplaination"></a>
+            <span asp-validation-for="Mandatory" class="text-danger"></span>
         </div>
     </div>
+    <div class="form-group">
+        <label mt-for="Recurring" mt-icon="refresh" class="col-xs-3 control-label"></label>
+        <div class="col-xs-9 flex">
+            <div class="flex-1">
+                <input asp-for="Recurring" type="checkbox" class="form-control" />
+                <a mt-tooltip="@Res.RecurringExplaination"></a>
+            </div>
+            <div class="flex-2">
+                <input asp-for="ToDate" class="form-control datepicker" placeholder="@Html.DisplayNameFor(m => m.ToDate)" value="@Html.DisplayFor(m => m.ToDate)"/>
+            </div>
+        </div>
+        <div class="col-xs-offset-3 col-xs-9 flex">
+            <span asp-validation-for="Recurring" class="text-danger"></span>
+            <span asp-validation-for="ToDate" class="text-danger"></span>
+        </div>
+    </div>
+
 }
 

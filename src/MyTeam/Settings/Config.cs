@@ -8,6 +8,7 @@ namespace MyTeam.Settings
     {
         public static int AllowedSignupDays = 7;
         public static int AllowedSignoffHours = 2;
+        public static int AllowedMonthsAheadInTimeForTrainingCreation = 11;
         
 
         public static string PlayerImages(string clubShortname, string imagename, ImageSize imageSize)
@@ -31,7 +32,7 @@ namespace MyTeam.Settings
                 case ImageSize.Full:
                     return "full";
                 default:
-                    throw new NotImplementedException(string.Format("Imagesize not recognized: {0}", imageSize));
+                    throw new NotImplementedException($"Imagesize not recognized: {imageSize}");
             }
         }
 
