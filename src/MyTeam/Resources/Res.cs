@@ -16,6 +16,7 @@ namespace MyTeam.Resources
         public const string BirthDate = "Født";
 
 
+        public const string ConfirmDelete = "Er du sikker på at du vil slette?";
         public const string Create = "Opprett";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
         public const string CoachMenu = "Trenermeny";
@@ -53,6 +54,7 @@ namespace MyTeam.Resources
         public const string Phone = "Telefon";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
+        public const string Save = "Lagre";
 
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";

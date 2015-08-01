@@ -7,7 +7,8 @@
 @if (Model.IsEditMode)
 {
     <div class="col-xs-offset-1 col-xs-4 no-padding"><h2 class="no-margin" mt-eventtype="@Model.Type"></h2></div>
-    <a class="btn btn-danger pull-right" asp-action="delete" asp-route-eventId="@Model.EventId" title="@Res.Delete"><i class="fa fa-trash"></i></a>
+    <a class="btn btn-danger pull-right confirm-dialog"
+       asp-action="delete" asp-route-eventId="@Model.EventId" title="@Res.Delete" data-message="@Res.ConfirmDelete"><i class="fa fa-trash"></i></a>
     <div class="clearfix"></div>
     <br/>
 }
@@ -71,7 +72,7 @@ else
     <div class="col-sm-6 col-xs-12">
         <div class="form-group">
             <div class="col-xs-offset-3 col-xs-9">
-                <button type="submit" class="btn btn-primary">@Res.Create</button>
+                <button type="submit" class="btn btn-primary">@Res.Save</button>
             </div>
         </div>
     </div>
