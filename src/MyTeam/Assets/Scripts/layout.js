@@ -19,7 +19,7 @@ layout.pushState = function (key, value, title) {
     }
 
     history.pushState('', title, uri);
-    layout.setPageName(title)
+    layout.setPageName(title);
 };
 
 

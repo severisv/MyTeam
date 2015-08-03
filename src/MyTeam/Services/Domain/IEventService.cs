@@ -9,11 +9,11 @@ namespace MyTeam.Services.Domain
     public interface IEventService
     {
         Event Get(Guid id);
-        IEnumerable<Event> GetUpcoming(EventType type);
+        IEnumerable<Event> GetUpcoming(EventType type, bool showAll = false);
         IList<Event> GetAll(EventType type);
         IEnumerable<Event> GetPrevious(EventType type);
         void SetAttendance(Event ev, Guid playerId,  bool isAttending);
-        void Add(Event ev);
+        void Add(params  Event[] ev);
         void Delete(Guid eventId);
         void Update(Event ev);
     }

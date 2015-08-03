@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
@@ -70,23 +72,26 @@ namespace MyTeam.Controllers
 
             if (ModelState.IsValid)
             {
-                Event ev;
+                var result = new List<Event>();
 
                 if (model.EventId.HasValue)
                 {
-                    ev = EventService.Get(model.EventId.Value);
+                    var ev = EventService.Get(model.EventId.Value);
                     model.UpdateEvent(ev);
                     EventService.Update(ev);
+                    result.Add(ev);
                 }
 
                 else
                 {
-                    ev = model.CreateEvent();
-                    EventService.Add(ev);
+                    var events = model.CreateEvents();
+                    result.AddRange(events);
+                    EventService.Add(events.ToArray());
+                    
                 }
-                
-                Alert(AlertType.Success, $"{ev.Type} {Res.Saved.ToLower()}");
-                return View("CreateSuccess", ev);
+
+                Alert(AlertType.Success, $"{result.Count} {model.Type.ToString().Pluralize(result.Count).ToLower()} {Res.Saved.ToLower()}");
+                return View("CreateSuccess", result);
             }
             return View(model);
         }
@@ -113,7 +118,9 @@ namespace MyTeam.Controllers
             if (ev == null) return new NotFoundResult(Context);
 
             EventService.Delete(eventId);
+
             Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
+            if (Context.Request.IsAjaxRequest()) return PartialView("_Alerts");
             return Index();
         }
 

@@ -2,8 +2,13 @@
 @using MyTeam.Models.Enums
 @model MyTeam.ViewModels.Events.CreateEventViewModel
 
-@if (Model.Type == EventType.Trening)
+@if (Model.Type == EventType.Diverse)
 {
-  
+    <div class="form-group">
+        <label mt-for="Headline" mt-icon="header" class="col-xs-3 control-label"></label>
+        <div class="col-xs-9">
+            <input asp-for="Headline" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Headline)" />
+            <span asp-validation-for="Headline" class="text-danger"></span>
+        </div>
+    </div>
 }
-

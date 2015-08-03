@@ -33,6 +33,12 @@ namespace MyTeam.ViewModels.Events
         [Display(Name = Res.Description)]
         public string Description { get; set; }
 
+        [Display(Name = Res.Headline)]
+        public string Headline { get; set; }
+
+        [Display(Name = Res.Opponent)]
+        public string Opponent { get; set; }
+
         [Display(Name = Res.Recurring)]
         public bool Recurring { get; set; }
         [Display(Name = Res.ToDate)]
@@ -62,6 +68,8 @@ namespace MyTeam.ViewModels.Events
             Date = ev.DateTime.Date;
             Time = ev.DateTime.TimeOfDay;
             Description = ev.Description;
+            Headline = ev.Headline;
+            Opponent = ev.Opponent;
             Location = ev.Location;
             EventId = ev.Id;
             Mandatory = !ev.Voluntary;
@@ -92,15 +100,36 @@ namespace MyTeam.ViewModels.Events
             return result;
         }
 
-        public Event CreateEvent()
+        public List<Event> CreateEvents()
+        {
+            var result = new List<Event>
+            {
+                CreateEvent(Date)
+            };
+            
+            if (Recurring && ToDate.HasValue)
+            {
+                for (var date = Date.AddDays(7); date < ToDate.Value.Date.AddDays(1); date = date.AddDays(7))
+                {
+                    result.Add(CreateEvent(date));
+                }
+            }
+
+            return result;
+
+        }
+
+        private Event CreateEvent(DateTime date)
         {
             return new Event
             {
                 Location = Location,
                 Type = Type,
-                DateTime = Date + Time,
+                DateTime = date + Time,
                 Description = Description,
-                Voluntary = !Mandatory
+                Voluntary = !Mandatory,
+                Headline = Headline,
+                Opponent = Opponent,
             };
         }
 
@@ -110,6 +139,8 @@ namespace MyTeam.ViewModels.Events
             ev.Voluntary = !Mandatory;
             ev.DateTime = Date + Time;
             ev.Description = Description;
+            ev.Headline = Headline;
+            ev.Opponent = Opponent;
         }
     }
 }

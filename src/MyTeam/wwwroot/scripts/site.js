@@ -1,3 +1,22 @@
+var checkbox = checkbox || {};
+
+checkbox.showHideAssociatedElement = function (element, associatedSelector, reverse) {
+    var show = element.checked;
+    if (reverse) {
+        show = !element.checked;
+    }
+
+    if (show) {
+        $(associatedSelector).show();
+    } else {
+        $(associatedSelector).hide();
+    }
+};
+
+
+
+
+
 
 
 
@@ -83,9 +102,23 @@ layout.pushState = function (key, value, title) {
     }
 
     history.pushState('', title, uri);
-    layout.setPageName(title)
+    layout.setPageName(title);
 };
 
 
 
 
+
+var mt = mt || {};
+
+mt.deleteWithAjax = function(selector) {
+    var element = $(selector);
+    var href = element.data('href');
+    $.post(href, function (result) {
+
+        
+        $('#' + element.data('parent')).fadeOut(300, function() { $(this).remove(); });
+        $('#alerts').html(result);
+        $('.alert').effect("highlight", { }, 500 );
+    });
+}

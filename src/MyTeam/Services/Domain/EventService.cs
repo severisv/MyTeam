@@ -26,11 +26,12 @@ namespace MyTeam.Services.Domain
             return EventRepository.Get(id).Single();
         }
 
-        public IEnumerable<Event> GetUpcoming(EventType type)
+        public IEnumerable<Event> GetUpcoming(EventType type, bool showAll = false)
         {
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime.Date >= DateTime.Today.Date);
+                .Where(t => t.DateTime.Date >= DateTime.Today.Date)
+                .Where(t => t.SignupHasOpened());
         }
 
         public IList<Event> GetAll(EventType type)
@@ -71,10 +72,13 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public void Add(Event ev)
+        public void Add(params Event[] events)
         {
-            ev.Attendees = new List<EventAttendance>();
-            EventRepository.Add(ev);
+            foreach (var ev in events)
+            {
+                ev.Attendees = new List<EventAttendance>();
+            }
+            EventRepository.Add(events);
         }
 
         public void Delete(Guid eventId)

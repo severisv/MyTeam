@@ -15,7 +15,9 @@ namespace MyTeam.Models.Domain
 
         public DateTime DateTime { get; set; }
         public string Location { get; set; }
+        public string Headline { get; set; }
         public string Description { get; set; }
+        public string Opponent { get; set; }
         public bool Voluntary { get; set; }
 
         public virtual IList<EventAttendance> Attendees { get; set; }
@@ -37,7 +39,8 @@ namespace MyTeam.Models.Domain
 
         public bool SignupHasOpened()
         {
-            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays);
+            if (Type == EventType.Diverse) return true;
+            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays,0,0,0,0);
         }
 
         public bool SignupHasClosed()

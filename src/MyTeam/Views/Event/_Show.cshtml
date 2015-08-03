@@ -5,10 +5,10 @@
 @using MyTeam.Resources
 @model MyTeam.Models.Domain.Event
 
-<hr/>
+<hr />
 @if (!User.IsInRole(Roles.Coach))
 {
-    <a asp-action="edit" asp-route-eventId="@Model.Id" class="ft-md pull-right" title="@Res.Edit" ><i class="fa fa-edit"></i></a>
+    <a asp-action="edit" asp-route-eventId="@Model.Id" class="ft-md pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
 }
 <div class="show-upcoming-event">
     <div class="flex">
@@ -35,6 +35,14 @@
             }
         </div>
         <div class="flex-3 ">
+            @if (Model.Type == EventType.Diverse)
+            {
+                <h3 class="no-margin">@Html.DisplayFor(m => m.Headline)</h3>
+            }
+            else if (Model.Type == EventType.Kamp)
+            {
+                <h3 class="no-margin">vs @Html.DisplayFor(m => m.Opponent)</h3>
+            }
             <span class="description">
                 @Html.DisplayFor(m => m.Description)
             </span>

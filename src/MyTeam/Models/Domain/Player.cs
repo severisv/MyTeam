@@ -48,8 +48,8 @@ namespace MyTeam.Models.Domain
         public string ImageSmall => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Small);
         public string ImageMedium => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Medium);
         public string ImageFull => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Full);
-        public string Fullname => string.Format("{0} {1} {2}", FirstName, MiddleName, LastName);
-        public string Name => string.Format("{0} {1}", FirstName, LastName);
+        public string Fullname => $"{FirstName} {MiddleName} {LastName}";
+        public string Name => $"{FirstName} {LastName}";
 
         public virtual Club Club { get; set; }
 

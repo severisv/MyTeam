@@ -26,9 +26,10 @@ namespace MyTeam.Resources
         public const string Date = "Dato";
         public const string Delete = "Slett";
         public const string Deleted = "Slettet";
+        public const string Email = "E-post";
         public const string Edit = "Rediger";
         public const string Error = "Det oppstod en feil";
-        public const string Event = "Hendelse";
+        public const string Event = "Arrangement";
         public const string FieldRequired = "Feltet er obligatorisk";
 
         public const string Home = "Nyheter";
@@ -43,6 +44,7 @@ namespace MyTeam.Resources
         public const string GoalCount = "Mål";
         public const string Location = "Sted";
         public const string HallOfFame = "Hall of Fame";
+        public const string Headline = "Overskrift";
         public const string Mandatory = "Obligatorisk oppmøte";
         public const string MandatoryExplaination = "Obligatorisk oppmøte betyr at treningen teller med på oppmøtestatistikken";
         public const string NotFound = "Siden finnes ikke";
@@ -52,10 +54,10 @@ namespace MyTeam.Resources
 
         public const string Positions = "Posisjon";
         public const string StartDate = "Signerte for";
-        public const string Email = "E-post";
+        public const string Opponent = "Motstander";
         public const string Phone = "Telefon";
         public const string Recurring = "Ukentlig";
-        public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes treninger hver uke på samme tidspunkt frem til datoen man spesifiserer";
+        public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
         public const string Save = "Lagre";
