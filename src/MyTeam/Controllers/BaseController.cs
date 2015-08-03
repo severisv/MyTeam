@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 using MyTeam.Services.Application;
 
 
@@ -21,6 +23,10 @@ namespace MyTeam.Controllers
             return CurrentPlayer != null;
         }
 
-       
+
+        public void Alert(AlertType type, string message)
+        {
+            ViewData.Add($"Alert{type}", message);
+        }
     }
 }

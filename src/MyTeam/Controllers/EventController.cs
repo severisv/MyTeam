@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
@@ -69,15 +70,22 @@ namespace MyTeam.Controllers
 
             if (ModelState.IsValid)
             {
-                var ev = new Event
-                {
-                    Location = model.Location,
-                    Type = model.Type,
-                    DateTime = model.Date + model.Time,
-                    Description = model.Description
-                };
+                Event ev;
 
-                EventService.Add(ev);
+                if (model.EventId.HasValue)
+                {
+                    ev = EventService.Get(model.EventId.Value);
+                    model.UpdateEvent(ev);
+                    EventService.Update(ev);
+                }
+
+                else
+                {
+                    ev = model.CreateEvent();
+                    EventService.Add(ev);
+                }
+                
+                Alert(AlertType.Success, $"{ev.Type} {Res.Saved.ToLower()}");
                 return View("CreateSuccess", ev);
             }
             return View(model);
@@ -105,9 +113,10 @@ namespace MyTeam.Controllers
             if (ev == null) return new NotFoundResult(Context);
 
             EventService.Delete(eventId);
-            ViewBag.AlertSuccess = $"{ev.Type} {Res.Deleted}";
+            Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
             return Index();
         }
 
+      
     }
 }

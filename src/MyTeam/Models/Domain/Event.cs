@@ -16,9 +16,7 @@ namespace MyTeam.Models.Domain
         public DateTime DateTime { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
-
-        public bool Recurring { get; set; }
-        public DateTime? ToDate { get; set; }
+        public bool Voluntary { get; set; }
 
         public virtual IList<EventAttendance> Attendees { get; set; }
         public virtual IEnumerable<Player> Attending => Attendees.Where(a => a.IsAttending).Select(a => a.Player);

@@ -27,6 +27,12 @@
             <p>
                 <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Location)
             </p>
+            @if (Model.Voluntary)
+            {
+                <p>
+                    <i class="fa fa-asterisk"></i> @($"{Res.Voluntary} {Res.Attendance.ToLower()}")
+                </p>
+            }
         </div>
         <div class="flex-3 ">
             <span class="description">

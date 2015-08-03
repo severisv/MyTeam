@@ -15,5 +15,6 @@ namespace MyTeam.Services.Domain
         void SetAttendance(Event ev, Guid playerId,  bool isAttending);
         void Add(Event ev);
         void Delete(Guid eventId);
+        void Update(Event ev);
     }
 }

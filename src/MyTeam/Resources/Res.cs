@@ -9,6 +9,7 @@ namespace MyTeam.Resources
 
         public const string Actions = "Handlinger";
         public const string Attending = "Kommer";
+        public const string Attendance = "Oppmøte";
         public const string AssistCount = "Assists";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
@@ -18,6 +19,7 @@ namespace MyTeam.Resources
 
         public const string ConfirmDelete = "Er du sikker på at du vil slette?";
         public const string Create = "Opprett";
+        public const string Created = "Opprettet";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
         public const string CoachMenu = "Trenermeny";
         public const string Description = "Beskrivelse";
@@ -57,6 +59,7 @@ namespace MyTeam.Resources
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
         public const string Save = "Lagre";
+        public const string Saved = "Lagret";
 
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
@@ -71,7 +74,7 @@ namespace MyTeam.Resources
         public const string ToDate = "Til dato";
         public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
         public const string Unauthorized = "Ingen tilgang";
-
+        public const string Voluntary = "Frivillig";
 
 
 

@@ -73,6 +73,7 @@ namespace MyTeam.Services.Domain
 
         public void Add(Event ev)
         {
+            ev.Attendees = new List<EventAttendance>();
             EventRepository.Add(ev);
         }
 
@@ -80,6 +81,11 @@ namespace MyTeam.Services.Domain
         {
             var ev = EventRepository.Get(eventId).Single();
             EventRepository.Delete(ev);
+        }
+
+        public void Update(Event ev)
+        {
+            EventRepository.Update(ev);
         }
     }
 }

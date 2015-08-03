@@ -43,10 +43,10 @@ namespace MyTeam.ViewModels.Events
         public bool Mandatory { get; set; }
 
 
-        public bool IsEditMode { get; }
+        public bool IsEditMode => EventId.HasValue;
 
         public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
-        public Guid? EventId { get; }
+        public Guid? EventId { get; set; }
 
 
         public CreateEventViewModel()
@@ -63,10 +63,8 @@ namespace MyTeam.ViewModels.Events
             Time = ev.DateTime.TimeOfDay;
             Description = ev.Description;
             Location = ev.Location;
-            Recurring = ev.Recurring;
-            ToDate = ev.ToDate;
-            IsEditMode = true;
             EventId = ev.Id;
+            Mandatory = !ev.Voluntary;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -92,6 +90,26 @@ namespace MyTeam.ViewModels.Events
             }
 
             return result;
+        }
+
+        public Event CreateEvent()
+        {
+            return new Event
+            {
+                Location = Location,
+                Type = Type,
+                DateTime = Date + Time,
+                Description = Description,
+                Voluntary = !Mandatory
+            };
+        }
+
+        public void UpdateEvent(Event ev)
+        {
+            ev.Location = Location;
+            ev.Voluntary = !Mandatory;
+            ev.DateTime = Date + Time;
+            ev.Description = Description;
         }
     }
 }

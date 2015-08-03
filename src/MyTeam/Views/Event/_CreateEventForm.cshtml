@@ -28,7 +28,8 @@ else
 <form asp-action="Create" method="post" class="form-horizontal" role="form">
     @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
-    <input asp-for="Type" type="hidden" value="@((int) Model.Type)" />
+    <input asp-for="Type" type="hidden" />
+    <input asp-for="EventId" type="hidden" />
 
     <div class="col-sm-6 col-xs-12">
 
