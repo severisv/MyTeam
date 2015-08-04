@@ -1,0 +1,39 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Models.Domain
+@using MyTeam.Models.Enums
+@using MyTeam.Models.Structs
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Table.TableViewModel
+@{
+    ViewBag.Title = Res.Table;
+}
+
+
+<div mt-main>
+    @if (!Model.Seasons.Any())
+    {
+        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Season.Pluralize().ToLower()</div>
+
+    }
+    else if (Model.SelectedSeason.Table == null)
+    {
+        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
+
+    }
+    else
+    {
+        @Html.Partial("_Show", Model.SelectedSeason.Table)
+    }
+
+</div>
+<div mt-sidebar>
+    <ul class="nav nav-list">
+        <li class="nav-header">@Res.CoachMenu</li>
+        <li><a asp-action="update" asp-route-seasonId="@Model.CurrentSeason.Id"><i class='fa fa-table'></i> @Res.Update @Res.Table.ToLower()</a></li>
+    </ul>
+</div>
+<div mt-sidebar>
+    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+</div>
+

@@ -6,8 +6,8 @@
 @if (Model.Type == EventType.Trening)
 {
     <div class="form-group">
-        <label mt-for="Mandatory" mt-icon="asterisk" class="col-xs-3 control-label"></label>
-        <div class="col-xs-9">
+        <label mt-for="Mandatory" mt-icon="asterisk" class="col-xs-2 control-label"></label>
+        <div class="col-xs-10">
             <input asp-for="Mandatory" type="checkbox" class="form-control" />
             <a mt-tooltip="@Res.MandatoryExplaination"></a>
             <span asp-validation-for="Mandatory" class="text-danger"></span>
@@ -16,8 +16,8 @@
     if (!Model.IsEditMode)
     {
         <div class="form-group">
-            <label mt-for="Recurring" mt-icon="refresh" class="col-xs-3 control-label"></label>
-            <div class="col-xs-9 flex">
+            <label mt-for="Recurring" mt-icon="refresh" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10 flex">
                 <div class="flex-1">
                     <input asp-for="Recurring" type="checkbox" class="form-control" onclick="checkbox.showHideAssociatedElement(this, '#ToDateWrapper')" />
                     <a mt-tooltip="@Res.RecurringExplaination"></a>
@@ -28,7 +28,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-xs-offset-3 col-xs-9 flex">
+            <div class="col-xs-offset-2 col-xs-10 flex">
                 <span asp-validation-for="Recurring" class="text-danger"></span>
                 <span asp-validation-for="ToDate" class="text-danger"></span>
             </div>

@@ -1,0 +1,30 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.Resources
+
+@model MyTeam.Models.Domain.Table
+
+<table class="table">
+    <tr>
+        <th>@Res.Position</th>
+        <th>@Res.Name</th>
+        <th>@Res.Games</th>
+        <th>@Res.Win</th>
+        <th>@Res.Draw</th>
+        <th>@Res.Loss</th>
+        <th>@Res.GoalDifference</th>
+        <th>@Res.Points</th>
+        </tr>
+        @foreach (var line in Model.Lines)
+        {
+            <tr>
+                <td>@line.Position</td>
+                <td>@line.Name</td>
+                <td>@line.GamesPlayed</td>
+                <td>@line.Wins</td>
+                <td>@line.Draws</td>
+                <td>@line.Losses</td>
+                <td>@line.GoalDifference</td>
+                <td>@line.Points</td>
+            </tr>
+        }
+</table>

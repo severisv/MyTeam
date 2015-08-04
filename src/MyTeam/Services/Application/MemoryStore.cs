@@ -1,6 +1,9 @@
+using System;
 using System.Linq;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Dto;
 using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Application
@@ -17,14 +20,21 @@ namespace MyTeam.Services.Application
             ClubRepository = clubRepository;
         }
 
-        public Player GetPlayerFromUser(string name)
+        public PlayerDto GetPlayerFromUser(string name)
         {
-            return PlayerRepository.Get().FirstOrDefault(p => p.UserName == name);
+            var playerId = PlayerRepository.Get().Where(p => p.UserName == name).Select(p => p.Id).FirstOrDefault();
+
+            if (playerId == Guid.Empty) return null;
+            return new PlayerDto(playerId);
         }
 
-        public Club GetClub(string clubId)
+        public ClubDto GetCurrentClub(string clubId)
         {
-            return ClubRepository.Get().SingleOrDefault(c => c.ClubId == clubId);
+            var club = ClubRepository.Get().Single(c => c.ClubId == clubId);
+
+            return new ClubDto(clubId, club.Name, club.ShortName, club.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id));
+
         }
+
     }
 }

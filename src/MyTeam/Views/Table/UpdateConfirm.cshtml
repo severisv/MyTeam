@@ -1,0 +1,27 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Models.Domain
+@using MyTeam.Resources
+@model Table
+@{
+    ViewBag.Title = Res.Table;
+}
+
+<div mt-main>
+    <div class="col-xs-12">
+        @Html.Partial("_Show", Model)
+        <form asp-action="Save" method="post">
+            <div class="form-group">
+                <input asp-for="TableString" type="hidden"/>
+                <input asp-for="SeasonId" type="hidden"/>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">@Res.Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div mt-sidebar>
+    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+</div>
+

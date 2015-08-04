@@ -5,8 +5,8 @@
 @if (Model.Type == EventType.Kamp)
 {
     <div class="form-group">
-        <label mt-for="Opponent" mt-icon="users" class="col-xs-3 control-label"></label>
-        <div class="col-xs-9">
+        <label mt-for="Opponent" mt-icon="users" class="col-xs-2 control-label"></label>
+        <div class="col-xs-10">
             <input asp-for="Opponent" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Opponent)" />
             <span asp-validation-for="Opponent" class="text-danger"></span>
         </div>

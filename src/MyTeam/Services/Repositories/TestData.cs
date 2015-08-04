@@ -13,7 +13,8 @@ namespace MyTeam.Services.Repositories
                 ShortName = "Wam-Kam",
                 Name = "Wam-Kam FK",
                 ClubId = "wamkam",
-                Players = new List<Player>()
+                Players = new List<Player>(),
+                Teams = new List<Team> { new Team{Name = "Wam-Kam 2",SortOrder = 2} , new Team { Name = "Wam-Kam 1", SortOrder = 1 } }
             };
 
         public static void Addto(TestRepository testRepository)
@@ -26,7 +27,16 @@ namespace MyTeam.Services.Repositories
         private static void AddClub(TestRepository testRepository)
         {
         testRepository.Add(_club);
-        }   
+            foreach (var team in _club.Teams)
+            {
+                testRepository.Add(CreateSeason(team));
+            }
+        }
+
+        private static Season CreateSeason(Team team)
+        {
+            return new Season {StartDate = new DateTime(2015,01,01), EndDate = new DateTime(2015,12,31), Team = team, TeamId = team.Id};
+        }
 
         private static void AddPlayers(TestRepository testRepository)
         {

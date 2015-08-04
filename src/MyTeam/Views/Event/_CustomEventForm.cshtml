@@ -5,8 +5,8 @@
 @if (Model.Type == EventType.Diverse)
 {
     <div class="form-group">
-        <label mt-for="Headline" mt-icon="header" class="col-xs-3 control-label"></label>
-        <div class="col-xs-9">
+        <label mt-for="Headline" mt-icon="header" class="col-xs-2 control-label"></label>
+        <div class="col-xs-10">
             <input asp-for="Headline" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Headline)" />
             <span asp-validation-for="Headline" class="text-danger"></span>
         </div>
