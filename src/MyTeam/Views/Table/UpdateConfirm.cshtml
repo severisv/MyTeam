@@ -1,15 +1,13 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam
-@using MyTeam.Models.Domain
 @using MyTeam.Resources
-@model Table
+@model MyTeam.ViewModels.Table.CreateTableViewModel
 @{
     ViewBag.Title = Res.Table;
 }
 
 <div mt-main>
     <div class="col-xs-12">
-        @Html.Partial("_Show", Model)
+        @Html.Partial("_Show", Model.Table)
         <form asp-action="Save" method="post">
             <div class="form-group">
                 <input asp-for="TableString" type="hidden"/>

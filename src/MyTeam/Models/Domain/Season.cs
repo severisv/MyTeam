@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MyTeam.Models.Domain
 {
@@ -10,7 +11,7 @@ namespace MyTeam.Models.Domain
         public string Name => StartDate.Year == EndDate.Year ? EndDate.Year.ToString() : $"{StartDate.Year} / {EndDate.Year}";
 
         public virtual Team Team { get; set; }
-        public virtual Table Table { get; set; }
+        public virtual IEnumerable<Table> Tables { get; set; }
 
 
       

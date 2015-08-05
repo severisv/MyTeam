@@ -1,6 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam.Resources
-@model Guid
+@model MyTeam.ViewModels.Table.CreateTableViewModel
 @{
     ViewBag.Title = Res.Table;
 }
@@ -9,12 +9,12 @@
 <div mt-main>
     <div class="col-xs-12">
         <form asp-action="Update" method="post">
-            <input name="seasonId" value="@Model" type="hidden"/>
+            <input asp-for="SeasonId" type="hidden"/>
             <div class="form-group">
-                <textarea name="table" class="form-control update-table" placeholder="@Res.SubmitTable"></textarea>
+                <textarea asp-for="TableString" class="form-control update-table" placeholder="@Res.SubmitTable"></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">@Res.Save</button>
+                <button type="submit" class="btn btn-primary">@Res.Create</button>
             </div>
         </form>
     </div>

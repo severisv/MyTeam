@@ -11,19 +11,14 @@
 
 
 <div mt-main>
-    @if (!Model.Seasons.Any())
-    {
-        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Season.Pluralize().ToLower()</div>
-
-    }
-    else if (Model.SelectedSeason.Table == null)
+    @if (Model.Table == null)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
 
     }
     else
     {
-        @Html.Partial("_Show", Model.SelectedSeason.Table)
+        @Html.Partial("_Show", Model.Table)
     }
 
 </div>

@@ -10,7 +10,7 @@
     "jquery-ui": "~1.11.4",
     "Font-Awesome": "4.4.0",
     "bootbox.js": "^4.4.0",
-    "hammer.js": "*"
-
+    "hammer.js": "*",
+    "tablesorter": "*"
   }
 }

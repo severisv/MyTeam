@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Framework.DependencyInjection;
-using MyTeam.Filters;
+﻿using Microsoft.Framework.DependencyInjection;
 using MyTeam.Models.Domain;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
@@ -20,9 +15,11 @@ namespace MyTeam.Services
             services.AddTransient<IRepository<Event>, GenericRepository<Event>>();
             services.AddTransient<IRepository<EventAttendance>, GenericRepository<EventAttendance>>();
             services.AddTransient<IRepository<Season>, GenericRepository<Season>>();
+            services.AddTransient<IRepository<Table>, GenericRepository<Table>>();
 
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISeasonService, SeasonService>();
+            services.AddTransient<ITableService, TableService>();
             services.AddTransient<IMemoryStore, MemoryStore>();
             services.AddTransient<ILogger, Logger>();
 
