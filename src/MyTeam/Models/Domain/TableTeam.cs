@@ -1,15 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace MyTeam.Models.Domain
 {
     public class TableTeam
     {
+        private const int ExpectedFieldCount = 23;
+        private const int ExpectedNameIndex = 1;
 
         public TableTeam(string line)
         {
             try
             {
-                var fields = line.Split(null);
+                var fields = Regex.Split(line.Trim(), @"\s+");
+                
+                if (fields.Length < ExpectedFieldCount)
+                {
+                    Position = -1;
+                    return;
+                }
+
+                fields = RearrangeIfTeamNameHasWhiteSpace(fields);
+
                 Name = fields[1];
                 Position = P(fields[0]);
                 Points = P(fields[22]);
@@ -22,8 +36,28 @@ namespace MyTeam.Models.Domain
             }
             catch (Exception)
             {
-                Position = 0;
+                Position = -1;
             }
+        }
+
+        private string[] RearrangeIfTeamNameHasWhiteSpace(string[] fields)
+        {
+            
+            var numberOfWhiteSpacesInTeamName = fields.Length - ExpectedFieldCount;
+
+            if (numberOfWhiteSpacesInTeamName > 0)
+            {
+                var list = fields.ToList();
+                var teamName = "";
+                for (int i = ExpectedNameIndex; i <= ExpectedNameIndex + numberOfWhiteSpacesInTeamName; i++)
+                {
+                    teamName += fields[i] + " ";
+                    list.RemoveAt(i);
+                }
+                list.Insert(ExpectedNameIndex, teamName.Trim());
+                fields = list.ToArray();
+            }
+            return fields;
         }
 
         private int P(string str)

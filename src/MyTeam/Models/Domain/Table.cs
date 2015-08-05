@@ -34,7 +34,7 @@ namespace MyTeam.Models.Domain
         {
             var table = tableString.Split('\n');
 
-            return table.Select(line => new TableTeam(line)).Where(tableTeam => tableTeam.Position > 0).ToList();
+            return table.Select(line => new TableTeam(line)).Where(tableTeam => tableTeam.Position > -1).ToList();
         }
     }
 }

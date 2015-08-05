@@ -33,6 +33,7 @@ namespace MyTeam.Controllers
         public IActionResult Update(Guid seasonId, string table)
         {
             var model = new Table(seasonId, table);
+            
             return View("UpdateConfirm", model);
         }
 
