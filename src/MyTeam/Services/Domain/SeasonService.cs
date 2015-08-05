@@ -16,15 +16,20 @@ namespace MyTeam.Services.Domain
             _seasonRepository = seasonRepository;
         }
 
-        public IEnumerable<Season> Get(Guid teamId)
+        public IEnumerable<Season> GetForTeam(Guid teamId)
         {
             return _seasonRepository.Get().Where(s => s.TeamId == teamId);
+        }
+
+        public Season Get(Guid seasonId)
+        {
+            return _seasonRepository.Get().Single(s => s.Id == seasonId);
         }
 
         public IEnumerable<Season> GetTeamSeasonsFromSeasonId(Guid seasonId)
         {
             var teamId = _seasonRepository.Get(seasonId).Select(s => s.Team.Id).Single();
-            return Get(teamId);
+            return GetForTeam(teamId);
         }
       
     }

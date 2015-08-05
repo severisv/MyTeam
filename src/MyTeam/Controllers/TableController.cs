@@ -20,13 +20,14 @@ namespace MyTeam.Controllers
         {
             var seasons = seasonId != null
                 ? SeasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
-                SeasonService.Get(teamId ?? Club.TeamIds.First());
+                SeasonService.GetForTeam(teamId ?? Club.TeamIds.First());
 
             var model = new TableViewModel(seasons, seasonId);
             var table = TableService.GetTable(model.SelectedSeason.Id);
             model.Table = table;
 
-            return View(model);
+
+            return View("Index", model);
         }
 
 
@@ -34,9 +35,13 @@ namespace MyTeam.Controllers
 
         public IActionResult Update(Guid seasonId)
         {
+            var season = SeasonService.Get(seasonId);
+
             var model = new CreateTableViewModel
             {
-                SeasonId = seasonId
+                SeasonId = seasonId,
+                Season = season.Name,
+                Team = season.Team.Name
             };
             return View(model);
         }

@@ -44,6 +44,7 @@ namespace MyTeam.Resources
         public const string IsAttending = "Stiller";
         public const string IsNotAttending = "Kan ikke";
         public const string InvalidInput = "Ugyldig input";
+        public const string LastUpdated = "Sist oppdatert";
         public const string Loss = "Tap";
 
         public const string Location = "Sted";

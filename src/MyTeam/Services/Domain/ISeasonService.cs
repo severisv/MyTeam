@@ -6,7 +6,8 @@ namespace MyTeam.Services.Domain
 {
     public interface ISeasonService
     {
-        IEnumerable<Season> Get(Guid teamId);
+        Season Get(Guid id);
+        IEnumerable<Season> GetForTeam(Guid teamId);
         IEnumerable<Season> GetTeamSeasonsFromSeasonId(Guid seasonId);
     }
 }

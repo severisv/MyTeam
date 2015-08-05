@@ -19,6 +19,8 @@
     else
     {
         @Html.Partial("_Show", Model.Table)
+        <span class=subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
+
     }
 
 </div>

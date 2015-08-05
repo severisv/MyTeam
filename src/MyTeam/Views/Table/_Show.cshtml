@@ -3,7 +3,8 @@
 
 @model MyTeam.Models.Domain.Table
 
-<table class="table">
+<table class="table tablesorter">
+    <thead>
     <tr>
         <th>@Res.Position</th>
         <th>@Res.Name</th>
@@ -13,18 +14,23 @@
         <th>@Res.Loss</th>
         <th>@Res.GoalDifference</th>
         <th>@Res.Points</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var line in Model.Lines)
+    {
+        <tr>
+            <td>@line.Position</td>
+            <td>@line.Name</td>
+            <td>@line.GamesPlayed</td>
+            <td>@line.Wins</td>
+            <td>@line.Draws</td>
+            <td>@line.Losses</td>
+            <td>@line.GoalDifference</td>
+            <td>@line.Points</td>
         </tr>
-        @foreach (var line in Model.Lines)
-        {
-            <tr>
-                <td>@line.Position</td>
-                <td>@line.Name</td>
-                <td>@line.GamesPlayed</td>
-                <td>@line.Wins</td>
-                <td>@line.Draws</td>
-                <td>@line.Losses</td>
-                <td>@line.GoalDifference</td>
-                <td>@line.Points</td>
-            </tr>
-        }
+    }
+    </tbody>
 </table>
+
+

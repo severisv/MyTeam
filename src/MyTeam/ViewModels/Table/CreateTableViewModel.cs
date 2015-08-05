@@ -14,6 +14,9 @@ namespace MyTeam.ViewModels.Table
         [Required]
         public Guid SeasonId { get; set; }
 
+        public string Season { get; set; }
+        public string Team { get; set; }
+
         public virtual Models.Domain.Table Table
         {
             get
@@ -38,8 +41,6 @@ namespace MyTeam.ViewModels.Table
             {
                 result.Add(new ValidationResult(Res.InvalidInput, new[] { nameof(TableString) }));
             }
-            
-
             return result;
         }
     }

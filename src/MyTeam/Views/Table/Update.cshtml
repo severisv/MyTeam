@@ -2,14 +2,17 @@
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Table.CreateTableViewModel
 @{
-    ViewBag.Title = Res.Table;
+    ViewBag.Title = $"{Res.Update} {Res.Table.ToLower()}";
 }
 
 
 <div mt-main>
     <div class="col-xs-12">
-        <form asp-action="Update" method="post">
+        <h3>@Html.DisplayFor(m => m.Team) -  @Html.DisplayFor(m => m.Season)</h3>
+            <form asp-action="Update" method="post">
             <input asp-for="SeasonId" type="hidden"/>
+            <input asp-for="Team" type="hidden"/>
+            <input asp-for="Season" type="hidden"/>
             <div class="form-group">
                 <textarea asp-for="TableString" class="form-control update-table" placeholder="@Res.SubmitTable"></textarea>
             </div>

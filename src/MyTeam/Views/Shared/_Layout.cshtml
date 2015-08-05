@@ -34,7 +34,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="club" asp-action="index">@Res.Home</a></li>
                     <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
-                    <li><a asp-controller="table">@Res.Table</a></li>
+                    <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
                     <li><a asp-controller="game">@Res.Games</a></li>
                     <li><a asp-controller="event" asp-action="index" asp-route-type="@EventType.Trening">@Res.Trainings</a></li>
                 </ul>
@@ -53,6 +53,7 @@
     </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/tablesorter/jquery.tablesorter.js"></script>
     <script src="~/lib/jquery-ui/jquery-ui.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootbox.js/bootbox.js"></script>
