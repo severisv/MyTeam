@@ -7,9 +7,11 @@
 
 
 <div mt-main>
+    <h3 class="col-xs-6">&nbsp;<i class="fa fa-users"></i>&nbsp;&nbsp;@Html.DisplayFor(m => m.Team)</h3>
+    <h3 class="col-xs-6">&nbsp;<i class="fa fa-calendar"></i>&nbsp;&nbsp;@Html.DisplayFor(m => m.Season)</h3>
     <div class="col-xs-12">
-        <h3>@Html.DisplayFor(m => m.Team) -  @Html.DisplayFor(m => m.Season)</h3>
-            <form asp-action="Update" method="post">
+
+        <form asp-action="Update" method="post">
             <input asp-for="SeasonId" type="hidden"/>
             <input asp-for="Team" type="hidden"/>
             <input asp-for="Season" type="hidden"/>
