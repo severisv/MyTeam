@@ -43,7 +43,7 @@
         </div>
     </div>
     @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")
-    <div class="container body-content">
+    <div id="main-container" class="container">
         <div id="alerts" class="col-lg-9 col-md-9">
             @Html.Partial("_Alerts")
         </div>
