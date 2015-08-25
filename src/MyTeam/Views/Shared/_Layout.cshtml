@@ -36,8 +36,17 @@
                     <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
                     <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
                     <li><a asp-controller="game">@Res.Games</a></li>
-                    <li><a asp-controller="event" asp-action="index" asp-route-type="@EventType.Trening">@Res.Trainings</a></li>
+                    <li><a onclick="layout.toggleSubMenu(this, '#submenu-internal')" href="javascript:void(0)">@Res.Internal</a></li>
                 </ul>
+                <ul id="submenu-internal" class="nav navbar-nav" style="display: none;">
+                    <li><a asp-controller="club" asp-action="index">@Res.Home</a></li>
+                    <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
+                    <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
+                    <li><a asp-controller="game">@Res.Games</a></li>
+                    <li><a onclick="layout.toggleSubMenu(this)" href="javascript:void(0)">@Res.Internal</a></li>
+                </ul>
+
+
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>

@@ -41,6 +41,7 @@ namespace MyTeam.Resources
         public const string Home = "Nyheter";
 
 
+        public const string Internal = "Intern";
         public const string IsAttending = "Stiller";
         public const string IsNotAttending = "Kan ikke";
         public const string InvalidInput = "Ugyldig input";
@@ -62,6 +63,7 @@ namespace MyTeam.Resources
         public const string StartDate = "Signerte for";
         public const string Opponent = "Motstander";
         public const string Phone = "Telefon";
+        public const string Register = "Registrer";
         public const string Recurring = "Ukentlig";
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
