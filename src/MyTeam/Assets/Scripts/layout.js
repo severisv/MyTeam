@@ -23,14 +23,8 @@ layout.pushState = function (key, value, title) {
 };
 
 
-layout.toggleSubMenu = function(element, subMenu) {
-    var el = $(element);
 
-    el.addClass("active");
 
-    var sm = $(subMenu);
-    sm.slideDown(300);
 
-}
 
 

@@ -1,6 +1,7 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
+@using MyTeam.Settings
 
 @if (!User.IsInRole(Roles.Coach))
 {
@@ -9,7 +10,7 @@
         <ul class="nav nav-list">
             <li class="nav-header">@Res.CoachMenu</li>
             <li><a asp-action="create"><i class='fa fa-plus'></i> @Res.CreateEvent</a></li>
-            <li><a asp-action="RegisterAttendance"><i class='fa fa-check'></i> @Res.Register @Res.Attendance.ToLower()</a></li>
+            <li><a asp-action="RegisterAttendance"><i class='@Icons.Attendance'></i> @Res.Register @Res.Attendance.ToLower()</a></li>
         </ul>
     </div>
 

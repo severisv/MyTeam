@@ -36,19 +36,18 @@
                     <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
                     <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
                     <li><a asp-controller="game">@Res.Games</a></li>
-                    <li><a onclick="layout.toggleSubMenu(this, '#submenu-internal')" href="javascript:void(0)">@Res.Internal</a></li>
+                    <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal</a></li>
                 </ul>
-                <ul id="submenu-internal" class="nav navbar-nav" style="display: none;">
-                    <li><a asp-controller="club" asp-action="index">@Res.Home</a></li>
-                    <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
-                    <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
-                    <li><a asp-controller="game">@Res.Games</a></li>
-                    <li><a onclick="layout.toggleSubMenu(this)" href="javascript:void(0)">@Res.Internal</a></li>
-                </ul>
-
 
                 @await Html.PartialAsync("_LoginPartial")
             </div>
+            <ul id="submenu-internal" class="nav navbar-nav slide-down-child">
+                <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
+                <li><a asp-controller="attendance" asp-action="index"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a asp-controller="squad" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
+            </ul>
+        
+         
         </div>
     </div>
     @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")

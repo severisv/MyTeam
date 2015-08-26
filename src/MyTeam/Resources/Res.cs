@@ -72,6 +72,7 @@ namespace MyTeam.Resources
         public const string Points = "Poeng";
         public const string Saved = "Lagret";
         public const string Season = "Sesong";
+        public const string Signup = "Påmelding";
 
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
@@ -82,6 +83,7 @@ namespace MyTeam.Resources
         public const string Players = "Spillere";
         public const string Position = "Plassering";
         public const string Save = "Lagre";
+        public const string SquadList = "Lagliste";
         public const string SubmitTable = "Lim inn tabell på formatet \n" +
                                           "Plass   Lag       Kamper   [  Hjemme  ]    [  Borte  ]     [   Total    ]  Diff  Poeng    \neks:\n\n" +
 "1	Oslojuvelene	11	4	1	0	24 - 5	6	0	0	19 - 5	10	1	0	43 - 10	33	31 \n" +
