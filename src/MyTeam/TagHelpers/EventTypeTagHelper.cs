@@ -16,6 +16,8 @@ namespace MyTeam.TagHelpers
         public EventType EventType { get; set; }
         [HtmlAttributeName("mt-hidename")]
         public bool HideName { get; set; }
+        [HtmlAttributeName("mt-text-class")]
+        public string TextClass { get; set; }
 
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -23,9 +25,10 @@ namespace MyTeam.TagHelpers
 
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{GetIconName(EventType)}");
+            innertag.Attributes.Add("title", EventType.ToString());
 
             output.Content.Append($"{innertag.ToString()}");
-            if (!HideName) output.Content.Append($"&nbsp;&nbsp;{EventType}");
+            if (!HideName) output.Content.Append($"<span class='{TextClass}'>&nbsp;&nbsp;{EventType}</span>");
         }
         
         private string GetIconName(EventType type)

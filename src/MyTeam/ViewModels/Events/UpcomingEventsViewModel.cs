@@ -12,12 +12,14 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<Event> Events { get; }
         public EventType Type { get; }
-        public string Title => $"{Res.Upcoming} {(Type == EventType.Alle ? Res.Event.ToLower() : Type.ToString().ToLower()).Pluralize()}";
+        public bool Previous { get; }
+        public string Title => $"{(Previous ? Res.Previous : Res.Upcoming)} {(Type == EventType.Alle ? Res.Event.ToLower() : Type.ToString().ToLower()).Pluralize()}";
 
-        public UpcomingEventsViewModel(IEnumerable<Event> events, EventType type)
+        public UpcomingEventsViewModel(IEnumerable<Event> events, EventType type, bool previous)
         {
             Type = type;
             Events = events.OrderBy(e => e.DateTime);
+            Previous = previous;
         }
     }
 }

@@ -9,14 +9,23 @@
 }
 
 <div mt-main>
-    <ul class="nav nav-pills mt-justified">
-        @foreach (EventType type in Enum.GetValues(typeof (EventType)))
-        {
-            <li class="@(type == Model.Type ? "active" : "")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
+    <div class="clearfix">
+        <div class="col-sm-6 col-xs-12 no-padding-left">
+            <ul class="nav nav-pills mt-justified">
+                <li class="@(!Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type">@Res.Upcoming</a></li>
+                <li class="@(Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type" asp-route-previous="true">@Res.Previous</a></li>
+            </ul>
+        </div>
 
-        }
-    </ul>
-    <br/>
+        <div class="col-sm-offset-2 col-sm-4 hidden-xs no-padding-right">
+            <ul class="nav nav-pills mt-justified">
+                @foreach (EventType type in Enum.GetValues(typeof(EventType)))
+                {
+                    <li class="@(type == Model.Type ? "active" : "")"><a asp-route-type="@type" asp-route-previous="@Model.Previous"><span mt-eventtype="@type" mt-hidename="true" ></span></a></li>
+                }
+            </ul>
+        </div>
+    </div>
 
     @foreach (var ev in Model.Events)
     {

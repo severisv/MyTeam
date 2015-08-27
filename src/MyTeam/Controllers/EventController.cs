@@ -20,11 +20,14 @@ namespace MyTeam.Controllers
         public IEventService EventService { get; set; }
 
 
-        public IActionResult Index(EventType type = EventType.Alle)
+        public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
         {
-            var events = EventService.GetUpcoming(type);
-
-            var model = new UpcomingEventsViewModel(events, type);
+           var  events = previous ? 
+                EventService.GetUpcoming(type) : 
+                EventService.GetPrevious(type);
+                
+            
+            var model = new UpcomingEventsViewModel(events, type, previous);
             
             return View("Index", model);
         }
