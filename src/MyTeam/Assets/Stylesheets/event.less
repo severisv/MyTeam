@@ -1,0 +1,67 @@
+﻿
+/* Events */
+
+.show-upcoming-event {
+    p {
+        color: rgb(90, 90, 90);
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    .event-icon {
+        text-align: center;
+        font-size: 4em;
+        align-self: center;
+
+
+
+        @media (max-width: 600px) {
+            font-size: 2em;
+        }
+    }
+}
+
+.event-signup {
+    margin-top: 20px;
+    margin-left: 16.66%;
+
+
+
+    .panel {
+        background-color: transparent;
+        border: 0;
+    }
+}
+
+
+.attendee-links {
+    a {
+
+        span:last-child {
+            text-align: right;
+
+            &:after {
+                content: "\f078";
+                font-family: FontAwesome;
+            }
+        }
+
+
+        &.collapsed {
+            span:last-child:after {
+                content: "\f054";
+                font-family: FontAwesome;
+            }
+        }
+
+        &:focus {
+            text-decoration: none;
+        }
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

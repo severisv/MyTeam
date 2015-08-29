@@ -9,7 +9,7 @@ eval("var project = " + fs.readFileSync("./project.json"));
 var paths = {
     root: "./" + project.webroot,
     bower: "./bower_components/",
-    stylesheets: "./Assets/Stylesheets/*.less",
+    stylesheets: "./Assets/Stylesheets/styles.less",
     scripts: "./Assets/Scripts/*.js"
 };
 

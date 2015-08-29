@@ -2,6 +2,7 @@
 @using Microsoft.Data.Entity.Metadata
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
+@using MyTeam.Settings
 @model MyTeam.ViewModels.Events.UpcomingEventsViewModel
 
 @{
@@ -12,8 +13,8 @@
     <div class="clearfix">
         <div class="col-sm-6 col-xs-12 no-padding-left">
             <ul class="nav nav-pills mt-justified">
-                <li class="@(!Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type">@Res.Upcoming</a></li>
-                <li class="@(Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type" asp-route-previous="true">@Res.Previous</a></li>
+                <li class="@(!Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type"><i class="@Icons.Upcoming hidden-xss"></i>&nbsp;@Res.Upcoming</a></li>
+                <li class="@(Model.Previous ? "active" : "")"><a asp-route-type="@Model.Type" asp-route-previous="true"><i class="@Icons.Previous hidden-xss"></i>&nbsp;@Res.Previous</a></li>
             </ul>
         </div>
 

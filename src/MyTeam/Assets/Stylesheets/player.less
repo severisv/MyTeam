@@ -1,0 +1,56 @@
+﻿/* Player/Index */
+
+.mt-player-container {
+    padding-top: 0.5em;
+    height: 13em;
+    border: 2px solid transparent;
+
+
+    .image-container {
+        height: 9em;
+        width: 9em;
+        overflow: hidden;
+        border-radius: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+
+
+
+        img {
+            width: 100%;
+        }
+    }
+
+    p {
+        line-height: 1em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        color: fade(black, 80);
+        text-shadow: 0 1px 0px fade(black, 15);
+    }
+
+      transition: all 0.4s ease;
+
+    &:hover {
+        border: 2px solid @link-hover;
+        box-shadow: 0px 1px 1px fade(black, 15);
+        text-decoration: none;
+    }
+}
+
+
+
+/* Player/Show */
+.picture-frame {
+    padding: 15px;
+
+    img {
+        width: 100%;
+        box-shadow: 1px 2px 6px fade(black, 50);
+    }
+}
+
+.player-info {
+    padding: 15px;
+}

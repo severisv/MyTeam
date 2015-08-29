@@ -1,6 +1,4 @@
-﻿@import "colours";
-
-
+﻿
 html {
     overflow-y: scroll;
 }
@@ -22,13 +20,6 @@ body {
     }
 }
 
-
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-    .jumbotron {
-        margin-top: 20px;
-    }
-}
 
 
 /* User/login */
@@ -111,135 +102,7 @@ body {
     }
 }
 
-/* Player/Index */
-
-.mt-player-container {
-    padding-top: 0.5em;
-    height: 13em;
-    border: 2px solid transparent;
-
-
-    .image-container {
-        height: 9em;
-        width: 9em;
-        overflow: hidden;
-        border-radius: 50%;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
 
 
 
-        img {
-            width: 100%;
-        }
-    }
 
-    p {
-        line-height: 1em;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-        color: fade(black, 80);
-        text-shadow: 0 1px 0px fade(black, 15);
-    }
-
-      transition: all 0.4s ease;
-
-    &:hover {
-        border: 2px solid @link-hover;
-        box-shadow: 0px 1px 1px fade(black, 15);
-        text-decoration: none;
-    }
-}
-
-
-
-/* Player/Show */
-.picture-frame {
-    padding: 15px;
-
-    img {
-        width: 100%;
-        box-shadow: 1px 2px 6px fade(black, 50);
-    }
-}
-
-.player-info {
-    padding: 15px;
-}
-
-
-/* Events */
-
-.show-upcoming-event {
-    p {
-        color: rgb(90, 90, 90);
-
-        i {
-            margin-right: 5px;
-        }
-    }
-
-    .event-icon {
-        text-align: center;
-        font-size: 4em;
-        align-self: center;
-
-
-
-        @media (max-width: 600px) {
-            font-size: 2em;
-        }
-    }
-}
-
-.event-signup {
-    margin-top: 20px;
-    margin-left: 16.66%;
-
-
-
-    .panel {
-        background-color: transparent;
-        border: 0;
-    }
-}
-
-
-.attendee-links {
-    a {
-
-        span:last-child {
-            text-align: right;
-
-            &:after {
-                content: "\f078";
-                font-family: FontAwesome;
-            }
-        }
-
-
-        &.collapsed {
-            span:last-child:after {
-                content: "\f054";
-                font-family: FontAwesome;
-            }
-        }
-
-        &:focus {
-            text-decoration: none;
-        }
-
-        &:hover {
-            text-decoration: none;
-        }
-    }
-}
-
-
-/* Table */
-form {
-    textarea.update-table {
-        height: 30em;
-    }
-}
