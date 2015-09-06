@@ -8,8 +8,18 @@
 <hr />
 @if (!User.IsInRole(Roles.Coach))
 {
-    <a asp-action="edit" asp-route-eventId="@Model.Id" class="ft-md pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+
+@if(Model.SignupHasClosed()){
+    <a asp-action="edit" asp-route-eventId="@Model.Id" class="btn btn-sm btn-primary pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
 }
+else {
+    <a asp-action="edit" asp-route-eventId="@Model.Id" class="btn btn-default btn-sm pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+}
+ 
+}
+
+
+
 <div class="show-upcoming-event">
     <div class="flex">
         <div class="flex-1 event-icon">

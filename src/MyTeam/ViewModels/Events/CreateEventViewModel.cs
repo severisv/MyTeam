@@ -28,6 +28,9 @@ namespace MyTeam.ViewModels.Events
         public TimeSpan Time { get; set; }
         [Required]
         [Display(Name = Res.Location)]
+        
+        public DateTime DateTime => Date + Time;
+        
         public string Location { get; set; }
 
         [Display(Name = Res.Description)]
@@ -50,6 +53,8 @@ namespace MyTeam.ViewModels.Events
 
 
         public bool IsEditMode => EventId.HasValue;
+        
+        public bool HasOccured => IsEditMode && DateTime < DateTime.Now;
 
         public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
         public Guid? EventId { get; set; }
