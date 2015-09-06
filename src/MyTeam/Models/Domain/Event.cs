@@ -43,14 +43,9 @@ namespace MyTeam.Models.Domain
             return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays,0,0,0,0);
         }
 
-        public bool SignupHasClosed()
-        {
-            return DateTime < DateTime.Now;
-        }
-
-        public bool SignoffHasClosed()
-        {
-            return DateTime - DateTime.Now < new TimeSpan(0,Settings.Config.AllowedSignoffHours,0,0);
-        }
+        public bool SignupHasClosed() => DateTime < DateTime.Now;
+            
+        public bool SignoffHasClosed() => DateTime - DateTime.Now < new TimeSpan(0,Settings.Config.AllowedSignoffHours,0,0);
+        
     }
 }
