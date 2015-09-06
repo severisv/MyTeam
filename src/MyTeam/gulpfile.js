@@ -58,6 +58,8 @@ gulp.task('watch', function () {
 });
 
 
+// Default
+gulp.task('default', ['less', 'js', 'watch']);
 
 // Helper
 function swallowError(error) {
