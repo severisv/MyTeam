@@ -2,6 +2,12 @@
   "AppSettings": {
     "SiteTitle": "MyTeam"
   },
+  "Authentication": {
+    "Facebook": {
+      "AppId": "145085819174407",
+      "AppSecret":  "b0e6cf0be063cb39e72cec1842fe50fc"
+    }
+  },
   "Data": {
     "DefaultConnection": {
       "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-MyTeam-996255e1-7818-409b-bb2c-2e55ea8ccb6a;Trusted_Connection=True;MultipleActiveResultSets=true"
