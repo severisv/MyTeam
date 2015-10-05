@@ -11,6 +11,8 @@ namespace MyTeam.Resources
         public const string Attending = "Kommer";
         public const string Attendance = "Oppmøte";
         public const string AssistCount = "Assists";
+        public const string Add = "Legg til";
+        public const string AdminPage = "Trenersiden";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
 
