@@ -192,3 +192,4 @@ ModelManifest.xml
 #Assets
 src/MyTeam/wwwroot/css
 src/MyTeam/wwwroot/lib
+src/MyTeam/config.json
