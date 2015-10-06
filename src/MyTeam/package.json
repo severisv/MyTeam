@@ -7,8 +7,17 @@
     "gulp-cssmin": "0.1.7",
     "gulp-uglify": "1.2.0",
     "gulp-less": "3.0.3",
-    "rimraf": "2.2.8"
+    "rimraf": "2.2.8",
+    "browserify": "11.2.0",
+    "gulp-if": "2.0.0",
+    "gulp-notify": "2.2.0",
+    "path": "0.12.7",
+    "vinyl-source-stream": "1.1.0",
+  },
+  "dependencies": {
+    "jquery": "2.1.4",
+    "bootbox": "4.4.0"
   }
+
+
 }
-
-

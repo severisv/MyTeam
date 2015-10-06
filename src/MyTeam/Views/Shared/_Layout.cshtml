@@ -1,4 +1,6 @@
-﻿@using System.Threading.Tasks
+﻿@using System.ComponentModel
+@using System.Security.Policy
+@using System.Threading.Tasks
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
@@ -61,12 +63,7 @@
         <footer></footer>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/tablesorter/jquery.tablesorter.js"></script>
-    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/lib/bootbox.js/bootbox.js"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+
     <script src="~/scripts/site.js"></script>
     @RenderSection("scripts", required: false)
 </body>
