@@ -2,33 +2,39 @@
 var gulp = require("gulp");
 var concat = require('gulp-concat');
 var paths = require('./paths');
-var browserify = require('browserify');
 var notify = require('gulp-notify');
-var source = require('vinyl-source-stream');
-var _if = require('gulp-if');
 var _ = require('./utils');
-var isProduction = true;
+var uglify = require('gulp-uglify');
 
 
 gulp.task('js', function () {
-    var options = {
-        debug: !isProduction
-    };
+    return gulp.src(paths.src.scripts)
+      .pipe(concat('site.bundle.js'))
+      .on('error', _.plumb.errorHandler)
+      .pipe(uglify())
+      .pipe(gulp.dest(paths.dest.scripts))
+      .pipe(notify('Compiled javascript'));
+    
+});
 
-    var b = browserify(options);
-    b.add(paths.src.scripts);
-    b.add(paths.src.lib);
-    b.bundle()
-    .on('error', _.plumb.errorHandler)
-    .pipe(source('site.js'))
-    .pipe(gulp.dest(paths.dest.scripts))
-    .pipe(notify('Compiled javascript'));
+gulp.task('js-lib', function () {
+    return gulp.src(paths.src.lib)
+        .pipe(concat('lib.bundle.js'))
+        .on('error', _.plumb.errorHandler)
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dest.scripts))
+        .pipe(notify('Compiled javascript libraries'));
+    
 });
 
 
 // Watch
 gulp.task('watch-js', function () {
     gulp.watch(paths.src.scripts, ['js']);
+});
+
+gulp.task('watch-js-lib', function () {
+    gulp.watch(paths.self, ['js-lib']);
 });
 
 
