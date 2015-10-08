@@ -5,13 +5,15 @@ var paths = require('./paths');
 var notify = require('gulp-notify');
 var _ = require('./utils');
 var uglify = require('gulp-uglify');
+var react = require('gulp-react');
 
 
 gulp.task('js', function () {
     return gulp.src(paths.src.scripts)
       .pipe(concat('site.bundle.js'))
       .on('error', _.plumb.errorHandler)
-      .pipe(uglify())
+      .pipe(react())
+//      .pipe(uglify())
       .pipe(gulp.dest(paths.dest.scripts))
       .pipe(notify('Compiled javascript'));
     

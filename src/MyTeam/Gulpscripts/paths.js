@@ -20,15 +20,16 @@ module.exports = {
     src: {
         root: root,
         stylesheets: "./Assets/Stylesheets/styles.less",
-        scripts: join("", './Assets/Scripts/*.js'),
+        scripts: join("", './Assets/Scripts/*.{js,jsx}'),
+        
         lib: [
             npm("jquery/dist/jquery.js"),
-            bower("tablesorter/jquery.tablesorter.js"),
             bower("jquery-ui/jquery-ui.js"),
+            bower("tablesorter/jquery.tablesorter.js"),
             bower("bootstrap/dist/js/bootstrap.js"),
             bower("jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"),
-            npm("bootbox/bootbox.js")
-
+            npm("bootbox/bootbox.js"),
+            npm("react/dist/react.js")
         ]
     },
     dest : {
