@@ -10,5 +10,3 @@ mt.deleteWithAjax = function(selector) {
         $('.alert').effect("highlight", { }, 500 );
     });
 }
-
-

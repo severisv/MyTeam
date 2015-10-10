@@ -1,4 +1,4 @@
-/// <binding AfterBuild='copy, less, js' Clean='clean' ProjectOpened='watch' />
+/// <binding ProjectOpened='watch' />
 var gulp = require("gulp"),
     rimraf = require("rimraf");
 

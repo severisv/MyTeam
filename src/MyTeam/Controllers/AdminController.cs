@@ -1,18 +1,24 @@
 ﻿using System.Linq;
 using Microsoft.AspNet.Mvc;
-using MyTeam.Models.Domain;
-using MyTeam.Services.Application;
-using MyTeam.Services.Repositories;
+using Microsoft.Framework.Configuration;
+using MyTeam.ViewModels.Admin;
 
 namespace MyTeam.Controllers
 {
     public class AdminController : BaseController
     {
-     
+        [FromServices]
+        public IConfiguration Configuration { get; set; }
+
+
         public IActionResult Index()
         {
 
-            return View();
+            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
+
+            var model = new AdminViewModel(facebookAppId);
+
+            return View(model);
         }
         
     }

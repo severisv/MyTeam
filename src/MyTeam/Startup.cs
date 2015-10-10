@@ -85,6 +85,7 @@ namespace MyTeam
             // Register application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddInstance(Configuration);
 
             Registrations.Setup(services);
         }

@@ -10,12 +10,12 @@
     "rimraf": "2.2.8",
     "gulp-notify": "2.2.0",
     "path": "0.12.7",
-    "gulp-react" : "^3.0.1"
+    "gulp-react": "^3.0.1"
   },
   "dependencies": {
     "jquery": "2.1.4",
     "bootbox": "4.4.0",
-    "react": "^0.14.0"
+    "react": "0.13.0"
   }
 
 

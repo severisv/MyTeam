@@ -20,7 +20,10 @@ module.exports = {
     src: {
         root: root,
         stylesheets: "./Assets/Stylesheets/styles.less",
-        scripts: join("", './Assets/Scripts/*.{js,jsx}'),
+        scripts: [
+            join("", './Assets/Scripts/*.js'),
+            join("", './Assets/Scripts/ReactComponents/*.jsx')
+        ],
         
         lib: [
             npm("jquery/dist/jquery.js"),
