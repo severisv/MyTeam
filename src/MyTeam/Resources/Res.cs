@@ -67,7 +67,7 @@ namespace MyTeam.Resources
         public const string Phone = "Telefon";
         public const string Register = "Registrer";
         public const string Recurring = "Ukentlig";
-        public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en for hver uke på samme tidspunkt frem til datoen som er spesifisert";
+        public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
 

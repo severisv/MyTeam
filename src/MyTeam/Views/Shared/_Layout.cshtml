@@ -38,7 +38,7 @@
                     <li><a asp-controller="player" asp-action="index">@Res.Players</a></li>
                     <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
                     <li><a asp-controller="game">@Res.Games</a></li>
-                    <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal</a></li>
+                    <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
                 </ul>
 
                 @await Html.PartialAsync("_LoginPartial")
@@ -64,8 +64,8 @@
     </div>
 
 
-    <script src="~/scripts/lib.bundle.js"></script>
-    <script src="~/scripts/site.bundle.js"></script>
+    <script src="~/scripts/bundles/lib.bundle.js"></script>
+    <script src="~/scripts/bundles/site.bundle.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

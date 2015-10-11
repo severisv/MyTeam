@@ -11,10 +11,10 @@ var react = require('gulp-react');
 gulp.task('js', function () {
     return gulp.src(paths.src.scripts)
       .pipe(concat('site.bundle.js'))
-      .on('error', _.plumb.errorHandler)
       .pipe(react())
 //      .pipe(uglify())
       .pipe(gulp.dest(paths.dest.scripts))
+       .on('error', _.plumb.errorHandler)
       .pipe(notify('Compiled javascript'));
     
 });
@@ -22,9 +22,9 @@ gulp.task('js', function () {
 gulp.task('js-lib', function () {
     return gulp.src(paths.src.lib)
         .pipe(concat('lib.bundle.js'))
-        .on('error', _.plumb.errorHandler)
         .pipe(uglify())
         .pipe(gulp.dest(paths.dest.scripts))
+        .on('error', _.plumb.errorHandler)
         .pipe(notify('Compiled javascript libraries'));
     
 });
@@ -32,11 +32,13 @@ gulp.task('js-lib', function () {
 
 // Watch
 gulp.task('watch-js', function () {
-    gulp.watch(paths.src.scripts, ['js']);
+    gulp.watch(paths.src.scripts, ['js'])
+            .on('error', _.plumb.errorHandler);
 });
 
 gulp.task('watch-js-lib', function () {
-    gulp.watch(paths.self, ['js-lib']);
+    gulp.watch(paths.self, ['js-lib'])
+            .on('error', _.plumb.errorHandler);
 });
 
 

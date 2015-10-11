@@ -22,7 +22,8 @@ module.exports = {
         stylesheets: join("", './Assets/Stylesheets/*/*.less'),
         scripts: [
             join("", './Assets/Scripts/*.js'),
-            join("", './Assets/Scripts/ReactComponents/*.jsx')
+            join("", './Assets/Scripts/ReactComponents/*.jsx'),
+            join("", './Assets/Scripts/ReactComponents/*/*.jsx')
         ],
         
         lib: [
@@ -37,6 +38,6 @@ module.exports = {
     },
     dest : {
         stylesheets: root + "/css/",
-        scripts: root + "/scripts/"
+        scripts: root + "/scripts/Bundles/"
     }
 }

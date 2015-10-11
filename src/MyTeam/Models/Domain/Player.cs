@@ -17,8 +17,8 @@ namespace MyTeam.Models.Domain
         [Required]
         public string LastName { get; set; }
 
-        [Required]
         public string UserName { get; set; }
+        public string FacebookId { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = Res.BirthDate)]
@@ -34,7 +34,6 @@ namespace MyTeam.Models.Domain
 
         [DataType(DataType.EmailAddress)]
         [Display(Name = Res.Email)]
-
         public string Email => UserName;
 
 
@@ -62,5 +61,21 @@ namespace MyTeam.Models.Domain
 
         public virtual int PracticeCount { get; set; }
         public PlayerStatus Status { get; set; }
+
+
+        public Player()
+        {
+            
+        }
+
+        public Player(string facebookId, string firstName, string lastName)
+        {
+
+            FirstName = firstName;
+            MiddleName = "";
+            LastName = lastName;
+            Positions = new List<Position> {};
+
+        }
     }
 }

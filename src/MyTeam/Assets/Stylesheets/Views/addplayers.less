@@ -6,4 +6,20 @@
 
 .add-players ul li {
     height: 50px;
+
+    img {
+        margin-right: 1em;
+    }
+
+    button {
+        margin-top: 0.6em;
+        min-width: 7em;
+        &:disabled{
+            cursor:default;
+        }
+    }
+}
+
+.add-players ul li:nth-child(odd) {
+    background-color: rgba(0,0,0,0.05);
 }
