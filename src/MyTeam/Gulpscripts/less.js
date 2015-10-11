@@ -10,8 +10,8 @@ var minify = require('gulp-cssmin');
 
 gulp.task('less', function () {
     return gulp.src(paths.src.stylesheets)
-      .pipe(less())
       .pipe(concat('styles.bundle.css'))
+      .pipe(less())
         .on('error', _.plumb.errorHandler)
         .pipe(minify())
       .pipe(gulp.dest(paths.dest.stylesheets))

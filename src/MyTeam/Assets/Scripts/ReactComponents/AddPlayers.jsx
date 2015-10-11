@@ -24,7 +24,7 @@ var AddPlayers = React.createClass({
                 q: q,
                 type: "user",
                 access_token: url.accessToken,
-                limit: 5,
+                limit: 6,
                 fields: "picture,name"
             }).then(data => {
 
@@ -49,8 +49,9 @@ var AddPlayers = React.createClass({
     },
 
     render:function() {
-        return (<div>
-    <input type="text" onChange={this.handleChange} />
+        return (<div className="add-players">
+    <h3>Legg til spillere</h3>
+     <input className="form-control" placeholder="Søk etter personer" type="text" onChange={this.handleChange} />
     <ul>{this.renderUsers()}</ul>
     </div>
         )
