@@ -227,7 +227,7 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
         CONFIRM: "CONFIRM",
     },
 
-    routes : {
+    routes: {
         ADD_PLAYER: "admin/addPlayer"
     },
 
@@ -240,7 +240,7 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
         })
     },
 
-    componentDidMount(){
+    componentDidMount() {
         //var existingIds = $.getJSON("getFacebookIds").then(response => {
         //    this.setState({
         //        existingIds: response.data
@@ -248,7 +248,7 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
         //}
         //    );
     },
-    
+
     addPlayer: function (user) {
         $.post(this.routes.ADD_PLAYER, {
             firstname: user.first_name,
@@ -264,10 +264,10 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
                         existingIds: ids
                     })
             }
-        });      
+        });
 
     },
-    
+
     render: function () {
         return (React.createElement("div", {className: "add-players"}, 
             React.createElement("h3", null, "Legg til spillere"), 
@@ -283,6 +283,7 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
     getInitialState: function () {
         return ({
             users: [],
+            addUsingFacebook: true
         })
     },
 
@@ -312,6 +313,11 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
         }
     },
 
+    changeAddMethod: function(method){
+        if (method == "facebook") this.setState({ addUsingFacebook: true })
+        else this.setState({ addUsingFacebook: false })
+    },
+
     renderUsers: function (addPlayer, existingIds) {
         return this.state.users.map(function (user) {
 
@@ -339,20 +345,47 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
         })
     },
 
+
     render: function () {
-        return (
-        React.createElement("div", null, 
+
+        var addWithFacebookClass = this.state.addUsingFacebook ? "active" : "";
+        var addWithEmailClass = this.state.addUsingFacebook ? "" : "active";
+
+        return (React.createElement("div", {className: "col-md-12 col-lg-8 no-padding"}, 
+            React.createElement("ul", {className: "nav nav-pills mt-justified"}, 
+                   React.createElement("li", {className: addWithFacebookClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "facebook")}, React.createElement("i", {className: "fa fa-facebook"}), " Med Facebook")), 
+                   React.createElement("li", {className: addWithEmailClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "email")}, React.createElement("i", {className: "fa fa-envelope"}), " Med e-post"))
+            ), 
+            
+                    
+            this.renderAddModule()
+        )
+    )
+    },
+    renderAddModule: function () {
+        if (this.state.addUsingFacebook) {
+            return (
+                  React.createElement("div", null, 
              React.createElement("div", {className: "col-xs-12 no-padding"}, 
-        React.createElement("input", {className: "form-control search", placeholder: "Søk etter personer", type: "text", onChange: this.handleChange}), 
+
+
+                   React.createElement("input", {className: "form-control search", placeholder: "Søk etter personer", type: "text", onChange: this.handleChange}), 
         React.createElement("i", {className: "fa fa-search search-icon"})
 
-        ), 
+             ), 
         React.createElement("div", {className: "clearfix"}), 
         React.createElement("div", {className: "list-users"}, 
         React.createElement("ul", null, this.renderUsers(this.props.addPlayer, this.props.existingIds))
-        
+
         )
-        )
-    )
+                  )
+                )
+        }
+        else {
+            return (
+                React.createElement("div", null
+                ))
+        }
+
     }
 });

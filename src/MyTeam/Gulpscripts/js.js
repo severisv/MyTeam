@@ -12,9 +12,10 @@ gulp.task('js', function () {
     return gulp.src(paths.src.scripts)
       .pipe(concat('site.bundle.js'))
       .pipe(react())
+      .on('error', _.plumb.errorHandler)
 //      .pipe(uglify())
       .pipe(gulp.dest(paths.dest.scripts))
-       .on('error', _.plumb.errorHandler)
+      .on('error', _.plumb.errorHandler)
       .pipe(notify('Compiled javascript'));
     
 });

@@ -7,7 +7,7 @@ var AddPlayers = React.createClass({
         CONFIRM: "CONFIRM",
     },
 
-    routes : {
+    routes: {
         ADD_PLAYER: "admin/addPlayer"
     },
 
@@ -20,7 +20,7 @@ var AddPlayers = React.createClass({
         })
     },
 
-    componentDidMount(){
+    componentDidMount() {
         //var existingIds = $.getJSON("getFacebookIds").then(response => {
         //    this.setState({
         //        existingIds: response.data
@@ -28,7 +28,7 @@ var AddPlayers = React.createClass({
         //}
         //    );
     },
-    
+
     addPlayer: function (user) {
         $.post(this.routes.ADD_PLAYER, {
             firstname: user.first_name,
@@ -44,10 +44,10 @@ var AddPlayers = React.createClass({
                         existingIds: ids
                     })
             }
-        });      
+        });
 
     },
-    
+
     render: function () {
         return (<div className="add-players">
             <h3>Legg til spillere</h3>
@@ -63,6 +63,7 @@ var FacebookAdd = React.createClass({
     getInitialState: function () {
         return ({
             users: [],
+            addUsingFacebook: true
         })
     },
 
@@ -92,6 +93,11 @@ var FacebookAdd = React.createClass({
         }
     },
 
+    changeAddMethod: function(method){
+        if (method == "facebook") this.setState({ addUsingFacebook: true })
+        else this.setState({ addUsingFacebook: false })
+    },
+
     renderUsers: function (addPlayer, existingIds) {
         return this.state.users.map(function (user) {
 
@@ -119,20 +125,47 @@ var FacebookAdd = React.createClass({
         })
     },
 
+
     render: function () {
-        return (
-        <div>
+
+        var addWithFacebookClass = this.state.addUsingFacebook ? "active" : "";
+        var addWithEmailClass = this.state.addUsingFacebook ? "" : "active";
+
+        return (<div className="col-md-12 col-lg-8 no-padding">
+            <ul className="nav nav-pills mt-justified">
+                   <li className={addWithFacebookClass}><a onClick={this.changeAddMethod.bind(null, "facebook")}><i className="fa fa-facebook"></i> Med Facebook</a></li>
+                   <li className={addWithEmailClass}><a onClick={this.changeAddMethod.bind(null, "email")} ><i className="fa fa-envelope"></i>&nbsp;Med e-post</a></li>                
+            </ul>
+            
+                    
+            {this.renderAddModule()}
+        </div>
+    )
+    },
+    renderAddModule: function () {
+        if (this.state.addUsingFacebook) {
+            return (
+                  <div>
              <div className="col-xs-12 no-padding">
-        <input className="form-control search" placeholder="Søk etter personer" type="text" onChange={this.handleChange} />
+
+
+                   <input className="form-control search" placeholder="Søk etter personer" type="text" onChange={this.handleChange} />
         <i className="fa fa-search search-icon"></i>
 
-        </div>
+             </div>
         <div className="clearfix"></div>
         <div className="list-users">
         <ul>{this.renderUsers(this.props.addPlayer, this.props.existingIds)}</ul>
-        
+
         </div>
-        </div>
-    )
+                  </div>
+                )
+        }
+        else {
+            return (
+                <div>
+                </div>)
+        }
+
     }
 });
