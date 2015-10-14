@@ -104,7 +104,17 @@ mt_fb.getSearchUrl = function () {
     return null;
 };
 
-
+mt_fb.getUserImageUrl = function(id) {
+    var accessToken = mt_fb.aquireUserToken();
+    if (accessToken) {
+        var url = "https://graph.facebook.com/v2.5/"+id+"/picture";
+        return {
+            url: url,
+            accessToken: accessToken
+        };
+    }
+    return null;
+}
 var timestamp = new Date();
 var start = timestamp.getMilliseconds();
 
@@ -219,71 +229,170 @@ mt.deleteWithAjax = function(selector) {
 }
 
 
+mt.alert = function(type, message) {
+    $('#' + type).removeClass("hidden");
+    $('#' + type + " .alert-content").html(message);
+    $('.alert').effect("highlight", {}, 500);
+}
+
 var AddPlayers = React.createClass({displayName: "AddPlayers",
 
-    views: {
-        FACEBOOK_ADD: "FACEBOOK_ADD",
-        EMAIL_ADD: "EMAIL_ADD",
-        CONFIRM: "CONFIRM",
-    },
-
     routes: {
-        ADD_PLAYER: "admin/addPlayer"
+        ADD_PLAYER: "admin/addPlayer",
+        GET_FACEBOOK_IDS: "admin/getFacebookIds",
     },
 
     getInitialState: function () {
         return ({
             users: [],
             currentUser: null,
-            view: this.views.FACEBOOK_ADD,
-            existingIds: []
+            existingIds: [],
+            validationMessage: "",
+            addUsingFacebook: true
+
         })
     },
 
     componentDidMount() {
-        //var existingIds = $.getJSON("getFacebookIds").then(response => {
-        //    this.setState({
-        //        existingIds: response.data
-        //    })
-        //}
-        //    );
+        var existingIds = $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
+            this.setState({
+                existingIds: response.data
+            })
+        }
+        );
     },
 
     addPlayer: function (user) {
-        $.post(this.routes.ADD_PLAYER, {
-            firstname: user.first_name,
-            lastname: user.last_name,
-            facebookid: user.id
-        }).then(data => {
-            if (data.success) {
-                var ids = this.state.existingIds;
-                ids.push(user.id)
-                console.log(ids)
-                this.setState(
-                    {
-                        existingIds: ids
-                    })
-            }
-        });
+        var validationMessage = this.validateUser(user);
+        console.log(user)
+
+        if (validationMessage) this.setState({ validationMessage: validationMessage })
+            
+        else {
+            $.post(this.routes.ADD_PLAYER, {
+                firstname: user.first_name,
+                lastname: user.last_name,
+                facebookid: user.id,
+                emailAddress: user.email,
+                imageSmall: user.picture.data.url,          
+                imageMedium: user.imageMedium,
+                imageLarge: user.imageLarge             
+            }).then(data => {
+                if (data.SuccessMessage == "facebookAdd") {
+                    var ids = this.state.existingIds;
+                    ids.push(user.id)
+                    this.setState(
+                        {
+                            existingIds: ids
+                        })
+                }
+                else if (data.SuccessMessage) {
+                    this.setState({ validationMessage: "" });
+                    mt.alert("success", data.SuccessMessage);
+                    this.clearEmailForm();
+                }
+
+                else if (data.ValidationMessage) {
+                    this.setState({ validationMessage: data.ValidationMessage });
+                }
+
+            });
+        }
 
     },
 
+    clearEmailForm: function(){
+        $('.add-players input').val('')
+    },
+
+    changeAddMethod: function (method) {
+        if (method == "facebook") this.setState({ addUsingFacebook: true })
+        else this.setState({ addUsingFacebook: false })
+    },
+
+    validateUser: function(user){
+        if (user.id) return null;
+
+        if (user.first_name == "" || user.last_name == "" || user.email == "") return "Alle feltene må fylles ut";
+
+        function validateEmail(email) {
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return re.test(email);
+        }
+        if (!validateEmail(user.email)) return "Ugyldig e-postadresse"
+
+    },
     render: function () {
+        var addWithFacebookClass = this.state.addUsingFacebook ? "active" : "";
+        var addWithEmailClass = this.state.addUsingFacebook ? "" : "active";
         return (React.createElement("div", {className: "add-players"}, 
             React.createElement("h3", null, "Legg til spillere"), 
-            React.createElement(FacebookAdd, {addPlayer: this.addPlayer, existingIds: this.state.existingIds})
+                  
+
+                    React.createElement("div", {className: "col-md-12 col-lg-8 no-padding"}, 
+            React.createElement("ul", {className: "nav nav-pills mt-justified"}, 
+                   React.createElement("li", {className: addWithFacebookClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "facebook")}, React.createElement("i", {className: "fa fa-facebook"}), " Med Facebook")), 
+                   React.createElement("li", {className: addWithEmailClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "email")}, React.createElement("i", {className: "fa fa-envelope"}), " Med e-post"))
+            ), 
+            this.renderAddModule()
         )
         )
-    }
+        )
+    },
+        renderAddModule: function () {
+            if (this.state.addUsingFacebook)
+                return (React.createElement(FacebookAdd, {addPlayer: this.addPlayer, existingIds: this.state.existingIds}))
+            else 
+            return (React.createElement(EmailAdd, {addPlayer: this.addPlayer, validationMessage: this.state.validationMessage}))
+
+        }
+
 });
+
+
+
+
+var EmailAdd = React.createClass({displayName: "EmailAdd",
+   
+    getInitialState: function () {
+        return { firstname: '', lastname: '', email: '' };
+    },
+    
+    submit: function(){
+        var user = {        
+            first_name: this.state.firstname,
+            last_name: this.state.lastname,
+            email: this.state.email            
+        }
+        this.props.addPlayer(user);
+    },
+
+    handleFirstnameChange : function(){ this.setState({firstname: event.target.value}) },
+    handleLastnameChange : function(){ this.setState({lastname: event.target.value}) },
+    handleEmailChange : function(){ this.setState({email: event.target.value}) },
+
+    render: function () {
+        return (
+                  React.createElement("div", null, 
+                       React.createElement("span", {className: "text-danger"}, this.props.validationMessage), 
+                      React.createElement("input", {onChange: this.handleEmailChange, className: "form-control", placeholder: "E-postadresse"}), 
+                      React.createElement("input", {onChange: this.handleFirstnameChange, className: "form-control", placeholder: "Fornavn"}), 
+                      React.createElement("input", {onChange: this.handleLastnameChange, className: "form-control", placeholder: "Etternavn"}), 
+                      React.createElement("button", {onClick: this.submit, className: "btn btn-primary"}, React.createElement("i", {className: "fa fa-plus"}), " Legg til")
+                  ))
+    }
+   
+        
+
+});
+
 
 
 var FacebookAdd = React.createClass({displayName: "FacebookAdd",
 
     getInitialState: function () {
         return ({
-            users: [],
-            addUsingFacebook: true
+            users: []
         })
     },
 
@@ -313,9 +422,33 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
         }
     },
 
-    changeAddMethod: function(method){
-        if (method == "facebook") this.setState({ addUsingFacebook: true })
-        else this.setState({ addUsingFacebook: false })
+    addPlayer: function(user){
+                
+        function getImageUrl(url, size) {
+            var imageUrl;
+            $.ajax({
+                url: url.url,
+                async: false,
+                data: {
+                    access_token: url.accessToken,
+                    height: size,
+                    width: size,
+                    redirect: 0
+                },
+                success: function (response) {
+                    imageUrl = response.data.url;
+                }
+
+            });
+            return imageUrl;
+        }                  
+
+        var url = mt_fb.getUserImageUrl(user.id);
+        
+        user.imageMedium = getImageUrl(url, 400);
+        user.imageLarge = getImageUrl(url, 800);
+
+        this.props.addPlayer(user);
     },
 
     renderUsers: function (addPlayer, existingIds) {
@@ -347,45 +480,18 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
 
 
     render: function () {
-
-        var addWithFacebookClass = this.state.addUsingFacebook ? "active" : "";
-        var addWithEmailClass = this.state.addUsingFacebook ? "" : "active";
-
-        return (React.createElement("div", {className: "col-md-12 col-lg-8 no-padding"}, 
-            React.createElement("ul", {className: "nav nav-pills mt-justified"}, 
-                   React.createElement("li", {className: addWithFacebookClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "facebook")}, React.createElement("i", {className: "fa fa-facebook"}), " Med Facebook")), 
-                   React.createElement("li", {className: addWithEmailClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "email")}, React.createElement("i", {className: "fa fa-envelope"}), " Med e-post"))
-            ), 
-            
-                    
-            this.renderAddModule()
+        return (
+        React.createElement("div", null, 
+            React.createElement("div", {className: "col-xs-12 no-padding"}, 
+             React.createElement("input", {className: "form-control search", placeholder: "Søk etter personer", type: "text", onChange: this.handleChange}), 
+          React.createElement("i", {className: "fa fa-search search-icon"})
+               ), 
+          React.createElement("div", {className: "clearfix"}), 
+          React.createElement("div", {className: "list-users"}, 
+          React.createElement("ul", null, this.renderUsers(this.addPlayer, this.props.existingIds))
+          )
         )
     )
     },
-    renderAddModule: function () {
-        if (this.state.addUsingFacebook) {
-            return (
-                  React.createElement("div", null, 
-             React.createElement("div", {className: "col-xs-12 no-padding"}, 
 
-
-                   React.createElement("input", {className: "form-control search", placeholder: "Søk etter personer", type: "text", onChange: this.handleChange}), 
-        React.createElement("i", {className: "fa fa-search search-icon"})
-
-             ), 
-        React.createElement("div", {className: "clearfix"}), 
-        React.createElement("div", {className: "list-users"}, 
-        React.createElement("ul", null, this.renderUsers(this.props.addPlayer, this.props.existingIds))
-
-        )
-                  )
-                )
-        }
-        else {
-            return (
-                React.createElement("div", null
-                ))
-        }
-
-    }
 });

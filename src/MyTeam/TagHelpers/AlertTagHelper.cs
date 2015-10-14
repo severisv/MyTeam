@@ -21,16 +21,18 @@ namespace MyTeam.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var message = context.GetChildContentAsync().Result.GetContent();
-            if (string.IsNullOrWhiteSpace(message)) return;
+
 
             var alert = new Alert(Type, message);
 
-            output.Attributes["class"] = $"alert alert-{Type.ToString().ToLower()}";
+            var hidden = string.IsNullOrWhiteSpace(message) ? "hidden" : "";
+            output.Attributes["class"] = $"alert alert-{Type.ToString().ToLower()} {hidden}";
+            output.Attributes["id"] = Type.ToString().ToLower();
 
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{alert.Icon}");
             output.Content.Append(innertag.ToString());
-            output.Content.Append($" {alert.Message}");
+            output.Content.Append($" <span class='alert-content'>{alert.Message}</span>");
             output.Content.Append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
         }
 

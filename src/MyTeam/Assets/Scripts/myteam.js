@@ -10,3 +10,10 @@ mt.deleteWithAjax = function(selector) {
         $('.alert').effect("highlight", { }, 500 );
     });
 }
+
+
+mt.alert = function(type, message) {
+    $('#' + type).removeClass("hidden");
+    $('#' + type + " .alert-content").html(message);
+    $('.alert').effect("highlight", {}, 500);
+}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using MyTeam.Models.Enums;
@@ -40,13 +39,19 @@ namespace MyTeam.Models.Domain
         public int StartYear => StartDate.Year;
         public string Imagename { get; set; }
 
+        public string ImageSmall { get; set; }
+        public string ImageMedium { get; set; }
+        public string ImageFull { get; set; }
+
+
         [Display(Name = Res.Positions)]
         public virtual IEnumerable<Position> Positions { get; set; }
         public virtual string PositionsToString => string.Join(", ", Positions.ToArray());
 
-        public string ImageSmall => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Small);
-        public string ImageMedium => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Medium);
-        public string ImageFull => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Full);
+//        public string ImageSmall => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Small);
+//        public string ImageMedium => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Medium);
+//        public string ImageFull => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Full);
+
         public string Fullname => $"{FirstName} {MiddleName} {LastName}";
         public string Name => $"{FirstName} {LastName}";
 
@@ -68,9 +73,10 @@ namespace MyTeam.Models.Domain
             
         }
 
-        public Player(string facebookId, string firstName, string lastName)
+        public Player(string facebookId, string firstName, string lastName, string emailAddress)
         {
-
+            FacebookId = facebookId;
+            UserName = emailAddress;
             FirstName = firstName;
             MiddleName = "";
             LastName = lastName;

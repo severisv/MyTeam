@@ -12,6 +12,7 @@ namespace MyTeam.Resources
         public const string Attendance = "Oppmøte";
         public const string AssistCount = "Assists";
         public const string Add = "Legg til";
+        public const string Added = "Lagt til";
         public const string AdminPage = "Trenersiden";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
@@ -45,6 +46,8 @@ namespace MyTeam.Resources
 
         public const string Internal = "Intern";
         public const string IsAttending = "Stiller";
+        public const string IsAlready = "Er allerede";
+        public const string IsRequired = "Er obligatorisk";
         public const string IsNotAttending = "Kan ikke";
         public const string InvalidInput = "Ugyldig input";
         public const string LastUpdated = "Sist oppdatert";
@@ -71,6 +74,7 @@ namespace MyTeam.Resources
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
 
+        public const string Player = "Spiller";
         public const string Points = "Poeng";
         public const string Saved = "Lagret";
         public const string Season = "Sesong";

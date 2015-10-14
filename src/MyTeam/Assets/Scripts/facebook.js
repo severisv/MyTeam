@@ -43,3 +43,14 @@ mt_fb.getSearchUrl = function () {
     return null;
 };
 
+mt_fb.getUserImageUrl = function(id) {
+    var accessToken = mt_fb.aquireUserToken();
+    if (accessToken) {
+        var url = "https://graph.facebook.com/v2.5/"+id+"/picture";
+        return {
+            url: url,
+            accessToken: accessToken
+        };
+    }
+    return null;
+}
