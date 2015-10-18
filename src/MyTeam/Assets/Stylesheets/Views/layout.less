@@ -3,12 +3,18 @@
     padding: 0;
 }
 
-
-@media screen and (max-width: 767px) {
-    div[mt-main] {
-        padding: 0;
-    }
+div[mt-main] {
+    float: left;
+    .r-above(@sm-max, {width: 74% });
+    .r-above(@md-max, {width: 78% });
+    .r-under(@md-min,  { width: 100%; padding: 0; });
 }
+div[mt-sidebar] {
+    width: 24%;
+    .r-above(@md-max, {width: 20% });
+    .r-under(@md-min, { display:none; });
+}
+
 
 
 

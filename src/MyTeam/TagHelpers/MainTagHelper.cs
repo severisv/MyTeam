@@ -25,7 +25,7 @@ namespace MyTeam.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes["class"] = $"col-lg-9 col-md-9 {Class}";
+            output.Attributes["class"] = $"{Class}";
 
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");

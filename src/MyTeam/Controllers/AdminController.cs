@@ -16,7 +16,18 @@ namespace MyTeam.Controllers
         public IPlayerService PlayerService { get; set; }
 
 
+
         public IActionResult Index()
+        {
+
+            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
+
+            var model = new AdminViewModel(facebookAppId);
+
+            return View(model);
+        }
+
+        public IActionResult AddPlayers()
         {
 
             var facebookAppId = Configuration["Authentication:Facebook:AppId"];

@@ -1,0 +1,35 @@
+﻿@xs-max:                                 767px;  
+@sm-min:                                 (@xs-max+1);                                          
+@sm-max:                                 990px;  
+@md-min:                                 (@sm-max+1);  
+@md-max:                                 1200px;    
+@lg-min:                                 (@md-max+1);           
+
+
+.r-xs(@rules) {
+	@media (max-width: @xs-max) { @rules(); }
+}
+
+.r-sm(@rules) {
+	@media (min-width: @sm-min) and (max-width: @sm-max) { @rules(); }
+}
+
+.r-md(@rules) {
+	@media (min-width: @md-min) and (max-width: @md-max) { @rules(); }
+}
+
+.r-lg(@rules) {
+	@media (min-width: @lg-min) { @rules(); }
+}
+
+.r-under(@max-width, @rules){
+   	@media (max-width: @max-width) { @rules(); }
+}
+
+.r-above(@min-width, @rules){
+   	@media (min-width: @min-width) { @rules(); }
+}
+
+.r-range(@min-width, @max-width, @rules){
+   	@media (min-width: @min-width) and (max-width: @max-width) { @rules(); }
+}

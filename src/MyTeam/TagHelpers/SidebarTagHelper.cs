@@ -22,7 +22,7 @@ namespace MyTeam.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes["class"] = $"col-lg-3 col-md-3 visible-md visible-lg pull-right {Class}";
+            output.Attributes["class"] = $" pull-right {Class}";
 
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");
