@@ -126,6 +126,7 @@ $('a.mt-popover').popover({ trigger: "hover" });
 
 applySlideDownMenuListeners();
 applyConfirmDialogListeners();
+applyActiveLinkSwapper();
 
 
 
@@ -135,7 +136,6 @@ window.onpopstate = function () {
 
 
 console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
-
 
 
 // Slide down
@@ -182,6 +182,14 @@ function applyConfirmDialogListeners() {
             }
         });
 
+    });
+}
+
+// Active links
+function applyActiveLinkSwapper() {
+    $('ul.nav li').on('click', function () {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
     });
 }
 
@@ -233,6 +241,13 @@ mt.alert = function(type, message) {
     $('#' + type).removeClass("hidden");
     $('#' + type + " .alert-content").html(message);
     $('.alert').effect("highlight", {}, 500);
+}
+
+mt.showElement = function(selector) {
+    $(selector).show();
+}
+mt.hideElement = function(selector) {
+    $(selector).hide();
 }
 
 var AddPlayers = React.createClass({displayName: "AddPlayers",

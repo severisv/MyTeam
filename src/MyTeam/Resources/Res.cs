@@ -84,6 +84,7 @@ namespace MyTeam.Resources
         public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
         public const string Submenu = "Undermeny";
         public const string Upcoming = "Kommende";
+        public const string Password = "Passord";
         public const string Previous = "Tidligere";
         public const string Pluralise = "er";
         public const string Players = "Spillere";

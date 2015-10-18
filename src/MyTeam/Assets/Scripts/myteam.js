@@ -17,3 +17,10 @@ mt.alert = function(type, message) {
     $('#' + type + " .alert-content").html(message);
     $('.alert').effect("highlight", {}, 500);
 }
+
+mt.showElement = function(selector) {
+    $(selector).show();
+}
+mt.hideElement = function(selector) {
+    $(selector).hide();
+}

@@ -9,6 +9,7 @@ $('a.mt-popover').popover({ trigger: "hover" });
 
 applySlideDownMenuListeners();
 applyConfirmDialogListeners();
+applyActiveLinkSwapper();
 
 
 
@@ -18,7 +19,6 @@ window.onpopstate = function () {
 
 
 console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
-
 
 
 // Slide down
@@ -65,5 +65,13 @@ function applyConfirmDialogListeners() {
             }
         });
 
+    });
+}
+
+// Active links
+function applyActiveLinkSwapper() {
+    $('ul.nav li').on('click', function () {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
     });
 }

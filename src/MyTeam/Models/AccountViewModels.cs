@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Mvc.Rendering;
+using MyTeam.Resources;
 
 namespace MyTeam.Models
 {
@@ -11,6 +13,7 @@ namespace MyTeam.Models
     {
         [Required]
         [EmailAddress]
+        [Display(Name =Res.Email)]
         public string Email { get; set; }
     }
 
@@ -46,6 +49,7 @@ namespace MyTeam.Models
     {
         [Required]
         [EmailAddress]
+        [Display(Name = Res.Email)]
         public string Email { get; set; }
 
         [Required]
@@ -65,6 +69,7 @@ namespace MyTeam.Models
     {
         [Required]
         [EmailAddress]
+        [Display(Name = Res.Email)]
         public string Email { get; set; }
     }
 
@@ -78,7 +83,7 @@ namespace MyTeam.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Husk meg?")]
         public bool RememberMe { get; set; }
     }
 
@@ -86,18 +91,18 @@ namespace MyTeam.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = Res.Email)]
         public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = Res.Password)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bekreft passord")]
+        [Compare("Password", ErrorMessage = "Passordene stemmer ikke overrens.")]
         public string ConfirmPassword { get; set; }
     }
 }
