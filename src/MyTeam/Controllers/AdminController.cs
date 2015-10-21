@@ -20,11 +20,7 @@ namespace MyTeam.Controllers
         public IActionResult Index()
         {
 
-            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
-
-            var model = new AdminViewModel(facebookAppId);
-
-            return View(model);
+            return View();
         }
 
         public IActionResult AddPlayers()
@@ -32,7 +28,7 @@ namespace MyTeam.Controllers
 
             var facebookAppId = Configuration["Authentication:Facebook:AppId"];
 
-            var model = new AdminViewModel(facebookAppId);
+            var model = new AddPlayersViewModel(facebookAppId);
 
             return View(model);
         }
@@ -49,12 +45,6 @@ namespace MyTeam.Controllers
             var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
         }
-
-        public JsonResult GetFacebookIds()
-        {
-            var ids = PlayerService.GetFacebookIds();
-            return new JsonResult(new { data = ids});
-        }
-
+        
     }
 }  

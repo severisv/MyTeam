@@ -57,6 +57,7 @@ namespace MyTeam.Resources
         public const string HallOfFame = "Hall of Fame";
         public const string Headline = "Overskrift";
         public const string Manage = "Administrer";
+        public const string ManagePlayers = "Administrer spillere";
         public const string Mandatory = "Obligatorisk oppmøte";
         public const string MandatoryExplaination = "Obligatorisk oppmøte betyr at treningen teller med på oppmøtestatistikken";
         public const string NotFound = "Siden finnes ikke";

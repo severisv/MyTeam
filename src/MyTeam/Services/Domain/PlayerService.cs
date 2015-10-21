@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Domain;
@@ -60,6 +61,17 @@ namespace MyTeam.Services.Domain
         public IEnumerable<string> GetFacebookIds()
         {
             return _playerRepository.Get().Select(p => p.FacebookId);
+        }
+
+        public IEnumerable<Object> Get(string clubId)
+        {
+            var players = _playerRepository.Get().Where(p => p.Club.ClubId == clubId).Select(p =>
+            new
+            {
+                FullName = p.Fullname,
+                Status = p.Status.ToString()
+            });
+            return players;
         }
     }
 }

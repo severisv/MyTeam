@@ -2,8 +2,8 @@
 var AddPlayers = React.createClass({
 
     routes: {
-        ADD_PLAYER: "admin/addPlayer",
-        GET_FACEBOOK_IDS: "admin/getFacebookIds",
+        ADD_PLAYER: Routes.ADD_PLAYER,
+        GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
     },
 
     getInitialState: function () {
@@ -18,7 +18,7 @@ var AddPlayers = React.createClass({
     },
 
     componentDidMount() {
-        var existingIds = $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
+        $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
             this.setState({
                 existingIds: response.data
             })

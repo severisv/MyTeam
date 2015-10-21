@@ -1,11 +1,11 @@
 ﻿namespace MyTeam.ViewModels.Admin
 {
-    public class AdminViewModel
+    public class AddPlayersViewModel
     {
         public string FacebookAppId { get; set; }
 
 
-        public AdminViewModel(string facebookAppId)
+        public AddPlayersViewModel(string facebookAppId)
         {
             FacebookAppId = facebookAppId;
         }    

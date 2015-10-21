@@ -253,8 +253,8 @@ mt.hideElement = function(selector) {
 var AddPlayers = React.createClass({displayName: "AddPlayers",
 
     routes: {
-        ADD_PLAYER: "admin/addPlayer",
-        GET_FACEBOOK_IDS: "admin/getFacebookIds",
+        ADD_PLAYER: Routes.ADD_PLAYER,
+        GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
     },
 
     getInitialState: function () {
@@ -269,7 +269,7 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
     },
 
     componentDidMount() {
-        var existingIds = $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
+        $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
             this.setState({
                 existingIds: response.data
             })
@@ -361,6 +361,64 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
             return (React.createElement(EmailAdd, {addPlayer: this.addPlayer, validationMessage: this.state.validationMessage}))
 
         }
+
+});
+
+
+
+
+var ManagePlayers = React.createClass({displayName: "ManagePlayers",
+
+    routes: {
+        GET_PLAYERS: Routes.GET_PLAYERS
+    },
+
+    getInitialState: function () {
+        return ({
+            players: []
+        })
+    },
+
+    componentDidMount() {
+
+        $.getJSON(this.routes.GET_PLAYERS).then(response => {
+            this.setState({
+                players: response
+            })
+        }
+        );
+            
+
+    },
+
+    renderPlayers: function (playerStatus) {
+        if (!this.state.players) return "";
+
+        var players = this.state.players.filter(function (player) {
+            if (player.Status == playerStatus) {
+                return (player)
+            }
+        })
+        var playerElements = players.map(function (player) {
+            return (React.createElement("li", null, player.FullName))
+        })
+        
+        return (React.createElement("div", null, 
+    React.createElement("h3", null, playerStatus), 
+    React.createElement("ul", null, 
+        playerElements
+    )
+        ))
+    },
+
+    render: function () {
+
+        return (React.createElement("div", null, 
+            this.renderPlayers(Constants.Active), 
+            this.renderPlayers(Constants.Veterans), 
+            this.renderPlayers(Constants.Inactive)
+        ))
+    }
 
 });
 
