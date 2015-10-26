@@ -26,17 +26,18 @@ var ManagePlayers = React.createClass({
 
     },
 
-    changePlayerStatus: function (player, event,asd,asd2) {
-        console.log(player)
-        console.log(event.target)
-        console.log(asd)
-        console.log(asd2)
+    setPlayerStatus: function (player, status) {
+   
         $.post(this.routes.SET_PLAYER_STATUS).then(response => {
-            if (response.Success && event.target.value) {
+            if (response.Success) {
+                var players = this.state.players;
                 for (var i in this.state.players) {
-                    this.state.players[i].Status = event.target.value;
+                    if (players[i].Id == player.Id) {
+                        this.state.players[i].Status = status;
+                    }
                 }
             }
+            this.forceUpdate();
         }
       );
     },
@@ -51,9 +52,9 @@ var ManagePlayers = React.createClass({
         })
 
         var options = this.options;
-        var changePlayerStatus = this.changePlayerStatus;
+        var setPlayerStatus = this.setPlayerStatus;
         var playerElements = players.map(function (player, i) {
-            return (<ManagePlayer key={i} player={player} changePlayerStatus={changePlayerStatus} options={options} />)
+            return (<ManagePlayer key={i} player={player} setPlayerStatus={setPlayerStatus} options={options} />)
         })
 
         return (<div>
@@ -83,6 +84,10 @@ var ManagePlayer = React.createClass({
         })
     },
 
+    setPlayerStatus: function(event){
+        this.props.setPlayerStatus(this.state.player, event.target.value)
+    },
+
     renderStatusOptions: function () {
 
         var statuses = this.props.options.playerStatus;
@@ -92,7 +97,7 @@ var ManagePlayer = React.createClass({
         }
 
         return (
-            <select onChange={this.props.changePlayerStatus.bind(null, this.state.player)}>          
+            <select onChange={this.setPlayerStatus}>          
                {statusList}
            </select>
             
