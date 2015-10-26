@@ -1,9 +1,12 @@
 ﻿
 var ManagePlayers = React.createClass({
 
-    routes: {
-        GET_PLAYERS: Routes.GET_PLAYERS
+    routes: Routes,
+
+    options: {
+        playerStatus: PlayerStatus
     },
+
 
     getInitialState: function () {
         return ({
@@ -19,8 +22,23 @@ var ManagePlayers = React.createClass({
             })
         }
         );
-            
 
+
+    },
+
+    changePlayerStatus: function (player, event,asd,asd2) {
+        console.log(player)
+        console.log(event.target)
+        console.log(asd)
+        console.log(asd2)
+        $.post(this.routes.SET_PLAYER_STATUS).then(response => {
+            if (response.Success && event.target.value) {
+                for (var i in this.state.players) {
+                    this.state.players[i].Status = event.target.value;
+                }
+            }
+        }
+      );
     },
 
     renderPlayers: function (playerStatus) {
@@ -31,10 +49,13 @@ var ManagePlayers = React.createClass({
                 return (player)
             }
         })
-        var playerElements = players.map(function (player) {
-            return (<li>{player.FullName}</li>)
+
+        var options = this.options;
+        var changePlayerStatus = this.changePlayerStatus;
+        var playerElements = players.map(function (player, i) {
+            return (<ManagePlayer key={i} player={player} changePlayerStatus={changePlayerStatus} options={options} />)
         })
-        
+
         return (<div>
     <h3>{playerStatus}</h3>
     <ul>
@@ -46,12 +67,47 @@ var ManagePlayers = React.createClass({
     render: function () {
 
         return (<div>
-            {this.renderPlayers(Constants.Active)}
-            {this.renderPlayers(Constants.Veterans)}
-            {this.renderPlayers(Constants.Inactive)}
+            {this.renderPlayers(this.options.playerStatus.Active)}
+            {this.renderPlayers(this.options.playerStatus.Veteran)}
+            {this.renderPlayers(this.options.playerStatus.Inactive)}
         </div>)
     }
 
 });
 
 
+var ManagePlayer = React.createClass({
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
+
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(<option key={statuses[key]}>{statuses[key]}</option>)
+        }
+
+        return (
+            <select onChange={this.props.changePlayerStatus.bind(null, this.state.player)}>          
+               {statusList}
+           </select>
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+
+        return (<li>
+            {player.FullName}
+            {this.renderStatusOptions()}
+        </li>)
+    }
+
+
+})

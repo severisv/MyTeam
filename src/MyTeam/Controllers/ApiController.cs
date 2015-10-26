@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
+using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.Services.Repositories;
@@ -26,6 +27,19 @@ namespace MyTeam.Controllers
         {
             var ids = PlayerService.GetFacebookIds();
             return new JsonResult(new { data = ids });
+        }
+
+        [HttpPost]
+        public JsonResult SetPlayerStatus(Guid id, PlayerStatus status)
+        {
+            if (ModelState.IsValid)
+            {
+                var reponse = new {Success = true};
+                return new JsonResult(reponse);
+            }
+
+            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
         }
 
     }

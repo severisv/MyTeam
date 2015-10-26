@@ -369,9 +369,12 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
 
 var ManagePlayers = React.createClass({displayName: "ManagePlayers",
 
-    routes: {
-        GET_PLAYERS: Routes.GET_PLAYERS
+    routes: Routes,
+
+    options: {
+        playerStatus: PlayerStatus
     },
+
 
     getInitialState: function () {
         return ({
@@ -387,8 +390,23 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
             })
         }
         );
-            
 
+
+    },
+
+    changePlayerStatus: function (player, event,asd,asd2) {
+        console.log(player)
+        console.log(event.target)
+        console.log(asd)
+        console.log(asd2)
+        $.post(this.routes.SET_PLAYER_STATUS).then(response => {
+            if (response.Success && event.target.value) {
+                for (var i in this.state.players) {
+                    this.state.players[i].Status = event.target.value;
+                }
+            }
+        }
+      );
     },
 
     renderPlayers: function (playerStatus) {
@@ -399,10 +417,13 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
                 return (player)
             }
         })
-        var playerElements = players.map(function (player) {
-            return (React.createElement("li", null, player.FullName))
+
+        var options = this.options;
+        var changePlayerStatus = this.changePlayerStatus;
+        var playerElements = players.map(function (player, i) {
+            return (React.createElement(ManagePlayer, {key: i, player: player, changePlayerStatus: changePlayerStatus, options: options}))
         })
-        
+
         return (React.createElement("div", null, 
     React.createElement("h3", null, playerStatus), 
     React.createElement("ul", null, 
@@ -414,16 +435,50 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     render: function () {
 
         return (React.createElement("div", null, 
-            this.renderPlayers(Constants.Active), 
-            this.renderPlayers(Constants.Veterans), 
-            this.renderPlayers(Constants.Inactive)
+            this.renderPlayers(this.options.playerStatus.Active), 
+            this.renderPlayers(this.options.playerStatus.Veteran), 
+            this.renderPlayers(this.options.playerStatus.Inactive)
         ))
     }
 
 });
 
 
+var ManagePlayer = React.createClass({displayName: "ManagePlayer",
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
 
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
+        }
+
+        return (
+            React.createElement("select", {onChange: this.props.changePlayerStatus.bind(null, this.state.player)}, 
+               statusList
+           )
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+
+        return (React.createElement("li", null, 
+            player.FullName, 
+            this.renderStatusOptions()
+        ))
+    }
+
+
+})
 
 var EmailAdd = React.createClass({displayName: "EmailAdd",
    

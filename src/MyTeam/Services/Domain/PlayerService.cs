@@ -68,6 +68,7 @@ namespace MyTeam.Services.Domain
             var players = _playerRepository.Get().Where(p => p.Club.ClubId == clubId).Select(p =>
             new
             {
+                Id = p.Id,
                 FullName = p.Fullname,
                 Status = p.Status.ToString()
             });
