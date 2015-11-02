@@ -3,7 +3,7 @@
     public static class Roles
     {
         public const string Admin = "Admin";
-        public const string Coach = "Coach";
-        public const string NewsWriter = "NewsWriter";
+        public const string Coach = "Trener";
+        public const string NewsWriter = "Skribent";
     }
 }

@@ -368,30 +368,33 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
 
 
 var ManagePlayers = React.createClass({displayName: "ManagePlayers",
-
-    routes: Routes,
-
-    options: {
-        playerStatus: PlayerStatus
-    },
-
-
+         
     getInitialState: function () {
         return ({
             players: []
         })
     },
 
+    componentWillMount: function(){
+        this.routes = Routes,
+
+      this.options = {
+          playerStatus: PlayerStatus,
+          playerRoles: PlayerRoles
+      }
+    },
+
     componentDidMount() {
+        console.log("hei")
 
         $.getJSON(this.routes.GET_PLAYERS).then(response => {
+            console.log(response)
+
             this.setState({
                 players: response
             })
         }
         );
-
-
     },
 
     setPlayerStatus: function (player, status) {
@@ -425,16 +428,19 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
             return (React.createElement(ManagePlayer, {key: i, player: player, setPlayerStatus: setPlayerStatus, options: options}))
         })
 
-        return (React.createElement("div", null, 
-    React.createElement("h3", null, playerStatus), 
-    React.createElement("ul", null, 
+        return (React.createElement("div", {className: "manage-players"}, 
+    React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-xs-4 headline"}, React.createElement("strong", null, playerStatus)), 
+        React.createElement("div", {className: "col-xs-3 subheadline"}, React.createElement("strong", null, "Status")), 
+        React.createElement("div", {className: "col-xs-5 subheadline"}, React.createElement("strong", null, "Roller"))
+    ), 
+    React.createElement("div", null, 
         playerElements
     )
         ))
     },
 
     render: function () {
-
         return (React.createElement("div", null, 
             this.renderPlayers(this.options.playerStatus.Active), 
             this.renderPlayers(this.options.playerStatus.Veteran), 
@@ -443,47 +449,6 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     }
 
 });
-
-
-var ManagePlayer = React.createClass({displayName: "ManagePlayer",
-    getInitialState: function () {
-        return ({
-            player: this.props.player
-        })
-    },
-
-    setPlayerStatus: function(event){
-        this.props.setPlayerStatus(this.state.player, event.target.value)
-    },
-
-    renderStatusOptions: function () {
-
-        var statuses = this.props.options.playerStatus;
-        var statusList = [];
-        for (var key in statuses) {
-            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
-        }
-
-        return (
-            React.createElement("select", {onChange: this.setPlayerStatus}, 
-               statusList
-           )
-            
-        )
-    },
-
-    render: function () {
-
-        var player = this.state.player;
-
-        return (React.createElement("li", null, 
-            player.FullName, 
-            this.renderStatusOptions()
-        ))
-    }
-
-
-})
 
 var EmailAdd = React.createClass({displayName: "EmailAdd",
    
@@ -628,3 +593,71 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
     },
 
 });
+
+
+var ManagePlayer = React.createClass({displayName: "ManagePlayer",
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
+
+    setPlayerStatus: function(event){
+        this.props.setPlayerStatus(this.state.player, event.target.value)
+    },
+
+    setRole: function(role){
+        console.log(role)
+    },
+
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
+        }
+
+        return (
+            React.createElement("select", {className: "form-control", onChange: this.setPlayerStatus}, 
+               statusList
+           )
+            
+        )
+    },
+
+        renderRoles: function () {
+
+        var roles = this.props.options.playerRoles;
+        var player = this.state.player;
+        var buttons = [];
+        for (var key in roles) {
+            console.log(player)
+            var role = roles[key];
+            var buttonClass = "btn";
+            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
+            else buttonClass += " btn-default";
+            buttons.push(React.createElement("button", {onClick: this.setRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
+        }
+
+        return (
+            React.createElement("span", null, 
+               buttons
+           )
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+
+        return (React.createElement("div", {className: "row list-player"}, 
+               React.createElement("div", {className: "col-xs-4"}, player.FullName), 
+               React.createElement("div", {className: "col-xs-3"}, this.renderStatusOptions()), 
+               React.createElement("div", {className: "col-xs-5"}, this.renderRoles())
+        ))
+    }
+
+
+})

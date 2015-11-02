@@ -1,29 +1,32 @@
 ﻿
 var ManagePlayers = React.createClass({
-
-    routes: Routes,
-
-    options: {
-        playerStatus: PlayerStatus
-    },
-
-
+         
     getInitialState: function () {
         return ({
             players: []
         })
     },
 
+    componentWillMount: function(){
+        this.routes = Routes,
+
+      this.options = {
+          playerStatus: PlayerStatus,
+          playerRoles: PlayerRoles
+      }
+    },
+
     componentDidMount() {
+        console.log("hei")
 
         $.getJSON(this.routes.GET_PLAYERS).then(response => {
+            console.log(response)
+
             this.setState({
                 players: response
             })
         }
         );
-
-
     },
 
     setPlayerStatus: function (player, status) {
@@ -57,16 +60,19 @@ var ManagePlayers = React.createClass({
             return (<ManagePlayer key={i} player={player} setPlayerStatus={setPlayerStatus} options={options} />)
         })
 
-        return (<div>
-    <h3>{playerStatus}</h3>
-    <ul>
+        return (<div className="manage-players">
+    <div className="row">
+        <div className="col-xs-4 headline"><strong>{playerStatus}</strong></div>
+        <div className="col-xs-3 subheadline"><strong>Status</strong></div>
+        <div className="col-xs-5 subheadline"><strong>Roller</strong></div>
+    </div>
+    <div>
         {playerElements}
-    </ul>
+    </div>
         </div>)
     },
 
     render: function () {
-
         return (<div>
             {this.renderPlayers(this.options.playerStatus.Active)}
             {this.renderPlayers(this.options.playerStatus.Veteran)}
@@ -75,44 +81,3 @@ var ManagePlayers = React.createClass({
     }
 
 });
-
-
-var ManagePlayer = React.createClass({
-    getInitialState: function () {
-        return ({
-            player: this.props.player
-        })
-    },
-
-    setPlayerStatus: function(event){
-        this.props.setPlayerStatus(this.state.player, event.target.value)
-    },
-
-    renderStatusOptions: function () {
-
-        var statuses = this.props.options.playerStatus;
-        var statusList = [];
-        for (var key in statuses) {
-            statusList.push(<option key={statuses[key]}>{statuses[key]}</option>)
-        }
-
-        return (
-            <select onChange={this.setPlayerStatus}>          
-               {statusList}
-           </select>
-            
-        )
-    },
-
-    render: function () {
-
-        var player = this.state.player;
-
-        return (<li>
-            {player.FullName}
-            {this.renderStatusOptions()}
-        </li>)
-    }
-
-
-})

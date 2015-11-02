@@ -19,6 +19,9 @@ namespace MyTeam.Models.Domain
         public string UserName { get; set; }
         public string FacebookId { get; set; }
 
+        public string RolesString { get; set; }
+        public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
+
         [DataType(DataType.Date)]
         [Display(Name = Res.BirthDate)]
         public DateTime BirthDate { get; set; }
@@ -81,6 +84,7 @@ namespace MyTeam.Models.Domain
             MiddleName = "";
             LastName = lastName;
             Positions = new List<Position> {};
+            RolesString = "";
 
         }
     }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNet.Identity;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
@@ -69,9 +71,12 @@ namespace MyTeam.Services.Domain
             new
             {
                 Id = p.Id,
-                FullName = p.Fullname,
-                Status = p.Status.ToString()
+                FullName = p.Name,
+                Status = p.Status.ToString(),
+                Roles = p.Roles
             });
+
+           
             return players;
         }
     }

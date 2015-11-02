@@ -75,7 +75,10 @@ namespace MyTeam.Services.Repositories
                 {
                     Position.Spiss, Position.Ving
                 }
-            };
+                ,
+                RolesString = ""
+
+        };
             _club.Players.Add(player);
             return player;
         }
