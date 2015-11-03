@@ -2,16 +2,25 @@
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
+@using MyTeam.ViewModels.Player
 @model MyTeam.ViewModels.Player.ShowPlayersViewModel
 @{
     ViewBag.Title = Res.Players;
 }
 
 <div mt-main  inner-id="show-players">
-
+    
     @if(Model.SelectedPlayer != null)
     {
-        @Html.Partial("_Show", Model.SelectedPlayer)
+        if (Model.IsEditMode)
+        {
+            @Html.Partial("_Edit", new EditPlayerViewModel(Model.SelectedPlayer))
+        }
+        else
+        {
+            @Html.Partial("_Show", Model.SelectedPlayer)
+
+        }
     }
     else
     {

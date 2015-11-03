@@ -1,10 +1,7 @@
 ﻿
 var AddPlayers = React.createClass({
 
-    routes: {
-        ADD_PLAYER: Routes.ADD_PLAYER,
-        GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
-    },
+   
 
     getInitialState: function () {
         return ({
@@ -15,6 +12,13 @@ var AddPlayers = React.createClass({
             addUsingFacebook: true
 
         })
+    },
+
+    componentWillMount(){
+        this.routes = {
+                ADD_PLAYER: Routes.ADD_PLAYER,
+                GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
+                }
     },
 
     componentDidMount() {

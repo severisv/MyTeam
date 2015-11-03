@@ -1,0 +1,71 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Player.EditPlayerViewModel
+
+<div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
+    <img src="@Url.Content(Model.ImageFull)" />
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 player-info">
+    <form asp-controller="Player" asp-action="Edit" method="post" class="form-horizontal" role="form"
+          data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players">
+        @*<div class="form-group">
+                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+            </div>*@
+
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="ImageFull" type="hidden" />
+        <div class="form-group">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MiddleName"></label>
+            <input asp-for="MiddleName" class="form-control" />
+            <span asp-validation-for="MiddleName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+@*        <div class="form-group">*@
+@*            <label asp-for="Positions"></label>*@
+@*            <select asp-for="Positions"*@
+@*                    asp-items="Model.AllPositions"></select>*@
+@*            <span asp-validation-for="Positions" class="text-danger"></span>*@
+        @*        </div>*@
+
+   
+        <div class="form-group">
+            <label asp-for="BirthDate"></label>
+            <input asp-for="BirthDate" type="text" class="form-control datepicker"/>
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartDate"></label>
+            <input asp-for="StartDate" type="text" class="form-control datepicker"/>
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone"></label>
+            <input asp-for="Phone" type="text" class="form-control datepicker" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">@Res.Save</button>
+        </div>
+    </form>
+</div>
+
+
+@if (Context.Request.IsAjaxRequest())
+{
+    <script>
+        layout.pushState('playerId', '@Model.Id', '@Model.Fullname');
+        global.applyScopedJsComponents($('#show-players'));
+    </script>
+}
+

@@ -1,24 +1,31 @@
-﻿var timestamp = new Date();
-var start = timestamp.getMilliseconds();
+﻿var ANIMATION_DURATON = 300;
+var global = global || {};
 
-var ANIMATION_DURATON = 300; 
+global.applyScopedJsComponents = function ($scope) {
+    $scope.find('input.datepicker').datepicker();
+    $scope.find('table.tablesorter').tablesorter();
+    $scope.find('a.mt-popover').popover({ trigger: "hover" });
+    applyConfirmDialogListeners($scope);
+    applyActiveLinkSwapper($scope);
+}
 
-$('input.datepicker').datepicker();
-$('table.tablesorter').tablesorter();
-$('a.mt-popover').popover({ trigger: "hover" });
+global.applyJsComponents = function() {
+    var timestamp = new Date();
+    var start = timestamp.getMilliseconds();
 
-applySlideDownMenuListeners();
-applyConfirmDialogListeners();
-applyActiveLinkSwapper();
+    this.applyScopedJsComponents($(document));
+    applySlideDownMenuListeners();
+    
 
-
-
-window.onpopstate = function () {
-    location.reload();
+    window.onpopstate = function () {
+        location.reload();
+    }
+    console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
 }
 
 
-console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
+global.applyJsComponents();
+
 
 
 // Slide down
@@ -53,8 +60,8 @@ function applySlideDownMenuListeners() {
 }
 
 // Confirm dialog
-function applyConfirmDialogListeners() {
-    $('a.confirm-dialog').click(function (e) {
+function applyConfirmDialogListeners($scope) {
+    $scope.find('a.confirm-dialog').click(function (e) {
         e.preventDefault();
         var element = $(this);
         var message = element.attr('data-message');
@@ -69,8 +76,8 @@ function applyConfirmDialogListeners() {
 }
 
 // Active links
-function applyActiveLinkSwapper() {
-    $('ul.nav li').on('click', function () {
+function applyActiveLinkSwapper($scope) {
+    $scope.find('ul.nav li').on('click', function () {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
     });

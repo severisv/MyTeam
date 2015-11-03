@@ -34,6 +34,21 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
+                PlayerService.SetPlayerStatus(id, status);
+                var reponse = new {Success = true};
+                return new JsonResult(reponse);
+            }
+
+            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
+        }
+
+        [HttpPost]
+        public JsonResult TogglePlayerRole(Guid id, string role)
+        {
+            if (ModelState.IsValid)
+            {
+                PlayerService.TogglePlayerRole(id, role);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }

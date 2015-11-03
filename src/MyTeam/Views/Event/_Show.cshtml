@@ -9,7 +9,7 @@
 @if (!User.IsInRole(Roles.Coach))
 {
 
-@if(Model.SignupHasClosed()){
+if(Model.SignupHasClosed()){
     <a asp-action="edit" asp-route-eventId="@Model.Id" class="btn btn-sm btn-primary pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
 }
 else {

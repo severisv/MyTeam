@@ -22,8 +22,7 @@
         <li><a asp-action="addplayers"><i class='fa fa-plus'></i> @Res.Add @Res.Players.ToLower()</a></li>
     </ul>
 </div>
-
-
+@Html.Partial("_JsConstants")
 @section Scripts
 {
     <script src="~/scripts/Admin/manageplayers.js"></script>

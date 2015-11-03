@@ -51,6 +51,7 @@ namespace MyTeam.Models.Domain
         public virtual IEnumerable<Position> Positions { get; set; }
         public virtual string PositionsToString => string.Join(", ", Positions.ToArray());
 
+
 //        public string ImageSmall => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Small);
 //        public string ImageMedium => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Medium);
 //        public string ImageFull => Config.PlayerImages(Club.ShortName, Imagename, ImageSize.Full);

@@ -4,11 +4,13 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Repositories;
 using MyTeam.Settings;
 using MyTeam.ViewModels.Admin;
+using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Services.Domain
 {
@@ -78,6 +80,38 @@ namespace MyTeam.Services.Domain
 
            
             return players;
+        }
+
+        public void SetPlayerStatus(Guid id, PlayerStatus status)
+        {
+            var player = _playerRepository.Get(id).Single();
+            player.Status = status;
+        }
+
+        public void TogglePlayerRole(Guid id, string role)
+        {
+            var player = _playerRepository.Get(id).Single();
+            var roles = player.Roles.ToList();
+            if (roles.Any(r => r == role))
+            {
+                roles.Remove(role);
+            }
+            else
+            {
+                roles.Add(role);
+            }
+            player.RolesString = string.Join(",", roles);
+        }
+
+        public void EditPlayer(EditPlayerViewModel model)
+        {
+            var player = _playerRepository.Get(model.Id).Single();
+            player.FirstName = model.FirstName;
+            player.MiddleName = model.MiddleName;
+            player.LastName = model.LastName;
+            player.Phone = model.Phone;
+            player.StartDate = model.StartDate;
+            player.BirthDate = model.BirthDate;
         }
     }
 }

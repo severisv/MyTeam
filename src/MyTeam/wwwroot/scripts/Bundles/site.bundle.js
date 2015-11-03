@@ -115,27 +115,34 @@ mt_fb.getUserImageUrl = function(id) {
     }
     return null;
 }
-var timestamp = new Date();
-var start = timestamp.getMilliseconds();
+var ANIMATION_DURATON = 300;
+var global = global || {};
 
-var ANIMATION_DURATON = 300; 
+global.applyScopedJsComponents = function ($scope) {
+    $scope.find('input.datepicker').datepicker();
+    $scope.find('table.tablesorter').tablesorter();
+    $scope.find('a.mt-popover').popover({ trigger: "hover" });
+    applyConfirmDialogListeners($scope);
+    applyActiveLinkSwapper($scope);
+}
 
-$('input.datepicker').datepicker();
-$('table.tablesorter').tablesorter();
-$('a.mt-popover').popover({ trigger: "hover" });
+global.applyJsComponents = function() {
+    var timestamp = new Date();
+    var start = timestamp.getMilliseconds();
 
-applySlideDownMenuListeners();
-applyConfirmDialogListeners();
-applyActiveLinkSwapper();
+    this.applyScopedJsComponents($(document));
+    applySlideDownMenuListeners();
+    
 
-
-
-window.onpopstate = function () {
-    location.reload();
+    window.onpopstate = function () {
+        location.reload();
+    }
+    console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
 }
 
 
-console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
+global.applyJsComponents();
+
 
 
 // Slide down
@@ -170,8 +177,8 @@ function applySlideDownMenuListeners() {
 }
 
 // Confirm dialog
-function applyConfirmDialogListeners() {
-    $('a.confirm-dialog').click(function (e) {
+function applyConfirmDialogListeners($scope) {
+    $scope.find('a.confirm-dialog').click(function (e) {
         e.preventDefault();
         var element = $(this);
         var message = element.attr('data-message');
@@ -186,8 +193,8 @@ function applyConfirmDialogListeners() {
 }
 
 // Active links
-function applyActiveLinkSwapper() {
-    $('ul.nav li').on('click', function () {
+function applyActiveLinkSwapper($scope) {
+    $scope.find('ul.nav li').on('click', function () {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
     });
@@ -252,10 +259,7 @@ mt.hideElement = function(selector) {
 
 var AddPlayers = React.createClass({displayName: "AddPlayers",
 
-    routes: {
-        ADD_PLAYER: Routes.ADD_PLAYER,
-        GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
-    },
+   
 
     getInitialState: function () {
         return ({
@@ -266,6 +270,13 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
             addUsingFacebook: true
 
         })
+    },
+
+    componentWillMount(){
+        this.routes = {
+                ADD_PLAYER: Routes.ADD_PLAYER,
+                GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
+                }
     },
 
     componentDidMount() {
@@ -376,8 +387,7 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     },
 
     componentWillMount: function(){
-        this.routes = Routes,
-
+      this.routes = Routes,
       this.options = {
           playerStatus: PlayerStatus,
           playerRoles: PlayerRoles
@@ -385,11 +395,8 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     },
 
     componentDidMount() {
-        console.log("hei")
 
         $.getJSON(this.routes.GET_PLAYERS).then(response => {
-            console.log(response)
-
             this.setState({
                 players: response
             })
@@ -397,12 +404,32 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
         );
     },
 
-    setPlayerStatus: function (player, status) {
-   
-        $.post(this.routes.SET_PLAYER_STATUS).then(response => {
+    togglePlayerRole: function(player, role){
+        $.post(this.routes.TOGGLE_PLAYER_ROLE, { Id: player.Id, Role: role }).then(response => {
             if (response.Success) {
                 var players = this.state.players;
                 for (var i in this.state.players) {
+                    if (players[i].Id == player.Id) {
+                        var index = players[i].Roles.indexOf(role);
+                        if (index > -1) {
+                            this.state.players[i].Roles.splice(index, 1);
+                        }
+                        else {
+                            this.state.players[i].Roles.push(role);
+                        }
+                    }
+                }
+            }
+            this.forceUpdate();
+        }
+    );
+    },
+    setPlayerStatus: function (player, status) {
+   
+        $.post(this.routes.SET_PLAYER_STATUS, { Id: player.Id, Status: status}).then(response => {
+            if (response.Success) {
+                var players = this.state.players;
+                for (var i in this.state.players) {                    
                     if (players[i].Id == player.Id) {
                         this.state.players[i].Status = status;
                     }
@@ -411,6 +438,7 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
             this.forceUpdate();
         }
       );
+
     },
 
     renderPlayers: function (playerStatus) {
@@ -423,16 +451,18 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
         })
 
         var options = this.options;
+        var routes = this.routes;
         var setPlayerStatus = this.setPlayerStatus;
+        var togglePlayerRole = this.togglePlayerRole;
         var playerElements = players.map(function (player, i) {
-            return (React.createElement(ManagePlayer, {key: i, player: player, setPlayerStatus: setPlayerStatus, options: options}))
+            return (React.createElement(ManagePlayer, {key: player.Id, player: player, setPlayerStatus: setPlayerStatus, togglePlayerRole: togglePlayerRole, options: options, routes: routes}))
         })
 
         return (React.createElement("div", {className: "manage-players"}, 
     React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-xs-4 headline"}, React.createElement("strong", null, playerStatus)), 
-        React.createElement("div", {className: "col-xs-3 subheadline"}, React.createElement("strong", null, "Status")), 
-        React.createElement("div", {className: "col-xs-5 subheadline"}, React.createElement("strong", null, "Roller"))
+        React.createElement("div", {className: "col-xs-3 subheadline hidden-xs"}, React.createElement("strong", null, "Status")), 
+        React.createElement("div", {className: "col-xs-5 subheadline hidden-xs"}, React.createElement("strong", null, "Roller"))
     ), 
     React.createElement("div", null, 
         playerElements
@@ -606,8 +636,8 @@ var ManagePlayer = React.createClass({displayName: "ManagePlayer",
         this.props.setPlayerStatus(this.state.player, event.target.value)
     },
 
-    setRole: function(role){
-        console.log(role)
+    togglePlayerRole: function(role){
+        this.props.togglePlayerRole(this.state.player, role)
     },
 
     renderStatusOptions: function () {
@@ -619,7 +649,7 @@ var ManagePlayer = React.createClass({displayName: "ManagePlayer",
         }
 
         return (
-            React.createElement("select", {className: "form-control", onChange: this.setPlayerStatus}, 
+            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
                statusList
            )
             
@@ -632,12 +662,11 @@ var ManagePlayer = React.createClass({displayName: "ManagePlayer",
         var player = this.state.player;
         var buttons = [];
         for (var key in roles) {
-            console.log(player)
             var role = roles[key];
             var buttonClass = "btn";
             if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
             else buttonClass += " btn-default";
-            buttons.push(React.createElement("button", {onClick: this.setRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
+            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
         }
 
         return (
@@ -651,11 +680,13 @@ var ManagePlayer = React.createClass({displayName: "ManagePlayer",
     render: function () {
 
         var player = this.state.player;
-
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "&playerId=" + player.Id;
         return (React.createElement("div", {className: "row list-player"}, 
-               React.createElement("div", {className: "col-xs-4"}, player.FullName), 
-               React.createElement("div", {className: "col-xs-3"}, this.renderStatusOptions()), 
-               React.createElement("div", {className: "col-xs-5"}, this.renderRoles())
+               React.createElement("div", {className: " col-sm-4 mp-name"}, player.FullName), 
+               React.createElement("div", {className: "col-sm-3 mp-status"}, this.renderStatusOptions()), 
+               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
+                    React.createElement("a", {className: "btn btn-default pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
+                )
         ))
     }
 

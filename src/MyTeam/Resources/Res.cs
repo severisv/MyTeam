@@ -67,7 +67,7 @@ namespace MyTeam.Resources
         public const string Table = "Tabell";
 
         public const string Positions = "Posisjon";
-        public const string StartDate = "Signerte for";
+        public const string StartDate = "Signerte for klubben";
         public const string Opponent = "Motstander";
         public const string Phone = "Telefon";
         public const string Register = "Registrer";
