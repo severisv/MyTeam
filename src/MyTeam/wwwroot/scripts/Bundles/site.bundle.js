@@ -118,12 +118,14 @@ mt_fb.getUserImageUrl = function(id) {
 var ANIMATION_DURATON = 300;
 var global = global || {};
 
-global.applyScopedJsComponents = function ($scope) {
+global.applyScopedJsComponents = function (selector) {
+    var $scope = $(selector);
     $scope.find('input.datepicker').datepicker();
     $scope.find('table.tablesorter').tablesorter();
     $scope.find('a.mt-popover').popover({ trigger: "hover" });
     applyConfirmDialogListeners($scope);
     applyActiveLinkSwapper($scope);
+    applyAjaxLinkActions($scope);
 }
 
 global.applyJsComponents = function() {
@@ -198,6 +200,16 @@ function applyActiveLinkSwapper($scope) {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
     });
+
+
+}// Active links
+function applyAjaxLinkActions($scope) {
+    $scope.find('a[mt-pushstate]').on('click', function () {
+        var $el = $(this);
+        if ($el.attr('mt-pushstate')) {
+            layout.pushState($el.attr('href'), $el.attr('mt-pushstate'));
+        }
+    });
 }
 
 
@@ -208,18 +220,8 @@ layout.setPageName = function (text) {
     $('.mt-page-header').find('h1').html(text);
 };
 
-layout.pushState = function (key, value, title) {
-    var uri = window.location.href;
-    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-    if (uri.match(re)) {
-        uri = uri.replace(re, '$1' + key + "=" + value + '$2');
-    }
-    else {
-        uri = uri + separator + key + "=" + value;
-    }
-
-    history.pushState('', title, uri);
+layout.pushState = function (href, title) {
+    history.pushState('', title, href);
     layout.setPageName(title);
 };
 
@@ -256,11 +258,8 @@ mt.showElement = function(selector) {
 mt.hideElement = function(selector) {
     $(selector).hide();
 }
-
 var AddPlayers = React.createClass({displayName: "AddPlayers",
-
-   
-
+ 
     getInitialState: function () {
         return ({
             users: [],
@@ -290,17 +289,17 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
 
     addPlayer: function (user) {
         var validationMessage = this.validateUser(user);
-        console.log(user)
-
+        var imageSmall = user.picture != null ? user.picture.data.url : null;
         if (validationMessage) this.setState({ validationMessage: validationMessage })
             
         else {
             $.post(this.routes.ADD_PLAYER, {
                 firstname: user.first_name,
+                middlename: user.middle_name,
                 lastname: user.last_name,
                 facebookid: user.id,
                 emailAddress: user.email,
-                imageSmall: user.picture.data.url,          
+                imageSmall: imageSmall,
                 imageMedium: user.imageMedium,
                 imageLarge: user.imageLarge             
             }).then(data => {
@@ -534,7 +533,7 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
                 type: "user",
                 access_token: url.accessToken,
                 limit: 6,
-                fields: "picture,name,first_name,last_name"
+                fields: "picture,name,first_name,last_name,middle_name"
             }).then(data => {
                 this.setState({
                     users: data.data
@@ -680,12 +679,12 @@ var ManagePlayer = React.createClass({displayName: "ManagePlayer",
     render: function () {
 
         var player = this.state.player;
-        var editPlayerHref = this.props.routes.EDIT_PLAYER + "&playerId=" + player.Id;
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
         return (React.createElement("div", {className: "row list-player"}, 
                React.createElement("div", {className: " col-sm-4 mp-name"}, player.FullName), 
                React.createElement("div", {className: "col-sm-3 mp-status"}, this.renderStatusOptions()), 
                React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
-                    React.createElement("a", {className: "btn btn-default pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
+                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
                 )
         ))
     }

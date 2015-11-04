@@ -1,12 +1,14 @@
 ﻿var ANIMATION_DURATON = 300;
 var global = global || {};
 
-global.applyScopedJsComponents = function ($scope) {
+global.applyScopedJsComponents = function (selector) {
+    var $scope = $(selector);
     $scope.find('input.datepicker').datepicker();
     $scope.find('table.tablesorter').tablesorter();
     $scope.find('a.mt-popover').popover({ trigger: "hover" });
     applyConfirmDialogListeners($scope);
     applyActiveLinkSwapper($scope);
+    applyAjaxLinkActions($scope);
 }
 
 global.applyJsComponents = function() {
@@ -80,5 +82,15 @@ function applyActiveLinkSwapper($scope) {
     $scope.find('ul.nav li').on('click', function () {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
+    });
+
+
+}// Active links
+function applyAjaxLinkActions($scope) {
+    $scope.find('a[mt-pushstate]').on('click', function () {
+        var $el = $(this);
+        if ($el.attr('mt-pushstate')) {
+            layout.pushState($el.attr('href'), $el.attr('mt-pushstate'));
+        }
     });
 }

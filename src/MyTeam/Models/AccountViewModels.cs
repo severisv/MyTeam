@@ -15,6 +15,7 @@ namespace MyTeam.Models
         [EmailAddress]
         [Display(Name =Res.Email)]
         public string Email { get; set; }
+        public string FacebookId { get; set; }
     }
 
     public class SendCodeViewModel

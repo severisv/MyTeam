@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -12,6 +13,7 @@ using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Controllers
 {
+//    [RequireMember]
     public class ApiController : BaseController
     {
         [FromServices]
@@ -22,6 +24,7 @@ namespace MyTeam.Controllers
             var players = PlayerService.Get(Club.ClubId);
             return new JsonResult(players);
         }
+
 
         public JsonResult GetFacebookIds()
         {

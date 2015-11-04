@@ -13,6 +13,7 @@ using Microsoft.Data.Entity;
 using MyTeam;
 using MyTeam.Models;
 using MyTeam.Services;
+using MyTeam.Services.Domain;
 
 namespace MyTeam.Controllers
 {
@@ -24,6 +25,7 @@ namespace MyTeam.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IPlayerService _playerService;
         private static bool _databaseChecked;
 
         public AccountController(
@@ -31,13 +33,15 @@ namespace MyTeam.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ApplicationDbContext applicationDbContext)
+            ApplicationDbContext applicationDbContext,
+            IPlayerService playerService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _applicationDbContext = applicationDbContext;
+            _playerService = playerService;
         }
 
         //
@@ -181,6 +185,8 @@ namespace MyTeam.Controllers
                 // If the user does not have an account, then ask the user to create an account.
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
+                var idClaim = info.ExternalPrincipal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+                ViewData["FacebookId"] = idClaim.Value;
                 var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
             }
@@ -214,6 +220,9 @@ namespace MyTeam.Controllers
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        
+                      _playerService.AddEmailToPlayer(model.FacebookId, model.Email);
+
                         return RedirectToLocal(returnUrl);
                     }
                 }

@@ -11,7 +11,7 @@ namespace MyTeam.Controllers
      
         public IActionResult Index()
         {
-            //TempData.
+            //TempData
             return View();
         }
         

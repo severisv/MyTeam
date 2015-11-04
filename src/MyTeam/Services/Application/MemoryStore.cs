@@ -22,10 +22,10 @@ namespace MyTeam.Services.Application
 
         public PlayerDto GetPlayerFromUser(string name)
         {
-            var playerId = PlayerRepository.Get().Where(p => p.UserName == name).Select(p => p.Id).FirstOrDefault();
+            var player = PlayerRepository.Get().Where(p => p.UserName == name).Select(p => new { p.Id, p.Roles }).FirstOrDefault();
 
-            if (playerId == Guid.Empty) return null;
-            return new PlayerDto(playerId);
+            if (player == null || player.Id == Guid.Empty) return null;
+            return new PlayerDto(player.Id, player.Roles);
         }
 
         public ClubDto GetCurrentClub(string clubId)

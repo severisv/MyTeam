@@ -12,10 +12,12 @@ namespace MyTeam.Models.Dto
     public class PlayerDto
     {
         public Guid Id { get;  }
+        public string[] Roles { get;  }
 
-        public PlayerDto(Guid playerId)
+        public PlayerDto(Guid playerId, string[] roles)
         {
             Id = playerId;
+            Roles = roles;
 
         }
     }

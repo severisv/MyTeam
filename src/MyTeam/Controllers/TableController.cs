@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
@@ -32,7 +33,7 @@ namespace MyTeam.Controllers
 
 
 
-
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(Guid seasonId)
         {
             var season = SeasonService.Get(seasonId);
@@ -47,6 +48,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(CreateTableViewModel model)
         {
             if (ModelState.IsValid)
@@ -58,6 +60,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Save(CreateTableViewModel model)
         {
             if (ModelState.IsValid)

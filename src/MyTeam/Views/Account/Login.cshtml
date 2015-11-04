@@ -20,7 +20,7 @@
     </div>
     <div class="clearfix"></div>
     <hr />
-    <div id="facebook-login" class="col-md-12 col-md-offset-2 no-padding">
+    <div id="facebook-login" class="col-md-12 no-padding">
         <section>
             @{
                 var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
@@ -30,7 +30,7 @@
                             <p>
                                 @foreach (var provider in loginProviders)
                                 {
-                                    <button type="submit" class="btn btn-primary btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.Caption-konto"><i class="fa fa-facebook"></i> Logg inn</button>
+                                    <button type="submit" class="col-lg-8 col-xs-12 btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.Caption-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
                                 }
                             </p>
                         </div>

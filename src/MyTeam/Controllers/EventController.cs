@@ -14,6 +14,7 @@ using MyTeam.ViewModels.Events;
 
 namespace MyTeam.Controllers
 {
+    [RequireMember]
     public class EventController : BaseController
     {
         [FromServices]
@@ -32,7 +33,7 @@ namespace MyTeam.Controllers
             return View("Index", model);
         }
 
-        [RequirePlayer]
+        [RequireMember]
         [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
@@ -53,8 +54,8 @@ namespace MyTeam.Controllers
 
             return PartialView("_SignupDetails", ev);
         }
-       
-        //[Authorize(Roles = Roles.Coach)]
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Create(EventType type = EventType.Trening)
         {
             var model = new CreateEventViewModel()
@@ -67,7 +68,7 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        //[Authorize(Roles = Roles.Coach)]
+        [RequireMember(Roles.Coach, Roles.Admin)]
         [HttpPost]
         public IActionResult Create(CreateEventViewModel model)
         {
@@ -98,9 +99,9 @@ namespace MyTeam.Controllers
             }
             return View(model);
         }
-        
-        
-        //[Authorize(Roles = Roles.Coach)]
+
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Edit(Guid eventId)
         {
             var ev = EventService.Get(eventId);
@@ -114,6 +115,7 @@ namespace MyTeam.Controllers
             return View("Create", model);
         }
 
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Delete(Guid eventId)
         {
             var ev = EventService.Get(eventId);

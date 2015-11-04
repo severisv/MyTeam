@@ -54,12 +54,12 @@ var ManagePlayer = React.createClass({
     render: function () {
 
         var player = this.state.player;
-        var editPlayerHref = this.props.routes.EDIT_PLAYER + "&playerId=" + player.Id;
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
         return (<div className="row list-player">
                <div className=" col-sm-4 mp-name">{player.FullName}</div>
                <div className="col-sm-3 mp-status">{this.renderStatusOptions()}</div>
                <div className="col-sm-5">{this.renderRoles()}
-                    <a className="btn btn-default pull-right" title="Rediger spiller" href={editPlayerHref}><i className="fa fa-edit"></i></a>
+                    <a className="pull-right" title="Rediger spiller" href={editPlayerHref}><i className="fa fa-edit"></i></a>
                 </div>
         </div>)
     }

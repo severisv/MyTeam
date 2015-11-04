@@ -16,7 +16,7 @@
                 type: "user",
                 access_token: url.accessToken,
                 limit: 6,
-                fields: "picture,name,first_name,last_name"
+                fields: "picture,name,first_name,last_name,middle_name"
             }).then(data => {
                 this.setState({
                     users: data.data

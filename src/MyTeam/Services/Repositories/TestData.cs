@@ -41,7 +41,6 @@ namespace MyTeam.Services.Repositories
         private static void AddPlayers(TestRepository testRepository)
         {
            testRepository.Add(GetPlayer("Tom", "Hansen"));
-           testRepository.Add(GetPlayer("Severin", "Sverdvik", imageName: "severin", username: "severin@sverdvik.no"));
            testRepository.Add(GetPlayer("Fredrik", "Hansen"));
            testRepository.Add(GetPlayer("Tom", "Lund"));
            testRepository.Add(GetPlayer("Freddy", "Dos Santos"));

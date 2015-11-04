@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.Configuration;
+using MyTeam.Filters;
+using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
@@ -8,6 +10,7 @@ using MyTeam.ViewModels.Admin;
 
 namespace MyTeam.Controllers
 {
+//    [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
         [FromServices]
@@ -19,7 +22,6 @@ namespace MyTeam.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -38,7 +40,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = PlayerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.LastName, model.EmailAddress, model.ImageSmall, model.ImageMedium, model.ImageLarge);
+                var response = PlayerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress, model.ImageSmall, model.ImageMedium, model.ImageLarge);
                 return new JsonResult(response);
            }
 

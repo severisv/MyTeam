@@ -9,7 +9,7 @@ using MyTeam.Validation.Attributes;
 
 namespace MyTeam.ViewModels.Player
 {
-    public class EditPlayerViewModel
+    public class EditPlayerViewModel : IValidatableObject
     {
         [RequiredNO]
         public Guid Id { get; set; }
@@ -37,6 +37,7 @@ namespace MyTeam.ViewModels.Player
         [RequiredNO]
         public int Phone { get; set; }
 
+        [RequiredNO]
         [Display(Name = Res.Positions)]
         public IEnumerable<Position> Positions { get; set; }
 
@@ -65,5 +66,14 @@ namespace MyTeam.ViewModels.Player
             Positions = player.Positions;
         }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var result = new List<ValidationResult>();
+            if (Positions == null || !Positions.Any())
+            {
+                result.Add(new ValidationResult("Minst én posisjon må oppgis"));
+            }
+            return result;
+        }
     }
 }

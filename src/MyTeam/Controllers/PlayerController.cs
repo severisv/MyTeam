@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -20,7 +21,7 @@ namespace MyTeam.Controllers
         public IPlayerService PlayerService { get; set; }
 
 
-        public IActionResult Index(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
+        public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
             var players = PlayerRepository.Get().Where(p => p.Status == type);
 
@@ -34,7 +35,7 @@ namespace MyTeam.Controllers
                 Res.PlayersOfType(type);
 
 
-            return View("Index",model);
+            return View("List",model);
         }
     
 
@@ -45,10 +46,11 @@ namespace MyTeam.Controllers
                 var player = PlayerRepository.GetSingle(playerId);
                 return PartialView("_Show", player);
             }
-            return Index(playerId: playerId);           
+            return List(playerId: playerId);           
            
         }
 
+        [RequireMember]
         public IActionResult Edit(Guid playerId)
         {
             if (Request.IsAjaxRequest())
@@ -56,12 +58,13 @@ namespace MyTeam.Controllers
                 var player = PlayerRepository.GetSingle(playerId);
                 return PartialView("_Edit", new EditPlayerViewModel(player));
             }
-            return Index(playerId: playerId, editMode: true);
+            return List(playerId: playerId, editMode: true);
 
         }
 
 
         [HttpPost]
+        [RequireMember]
         public IActionResult Edit(EditPlayerViewModel model)
         {
             if (ModelState.IsValid)
@@ -71,7 +74,6 @@ namespace MyTeam.Controllers
 
             }
             return PartialView("_Edit", model);
-
         }
       
 

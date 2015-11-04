@@ -7,7 +7,12 @@
     <img src="@Url.Content(Model.ImageFull)" />
 </div>
 <div class="col-sm-6 col-md-6 col-lg-6 player-info">
-    <a class="edit-player-link " data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" 
+    <a class="edit-player-link "
+       data-ajax="true" 
+       data-ajax-mode="replace"
+       data-ajax-update="#show-players"
+       data-ajax-complete="global.applyScopedJsComponents('#show-players')"
+       mt-pushstate="@Model.Fullname"
        asp-controller="player" asp-action="edit" asp-route-playerid="@Model.Id"><i class="fa fa-pencil-square-o"></i></a>
     <table class="table">
         <tr><td><label asp-for="Positions"></label></td><td>@Html.DisplayFor(m => m.PositionsToString)</td></tr>
@@ -27,7 +32,6 @@
 @if (Context.Request.IsAjaxRequest())
 {
     <script>
-        layout.pushState('playerId', '@Model.Id', '@Model.Fullname')
+        layout.pushState('@Html.Raw(Url.Action("List", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
     </script>
 }
-

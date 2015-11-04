@@ -19,19 +19,35 @@ namespace MyTeam.Services.Domain
     {
         private readonly IRepository<Player> _playerRepository;
         private readonly IRepository<Club> _clubRepository;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public PlayerService(IRepository<Player> playerRepository, IRepository<Club> clubRepository)
+        public PlayerService(IRepository<Player> playerRepository, IRepository<Club> clubRepository, ApplicationDbContext applicationDbContext)
         {
             _playerRepository = playerRepository;
             _clubRepository = clubRepository;
+            _applicationDbContext = applicationDbContext;
         }
 
-        public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string lastName, string emailAddress,
+        public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress,
             string imageSmall, string imageMedium, string imageLarge)
         {
             var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
                 _playerRepository.Get().FirstOrDefault(p => p.UserName == emailAddress):
                 _playerRepository.Get().FirstOrDefault(p => p.FacebookId == facebookId);
+
+
+            if (!string.IsNullOrWhiteSpace(facebookId) && string.IsNullOrWhiteSpace(emailAddress))
+            {
+                var correspondingUserLogin = _applicationDbContext.UserLogins.FirstOrDefault(u => u.ProviderKey == facebookId);
+                if (correspondingUserLogin != null)
+                {
+                    emailAddress = _applicationDbContext.Users.Single(u => u.Id == correspondingUserLogin.UserId).Email;
+                }
+            }
+
+            if(imageSmall == null) imageSmall = "~/img/default_player.gif";
+            if(imageMedium == null) imageMedium = "~/img/default_player.gif";
+            if(imageLarge == null) imageLarge = "~/img/default_player.gif";
 
             if (existingPlayer == null)
             {
@@ -46,7 +62,8 @@ namespace MyTeam.Services.Domain
                 {
                     ImageSmall = imageSmall,
                     ImageMedium = imageMedium,
-                    ImageFull = imageLarge
+                    ImageFull = imageLarge,
+                    MiddleName = middleName
                 };
 
                 player.Club = club;
@@ -112,6 +129,21 @@ namespace MyTeam.Services.Domain
             player.Phone = model.Phone;
             player.StartDate = model.StartDate;
             player.BirthDate = model.BirthDate;
+            player.Positions = model.Positions;
+        }
+
+        public void AddEmailToPlayer(string facebookId, string email)
+        {
+            if (string.IsNullOrWhiteSpace(facebookId)) return;
+            var players = _playerRepository.Get().Where(p => p.FacebookId == facebookId).ToList();
+            foreach (var player in players)
+            {
+                if (string.IsNullOrWhiteSpace(player.UserName))
+                {
+                    player.UserName = email;
+                }
+            }
+            _playerRepository.CommitChanges();
         }
     }
 }

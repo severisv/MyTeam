@@ -1,8 +1,5 @@
-﻿
-var AddPlayers = React.createClass({
-
-   
-
+﻿var AddPlayers = React.createClass({
+ 
     getInitialState: function () {
         return ({
             users: [],
@@ -32,17 +29,17 @@ var AddPlayers = React.createClass({
 
     addPlayer: function (user) {
         var validationMessage = this.validateUser(user);
-        console.log(user)
-
+        var imageSmall = user.picture != null ? user.picture.data.url : null;
         if (validationMessage) this.setState({ validationMessage: validationMessage })
             
         else {
             $.post(this.routes.ADD_PLAYER, {
                 firstname: user.first_name,
+                middlename: user.middle_name,
                 lastname: user.last_name,
                 facebookid: user.id,
                 emailAddress: user.email,
-                imageSmall: user.picture.data.url,          
+                imageSmall: imageSmall,
                 imageMedium: user.imageMedium,
                 imageLarge: user.imageLarge             
             }).then(data => {
