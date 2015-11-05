@@ -9,15 +9,15 @@ namespace MyTeam.Filters
     public class RequireMemberAttribute : ActionFilterAttribute
     {
         private string[] _roles;
-        public RequireMemberAttribute(params string[] roles)
+        private bool _allowIfSelf;
+        public RequireMemberAttribute(bool allowIfSelf, params string[] roles)
         {
             _roles = roles;
+            _allowIfSelf = allowIfSelf;
         }
+        public RequireMemberAttribute(params string[] roles) : this(false, roles){}
 
-        public RequireMemberAttribute()
-        {
-            
-        }
+        public RequireMemberAttribute(){}
 
         public override void OnActionExecuting(ActionExecutingContext actionContext)
         {
@@ -25,10 +25,22 @@ namespace MyTeam.Filters
 
             var userPlayer = controller.CurrentPlayer;
 
+            if (_allowIfSelf && CurrentPageIsAboutUser(actionContext, userPlayer)) return;
+
             if (!UserIsMember(userPlayer) || _roles != null && !UserHasAnyOneRole(userPlayer))
             {
                 actionContext.Result = new UnauthorizedResult(actionContext.HttpContext);
             }
+        }
+
+        private bool CurrentPageIsAboutUser(ActionExecutingContext actionContext, PlayerDto userPlayer)
+        {
+            if (userPlayer == null) return false;
+            object targetPlayerId;
+            actionContext.ActionArguments.TryGetValue("playerId", out targetPlayerId);
+            if ((targetPlayerId as Guid?) != userPlayer.Id) return false;
+            return true;
+
         }
 
         private bool UserHasAnyOneRole(PlayerDto userPlayer)

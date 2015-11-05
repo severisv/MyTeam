@@ -10,7 +10,7 @@ using MyTeam.ViewModels.Admin;
 
 namespace MyTeam.Controllers
 {
-//    [RequireMember(Roles.Coach, Roles.Admin)]
+    [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
         [FromServices]

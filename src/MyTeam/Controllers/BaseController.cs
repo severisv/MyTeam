@@ -14,12 +14,10 @@ namespace MyTeam.Controllers
     public class BaseController : Controller
     {
         [FromServices]
-        public IMemoryStore MemoryStore { get; set; }
+        public ICacheHelper CacheHelper { get; set; }
 
-        public virtual PlayerDto CurrentPlayer => _currentPlayer ?? (_currentPlayer = MemoryStore.GetPlayerFromUser(User.Identity.Name));
-        private PlayerDto _currentPlayer;
-        public virtual ClubDto Club => _club ?? (_club = MemoryStore.GetCurrentClub(RouteData.Values["club"] as string));
-        private ClubDto _club;
+        public virtual PlayerDto CurrentPlayer => CacheHelper.GetPlayerFromUser(User.Identity.Name);
+        public virtual ClubDto Club => CacheHelper.GetCurrentClub(RouteData.Values["club"] as string);
 
         public bool UserIsPlayer()
         {
@@ -30,5 +28,6 @@ namespace MyTeam.Controllers
         {
             ViewData.Add($"Alert{type}", message);
         }
+     
     }
 }

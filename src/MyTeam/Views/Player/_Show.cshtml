@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
+@using MyTeam.Models.Domain
 @using MyTeam.Resources
 @model MyTeam.Models.Domain.Player
 
@@ -14,7 +15,8 @@
        data-ajax-complete="global.applyScopedJsComponents('#show-players')"
        mt-pushstate="@Model.Fullname"
        asp-controller="player" asp-action="edit" asp-route-playerid="@Model.Id"><i class="fa fa-pencil-square-o"></i></a>
-    <table class="table">
+  
+      <table class="table">
         <tr><td><label asp-for="Positions"></label></td><td>@Html.DisplayFor(m => m.PositionsToString)</td></tr>
         <tr><td><label asp-for="GameCount"></label></td><td>@Html.DisplayFor(m => m.GameCount)</td></tr>
         <tr><td><label asp-for="GoalCount"></label></td><td>@Html.DisplayFor(m => m.GoalCount)</td></tr>

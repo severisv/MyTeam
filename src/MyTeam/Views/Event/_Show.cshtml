@@ -1,6 +1,7 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
 @using Microsoft.AspNet.Mvc.Rendering
+@using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.Models.Domain.Event
@@ -17,8 +18,6 @@ else {
 }
  
 }
-
-
 
 <div class="show-upcoming-event">
     <div class="flex">
@@ -37,7 +36,7 @@ else {
             <p>
                 <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Location)
             </p>
-            @if (Model.Voluntary)
+            @if ((Model as Training)?.Voluntary == true)
             {
                 <p>
                     <i class="fa fa-asterisk"></i> @($"{Res.Voluntary} {Res.Attendance.ToLower()}")
@@ -51,7 +50,7 @@ else {
             }
             else if (Model.Type == EventType.Kamp)
             {
-                <h3 class="no-margin">vs @Html.DisplayFor(m => m.Opponent)</h3>
+                <h3 class="no-margin">vs @Html.DisplayFor(m => ((Game)m).Opponent)</h3>
             }
             <span class="description">
                 @Html.DisplayFor(m => m.Description)

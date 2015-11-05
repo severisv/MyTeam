@@ -21,7 +21,7 @@ namespace MyTeam.Services
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<ITableService, TableService>();
-            services.AddTransient<IMemoryStore, MemoryStore>();
+            services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<ILogger, Logger>();
 
             services.AddSingleton<TestRepository>();

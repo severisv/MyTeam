@@ -69,15 +69,21 @@ namespace MyTeam.ViewModels.Events
 
         public CreateEventViewModel(Event ev)
         {
+            var game = ev as Game;
+            var opponent = game?.Opponent;
+
+            var training = ev as Training;
+            var voluntary = training?.Voluntary;
+
             Type = ev.Type;
             Date = ev.DateTime.Date;
             Time = ev.DateTime.TimeOfDay;
             Description = ev.Description;
             Headline = ev.Headline;
-            Opponent = ev.Opponent;
+            Opponent = opponent;
             Location = ev.Location;
             EventId = ev.Id;
-            Mandatory = !ev.Voluntary;
+            Mandatory = !voluntary ?? false;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -126,26 +132,54 @@ namespace MyTeam.ViewModels.Events
 
         private Event CreateEvent(DateTime date)
         {
+            if (Type == EventType.Kamp)
+            {
+                return new Game
+                {
+                    Location = Location,
+                    Type = Type,
+                    DateTime = date + Time,
+                    Description = Description,
+                    Headline = Headline,
+                    Opponent = Opponent,
+                };
+            }
+            else if (Type == EventType.Trening)
+            {
+                return new Training
+                {
+                    Location = Location,
+                    Type = Type,
+                    DateTime = date + Time,
+                    Description = Description,
+                    Voluntary = !Mandatory,
+                    Headline = Headline,
+                };
+            }
+
             return new Event
             {
                 Location = Location,
                 Type = Type,
                 DateTime = date + Time,
                 Description = Description,
-                Voluntary = !Mandatory,
                 Headline = Headline,
-                Opponent = Opponent,
             };
         }
 
         public void UpdateEvent(Event ev)
         {
             ev.Location = Location;
-            ev.Voluntary = !Mandatory;
             ev.DateTime = Date + Time;
             ev.Description = Description;
             ev.Headline = Headline;
-            ev.Opponent = Opponent;
+
+            var training = ev as Training;
+            if(training != null) training.Voluntary = !Mandatory;
+
+
+            var game = ev as Game;
+            if(game != null) game.Opponent = Opponent;
         }
     }
 }

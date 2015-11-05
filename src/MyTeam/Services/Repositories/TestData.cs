@@ -40,6 +40,7 @@ namespace MyTeam.Services.Repositories
 
         private static void AddPlayers(TestRepository testRepository)
         {
+           testRepository.Add(GetPlayer("Severin", "Sverdvik", username: "severin@sverdvik.no", roleString: Roles.Coach));
            testRepository.Add(GetPlayer("Tom", "Hansen"));
            testRepository.Add(GetPlayer("Fredrik", "Hansen"));
            testRepository.Add(GetPlayer("Tom", "Lund"));
@@ -56,7 +57,8 @@ namespace MyTeam.Services.Repositories
     
         }
 
-        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null, PlayerStatus status = PlayerStatus.Aktiv, string username = "")
+
+        private static Player GetPlayer(string fornavn, string etternavn, string mellomnavn = "", string imageName = null, PlayerStatus status = PlayerStatus.Aktiv, string username = "", string roleString = "")
         {
             var player = new Player()
             {
@@ -75,7 +77,7 @@ namespace MyTeam.Services.Repositories
                     Position.Spiss, Position.Ving
                 }
                 ,
-                RolesString = ""
+                RolesString = roleString
 
         };
             _club.Players.Add(player);

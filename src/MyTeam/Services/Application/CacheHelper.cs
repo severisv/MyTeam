@@ -8,13 +8,13 @@ using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Application
 {
-    class MemoryStore : IMemoryStore
+    class CacheHelper : ICacheHelper
     {
         public IDatabaseContext DatabaseContext { get; set; }
         public IRepository<Player> PlayerRepository { get; set; }
         public IRepository<Club> ClubRepository { get; set; }
 
-        public MemoryStore(IRepository<Player> playerRepository, IRepository<Club> clubRepository)
+        public CacheHelper(IRepository<Player> playerRepository, IRepository<Club> clubRepository)
         {
             PlayerRepository = playerRepository;
             ClubRepository = clubRepository;

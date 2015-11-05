@@ -50,7 +50,7 @@ namespace MyTeam.Controllers
            
         }
 
-        [RequireMember]
+        [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId)
         {
             if (Request.IsAjaxRequest())
@@ -64,7 +64,7 @@ namespace MyTeam.Controllers
 
 
         [HttpPost]
-        [RequireMember]
+        [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(EditPlayerViewModel model)
         {
             if (ModelState.IsValid)

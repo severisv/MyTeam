@@ -15,6 +15,11 @@ namespace Microsoft.AspNet.Mvc
         {
             return context.Items["club"] as Club;
         }
+
+        public static Club GetMember(this HttpContext context)
+        {
+            return context.Items["member"] as Member;
+        }
         
     }
 }

@@ -13,7 +13,7 @@ using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Controllers
 {
-//    [RequireMember]
+    [RequireMember]
     public class ApiController : BaseController
     {
         [FromServices]
@@ -25,7 +25,7 @@ namespace MyTeam.Controllers
             return new JsonResult(players);
         }
 
-
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult GetFacebookIds()
         {
             var ids = PlayerService.GetFacebookIds();
@@ -33,6 +33,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult SetPlayerStatus(Guid id, PlayerStatus status)
         {
             if (ModelState.IsValid)
@@ -47,6 +48,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult TogglePlayerRole(Guid id, string role)
         {
             if (ModelState.IsValid)

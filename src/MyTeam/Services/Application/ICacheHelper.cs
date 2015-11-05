@@ -6,7 +6,7 @@ using MyTeam.Models.Dto;
 
 namespace MyTeam.Services.Application
 {
-    public interface IMemoryStore
+    public interface ICacheHelper
     {
         PlayerDto GetPlayerFromUser(string name);
         ClubDto GetCurrentClub(string clubId);
