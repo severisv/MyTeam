@@ -6,9 +6,10 @@ using MyTeam.Models.Dto;
 
 namespace MyTeam.Services.Application
 {
+
     public interface ICacheHelper
     {
-        PlayerDto GetPlayerFromUser(string name);
+        PlayerDto GetPlayerFromUser(string name, string clubId);
         ClubDto GetCurrentClub(string clubId);
     }
 }

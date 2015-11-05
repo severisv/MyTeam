@@ -15,9 +15,9 @@ namespace MyTeam.Controllers
     {
         [FromServices]
         public ICacheHelper CacheHelper { get; set; }
-
-        public virtual PlayerDto CurrentPlayer => CacheHelper.GetPlayerFromUser(User.Identity.Name);
+        
         public virtual ClubDto Club => CacheHelper.GetCurrentClub(RouteData.Values["club"] as string);
+        public virtual PlayerDto CurrentPlayer => CacheHelper.GetPlayerFromUser(User.Identity.Name, RouteData.Values["club"] as string);
 
         public bool UserIsPlayer()
         {
