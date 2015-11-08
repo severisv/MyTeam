@@ -21,36 +21,25 @@ namespace MyTeam.Filters
 
         public override void OnActionExecuting(ActionExecutingContext actionContext)
         {
-            var controller = (BaseController)actionContext.Controller;
-
-            var userPlayer = controller.CurrentPlayer;
+            var userPlayer = actionContext.HttpContext.Member();
 
             if (_allowIfSelf && CurrentPageIsAboutUser(actionContext, userPlayer)) return;
 
-            if (!UserIsMember(userPlayer) || _roles != null && !UserHasAnyOneRole(userPlayer))
+            if (!userPlayer.Exists || _roles != null && !userPlayer.Roles.ContainsAny(_roles))
             {
                 actionContext.Result = new UnauthorizedResult(actionContext.HttpContext);
             }
         }
 
-        private bool CurrentPageIsAboutUser(ActionExecutingContext actionContext, PlayerDto userPlayer)
+        private bool CurrentPageIsAboutUser(ActionExecutingContext actionContext, UserMember userPlayer)
         {
-            if (userPlayer == null) return false;
             object targetPlayerId;
             actionContext.ActionArguments.TryGetValue("playerId", out targetPlayerId);
-            if ((targetPlayerId as Guid?) != userPlayer.Id) return false;
-            return true;
+            if (userPlayer.Id == (targetPlayerId as Guid?)) return true;
+            return false;
 
         }
 
-        private bool UserHasAnyOneRole(PlayerDto userPlayer)
-        {
-            return userPlayer.Roles.Any(ur => _roles.Any(r => r == ur));
-        }
 
-        private bool UserIsMember(PlayerDto userPlayer)
-        {
-            return userPlayer != null;
-        }
     }
 }

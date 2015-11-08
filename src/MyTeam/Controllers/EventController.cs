@@ -49,7 +49,7 @@ namespace MyTeam.Controllers
             }
             else
             {
-                EventService.SetAttendance(ev, CurrentPlayer.Id, isAttending);
+                EventService.SetAttendance(ev, CurrentMember.Id, isAttending);
             }
 
             return PartialView("_SignupDetails", ev);

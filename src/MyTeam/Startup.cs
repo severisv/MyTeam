@@ -96,7 +96,6 @@ namespace MyTeam
             loggerFactory.MinimumLevel = LogLevel.Information;
             loggerFactory.AddConsole();
 
-            // Configure the HTTP request pipeline.
 
             // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
@@ -107,23 +106,17 @@ namespace MyTeam
             }
             else
             {
-                // Add Error handling middleware which catches all application specific errors and
-                // sends the request to the following path or controller action.
                 app.UseErrorHandler("/Error/Error");
             }
 
-            // Add static files to the request pipeline.
             app.UseStaticFiles();
 
-            // Add cookie-based authentication to the request pipeline.
             app.UseIdentity();
 
-            // Add authentication middleware to the request pipeline. You can configure options such as Id and Secret in the ConfigureServices method.
-            // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
              app.UseFacebookAuthentication();
             // app.UseGoogleAuthentication();
-            // app.UseMicrosoftAccountAuthentication();
-            // app.UseTwitterAuthentication();
+
+            app.LoadAppData();
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
@@ -136,6 +129,7 @@ namespace MyTeam
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
         }
-        
+
+      
     }
 }

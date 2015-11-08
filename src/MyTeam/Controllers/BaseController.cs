@@ -7,7 +7,6 @@ using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Application;
 
-
 namespace MyTeam.Controllers
 {
     [HandleError]
@@ -15,15 +14,11 @@ namespace MyTeam.Controllers
     {
         [FromServices]
         public ICacheHelper CacheHelper { get; set; }
-        
-        public virtual ClubDto Club => CacheHelper.GetCurrentClub(RouteData.Values["club"] as string);
-        public virtual PlayerDto CurrentPlayer => CacheHelper.GetPlayerFromUser(User.Identity.Name, RouteData.Values["club"] as string);
 
-        public bool UserIsPlayer()
-        {
-            return CurrentPlayer != null;
-        }
-        
+        public virtual CurrentClub Club => Context.GetClub();
+        public virtual UserMember CurrentMember => Context.Member();
+
+  
         public void Alert(AlertType type, string message)
         {
             ViewData.Add($"Alert{type}", message);
