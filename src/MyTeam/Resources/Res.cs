@@ -24,7 +24,7 @@ namespace MyTeam.Resources
         public const string Create = "Opprett";
         public const string Created = "Opprettet";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
-        public const string CoachMenu = "Trenermeny";
+        public const string CoachMenu = "Adminmeny";
         public const string Description = "Beskrivelse";
         public const string Date = "Dato";
         public const string Delete = "Slett";
@@ -52,14 +52,15 @@ namespace MyTeam.Resources
         public const string InvalidInput = "Ugyldig input";
         public const string LastUpdated = "Sist oppdatert";
         public const string Loss = "Tap";
+        public const string Logout = "Logg ut";
 
         public const string Location = "Sted";
         public const string HallOfFame = "Hall of Fame";
         public const string Headline = "Overskrift";
         public const string Manage = "Administrer";
         public const string ManagePlayers = "Administrer spillere";
-        public const string Mandatory = "Obligatorisk oppmøte";
-        public const string MandatoryExplaination = "Obligatorisk oppmøte betyr at treningen teller med på oppmøtestatistikken";
+        public const string Mandatory = "Tellende oppmøte";
+        public const string MandatoryExplaination = "Tellende oppmøte betyr at treningen teller med på oppmøtestatistikken";
         public const string NotFound = "Siden finnes ikke";
         public const string Name = "Navn";
 
@@ -110,11 +111,13 @@ namespace MyTeam.Resources
 
 
         public const string Time = "Klokkeslett";
+        public const string Training = "Trening";
         public const string Trainings = "Treninger";
         public const string ToDate = "Til dato";
         public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
         public const string Unauthorized = "Ingen tilgang";
         public const string Update = "Oppdater";
+        public const string User = "Bruker";
         public const string Voluntary = "Frivillig";
         public const string Win = "Seier";
 

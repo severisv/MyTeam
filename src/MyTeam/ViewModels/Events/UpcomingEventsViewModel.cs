@@ -18,7 +18,7 @@ namespace MyTeam.ViewModels.Events
         public UpcomingEventsViewModel(IEnumerable<Event> events, EventType type, bool previous)
         {
             Type = type;
-            Events = events.OrderBy(e => e.DateTime);
+            Events = events;
             Previous = previous;
         }
     }

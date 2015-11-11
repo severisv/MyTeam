@@ -1,20 +1,21 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
 @using Microsoft.AspNet.Mvc.Rendering
+@using MyTeam
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.Models.Domain.Event
 
 <hr />
-@if (!User.IsInRole(Roles.Coach))
+@if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
 {
 
 if(Model.SignupHasClosed()){
-    <a asp-action="edit" asp-route-eventId="@Model.Id" class="btn btn-sm btn-primary pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
+    <a asp-action="registerattendance" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
 }
 else {
-    <a asp-action="edit" asp-route-eventId="@Model.Id" class="btn btn-default btn-sm pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+    <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
 }
  
 }

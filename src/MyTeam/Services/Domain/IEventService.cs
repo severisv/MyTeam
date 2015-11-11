@@ -16,5 +16,6 @@ namespace MyTeam.Services.Domain
         void Add(params  Event[] ev);
         void Delete(Guid eventId);
         void Update(Event ev);
+        void ConfirmAttendance(Guid attendanceId, bool didAttend);
     }
 }

@@ -3,7 +3,7 @@
 
 .show-upcoming-event {
     p {
-        color: rgb(90, 90, 90);
+        color: @black-faded;
 
         i {
             margin-right: 5px;
@@ -39,10 +39,12 @@
 .attendee-links {
     a {
 
-        span:last-child {
-            text-align: right;
+        span:first-child {
 
-            &:after {
+            &:before {
+                margin-left: -1.7em;
+                margin-top: -0.1em;
+                position: absolute;
                 content: "\f078";
                 font-family: FontAwesome;
             }
@@ -50,7 +52,9 @@
 
 
         &.collapsed {
-            span:last-child:after {
+            span:first-child:before {
+                margin-left: -1.5em;
+                margin-top: 0;
                 content: "\f054";
                 font-family: FontAwesome;
             }

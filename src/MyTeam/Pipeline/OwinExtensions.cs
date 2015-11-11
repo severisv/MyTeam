@@ -35,6 +35,15 @@ namespace MyTeam
         {
             return new UserMember(context.Items[MemberKey] as PlayerDto);
         }
+
+        public static bool UserIsMember(this HttpContext context)
+        {
+            return context.Member().Exists;
+        }
+        public static bool UserIsInRole(this HttpContext context, params string[] roles)
+        {
+            return context.Member().Roles.ContainsAny(roles);
+        }
         
    }
 }

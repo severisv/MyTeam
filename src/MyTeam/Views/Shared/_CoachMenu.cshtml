@@ -1,9 +1,10 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
 
-@if (!User.IsInRole(Roles.Coach))
+@if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
 {
 
     <div mt-sidebar>

@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
+using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
@@ -23,17 +24,17 @@ namespace MyTeam.Controllers
 
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
         {
-           var  events = previous ? 
-                EventService.GetUpcoming(type) : 
-                EventService.GetPrevious(type);
-                
-            
+            var events = previous
+                ? EventService.GetPrevious(type)
+                : EventService.GetUpcoming(type);
+
+
             var model = new UpcomingEventsViewModel(events, type, previous);
-            
+
             return View("Index", model);
         }
 
-        [RequireMember]
+        [RequireMember(true, Roles.DenyAll)]
         [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
@@ -91,7 +92,7 @@ namespace MyTeam.Controllers
                     var events = model.CreateEvents();
                     result.AddRange(events);
                     EventService.Add(events.ToArray());
-                    
+
                 }
 
                 Alert(AlertType.Success, $"{result.Count} {model.Type.ToString().Pluralize(result.Count).ToLower()} {Res.Saved.ToLower()}");
@@ -129,6 +130,26 @@ namespace MyTeam.Controllers
             return Index();
         }
 
-      
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult RegisterAttendance(Guid eventId)
+        {
+            var ev = EventService.Get(eventId);
+
+            if (ev == null) return new NotFoundResult(Context);
+
+
+            ViewBag.Title = $"{Res.Register} {Res.Attendance.ToLower()}";
+
+            return View("RegisterAttendance", ev as Training);
+        }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public JsonResult ConfirmAttendance(Guid attendanceId, bool didAttend)
+        {
+            EventService.ConfirmAttendance(attendanceId, didAttend);
+
+            return new JsonResult(JsonResponse.Success());
+        }
     }
 }

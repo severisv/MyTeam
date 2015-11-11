@@ -13,6 +13,7 @@ using Microsoft.Data.Entity;
 using MyTeam;
 using MyTeam.Models;
 using MyTeam.Services;
+using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 
 namespace MyTeam.Controllers
@@ -26,6 +27,7 @@ namespace MyTeam.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IPlayerService _playerService;
+        private readonly ICacheHelper _cacheHelper;
         private static bool _databaseChecked;
 
         public AccountController(
@@ -34,6 +36,7 @@ namespace MyTeam.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ApplicationDbContext applicationDbContext,
+            ICacheHelper cacheHelper,
             IPlayerService playerService)
         {
             _userManager = userManager;
@@ -41,6 +44,7 @@ namespace MyTeam.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _applicationDbContext = applicationDbContext;
+            _cacheHelper = cacheHelper;
             _playerService = playerService;
         }
 
@@ -70,6 +74,7 @@ namespace MyTeam.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    _cacheHelper.ClearCache(Context.GetClub()?.Name, model.Email);
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -137,6 +142,7 @@ namespace MyTeam.Controllers
         public IActionResult LogOff()
         {
             _signInManager.SignOut();
+            _cacheHelper.ClearCache(Context.GetClub()?.Name, Context.User.Identity.Name);
             return RedirectToAction(nameof(ClubController.Index), "Club");
         }
 

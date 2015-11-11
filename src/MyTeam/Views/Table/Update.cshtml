@@ -19,16 +19,10 @@
                 <textarea asp-for="TableString" class="form-control update-table" placeholder="@Res.SubmitTable"></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">@Res.Create</button>
+                <button type="submit" class="btn btn-primary">@Res.Save</button>
             </div>
         </form>
     </div>
-</div>
-<div mt-sidebar>
-    <ul class="nav nav-list">
-        <li class="nav-header">@Res.CoachMenu</li>
-        <li><a asp-action="update"><i class='fa fa-table'></i> @Res.Update @Res.Table.ToLower()</a></li>
-    </ul>
 </div>
 <div mt-sidebar>
     It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.

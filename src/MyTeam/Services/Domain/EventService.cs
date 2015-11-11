@@ -31,7 +31,8 @@ namespace MyTeam.Services.Domain
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime.Date >= DateTime.Today.Date)
-                .Where(t => t.SignupHasOpened());
+                .Where(t => t.SignupHasOpened())
+                .OrderBy(e => e.DateTime);
         }
 
         public IList<Event> GetAll(EventType type)
@@ -45,7 +46,8 @@ namespace MyTeam.Services.Domain
         {
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime.Date < DateTime.Today.Date);
+                .Where(t => t.DateTime.Date < DateTime.Today.Date)
+                .OrderByDescending(e => e.DateTime);
         }
 
         public void SetAttendance(Event ev, Guid playerId, bool isAttending)
@@ -90,6 +92,13 @@ namespace MyTeam.Services.Domain
         public void Update(Event ev)
         {
             EventRepository.Update(ev);
+        }
+
+        public void ConfirmAttendance(Guid attendanceId, bool didAttend)
+        {
+            var attendance = EventAttendanceRepository.GetSingle(attendanceId);
+            attendance.DidAttend = didAttend;
+            EventAttendanceRepository.CommitChanges();
         }
     }
 }

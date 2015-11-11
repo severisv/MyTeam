@@ -107,7 +107,7 @@ namespace MyTeam.Services.Repositories
 
         private static Event CreateEvent(TestRepository testRepository, DateTime dateTime, string description = "", string location = "", EventType type = EventType.Trening, Player[] players = null)
         {
-            var result = new Event()
+            var result = new Training()
             {
                 DateTime = dateTime,
                 Description = description,

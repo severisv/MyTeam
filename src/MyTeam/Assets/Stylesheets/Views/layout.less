@@ -16,10 +16,21 @@ div[mt-main] {
     .r-under(@md-min,  { width: 100%; padding: 0; });
     min-height: 24em;
 }
+
+.container-narrow [mt-main] {
+    .r-above(@md-min+1, {width: 68% });
+}
+
 div[mt-sidebar] {
     width: 24%;
     .r-above(@md-max, {width: 20% });
     .r-under(@md-min, { display:none; });
+}
+
+
+
+.container-narrow div[mt-sidebar] {
+    width: 29%;
 }
 
 
@@ -66,6 +77,13 @@ div[mt-sidebar] {
     }
 }
 
+.container-narrow {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
 
+.edit-link {
+    font-size:2em;
+}
 

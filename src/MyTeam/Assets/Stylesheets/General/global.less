@@ -11,3 +11,34 @@ a {
 * {
     box-sizing: border-box;
 }
+
+h2,h3,h4,h5{
+    text-align: center;
+}
+
+.list-users li {
+    height: 50px;
+    img {
+        margin-right: 1em;
+        height: 100%;
+    }
+
+    input.form-control[type=checkbox]{
+        margin-top: 0.65em;
+        margin-right: 0.65em;
+    }
+
+    button {
+        margin-top: 0.6em;
+        min-width: 7em;
+        &:disabled{
+            cursor:default;
+        }  
+  
+  }
+       
+}
+
+.list-users li:nth-child(odd) {
+    background-color: rgba(0,0,0,0.05);
+}

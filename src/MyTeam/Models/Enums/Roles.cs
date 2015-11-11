@@ -5,5 +5,6 @@
         public const string Admin = "Admin";
         public const string Coach = "Trener";
         public const string NewsWriter = "Skribent";
+        public const string DenyAll = "DenyAll";
     }
 }

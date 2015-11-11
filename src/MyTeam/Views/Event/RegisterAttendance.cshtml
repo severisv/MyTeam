@@ -1,0 +1,34 @@
+﻿@using System.Threading.Tasks
+@using Microsoft.Data.Entity.Metadata
+@using MyTeam.Models.Domain
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@model MyTeam.Models.Domain.Training
+
+
+<div class="container-narrow">
+    <div mt-main>
+        <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit @Res.Training.ToLower()"><i class="fa fa-edit"></i></a>
+        <h3>Påmeldte spillere</h3>
+        <div class="row">
+            <ul class="list-users col-xs-11 col-md-10">
+                @foreach (var attendance in Model.Attendees)
+                {
+                    <li >
+                        <img src="@Url.Content(attendance.Player.ImageSmall)"/>@attendance.Player.Name
+                        <input class="pull-right form-control register-attendance-input" data-attendance-id="@attendance.Id" type="checkbox"/>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_CoachMenu")
+</div>
+<script>
+    var Routes = Routes || {}
+    Routes.CONFIRM_ATTENDANCE = '@Html.Raw(Url.Action("ConfirmAttendance", "Event"))';
+</script>
+@section Scripts
+{
+    <script src="~/scripts/event/registerAttendance.js"></script>
+}
