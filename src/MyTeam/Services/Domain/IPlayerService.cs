@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.ViewModels.Player;
@@ -17,5 +18,6 @@ namespace MyTeam.Services.Domain
         void TogglePlayerRole(Guid id, string role);
         void EditPlayer(EditPlayerViewModel model);
         void AddEmailToPlayer(string facebookId, string email);
+        IEnumerable<SimplePlayerDto> GetDto(string clubId);
     }
 }

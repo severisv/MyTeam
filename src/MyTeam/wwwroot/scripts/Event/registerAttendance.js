@@ -1,19 +1,25 @@
 ﻿
 
-$('.register-attendance-item').click(function () {
+$('.register-attendance-input').click(function () {
     var element = $(this);
     var attendanceId = element.data('attendanceId');
-    var value = element.val();
-    console.log(value);
-    $.ajax({
-        type: 'POST',
-     url: Routes.CONFIRM_ATTENDANCE,
-        data: {
-            attendanceId: attendanceId,
-            didAttend: value
-        },
-        success: function (response) {
-          
+    var value = element.is(":checked");
+    element.parent().find('i.fa-spinner').show();
+    $.post(Routes.CONFIRM_ATTENDANCE,
+    {
+        attendanceId: attendanceId,
+        didAttend: value
+    }).then(function (response) {
+        if (response.Success) {
+            var successLabel = element.parent().find('.label-success');
+            element.parent().find('i.fa-spinner').hide();
+            successLabel.show();
+            successLabel.fadeOut(1500);
+        } else {
+            var failLabel = element.parent().find('.label-danger');
+            element.parent().find('i.fa-spinner').hide();
+            failLabel.show();
+            failLabel.fadeOut(3000);
         }
     });
 });

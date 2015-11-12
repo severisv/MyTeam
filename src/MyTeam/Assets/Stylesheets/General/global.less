@@ -1,8 +1,8 @@
 ﻿
 ul, ol {
-     list-style: none;
-    padding-left:0;
-    }
+    list-style: none;
+    padding-left: 0;
+}
 
 a {
     cursor: pointer;
@@ -12,18 +12,19 @@ a {
     box-sizing: border-box;
 }
 
-h2,h3,h4,h5{
+h2, h3, h4, h5 {
     text-align: center;
 }
 
 .list-users li {
     height: 50px;
+
     img {
         margin-right: 1em;
         height: 100%;
     }
 
-    input.form-control[type=checkbox]{
+    input.form-control[type=checkbox] {
         margin-top: 0.65em;
         margin-right: 0.65em;
     }
@@ -31,14 +32,39 @@ h2,h3,h4,h5{
     button {
         margin-top: 0.6em;
         min-width: 7em;
-        &:disabled{
-            cursor:default;
-        }  
-  
-  }
-       
+
+        &:disabled {
+            cursor: default;
+        }
+    }
 }
 
 .list-users li:nth-child(odd) {
     background-color: rgba(0,0,0,0.05);
+}
+
+.faded {
+    color: @black-faded;
+}
+
+.collapselink-parent {
+    position: relative;
+}
+.collapse-link {
+
+    &:before {
+        content: "\f078";
+        font-family: FontAwesome;
+        position: absolute;
+        left: 0;
+        
+    }
+
+    &.collapsed:before {
+        content: "\f054";
+    }
+
+    &:hover {
+            text-decoration: none;
+    }
 }

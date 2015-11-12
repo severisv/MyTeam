@@ -20,6 +20,8 @@ namespace MyTeam.Controllers
     {
         [FromServices]
         public IEventService EventService { get; set; }
+        [FromServices]
+        public IPlayerService PlayerService { get; set; }
 
 
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
@@ -133,14 +135,16 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult RegisterAttendance(Guid eventId)
         {
-            var ev = EventService.Get(eventId);
+            var ev = EventService.Get(eventId) as Training;
+            var players = PlayerService.GetDto(Context.GetClub().ClubId);
 
             if (ev == null) return new NotFoundResult(Context);
 
+            var model = new RegisterAttendanceViewModel(ev, players);
 
             ViewBag.Title = $"{Res.Register} {Res.Attendance.ToLower()}";
 
-            return View("RegisterAttendance", ev as Training);
+            return View("RegisterAttendance", model);
         }
 
         [HttpPost]

@@ -92,7 +92,7 @@ namespace MyTeam.Services.Repositories
 
             testRepository.Add(CreateEvent(testRepository,D(-14), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,D(-7), location: "Muselunden"));
-            testRepository.Add(CreateEvent(testRepository,D(0), location: "Muselunden", players: players));
+            testRepository.Add(CreateEvent(testRepository,D(-1), location: "Muselunden", players: players));
             testRepository.Add(CreateEvent(testRepository,DateTime.Now.AddHours(1), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,DateTime.Now.AddHours(-1), location: "Muselunden"));
             testRepository.Add(CreateEvent(testRepository,D(+7), location: "Muselunden"));

@@ -1,28 +1,57 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata
-@using MyTeam.Models.Domain
-@using MyTeam.Models.Enums
+
 @using MyTeam.Resources
-@model MyTeam.Models.Domain.Training
+@model MyTeam.ViewModels.Events.RegisterAttendanceViewModel
 
 
 <div class="container-narrow">
     <div mt-main>
-        <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit @Res.Training.ToLower()"><i class="fa fa-edit"></i></a>
-        <h3>Påmeldte spillere</h3>
-        <div class="row">
-            <ul class="list-users col-xs-11 col-md-10">
-                @foreach (var attendance in Model.Attendees)
-                {
-                    <li >
-                        <img src="@Url.Content(attendance.Player.ImageSmall)"/>@attendance.Player.Name
-                        <input class="pull-right form-control register-attendance-input" data-attendance-id="@attendance.Id" type="checkbox"/>
-                    </li>
-                }
-            </ul>
+        <a asp-action="edit" asp-route-eventId="@Model.Training.Id" class="edit-link  pull-right" title="@Res.Edit @Res.Training.ToLower()"><i class="fa fa-edit"></i></a>
+        <div class="flex">
+            <div class="flex-1 event-icon">
+                <div class="fa-3x">
+                    <span mt-eventtype="@Model.Training.Type" mt-hidename="true"></span>
+                </div>
+            </div>
+            <div class="flex-2 faded">
+                <p>
+                    <i class="fa fa-calendar"></i> @Model.Training.DateTime.ToString("ddd d MMMM")
+                </p>
+                <p>
+                    <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Training.Location)
+                </p>
+            </div>
+
+        </div>
+        <h3 class="collapselink-parent">
+            <a class="collapse-link " role="button" data-toggle="collapse" href="#ra-otherplayers-signedup" aria-expanded="true">
+                Påmeldte spillere
+            </a>
+        </h3>
+        <div id="ra-otherplayers-signedup" class="collapse in">
+            @Html.Partial("_RegisterAttendanceListPlayers", Model.Attendees)
+        </div>
+        <br/>
+        <h3 class="collapselink-parent">
+            <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-active">
+                Øvrige aktive
+            </a>
+        </h3>
+        <div id="ra-otherplayers-active" class="collapse">
+            @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherActivePlayers)
+        </div>
+        <br/>
+        <h3 class="collapselink-parent">
+            <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-inactive">
+                Øvrige inaktive
+            </a>
+        </h3>
+        <div id="ra-otherplayers-inactive" class="collapse">
+            @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherInactivePlayers)
+
         </div>
     </div>
-    @Html.Partial("_CoachMenu")
+        @Html.Partial("_CoachMenu")
 </div>
 <script>
     var Routes = Routes || {}

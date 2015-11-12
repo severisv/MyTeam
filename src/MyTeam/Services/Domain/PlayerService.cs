@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
@@ -144,6 +145,17 @@ namespace MyTeam.Services.Domain
                 }
             }
             _playerRepository.CommitChanges();
+        }
+
+        public IEnumerable<SimplePlayerDto> GetDto(string clubId)
+        {
+            return _playerRepository.Get().Where(p => p.Club.ClubId == clubId).Select(p => new SimplePlayerDto()
+            {
+                Id = p.Id,
+                Name = p.Fullname,
+                Status =  p.Status,
+                ImageSmall = p.ImageSmall
+            });
         }
     }
 }
