@@ -1,0 +1,52 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Attendance.AttendanceViewModel
+
+@{
+    ViewBag.Title = Res.Attendance;
+}
+<div class="container-narrow">
+    <div mt-sidebar mt-hide="false">
+        <ul class="nav nav-list">
+            <li class="nav-header">Sesong</li>
+            @foreach (var year in Model.Years)
+            {
+                <li>
+                    <a class="@(Model.Year == year ? "active" : "" )" asp-controller="stats" asp-action="attendance" asp-route-year="@year">
+                        @year
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div mt-main>
+        <table class="table tablesorter">
+            <thead>
+                <tr>
+                    <th>@Res.Player</th>
+                    <th><span mt-eventtype="@EventType.Trening" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Trening</span></th>
+                    <th><span mt-eventtype="@EventType.Kamp" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Kamp</span></th>
+                    <th><i title="@Res.NoShows" class="fa fa-warning"></i>&nbsp;<span class="hidden-xs">@Res.NoShows</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Model.Players)
+                {
+                    <tr>
+                        <td><a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
+                            <img src="@Url.Content(player.ImageSmall)"/>
+                            &nbsp;
+                            @player.Name
+                        </a>
+                        </td>
+                        <td>@player.Trainings</td>
+                        <td>@player.Games</td>
+                        <td>@player.NoShows</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+ 
+</div>

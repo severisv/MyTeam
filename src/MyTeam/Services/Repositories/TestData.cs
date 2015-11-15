@@ -113,6 +113,7 @@ namespace MyTeam.Services.Repositories
                 Description = description,
                 Location = location,
                 Type = type,
+                ClubId = "wamkam"
             };
 
             var attendees = new List<EventAttendance>();
@@ -126,16 +127,14 @@ namespace MyTeam.Services.Repositories
                     Player = player,
                     PlayerId = player.Id,
                     EventId = result.Id,
-                    Event = result
+                    Event = result,
+                    IsAttending = true,
+                    DidAttend = true
                 });
             }
 
             testRepository.Add(attendees.ToArray());
-
             result.Attendees = attendees;
-
-            
-
             return result;
         }
     }

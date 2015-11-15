@@ -10,7 +10,7 @@ namespace MyTeam.Models.Domain
 {
     public class Event : Entity
     {
-
+        public string ClubId { get; set; }
         public EventType Type { get; set; } 
 
         public DateTime DateTime { get; set; }

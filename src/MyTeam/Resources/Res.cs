@@ -63,6 +63,7 @@ namespace MyTeam.Resources
         public const string MandatoryExplaination = "Tellende oppmøte betyr at treningen teller med på oppmøtestatistikken";
         public const string NotFound = "Siden finnes ikke";
         public const string Name = "Navn";
+        public const string NoShows = "Ikke møtt";
 
 
         public const string Table = "Tabell";
@@ -71,14 +72,13 @@ namespace MyTeam.Resources
         public const string StartDate = "Signerte for klubben";
         public const string Opponent = "Motstander";
         public const string Phone = "Telefon";
+        public const string Player = "Spiller";
+        public const string Points = "Poeng";
         public const string Register = "Registrer";
         public const string Recurring = "Ukentlig";
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
-
-        public const string Player = "Spiller";
-        public const string Points = "Poeng";
         public const string Saved = "Lagret";
         public const string Season = "Sesong";
         public const string Signup = "Påmelding";

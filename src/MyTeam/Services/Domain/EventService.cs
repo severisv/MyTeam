@@ -97,10 +97,25 @@ namespace MyTeam.Services.Domain
             EventRepository.Update(ev);
         }
 
-        public void ConfirmAttendance(Guid attendanceId, bool didAttend)
+        public void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
         {
-            var attendance = EventAttendanceRepository.GetSingle(attendanceId);
-            attendance.DidAttend = didAttend;
+            var attendance = EventAttendanceRepository.Get().FirstOrDefault(a => a.EventId == eventId && a.PlayerId == playerId);
+            if (attendance != null)
+            {
+                attendance.DidAttend = didAttend;
+            }
+            else
+            {
+                attendance = new EventAttendance
+                {
+                    Id = Guid.NewGuid(),
+                    EventId = eventId,
+                    DidAttend = didAttend,
+                    IsAttending = false,
+                    PlayerId = playerId
+                };
+                EventAttendanceRepository.Add(attendance);
+            }
             EventAttendanceRepository.CommitChanges();
         }
     }

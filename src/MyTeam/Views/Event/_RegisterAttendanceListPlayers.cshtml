@@ -4,21 +4,23 @@
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendanceViewModel.PlayerAttendanceViewModel>
-    <div class="row">
-        <ul class="list-users col-xs-11 col-md-10">
-            @foreach (var player in Model)
-            {
-                <li class="register-attendance-item">
-                    <img src="@Url.Content(player.ImageSmall)" />@player.Name
-                    <input class="pull-right form-control register-attendance-input"
-                           data-attendance-id="@player.Attendance?.Id" type="checkbox"
-                           @(player.Attendance?.DidAttend == true ? "checked" : "") />
-                    <div class="ra-info-elements">
-                        <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
-                        <span class="label label-danger"><i class="fa fa-warning"></i></span>
-                        <i class="loader fa fa-spin fa-spinner"></i>
-                    </div>
-                </li>
-            }
-        </ul>
-    </div>
+<div class="row">
+    <ul class="list-users col-xs-11 col-md-10">
+        @foreach (var player in Model)
+        {
+            <li class="register-attendance-item">
+                <img src="@Url.Content(player.ImageSmall)"/>@player.Name
+                <input class="pull-right form-control register-attendance-input"
+                       data-player-id="@player.Id"
+                       data-event-id="@player.EventId"
+                       type="checkbox"
+                       @(player.Attendance?.DidAttend == true ? "checked" : "")/>
+                <div class="ra-info-elements">
+                    <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
+                    <span class="label label-danger"><i class="fa fa-warning"></i></span>
+                    <i class="loader fa fa-spin fa-spinner"></i>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

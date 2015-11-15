@@ -2,12 +2,14 @@
 
 $('.register-attendance-input').click(function () {
     var element = $(this);
-    var attendanceId = element.data('attendanceId');
+    var eventId = element.data('playerId');
+    var playerId = element.data('eventId');
     var value = element.is(":checked");
     element.parent().find('i.fa-spinner').show();
     $.post(Routes.CONFIRM_ATTENDANCE,
     {
-        attendanceId: attendanceId,
+        playerId: playerId,
+        eventId: eventId,
         didAttend: value
     }).then(function (response) {
         if (response.Success) {

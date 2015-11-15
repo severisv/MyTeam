@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity.Metadata;
@@ -23,27 +24,27 @@ namespace MyTeam.ViewModels.Events
 
         public RegisterAttendanceViewModel(Training training, IEnumerable<SimplePlayerDto> players, IEnumerable<Event> previousEvents)
         {
-            var pl = players.Select(p => new PlayerAttendanceViewModel(p));
-            foreach (var player in pl)
-            {
-                var attendance = training.Attendees.FirstOrDefault(a => a.PlayerId == player.Id);
-                if (attendance != null) player.Attendance = attendance;
-            }
-            _players = pl;
             Training = training;
+            _players = players.Select(p => new PlayerAttendanceViewModel(p, Training.Id,
+                    training.Attendees.FirstOrDefault(a => a.PlayerId == p.Id)
+                ));
+          
             PreviousEvents = previousEvents;
         }
 
         public class PlayerAttendanceViewModel : SimplePlayerDto
         {
-            public EventAttendance Attendance;
+            public EventAttendance Attendance { get; }
+            public Guid EventId { get; }
 
-            public PlayerAttendanceViewModel(SimplePlayerDto player)
+            public PlayerAttendanceViewModel(SimplePlayerDto player, Guid eventId, EventAttendance attendance)
             {
+                Attendance = attendance;
                 Id = player.Id;
                 Name = player.Name;
                 ImageSmall = player.ImageSmall;
                 Status = player.Status;
+                EventId = eventId;
             }
         }
     }

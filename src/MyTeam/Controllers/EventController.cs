@@ -149,9 +149,11 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public JsonResult ConfirmAttendance(Guid attendanceId, bool didAttend)
+        public JsonResult ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
         {
-            EventService.ConfirmAttendance(attendanceId, didAttend);
+            if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
+
+            EventService.ConfirmAttendance(eventId, playerId, didAttend);
 
             return new JsonResult(JsonResponse.Success());
         }

@@ -20,6 +20,7 @@ namespace MyTeam.Services
 
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISeasonService, SeasonService>();
+            services.AddTransient<IStatsService, StatsService>();
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<ILogger, Logger>();
