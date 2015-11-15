@@ -30,7 +30,7 @@ namespace MyTeam.Services.Domain
         {
             return EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime.Date >= DateTime.Today.Date)
+                .Where(t => t.DateTime >= DateTime.Now)
                 .Where(t => t.SignupHasOpened())
                 .OrderBy(e => e.DateTime);
         }
@@ -42,12 +42,15 @@ namespace MyTeam.Services.Domain
                 .ToList();
         }
 
-        public IEnumerable<Event> GetPrevious(EventType type)
+        public IEnumerable<Event> GetPrevious(EventType type, int? count = null)
         {
-            return EventRepository.Get()
+            var result = EventRepository.Get()
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime.Date < DateTime.Today.Date)
+                .Where(t => t.DateTime < DateTime.Now)
                 .OrderByDescending(e => e.DateTime);
+
+            if (count != null) return result.Take((int)count);
+            return result;
         }
 
         public void SetAttendance(Event ev, Guid playerId, bool isAttending)

@@ -25,7 +25,7 @@
         </div>
         <h3 class="collapselink-parent">
             <a class="collapse-link " role="button" data-toggle="collapse" href="#ra-otherplayers-signedup" aria-expanded="true">
-                Påmeldte spillere
+                Påmeldte spillere (@Model.Attendees.Count())
             </a>
         </h3>
         <div id="ra-otherplayers-signedup" class="collapse in">
@@ -34,7 +34,7 @@
         <br/>
         <h3 class="collapselink-parent">
             <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-active">
-                Øvrige aktive
+                Øvrige aktive (@Model.OtherActivePlayers.Count())
             </a>
         </h3>
         <div id="ra-otherplayers-active" class="collapse">
@@ -43,7 +43,7 @@
         <br/>
         <h3 class="collapselink-parent">
             <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-inactive">
-                Øvrige inaktive
+                Øvrige inaktive (@Model.OtherInactivePlayers.Count())
             </a>
         </h3>
         <div id="ra-otherplayers-inactive" class="collapse">
@@ -52,6 +52,17 @@
         </div>
     </div>
         @Html.Partial("_CoachMenu")
+
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">Siste treninger</li>
+            @foreach (var ev in Model.PreviousEvents)
+            {
+                <li ><a class="@(Model.Training.Id == ev.Id ? "active" : "" )" asp-controller="event" asp-action="registerattendance" asp-route-eventid="@ev.Id"><i class="fa fa-calendar"></i> @ev.DateTime.ToString("ddd d MMMM")
+</a></li>
+            }
+        </ul>
+    </div>
 </div>
 <script>
     var Routes = Routes || {}

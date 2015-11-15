@@ -11,7 +11,7 @@ namespace MyTeam.Services.Domain
         Event Get(Guid id);
         IEnumerable<Event> GetUpcoming(EventType type, bool showAll = false);
         IList<Event> GetAll(EventType type);
-        IEnumerable<Event> GetPrevious(EventType type);
+        IEnumerable<Event> GetPrevious(EventType type, int? count = null);
         void SetAttendance(Event ev, Guid playerId,  bool isAttending);
         void Add(params  Event[] ev);
         void Delete(Guid eventId);

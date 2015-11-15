@@ -36,7 +36,6 @@ namespace MyTeam.Controllers
             return View("Index", model);
         }
 
-        [RequireMember(true, Roles.DenyAll)]
         [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
@@ -137,10 +136,11 @@ namespace MyTeam.Controllers
         {
             var ev = EventService.Get(eventId) as Training;
             var players = PlayerService.GetDto(Context.GetClub().ClubId);
+            var previousEvents = EventService.GetPrevious(EventType.Trening, 15);
 
             if (ev == null) return new NotFoundResult(Context);
 
-            var model = new RegisterAttendanceViewModel(ev, players);
+            var model = new RegisterAttendanceViewModel(ev, players, previousEvents);
 
             ViewBag.Title = $"{Res.Register} {Res.Attendance.ToLower()}";
 
