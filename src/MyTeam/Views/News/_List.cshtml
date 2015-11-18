@@ -1,0 +1,11 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.Models.Domain
+@model IEnumerable<MyTeam.Models.Domain.Article>
+@{
+    ViewData.Add("isShortVersion", true);
+}
+
+@foreach (var article in Model)
+{
+    @Html.Partial("_Show", article);
+}

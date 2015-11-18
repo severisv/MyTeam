@@ -5,6 +5,7 @@ namespace MyTeam.Models.Domain
 {
     public class Article : Entity
     {
+        public string ClubId { get; set; }
         public string Headline { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }

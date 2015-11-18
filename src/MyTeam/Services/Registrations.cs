@@ -10,6 +10,7 @@ namespace MyTeam.Services
     {
         public static void Setup(IServiceCollection services)
         {
+            services.AddTransient<IRepository<Article>, GenericRepository<Article>>();
             services.AddTransient<IRepository<Club>, GenericRepository<Club>>();
             services.AddTransient<IRepository<Player>, GenericRepository<Player>>();
             services.AddTransient<IRepository<Event>, GenericRepository<Event>>();
@@ -18,6 +19,7 @@ namespace MyTeam.Services
             services.AddTransient<IRepository<Table>, GenericRepository<Table>>();
             services.AddTransient<IPlayerService, PlayerService>();
 
+            services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<IStatsService, StatsService>();

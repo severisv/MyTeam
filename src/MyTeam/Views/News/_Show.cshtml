@@ -1,0 +1,25 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.Models.Domain
+@model MyTeam.Models.Domain.Article
+@{
+    var isShortVersion = ViewData["isShortVersion"] as bool? == true;
+}
+
+
+<div mt-main class="news-item">
+    <div class="news-imageWrapper">
+        <img src="@Model.ImageUrl"/>
+    </div>
+    <h2>@Model.Headline</h2>
+    @if (isShortVersion)
+    {
+        <p>@Model.Content</p>
+        <hr/>
+        <a asp-action="show" asp-route-articleId="@Model.Id">Les hele</a>
+    }
+    else
+    {
+        <p>@Model.Content</p>
+    }
+
+</div>
