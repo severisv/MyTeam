@@ -29,19 +29,23 @@ namespace MyTeam.Controllers
 
 
 
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult Update(Guid seasonId)
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
+        public IActionResult Edit(Guid articleId)
         {
-       
-            return View();
+            var article = ArticleService.Get(articleId);
+            var model = new EditArticleViewModel(article);
+            return View(model);
         }
 
         [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult Update(CreateTableViewModel model)
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
+        public IActionResult Edit(EditArticleViewModel model)
         {
-       
-            return View(model);
+            if (ModelState.IsValid)
+            {
+                return View("Show", model);
+            }
+            return View("Edit", model);
 
         }
     
