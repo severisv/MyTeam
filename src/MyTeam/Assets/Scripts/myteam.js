@@ -24,3 +24,4 @@ mt.showElement = function(selector) {
 mt.hideElement = function(selector) {
     $(selector).hide();
 }
+

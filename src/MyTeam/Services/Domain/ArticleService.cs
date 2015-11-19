@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Dto;
 using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Domain
@@ -30,5 +31,19 @@ namespace MyTeam.Services.Domain
         {
             return _articleRepository.GetSingle(articleId);
         }
+
+        public IEnumerable<SimpleArticleDto> GetSimple(string clubId, int take)
+        {
+            return _articleRepository.Get()
+                    .Where(a => a.ClubId == clubId)
+                    .OrderByDescending(a => a.Published)
+                    .Take(take)
+                    .Select(a => new SimpleArticleDto {
+                        Id = a.Id,
+                        Headline = a.Headline,
+                        Published = a.Published
+                    });
+        }
     }
+    
 }

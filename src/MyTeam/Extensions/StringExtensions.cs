@@ -21,5 +21,10 @@ namespace MyTeam
          {
             "diverse"
         };
+
+        public static string Truncate(this string str, int length = 300)
+        {
+            return $"{str?.Substring(0, length)}{(str?.Length > 300 ? "...":"")}";
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam
 @using MyTeam.Models.Domain
+@using MyTeam.Models.Enums
 @model MyTeam.Models.Domain.Article
 @{
     var isShortVersion = ViewData["isShortVersion"] as bool? == true;
@@ -10,10 +12,15 @@
     <div class="news-imageWrapper">
         <img src="@Model.ImageUrl"/>
     </div>
+    @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
+    {
+    <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-articleId="@Model.Id"><i class='fa fa-edit'></i></a>
+    }
     <h2>@Model.Headline</h2>
+    <p class="news-author">@Model.Author.Fullname <span class="datetime">@Model.Published.ToNo()</span></p>
     @if (isShortVersion)
     {
-        <p>@Model.Content</p>
+        <p>@Model.Content.Truncate()</p>
         <hr/>
         <a asp-action="show" asp-route-articleId="@Model.Id">Les hele</a>
     }

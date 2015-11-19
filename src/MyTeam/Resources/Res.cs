@@ -16,6 +16,7 @@ namespace MyTeam.Resources
         public const string AdminPage = "Trenersiden";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
+        public static string Archive => "Arkiv";
 
         public const string BirthDate = "Født";
 

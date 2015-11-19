@@ -1,12 +1,16 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam
 @using MyTeam.Models.Domain
-@model IEnumerable<MyTeam.Models.Domain.Article>
+@model IEnumerable<Article>
 @{
     ViewBag.Title = "Nyheter";
 }
-    @Html.Partial("_List", Model)
 
-<div mt-sidebar>
-    
-</div>
+
+@Component.Invoke("ArticleNav", Context.GetClub().ClubId)
+
+
+@Html.Partial("_List", Model)
+
+
 

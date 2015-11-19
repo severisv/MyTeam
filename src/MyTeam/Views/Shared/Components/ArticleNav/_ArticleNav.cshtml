@@ -1,0 +1,22 @@
+﻿@using System.Globalization
+@using System.Threading.Tasks
+@using MyTeam.Models.Dto
+@model IEnumerable<MyTeam.Models.Dto.SimpleArticleDto>
+
+<div mt-sidebar class="articleNav">
+    @foreach (var group in Model.GroupBy(a => a.Published.ToString("MMMM", CultureInfo.CurrentCulture) + " " + a.Published.Year))
+    {
+        <ul class="nav nav-list">
+            <li class="nav-header">@group.Key</li>
+            @foreach (var article in group)
+            {
+                <li><a asp-controller="news" asp-action="show" asp-route-articleid="@article.Id">@article.Headline</a></li>
+            }
+        </ul>
+        <br/>
+    }
+</div>
+@section Scripts
+{
+    <script src="~/scripts/News/articleNav.js"></script>
+}

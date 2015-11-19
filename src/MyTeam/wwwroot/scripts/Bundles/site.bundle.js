@@ -258,6 +258,8 @@ mt.showElement = function(selector) {
 mt.hideElement = function(selector) {
     $(selector).hide();
 }
+
+
 var AddPlayers = React.createClass({displayName: "AddPlayers",
  
     getInitialState: function () {
