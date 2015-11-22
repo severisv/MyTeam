@@ -35,6 +35,13 @@ module.exports = {
             npm("bootbox/bootbox.js"),
             npm("react/dist/react.js")
         ]
+        ,
+        cloudinary: [
+            npm("jquery.cloudinary/js/jquery.ui.widget.js"),
+            npm("jquery.cloudinary/js/jquery.iframe-transport.js"),
+            npm("jquery.cloudinary/js/jquery.fileupload.js"),
+            npm("jquery.cloudinary/js/jquery.cloudinary.js")
+        ]
     },
     dest : {
         stylesheets: root + "/css/",

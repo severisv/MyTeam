@@ -1,25 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using MyTeam.Filters;
 using MyTeam.Models.Domain;
-using MyTeam.Resources;
+using MyTeam.Validation.Attributes;
 
-namespace MyTeam.ViewModels.Table
+namespace MyTeam.ViewModels.News
 {
     public class EditArticleViewModel 
     {
 
         public Guid ArticleId { get; set; }
+        [RequiredNO]
         public string Headline { get; set; }
+        [RequiredNO]
         public string Content { get; set; }
         public string ImageUrl { get; set; }
-        public DateTime Published { get; set; }
-
-        public virtual Guid AuthorId { get; set; }
-        public virtual Member Author { get; set; }
-
         public Guid? GameId { get; set; }
-        public virtual Game Game { get; set; }
+        public bool IsNew => ArticleId == Guid.Empty;
+
+        public EditArticleViewModel()
+        {
+            
+        }
+
+        public EditArticleViewModel(Article article)
+        {
+            ArticleId = article.Id;
+            Headline = article.Headline;
+            Content = article.Content;
+            ImageUrl = article.ImageUrl;
+            GameId = article.Id;
+        }
     }
 }

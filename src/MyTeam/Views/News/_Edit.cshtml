@@ -1,0 +1,30 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Resources
+@model MyTeam.ViewModels.News.EditArticleViewModel
+
+
+
+
+    <div class="col-xs-12">
+        <form asp-action="Update" method="post">
+            <input asp-for="ArticleId" type="hidden" />
+            <input asp-for="ImageUrl" type="hidden"/>
+            <div class="cloudinary-preview news-imageWrapper">
+                <img src="@Model.ImageUrl"/>
+            </div>
+            <input name="file" type="file"
+                   class="btn btn-default cloudinary-fileupload" data-cloudinary-field="ImageUrl"/>
+            <br/>
+            <label asp-for="Headline">Overskrift</label>
+            <div class="form-group">
+                <input class="form-control" asp-for="Headline" placeholder="Overskrift"/>
+            </div>
+            <div class="form-group">
+                <textarea asp-for="Content" class="form-control update-table" placeholder="Innhold"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">@Res.Save</button>
+            </div>
+        </form>
+    </div>

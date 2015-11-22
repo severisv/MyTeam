@@ -5,3 +5,32 @@ i.search-icon {
     right: 0.5em;
     color: @gray;
 }
+
+
+input[type=file]{
+    width: 10em;
+}
+
+input[type=file]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type=file]::after {
+  content: 'Endre bilde';
+  display: inline-block;
+  background: -webkit-linear-gradient(top, white, white);
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  width: 90%;
+  height: 100%;
+  text-align: center;
+  position: relative;
+  left: -50%;
+}
+
+input[type=file]::before {
+    content: "\f1c5";
+    font-family: "FontAwesome";
+    outline: none;
+}

@@ -4,6 +4,7 @@ using System.Linq;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Services.Repositories;
+using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
 {
@@ -43,6 +44,19 @@ namespace MyTeam.Services.Domain
                         Headline = a.Headline,
                         Published = a.Published
                     });
+        }
+
+  
+
+        public Article CreateOrUpdate(EditArticleViewModel model, string clubId, Guid authorId)
+        {
+            var article = model.IsNew
+                ? new Article
+                {
+
+                }
+                : _articleRepository.GetSingle(model.ArticleId);
+            return article;
         }
     }
     

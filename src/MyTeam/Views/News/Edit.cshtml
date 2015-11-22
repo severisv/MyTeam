@@ -1,0 +1,17 @@
+﻿@using MyTeam
+@model MyTeam.ViewModels.News.EditArticleViewModel
+@{
+    ViewBag.Title = Model.IsNew ? "Skriv artikkel" : "Rediger artikkel";
+}
+
+@Component.Invoke("ArticleNav", Context.GetClub().ClubId)
+
+
+<div mt-main>
+    @Html.Partial("_Edit")
+</div>
+
+
+@section Scripts {
+    @Component.Invoke("CloudinaryScripts")
+}

@@ -5,6 +5,7 @@ using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
+using MyTeam.ViewModels.News;
 using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
@@ -24,9 +25,18 @@ namespace MyTeam.Controllers
         public IActionResult Show(Guid articleId)
         {
             var model = ArticleService.Get(articleId);
-            return View("Show ", model);
+            return View("Show", model);
         }
 
+
+
+
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
+        public IActionResult Create()
+        {
+            var model = new EditArticleViewModel();
+            return View("Edit", model);
+        }
 
 
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
@@ -43,7 +53,9 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                return View("Show", model);
+                var article = ArticleService.CreateOrUpdate(model, Context.GetClub().ClubId, Context.Member().Id);
+
+                return View("Show", article);
             }
             return View("Edit", model);
 

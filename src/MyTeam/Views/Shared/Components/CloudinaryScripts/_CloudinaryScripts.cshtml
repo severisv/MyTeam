@@ -1,0 +1,43 @@
+﻿@using System.Threading.Tasks
+@using Microsoft.Framework.Configuration
+@using MyTeam.Util
+@model Microsoft.Framework.Configuration.IConfiguration
+@{
+    var cloudName = Model["Integration:Cloudinary:CloudName"];
+    var apiKey = Model["Integration:Cloudinary:ApiKey"];
+    var apiSecret = Model["Integration:Cloudinary:ApiSecret"];
+    var unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+    var queryString = $"timestamp={unixTimestamp}{apiSecret}";
+    var signature = Sha1.HashStringForUTF8String(queryString);
+}
+
+<script src="~/scripts/Bundles/cloudinary.bundle.js"></script>
+<script>
+
+    $.cloudinary.config({ cloud_name: '@cloudName', api_key: '@apiKey', signature: '@signature' });
+
+    var formData = {
+        api_key: '@apiKey',
+        timestamp: '@unixTimestamp',
+        signature: '@signature'
+    }
+
+    $('.cloudinary-fileupload').each(function () {
+        $(this).attr('data-form-data', JSON.stringify(formData));
+    });
+
+    $('.cloudinary-fileupload').bind('cloudinarydone', function (e, data) {
+        $('.cloudinary-preview').html(
+          $.cloudinary.image(data.result.public_id,
+            {
+                format: data.result.format, version: data.result.version,
+                crop: 'fill'
+            })
+        );
+        return true;
+    });
+    $('.cloudinary-fileupload').bind('fileuploadprogress', function (e, data) {
+        $('.cloudinary-progress-bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%');
+    });
+</script>

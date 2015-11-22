@@ -30,6 +30,16 @@ gulp.task('js-lib', function () {
     
 });
 
+gulp.task('js-cloudinary', function () {
+    return gulp.src(paths.src.cloudinary)
+        .pipe(concat('cloudinary.bundle.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dest.scripts))
+        .on('error', _.plumb.errorHandler)
+        .pipe(notify('Compiled Cloudinary javascript'));
+    
+});
+
 
 // Watch
 gulp.task('watch-js', function () {
