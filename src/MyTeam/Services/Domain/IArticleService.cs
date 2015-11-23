@@ -12,5 +12,6 @@ namespace MyTeam.Services.Domain
         Article Get(Guid articleId);
         IEnumerable<SimpleArticleDto> GetSimple(string clubId, int take);
         Article CreateOrUpdate(EditArticleViewModel model, string clubId, Guid authorId);
+        void Delete(Guid articleId);
     }
 }

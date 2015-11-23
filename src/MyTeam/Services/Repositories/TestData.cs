@@ -38,7 +38,6 @@ namespace MyTeam.Services.Repositories
                     ClubId = _club.ClubId,
                     Content =
                         "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Cras ultricies ligula sed magna dictum porta. Cras ultricies ligula sed magna dictum porta. Donec sollicitudin molestie malesuada. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus nibh. Donec sollicitudin molestie malesuada.",
-                    ImageUrl = "http://gfx.nrk.no//v5EI4zLegcXLv2zxpF_7Ag4lN9oRZdL4VZk9lnP_dUnQ",
                     Headline = "Artikkel " + i,
                     Published = DateTime.Now.AddDays(rnd.Next(1,185)*-1),
                     Author = testRepository.Get<Player>().First()

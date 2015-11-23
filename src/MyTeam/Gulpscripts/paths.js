@@ -34,8 +34,7 @@ module.exports = {
             bower("jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"),
             npm("bootbox/bootbox.js"),
             npm("react/dist/react.js")
-        ]
-        ,
+        ],
         cloudinary: [
             npm("jquery.cloudinary/js/jquery.ui.widget.js"),
             npm("jquery.cloudinary/js/jquery.iframe-transport.js"),

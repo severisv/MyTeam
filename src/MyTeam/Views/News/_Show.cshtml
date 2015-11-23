@@ -2,6 +2,7 @@
 @using MyTeam
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
+@using MyTeam.Settings
 @model MyTeam.Models.Domain.Article
 @{
     var isShortVersion = ViewData["isShortVersion"] as bool? == true;
@@ -10,14 +11,15 @@
 
 <div mt-main class="news-item">
     <div class="news-imageWrapper">
-        <img src="@Model.ImageUrl"/>
+        <img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)" />
     </div>
     @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
     {
     <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-articleId="@Model.Id"><i class='fa fa-edit'></i></a>
     }
     <h2>@Model.Headline</h2>
-    <p class="news-author">@Model.Author.Fullname <span class="datetime">@Model.Published.ToNo()</span></p>
+    <p class="news-author"><a asp-controller="player" asp-action="show" asp-route-playerId="@Model.Author.Id">@Model.Author.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span></p>
+    <hr class="sm"/>
     @if (isShortVersion)
     {
         <p>@Model.Content.Truncate()</p>
@@ -26,7 +28,7 @@
     }
     else
     {
-        <p>@Model.Content</p>
+        <p>@Html.Raw(Model.Content)</p>
     }
 
 </div>

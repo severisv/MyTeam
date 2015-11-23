@@ -60,7 +60,19 @@ namespace MyTeam.Controllers
             return View("Edit", model);
 
         }
-    
+
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
+        public IActionResult Delete(Guid articleId)
+        {
+            if (ModelState.IsValid)
+            {
+                ArticleService.Delete(articleId);
+
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Edit", articleId);
+        }
+
 
 
     }
