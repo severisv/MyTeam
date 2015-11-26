@@ -1,0 +1,33 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Models.Domain
+@using MyTeam.Resources
+@using MyTeam.Settings
+@model IEnumerable<MyTeam.ViewModels.Member.MemberInfoViewModel>
+
+<div mt-main>
+    <table class="table col-xs-12">
+
+        <tr>
+            <th class="hidden-xs"></th>
+        </tr> 
+        <tr>
+            <th>@Res.Name</th>
+        </tr>
+
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td class="hidden-xs">
+                    <img src="@member.ImageSmall"/>@member.Name
+                </td>
+                <td>
+                    @member.Name
+                </td>
+            </tr>
+
+        }
+    </table>
+
+
+</div>   
