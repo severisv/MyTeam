@@ -1,7 +1,8 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
 @using MyTeam.Models.Domain
-@model IEnumerable<Article>
+@using MyTeam.Models.General
+@model MyTeam.Models.General.PagedList<Article>
 @{
     ViewBag.Title = "Nyheter";
 }

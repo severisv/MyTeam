@@ -12,7 +12,7 @@ namespace MyTeam.Settings
             return "http://res.cloudinary.com/drdo17bnj/" + res;
         }
 
-        public static string DefaultArticle = "image/upload/v1448309373/article_default_hnwnxo.jpg";
+        public static string DefaultArticle = "image/upload/c_scale,q_95,w_900/v1448309373/article_default_hnwnxo.jpg";
 
     }
 }

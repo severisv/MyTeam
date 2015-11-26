@@ -10,8 +10,17 @@
 
 
 <div mt-main class="news-item">
-    <div class="news-imageWrapper">
-        <img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)" />
+    <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short":"")">
+        @if (isShortVersion)
+        {
+            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)"/>
+            </a>
+        }
+        else
+        {
+            <img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)" />
+
+        }
     </div>
     @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
     {

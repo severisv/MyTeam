@@ -16,7 +16,7 @@ namespace MyTeam.Controllers
         public IArticleService ArticleService { get; set; }
 
 
-        public IActionResult Index(int skip = 0, int take = 5)
+        public IActionResult Index(int skip = 0, int take = 4)
         {
             var model = ArticleService.Get(Context.GetClub().ClubId, skip, take);
             return View("Index", model);

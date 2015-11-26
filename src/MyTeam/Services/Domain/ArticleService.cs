@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
+using MyTeam.Models.General;
 using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.News;
 
@@ -18,14 +19,16 @@ namespace MyTeam.Services.Domain
             _articleRepository = articleRepository;
         }
 
-        public IEnumerable<Article> Get(string clubId, int skip, int take)
+        public PagedList<Article> Get(string clubId, int skip, int take)
         {
-            return
-                _articleRepository.Get()
-                    .Where(a => a.ClubId == clubId)
-                    .OrderByDescending(a => a.Published)
-                    .Skip(skip)
-                    .Take(take);
+            var query = _articleRepository.Get()
+                .Where(a => a.ClubId == clubId)
+                .OrderByDescending(a => a.Published);
+
+            var totalCount = query.Count();
+
+
+            return new PagedList<Article>(query.Skip(skip).Take(take), skip, take, totalCount);
         }
 
         public Article Get(Guid articleId)
@@ -33,18 +36,25 @@ namespace MyTeam.Services.Domain
             return _articleRepository.GetSingle(articleId);
         }
 
-        public IEnumerable<SimpleArticleDto> GetSimple(string clubId, int take)
+        public PagedList<SimpleArticleDto> GetSimple(string clubId, int take)
         {
-            return _articleRepository.Get()
+            var skip = 0;
+            var query = _articleRepository.Get()
                     .Where(a => a.ClubId == clubId)
-                    .OrderByDescending(a => a.Published)
+                    .OrderByDescending(a => a.Published);
+
+            var totalCount = query.Count();
+                  
+                    
+              return new PagedList<SimpleArticleDto>(query.Skip(skip).Take(take)
                     .Take(take)
                     .Select(a => new SimpleArticleDto
                     {
                         Id = a.Id,
                         Headline = a.Headline,
                         Published = a.Published
-                    });
+                    }),
+                    skip, take, totalCount);
         }
 
 
