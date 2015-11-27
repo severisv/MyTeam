@@ -35,7 +35,7 @@
                 {
                     <tr>
                         <td><a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
-                            <img src="@Url.Content(player.ImageSmall)"/>
+                            <img src="@Cloudinary.MemberImage(player.ImageSmall, 200)"/>
                             &nbsp;
                             @player.Name
                         </a>

@@ -27,7 +27,7 @@ namespace MyTeam.Models.Domain
         
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
 
         [DataType(DataType.EmailAddress)]
         [Display(Name = Res.Email)]

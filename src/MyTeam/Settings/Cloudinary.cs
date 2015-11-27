@@ -26,6 +26,8 @@ namespace MyTeam.Settings
             {
                 res = DefaultMember;
             }
+            else if (res.Contains("http")) return res;
+
             return Resize($"{BaseLocation}{res}", width);
         }
 
@@ -40,7 +42,7 @@ namespace MyTeam.Settings
                 if (urlList[i] == "upload") insertAt = i + 1;
             }
 
-            urlList.Insert(insertAt, $"c_scale,w_{width}");
+            urlList.Insert(insertAt, $"c_scale,w_{width},q_100");
 
             return string.Join("/", urlList);
         }

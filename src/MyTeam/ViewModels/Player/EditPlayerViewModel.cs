@@ -35,7 +35,7 @@ namespace MyTeam.ViewModels.Player
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]
         [RequiredNO]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
 
         [RequiredNO]
         [Display(Name = Res.Positions)]

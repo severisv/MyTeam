@@ -1,4 +1,5 @@
-﻿@xs-max:                                 767px;  
+﻿@xxs-max:                                 420px;  
+@xs-max:                                 767px;  
 @sm-min:                                 (@xs-max+1);                                          
 @sm-max:                                 990px;  
 @md-min:                                 (@sm-max+1);  
@@ -32,4 +33,9 @@
 
 .r-range(@min-width, @max-width, @rules){
    	@media (min-width: @min-width) and (max-width: @max-width) { @rules(); }
+}
+
+
+.hidden-xxs {
+       	@media (max-width: @xxs-max ) { display:none; }
 }

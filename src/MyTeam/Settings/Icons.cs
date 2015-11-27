@@ -11,7 +11,7 @@ namespace MyTeam.Settings
         public const string Signup = "fa fa-clipboard";
         public const string Previous = "fa fa-history";
         public const string Upcoming = "fa fa-calendar-o";
-        public const string SquadList = "fa fa-list";
+        public const string SquadList = "fa fa-users";
         
      }
 }

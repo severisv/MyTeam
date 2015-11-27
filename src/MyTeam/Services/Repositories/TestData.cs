@@ -91,15 +91,13 @@ namespace MyTeam.Services.Repositories
                 Status = status,
                 Club = _club,
                 UserName = username,
-                ImageSmall = "~/img/default_player.gif",
-                ImageMedium = "~/img/default_player.gif",
-                ImageFull = "~/img/default_player.gif",
                 Positions = new List<Position>
                 {
                     Position.Spiss, Position.Ving
                 }
                 ,
-                RolesString = roleString
+                RolesString = roleString,
+                Phone ="91611166"
 
         };
             _club.Players.Add(player);

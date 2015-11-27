@@ -1,33 +1,54 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
 @using MyTeam.Models.Domain
+@using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
-@model IEnumerable<MyTeam.ViewModels.Member.MemberInfoViewModel>
-
-<div mt-main>
-    <table class="table col-xs-12">
-
-        <tr>
-            <th class="hidden-xs"></th>
-        </tr> 
-        <tr>
-            <th>@Res.Name</th>
-        </tr>
-
-        @foreach (var member in Model)
-        {
+@model MyTeam.ViewModels.Member.MemberListViewModel
+<div class="container-narrow">
+    <div class="mt-container">
+        <ul class="nav nav-pills mt-justified">
+            <li class="@(Model.MemberStatus == PlayerStatus.Aktiv ? "active" : "")"><a asp-route-status="@PlayerStatus.Aktiv"><i class="fa fa-user"></i>&nbsp;@PlayerStatus.Aktiv</a></li>
+            <li class="@(Model.MemberStatus == PlayerStatus.Pensjonert ? "active" : "")"><a asp-route-status="@PlayerStatus.Pensjonert"><i class="fa fa-trophy"></i>&nbsp;@PlayerStatus.Pensjonert</a></li>
+            <li class="@(Model.MemberStatus == PlayerStatus.Inaktiv ? "active" : "")"><a asp-route-status="@PlayerStatus.Inaktiv"><i class="fa fa-user-times"></i>&nbsp;@PlayerStatus.Inaktiv</a></li>
+        </ul>
+        <br/>
+        <table class="listMembers table tablesorter col-xs-12">
+            <thead>
             <tr>
-                <td class="hidden-xs">
-                    <img src="@member.ImageSmall"/>@member.Name
-                </td>
-                <td>
-                    @member.Name
-                </td>
+                <th class="hidden-xs nosort"></th>
+
+                <th>@Res.Name</th>
+
+                <th>@Res.Phone</th>
+
+                <th class="hidden-xs">@Res.Email</th>
             </tr>
+            </thead>
+            <tbody>
+            @foreach (var member in Model.Members)
+            {
+                <tr>
+                    <td class="hidden-xs image">
+                        <a asp-controller="player" asp-action="show" asp-route-playerid="@member.Id">
+                            <img src="@Cloudinary.MemberImage(member.ImageSmall, 150)"/>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-controller="player" asp-action="show" asp-route-playerid="@member.Id">
+                            @member.Name
+                        </a>
+                    </td>
+                    <td>
+                        @member.Phone
+                    </td>
+                    <td class="hidden-xs">
+                        @member.Email
+                    </td>
+                </tr>
 
-        }
-    </table>
-
-
-</div>   
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
