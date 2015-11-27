@@ -14,6 +14,8 @@ namespace MyTeam.Services.Repositories
                 ShortName = "Wam-Kam",
                 Name = "Wam-Kam FK",
                 ClubId = "wamkam",
+                Logo = "image/upload/v1448650992/wamkam/wamkam.png",
+                Favicon = "image/upload/v1448650991/wamkam/favicon.png",
                 Players = new List<Player>(),
                 Teams = new List<Team> { new Team{Name = "Wam-Kam 2",SortOrder = 2} , new Team { Name = "Wam-Kam 1", SortOrder = 1 } }
             };
@@ -97,7 +99,7 @@ namespace MyTeam.Services.Repositories
                 }
                 ,
                 RolesString = roleString,
-                Phone ="91611166"
+                Phone = "91611166"
 
         };
             _club.Players.Add(player);

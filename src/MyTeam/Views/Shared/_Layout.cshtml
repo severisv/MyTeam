@@ -7,7 +7,7 @@
 @using MyTeam.Resources
 @using MyTeam.Settings
 @{
-    var clubId = ViewContext.RouteData.Values["club"] as string;
+   var club = Context.GetClub();
 }
 <!DOCTYPE html>
 <html>
@@ -15,8 +15,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@clubId - @ViewBag.Title</title>
-    <link rel="icon" type="image/png" href="@Url.Content($"~/img/clubs/{clubId}/favicon.png")">
+    <title>@club?.ShortName - @ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="@Cloudinary.Image(club?.Favicon ?? club?.Logo)">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles.bundle.css" />
     <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.css" />
@@ -31,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-controller="home" class="navbar-brand"><img src="@Url.Content($"~/img/clubs/{clubId}/wamkam_small.png")" alt="Wam-Kam" /></a>
+                <a asp-controller="home" class="navbar-brand"><img src="@Cloudinary.Image(club?.Logo, 100)" alt="Wam-Kam" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

@@ -75,7 +75,7 @@ namespace MyTeam.Services.Application
             }
 
             club = ClubRepository.Get().Where(c => c.ClubId == clubId).Select(
-                c => new ClubDto(clubId, c.Name, c.ShortName, c.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id))
+                c => new ClubDto(clubId, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id))
             ).Single();
 
 

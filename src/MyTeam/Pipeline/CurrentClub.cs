@@ -11,7 +11,9 @@ namespace MyTeam
         public string ShortName { get; }
         public string Name { get; }
         public IEnumerable<Guid> TeamIds { get; }
-    
+        public string Favicon { get; }
+        public string Logo { get; }
+
         public CurrentClub(ClubDto club)
         {
             if (club != null)
@@ -20,6 +22,8 @@ namespace MyTeam
                 Name = club.Name;
                 ShortName = club.ShortName;
                 TeamIds = club.TeamIds;
+                Favicon = club.Favicon;
+                Logo = club.Logo;
             }
           
 

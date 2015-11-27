@@ -9,14 +9,15 @@ namespace MyTeam.Settings
     {
 
         public static string BaseLocation = "http://res.cloudinary.com/drdo17bnj/";
-        public static string DefaultArticle = "image/upload/c_scale,q_95,w_900/v1448309373/article_default_hnwnxo.jpg";
+        public static string DefaultArticle = "image/upload/v1448309373/article_default_hnwnxo.jpg";
         public static string DefaultMember = "image/upload/v1448559418/default_player_dnwac0.gif";
 
 
-        public static string Image(string res, string fallback = "")
+        public static string Image(string res, int? width = null, string fallback = "")
         {
-            if (string.IsNullOrWhiteSpace(res)) res = fallback; 
-            return BaseLocation + res;
+            if (string.IsNullOrWhiteSpace(res)) res = fallback;
+
+            return Resize($"{BaseLocation}{res}", width);
         }
 
 
@@ -26,7 +27,7 @@ namespace MyTeam.Settings
             {
                 res = DefaultMember;
             }
-            else if (res.Contains("http")) return res;
+            else if (res.StartsWith("http")) return res;
 
             return Resize($"{BaseLocation}{res}", width);
         }

@@ -13,12 +13,12 @@
     <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short":"")">
         @if (isShortVersion)
         {
-            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)"/>
+            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@Cloudinary.Image(Model.ImageUrl, 900, Cloudinary.DefaultArticle)"/>
             </a>
         }
         else
         {
-            <img src="@Cloudinary.Image(Model.ImageUrl, Cloudinary.DefaultArticle)" />
+            <img src="@Cloudinary.Image(Model.ImageUrl, 800, Cloudinary.DefaultArticle)" />
 
         }
     </div>
