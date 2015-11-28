@@ -2,7 +2,7 @@ fs = require("fs"),
 
 eval("var project = " + fs.readFileSync("./project.json"));
 var join = require('path').resolve;
-var root = "./" + project.webroot;
+var root = "./wwwroot";
 var bowerFolder = "./wwwroot/lib/";
 var npmFolder = "./node_modules/";
 

@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Configuration;
+using Microsoft.Extensions.Configuration;
 using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.Shared
 {
     public class CloudinaryScriptsViewComponent : ViewComponent
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationRoot _configuration;
 
-        public CloudinaryScriptsViewComponent(IConfiguration configuration)
+        public CloudinaryScriptsViewComponent(IConfigurationRoot configuration)
         {
             _configuration = configuration;
         }

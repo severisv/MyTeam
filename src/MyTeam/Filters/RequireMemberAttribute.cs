@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNet.Mvc;
-using MyTeam.Controllers;
-using MyTeam.Models.Dto;
+using Microsoft.AspNet.Mvc.Filters;
 
 namespace MyTeam.Filters
 {

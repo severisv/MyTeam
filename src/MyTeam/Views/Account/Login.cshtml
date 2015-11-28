@@ -1,10 +1,8 @@
-﻿@using System.Collections.Generic
-@using System.Threading.Tasks
-@using Microsoft.AspNet.Http
-@using Microsoft.AspNet.Http.Authentication
+﻿@using System.Threading.Tasks
 @using Microsoft.AspNet.Identity
 @using MyTeam.Models
-@model MyTeam.Models.LoginViewModel
+@using MyTeam.ViewModels.Account
+@model MyTeam.ViewModels.Account.LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
@@ -32,7 +30,7 @@
                             <p class="col-xs-12">
                                 @foreach (var provider in loginProviders)
                                 {
-                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.Caption-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
+                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
                                 }
                             </p>
                         </div>
@@ -40,13 +38,6 @@
                 }
             </section>
         </div>
-
-
-
-
-
-
-
         <div>
 
             <div id="mt-login" class="col-md-12" style="display: none;">
@@ -93,6 +84,6 @@
         </div>
     </div>
 </div>
-    @section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

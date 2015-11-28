@@ -1,7 +1,5 @@
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
-using Microsoft.Framework.DependencyInjection;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Services.Application;
 
@@ -16,7 +14,7 @@ namespace MyTeam
         {
             app.Use(async (context, next) =>
             {
-                var cacheHelper = app.ApplicationServices.GetService<ICacheHelper>();
+                var cacheHelper = app.ApplicationServices.GetService(typeof(ICacheHelper)) as ICacheHelper;
                 var clubId = context.Request.Path.ToString().Split('/')[1];
                 context.Items[ClubKey] = cacheHelper.GetCurrentClub(clubId);
                 var username = context.User.Identity.Name;

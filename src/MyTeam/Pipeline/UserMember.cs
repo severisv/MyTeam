@@ -1,16 +1,10 @@
 using System;
-using System.Linq;
-using Microsoft.AspNet.Authentication.Notifications;
 using MyTeam.Models.Dto;
-using MyTeam.Models.Enums;
 
 namespace MyTeam
 {
     public class UserMember
     {
-
-    
-
         public Guid Id { get; }
         public string[] Roles { get; }
 

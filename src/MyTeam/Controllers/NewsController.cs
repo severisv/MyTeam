@@ -18,7 +18,7 @@ namespace MyTeam.Controllers
 
         public IActionResult Index(int skip = 0, int take = 4)
         {
-            var model = ArticleService.Get(Context.GetClub().ClubId, skip, take);
+            var model = ArticleService.Get(HttpContext.GetClub().ClubId, skip, take);
             return View("Index", model);
         }
 
@@ -53,7 +53,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = ArticleService.CreateOrUpdate(model, Context.GetClub().ClubId, Context.Member().Id);
+                var article = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().ClubId, HttpContext.Member().Id);
 
                 return View("Show", article);
             }

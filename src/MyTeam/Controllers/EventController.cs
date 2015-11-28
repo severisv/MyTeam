@@ -108,7 +108,7 @@ namespace MyTeam.Controllers
         {
             var ev = EventService.Get(eventId);
 
-            if (ev == null) return new NotFoundResult(Context);
+            if (ev == null) return new NotFoundResult(HttpContext);
 
             var model = new CreateEventViewModel(ev);
 
@@ -122,12 +122,12 @@ namespace MyTeam.Controllers
         {
             var ev = EventService.Get(eventId);
 
-            if (ev == null) return new NotFoundResult(Context);
+            if (ev == null) return new NotFoundResult(HttpContext);
 
             EventService.Delete(eventId);
 
             Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
-            if (Context.Request.IsAjaxRequest()) return PartialView("_Alerts");
+            if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
             return Index();
         }
 
@@ -135,10 +135,10 @@ namespace MyTeam.Controllers
         public IActionResult RegisterAttendance(Guid eventId)
         {
             var ev = EventService.Get(eventId) as Training;
-            var players = PlayerService.GetDto(Context.GetClub().ClubId);
+            var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
             var previousEvents = EventService.GetPrevious(EventType.Trening, 15);
 
-            if (ev == null) return new NotFoundResult(Context);
+            if (ev == null) return new NotFoundResult(HttpContext);
 
             var model = new RegisterAttendanceViewModel(ev, players, previousEvents);
 

@@ -1,17 +1,15 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Mvc.TagHelpers;
-using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+using Microsoft.AspNet.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
 {
 
-    [TargetElement("a", Attributes = ForAttributeName)]
+    [HtmlTargetElement("a", Attributes = ForAttributeName)]
     public class TooltipTagHelper : TagHelper
     {
         private const string ForAttributeName = "mt-tooltip";
-        
+
         [HtmlAttributeName(ForAttributeName)]
         public string Content { get; set; }
 
@@ -25,8 +23,8 @@ namespace MyTeam.TagHelpers
             tagBuilder.Attributes["data-toggle"] = "popover";
             tagBuilder.Attributes["data-placement"] = "right";
             tagBuilder.Attributes["data-content"] = Content;
-            output.Content.Append("<i class='fa fa-question-circle'></i>");
-            
+            output.Content.AppendHtml("<i class='fa fa-question-circle'></i>");
+
             output.MergeAttributes(tagBuilder);
 
         }

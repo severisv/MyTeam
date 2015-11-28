@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Services.Repositories;
@@ -14,7 +12,6 @@ namespace MyTeam.Services.Application
         private readonly MemoryCacheEntryOptions _cacheOptions = 
             new MemoryCacheEntryOptions {SlidingExpiration = new TimeSpan(0, 0, 0, 15) };
 
-        private readonly IDatabaseContext _databaseContext;
         public IMemoryCache Cache { get; set; }
         public IRepository<Player> PlayerRepository { get; set; }
         public IRepository<Club> ClubRepository { get; set; }

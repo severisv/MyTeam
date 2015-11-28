@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Mvc;
-using MyTeam.Controllers;
+using Microsoft.AspNet.Mvc.Filters;
 
 namespace MyTeam.Filters
 {

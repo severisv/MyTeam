@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.TagHelpers;
-using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Razor.TagHelpers;
 using MyTeam.Models.Enums;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("*", Attributes = Name)]
+    [HtmlTargetElement("*", Attributes = Name)]
     public class EventTypeTagHelper : TagHelper
     {
 
@@ -27,10 +25,10 @@ namespace MyTeam.TagHelpers
             innertag.AddCssClass($"fa fa-{GetIconName(EventType)}");
             innertag.Attributes.Add("title", EventType.ToString());
 
-            output.Content.Append($"{innertag.ToString()}");
-            if (!HideName) output.Content.Append($"<span class='{TextClass}'>&nbsp;&nbsp;{EventType}</span>");
+            output.Content.Append(innertag);
+            if (!HideName) output.Content.AppendHtml($"<span class='{TextClass}'>&nbsp;&nbsp;{EventType}</span>");
         }
-        
+
         private string GetIconName(EventType type)
         {
             switch (type)
@@ -45,7 +43,7 @@ namespace MyTeam.TagHelpers
                     return "beer";
                 default:
                     return string.Empty;
-                    
+
             }
         }
 

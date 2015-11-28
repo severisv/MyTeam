@@ -1,10 +1,11 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
 @using MyTeam.Resources
+@using MyTeam.Settings
 @model MyTeam.ViewModels.Player.EditPlayerViewModel
 
 <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
-    <img src="@Url.Content(Model.ImageFull)" />
+    <img src="@Cloudinary.MemberImage(Model.ImageFull, 400)" />
 </div>
 <div class="col-sm-6 col-md-6 col-lg-6 player-info">
     <form asp-controller="Player" asp-action="Edit" method="post" class="form-horizontal" role="form"

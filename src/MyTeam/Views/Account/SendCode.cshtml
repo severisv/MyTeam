@@ -1,4 +1,6 @@
-﻿@model SendCodeViewModel
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.Account
+@model MyTeam.ViewModels.Account.SendCodeViewModel
 @{
     ViewData["Title"] = "Send Verification Code";
 }
@@ -17,6 +19,6 @@
         </div>
     </form>
 </div>
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

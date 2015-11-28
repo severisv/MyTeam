@@ -1,6 +1,6 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Models
-@model MyTeam.Models.ExternalLoginConfirmationViewModel
+@using MyTeam.ViewModels.Account
+@model MyTeam.ViewModels.Account.ExternalLoginConfirmationViewModel
 @{
     ViewData["Title"] = "Registrering";
 }
@@ -28,6 +28,6 @@
         </div>
     </form>
 </div>
-    @section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

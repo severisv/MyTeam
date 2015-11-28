@@ -37,13 +37,15 @@ namespace MyTeam.Settings
             if (width == null) return imageUrl;
 
             var urlList = imageUrl.Split('/').ToList();
-            int insertAt = 1337;
+            int? insertAt = null;
             for (int i = 0; i < urlList.Count(); i++)
             {
                 if (urlList[i] == "upload") insertAt = i + 1;
             }
-
-            urlList.Insert(insertAt, $"c_scale,w_{width},q_100");
+            if (insertAt != null)
+            {
+                urlList.Insert((int)insertAt, $"c_scale,w_{width},q_100");
+            }
 
             return string.Join("/", urlList);
         }

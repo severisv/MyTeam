@@ -1,10 +1,12 @@
-﻿using Microsoft.Framework.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using MyTeam.Models.Domain;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.Services.Repositories;
+using ILogger = MyTeam.Services.Application.ILogger;
 
-namespace MyTeam.Services
+namespace MyTeam.Services.Composition
 {
     public class Registrations
     {
@@ -28,8 +30,8 @@ namespace MyTeam.Services
             services.AddTransient<ILogger, Logger>();
 
             services.AddSingleton<TestRepository>();
-            
-         
+
+
         }
     }
 

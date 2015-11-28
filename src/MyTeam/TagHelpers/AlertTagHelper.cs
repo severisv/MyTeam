@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.TagHelpers;
-using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+﻿using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Razor.TagHelpers;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("div", Attributes = Name)]
+    [HtmlTargetElement("div", Attributes = Name)]
     public class AlertTagHelper : TagHelper
     {
 
@@ -20,9 +17,7 @@ namespace MyTeam.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var message = context.GetChildContentAsync().Result.GetContent();
-
-
+            var message = output.GetChildContentAsync().Result.GetContent();
             var alert = new Alert(Type, message);
 
             var hidden = string.IsNullOrWhiteSpace(message) ? "hidden" : "";
@@ -31,12 +26,12 @@ namespace MyTeam.TagHelpers
 
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{alert.Icon}");
-            output.Content.Append(innertag.ToString());
-            output.Content.Append($" <span class='alert-content'>{alert.Message}</span>");
-            output.Content.Append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+            output.Content.Append(innertag);
+            output.Content.AppendHtml($" <span class='alert-content'>{alert.Message}</span>");
+            output.Content.AppendHtml("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
         }
 
-      
+
     }
 }
 

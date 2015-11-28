@@ -1,6 +1,6 @@
 /// <binding ProjectOpened='watch' />
-var gulp = require("gulp"),
-    rimraf = require("rimraf");
+var gulp = require("gulp");
+var rimraf = require("rimraf");
 
 require('./Gulpscripts/js');
 require('./Gulpscripts/less');

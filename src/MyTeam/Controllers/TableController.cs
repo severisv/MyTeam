@@ -70,7 +70,7 @@ namespace MyTeam.Controllers
                 Alert(AlertType.Success, $"{Res.Table} {Res.Saved.ToLower()}");
                 return Index(seasonId: model.SeasonId);
             }
-            return new ErrorResult(Context);
+            return new ErrorResult(HttpContext);
         }
 
 

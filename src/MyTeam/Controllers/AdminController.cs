@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Configuration;
+using Microsoft.Extensions.Configuration;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -14,7 +14,7 @@ namespace MyTeam.Controllers
     public class AdminController : BaseController
     {
         [FromServices]
-        public IConfiguration Configuration { get; set; }
+        public IConfigurationRoot Configuration { get; set; }
         [FromServices]
         public IPlayerService PlayerService { get; set; }
 

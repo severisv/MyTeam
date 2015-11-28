@@ -5,7 +5,7 @@ using Microsoft.AspNet.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
 {
-    [TargetElement("div", Attributes = Name)]
+    [HtmlTargetElement("div", Attributes = Name)]
     public class SidebarTagHelper : TagHelper
     {
 
@@ -27,14 +27,14 @@ namespace MyTeam.TagHelpers
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");
 
-            var content = context.GetChildContentAsync().Result.GetContent();
-            innertag.InnerHtml = content;
+            var content = output.GetChildContentAsync().Result.GetContent();
+            innertag.InnerHtml.AppendHtml(content);
 
             if (!string.IsNullOrWhiteSpace(InnerId)) innertag.Attributes["id"] = InnerId;
 
-            output.Content.Append(innertag.ToString());
+            output.Content.Append(innertag);
         }
-        
+
 
     }
 }

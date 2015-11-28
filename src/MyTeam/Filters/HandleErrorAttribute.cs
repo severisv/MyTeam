@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNet.Diagnostics;
-using Microsoft.AspNet.Mvc;
-using MyTeam.Controllers;
+﻿using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Filters;
 
 namespace MyTeam.Filters
 {
