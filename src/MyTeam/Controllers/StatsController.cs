@@ -17,8 +17,8 @@ namespace MyTeam.Controllers
         public IActionResult Attendance(int? year)
         {
             int selectedYear = year ?? DateTime.Now.Year;
-            var eventAttendance = StatsService.GetAttendance(HttpContext.GetClub().ClubId, selectedYear);
-            var years = StatsService.GetAttendanceYears(HttpContext.GetClub().ClubId);
+            var eventAttendance = StatsService.GetAttendance(HttpContext.GetClub().Id, selectedYear);
+            var years = StatsService.GetAttendanceYears(HttpContext.GetClub().Id);
 
             var model = new AttendanceViewModel(eventAttendance, years, selectedYear);
          

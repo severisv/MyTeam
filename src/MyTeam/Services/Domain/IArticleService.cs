@@ -9,10 +9,10 @@ namespace MyTeam.Services.Domain
 {
     public interface IArticleService
     {
-        PagedList<Article> Get(string clubId, int skip, int take);
+        PagedList<Article> Get(Guid clubId, int skip, int take);
         Article Get(Guid articleId);
-        PagedList<SimpleArticleDto> GetSimple(string clubId, int take);
-        Article CreateOrUpdate(EditArticleViewModel model, string clubId, Guid authorId);
+        PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take);
+        Article CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
         void Delete(Guid articleId);
     }
 }

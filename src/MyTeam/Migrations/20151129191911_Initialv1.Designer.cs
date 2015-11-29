@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151129191911_Initialv1")]
+    partial class Initialv1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -146,30 +147,6 @@ namespace MyTeam.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid?>("AuthorId");
-
-                    b.Property<Guid>("ClubId");
-
-                    b.Property<string>("Content")
-                        .IsRequired();
-
-                    b.Property<Guid?>("GameId");
-
-                    b.Property<string>("Headline")
-                        .IsRequired();
-
-                    b.Property<string>("ImageUrl");
-
-                    b.Property<DateTime>("Published");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("MyTeam.Models.Domain.Club", b =>
                 {
                     b.Property<Guid>("Id")
@@ -192,122 +169,6 @@ namespace MyTeam.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ClubId");
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("Headline");
-
-                    b.Property<string>("Location")
-                        .IsRequired();
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
-
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Event");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("DidAttend");
-
-                    b.Property<Guid>("EventId");
-
-                    b.Property<bool>("IsAttending");
-
-                    b.Property<Guid>("PlayerId");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("BirthDate");
-
-                    b.Property<Guid>("ClubId");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("FacebookId");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("ImageFull");
-
-                    b.Property<string>("ImageMedium");
-
-                    b.Property<string>("ImageSmall");
-
-                    b.Property<string>("Imagename");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("MiddleName");
-
-                    b.Property<string>("Phone");
-
-                    b.Property<string>("RolesString");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("Id");
-
-                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
-
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Member");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<Guid>("TeamId");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Table", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<Guid>("SeasonId");
-
-                    b.Property<string>("TableString")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
                 {
                     b.Property<Guid>("Id")
@@ -321,46 +182,6 @@ namespace MyTeam.Migrations
                     b.Property<int>("SortOrder");
 
                     b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
-                {
-                    b.HasBaseType("MyTeam.Models.Domain.Event");
-
-                    b.Property<string>("Opponent")
-                        .IsRequired();
-
-                    b.Property<Guid?>("ReportId");
-
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Game");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Training", b =>
-                {
-                    b.HasBaseType("MyTeam.Models.Domain.Event");
-
-                    b.Property<bool>("Voluntary");
-
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Training");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
-                {
-                    b.HasBaseType("MyTeam.Models.Domain.Member");
-
-                    b.Property<int>("AssistCount");
-
-                    b.Property<int>("GameCount");
-
-                    b.Property<int>("GoalCount");
-
-                    b.Property<string>("PositionsString");
-
-                    b.Property<int>("PracticeCount");
-
-                    b.Property<int>("Status");
-
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Player");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -395,62 +216,11 @@ namespace MyTeam.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("MyTeam.Models.Domain.Club")
-                        .WithMany()
-                        .HasForeignKey("ClubId");
-
-                    b.HasOne("MyTeam.Models.Domain.Game")
-                        .WithOne()
-                        .HasForeignKey("MyTeam.Models.Domain.Article", "GameId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Event")
-                        .WithMany()
-                        .HasForeignKey("EventId");
-
-                    b.HasOne("MyTeam.Models.Domain.Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Club")
-                        .WithMany()
-                        .HasForeignKey("ClubId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Table", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Season")
-                        .WithMany()
-                        .HasForeignKey("SeasonId");
-                });
-
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
                         .HasForeignKey("ClubId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
-                {
                 });
         }
     }

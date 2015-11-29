@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Services.Repositories;
@@ -40,7 +43,7 @@ namespace MyTeam.Services.Application
                 return member;
             }
             
-             member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubId && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles)).FirstOrDefault();
+            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles)).FirstOrDefault();
 
             if (member != null)
             {
@@ -56,6 +59,9 @@ namespace MyTeam.Services.Application
     
         public ClubDto GetCurrentClub(string clubId)
         {
+
+
+
             if (string.IsNullOrWhiteSpace(clubId)) return null;
 
             var key = clubId;
@@ -71,10 +77,10 @@ namespace MyTeam.Services.Application
                 return club;
             }
 
-            club = ClubRepository.Get().Where(c => c.ClubId == clubId).Select(
-                c => new ClubDto(clubId, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id))
+            club = ClubRepository.Get().Where(c => c.ClubIdentifier == clubId).Select(
+                c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id))
             ).Single();
-
+            
 
             if (club != null)
             {

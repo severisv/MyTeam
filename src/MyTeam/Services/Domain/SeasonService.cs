@@ -28,7 +28,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<Season> GetTeamSeasonsFromSeasonId(Guid seasonId)
         {
-            var teamId = _seasonRepository.Get(seasonId).Select(s => s.Team.Id).Single();
+            var teamId = _seasonRepository.Get().Where(s => s.Id == seasonId).Select(s => s.Team.Id).Single();
             return GetForTeam(teamId);
         }
       

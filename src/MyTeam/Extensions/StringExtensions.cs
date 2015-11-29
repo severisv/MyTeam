@@ -24,7 +24,8 @@ namespace MyTeam
 
         public static string Truncate(this string str, int length = 300)
         {
-            return $"{str?.Substring(0, length)}{(str?.Length > 300 ? "...":"")}";
+            if(str.Length > 300) return $"{str?.Substring(0, length)}...";
+            return str;
         }
     }
 }

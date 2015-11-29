@@ -4,7 +4,7 @@
     ViewBag.Title = Model.IsNew ? "Skriv artikkel" : "Rediger artikkel";
 }
 
-@Component.Invoke("ArticleNav", Context.GetClub().ClubId)
+@Component.Invoke("ArticleNav", Context.GetClub().Id)
 
 
 <div mt-main>

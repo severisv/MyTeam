@@ -39,7 +39,10 @@ namespace MyTeam.ViewModels.Player
 
         [RequiredNO]
         [Display(Name = Res.Positions)]
-        public IEnumerable<Position> Positions { get; set; }
+        public string PositionsString { get; set; }
+        [RequiredNO]
+        [Display(Name = Res.Positions)]
+        public string[] Positions { get; set; }
 
         public SelectList AllPositions => new SelectList(Enum.GetValues(typeof(Position)).Cast<Position>().Select(v => new SelectListItem
         {

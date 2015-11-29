@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -15,7 +16,7 @@ namespace MyTeam.Services.Domain
             _eventRepository = eventRepository;
         }
 
-        public IEnumerable<EventAttendance> GetAttendance(string clubId, int year)
+        public IEnumerable<EventAttendance> GetAttendance(Guid clubId, int year)
         {
             return _eventRepository.Get()
                 .Where(e => e.ClubId == clubId &&
@@ -24,7 +25,7 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public IEnumerable<int> GetAttendanceYears(string clubId)
+        public IEnumerable<int> GetAttendanceYears(Guid clubId)
         {
             return _eventRepository.Get()
                 .Where(e => e.ClubId == clubId && (e.Type == EventType.Trening || e.Type == EventType.Kamp))

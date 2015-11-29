@@ -4,11 +4,11 @@ using MyTeam.Models.Domain;
 
 namespace MyTeam.Services.Repositories
 {
-    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
+    public class GenericMemoryRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         private readonly TestRepository _testRepository;
 
-        public GenericRepository(TestRepository testRepository)
+        public GenericMemoryRepository(TestRepository testRepository)
         {
             _testRepository = testRepository;
         }
@@ -50,13 +50,13 @@ namespace MyTeam.Services.Repositories
 
         public void Update(TEntity entity)
         {
-           
+
 
         }
 
         public void CommitChanges()
         {
-            
+
         }
     }
 }

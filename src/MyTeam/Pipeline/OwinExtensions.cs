@@ -1,4 +1,5 @@
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Http;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;
 
@@ -13,19 +14,24 @@ namespace MyTeam
             {
                 var cacheHelper = app.ApplicationServices.GetService(typeof(ICacheHelper)) as ICacheHelper;
 
-                var clubId = PipelineConstants.GetClubIdFromHostname(context.Request.Host.Value);
+                var clubId = GetSubdomain(context);
+                if (clubId == null) clubId = "wamkam";
 
-                // If there is no registered clubId for the domain, get from querystring
-                if (clubId == null)
+                if (clubId != null)
                 {
-                    clubId = context.Request.Path.ToString().Split('/')[1];
+                    context.Items[PipelineConstants.ClubKey] = cacheHelper.GetCurrentClub(clubId);
+                    var username = context.User.Identity.Name;
+                    context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, clubId);
                 }
-                context.Items[PipelineConstants.ClubKey] = cacheHelper.GetCurrentClub(clubId);
-                var username = context.User.Identity.Name;
-                context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, clubId);
                 await next();
             });
         }
-        
-   }
+
+        private static string GetSubdomain(HttpContext context)
+        {
+            var hostNameArray = context.Request.Host.Value.Split('.');
+            if (hostNameArray.Length > 2) return hostNameArray[0];
+            return null;
+        }
+    }
 }

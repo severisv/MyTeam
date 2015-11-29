@@ -9,8 +9,6 @@ using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Repositories;
-using MyTeam.Settings;
-using MyTeam.ViewModels.Admin;
 using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Services.Domain
@@ -52,23 +50,23 @@ namespace MyTeam.Services.Domain
 
             if (existingPlayer == null)
             {
-                var club = _clubRepository.Get().Single(c => c.ClubId == clubId);
+                var club = _clubRepository.Get().Single(c => c.ClubIdentifier == clubId);
 
-                var player = new Player(
-                    facebookId,
-                    firstName,
-                    lastName,
-                    emailAddress
-                    )
+                var player = new Player
                 {
+                    FacebookId = facebookId,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    UserName = emailAddress,
+                    ClubId = club.Id,
                     ImageSmall = imageSmall,
                     ImageMedium = imageMedium,
                     ImageFull = imageLarge,
                     MiddleName = middleName
                 };
 
-                player.Club = club;
-                _playerRepository.Add(player);
+                _applicationDbContext.Players.Add(player);
+                _playerRepository.CommitChanges();
 
                 var message = string.IsNullOrWhiteSpace(facebookId)
                     ? $"{Res.Player} {Res.Added.ToLower()}"
@@ -87,7 +85,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<Object> Get(string clubId)
         {
-            var players = _playerRepository.Get().Where(p => p.Club.ClubId == clubId).Select(p =>
+            var players = _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p =>
             new
             {
                 Id = p.Id,
@@ -102,13 +100,13 @@ namespace MyTeam.Services.Domain
 
         public void SetPlayerStatus(Guid id, PlayerStatus status)
         {
-            var player = _playerRepository.Get(id).Single();
+            var player = _playerRepository.GetSingle(id);
             player.Status = status;
         }
 
         public void TogglePlayerRole(Guid id, string role)
         {
-            var player = _playerRepository.Get(id).Single();
+            var player = _playerRepository.GetSingle(id);
             var roles = player.Roles.ToList();
             if (roles.Any(r => r == role))
             {
@@ -119,18 +117,19 @@ namespace MyTeam.Services.Domain
                 roles.Add(role);
             }
             player.RolesString = string.Join(",", roles);
+            _playerRepository.CommitChanges();
         }
 
         public void EditPlayer(EditPlayerViewModel model)
         {
-            var player = _playerRepository.Get(model.Id).Single();
+            var player = _playerRepository.GetSingle(model.Id);
             player.FirstName = model.FirstName;
             player.MiddleName = model.MiddleName;
             player.LastName = model.LastName;
             player.Phone = model.Phone;
             player.StartDate = model.StartDate;
             player.BirthDate = model.BirthDate;
-            player.Positions = model.Positions;
+            player.PositionsString = model.PositionsString;
         }
 
         public void AddEmailToPlayer(string facebookId, string email)
@@ -149,7 +148,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<SimplePlayerDto> GetDto(string clubId)
         {
-            return _playerRepository.Get().Where(p => p.Club.ClubId == clubId).Select(p => new SimplePlayerDto()
+            return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto()
             {
                 Id = p.Id,
                 Name = p.Fullname,

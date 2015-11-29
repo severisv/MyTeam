@@ -23,7 +23,7 @@ namespace MyTeam.Controllers
 
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
-            var players = PlayerRepository.Get().Where(p => p.Status == type);
+            var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId);
 
             var model = new ShowPlayersViewModel(players, editMode)
             {

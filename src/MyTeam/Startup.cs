@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -9,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
+using MyTeam.Models.Domain;
 using MyTeam.Services;
-using Microsoft.AspNet.Authentication.Facebook;
-using MyTeam.Pipeline;
 using MyTeam.Services.Composition;
+using MyTeam.Services.Repositories;
 
 
 namespace MyTeam
@@ -107,20 +105,14 @@ namespace MyTeam
 
             app.UseMvc(routes =>
             {
-                foreach (var keyValuePair in PipelineConstants.ClubIdlookup)
-                {
-                    routes.MapRoute(
-                     name: keyValuePair.Key,
-                     template: "{controller=News}/{action=Index}/{id?}",
-                     defaults: new { club = keyValuePair.Value },
-                     constraints: new HostConstraint(keyValuePair.Key)
-                     );
-                }
-
                 routes.MapRoute(
                      name: "default",
-                     template: "{club}/{controller=News}/{action=Index}/{id?}");
+                     template: "{controller=News}/{action=Index}/{id?}");
             });
+
+ 
+            BootstrapData.Initialize(app.ApplicationServices);
+
         }
 
         // Entry point for the application.

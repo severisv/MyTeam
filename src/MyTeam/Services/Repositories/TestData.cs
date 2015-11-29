@@ -13,11 +13,17 @@ namespace MyTeam.Services.Repositories
             {
                 ShortName = "Wam-Kam",
                 Name = "Wam-Kam FK",
-                ClubId = "wamkam",
+                ClubIdentifier = "wamkam",
                 Logo = "image/upload/v1448650992/wamkam/wamkam.png",
                 Favicon = "image/upload/v1448650991/wamkam/favicon.png",
-                Players = new List<Player>(),
-                Teams = new List<Team> { new Team{Name = "Wam-Kam 2",SortOrder = 2} , new Team { Name = "Wam-Kam 1", SortOrder = 1 } }
+                Players = new List<Member>(),
+                Teams = new List<Team> { new Team
+                {
+                    Name = "Wam-Kam 2", SortOrder = 2
+                } , new Team
+                {
+                    Name = "Wam-Kam 1", SortOrder = 1
+                } }
             };
 
         public static void Addto(TestRepository testRepository)
@@ -37,7 +43,7 @@ namespace MyTeam.Services.Repositories
                 var article = new Article()
                 {
                     Id = Guid.NewGuid(),
-                    ClubId = _club.ClubId,
+                    ClubId = _club.Id,
                     Content =
                         "Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Cras ultricies ligula sed magna dictum porta. Cras ultricies ligula sed magna dictum porta. Donec sollicitudin molestie malesuada. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus nibh. Donec sollicitudin molestie malesuada.",
                     Headline = "Artikkel " + i,
@@ -93,11 +99,7 @@ namespace MyTeam.Services.Repositories
                 Status = status,
                 Club = _club,
                 UserName = username,
-                Positions = new List<Position>
-                {
-                    Position.Spiss, Position.Ving
-                }
-                ,
+                PositionsString = $"{Position.Spiss}, {Position.Ving}",
                 RolesString = roleString,
                 Phone = "91611166"
 
@@ -135,7 +137,7 @@ namespace MyTeam.Services.Repositories
                 Description = description,
                 Location = location,
                 Type = type,
-                ClubId = "wamkam"
+                ClubId = _club.Id
             };
 
             var attendees = new List<EventAttendance>();

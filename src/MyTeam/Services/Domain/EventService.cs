@@ -23,7 +23,7 @@ namespace MyTeam.Services.Domain
 
         public Event Get(Guid id)
         {
-            return EventRepository.Get(id).Single();
+            return EventRepository.GetSingle(id);
         }
 
         public IEnumerable<Event> GetUpcoming(EventType type, bool showAll = false)
@@ -88,13 +88,13 @@ namespace MyTeam.Services.Domain
 
         public void Delete(Guid eventId)
         {
-            var ev = EventRepository.Get(eventId).Single();
+            var ev = EventRepository.GetSingle(eventId);
             EventRepository.Delete(ev);
         }
 
         public void Update(Event ev)
         {
-            EventRepository.Update(ev);
+            throw new NotImplementedException();
         }
 
         public void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)

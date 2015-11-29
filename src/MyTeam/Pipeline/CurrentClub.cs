@@ -7,6 +7,7 @@ namespace MyTeam
     public class CurrentClub
     {
 
+        public Guid Id { get; }
         public string ClubId { get; }
         public string ShortName { get; }
         public string Name { get; }
@@ -18,6 +19,7 @@ namespace MyTeam
         {
             if (club != null)
             {
+                Id = club.Id;
                 ClubId = club.ClubId;
                 Name = club.Name;
                 ShortName = club.ShortName;

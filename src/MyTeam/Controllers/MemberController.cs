@@ -22,7 +22,7 @@ namespace MyTeam.Controllers
             ViewBag.Title = Res.SquadList;
 
             var players = PlayerRepository.Get()
-                .Where(p => p.Club.ClubId == HttpContext.GetClub().ClubId)
+                .Where(p => p.Club.ClubIdentifier == HttpContext.GetClub().ClubId)
                 .Where(p => p.Status == status)
                 .OrderBy(p => p.FirstName)
                 .Select(p => new MemberInfoViewModel{

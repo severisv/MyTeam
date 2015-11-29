@@ -1,8 +1,5 @@
 ﻿@using System.ComponentModel
-@using System.Security.Policy
-@using System.Threading.Tasks
-@using MyTeam
-@using MyTeam.Models.Domain
+
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
@@ -22,58 +19,58 @@
     <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.css" />
 </head>
 <body>
-    <div id="bg-placeholder"></div>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-controller="home" class="navbar-brand"><img src="@Cloudinary.Image(club?.Logo, 100)" alt="Wam-Kam" /></a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-controller="news" asp-action="index">@Res.Home</a></li>
-                    <li><a asp-controller="player" asp-action="list">@Res.Players</a></li>
-                    <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
-                    <li><a asp-controller="game">@Res.Games</a></li>
-                    @if (Context.Member().Exists)
-                    {
-                        <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
-                    }
-                </ul>
-
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-            @if (Context.UserIsMember())
-            {
-                <ul id="submenu-internal" class="nav navbar-nav slide-down-child">
-                    <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                    <li><a asp-controller="stats" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
-                    <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
-                    @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
-                    {
-
-                        <li><a asp-controller="admin" asp-action="index"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
-                    }
-                </ul>
-            }
-
+<div id="bg-placeholder"></div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-controller="home" class="navbar-brand"><img src="@Cloudinary.Image(club?.Logo, 100)" alt="Wam-Kam"/></a>
         </div>
-    </div>
-    @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")
-    <div id="main-container" class="container">
-        <div id="alerts" class="col-lg-9 col-md-9">
-            @Html.Partial("_Alerts")
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="news" asp-action="index">@Res.Home</a></li>
+                <li><a asp-controller="player" asp-action="list">@Res.Players</a></li>
+                <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
+                <li><a asp-controller="game">@Res.Games</a></li>
+                @if (Context.Member().Exists)
+                {
+                    <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
+                }
+            </ul>
+
+            @await Html.PartialAsync("_LoginPartial")
         </div>
-        <div class="clearfix"></div>
-        @RenderBody()
-        <footer></footer>
+        @if (Context.UserIsMember())
+        {
+            <ul id="submenu-internal" class="nav navbar-nav slide-down-child">
+                <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
+                <li><a asp-controller="stats" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
+                @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+                {
+
+                    <li><a asp-controller="admin" asp-action="index"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
+                }
+            </ul>
+        }
+
     </div>
-    <script src="~/scripts/bundles/lib.bundle.js"></script>
-    <script src="~/scripts/bundles/site.bundle.js"></script>
-    @RenderSection("scripts", required: false)
+</div>
+@Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")
+<div id="main-container" class="container">
+    <div id="alerts" class="col-lg-9 col-md-9">
+        @Html.Partial("_Alerts")
+    </div>
+    <div class="clearfix"></div>
+    @RenderBody()
+    <footer></footer>
+</div>
+<script src="~/scripts/bundles/lib.bundle.js"></script>
+<script src="~/scripts/bundles/site.bundle.js"></script>
+@RenderSection("scripts", required: false)
 </body>
 </html>

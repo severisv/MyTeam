@@ -6,6 +6,7 @@ namespace MyTeam.Models.Dto
 {
     public class ClubDto
     {
+        public Guid Id { get; }
         public string ClubId { get; }
         public string ShortName { get; }
         public string Name { get; }
@@ -14,8 +15,9 @@ namespace MyTeam.Models.Dto
         public string Logo { get;  }
 
 
-        public ClubDto(string clubId, string name, string shortName, string logo, string favicon, IEnumerable<Guid> teamIds)
+        public ClubDto(Guid id, string clubId, string name, string shortName, string logo, string favicon, IEnumerable<Guid> teamIds)
         {
+            Id = id;
             ClubId = clubId;
             Name = name;
             ShortName = shortName;

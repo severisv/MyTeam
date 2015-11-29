@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace MyTeam.Models.Domain
 {
     public class Table : Entity
     {
+        [Required]
         public Guid SeasonId { get; set; }
+        [Required]
         public DateTime CreatedDate { get; set; }
+        [NotMapped]
         public IList<TableTeam> Lines => ParseTable(TableString);
+        [Required]
         public string TableString { get; set; }
         public virtual Season Season { get; set; }
 

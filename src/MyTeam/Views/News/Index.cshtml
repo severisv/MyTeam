@@ -1,18 +1,55 @@
-﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata
-@using MyTeam
-@using MyTeam.Models.Domain
-@using MyTeam.Models.General
+﻿@using System.ComponentModel
+@using System.Runtime.Remoting.Contexts
+@using Microsoft.Data.Entity.Metadata.Internal
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@using MyTeam.Settings
 @model MyTeam.Models.General.PagedList<Article>
 @{
     ViewBag.Title = "Nyheter";
 }
 
+@if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.NewsWriter))
+{
 
-@Component.Invoke("ArticleNav", Context.GetClub().ClubId)
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.Actions</li>
+            <li><a asp-action="create"><i class='fa fa-plus'></i> Skriv ny artikkel</a></li>
+        </ul>
+    </div>
+
+}
+
+
 
 
 @Html.Partial("_List", Model)
 
 
 
+@Component.Invoke("ArticleNav", Context.GetClub().Id)
+
+<div mt-main>
+    <nav class="news-pager">
+        <ul class="pager">
+            @if (Model.HasPrevious)
+            {
+                <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take=" @Model.Take "><span aria-hidden="true">&larr;</span> Nyere</a></li>
+            }
+            else
+            {
+                <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Nyere</a></li>
+            }
+            @if (Model.HasNext)
+            {
+                <li class="next @(Model.HasNext ? "" : "disabled")"><a asp-route-skip="@Model.SkipNext" asp-route-take="@Model.Take">Eldre <span aria-hidden="true">&rarr;</span></a></li>
+            }
+            else
+            {
+                <li class="next disabled"><a>Eldre <span aria-hidden="true">&rarr;</span></a></li>
+            }
+
+        </ul>
+    </nav>
+</div>

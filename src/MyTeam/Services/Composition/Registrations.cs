@@ -12,13 +12,14 @@ namespace MyTeam.Services.Composition
     {
         public static void Setup(IServiceCollection services)
         {
-            services.AddTransient<IRepository<Article>, GenericRepository<Article>>();
-            services.AddTransient<IRepository<Club>, GenericRepository<Club>>();
-            services.AddTransient<IRepository<Player>, GenericRepository<Player>>();
-            services.AddTransient<IRepository<Event>, GenericRepository<Event>>();
-            services.AddTransient<IRepository<EventAttendance>, GenericRepository<EventAttendance>>();
-            services.AddTransient<IRepository<Season>, GenericRepository<Season>>();
-            services.AddTransient<IRepository<Table>, GenericRepository<Table>>();
+            services.AddTransient<IRepository<Article>, EfRepository<Article>>();
+            services.AddTransient<IRepository<Club>, EfRepository<Club>>();
+            services.AddTransient<IRepository<Team>, EfRepository<Team>>();
+            services.AddTransient<IRepository<Player>, EfRepository<Player>>();
+            services.AddTransient<IRepository<Event>, EfRepository<Event>>();
+            services.AddTransient<IRepository<EventAttendance>, EfRepository<EventAttendance>>();
+            services.AddTransient<IRepository<Season>, EfRepository<Season>>();
+            services.AddTransient<IRepository<Table>, EfRepository<Table>>();
             services.AddTransient<IPlayerService, PlayerService>();
 
             services.AddTransient<IArticleService, ArticleService>();

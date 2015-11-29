@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MyTeam.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 
@@ -10,20 +11,31 @@ namespace MyTeam.Models.Domain
 {
     public class Event : Entity
     {
-        public string ClubId { get; set; }
-        public EventType Type { get; set; } 
+        [Required]
+        public Guid ClubId { get; set; }
+        [Required]
+        public EventType Type { get; set; }
 
+        [Required]
         public DateTime DateTime { get; set; }
+        [Required]
         public string Location { get; set; }
         public string Headline { get; set; }
         public string Description { get; set; }
 
+        [NotMapped]
+        public virtual IEnumerable<Team> Teams { get; set; }
         public virtual IList<EventAttendance> Attendees { get; set; }
-        public virtual IEnumerable<Player> Attending => Attendees.Where(a => a.IsAttending).Select(a => a.Player);
-        public virtual IEnumerable<Player> NotAttending => Attendees.Where(a => !a.IsAttending).Select(a => a.Player);
+        [NotMapped]
+        public virtual IEnumerable<Player> Attending => Attendees?.Where(a => a.IsAttending).Select(a => a.Player);
+        [NotMapped]
+        public virtual IEnumerable<Player> NotAttending => Attendees?.Where(a => !a.IsAttending).Select(a => a.Player);
 
+        [NotMapped]
         public bool IsGame => Type == EventType.Kamp;
+        [NotMapped]
         public bool IsTraining => Type == EventType.Trening;
+        [NotMapped]
         public bool IsCustom => Type == EventType.Diverse;
 
         public bool IsAttending(ClaimsPrincipal user)

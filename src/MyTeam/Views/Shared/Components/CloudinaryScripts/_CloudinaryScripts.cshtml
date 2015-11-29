@@ -1,7 +1,7 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Framework.Configuration
 @using MyTeam.Util
-@model Microsoft.Framework.Configuration.IConfiguration
+@using Microsoft.Extensions.Configuration;
+@model IConfiguration
 @{
     var cloudName = Model["Integration:Cloudinary:CloudName"];
     var apiKey = Model["Integration:Cloudinary:ApiKey"];

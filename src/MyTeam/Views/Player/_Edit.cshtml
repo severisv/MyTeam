@@ -50,11 +50,11 @@
                 
                     if (Model.Positions.Any(p => p.ToString() == position.Text))
                     {
-                        <option selected value="@position.Value">@position.Text</option>
+                        <option selected value="@position.Text">@position.Text</option>
                     }
                     else
                     {
-                        <option value="@position.Value">@position.Text</option>
+                        <option value="@position.Text">@position.Text</option>
                     }
                 }
             </select>

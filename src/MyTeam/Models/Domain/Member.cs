@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MyTeam.Resources;
 
 namespace MyTeam.Models.Domain
@@ -11,11 +13,15 @@ namespace MyTeam.Models.Domain
         public string MiddleName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public Guid ClubId { get; set; }
 
         public string UserName { get; set; }
         public string FacebookId { get; set; }
 
         public string RolesString { get; set; }
+
+        [NotMapped]
         public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
 
         [DataType(DataType.Date)]
@@ -31,22 +37,24 @@ namespace MyTeam.Models.Domain
 
         [DataType(DataType.EmailAddress)]
         [Display(Name = Res.Email)]
+        [NotMapped]
         public string Email => UserName;
 
-
+        [NotMapped]
         public int StartYear => StartDate.Year;
         public string Imagename { get; set; }
 
         public string ImageSmall { get; set; }
         public string ImageMedium { get; set; }
         public string ImageFull { get; set; }
-        
 
+        [NotMapped]
         public string Fullname => $"{FirstName} {MiddleName} {LastName}";
+        [NotMapped]
         public string Name => $"{FirstName} {LastName}";
 
         public virtual Club Club { get; set; }
-
+   //     public virtual IEnumerable<Team> Teams { get; set; }
   
     }
 

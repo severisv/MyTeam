@@ -18,7 +18,7 @@ namespace MyTeam.Controllers
 
         public IActionResult Index(int skip = 0, int take = 4)
         {
-            var model = ArticleService.Get(HttpContext.GetClub().ClubId, skip, take);
+            var model = ArticleService.Get(HttpContext.GetClub().Id, skip, take);
             return View("Index", model);
         }
 
@@ -27,9 +27,7 @@ namespace MyTeam.Controllers
             var model = ArticleService.Get(articleId);
             return View("Show", model);
         }
-
-
-
+        
 
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Create()
@@ -53,8 +51,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().ClubId, HttpContext.Member().Id);
-
+                var article = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
                 return View("Show", article);
             }
             return View("Edit", model);

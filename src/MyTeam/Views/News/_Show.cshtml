@@ -27,7 +27,7 @@
     <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-articleId="@Model.Id"><i class='fa fa-edit'></i></a>
     }
     <h2>@Model.Headline</h2>
-    <p class="news-author"><a asp-controller="player" asp-action="show" asp-route-playerId="@Model.Author.Id">@Model.Author.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span></p>
+    <p class="news-author"><a asp-controller="player" asp-action="show" asp-route-playerId="@Model.AuthorId">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span></p>
     <hr class="sm"/>
     @if (isShortVersion)
     {

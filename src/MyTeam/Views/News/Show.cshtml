@@ -5,7 +5,7 @@
     ViewBag.Title = Model.Headline;
 }
 
-@Component.Invoke("ArticleNav", Context.GetClub().ClubId)
+@Component.Invoke("ArticleNav", Context.GetClub().Id)
 
 @Html.Partial("_Show", Model)
 

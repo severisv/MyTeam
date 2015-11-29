@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
@@ -13,15 +14,18 @@ namespace MyTeam.Services.Domain
     {
 
         private readonly IRepository<Article> _articleRepository;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ArticleService(IRepository<Article> articleRepository)
+        public ArticleService(IRepository<Article> articleRepository, ApplicationDbContext dbContext)
         {
             _articleRepository = articleRepository;
+            _dbContext = dbContext;
         }
 
-        public PagedList<Article> Get(string clubId, int skip, int take)
+        public PagedList<Article> Get(Guid clubId, int skip, int take)
         {
-            var query = _articleRepository.Get()
+            var query = _articleRepository.Get();
+            query = query
                 .Where(a => a.ClubId == clubId)
                 .OrderByDescending(a => a.Published);
 
@@ -36,7 +40,7 @@ namespace MyTeam.Services.Domain
             return _articleRepository.GetSingle(articleId);
         }
 
-        public PagedList<SimpleArticleDto> GetSimple(string clubId, int take)
+        public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
         {
             var skip = 0;
             var query = _articleRepository.Get()
@@ -59,7 +63,7 @@ namespace MyTeam.Services.Domain
 
 
 
-        public Article CreateOrUpdate(EditArticleViewModel model, string clubId, Guid authorId)
+        public Article CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
         {
             var articleId = model.IsNew ? Guid.NewGuid() : model.ArticleId;
 
@@ -68,6 +72,7 @@ namespace MyTeam.Services.Domain
                 var newArticle = new Article
                 {
                     Id = articleId,
+                    Headline = model.Headline,
                     ClubId = clubId,
                     AuthorId = authorId,
                     GameId = model.GameId,
@@ -75,8 +80,8 @@ namespace MyTeam.Services.Domain
                     ImageUrl = model.ImageUrl,
                     Published = DateTime.Now
                 };
-                _articleRepository.Add(newArticle);
-                _articleRepository.CommitChanges();
+                _dbContext.Add(newArticle);
+                _dbContext.SaveChanges();
 
             }
             var article = _articleRepository.GetSingle(articleId);
