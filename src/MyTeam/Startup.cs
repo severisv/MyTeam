@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services;
 using Microsoft.AspNet.Authentication.Facebook;
+using MyTeam.Pipeline;
 using MyTeam.Services.Composition;
 
 
@@ -103,10 +103,20 @@ namespace MyTeam
                 options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
 
-            app.LoadAppData();
+            app.LoadTenantData();
 
             app.UseMvc(routes =>
             {
+                foreach (var keyValuePair in PipelineConstants.ClubIdlookup)
+                {
+                    routes.MapRoute(
+                     name: keyValuePair.Key,
+                     template: "{controller=News}/{action=Index}/{id?}",
+                     defaults: new { club = keyValuePair.Value },
+                     constraints: new HostConstraint(keyValuePair.Key)
+                     );
+                }
+
                 routes.MapRoute(
                      name: "default",
                      template: "{club}/{controller=News}/{action=Index}/{id?}");
