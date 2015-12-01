@@ -16,14 +16,14 @@ namespace MyTeam.ViewModels.Attendance
         {
             get
             {
-                var players = _attendance.GroupBy(attendance => attendance.PlayerId).Select(group => group.First().Player);
+                var players = _attendance.GroupBy(attendance => attendance.MemberId).Select(group => group.First().Member);
                 return players.Select(player => new PlayerAttendanceViewModel
                 {
                     PlayerId = player.Id,
                     Name = player.Name,
-                    Trainings = _attendance.Where(a => a.DidAttend && a.PlayerId == player.Id).Count(a => a.Event.Type == EventType.Trening),
-                    Games = _attendance.Where(a => a.DidAttend && a.PlayerId == player.Id).Count(a => a.Event.Type == EventType.Kamp),
-                    NoShows = _attendance.Where(a => a.IsAttending && !a.DidAttend && a.PlayerId == player.Id).Count(a => a.Event.Type == EventType.Kamp),
+                    Trainings = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.Event.Type == EventType.Trening),
+                    Games = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.Event.Type == EventType.Kamp),
+                    NoShows = _attendance.Where(a => a.IsAttending && !a.DidAttend && a.MemberId == player.Id).Count(a => a.Event.Type == EventType.Kamp),
                     ImageSmall =  player.ImageSmall
                 }).ToList().OrderByDescending(p => p.Trainings).ThenBy(p => p.Games);
             }

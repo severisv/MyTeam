@@ -99,8 +99,8 @@ namespace MyTeam.Services.Domain
         public void Delete(Guid articleId)
         {
             var article = _articleRepository.GetSingle(articleId);
-            _articleRepository.Delete(article);
-            _articleRepository.CommitChanges();
+            _dbContext.Articles.Remove(article);
+            _dbContext.SaveChanges();
         }
     }
 

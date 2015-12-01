@@ -231,7 +231,7 @@ namespace MyTeam.Migrations
 
                     b.Property<bool>("IsAttending");
 
-                    b.Property<Guid>("PlayerId");
+                    b.Property<Guid>("MemberId");
 
                     b.HasKey("Id");
                 });
@@ -250,7 +250,8 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("FacebookId");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<string>("ImageFull");
 
@@ -260,11 +261,14 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("Imagename");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<string>("MiddleName");
 
                     b.Property<string>("Phone");
+
+                    b.Property<bool>("ProfileIsConfirmed");
 
                     b.Property<string>("RolesString");
 
@@ -410,15 +414,22 @@ namespace MyTeam.Migrations
                         .HasForeignKey("MyTeam.Models.Domain.Article", "GameId");
                 });
 
+            modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
+                {
+                    b.HasOne("MyTeam.Models.Domain.Club")
+                        .WithMany()
+                        .HasForeignKey("ClubId");
+                });
+
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Event")
                         .WithMany()
                         .HasForeignKey("EventId");
 
-                    b.HasOne("MyTeam.Models.Domain.Player")
+                    b.HasOne("MyTeam.Models.Domain.Member")
                         .WithMany()
-                        .HasForeignKey("PlayerId");
+                        .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
@@ -447,6 +458,14 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
                         .HasForeignKey("ClubId");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+                {
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Training", b =>
+                {
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>

@@ -16,7 +16,7 @@ namespace MyTeam.Services.Repositories
                 ClubIdentifier = "wamkam",
                 Logo = "image/upload/v1448650992/wamkam/wamkam.png",
                 Favicon = "image/upload/v1448650991/wamkam/favicon.png",
-                Players = new List<Member>(),
+                Members = new List<Member>(),
                 Teams = new List<Team> { new Team
                 {
                     Name = "Wam-Kam 2", SortOrder = 2
@@ -104,7 +104,7 @@ namespace MyTeam.Services.Repositories
                 Phone = "91611166"
 
         };
-            _club.Players.Add(player);
+            _club.Members.Add(player);
             return player;
         }
 
@@ -148,8 +148,8 @@ namespace MyTeam.Services.Repositories
             {
                 attendees.Add(new EventAttendance
                 {
-                    Player = player,
-                    PlayerId = player.Id,
+                    Member = player,
+                    MemberId = player.Id,
                     EventId = result.Id,
                     Event = result,
                     IsAttending = true,

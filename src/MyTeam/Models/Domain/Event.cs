@@ -23,13 +23,15 @@ namespace MyTeam.Models.Domain
         public string Headline { get; set; }
         public string Description { get; set; }
 
+        public virtual Club Club { get; set; }
+        
         [NotMapped]
         public virtual IEnumerable<Team> Teams { get; set; }
-        public virtual IList<EventAttendance> Attendees { get; set; }
+        public virtual ICollection<EventAttendance> Attendees { get; set; }
         [NotMapped]
-        public virtual IEnumerable<Player> Attending => Attendees?.Where(a => a.IsAttending).Select(a => a.Player);
+        public virtual IEnumerable<Member> Attending => Attendees?.Where(a => a.IsAttending).Select(a => a.Member);
         [NotMapped]
-        public virtual IEnumerable<Player> NotAttending => Attendees?.Where(a => !a.IsAttending).Select(a => a.Player);
+        public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => !a.IsAttending).Select(a => a.Member);
 
         [NotMapped]
         public bool IsGame => Type == EventType.Kamp;
@@ -40,11 +42,11 @@ namespace MyTeam.Models.Domain
 
         public bool IsAttending(ClaimsPrincipal user)
         {
-            return Attending.Any(a => a.UserName == user.Identity.Name);
+            return Attending?.Any(a => a.UserName == user.Identity.Name) == true;
         }
         public bool IsNotAttending(ClaimsPrincipal user)
         {
-            return NotAttending.Any(a => a.UserName == user.Identity.Name);
+            return NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
         }
 
         public bool SignupHasOpened()

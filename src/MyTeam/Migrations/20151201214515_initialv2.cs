@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace MyTeam.Migrations
 {
-    public partial class Initialv4 : Migration
+    public partial class initialv2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +13,13 @@ namespace MyTeam.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_Article_Club_ClubId", table: "Article");
+            migrationBuilder.DropForeignKey(name: "FK_Event_Club_ClubId", table: "Event");
+            migrationBuilder.DropForeignKey(name: "FK_EventAttendance_Event_EventId", table: "EventAttendance");
             migrationBuilder.DropForeignKey(name: "FK_Member_Club_ClubId", table: "Member");
+            migrationBuilder.DropForeignKey(name: "FK_Season_Team_TeamId", table: "Season");
+            migrationBuilder.DropForeignKey(name: "FK_Table_Season_SeasonId", table: "Table");
             migrationBuilder.DropForeignKey(name: "FK_Team_Club_ClubId", table: "Team");
-            migrationBuilder.DropColumn(name: "Fullname", table: "Member");
-            migrationBuilder.DropColumn(name: "Name", table: "Member");
-            migrationBuilder.DropColumn(name: "StartYear", table: "Member");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -54,10 +56,45 @@ namespace MyTeam.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
             migrationBuilder.AddForeignKey(
+                name: "FK_Article_Club_ClubId",
+                table: "Article",
+                column: "ClubId",
+                principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Event_Club_ClubId",
+                table: "Event",
+                column: "ClubId",
+                principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_EventAttendance_Event_EventId",
+                table: "EventAttendance",
+                column: "EventId",
+                principalTable: "Event",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
                 name: "FK_Member_Club_ClubId",
                 table: "Member",
                 column: "ClubId",
                 principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Season_Team_TeamId",
+                table: "Season",
+                column: "TeamId",
+                principalTable: "Team",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Table_Season_SeasonId",
+                table: "Table",
+                column: "SeasonId",
+                principalTable: "Season",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
             migrationBuilder.AddForeignKey(
@@ -76,21 +113,13 @@ namespace MyTeam.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_Article_Club_ClubId", table: "Article");
+            migrationBuilder.DropForeignKey(name: "FK_Event_Club_ClubId", table: "Event");
+            migrationBuilder.DropForeignKey(name: "FK_EventAttendance_Event_EventId", table: "EventAttendance");
             migrationBuilder.DropForeignKey(name: "FK_Member_Club_ClubId", table: "Member");
+            migrationBuilder.DropForeignKey(name: "FK_Season_Team_TeamId", table: "Season");
+            migrationBuilder.DropForeignKey(name: "FK_Table_Season_SeasonId", table: "Table");
             migrationBuilder.DropForeignKey(name: "FK_Team_Club_ClubId", table: "Team");
-            migrationBuilder.AddColumn<string>(
-                name: "Fullname",
-                table: "Member",
-                nullable: true);
-            migrationBuilder.AddColumn<string>(
-                name: "Name",
-                table: "Member",
-                nullable: true);
-            migrationBuilder.AddColumn<int>(
-                name: "StartYear",
-                table: "Member",
-                nullable: false,
-                defaultValue: 0);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -127,10 +156,45 @@ namespace MyTeam.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
             migrationBuilder.AddForeignKey(
+                name: "FK_Article_Club_ClubId",
+                table: "Article",
+                column: "ClubId",
+                principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Event_Club_ClubId",
+                table: "Event",
+                column: "ClubId",
+                principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_EventAttendance_Event_EventId",
+                table: "EventAttendance",
+                column: "EventId",
+                principalTable: "Event",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
                 name: "FK_Member_Club_ClubId",
                 table: "Member",
                 column: "ClubId",
                 principalTable: "Club",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Season_Team_TeamId",
+                table: "Season",
+                column: "TeamId",
+                principalTable: "Team",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Table_Season_SeasonId",
+                table: "Table",
+                column: "SeasonId",
+                principalTable: "Season",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
             migrationBuilder.AddForeignKey(

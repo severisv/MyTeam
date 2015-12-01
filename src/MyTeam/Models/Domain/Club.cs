@@ -17,6 +17,7 @@ namespace MyTeam.Models.Domain
         public string Logo { get; set; }
         public string Favicon { get; set; }
         public virtual List<Team> Teams { get; set; }
-        public virtual List<Member> Players { get; set; } 
+        public virtual List<Member> Members { get; set; } 
+        public virtual List<Event> Events { get; set; } 
     }
 }

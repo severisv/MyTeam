@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Microsoft.Data.Entity.Metadata
+@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
@@ -40,7 +41,7 @@
 {
     <div mt-sidebar>
         <ul class="nav nav-list">
-            <li class="nav-header">@ViewBag.PageName</li>
+            <li class="nav-header">@Res.PlayersOfType(Model.Status)</li>
             @foreach (var player in Model.Players)
             {
                 <li><a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name</a></li>

@@ -39,7 +39,7 @@ namespace MyTeam.ViewModels.Player
 
         [RequiredNO]
         [Display(Name = Res.Positions)]
-        public string PositionsString { get; set; }
+        public string PositionsString => Positions != null ? string.Join(",", Positions) : "";
         [RequiredNO]
         [Display(Name = Res.Positions)]
         public string[] Positions { get; set; }

@@ -16,7 +16,7 @@ namespace MyTeam.ViewModels.Events
         public Training Training { get; }
         private readonly IEnumerable<RegisterAttendanceViewModel.PlayerAttendanceViewModel> _players;
 
-        public IEnumerable<PlayerAttendanceViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.PlayerId == p.Id && a.IsAttending));
+        public IEnumerable<PlayerAttendanceViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
 
         public IEnumerable<PlayerAttendanceViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv).Where(p => Attendees.All(a => a.Id != p.Id));
 
@@ -26,7 +26,7 @@ namespace MyTeam.ViewModels.Events
         {
             Training = training;
             _players = players.Select(p => new PlayerAttendanceViewModel(p, Training.Id,
-                    training.Attendees.FirstOrDefault(a => a.PlayerId == p.Id)
+                    training.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
                 ));
           
             PreviousEvents = previousEvents;

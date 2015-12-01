@@ -48,12 +48,16 @@ namespace MyTeam.Models.Domain
         public string ImageMedium { get; set; }
         public string ImageFull { get; set; }
 
+        public bool ProfileIsConfirmed { get; set; }
+
         [NotMapped]
         public string Fullname => $"{FirstName} {MiddleName} {LastName}";
         [NotMapped]
         public string Name => $"{FirstName} {LastName}";
 
         public virtual Club Club { get; set; }
+        public virtual IEnumerable<Article> Articles { get; set; }
+        public virtual ICollection<EventAttendance> EventAttendances { get; set; }
    //     public virtual IEnumerable<Team> Teams { get; set; }
   
     }

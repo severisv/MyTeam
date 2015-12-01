@@ -130,6 +130,7 @@ namespace MyTeam.Services.Domain
             player.StartDate = model.StartDate;
             player.BirthDate = model.BirthDate;
             player.PositionsString = model.PositionsString;
+            _playerRepository.CommitChanges();
         }
 
         public void AddEmailToPlayer(string facebookId, string email)

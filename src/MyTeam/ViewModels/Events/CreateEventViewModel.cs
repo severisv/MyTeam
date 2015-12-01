@@ -8,29 +8,30 @@ using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Settings;
+using MyTeam.Validation.Attributes;
 
 namespace MyTeam.ViewModels.Events
 {
     public class CreateEventViewModel : IValidatableObject
     {
 
-        [Required]
+        [RequiredNO]
         public EventType Type { get; set; }
-        
-        [Required]
+
+        [RequiredNO]
         [Display(Name = Res.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [Required]
+        [RequiredNO]
         [Display(Name = Res.Time)]
         [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan Time { get; set; }
-        [Required]
-        [Display(Name = Res.Location)]
+        [Display(Name = Res.Time)]
         
         public DateTime DateTime => Date + Time;
-        
+        [Display(Name = Res.Location)]
+        [RequiredNO]
         public string Location { get; set; }
 
         [Display(Name = Res.Description)]
@@ -58,6 +59,7 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
         public Guid? EventId { get; set; }
+        public Guid ClubId { get; set; }
 
 
         public CreateEventViewModel()
@@ -136,6 +138,7 @@ namespace MyTeam.ViewModels.Events
             {
                 return new Game
                 {
+                    ClubId = ClubId,
                     Location = Location,
                     Type = Type,
                     DateTime = date + Time,
@@ -148,6 +151,7 @@ namespace MyTeam.ViewModels.Events
             {
                 return new Training
                 {
+                    ClubId = ClubId,
                     Location = Location,
                     Type = Type,
                     DateTime = date + Time,
@@ -159,6 +163,7 @@ namespace MyTeam.ViewModels.Events
 
             return new Event
             {
+                ClubId = ClubId,
                 Location = Location,
                 Type = Type,
                 DateTime = date + Time,
@@ -167,19 +172,21 @@ namespace MyTeam.ViewModels.Events
             };
         }
 
-        public void UpdateEvent(Event ev)
+        public Event CopyTo(Event ev)
         {
             ev.Location = Location;
             ev.DateTime = Date + Time;
             ev.Description = Description;
             ev.Headline = Headline;
-
+            
             var training = ev as Training;
             if(training != null) training.Voluntary = !Mandatory;
 
 
             var game = ev as Game;
             if(game != null) game.Opponent = Opponent;
+
+            return ev;
         }
     }
 }

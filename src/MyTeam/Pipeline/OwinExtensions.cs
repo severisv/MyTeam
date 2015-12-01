@@ -1,5 +1,10 @@
+using System;
+using System.Diagnostics;
+using System.Threading;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.DependencyInjection;
+using MyTeam.Models;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;
 
@@ -12,7 +17,7 @@ namespace MyTeam
         {
             app.Use(async (context, next) =>
             {
-                var cacheHelper = app.ApplicationServices.GetService(typeof(ICacheHelper)) as ICacheHelper;
+                var cacheHelper = app.ApplicationServices.GetService<ICacheHelper>();
 
                 var clubId = GetSubdomain(context);
                 if (clubId == null) clubId = "wamkam";

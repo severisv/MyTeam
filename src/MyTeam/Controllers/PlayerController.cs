@@ -25,10 +25,8 @@ namespace MyTeam.Controllers
         {
             var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId);
 
-            var model = new ShowPlayersViewModel(players, editMode)
-            {
-                SelectedPlayerId = playerId
-            };
+            var model = new ShowPlayersViewModel(players, editMode, type);
+            model.SelectedPlayerId = playerId;
 
             ViewBag.PageName = model.SelectedPlayer != null ?
                 model.SelectedPlayer.Name: 

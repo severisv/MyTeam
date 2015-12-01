@@ -1,8 +1,6 @@
-﻿@using System.Threading.Tasks
-@using MyTeam
-@using MyTeam.Models.Domain
+﻿@using System.Runtime.Remoting.Contexts
+@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Models.Enums
-@using MyTeam.Models.Structs
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Table.TableViewModel
 @{
@@ -10,7 +8,7 @@
 }
 
 
-<div mt-main>
+@*<div mt-main>
 
 
     @if (Model.Table == null)
@@ -37,5 +35,5 @@
 
 <div mt-sidebar>
     It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
-</div>
+</div>*@
 

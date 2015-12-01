@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Metadata;
 using MyTeam.Models.Domain;
 
 namespace MyTeam.Models
@@ -26,9 +27,13 @@ namespace MyTeam.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<Member>()
+                .HasMany(e => e.EventAttendances)
+                .WithOne(c => c.Member)
+                .HasForeignKey(c => c.MemberId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

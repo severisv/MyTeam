@@ -24,10 +24,11 @@ namespace MyTeam.Controllers
                 SeasonService.GetForTeam(teamId ?? Club.TeamIds.First());
 
             var model = new TableViewModel(seasons, seasonId);
-            var table = TableService.GetTable(model.SelectedSeason.Id);
-            model.Table = table;
-
-
+            if (model.SelectedSeason != null)
+            {
+                var table = TableService.GetTable(model.SelectedSeason.Id);
+                model.Table = table;
+            }
             return View("Index", model);
         }
 

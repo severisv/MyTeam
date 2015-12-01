@@ -1,29 +1,29 @@
 using System;
 using System.Linq;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
-using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Domain
 {
     class TableService : ITableService
     {
-        private readonly IRepository<Table> _tableRepository;
+        private readonly ApplicationDbContext _dbContext;
 
-        public TableService(IRepository<Table> tableRepository)
+        public TableService(ApplicationDbContext dbContext)
         {
-            _tableRepository = tableRepository;
+            _dbContext = dbContext;
         }
-
-
+        
         public Table GetTable(Guid seasonId)
         {
-            return _tableRepository.Get().Where(t => t.SeasonId == seasonId).OrderByDescending(t => t.CreatedDate).FirstOrDefault();
+            return _dbContext.Tables.Where(t => t.SeasonId == seasonId).OrderByDescending(t => t.CreatedDate).FirstOrDefault();
         }
 
         public void Create(Guid seasonId, string tableString)
         {
             var table = new Table(seasonId, tableString);
-            _tableRepository.Add(table);
+            _dbContext.Add(table);
+            _dbContext.SaveChanges();
         }
     }
 }

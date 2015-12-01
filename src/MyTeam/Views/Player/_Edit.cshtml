@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam
 @using MyTeam.Resources
 @using MyTeam.Settings
@@ -35,20 +36,14 @@
             <input asp-for="LastName" class="form-control" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
-@*        <div class="form-group">*@
-@*            <label asp-for="Positions"></label>*@
-@*            <select asp-for="Positions"*@
-@*                    asp-items="Model.AllPositions"></select>*@
-@*            <span asp-validation-for="Positions" class="text-danger"></span>*@
-        @*        </div>*@
-
         <div class="form-group">
             <label asp-for="Positions"></label>
             <select name="Positions" class="ep-positions form-control" multiple>
                 @foreach (var position in Model.AllPositions)
                 {
                 
-                    if (Model.Positions.Any(p => p.ToString() == position.Text))
+
+                    if (Model.Positions != null && Model.Positions.Any(p => p.ToString() == position.Text))
                     {
                         <option selected value="@position.Text">@position.Text</option>
                     }

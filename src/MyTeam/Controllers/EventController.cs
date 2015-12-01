@@ -27,8 +27,8 @@ namespace MyTeam.Controllers
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
         {
             var events = previous
-                ? EventService.GetPrevious(type)
-                : EventService.GetUpcoming(type);
+                ? EventService.GetPrevious(type, Club.Id)
+                : EventService.GetUpcoming(type, Club.Id);
 
 
             var model = new UpcomingEventsViewModel(events, type, previous);
@@ -83,13 +83,14 @@ namespace MyTeam.Controllers
                 if (model.EventId.HasValue)
                 {
                     var ev = EventService.Get(model.EventId.Value);
-                    model.UpdateEvent(ev);
+                    ev = model.CopyTo(ev);
                     EventService.Update(ev);
                     result.Add(ev);
                 }
 
                 else
                 {
+                    model.ClubId = HttpContext.GetClub().Id;
                     var events = model.CreateEvents();
                     result.AddRange(events);
                     EventService.Add(events.ToArray());
@@ -136,7 +137,7 @@ namespace MyTeam.Controllers
         {
             var ev = EventService.Get(eventId) as Training;
             var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
-            var previousEvents = EventService.GetPrevious(EventType.Trening, 15);
+            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.Id, 15);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
