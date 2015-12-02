@@ -12,7 +12,7 @@ namespace MyTeam.ViewModels.Events
 {
     public class RegisterAttendanceViewModel
     {
-        public IEnumerable<Event>  PreviousEvents { get; } 
+        public IEnumerable<EventViewModel>  PreviousEvents { get; } 
         public Training Training { get; }
         private readonly IEnumerable<RegisterAttendanceViewModel.PlayerAttendanceViewModel> _players;
 
@@ -22,7 +22,7 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<PlayerAttendanceViewModel> OtherInactivePlayers => _players.Where(p => Attendees.All(a => a.Id != p.Id)).Where(p => OtherActivePlayers.All(a => a.Id != p.Id));
 
-        public RegisterAttendanceViewModel(Training training, IEnumerable<SimplePlayerDto> players, IEnumerable<Event> previousEvents)
+        public RegisterAttendanceViewModel(Training training, IEnumerable<SimplePlayerDto> players, IEnumerable<EventViewModel> previousEvents)
         {
             Training = training;
             _players = players.Select(p => new PlayerAttendanceViewModel(p, Training.Id,

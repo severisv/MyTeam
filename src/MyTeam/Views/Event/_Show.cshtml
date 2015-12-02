@@ -5,7 +5,8 @@
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
-@model MyTeam.Models.Domain.Event
+@using MyTeam.ViewModels.Events
+@model MyTeam.ViewModels.Events.EventViewModel
 
 <hr />
 @if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
@@ -36,7 +37,7 @@ else {
             <p>
                 <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Location)
             </p>
-            @if ((Model as Training)?.Voluntary == true)
+            @if (Model.Voluntary == true)
             {
                 <p>
                     <i class="fa fa-asterisk"></i> @($"{Res.Voluntary} {Res.Attendance.ToLower()}")
@@ -50,7 +51,7 @@ else {
             }
             else if (Model.Type == EventType.Kamp)
             {
-                <h3 class="no-margin">vs @Html.DisplayFor(m => ((Game)m).Opponent)</h3>
+                <h3 class="no-margin">vs @Html.DisplayFor(m => m.Opponent)</h3>
             }
             <span class="description">
                 @Html.DisplayFor(m => m.Description)

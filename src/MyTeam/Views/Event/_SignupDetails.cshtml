@@ -1,9 +1,8 @@
 ﻿@using System.Linq
-@using Microsoft.Data.Entity.Metadata.Internal
-@using MyTeam.Models.Domain
+@using System.Threading.Tasks
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
-@model MyTeam.Models.Domain.Event
+@model MyTeam.ViewModels.Events.EventViewModel
 
 
 @if (!Model.SignupHasClosed())
@@ -28,24 +27,20 @@
     <div class="panel">
         <div id="attendees-@Model.Id" class="panel-collapse collapse">
             <div class="flex">
-                @if (Model.Attending != null)
-                {
+               
                     <ul class="list-unstyled flex-2">
                         @foreach (var player in Model.Attending)
                         {
-                            <li>@Html.Partial("Player/_Link", player)</li>
+                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.Id, player.Name))</li>
                         }
                     </ul>
-                }
-               @if (Model.NotAttending != null)
-               {
                    <ul class="list-unstyled flex-3">
                        @foreach (var player in Model.NotAttending)
                        {
-                           <li>@Html.Partial("Player/_Link", player)</li>
+                           <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.Id, player.Name))</li>
                        }
                    </ul>
-               }
+               
             </div>
 
         </div>

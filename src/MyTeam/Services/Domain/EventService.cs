@@ -6,6 +6,7 @@ using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Repositories;
+using MyTeam.ViewModels.Events;
 
 namespace MyTeam.Services.Domain
 {
@@ -29,14 +30,19 @@ namespace MyTeam.Services.Domain
             return EventRepository.GetSingle(id);
         }
 
-        public IEnumerable<Event> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
+        public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
             return EventRepository.Get()
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime >= DateTime.Now)
                 .Where(t => t.SignupHasOpened())
-                .OrderBy(e => e.DateTime);
+                .OrderBy(e => e.DateTime)
+                .Select(e =>
+                new EventViewModel(
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                     e.Id, type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                ));
         }
 
         public IList<Event> GetAll(EventType type, Guid clubId)
@@ -47,7 +53,7 @@ namespace MyTeam.Services.Domain
                 .ToList();
         }
 
-        public IEnumerable<Event> GetPrevious(EventType type, Guid clubId, int? count = null)
+        public IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId, int? count = null)
         {
             var result = EventRepository.Get()
                 .Where(t => t.ClubId == clubId)
@@ -55,14 +61,19 @@ namespace MyTeam.Services.Domain
                 .Where(t => t.DateTime < DateTime.Now)
                 .OrderByDescending(e => e.DateTime);
 
-            if (count != null) return result.Take((int)count);
-            return result;
+            if (count != null) result = (IOrderedQueryable<Event>)result.Take((int)count);
+
+            return result.Select(e =>
+                new EventViewModel(
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                    e.Id, type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                ));
         }
 
-        public void SetAttendance(Event ev, Guid playerId, bool isAttending)
+        public void SetAttendance(Guid eventId, Guid memberId, bool isAttending)
         {
 
-            var attendance = ev.Attendees?.SingleOrDefault(a => a.MemberId == playerId);
+            var attendance = _dbContext.EventAttendances.SingleOrDefault(e => e.EventId == eventId && e.MemberId == memberId);
             if (attendance != null)
             {
                 attendance.IsAttending = isAttending;
@@ -71,13 +82,13 @@ namespace MyTeam.Services.Domain
             {
                 attendance = new EventAttendance
                 {
-                    EventId = ev.Id,
-                    MemberId = playerId,
+                    EventId = eventId,
+                    MemberId = memberId,
                     IsAttending = isAttending,
                 };
                 _dbContext.EventAttendances.Add(attendance);
-                _dbContext.SaveChanges();
             }
+            _dbContext.SaveChanges();
 
         }
 
@@ -94,8 +105,15 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public void Update(Event ev)
+        public void Update(CreateEventViewModel model)
         {
+            var ev = _dbContext.Events.Single(e => e.Id == model.EventId);
+            ev.Description = model.Description;
+            ev.Headline = model.Headline;
+            ev.Location = model.Location;
+            ev.Opponent = model.Opponent;
+            ev.DateTime = model.DateTime;
+            ev.Voluntary = !model.Mandatory;
             _dbContext.SaveChanges();
         }
 
@@ -119,6 +137,15 @@ namespace MyTeam.Services.Domain
                 _dbContext.EventAttendances.Add(attendance);
             }
             _dbContext.SaveChanges();
+        }
+
+        public EventViewModel GetEventViewModel(Guid eventId)
+        {
+            return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
+                new EventViewModel(
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                )).Single();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace MyTeam.Controllers
         [ValidateModelState]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
-            var ev = EventService.Get(eventId);
+            var ev = EventService.GetEventViewModel(eventId);
 
             if (isAttending == false && ev.SignoffHasClosed())
             {
@@ -51,9 +51,9 @@ namespace MyTeam.Controllers
             }
             else
             {
-                EventService.SetAttendance(ev, CurrentMember.Id, isAttending);
+                EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending);
+                ev.SetAttendance(CurrentMember.Id, isAttending);
             }
-
             return PartialView("_SignupDetails", ev);
         }
 
@@ -78,23 +78,20 @@ namespace MyTeam.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = new List<Event>();
-
+                var result = new List<EventViewModel>();
                 if (model.EventId.HasValue)
                 {
-                    var ev = EventService.Get(model.EventId.Value);
-                    ev = model.CopyTo(ev);
-                    EventService.Update(ev);
-                    result.Add(ev);
+                    EventService.Update(model);
+                    result.Add(EventService.GetEventViewModel(model.EventId.Value));
                 }
 
                 else
                 {
                     model.ClubId = HttpContext.GetClub().Id;
                     var events = model.CreateEvents();
-                    result.AddRange(events);
                     EventService.Add(events.ToArray());
 
+                    result.AddRange(events.Select(e => new EventViewModel(e)));
                 }
 
                 Alert(AlertType.Success, $"{result.Count} {model.Type.ToString().Pluralize(result.Count).ToLower()} {Res.Saved.ToLower()}");
@@ -107,7 +104,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Edit(Guid eventId)
         {
-            var ev = EventService.Get(eventId);
+            var ev = EventService.GetEventViewModel(eventId);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 

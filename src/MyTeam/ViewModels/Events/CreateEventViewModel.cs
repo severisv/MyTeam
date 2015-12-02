@@ -69,13 +69,10 @@ namespace MyTeam.ViewModels.Events
             Mandatory = true;
         }
 
-        public CreateEventViewModel(Event ev)
+        public CreateEventViewModel(EventViewModel ev)
         {
-            var game = ev as Game;
-            var opponent = game?.Opponent;
-
-            var training = ev as Training;
-            var voluntary = training?.Voluntary;
+            var opponent = ev.Opponent;
+            var voluntary = ev.Voluntary;
 
             Type = ev.Type;
             Date = ev.DateTime.Date;
@@ -85,7 +82,7 @@ namespace MyTeam.ViewModels.Events
             Opponent = opponent;
             Location = ev.Location;
             EventId = ev.Id;
-            Mandatory = !voluntary ?? false;
+            Mandatory = !voluntary;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -105,11 +102,22 @@ namespace MyTeam.ViewModels.Events
                         ToDate = DateTime.Now.Date.AddMonths(Config.AllowedMonthsAheadInTimeForTrainingCreation);
                         result.Add(new ValidationResult(Res.TrainingCreationTooFarAheadInTime, new[] { nameof(ToDate) }));
                     }
-
                 }
-                    
             }
-
+            else if (Type == EventType.Kamp)
+            {
+                if (string.IsNullOrWhiteSpace(Opponent))
+                {
+                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Opponent) }));
+                }
+            }
+            else if (Type == EventType.Diverse)
+            {
+                if (string.IsNullOrWhiteSpace(Headline))
+                {
+                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Opponent) }));
+                }
+            }
             return result;
         }
 
@@ -171,22 +179,6 @@ namespace MyTeam.ViewModels.Events
                 Headline = Headline,
             };
         }
-
-        public Event CopyTo(Event ev)
-        {
-            ev.Location = Location;
-            ev.DateTime = Date + Time;
-            ev.Description = Description;
-            ev.Headline = Headline;
-            
-            var training = ev as Training;
-            if(training != null) training.Voluntary = !Mandatory;
-
-
-            var game = ev as Game;
-            if(game != null) game.Opponent = Opponent;
-
-            return ev;
-        }
+        
     }
 }
