@@ -132,9 +132,9 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult RegisterAttendance(Guid eventId)
         {
-            var ev = EventService.Get(eventId) as Training;
+            var ev = EventService.GetEventViewModel(eventId);
             var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
-            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.Id, 15);
+            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.Id, 15).ToList();
 
             if (ev == null) return new NotFoundResult(HttpContext);
 

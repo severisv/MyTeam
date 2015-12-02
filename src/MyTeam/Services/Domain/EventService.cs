@@ -40,7 +40,7 @@ namespace MyTeam.Services.Domain
                 .OrderBy(e => e.DateTime)
                 .Select(e =>
                 new EventViewModel(
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)),
                      e.Id, type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 ));
         }
@@ -61,13 +61,17 @@ namespace MyTeam.Services.Domain
                 .Where(t => t.DateTime < DateTime.Now)
                 .OrderByDescending(e => e.DateTime);
 
-            if (count != null) result = (IOrderedQueryable<Event>)result.Take((int)count);
-
-            return result.Select(e =>
+            var resultViewModels = result.Select(e =>
                 new EventViewModel(
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)),
                     e.Id, type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 ));
+
+            if (count != null)
+            {
+                return resultViewModels.Take(count.Value);
+            }
+            return resultViewModels;
         }
 
         public void SetAttendance(Guid eventId, Guid memberId, bool isAttending)
@@ -143,7 +147,7 @@ namespace MyTeam.Services.Domain
         {
             return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending)),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)),
                     e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 )).Single();
         }

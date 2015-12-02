@@ -23,7 +23,7 @@ namespace MyTeam.Models.Domain
 
         [Display(Name = Res.Positions)]
         [NotMapped]
-        public string[] Positions => PositionsString.Split(',');
+        public string[] Positions => PositionsString?.Split(',');
         public virtual string PositionsString { get; set; }
 
         public Player()

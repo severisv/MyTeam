@@ -102,6 +102,7 @@ namespace MyTeam.Services.Domain
         {
             var player = _playerRepository.GetSingle(id);
             player.Status = status;
+            _playerRepository.CommitChanges();
         }
 
         public void TogglePlayerRole(Guid id, string role)

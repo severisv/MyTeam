@@ -1,35 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyTeam.Models.Domain;
+using MyTeam.Models;
 using MyTeam.Models.Enums;
-using MyTeam.Services.Repositories;
+using MyTeam.ViewModels.Attendance;
 
 namespace MyTeam.Services.Domain
 {
     class StatsService : IStatsService
     {
-        private readonly IRepository<Event> _eventRepository;
+        private readonly ApplicationDbContext _dbContext;
 
-        public StatsService(IRepository<Event> eventRepository)
+        public StatsService(ApplicationDbContext dbContext)
         {
-            _eventRepository = eventRepository;
+            _dbContext = dbContext;
         }
 
-        public IEnumerable<EventAttendance> GetAttendance(Guid clubId, int year)
+        public IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year)
         {
-            return _eventRepository.Get()
+            var eventIds = _dbContext.Events
                 .Where(e => e.ClubId == clubId &&
                             e.DateTime.Year == year &&
-                            (e.Type == EventType.Trening || e.Type == EventType.Kamp)).SelectMany(e => e.Attendees);
+                            (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id);
+
+            var attendances = _dbContext.EventAttendances.Where(a => eventIds.Contains(a.EventId));
+
+            return attendances.Select(e => new EventAttendanceViewModel
+            {
+                DidAttend = e.DidAttend,
+                EventType = e.Event.Type,
+                IsAttending = e.IsAttending,
+                MemberId = e.MemberId,
+                Member = new AttendanceMemberViewModel
+                {
+                    ImageSmall = e.Member.ImageSmall,
+                    Id = e.MemberId,
+                    Name = e.Member.Name
+                }
+            }).ToList();
 
         }
 
         public IEnumerable<int> GetAttendanceYears(Guid clubId)
         {
-            return _eventRepository.Get()
+            return _dbContext.Events
                 .Where(e => e.ClubId == clubId && (e.Type == EventType.Trening || e.Type == EventType.Kamp))
-                .Select(e => e.DateTime.Year).Distinct();
+                .Select(e => e.DateTime.Year).ToList().Distinct();
         }
     }
 }

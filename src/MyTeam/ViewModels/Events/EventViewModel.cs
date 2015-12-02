@@ -23,10 +23,10 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
-        public EventViewModel(IEnumerable<AttendeeViewModel> attendees, Guid id, EventType type, DateTime dateTime, string location,
+        public EventViewModel(IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary)
         {
-            Id = id;
+            Id = eventId;
             Attendees = attendees;
             DateTime = dateTime;
             Location = location;
@@ -41,7 +41,9 @@ namespace MyTeam.ViewModels.Events
         {
             
         }
-       
+
+     
+
 
         public IEnumerable<AttendeeViewModel> Attending => Attendees?.Where(a => a.IsAttending);
         public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => !a.IsAttending);
@@ -71,7 +73,7 @@ namespace MyTeam.ViewModels.Events
 
         public void SetAttendance(Guid memberId, bool isAttending)
         {
-            foreach (var attendee in Attendees.Where(a => a.Id == memberId))
+            foreach (var attendee in Attendees.Where(a => a.MemberId == memberId))
             {
                 attendee.IsAttending = isAttending;
             }

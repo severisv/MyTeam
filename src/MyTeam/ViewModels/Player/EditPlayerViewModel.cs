@@ -76,6 +76,14 @@ namespace MyTeam.ViewModels.Player
             {
                 result.Add(new ValidationResult("Minst én posisjon må oppgis"));
             }
+            if (StartDate < new DateTime(2007,01,01))
+            {
+                result.Add(new ValidationResult("Første mulige startdato er i 2007",  new[] { nameof(StartDate) }));
+            }
+            if (BirthDate < new DateTime(1945,01,01))
+            {
+                result.Add(new ValidationResult("Fødselsdatoen må være en troverdig dato", new[] { nameof(BirthDate) }));
+            }
             return result;
         }
     }

@@ -20,8 +20,8 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IRepository<EventAttendance>, EfRepository<EventAttendance>>();
             services.AddTransient<IRepository<Season>, EfRepository<Season>>();
             services.AddTransient<IRepository<Table>, EfRepository<Table>>();
-            services.AddTransient<IPlayerService, PlayerService>();
 
+            services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISeasonService, SeasonService>();
