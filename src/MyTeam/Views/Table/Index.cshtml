@@ -17,7 +17,7 @@
         <ul class="nav nav-pills mt-justified">
             @foreach (var team in Model.Teams)
             {
-                <li class="@(Model.CurrentSeason.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
+                <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
             }
         </ul>
     </div>
