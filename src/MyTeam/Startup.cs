@@ -86,8 +86,9 @@ namespace MyTeam
                      //       dbContext.Database.EnsureDeleted();
                             dbContext.Database.EnsureCreated();
                             dbContext.Database.Migrate();
-                        }
+                            BootstrapData.Initialize(serviceScope.ServiceProvider);
                     }
+                }
                     catch
                     {
                     }
@@ -105,11 +106,7 @@ namespace MyTeam
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-
-
-
-                BootstrapData.Initialize(app.ApplicationServices);
-
+            
                 app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
