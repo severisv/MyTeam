@@ -23,7 +23,6 @@ namespace MyTeam.Models.Domain
         public string Headline { get; set; }
         public string Description { get; set; }
 
-        [Required]
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
 

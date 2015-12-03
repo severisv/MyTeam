@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using MyTeam.Models.Domain;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Services.Domain
 {
     public interface ISeasonService
     {
-        Season Get(Guid id);
-        IEnumerable<Season> GetForTeam(Guid teamId);
-        IEnumerable<Season> GetTeamSeasonsFromSeasonId(Guid seasonId);
+        IEnumerable<SeasonViewModel> GetForTeam(Guid teamId);
+        IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId);
     }
 }

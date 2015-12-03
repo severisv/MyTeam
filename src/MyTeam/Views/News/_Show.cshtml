@@ -31,7 +31,7 @@
     <hr class="sm"/>
     @if (isShortVersion)
     {
-        <p>@Model.Content.Truncate()</p>
+        <p>@Html.Raw(Model.Content.Truncate())</p>
         <hr/>
         <a asp-action="show" asp-route-articleId="@Model.Id">Les hele</a>
     }

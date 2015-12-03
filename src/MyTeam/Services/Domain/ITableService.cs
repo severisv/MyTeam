@@ -7,5 +7,6 @@ namespace MyTeam.Services.Domain
     {
         Table GetTable(Guid seasonId);
         void Create(Guid seasonId, string tableString);
+        void CreateSeason(Guid teamId, int year, string name);
     }
 }

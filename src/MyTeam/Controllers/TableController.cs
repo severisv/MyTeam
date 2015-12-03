@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
@@ -16,6 +17,8 @@ namespace MyTeam.Controllers
         public ISeasonService SeasonService { get; set; }
         [FromServices]
         public ITableService TableService { get; set; }
+        [FromServices]
+        public ApplicationDbContext DbContext { get; set; }
 
         public IActionResult Index(Guid? teamId = null, Guid? seasonId = null)
         {
@@ -23,7 +26,13 @@ namespace MyTeam.Controllers
                 ? SeasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
                 SeasonService.GetForTeam(teamId ?? Club.TeamIds.First());
 
-            var model = new TableViewModel(seasons, seasonId);
+            var teams = DbContext.Teams.Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
+            {
+                Id = t.Id,
+                Name = t.Name
+            }).ToList();
+
+            var model = new TableViewModel(seasons, teams, seasonId);
             if (model.SelectedSeason != null)
             {
                 var table = TableService.GetTable(model.SelectedSeason.Id);
@@ -37,14 +46,13 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(Guid seasonId)
         {
-            var season = SeasonService.Get(seasonId);
-
-            var model = new CreateTableViewModel
+            var model = DbContext.Seasons.Where(s => s.Id == seasonId).Select(s =>
+            new CreateTableViewModel
             {
                 SeasonId = seasonId,
-                Season = season.Name,
-                Team = season.Team.Name
-            };
+                Season = s.Name,
+                Team = s.Team.Name
+            }).Single();
             return View(model);
         }
 
@@ -69,9 +77,39 @@ namespace MyTeam.Controllers
                 TableService.Create(model.SeasonId, model.TableString);
 
                 Alert(AlertType.Success, $"{Res.Table} {Res.Saved.ToLower()}");
-                return Index(seasonId: model.SeasonId);
+                return RedirectToAction("index", "Table" , new { seasonId= model.SeasonId});
             }
             return new ErrorResult(HttpContext);
+        }
+
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult CreateSeason()
+        {
+            var model = new CreateSeasonViewModel
+            {
+                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                })
+            };
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult CreateSeason(CreateSeasonViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                TableService.CreateSeason(model.TeamId, model.Year, model.Name);
+
+                Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
+                return Index();
+            }
+            return View(model);
         }
 
 

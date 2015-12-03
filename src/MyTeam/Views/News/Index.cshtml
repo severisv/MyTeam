@@ -30,26 +30,32 @@
 
 @Component.Invoke("ArticleNav", Context.GetClub().Id)
 
-<div mt-main>
-    <nav class="news-pager">
-        <ul class="pager">
-            @if (Model.HasPrevious)
-            {
-                <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take=" @Model.Take "><span aria-hidden="true">&larr;</span> Nyere</a></li>
-            }
-            else
-            {
-                <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Nyere</a></li>
-            }
-            @if (Model.HasNext)
-            {
-                <li class="next @(Model.HasNext ? "" : "disabled")"><a asp-route-skip="@Model.SkipNext" asp-route-take="@Model.Take">Eldre <span aria-hidden="true">&rarr;</span></a></li>
-            }
-            else
-            {
-                <li class="next disabled"><a>Eldre <span aria-hidden="true">&rarr;</span></a></li>
-            }
 
-        </ul>
-    </nav>
-</div>
+@if (Model.HasPrevious || Model.HasNext)
+{
+
+
+    <div mt-main>
+        <nav class="news-pager">
+            <ul class="pager">
+                @if (Model.HasPrevious)
+                {
+                    <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take=" @Model.Take "><span aria-hidden="true">&larr;</span> Nyere</a></li>
+                }
+                else
+                {
+                    <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Nyere</a></li>
+                }
+                @if (Model.HasNext)
+                {
+                    <li class="next @(Model.HasNext ? "" : "disabled")"><a asp-route-skip="@Model.SkipNext" asp-route-take="@Model.Take">Eldre <span aria-hidden="true">&rarr;</span></a></li>
+                }
+                else
+                {
+                    <li class="next disabled"><a>Eldre <span aria-hidden="true">&rarr;</span></a></li>
+                }
+
+            </ul>
+        </nav>
+    </div>
+}

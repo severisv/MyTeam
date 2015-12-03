@@ -18,6 +18,11 @@ namespace MyTeam.Models.Domain
         public string TableString { get; set; }
         public virtual Season Season { get; set; }
 
+        public Table()
+        {
+            
+        }
+
         public Table(Guid seasonId, string table)
         {
             CreatedDate = DateTime.Now;

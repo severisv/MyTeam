@@ -14,10 +14,11 @@ namespace MyTeam.Models.Domain
         [Required]
         public Guid ClubId { get; set; }
         public virtual Club Club { get; set; }
-//        public virtual IEnumerable<Member> Members { get; set; }
+        //        public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<Season> Seasons { get; set; }
 
         [NotMapped]
-        public virtual IList<Event> Events { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
         [NotMapped]
         public virtual IEnumerable<Event> Games => Events?.Where(e => e.IsGame);
         [NotMapped]

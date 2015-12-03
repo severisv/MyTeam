@@ -85,7 +85,7 @@ namespace MyTeam
                         {
                             var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                            dbContext.Database.EnsureDeleted();
+                       //     dbContext.Database.EnsureDeleted();
                             dbContext.Database.EnsureCreated();
                             dbContext.Database.Migrate();
                         }

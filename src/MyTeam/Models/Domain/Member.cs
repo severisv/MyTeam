@@ -56,7 +56,7 @@ namespace MyTeam.Models.Domain
         public string Name => $"{FirstName} {LastName}";
 
         public virtual Club Club { get; set; }
-        public virtual IEnumerable<Article> Articles { get; set; }
+        public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
    //     public virtual IEnumerable<Team> Teams { get; set; }
   

@@ -13,11 +13,10 @@ namespace MyTeam.Models.Domain
         public DateTime StartDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
-        [NotMapped]
-        public string Name => StartDate.Year == EndDate.Year ? EndDate.Year.ToString() : $"{StartDate.Year} / {EndDate.Year}";
+        public string Name { get; set; }
 
         public virtual Team Team { get; set; }
-        public virtual IEnumerable<Table> Tables { get; set; }
+        public virtual ICollection<Table> Tables { get; set; }
 
 
       

@@ -31,13 +31,13 @@
                     <ul class="list-unstyled flex-2">
                         @foreach (var player in Model.Attending)
                         {
-                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.Id, player.Name))</li>
+                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))</li>
                         }
                     </ul>
                    <ul class="list-unstyled flex-3">
                        @foreach (var player in Model.NotAttending)
                        {
-                           <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.Id, player.Name))</li>
+                           <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))</li>
                        }
                    </ul>
                

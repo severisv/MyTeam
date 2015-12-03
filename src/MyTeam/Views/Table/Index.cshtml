@@ -1,5 +1,6 @@
 ﻿@using System.Runtime.Remoting.Contexts
 @using Microsoft.Data.Entity.Metadata.Internal
+@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Table.TableViewModel
@@ -8,32 +9,71 @@
 }
 
 
-@*<div mt-main>
+<div mt-main>
+    @if (Model.Teams?.Count() > 1)
+    {
+   
+    <div>
+        <ul class="nav nav-pills mt-justified">
+            @foreach (var team in Model.Teams)
+            {
+                <li class="@(Model.CurrentSeason.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
+            }
+        </ul>
+    </div>
+    
+    <hr/>
+    }
 
 
-    @if (Model.Table == null)
+    @if (Model.CurrentSeason == null)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
-      if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
-      {
-        <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.CurrentSeason.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
+        if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+        {
+            <a class="btn btn-lg btn-primary" asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a>
+        }
+    }
+    else if (Model.Table == null)
+    {
+        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
+        if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+        {
+            <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.CurrentSeason?.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
         }
 
     }
     else
     {
+        <h2><i class="fa fa-trophy"></i> @Model.CurrentSeason.DisplayName</h2>
+        
         if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
         {
-                <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.CurrentSeason.Id"><i class='fa fa-edit'></i></a>
+            <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.CurrentSeason.Id"><i class='fa fa-edit'></i></a>
         }
         @Html.Partial("_Show", Model.Table)
         <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
-
     }
 
 </div>
 
 <div mt-sidebar>
-    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
-</div>*@
+    <ul class="nav nav-list">
+        <li class="nav-header">@Res.Season.Pluralize()</li>
+        @foreach (var season in Model.Seasons)
+        {
+            <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
+        }
+    </ul>
 
+</div>
+
+ @if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+ {
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.CoachMenu</li>
+            <li><a asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a></li>
+        </ul>
+    </div>
+ }

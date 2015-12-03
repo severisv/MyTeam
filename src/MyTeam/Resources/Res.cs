@@ -93,7 +93,7 @@ namespace MyTeam.Resources
         public const string Previous = "Tidligere";
         public const string Pluralise = "er";
         public const string Players = "Spillere";
-        public const string Position = "Plassering";
+        public const string Position = "Pos";
         public const string Save = "Lagre";
         public const string SquadList = "Lagliste";
         public const string SubmitTable = "Lim inn tabell på formatet \n" +
