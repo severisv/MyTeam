@@ -14,8 +14,7 @@ namespace MyTeam.Services.Repositories
         {
 
             var context = serviceProvider.GetService(typeof(ApplicationDbContext)) as ApplicationDbContext;
-            context.Database.Migrate();
-
+     
             var club = new Club()
             {
                 Id = new Guid("6790dd24-cf7f-442d-bec7-1a8e7f792a33"),

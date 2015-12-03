@@ -8,8 +8,8 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20151201214440_initialv")]
-    partial class initialv
+    [Migration("20151203195733_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,7 +212,11 @@ namespace MyTeam.Migrations
                     b.Property<string>("Location")
                         .IsRequired();
 
+                    b.Property<string>("Opponent");
+
                     b.Property<int>("Type");
+
+                    b.Property<bool>("Voluntary");
 
                     b.HasKey("Id");
 
@@ -232,7 +236,7 @@ namespace MyTeam.Migrations
 
                     b.Property<bool>("IsAttending");
 
-                    b.Property<Guid?>("PlayerId1");
+                    b.Property<Guid>("MemberId");
 
                     b.HasKey("Id");
                 });
@@ -291,6 +295,8 @@ namespace MyTeam.Migrations
 
                     b.Property<DateTime>("EndDate");
 
+                    b.Property<string>("Name");
+
                     b.Property<DateTime>("StartDate");
 
                     b.Property<Guid>("TeamId");
@@ -332,9 +338,6 @@ namespace MyTeam.Migrations
                 {
                     b.HasBaseType("MyTeam.Models.Domain.Event");
 
-                    b.Property<string>("Opponent")
-                        .IsRequired();
-
                     b.Property<Guid?>("ReportId");
 
                     b.HasAnnotation("Relational:DiscriminatorValue", "Game");
@@ -344,7 +347,6 @@ namespace MyTeam.Migrations
                 {
                     b.HasBaseType("MyTeam.Models.Domain.Event");
 
-                    b.Property<bool>("Voluntary");
 
                     b.HasAnnotation("Relational:DiscriminatorValue", "Training");
                 });
@@ -430,7 +432,7 @@ namespace MyTeam.Migrations
 
                     b.HasOne("MyTeam.Models.Domain.Member")
                         .WithMany()
-                        .HasForeignKey("PlayerId1");
+                        .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>

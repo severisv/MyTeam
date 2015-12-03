@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace MyTeam.Migrations
 {
-    public partial class initialv : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -154,10 +154,10 @@ namespace MyTeam.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     Headline = table.Column<string>(nullable: true),
                     Location = table.Column<string>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
                     Opponent = table.Column<string>(nullable: true),
-                    ReportId = table.Column<Guid>(nullable: true),
-                    Voluntary = table.Column<bool>(nullable: true)
+                    Type = table.Column<int>(nullable: false),
+                    Voluntary = table.Column<bool>(nullable: false),
+                    ReportId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -167,7 +167,7 @@ namespace MyTeam.Migrations
                         column: x => x.ClubId,
                         principalTable: "Club",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "Member",
@@ -205,7 +205,7 @@ namespace MyTeam.Migrations
                         column: x => x.ClubId,
                         principalTable: "Club",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "Team",
@@ -269,7 +269,7 @@ namespace MyTeam.Migrations
                     DidAttend = table.Column<bool>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false),
                     IsAttending = table.Column<bool>(nullable: false),
-                    PlayerId1 = table.Column<Guid>(nullable: true)
+                    MemberId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,8 +281,8 @@ namespace MyTeam.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventAttendance_Member_PlayerId1",
-                        column: x => x.PlayerId1,
+                        name: "FK_EventAttendance_Member_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Member",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -293,6 +293,7 @@ namespace MyTeam.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
                     TeamId = table.Column<Guid>(nullable: false)
                 },
