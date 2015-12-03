@@ -22,13 +22,13 @@ namespace MyTeam.ViewModels.News
             
         }
 
-        public EditArticleViewModel(Article article)
+        public EditArticleViewModel(ArticleViewModel article)
         {
             ArticleId = article.Id;
             Headline = article.Headline;
             Content = article.Content;
             ImageUrl = article.ImageUrl;
-            GameId = article.Id;
+            GameId = article.GameId;
         }
     }
 }

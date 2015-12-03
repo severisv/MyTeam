@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Data.Entity.Storage;
+using Microsoft.Data.Entity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -14,8 +14,7 @@ namespace MyTeam.Services.Repositories
         {
 
             var context = serviceProvider.GetService(typeof(ApplicationDbContext)) as ApplicationDbContext;
-
-
+            context.Database.Migrate();
 
             var club = new Club()
             {

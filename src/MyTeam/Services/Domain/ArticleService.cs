@@ -22,7 +22,7 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public PagedList<Article> Get(Guid clubId, int skip, int take)
+        public PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take)
         {
             var query = _articleRepository.Get();
             query = query
@@ -31,13 +31,36 @@ namespace MyTeam.Services.Domain
 
             var totalCount = query.Count();
 
+            var articles = query.Select(a =>
+                new ArticleViewModel
+                {
+                    Id = a.Id,
+                    Author = new MemberViewModel {Fullname = a.Author.Fullname},
+                    AuthorId = a.AuthorId,
+                    Headline = a.Headline,
+                    Content = a.Content,
+                    GameId = a.GameId,
+                    ImageUrl = a.ImageUrl,
+                    Published = a.Published
+                });
 
-            return new PagedList<Article>(query.Skip(skip).Take(take), skip, take, totalCount);
+            return new PagedList<ArticleViewModel>(articles.Skip(skip).Take(take), skip, take, totalCount);
         }
 
-        public Article Get(Guid articleId)
+        public ArticleViewModel Get(Guid articleId)
         {
-            return _articleRepository.GetSingle(articleId);
+            return _articleRepository.Get().Where(a => a.Id == articleId).Select(a =>
+                new ArticleViewModel
+                {
+                    Id = articleId,
+                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
+                    AuthorId = a.AuthorId,
+                    Headline = a.Headline,
+                    Content = a.Content,
+                    GameId = a.GameId,
+                    ImageUrl = a.ImageUrl,
+                    Published = a.Published
+                }).Single(); 
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
@@ -63,7 +86,7 @@ namespace MyTeam.Services.Domain
 
 
 
-        public Article CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
+        public ArticleViewModel CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
         {
             var articleId = model.IsNew ? Guid.NewGuid() : model.ArticleId;
 
@@ -93,7 +116,9 @@ namespace MyTeam.Services.Domain
                 article.Headline = model.Headline;
                 _articleRepository.CommitChanges();
             }
-            return article;
+
+
+            return Get(articleId); ;
         }
 
         public void Delete(Guid articleId)
