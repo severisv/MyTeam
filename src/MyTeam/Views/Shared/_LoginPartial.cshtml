@@ -6,9 +6,9 @@
 {
     <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
+            @*<li>
                 <a asp-controller="Manage" asp-action="Index" title="@Res.User"><i class="fa fa-user"></i></a>
-            </li>
+            </li>*@
             <li>
                 <a href="javascript:document.getElementById('logoutForm').submit()" title="@Res.Logout"><i class="fa fa-sign-out"></i></a>
             </li>
