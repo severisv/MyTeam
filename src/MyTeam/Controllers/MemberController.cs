@@ -10,12 +10,13 @@ using MyTeam.ViewModels.Member;
 namespace MyTeam.Controllers
 {
     [RequireMember]
+    [Route("intern")]
     public class MemberController : BaseController
     {
         [FromServices]
         public IRepository<Player> PlayerRepository { get; set; }
 
-
+        [Route("lagliste")]
         public IActionResult Index(PlayerStatus status = PlayerStatus.Aktiv)
         {
 

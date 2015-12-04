@@ -8,12 +8,14 @@ using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
 {
+    [Route("intern")]
     public class StatsController : BaseController
     {
         [FromServices]
         public IStatsService StatsService { get; set; }
   
         [RequireMember]
+        [Route("oppmote")]
         public IActionResult Attendance(int? year)
         {
             int selectedYear = year ?? DateTime.Now.Year;

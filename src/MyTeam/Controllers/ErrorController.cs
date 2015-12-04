@@ -6,12 +6,12 @@ namespace MyTeam.Controllers
 {
     public class ErrorController : BaseController
     {
+
         public IActionResult Index()
         {
             return Error();
         }
 
-        
         public IActionResult Error(Exception e = null)
         {
             if(Request.IsAjaxRequest())

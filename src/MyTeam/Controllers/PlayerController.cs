@@ -13,6 +13,7 @@ using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Controllers
 {
+    [Route("spillere")]
     public class PlayerController : BaseController
     {
         [FromServices]
@@ -20,7 +21,7 @@ namespace MyTeam.Controllers
         [FromServices]
         public IPlayerService PlayerService { get; set; }
 
-
+        [Route("oversikt")]
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
             var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId);
@@ -35,8 +36,8 @@ namespace MyTeam.Controllers
 
             return View("List",model);
         }
-    
 
+        [Route("vis")]
         public IActionResult Show(Guid playerId)
         {
             if (Request.IsAjaxRequest())
@@ -48,6 +49,7 @@ namespace MyTeam.Controllers
            
         }
 
+        [Route("endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId)
         {
@@ -63,6 +65,7 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
+        [Route("endre")]
         public IActionResult Edit(EditPlayerViewModel model)
         {
             if (ModelState.IsValid)

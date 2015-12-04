@@ -19,6 +19,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 namespace MyTeam.Controllers
 {
     [Authorize]
+    [Route("konto")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -51,6 +52,7 @@ namespace MyTeam.Controllers
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
+        [Route("innlogging")]
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -62,6 +64,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("innlogging")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -100,6 +103,7 @@ namespace MyTeam.Controllers
         // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
+        [Route("ny")]
         public IActionResult Register()
         {
             return View();
@@ -110,6 +114,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("ny")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -139,6 +144,7 @@ namespace MyTeam.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("utlogging")]
         public async Task<IActionResult> LogOff()
         {
            await _signInManager.SignOutAsync();
@@ -152,6 +158,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("innlogging/ekstern")]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
@@ -164,6 +171,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ExternalLoginCallback
         [HttpGet]
         [AllowAnonymous]
+        [Route("innlogging/ekstern/callback")]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -204,6 +212,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("innlogging/ekstern/bekreftelse")]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
             if (User.IsSignedIn())
@@ -243,6 +252,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
+        [Route("epost/bekreft")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -262,6 +272,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ForgotPassword
         [HttpGet]
         [AllowAnonymous]
+        [Route("passord/glemt")]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -272,6 +283,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("passord/glemt")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -300,6 +312,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
+        [Route("passord/bekreft")]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -309,6 +322,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ResetPassword
         [HttpGet]
         [AllowAnonymous]
+        [Route("passord/nullstill")]
         public IActionResult ResetPassword(string code = null)
         {
             return code == null ? View("Error") : View();
@@ -319,6 +333,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("passord/nullstill")]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -344,6 +359,7 @@ namespace MyTeam.Controllers
         // GET: /Account/ResetPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
+        [Route("passord/nullstill/bekreft")]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -353,6 +369,7 @@ namespace MyTeam.Controllers
         // GET: /Account/SendCode
         [HttpGet]
         [AllowAnonymous]
+        [Route("kode/send")]
         public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
         {
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -370,6 +387,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("kode/send")]
         public async Task<IActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -407,6 +425,7 @@ namespace MyTeam.Controllers
         // GET: /Account/VerifyCode
         [HttpGet]
         [AllowAnonymous]
+        [Route("kode/verifiser")]
         public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
         {
             // Require that the user has already logged in via username/password or external login
@@ -423,6 +442,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("kode/verifiser")]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)

@@ -15,6 +15,7 @@ namespace MyTeam.Controllers
         public virtual UserMember CurrentMember => HttpContext.Member();
 
   
+        [NonAction]
         public void Alert(AlertType type, string message)
         {
             ViewData.Add($"Alert{type}", message);

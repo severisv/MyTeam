@@ -4,12 +4,12 @@ using Microsoft.Extensions.Configuration;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
-using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Admin;
 
 namespace MyTeam.Controllers
 {
+    [Route("admin")]
     [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
@@ -25,6 +25,7 @@ namespace MyTeam.Controllers
             return View();
         }
 
+        [Route("spillerinvitasjon")]
         public IActionResult AddPlayers()
         {
 
@@ -36,6 +37,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [Route("spillerinvitasjon")]
         public JsonResult AddPlayer(AddPlayerViewModel model)
         {
             if (ModelState.IsValid)

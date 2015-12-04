@@ -16,6 +16,7 @@ using MyTeam.ViewModels.Events;
 namespace MyTeam.Controllers
 {
     [RequireMember]
+    [Route("intern/arrangementer")]
     public class EventController : BaseController
     {
         [FromServices]
@@ -37,6 +38,7 @@ namespace MyTeam.Controllers
         }
 
         [ValidateModelState]
+        [Route("pamelding")]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
             var ev = EventService.GetEventViewModel(eventId);
@@ -58,6 +60,7 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("ny")]
         public IActionResult Create(EventType type = EventType.Trening)
         {
             var model = new CreateEventViewModel()
@@ -72,6 +75,7 @@ namespace MyTeam.Controllers
 
         [RequireMember(Roles.Coach, Roles.Admin)]
         [HttpPost]
+        [Route("ny")]
         public IActionResult Create(CreateEventViewModel model)
         {
             ViewBag.Title = Res.CreateEvent;
@@ -102,6 +106,7 @@ namespace MyTeam.Controllers
 
 
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("endre")]
         public IActionResult Edit(Guid eventId)
         {
             var ev = EventService.GetEventViewModel(eventId);
@@ -116,6 +121,7 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("slett")]
         public IActionResult Delete(Guid eventId)
         {
             var ev = EventService.Get(eventId);
@@ -130,6 +136,7 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("oppmote/bekreft")]
         public IActionResult RegisterAttendance(Guid eventId)
         {
             var ev = EventService.GetEventViewModel(eventId);
@@ -147,6 +154,7 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("oppmote/bekreft")]
         public JsonResult ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
         {
             if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));

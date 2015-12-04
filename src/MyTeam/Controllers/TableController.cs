@@ -11,6 +11,7 @@ using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
 {
+    [Route("tabell")]
     public class TableController : BaseController
     {
         [FromServices]
@@ -42,7 +43,7 @@ namespace MyTeam.Controllers
         }
 
 
-
+        [Route("oppdater")]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(Guid seasonId)
         {
@@ -57,6 +58,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [Route("oppdater")]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(CreateTableViewModel model)
         {
@@ -69,6 +71,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [Route("lagre")]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Save(CreateTableViewModel model)
         {
@@ -84,6 +87,7 @@ namespace MyTeam.Controllers
 
 
         [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("sesong/opprett")]
         public IActionResult CreateSeason()
         {
             var model = new CreateSeasonViewModel
@@ -99,6 +103,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
+        [Route("sesong/opprett")]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult CreateSeason(CreateSeasonViewModel model)
         {
