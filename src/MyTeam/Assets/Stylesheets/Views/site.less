@@ -5,35 +5,37 @@ html {
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-    padding-top: 50px;
     padding-bottom: 20px;
     text-shadow: 5px;
     font-family: "jaf-bernino-sans-comp", sans-serif;
-    font-weight: 400;    
-   .backgroundImage(0px, 400px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_650,w_400/v1449177091/breddefotball/site_background.jpg');
-   .backgroundImage(401px, 600px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_960,w_600/v1449177091/breddefotball/site_background.jpg');
-   .backgroundImage(601px, 1023px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_1030,w_1030/v1449177091/breddefotball/site_background.jpg');
-   .backgroundImage(1024px, 1199px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_960,w_1200/v1449177091/breddefotball/site_background.jpg');
-   .backgroundImage(1200px, 1728px, 'http://res.cloudinary.com/drdo17bnj/image/upload/breddefotball/site_background.jpg');
-   .backgroundImage(1729px, 2000px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_scale,w_2000/v1449177091/breddefotball/site_background.jpg');
-   .backgroundImage(2000px, 30400px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_scale,w_2400/v1449177091/breddefotball/site_background.jpg');
+    font-weight: 400;
+    .backgroundImage(0px, 400px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_650,w_400/v1449177091/breddefotball/site_background.jpg');
+    .backgroundImage(401px, 600px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_960,w_600/v1449177091/breddefotball/site_background.jpg');
+    .backgroundImage(601px, 1023px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_1030,w_1030/v1449177091/breddefotball/site_background.jpg');
+    .backgroundImage(1024px, 1199px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_960,w_1200/v1449177091/breddefotball/site_background.jpg');
+    .backgroundImage(1200px, 1728px, 'http://res.cloudinary.com/drdo17bnj/image/upload/breddefotball/site_background.jpg');
+    .backgroundImage(1729px, 2000px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_scale,w_2000/v1449177091/breddefotball/site_background.jpg');
+    .backgroundImage(2000px, 30400px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_scale,w_2400/v1449177091/breddefotball/site_background.jpg');
     -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-top: 80px;
 
+    @media screen and (max-width: 767px) {
+        padding-top: 0px;
 
-    @media screen and (min-width: 768px) {
-        padding-top: 80px;
+        .navbar-fixed-top {
+            position: static;
+            margin-bottom: 0;
+        }
     }
 }
 
-.backgroundImage(@screenMin, @screenMax, @imageUrl){
-	@media (min-width: @screenMin) and (max-width: @screenMax) {
-               background: linear-gradient(to bottom, fade(@team-secondary, 70) 0%, fade(@team-secondary, 70) 100%), url(@imageUrl) no-repeat center center fixed;
-
-	}
-
+.backgroundImage(@screenMin, @screenMax, @imageUrl) {
+    @media (min-width: @screenMin) and (max-width: @screenMax) {
+        background: linear-gradient(to bottom, fade(@team-secondary, 70) 0%, fade(@team-secondary, 70) 100%), url(@imageUrl) no-repeat center center fixed;
+    }
 }
 
 /* User/login */
@@ -43,21 +45,15 @@ body {
         display: flex;
     }
 
-  
-     @media screen and (max-width: 769px) {
-    position: fixed;
-    top: -3px;
-    font-size: 125%;
-    right: 80px;
 
-    a {
-        margin-right:16px;
-    }
+    @media screen and (max-width: 769px) {
+        position: fixed;
+        top: -3px;
+        font-size: 125%;
+        right: 80px;
 
+        a {
+            margin-right: 16px;
+        }
     }
 }
-
-
-
-
-
