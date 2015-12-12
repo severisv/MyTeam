@@ -78,7 +78,9 @@ namespace MyTeam.Controllers
 
         public JsonResult GetTeams()
         {
-            var teams = DbContext.Teams.Where(c => c.ClubId == Club.Id).Select(t => new {
+            var teams = DbContext.Teams
+                .OrderBy(c => c.SortOrder)
+                .Where(c => c.ClubId == Club.Id).Select(t => new {
                 Id = t.Id,
                 ShortName = t.ShortName}
                 );

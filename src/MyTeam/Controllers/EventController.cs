@@ -5,12 +5,14 @@ using System.Reflection;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
+using MyTeam.ViewModels.Table;
 
 
 namespace MyTeam.Controllers
@@ -23,6 +25,8 @@ namespace MyTeam.Controllers
         public IEventService EventService { get; set; }
         [FromServices]
         public IPlayerService PlayerService { get; set; }
+        [FromServices]
+        public ApplicationDbContext DbContext { get; set; }
 
 
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
@@ -30,8 +34,7 @@ namespace MyTeam.Controllers
             var events = previous
                 ? EventService.GetPrevious(type, Club.Id)
                 : EventService.GetUpcoming(type, Club.Id);
-
-
+            
             var model = new UpcomingEventsViewModel(events, type, previous);
 
             return View("Index", model);
@@ -63,9 +66,16 @@ namespace MyTeam.Controllers
         [Route("ny")]
         public IActionResult Create(EventType type = EventType.Trening)
         {
+
             var model = new CreateEventViewModel()
             {
-                Type = type
+                Type = type,
+                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                {
+                  Id = t.Id,
+                  Name = t.Name  
+                }).ToList(),
+                TeamIds = new List<Guid>()
             };
 
             ViewBag.Title = Res.CreateEvent;

@@ -5,10 +5,42 @@
 @if (Model.Type == EventType.Diverse)
 {
     <div class="form-group">
+        <label class="col-xs-2 control-label" asp-for="TeamIds"></label>
+        <div class="col-xs-10">
+
+            <select name="TeamIds" class="form-control event-teamSelect" multiple>
+                @for (int i = 0; i < Model.Teams.Count(); i++)
+                {
+                    var team = Model.Teams[i];
+                    if (Model.TeamIds.Any(t => t == team.Id))
+                    {
+                        <option selected value="@team.Id">@team.Name</option>
+
+                    }
+                    else
+                    {
+                        <option value="@team.Id">@team.Name</option>
+
+                    }
+
+                }
+            </select>
+
+            @for (int i = 0; i < Model.Teams.Count(); i++)
+                {
+                <input type="hidden" asp-for="Teams[i].Id" />
+                <input type="hidden" asp-for="Teams[i].Name" />
+            }
+            <span asp-validation-for="TeamIds" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
         <label mt-for="Headline" mt-icon="header" class="col-xs-2 control-label"></label>
         <div class="col-xs-10">
-            <input asp-for="Headline" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Headline)" />
+            <input asp-for="Headline" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Headline)"/>
             <span asp-validation-for="Headline" class="text-danger"></span>
         </div>
     </div>
+
+
 }

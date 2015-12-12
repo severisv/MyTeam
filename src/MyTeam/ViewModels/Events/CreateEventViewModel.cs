@@ -9,6 +9,7 @@ using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Settings;
 using MyTeam.Validation.Attributes;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Events
 {
@@ -52,6 +53,12 @@ namespace MyTeam.ViewModels.Events
         [Display(Name = Res.Mandatory)]
         public bool Mandatory { get; set; }
 
+        [Display(Name = Res.Team)]
+        public IList<Guid> TeamIds { get; set; }
+
+        [Display(Name = Res.Team)]
+        public IList<TeamViewModel> Teams { get; set; }
+
 
         public bool IsEditMode => EventId.HasValue;
         
@@ -67,6 +74,7 @@ namespace MyTeam.ViewModels.Events
             Time = new TimeSpan(19,30,0);
             Date = DateTime.Now.Date.AddDays(4);
             Mandatory = true;
+            TeamIds = new List<Guid>();
         }
 
         public CreateEventViewModel(EventViewModel ev)
@@ -118,6 +126,12 @@ namespace MyTeam.ViewModels.Events
                     result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Opponent) }));
                 }
             }
+
+            if (!TeamIds.Any(t => t != Guid.Empty))
+            {
+                result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(TeamIds) }));
+            }
+
             return result;
         }
 

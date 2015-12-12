@@ -106,7 +106,6 @@ namespace MyTeam
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-
             app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
