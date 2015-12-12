@@ -19,7 +19,14 @@
 
 @Html.Partial("_List", Model)
 
+
 @Component.Invoke("ArticleNav", Context.GetClub().Id)
+
+<div mt-sidebar>
+    <h4><i class="fa fa-twitter"></i> Siste Tweets</h4>
+    <a class="twitter-timeline" href="https://twitter.com/WamKam" data-widget-id="672159319203430401" data-tweet-limit="5" data-chrome="nofooter transparent noheader noborders noscrollbar">Tweets by WamKam</a>
+</div>
+
 
 
 @if (Model.HasPrevious || Model.HasNext)
@@ -49,4 +56,8 @@
             </ul>
         </nav>
     </div>
+}
+
+@section Scripts {
+    @Html.Partial("Scripts/_TwitterFeed")
 }
