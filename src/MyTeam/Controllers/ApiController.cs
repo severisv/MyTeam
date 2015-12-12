@@ -99,5 +99,20 @@ namespace MyTeam.Controllers
             var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
         }
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult ApplyMigrations()
+        {
+            try
+            {
+                DbContext.Database.Migrate();
+            }
+            catch (Exception e)
+            {
+                return View("_Error", e);
+            }
+            return Json("Success");
+        }
+
     }
 }

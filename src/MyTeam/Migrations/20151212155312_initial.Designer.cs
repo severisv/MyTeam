@@ -8,8 +8,8 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20151212133307_v3")]
-    partial class v3
+    [Migration("20151212155312_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -339,6 +339,9 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("ClubId");
 
                     b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("ShortName")
                         .IsRequired();
 
                     b.Property<int>("SortOrder");

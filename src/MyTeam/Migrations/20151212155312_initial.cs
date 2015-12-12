@@ -214,6 +214,7 @@ namespace MyTeam.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ClubId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    ShortName = table.Column<string>(nullable: false),
                     SortOrder = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -288,6 +289,30 @@ namespace MyTeam.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
+                name: "MemberTeam",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    MemberId = table.Column<Guid>(nullable: false),
+                    TeamId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberTeam", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MemberTeam_Member_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Member",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MemberTeam_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
                 name: "Season",
                 columns: table => new
                 {
@@ -348,6 +373,7 @@ namespace MyTeam.Migrations
             migrationBuilder.DropTable("AspNetUserRoles");
             migrationBuilder.DropTable("Article");
             migrationBuilder.DropTable("EventAttendance");
+            migrationBuilder.DropTable("MemberTeam");
             migrationBuilder.DropTable("Table");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
