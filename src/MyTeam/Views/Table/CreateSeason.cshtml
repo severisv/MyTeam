@@ -1,50 +1,49 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Table.CreateSeasonViewModel
 @{
     ViewBag.Title = $"{Res.Create} {Res.Season.ToLower()}";
 }
-
-
 <div mt-main>
-    
-        <form asp-action="CreateSeason" method="post" class="form-horizontal">
-            <div class="form-group">
-                <label asp-for="TeamId" class="col-xs-2 control-label"></label>
-                <div class="col-xs-10">
-                    <select asp-for="TeamId" class="form-control">
-                        @foreach (var team in Model.Teams)
-                        {
-                            <option value="@team.Id">@team.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="TeamId" class="text-danger"></span>
-                </div>
+
+    <form asp-action="CreateSeason" method="post" class="form-horizontal">
+        @for (int i = 0; i <Model.Teams.Count() ; i++)
+        {
+            <input type="hidden" asp-for="Teams[i].Id"/>
+            <input type="hidden" asp-for="Teams[i].Name"/>
+        }
+        <div class="form-group">
+            <label asp-for="TeamId" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10">
+                <select asp-for="TeamId" class="form-control">
+                    @foreach (var team in Model.Teams)
+                    {
+                        <option value="@team.Id">@team.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TeamId" class="text-danger"></span>
             </div>
-             <div class="form-group">
-                <label asp-for="Name" class="col-xs-2 control-label"></label>
-                <div class="col-xs-10">
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10">
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Year" class="col-xs-2 control-label"></label>
-                <div class="col-xs-10">
-                    <input asp-for="Year" class="form-control" />
-                    <span asp-validation-for="Year" class="text-danger"></span>
-                </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Year" class="col-xs-2 control-label"></label>
+            <div class="col-xs-10">
+                <input asp-for="Year" class="form-control"/>
+                <span asp-validation-for="Year" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        </div>
+        <div class="form-group">
 
             <div class="col-xs-offset-2 col-xs-10">
                 <button type="submit" class="btn btn-primary">@Res.Save</button>
             </div>
-                </div>
-</form>
+        </div>
+    </form>
 </div>
-<div mt-sidebar>
-    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
-</div>
-
+@Html.Partial("_AdminMenu")

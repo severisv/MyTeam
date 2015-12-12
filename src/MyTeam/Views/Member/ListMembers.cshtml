@@ -9,7 +9,7 @@
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
             <li class="@(Model.MemberStatus == PlayerStatus.Aktiv ? "active" : "")"><a asp-route-status="@PlayerStatus.Aktiv"><i class="fa fa-user"></i>&nbsp;@PlayerStatus.Aktiv</a></li>
-            <li class="@(Model.MemberStatus == PlayerStatus.Pensjonert ? "active" : "")"><a asp-route-status="@PlayerStatus.Pensjonert"><i class="fa fa-trophy"></i>&nbsp;@PlayerStatus.Pensjonert</a></li>
+            <li class="@(Model.MemberStatus == PlayerStatus.Veteran ? "active" : "")"><a asp-route-status="@PlayerStatus.Veteran"><i class="fa fa-trophy"></i>&nbsp;@PlayerStatus.Veteran</a></li>
             <li class="@(Model.MemberStatus == PlayerStatus.Inaktiv ? "active" : "")"><a asp-route-status="@PlayerStatus.Inaktiv"><i class="fa fa-user-times"></i>&nbsp;@PlayerStatus.Inaktiv</a></li>
         </ul>
         <br/>

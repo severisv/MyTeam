@@ -12,16 +12,16 @@
 <div mt-main>
     @if (Model.Teams?.Count() > 1)
     {
-   
-    <div>
-        <ul class="nav nav-pills mt-justified">
-            @foreach (var team in Model.Teams)
-            {
-                <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
-            }
-        </ul>
-    </div>
-    
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="nav nav-pills mt-justified">
+                    @foreach (var team in Model.Teams)
+                    {
+                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
     <hr/>
     }
 
@@ -57,23 +57,21 @@
 
 </div>
 
-<div mt-sidebar>
-    <ul class="nav nav-list">
-        <li class="nav-header">@Res.Season.Pluralize()</li>
-        @foreach (var season in Model.Seasons)
-        {
-            <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
-        }
-    </ul>
 
-</div>
+@Html.Partial("_AdminMenu")
 
- @if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
- {
+@if (Model.Seasons?.Any() == true)
+{
     <div mt-sidebar>
         <ul class="nav nav-list">
-            <li class="nav-header">@Res.CoachMenu</li>
-            <li><a asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a></li>
+            <li class="nav-header">@Res.Season.Pluralize()</li>
+            @foreach (var season in Model.Seasons)
+            {
+                <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
+            }
         </ul>
+
     </div>
- }
+
+}
+

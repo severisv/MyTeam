@@ -19,7 +19,9 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<SeasonViewModel> GetForTeam(Guid teamId)
         {
-            return _seasonRepository.Get().Where(s => s.TeamId == teamId).Select(s =>
+            return _seasonRepository.Get()
+                .Where(s => s.TeamId == teamId)
+                .Select(s =>
                   new SeasonViewModel
                   {
                       Id = s.Id,
@@ -33,7 +35,7 @@ namespace MyTeam.Services.Domain
                       },
                       TeamId = teamId
                   }
-                );
+                ).OrderByDescending(s => s.StartDate);
         }
 
     

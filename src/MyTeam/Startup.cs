@@ -73,7 +73,7 @@ namespace MyTeam
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Error/Error");
+             //       app.UseExceptionHandler("/Error/Error");
 
                     // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                     try
@@ -83,10 +83,10 @@ namespace MyTeam
                         {
                             var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                     //       dbContext.Database.EnsureDeleted();
+//                            dbContext.Database.EnsureDeleted();
                             dbContext.Database.EnsureCreated();
                             dbContext.Database.Migrate();
-                            BootstrapData.Initialize(serviceScope.ServiceProvider);
+                            BootstrapData.Initialize(app.ApplicationServices);
                     }
                 }
                     catch
@@ -106,8 +106,8 @@ namespace MyTeam
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-            
-                app.LoadTenantData();
+
+            app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(

@@ -7,6 +7,7 @@ namespace MyTeam.Resources
     public class Res
     {
 
+        public const string Admin = "Admin";
         public const string Actions = "Handlinger";
         public const string Attending = "Kommer";
         public const string Attendance = "Oppmøte";
@@ -80,6 +81,8 @@ namespace MyTeam.Resources
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
+        public const string Team = "Lag";
+
         public static string Stats = "Statistikk";
 
         public const string Saved = "Lagret";
@@ -129,7 +132,7 @@ namespace MyTeam.Resources
         public static string PlayersOfType(PlayerStatus status)
         {
             if (status == PlayerStatus.Aktiv) return string.Format("{0}", ActivePlayers);
-            if (status == PlayerStatus.Pensjonert) return string.Format("{0}", HallOfFame);
+            if (status == PlayerStatus.Veteran) return string.Format("{0}", HallOfFame);
             return Players;
         }
     }

@@ -1,0 +1,15 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+
+
+ @if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+ {
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.CoachMenu</li>
+            <li><a asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a></li>
+        </ul>
+    </div>
+ }

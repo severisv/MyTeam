@@ -481,6 +481,74 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
 
 });
 
+var ManagePlayer = React.createClass({displayName: "ManagePlayer",
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
+
+    setPlayerStatus: function(event){
+        this.props.setPlayerStatus(this.state.player, event.target.value)
+    },
+
+    togglePlayerRole: function(role){
+        this.props.togglePlayerRole(this.state.player, role)
+    },
+
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
+        }
+
+        return (
+            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
+               statusList
+           )
+            
+        )
+    },
+
+        renderRoles: function () {
+
+        var roles = this.props.options.playerRoles;
+        var player = this.state.player;
+        var buttons = [];
+        for (var key in roles) {
+            var role = roles[key];
+            var buttonClass = "btn";
+            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
+            else buttonClass += " btn-default";
+            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
+        }
+
+        return (
+            React.createElement("span", null, 
+               buttons
+           )
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
+        return (React.createElement("div", {className: "row list-player"}, 
+               React.createElement("div", {className: " col-sm-4 mp-name"}, player.FullName), 
+               React.createElement("div", {className: "col-sm-3 mp-status"}, this.renderStatusOptions()), 
+               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
+                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
+                )
+        ))
+    }
+
+
+})
+
 var EmailAdd = React.createClass({displayName: "EmailAdd",
    
     getInitialState: function () {
@@ -534,7 +602,7 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
                 q: q,
                 type: "user",
                 access_token: url.accessToken,
-                limit: 6,
+                limit: 10,
                 fields: "picture,name,first_name,last_name,middle_name"
             }).then(data => {
                 this.setState({
@@ -624,72 +692,3 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
     },
 
 });
-
-
-var ManagePlayer = React.createClass({displayName: "ManagePlayer",
-    getInitialState: function () {
-        return ({
-            player: this.props.player
-        })
-    },
-
-    setPlayerStatus: function(event){
-        this.props.setPlayerStatus(this.state.player, event.target.value)
-    },
-
-    togglePlayerRole: function(role){
-        this.props.togglePlayerRole(this.state.player, role)
-    },
-
-    renderStatusOptions: function () {
-
-        var statuses = this.props.options.playerStatus;
-        var statusList = [];
-        for (var key in statuses) {
-            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
-        }
-
-        return (
-            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
-               statusList
-           )
-            
-        )
-    },
-
-        renderRoles: function () {
-
-        var roles = this.props.options.playerRoles;
-        var player = this.state.player;
-        var buttons = [];
-        for (var key in roles) {
-            var role = roles[key];
-            var buttonClass = "btn";
-            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
-            else buttonClass += " btn-default";
-            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
-        }
-
-        return (
-            React.createElement("span", null, 
-               buttons
-           )
-            
-        )
-    },
-
-    render: function () {
-
-        var player = this.state.player;
-        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
-        return (React.createElement("div", {className: "row list-player"}, 
-               React.createElement("div", {className: " col-sm-4 mp-name"}, player.FullName), 
-               React.createElement("div", {className: "col-sm-3 mp-status"}, this.renderStatusOptions()), 
-               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
-                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
-                )
-        ))
-    }
-
-
-})

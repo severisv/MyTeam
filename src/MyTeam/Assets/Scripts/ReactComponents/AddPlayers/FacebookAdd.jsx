@@ -15,7 +15,7 @@
                 q: q,
                 type: "user",
                 access_token: url.accessToken,
-                limit: 6,
+                limit: 10,
                 fields: "picture,name,first_name,last_name,middle_name"
             }).then(data => {
                 this.setState({

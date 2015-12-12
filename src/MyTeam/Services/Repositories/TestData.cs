@@ -82,7 +82,7 @@ namespace MyTeam.Services.Repositories
            testRepository.Add(GetPlayer("Sindre", "Meldalen", "Granly"));
            testRepository.Add(GetPlayer("Hans Petter", "Olsen"));
            testRepository.Add(GetPlayer("Erik", "Nakkerud"));
-           testRepository.Add(GetPlayer("Oystein", "Bondhus", status: PlayerStatus.Pensjonert));
+           testRepository.Add(GetPlayer("Oystein", "Bondhus", status: PlayerStatus.Veteran));
   
     
         }

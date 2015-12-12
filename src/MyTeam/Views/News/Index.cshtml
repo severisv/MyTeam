@@ -1,6 +1,4 @@
-﻿@using System.ComponentModel
-@using System.Runtime.Remoting.Contexts
-@using Microsoft.Data.Entity.Metadata.Internal
+﻿@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.ViewModels.News
@@ -11,22 +9,15 @@
 
 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.NewsWriter))
 {
-
     <div mt-sidebar>
         <ul class="nav nav-list">
-            <li class="nav-header">@Res.Actions</li>
+            <li class="nav-header">@Res.CoachMenu</li>
             <li><a asp-action="create"><i class='fa fa-plus'></i> Skriv ny artikkel</a></li>
         </ul>
     </div>
-
 }
 
-
-
-
 @Html.Partial("_List", Model)
-
-
 
 @Component.Invoke("ArticleNav", Context.GetClub().Id)
 
@@ -40,7 +31,7 @@
             <ul class="pager">
                 @if (Model.HasPrevious)
                 {
-                    <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take=" @Model.Take "><span aria-hidden="true">&larr;</span> Nyere</a></li>
+                    <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take="@Model.Take"><span aria-hidden="true">&larr;</span> Nyere</a></li>
                 }
                 else
                 {

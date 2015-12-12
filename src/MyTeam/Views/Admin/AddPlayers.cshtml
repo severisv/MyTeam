@@ -9,15 +9,8 @@
 <div mt-main>
     <div id="add-players"></div>
 </div>
-<div mt-sidebar>
-    <ul class="nav nav-list">
-        <li class="nav-header">@Res.CoachMenu</li>
-        <li><a asp-action="addplayers"><i class='fa fa-plus'></i> @Res.Add @Res.Players.ToLower()</a></li>
-    </ul>
-</div>
-<div mt-sidebar>
-    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
-</div>
+@Html.Partial("_CoachMenu")
+
 @Html.Partial("_JsConstants")
 @section Scripts
 {

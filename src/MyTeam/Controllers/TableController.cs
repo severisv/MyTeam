@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
@@ -96,10 +95,9 @@ namespace MyTeam.Controllers
                 {
                     Id = t.Id,
                     Name = t.Name
-                })
+                }).ToList()
             };
             return View(model);
-
         }
 
         [HttpPost]
@@ -109,7 +107,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                TableService.CreateSeason(model.TeamId, model.Year, model.Name);
+                TableService.CreateSeason(model.TeamId, model.Year.Value, model.Name);
 
                 Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
                 return Index();

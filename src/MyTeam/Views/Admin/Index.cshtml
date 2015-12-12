@@ -15,13 +15,8 @@
         
     </div>
 </div>
-<div mt-sidebar>
-    <ul class="nav nav-list">
-        <li class="nav-header">@Res.CoachMenu</li>
-        <li><a asp-action="index"><i class='fa fa-user'></i> @Res.ManagePlayers</a></li>
-        <li><a asp-action="addplayers"><i class='fa fa-plus'></i> @Res.Add @Res.Players.ToLower()</a></li>
-    </ul>
-</div>
+
+@Html.Partial("_CoachMenu")
 @Html.Partial("_JsConstants")
 @section Scripts
 {
