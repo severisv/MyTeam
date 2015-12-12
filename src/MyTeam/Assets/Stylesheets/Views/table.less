@@ -5,3 +5,29 @@ form {
     }
 }
 
+
+
+/* Table */
+table.table {
+    tr {
+        td {
+            border-top: 1px solid fade(black, 5);
+        }
+
+        &.br {
+            height: 2em;
+
+            td {
+                border-top: 1px solid transparent;
+            }
+        }
+    }
+}
+
+
+.table--striped tbody tr:nth-child(odd){
+    background-color: fade(@link-color,5);   
+}
+.table--striped tbody tr td {
+            border-top: 0;
+}
