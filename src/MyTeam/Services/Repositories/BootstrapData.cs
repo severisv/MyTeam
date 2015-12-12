@@ -44,6 +44,7 @@ namespace MyTeam.Services.Repositories
                         Id = Guid.NewGuid(),
                         ClubId = club.Id,
                         Name = "Wam-Kam 2",
+                        ShortName = "WK2",
                         SortOrder = 2
                     },
                     new Team
@@ -51,6 +52,7 @@ namespace MyTeam.Services.Repositories
                         Id = Guid.NewGuid(),
                         ClubId = club.Id,
                         Name = "Wam-Kam 1",
+                        ShortName = "WK1",
                         SortOrder = 1
                     }
                 };

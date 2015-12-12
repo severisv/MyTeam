@@ -4,7 +4,6 @@ namespace MyTeam.Models.Enums
     {
         Aktiv,
         Inaktiv,
-        Veteran,
-        Klubblegende
+        Veteran
     }
 }

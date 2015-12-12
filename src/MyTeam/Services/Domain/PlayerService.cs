@@ -44,10 +44,7 @@ namespace MyTeam.Services.Domain
                 }
             }
 
-            if(imageSmall == null) imageSmall = "~/img/default_player.gif";
-            if(imageMedium == null) imageMedium = "~/img/default_player.gif";
-            if(imageLarge == null) imageLarge = "~/img/default_player.gif";
-
+   
             if (existingPlayer == null)
             {
                 var club = _clubRepository.Get().Single(c => c.ClubIdentifier == clubId);
@@ -83,20 +80,7 @@ namespace MyTeam.Services.Domain
             return _playerRepository.Get().Select(p => p.FacebookId);
         }
 
-        public IEnumerable<Object> Get(string clubId)
-        {
-            var players = _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p =>
-            new
-            {
-                Id = p.Id,
-                FullName = p.Name,
-                Status = p.Status.ToString(),
-                Roles = p.Roles
-            });
-
-           
-            return players;
-        }
+     
 
         public void SetPlayerStatus(Guid id, PlayerStatus status)
         {
@@ -157,6 +141,27 @@ namespace MyTeam.Services.Domain
                 Status =  p.Status,
                 ImageSmall = p.ImageSmall
             });
+        }
+
+        public void TogglePlayerTeam(Guid teamId, Guid playerId)
+        {
+
+            var existingTeam = _applicationDbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
+            if (existingTeam != null)
+            {
+                _applicationDbContext.Remove(existingTeam);
+            }
+            else
+            {
+                var memberTeam = new MemberTeam
+                {
+                    Id = Guid.NewGuid(),
+                    MemberId = playerId,
+                    TeamId = teamId
+                };
+                _applicationDbContext.Add(memberTeam);
+            }
+            _applicationDbContext.SaveChanges();
         }
     }
 }

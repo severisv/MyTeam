@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel
+@using MyTeam
 
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
@@ -7,11 +8,12 @@
     var club = Context.GetClub();
 }
 <!DOCTYPE html>
-<html>
+<html lang="nb-no">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta title="@club?.ShortName - @ViewBag.Title"/>
     <title>@club?.ShortName - @ViewBag.Title</title>
     <link rel="icon" type="image/png" href="@Cloudinary.Image(club?.Favicon ?? club?.Logo)">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />

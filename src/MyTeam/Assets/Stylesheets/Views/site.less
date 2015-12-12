@@ -34,7 +34,8 @@ body {
 
 .backgroundImage(@screenMin, @screenMax, @imageUrl) {
     @media (min-width: @screenMin) and (max-width: @screenMax) {
-        background: linear-gradient(to bottom, fade(@team-secondary, 70) 0%, fade(@team-secondary, 70) 100%), url(@imageUrl) no-repeat center center fixed;
+    //    background: linear-gradient(to bottom, fade(@team-secondary, 70) 0%, fade(@team-secondary, 70) 100%), url(@imageUrl) no-repeat center center fixed;
+    background: fade(black, 75);
     }
 }
 

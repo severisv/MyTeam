@@ -378,12 +378,14 @@ var AddPlayers = React.createClass({displayName: "AddPlayers",
 
 
 
+"use strict";
 
 var ManagePlayers = React.createClass({displayName: "ManagePlayers",
          
     getInitialState: function () {
         return ({
-            players: []
+            players: [],
+            teams: []
         })
     },
 
@@ -396,34 +398,38 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     },
 
     componentDidMount() {
-
-        $.getJSON(this.routes.GET_PLAYERS).then(response => {
-            this.setState({
+        var that = this;
+        $.getJSON(that.routes.GET_PLAYERS).then(function (response) {
+            that.setState({
                 players: response
-            })
-        }
-        );
+            });
+        });
+
+        $.getJSON(that.routes.GET_TEAMS).then(function (response) {
+            that.setState({
+                teams: response.data
+            });
+        });
     },
 
-    togglePlayerRole: function(player, role){
-        $.post(this.routes.TOGGLE_PLAYER_ROLE, { Id: player.Id, Role: role }).then(response => {
+    togglePlayerRole: function (player, role) {
+        var that = this;
+        $.post(that.routes.TOGGLE_PLAYER_ROLE, { Id: player.Id, Role: role }).then(function (response) {
             if (response.Success) {
-                var players = this.state.players;
-                for (var i in this.state.players) {
+                var players = that.state.players;
+                for (var i in that.state.players) {
                     if (players[i].Id == player.Id) {
                         var index = players[i].Roles.indexOf(role);
                         if (index > -1) {
-                            this.state.players[i].Roles.splice(index, 1);
-                        }
-                        else {
-                            this.state.players[i].Roles.push(role);
+                            that.state.players[i].Roles.splice(index, 1);
+                        } else {
+                            that.state.players[i].Roles.push(role);
                         }
                     }
                 }
             }
-            this.forceUpdate();
-        }
-    );
+            that.forceUpdate();
+        });
     },
     setPlayerStatus: function (player, status) {
    
@@ -441,7 +447,30 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
       );
 
     },
+    
+    toggleTeam: function (teamId, playerId) {
 
+        var that = this;
+        $.post(that.routes.TOGGLE_PLAYER_TEAM, { PlayerId: playerId, TeamId: teamId }).then(function (response) {
+            if (response.Success) {
+                var players = that.state.players;
+                for (var i in that.state.players) {
+                    if (players[i].Id == playerId) {
+                        var teamIds = that.state.players[i].TeamIds;
+                        if (teamIds.indexOf(teamId) > -1) {
+                            that.state.players[i].TeamIds = teamIds.filter(function (element) { return element != teamId; });
+                        }
+                        else {
+                            that.state.players[i].TeamIds.push(teamId);
+                        }
+                    }
+                }
+            }
+            that.forceUpdate();
+        });
+
+    },
+    
     renderPlayers: function (playerStatus) {
         if (!this.state.players) return "";
 
@@ -453,17 +482,24 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
 
         var options = this.options;
         var routes = this.routes;
+        var teams = this.state.teams;
         var setPlayerStatus = this.setPlayerStatus;
         var togglePlayerRole = this.togglePlayerRole;
+        var toggleTeam = this.toggleTeam;
         var playerElements = players.map(function (player, i) {
-            return (React.createElement(ManagePlayer, {key: player.Id, player: player, setPlayerStatus: setPlayerStatus, togglePlayerRole: togglePlayerRole, options: options, routes: routes}))
+            return (React.createElement(ManagePlayer, {key: player.Id, player: player, setPlayerStatus: setPlayerStatus, togglePlayerRole: togglePlayerRole, options: options, routes: routes, teams: teams, toggleTeam: toggleTeam}))
         })
+
+        var teamElements = teams.map(function (team, i) {
+            return (React.createElement("div", {key: team.Id, className: "col-xs-1 no-padding subheadline align-center"}, team.ShortName))
+        });
 
         return (React.createElement("div", {className: "manage-players"}, 
     React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-xs-4 headline"}, React.createElement("strong", null, playerStatus)), 
-        React.createElement("div", {className: "col-xs-3 subheadline hidden-xs"}, React.createElement("strong", null, "Status")), 
-        React.createElement("div", {className: "col-xs-5 subheadline hidden-xs"}, React.createElement("strong", null, "Roller"))
+        React.createElement("div", {className: "col-xs-3 headline"}, React.createElement("strong", null, playerStatus)), 
+        React.createElement("div", {className: "col-xs-2 subheadline hidden-xs"}, React.createElement("strong", null, "Status")), 
+        teamElements, 
+        React.createElement("div", {className: "col-xs-3 subheadline hidden-xs"}, React.createElement("strong", null, "Roller"))
     ), 
     React.createElement("div", null, 
         playerElements
@@ -480,74 +516,6 @@ var ManagePlayers = React.createClass({displayName: "ManagePlayers",
     }
 
 });
-
-var ManagePlayer = React.createClass({displayName: "ManagePlayer",
-    getInitialState: function () {
-        return ({
-            player: this.props.player
-        })
-    },
-
-    setPlayerStatus: function(event){
-        this.props.setPlayerStatus(this.state.player, event.target.value)
-    },
-
-    togglePlayerRole: function(role){
-        this.props.togglePlayerRole(this.state.player, role)
-    },
-
-    renderStatusOptions: function () {
-
-        var statuses = this.props.options.playerStatus;
-        var statusList = [];
-        for (var key in statuses) {
-            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
-        }
-
-        return (
-            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
-               statusList
-           )
-            
-        )
-    },
-
-        renderRoles: function () {
-
-        var roles = this.props.options.playerRoles;
-        var player = this.state.player;
-        var buttons = [];
-        for (var key in roles) {
-            var role = roles[key];
-            var buttonClass = "btn";
-            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
-            else buttonClass += " btn-default";
-            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
-        }
-
-        return (
-            React.createElement("span", null, 
-               buttons
-           )
-            
-        )
-    },
-
-    render: function () {
-
-        var player = this.state.player;
-        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
-        return (React.createElement("div", {className: "row list-player"}, 
-               React.createElement("div", {className: " col-sm-4 mp-name"}, player.FullName), 
-               React.createElement("div", {className: "col-sm-3 mp-status"}, this.renderStatusOptions()), 
-               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
-                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
-                )
-        ))
-    }
-
-
-})
 
 var EmailAdd = React.createClass({displayName: "EmailAdd",
    
@@ -692,3 +660,77 @@ var FacebookAdd = React.createClass({displayName: "FacebookAdd",
     },
 
 });
+
+
+var ManagePlayer = React.createClass({displayName: "ManagePlayer",
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
+
+    setPlayerStatus: function(event){
+        this.props.setPlayerStatus(this.state.player, event.target.value)
+    },
+
+    togglePlayerRole: function(role){
+        this.props.togglePlayerRole(this.state.player, role)
+    },
+
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
+        }
+
+        return (
+            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
+               statusList
+           )
+            
+        )
+    },
+
+        renderRoles: function () {
+
+        var roles = this.props.options.playerRoles;
+        var player = this.state.player;
+        var buttons = [];
+        for (var key in roles) {
+            var role = roles[key];
+            var buttonClass = "btn";
+            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
+            else buttonClass += " btn-default";
+            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
+        }
+        return (
+            React.createElement("span", null, 
+               buttons
+           )
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+        var toggleTeam = this.props.toggleTeam;
+        var teamElements = this.props.teams.map(function (team, i) {
+            var checked = player.TeamIds.indexOf(team.Id) > -1;
+            return (React.createElement("div", {key: team.ShortName + player.Id, className: "col-xs-1 no-padding align-center"}, React.createElement("input", {onClick: toggleTeam.bind(null, team.Id, player.Id), type: "checkbox", checked: checked, className: "form-control"})))
+        });
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
+        return (React.createElement("div", {className: "row list-player"}, 
+               React.createElement("div", {className: "col-sm-3 mp-name"}, player.FullName), 
+               React.createElement("div", {className: "col-sm-2 mp-status"}, this.renderStatusOptions()), 
+                teamElements, 
+               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
+                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
+                )
+        ))
+    }
+
+
+})

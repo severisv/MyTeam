@@ -58,8 +58,7 @@ namespace MyTeam.Models.Domain
         public virtual Club Club { get; set; }
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
-   //     public virtual IEnumerable<Team> Teams { get; set; }
+        public virtual ICollection<MemberTeam> MemberTeams { get; set; }
   
     }
-
 }

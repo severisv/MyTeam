@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -14,20 +16,29 @@ using MyTeam.ViewModels.Player;
 namespace MyTeam.Controllers
 {
     [RequireMember]
-    [Route("api")]
     public class ApiController : BaseController
     {
         [FromServices]
         public IPlayerService PlayerService { get; set; }
+        [FromServices]
+        public ApplicationDbContext DbContext { get; set; }
         
         public JsonResult GetPlayers()
         {
-            var players = PlayerService.Get(Club.ClubId);
+            var players = DbContext.Players.Where(p => p.Club.Id == Club.Id).Select(p =>
+              new
+              {
+                  Id = p.Id,
+                  FullName = p.Name,
+                  Status = p.Status.ToString(),
+                  Roles = p.Roles,
+                  TeamIds = p.MemberTeams.Select(t => t.TeamId)
+              });
+
             return new JsonResult(players);
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("hentfacebookid")]
         public JsonResult GetFacebookIds()
         {
             var ids = PlayerService.GetFacebookIds();
@@ -36,7 +47,6 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("spillerstatus")]
         public JsonResult SetPlayerStatus(Guid id, PlayerStatus status)
         {
             if (ModelState.IsValid)
@@ -52,7 +62,6 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("spillerrolle")]
         public JsonResult TogglePlayerRole(Guid id, string role)
         {
             if (ModelState.IsValid)
@@ -66,5 +75,29 @@ namespace MyTeam.Controllers
             return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
         }
 
+
+        public JsonResult GetTeams()
+        {
+            var teams = DbContext.Teams.Where(c => c.ClubId == Club.Id).Select(t => new {
+                Id = t.Id,
+                ShortName = t.ShortName}
+                );
+            return new JsonResult(new { data = teams });
+        }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public JsonResult TogglePlayerTeam(Guid teamId, Guid playerId)
+        {
+            if (ModelState.IsValid)
+            {
+                PlayerService.TogglePlayerTeam(teamId, playerId);
+                var reponse = new { Success = true };
+                return new JsonResult(reponse);
+            }
+
+            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
+        }
     }
 }

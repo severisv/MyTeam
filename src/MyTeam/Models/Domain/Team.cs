@@ -10,11 +10,13 @@ namespace MyTeam.Models.Domain
     {
         [Required]
         public string Name { get; set; }
+        [Required]
+        public string ShortName { get; set; }
         public int SortOrder { get; set; }
         [Required]
         public Guid ClubId { get; set; }
         public virtual Club Club { get; set; }
-        //        public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<MemberTeam> MemberTeams { get; set; }
         public virtual ICollection<Season> Seasons { get; set; }
 
         [NotMapped]

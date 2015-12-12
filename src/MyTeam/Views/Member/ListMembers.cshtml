@@ -1,12 +1,9 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam
-@using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
 @model MyTeam.ViewModels.Member.MemberListViewModel
-<div class="container-narrow">
-    <div class="mt-container">
+<div mt-main>
         <ul class="nav nav-pills mt-justified">
             <li class="@(Model.MemberStatus == PlayerStatus.Aktiv ? "active" : "")"><a asp-route-status="@PlayerStatus.Aktiv"><i class="fa fa-user"></i>&nbsp;@PlayerStatus.Aktiv</a></li>
             <li class="@(Model.MemberStatus == PlayerStatus.Veteran ? "active" : "")"><a asp-route-status="@PlayerStatus.Veteran"><i class="fa fa-trophy"></i>&nbsp;@PlayerStatus.Veteran</a></li>
@@ -51,4 +48,3 @@
             </tbody>
         </table>
     </div>
-</div>

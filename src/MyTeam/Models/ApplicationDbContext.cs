@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyTeam.Models.Domain;
@@ -17,6 +13,7 @@ namespace MyTeam.Models
         public DbSet<EventAttendance> EventAttendances { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<MemberTeam> MemberTeams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Table> Tables { get; set; }
@@ -33,6 +30,14 @@ namespace MyTeam.Models
                 .WithOne(c => c.Member)
                 .HasForeignKey(c => c.MemberId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Team>()
+                .HasMany(e => e.MemberTeams)
+                .WithOne(c => c.Team)
+                .HasForeignKey(c => c.TeamId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
 
         }
     }
