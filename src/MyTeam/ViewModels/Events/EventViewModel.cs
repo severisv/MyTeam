@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,12 +19,11 @@ namespace MyTeam.ViewModels.Events
         public string Description { get;  }
         public bool Voluntary { get; }
         public string Opponent { get; }
-
-
+        public IEnumerable<Guid> TeamIds { get; set; }
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
-        public EventViewModel(IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
+        public EventViewModel(IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary)
         {
             Id = eventId;
@@ -35,9 +35,10 @@ namespace MyTeam.ViewModels.Events
             Type = type;
             Opponent = opponent;
             Voluntary = voluntary;
+            TeamIds = teamIds;
         }
 
-        public EventViewModel(Event e) : this(null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary)
+        public EventViewModel(Event e) : this(e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary)
         {
             
         }
@@ -51,7 +52,7 @@ namespace MyTeam.ViewModels.Events
         public bool IsGame => Type == EventType.Kamp;
         public bool IsTraining => Type == EventType.Trening;
         public bool IsCustom => Type == EventType.Diverse;
- 
+
         public bool IsAttending(ClaimsPrincipal user)
         {
             return Attending?.Any(a => a.UserName == user.Identity.Name) == true;

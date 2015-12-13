@@ -13,11 +13,13 @@ namespace MyTeam.Models.Dto
     {
         public Guid Id { get;  }
         public string[] Roles { get;  }
+        public Guid[] TeamIds { get; }
 
-        public PlayerDto(Guid playerId, string[] roles)
+        public PlayerDto(Guid playerId, string[] roles, Guid[] teamIds)
         {
             Id = playerId;
             Roles = roles;
+            TeamIds = teamIds;
 
         }
     }

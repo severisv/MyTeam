@@ -1,15 +1,15 @@
-﻿@using System.Linq
-@using System.Threading.Tasks
-@using Microsoft.AspNet.Mvc.Rendering
+﻿@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
-@using MyTeam.ViewModels.Events
 @model MyTeam.ViewModels.Events.EventViewModel
 
 
 <div id="event-signup-@Model.Id" class="event-signup">
-
-    @if (Model.SignupHasOpened())
+    @if (!Context.Member().BelongsToTeam(Model.TeamIds.ToArray()))
+    {
+        <div mt-alert="AlertType.Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
+    }
+    else if (Model.SignupHasOpened())
     {
         @Html.Partial("_SignupDetails")
     }

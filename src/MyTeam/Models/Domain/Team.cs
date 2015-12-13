@@ -19,11 +19,10 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }
         public virtual ICollection<Season> Seasons { get; set; }
 
+        public virtual ICollection<EventTeam> EventTeams { get; set; }
         [NotMapped]
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual IEnumerable<Event> Games => EventTeams?.Select(e => e.Event).Where(e => e.IsGame);
         [NotMapped]
-        public virtual IEnumerable<Event> Games => Events?.Where(e => e.IsGame);
-        [NotMapped]
-        public virtual IEnumerable<Event> Trainings => Events?.Where(e => e.IsTraining);
+        public virtual IEnumerable<Event> Trainings => EventTeams?.Select(e => e.Event).Where(e => e.IsTraining);
     }
 }

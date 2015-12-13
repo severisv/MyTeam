@@ -137,7 +137,6 @@ namespace MyTeam.Services.Repositories
                 Description = description,
                 Location = location,
                 Type = type,
-                ClubId = _club.Id
             };
 
             var attendees = new List<EventAttendance>();

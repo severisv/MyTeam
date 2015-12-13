@@ -8,6 +8,7 @@ using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
+using MyTeam.Services.Application;
 using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Player;
 
@@ -19,11 +20,13 @@ namespace MyTeam.Services.Domain
         private readonly IRepository<Player> _playerRepository;
         private readonly IRepository<Club> _clubRepository;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ICacheHelper _cacheHelper;
 
-        public PlayerService(IRepository<Player> playerRepository, IRepository<Club> clubRepository, ApplicationDbContext applicationDbContext)
+        public PlayerService(IRepository<Player> playerRepository, IRepository<Club> clubRepository, ApplicationDbContext applicationDbContext, ICacheHelper cacheHelper)
         {
             _playerRepository = playerRepository;
             _clubRepository = clubRepository;
+            _cacheHelper = cacheHelper;
             _applicationDbContext = applicationDbContext;
         }
 
@@ -82,14 +85,15 @@ namespace MyTeam.Services.Domain
 
      
 
-        public void SetPlayerStatus(Guid id, PlayerStatus status)
+        public void SetPlayerStatus(Guid id, PlayerStatus status, string clubName)
         {
             var player = _playerRepository.GetSingle(id);
             player.Status = status;
             _playerRepository.CommitChanges();
+            _cacheHelper.ClearCache(clubName, player.UserName);
         }
 
-        public void TogglePlayerRole(Guid id, string role)
+        public void TogglePlayerRole(Guid id, string role, string clubName)
         {
             var player = _playerRepository.GetSingle(id);
             var roles = player.Roles.ToList();
@@ -103,6 +107,7 @@ namespace MyTeam.Services.Domain
             }
             player.RolesString = string.Join(",", roles);
             _playerRepository.CommitChanges();
+            _cacheHelper.ClearCache(clubName, player.UserName);
         }
 
         public void EditPlayer(EditPlayerViewModel model)
@@ -143,7 +148,7 @@ namespace MyTeam.Services.Domain
             });
         }
 
-        public void TogglePlayerTeam(Guid teamId, Guid playerId)
+        public void TogglePlayerTeam(Guid teamId, Guid playerId, string clubName)
         {
 
             var existingTeam = _applicationDbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
@@ -161,7 +166,12 @@ namespace MyTeam.Services.Domain
                 };
                 _applicationDbContext.Add(memberTeam);
             }
+
+            var userName = _applicationDbContext.Members.Where(m => m.Id == playerId).Select(p => p.UserName).Single();
+
             _applicationDbContext.SaveChanges();
+            _cacheHelper.ClearCache(clubName, userName);
+
         }
     }
 }

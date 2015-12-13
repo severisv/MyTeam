@@ -12,8 +12,6 @@ namespace MyTeam.Models.Domain
     public class Event : Entity
     {
         [Required]
-        public Guid ClubId { get; set; }
-        [Required]
         public EventType Type { get; set; }
 
         [Required]
@@ -28,8 +26,7 @@ namespace MyTeam.Models.Domain
 
         public virtual Club Club { get; set; }
         
-        [NotMapped]
-        public virtual IEnumerable<Team> Teams { get; set; }
+        public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<EventAttendance> Attendees { get; set; }
         [NotMapped]
         public virtual IEnumerable<Member> Attending => Attendees?.Where(a => a.IsAttending).Select(a => a.Member);

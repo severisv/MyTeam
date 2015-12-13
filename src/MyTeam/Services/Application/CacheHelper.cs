@@ -43,7 +43,7 @@ namespace MyTeam.Services.Application
                 return member;
             }
             
-            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles)).FirstOrDefault();
+            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray())).FirstOrDefault();
 
             if (member != null)
             {
@@ -59,9 +59,6 @@ namespace MyTeam.Services.Application
     
         public ClubDto GetCurrentClub(string clubId)
         {
-
-
-
             if (string.IsNullOrWhiteSpace(clubId)) return null;
 
             var key = clubId;
@@ -94,10 +91,10 @@ namespace MyTeam.Services.Application
 
         }
 
-        public void ClearCache(string name, string email)
+        public void ClearCache(string clubId, string email)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email)) return;
-            var key = name + email;
+            if (string.IsNullOrEmpty(clubId) || string.IsNullOrEmpty(email)) return;
+            var key = email+clubId;
             Cache.Remove(key);
         }
     }

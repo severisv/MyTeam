@@ -4,13 +4,10 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
-using MyTeam.Resources;
+using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
-using MyTeam.Services.Repositories;
-using MyTeam.ViewModels.Player;
 
 
 namespace MyTeam.Controllers
@@ -51,7 +48,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.SetPlayerStatus(id, status);
+                PlayerService.SetPlayerStatus(id, status, Club.ClubId);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
@@ -66,7 +63,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.TogglePlayerRole(id, role);
+                PlayerService.TogglePlayerRole(id, role, Club.ClubId);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
@@ -93,7 +90,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.TogglePlayerTeam(teamId, playerId);
+                PlayerService.TogglePlayerTeam(teamId, playerId, Club.ClubId);
                 var reponse = new { Success = true };
                 return new JsonResult(reponse);
             }

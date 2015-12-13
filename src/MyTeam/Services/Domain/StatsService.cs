@@ -16,10 +16,10 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year)
+        public IEnumerable<EventAttendanceViewModel> GetAttendance(IEnumerable<Guid> teamIds, int year)
         {
             var eventIds = _dbContext.Events
-                .Where(e => e.ClubId == clubId &&
+                .Where(e => teamIds.Any(ti => e.EventTeams.Any(et => et.TeamId == ti)) &&
                             e.DateTime.Year == year &&
                             (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id);
 
@@ -41,10 +41,11 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public IEnumerable<int> GetAttendanceYears(Guid clubId)
+        public IEnumerable<int> GetAttendanceYears(IEnumerable<Guid> teamIds)
         {
             return _dbContext.Events
-                .Where(e => e.ClubId == clubId && (e.Type == EventType.Trening || e.Type == EventType.Kamp))
+                .Where(e => teamIds.Any(ti => e.EventTeams.Any(et => et.TeamId == ti))
+                && (e.Type == EventType.Trening || e.Type == EventType.Kamp))
                 .Select(e => e.DateTime.Year).ToList().Distinct();
         }
     }

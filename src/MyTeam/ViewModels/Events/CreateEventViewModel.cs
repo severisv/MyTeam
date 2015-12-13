@@ -91,6 +91,7 @@ namespace MyTeam.ViewModels.Events
             Location = ev.Location;
             EventId = ev.Id;
             Mandatory = !voluntary;
+            TeamIds = ev.TeamIds.ToList();
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -156,41 +157,56 @@ namespace MyTeam.ViewModels.Events
 
         private Event CreateEvent(DateTime date)
         {
+            var eventId = EventId ?? Guid.NewGuid();
+            var eventTeams = new List<EventTeam>();
+            foreach (var id in TeamIds)
+            {
+                eventTeams.Add(new EventTeam
+                {
+                    Id = Guid.NewGuid(),
+                    TeamId = id,
+                    EventId = eventId
+                });
+            }
+
             if (Type == EventType.Kamp)
             {
                 return new Game
                 {
-                    ClubId = ClubId,
+                    Id = eventId,
                     Location = Location,
                     Type = Type,
                     DateTime = date + Time,
                     Description = Description,
                     Headline = Headline,
                     Opponent = Opponent,
+                    EventTeams = eventTeams
                 };
             }
             else if (Type == EventType.Trening)
             {
                 return new Training
                 {
-                    ClubId = ClubId,
+                    Id = eventId,
                     Location = Location,
                     Type = Type,
                     DateTime = date + Time,
                     Description = Description,
                     Voluntary = !Mandatory,
                     Headline = Headline,
+                    EventTeams = eventTeams
                 };
             }
 
             return new Event
             {
-                ClubId = ClubId,
+                Id = eventId,
                 Location = Location,
                 Type = Type,
                 DateTime = date + Time,
                 Description = Description,
                 Headline = Headline,
+                EventTeams = eventTeams
             };
         }
         

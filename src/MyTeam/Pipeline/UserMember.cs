@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MyTeam.Models.Dto;
 
 namespace MyTeam
@@ -7,6 +8,7 @@ namespace MyTeam
     {
         public Guid Id { get; }
         public string[] Roles { get; }
+        public Guid[] TeamIds { get; }
 
 
         public UserMember(PlayerDto player)
@@ -15,6 +17,7 @@ namespace MyTeam
             {
                 Id = player.Id;
                 Roles = player.Roles;
+                TeamIds = player.TeamIds;
             }
             else
             {
@@ -27,6 +30,11 @@ namespace MyTeam
             if (id == Id) return true;
 
             return Roles.ContainsAny(Models.Enums.Roles.Admin , Models.Enums.Roles.Coach);
+        }
+
+        public bool BelongsToTeam(params Guid[] teamIds)
+        {
+            return TeamIds.Any(teamIds.Contains);
         }
 
         public bool Exists => Id != Guid.Empty;

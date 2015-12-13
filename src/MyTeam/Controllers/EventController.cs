@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
@@ -32,8 +29,8 @@ namespace MyTeam.Controllers
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
         {
             var events = previous
-                ? EventService.GetPrevious(type, Club.Id)
-                : EventService.GetUpcoming(type, Club.Id);
+                ? EventService.GetPrevious(type, Club.TeamIds)
+                : EventService.GetUpcoming(type, Club.TeamIds);
             
             var model = new UpcomingEventsViewModel(events, type, previous);
 
@@ -104,7 +101,6 @@ namespace MyTeam.Controllers
                     model.ClubId = HttpContext.GetClub().Id;
                     var events = model.CreateEvents();
                     EventService.Add(events.ToArray());
-
                     result.AddRange(events.Select(e => new EventViewModel(e)));
                 }
 
@@ -123,7 +119,14 @@ namespace MyTeam.Controllers
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
-            var model = new CreateEventViewModel(ev);
+            var model = new CreateEventViewModel(ev)
+            {
+                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                }).ToList()
+            };
 
             ViewBag.Title = $"{Res.Edit} {ev.Type.ToString().ToLower()}";
 
@@ -151,7 +154,7 @@ namespace MyTeam.Controllers
         {
             var ev = EventService.GetEventViewModel(eventId);
             var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
-            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.Id, 15).ToList();
+            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.TeamIds, 15).ToList();
 
             if (ev == null) return new NotFoundResult(HttpContext);
 

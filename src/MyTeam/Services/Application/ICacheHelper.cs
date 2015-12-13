@@ -11,6 +11,6 @@ namespace MyTeam.Services.Application
     {
         PlayerDto GetPlayerFromUser(string name, string clubId);
         ClubDto GetCurrentClub(string clubId);
-        void ClearCache(string name, string email);
+        void ClearCache(string clubId, string email);
     }
 }
