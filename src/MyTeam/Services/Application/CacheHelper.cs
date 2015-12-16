@@ -43,7 +43,7 @@ namespace MyTeam.Services.Application
                 return member;
             }
             
-            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray())).FirstOrDefault();
+            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
             {

@@ -26,10 +26,10 @@ namespace MyTeam.Models.Domain
 
         [DataType(DataType.Date)]
         [Display(Name = Res.BirthDate)]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = Res.StartDate)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]
@@ -41,7 +41,7 @@ namespace MyTeam.Models.Domain
         public string Email => UserName;
 
         [NotMapped]
-        public int StartYear => StartDate.Year;
+        public int? StartYear => StartDate?.Year;
         public string Imagename { get; set; }
 
         public string ImageSmall { get; set; }

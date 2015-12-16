@@ -1,8 +1,6 @@
-using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
 {

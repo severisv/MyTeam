@@ -26,11 +26,11 @@ namespace MyTeam.ViewModels.Player
         [RequiredNO]
         [Display(Name = Res.BirthDate)]
         [DataType(DataType.Date)]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = Res.StartDate)]
         [RequiredNO]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [RegularExpression(@"^\d{8}$", ErrorMessage = "Vennligst skriv inn et gyldig telefonnummer")]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]

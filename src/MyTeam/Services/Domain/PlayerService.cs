@@ -120,6 +120,7 @@ namespace MyTeam.Services.Domain
             player.StartDate = model.StartDate;
             player.BirthDate = model.BirthDate;
             player.PositionsString = model.PositionsString;
+            player.ProfileIsConfirmed = true;
             _playerRepository.CommitChanges();
         }
 

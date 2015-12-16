@@ -9,6 +9,7 @@ namespace MyTeam
         public Guid Id { get; }
         public string[] Roles { get; }
         public Guid[] TeamIds { get; }
+        public bool ProfileIsConfirmed { get; }
 
 
         public UserMember(PlayerDto player)
@@ -18,6 +19,7 @@ namespace MyTeam
                 Id = player.Id;
                 Roles = player.Roles;
                 TeamIds = player.TeamIds;
+                ProfileIsConfirmed = player.ProfileIsConfirmed;
             }
             else
             {
@@ -38,6 +40,5 @@ namespace MyTeam
         }
 
         public bool Exists => Id != Guid.Empty;
-
     }
 }

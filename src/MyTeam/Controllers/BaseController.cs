@@ -18,7 +18,15 @@ namespace MyTeam.Controllers
         [NonAction]
         public void Alert(AlertType type, string message)
         {
-            ViewData.Add($"Alert{type}", message);
+            if (Request.IsAjaxRequest())
+            {
+                ViewData.Add($"AjaxAlert{type}", message);
+            }
+            else
+            {
+                ViewData.Add($"Alert{type}", message);
+            }
+
         }
      
     }

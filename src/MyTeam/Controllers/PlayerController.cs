@@ -51,8 +51,11 @@ namespace MyTeam.Controllers
 
         [Route("endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
-        public IActionResult Edit(Guid playerId)
+        public IActionResult Edit(Guid playerId, bool filterRedirect = false)
         {
+            if(filterRedirect)
+                Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
+
             if (Request.IsAjaxRequest())
             {
                 var player = PlayerRepository.GetSingle(playerId);
@@ -71,6 +74,7 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 PlayerService.EditPlayer(model);
+                Alert(AlertType.Success, "Profil lagret");
                 return Show(model.Id);
 
             }

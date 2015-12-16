@@ -11,11 +11,15 @@ mt.deleteWithAjax = function(selector) {
     });
 }
 
-
-mt.alert = function(type, message) {
-    $('#' + type).removeClass("hidden");
+mt.alert = function (type, message) {
+    this.clearAlerts();
     $('#' + type + " .alert-content").html(message);
+    $('#' + type).removeClass("hidden");
     $('.alert').effect("highlight", {}, 500);
+}
+
+mt.clearAlerts = function () {
+    $('#alerts').find('.alert').addClass('hidden');
 }
 
 mt.showElement = function(selector) {

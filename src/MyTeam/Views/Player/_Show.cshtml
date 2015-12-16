@@ -39,4 +39,5 @@
     <script>
         layout.pushState('@Html.Raw(Url.Action("List", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
     </script>
+    @Html.Partial("_Alerts");
 }
