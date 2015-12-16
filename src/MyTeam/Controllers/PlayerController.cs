@@ -73,15 +73,13 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.EditPlayer(model);
+                PlayerService.EditPlayer(model, Club.ClubId);
                 Alert(AlertType.Success, "Profil lagret");
                 return Show(model.Id);
 
             }
             return PartialView("_Edit", model);
         }
-      
-
     
     }
 }

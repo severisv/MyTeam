@@ -119,7 +119,7 @@ namespace MyTeam.Services.Application
             {
                 notifications = new Dictionary<Guid, MemberNotification>();
             }
-
+            
             var currentEvents = new List<Guid>();
             foreach (var id in teamIds)
             {
@@ -127,7 +127,7 @@ namespace MyTeam.Services.Application
                   .Select(et => et.Event)
                   .Where(e => e.SignupHasOpened() && !e.SignupHasClosed())
                   .Select(e => e.Id).ToList();
-                   currentEvents.AddRange(ids);
+                  currentEvents.AddRange(ids);
             }
 
             var count = currentEvents.Count();

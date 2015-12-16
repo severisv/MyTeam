@@ -110,7 +110,7 @@ namespace MyTeam.Services.Domain
             _cacheHelper.ClearCache(clubName, player.UserName);
         }
 
-        public void EditPlayer(EditPlayerViewModel model)
+        public void EditPlayer(EditPlayerViewModel model, string clubId)
         {
             var player = _playerRepository.GetSingle(model.Id);
             player.FirstName = model.FirstName;
@@ -122,6 +122,7 @@ namespace MyTeam.Services.Domain
             player.PositionsString = model.PositionsString;
             player.ProfileIsConfirmed = true;
             _playerRepository.CommitChanges();
+            _cacheHelper.ClearCache(clubId, player.UserName);
         }
 
         public void AddEmailToPlayer(string facebookId, string email)

@@ -15,7 +15,7 @@ namespace MyTeam.Services.Domain
         IEnumerable<string> GetFacebookIds();
         void SetPlayerStatus(Guid id, PlayerStatus status, string clubName);
         void TogglePlayerRole(Guid id, string role, string clubName);
-        void EditPlayer(EditPlayerViewModel model);
+        void EditPlayer(EditPlayerViewModel model, string clubId);
         void AddEmailToPlayer(string facebookId, string email);
         IEnumerable<SimplePlayerDto> GetDto(string clubId);
         void TogglePlayerTeam(Guid teamId, Guid guid, string clubName);
