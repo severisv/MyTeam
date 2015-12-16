@@ -34,14 +34,14 @@ else
         <div class="form-group">
             <label mt-for="Date" mt-icon="calendar" class="col-xs-2 control-label"></label>
             <div class="col-xs-10">
-                <input asp-for="Date" class="form-control datepicker" />
+                <input asp-for="Date" type="text" class="form-control datepicker" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label mt-for="Time" mt-icon="clock-o" class="col-xs-2 control-label"></label>
             <div class="col-xs-10">
-                <input asp-for="Time" class="form-control timepicker" />
+                <input asp-for="Time" type="text" class="form-control timepicker" />
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
         </div>
