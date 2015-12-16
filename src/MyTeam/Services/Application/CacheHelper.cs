@@ -120,15 +120,17 @@ namespace MyTeam.Services.Application
                 notifications = new Dictionary<Guid, MemberNotification>();
             }
             
-            var currentEvents = new List<Guid>();
+            var events = new List<Guid>();
             foreach (var id in teamIds)
             {
              var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
                   .Select(et => et.Event)
                   .Where(e => e.SignupHasOpened() && !e.SignupHasClosed())
                   .Select(e => e.Id).ToList();
-                  currentEvents.AddRange(ids);
+                events.AddRange(ids);
             }
+
+            var currentEvents = events.Distinct().ToList();
 
             var count = currentEvents.Count();
             var answered = _dbContext.EventAttendances.Count(a => a.MemberId == memberId && currentEvents.Any(ce => ce == a.EventId));
