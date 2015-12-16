@@ -7,6 +7,7 @@ using MyTeam.Models.Enums;
 using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Events;
 using Microsoft.Data.Entity;
+using MyTeam.Services.Application;
 
 namespace MyTeam.Services.Domain
 {
@@ -16,13 +17,15 @@ namespace MyTeam.Services.Domain
         public IRepository<EventAttendance> EventAttendanceRepository { get; set; }
         public IRepository<Player> PlayerRepository { get; set; }
         private readonly ApplicationDbContext _dbContext;
+        private readonly ICacheHelper _cacheHelper;
 
-        public EventService(IRepository<Event> eventRepository, IRepository<EventAttendance> eventAttendanceRepository, IRepository<Player> playerRepository, ApplicationDbContext dbContext)
+        public EventService(IRepository<Event> eventRepository, IRepository<EventAttendance> eventAttendanceRepository, IRepository<Player> playerRepository, ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
             EventRepository = eventRepository;
             EventAttendanceRepository = eventAttendanceRepository;
             PlayerRepository = playerRepository;
             _dbContext = dbContext;
+            _cacheHelper = cacheHelper;
         }
 
         public Event Get(Guid id)
@@ -77,7 +80,7 @@ namespace MyTeam.Services.Domain
             return resultViewModels;
         }
 
-        public void SetAttendance(Guid eventId, Guid memberId, bool isAttending)
+        public void SetAttendance(Guid eventId, Guid memberId, bool isAttending, Guid clubId)
         {
 
             var attendance = _dbContext.EventAttendances.SingleOrDefault(e => e.EventId == eventId && e.MemberId == memberId);
@@ -96,23 +99,26 @@ namespace MyTeam.Services.Domain
                 _dbContext.EventAttendances.Add(attendance);
             }
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCacheByMemberId(clubId, memberId);
 
         }
 
-        public void Add(params Event[] events)
+        public void Add(Guid clubId, params Event[] events)
         {
             _dbContext.Events.AddRange(events);
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCache(clubId);
         }
 
-        public void Delete(Guid eventId)
+        public void Delete(Guid clubId, Guid eventId)
         {
             var ev = EventRepository.GetSingle(eventId);
             _dbContext.Remove(ev);
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCache(clubId);
         }
 
-        public void Update(CreateEventViewModel model)
+        public void Update(CreateEventViewModel model, Guid clubId)
         {
             var ev = _dbContext.Events.Include(e => e.EventTeams)
                 .Single(e => e.Id == model.EventId);
@@ -145,6 +151,7 @@ namespace MyTeam.Services.Domain
                 }
             }
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCache(clubId);
         }
 
         public void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,12 +19,15 @@ namespace MyTeam.Services.Application
         public IMemoryCache Cache { get; set; }
         public IRepository<Player> PlayerRepository { get; set; }
         public IRepository<Club> ClubRepository { get; set; }
+        private readonly ApplicationDbContext _dbContext;
 
-        public CacheHelper(IRepository<Player> playerRepository, IRepository<Club> clubRepository, IMemoryCache cache)
+        public CacheHelper(IRepository<Player> playerRepository, IRepository<Club> clubRepository, IMemoryCache cache,
+            ApplicationDbContext dbContext)
         {
             PlayerRepository = playerRepository;
             ClubRepository = clubRepository;
             Cache = cache;
+            _dbContext = dbContext;
         }
 
         public PlayerDto GetPlayerFromUser(string name, string clubId)
@@ -96,6 +100,69 @@ namespace MyTeam.Services.Application
             if (string.IsNullOrEmpty(clubId) || string.IsNullOrEmpty(email)) return;
             var key = email+clubId;
             Cache.Remove(key);
+        }
+
+        public MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds)
+        {
+            var key = clubId.ToString();
+
+            object cachedValue;
+            Cache.TryGetValue(key, out cachedValue);
+
+            var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
+            if (notifications != null)
+            {
+                var result = notifications[memberId] as MemberNotification;
+                if (result != null) return result;
+            }
+            else
+            {
+                notifications = new Dictionary<Guid, MemberNotification>();
+            }
+
+            var currentEvents = new List<Guid>();
+            foreach (var id in teamIds)
+            {
+             var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
+                  .Select(et => et.Event)
+                  .Where(e => e.SignupHasOpened() && !e.SignupHasClosed())
+                  .Select(e => e.Id).ToList();
+                   currentEvents.AddRange(ids);
+            }
+
+            var count = currentEvents.Count();
+            var answered = _dbContext.EventAttendances.Count(a => a.MemberId == memberId && currentEvents.Any(ce => ce == a.EventId));
+
+            var memberNotification = new MemberNotification
+            {
+                UnansweredEvents = count - answered
+            };
+
+            notifications[memberId] = memberNotification;
+            
+            Cache.Set(key, notifications, _cacheOptions);
+           
+            return memberNotification;
+        }
+
+        public void ClearNotificationCache(Guid clubId)
+        {
+            Cache.Set(clubId.ToString(), null);
+        }
+
+        public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)
+        {
+            var key = clubId.ToString();
+
+            object cachedValue;
+            Cache.TryGetValue(key, out cachedValue);
+
+            var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
+            if (notifications != null)
+            {
+                notifications[memberId] = null;
+            }
+            Cache.Set(key, notifications);
         }
     }
 }

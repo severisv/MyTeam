@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Http;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Routing;
 using MyTeam.Models.Domain;
@@ -12,5 +14,8 @@ namespace MyTeam.Services.Application
         PlayerDto GetPlayerFromUser(string name, string clubId);
         ClubDto GetCurrentClub(string clubId);
         void ClearCache(string clubId, string email);
+        MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds);
+        void ClearNotificationCache(Guid clubId);
+        void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId);
     }
 }

@@ -39,13 +39,16 @@
                 <li><a asp-controller="game" asp-action="index">@Res.Games</a></li>
                 <li><a asp-controller="table" asp-action="index">@Res.Table</a></li>
                 <li><a asp-controller="stats" asp-action="index">@Res.Stats</a></li>
-                @if (Context.Member().Exists)
+                @if (Context.UserIsMember())
                 {
                     <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
                 }
             </ul>
-
             @await Html.PartialAsync("_LoginPartial")
+            @if (Context.UserIsMember())
+            {
+                @Component.Invoke("NotificationButton")
+            }
         </div>
         @if (Context.UserIsMember())
         {
@@ -55,7 +58,6 @@
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
                 {
-
                     <li><a asp-controller="admin" asp-action="index"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
                 }
             </ul>

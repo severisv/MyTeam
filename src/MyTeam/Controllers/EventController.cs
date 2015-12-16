@@ -53,7 +53,7 @@ namespace MyTeam.Controllers
             }
             else
             {
-                EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending);
+                EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending, Club.Id);
                 ev.SetAttendance(CurrentMember.Id, isAttending);
             }
             return PartialView("_SignupDetails", ev);
@@ -92,7 +92,7 @@ namespace MyTeam.Controllers
                 var result = new List<EventViewModel>();
                 if (model.EventId.HasValue)
                 {
-                    EventService.Update(model);
+                    EventService.Update(model, Club.Id);
                     result.Add(EventService.GetEventViewModel(model.EventId.Value));
                 }
 
@@ -100,7 +100,7 @@ namespace MyTeam.Controllers
                 {
                     model.ClubId = HttpContext.GetClub().Id;
                     var events = model.CreateEvents();
-                    EventService.Add(events.ToArray());
+                    EventService.Add(Club.Id, events.ToArray());
                     result.AddRange(events.Select(e => new EventViewModel(e)));
                 }
 
@@ -141,7 +141,7 @@ namespace MyTeam.Controllers
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
-            EventService.Delete(eventId);
+            EventService.Delete(Club.Id, eventId);
 
             Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");

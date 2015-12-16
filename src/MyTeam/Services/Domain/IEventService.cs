@@ -12,10 +12,10 @@ namespace MyTeam.Services.Domain
         IEnumerable<EventViewModel> GetUpcoming(EventType type, IEnumerable<Guid> teamIds, bool showAll = false);
         IList<Event> GetAll(EventType type, IEnumerable<Guid> teamIds);
         IEnumerable<EventViewModel> GetPrevious(EventType type, IEnumerable<Guid> teamIds, int? count = null);
-        void SetAttendance(Guid eventId, Guid playerId,  bool isAttending);
-        void Add(params  Event[] ev);
-        void Delete(Guid eventId);
-        void Update(CreateEventViewModel ev);
+        void SetAttendance(Guid eventId, Guid playerId,  bool isAttending, Guid clubId);
+        void Add(Guid clubId, params  Event[] ev);
+        void Delete(Guid clubId, Guid eventId);
+        void Update(CreateEventViewModel ev, Guid clubId);
         void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend);
         EventViewModel GetEventViewModel(Guid eventId);
     }

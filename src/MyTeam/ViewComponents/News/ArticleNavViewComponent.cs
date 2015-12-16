@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.News
 {
