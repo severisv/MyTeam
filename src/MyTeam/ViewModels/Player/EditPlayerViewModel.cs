@@ -26,11 +26,11 @@ namespace MyTeam.ViewModels.Player
         [RequiredNO]
         [Display(Name = Res.BirthDate)]
         [DataType(DataType.Date)]
-        public DateTime? BirthDate { get; set; }
+        public string BirthDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = Res.StartDate)]
         [RequiredNO]
-        public DateTime? StartDate { get; set; }
+        public string StartDate { get; set; }
         [RegularExpression(@"^\d{8}$", ErrorMessage = "Vennligst skriv inn et gyldig telefonnummer")]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]
@@ -64,8 +64,8 @@ namespace MyTeam.ViewModels.Player
             LastName = player.LastName;
             ImageFull = player.ImageFull;
             Phone = player.Phone;
-            StartDate = player.StartDate;
-            BirthDate = player.BirthDate;
+            StartDate = player.StartDate.ToNoFull();
+            BirthDate = player.BirthDate.ToNoFull();
             Positions = player.Positions;
         }
 
@@ -76,11 +76,19 @@ namespace MyTeam.ViewModels.Player
             {
                 result.Add(new ValidationResult("Minst én posisjon må oppgis"));
             }
-            if (StartDate < new DateTime(2007,01,01))
+            if (StartDate.AsDate() == null)
+            {
+                result.Add(new ValidationResult("Startdato må være på formatet dd.mm.åååå",  new[] { nameof(StartDate) }));
+            }
+            if (BirthDate.AsDate() == null)
+            {
+                result.Add(new ValidationResult("Fødselsdato må være på formatet dd.mm.åååå",  new[] { nameof(BirthDate) }));
+            }
+            if (StartDate.AsDate() < new DateTime(2007,01,01))
             {
                 result.Add(new ValidationResult("Første mulige startdato er i 2007",  new[] { nameof(StartDate) }));
             }
-            if (BirthDate < new DateTime(1945,01,01))
+            if (BirthDate.AsDate() < new DateTime(1945,01,01))
             {
                 result.Add(new ValidationResult("Fødselsdatoen må være en troverdig dato", new[] { nameof(BirthDate) }));
             }

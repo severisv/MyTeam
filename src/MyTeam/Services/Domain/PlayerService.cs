@@ -117,8 +117,8 @@ namespace MyTeam.Services.Domain
             player.MiddleName = model.MiddleName;
             player.LastName = model.LastName;
             player.Phone = model.Phone;
-            player.StartDate = model.StartDate;
-            player.BirthDate = model.BirthDate;
+            player.StartDate = model.StartDate.AsDate();
+            player.BirthDate = model.BirthDate.AsDate();
             player.PositionsString = model.PositionsString;
             player.ProfileIsConfirmed = true;
             _playerRepository.CommitChanges();

@@ -27,5 +27,27 @@ namespace MyTeam
             if(str.Length > 300) return $"{str?.Substring(0, length)}...";
             return str;
         }
+
+
+        public static DateTime? AsDate(this string str)
+        {
+            try
+            {
+                return DateTime.Parse(str);
+            }
+            catch(Exception)
+            { }
+
+            try
+            {
+                var dateArray = str.Split('.');
+                return new DateTime(int.Parse(dateArray[2]), int.Parse(dateArray[1]), int.Parse(dateArray[0]));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+           
+        }
     }
 }

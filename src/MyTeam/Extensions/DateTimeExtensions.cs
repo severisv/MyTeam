@@ -8,5 +8,16 @@ namespace MyTeam
         {
             return datetime.ToString("ddd d MMMM");
         }
+
+        public static string ToNoFull(this DateTime? datetime)
+        {
+            if (datetime == null) return string.Empty;
+            return datetime.Value.ToString("dd.MM.yyyy");
+        }
+
+        public static string ToNoFull(this DateTime datetime)
+        {
+            return datetime.ToString("dd.MM.yyyy");
+        }
     }
 }

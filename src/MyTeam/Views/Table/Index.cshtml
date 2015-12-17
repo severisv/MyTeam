@@ -67,7 +67,7 @@
             <li class="nav-header">@Res.Season.Pluralize()</li>
             @foreach (var season in Model.Seasons)
             {
-                <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
+                <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-controller="table" asp-action="index" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
             }
         </ul>
 

@@ -22,7 +22,7 @@ namespace MyTeam.ViewModels.Events
         [RequiredNO]
         [Display(Name = Res.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         [RequiredNO]
         [Display(Name = Res.Time)]
@@ -30,7 +30,7 @@ namespace MyTeam.ViewModels.Events
         public TimeSpan Time { get; set; }
         [Display(Name = Res.Time)]
         
-        public DateTime DateTime => Date + Time;
+        public DateTime DateTime => Date.AsDate() ?? DateTime.MinValue + Time;
         [Display(Name = Res.Location)]
         [RequiredNO]
         public string Location { get; set; }
@@ -47,8 +47,7 @@ namespace MyTeam.ViewModels.Events
         [Display(Name = Res.Recurring)]
         public bool Recurring { get; set; }
         [Display(Name = Res.ToDate)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? ToDate { get; set; }
+        public string ToDate { get; set; }
 
         [Display(Name = Res.Mandatory)]
         public bool Mandatory { get; set; }
@@ -72,7 +71,7 @@ namespace MyTeam.ViewModels.Events
         public CreateEventViewModel()
         {
             Time = new TimeSpan(19,30,0);
-            Date = DateTime.Now.Date.AddDays(4);
+            Date = DateTime.Now.Date.AddDays(4).ToNoFull();
             Mandatory = true;
             TeamIds = new List<Guid>();
         }
@@ -83,7 +82,7 @@ namespace MyTeam.ViewModels.Events
             var voluntary = ev.Voluntary;
 
             Type = ev.Type;
-            Date = ev.DateTime.Date;
+            Date = ev.DateTime.Date.ToNoFull();
             Time = ev.DateTime.TimeOfDay;
             Description = ev.Description;
             Headline = ev.Headline;
@@ -98,6 +97,16 @@ namespace MyTeam.ViewModels.Events
         {
             var result = new List<ValidationResult>();
 
+            if (Date.AsDate() == null)
+            {
+                result.Add(new ValidationResult("Dato må være på formatet dd.mm.åååå", new[] { nameof(Date) }));
+            }
+            if (!string.IsNullOrEmpty(ToDate) && ToDate.AsDate() == null)
+            {
+                result.Add(new ValidationResult("Til-dato må være på formatet dd.mm.åååå", new[] { nameof(ToDate) }));
+            }
+
+
             if (Type == EventType.Trening)
             {
                 if (Recurring)
@@ -106,9 +115,9 @@ namespace MyTeam.ViewModels.Events
                     {
                         result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(ToDate) }));
                     }
-                    else if (ToDate > DateTime.Now.AddMonths(Config.AllowedMonthsAheadInTimeForTrainingCreation))
+                    else if (ToDate.AsDate() > DateTime.Now.AddMonths(Config.AllowedMonthsAheadInTimeForTrainingCreation))
                     {
-                        ToDate = DateTime.Now.Date.AddMonths(Config.AllowedMonthsAheadInTimeForTrainingCreation);
+                        ToDate = DateTime.Now.Date.AddMonths(Config.AllowedMonthsAheadInTimeForTrainingCreation).ToNoFull();
                         result.Add(new ValidationResult(Res.TrainingCreationTooFarAheadInTime, new[] { nameof(ToDate) }));
                     }
                 }
@@ -143,11 +152,11 @@ namespace MyTeam.ViewModels.Events
                 CreateEvent(Date)
             };
             
-            if (Recurring && ToDate.HasValue)
+            if (Recurring && ToDate.AsDate().HasValue)
             {
-                for (var date = Date.AddDays(7); date < ToDate.Value.Date.AddDays(1); date = date.AddDays(7))
+                for (var date = Date.AsDate().Value.AddDays(7); date < ToDate.AsDate().Value.Date.AddDays(1); date = date.AddDays(7))
                 {
-                    result.Add(CreateEvent(date));
+                    result.Add(CreateEvent(date.ToNoFull()));
                 }
             }
 
@@ -155,8 +164,9 @@ namespace MyTeam.ViewModels.Events
 
         }
 
-        private Event CreateEvent(DateTime date)
+        private Event CreateEvent(string dateTime)
         {
+            var date = (DateTime) dateTime.AsDate();
             var eventId = EventId ?? Guid.NewGuid();
             var eventTeams = new List<EventTeam>();
             foreach (var id in TeamIds)
