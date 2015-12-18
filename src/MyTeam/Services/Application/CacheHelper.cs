@@ -112,7 +112,7 @@ namespace MyTeam.Services.Application
             var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
             if (notifications != null)
             {
-                var result = notifications[memberId] as MemberNotification;
+                var result = notifications.TryGet(memberId);
                 if (result != null) return result;
             }
             else
