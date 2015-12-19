@@ -35,7 +35,13 @@ namespace MyTeam
         private static string GetSubdomain(HttpContext context)
         {
             var hostNameArray = context.Request.Host.Value.Split('.');
-            if (hostNameArray.Length > 2) return hostNameArray[0];
+            if (hostNameArray.Length > 2)
+            {
+                var subdomain = hostNameArray[0];
+                if ("www".Equals(subdomain, StringComparison.CurrentCultureIgnoreCase))
+                    subdomain = hostNameArray[1];
+                return subdomain;
+            }
             return null;
         }
     }
