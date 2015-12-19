@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using MyTeam.Models;
@@ -97,6 +98,7 @@ namespace MyTeam.Services.Application
 
         public void ClearCache(string clubId, string email)
         {
+            Thread.Sleep(20);
             if (string.IsNullOrEmpty(clubId) || string.IsNullOrEmpty(email)) return;
             var key = email+clubId;
             Cache.Remove(key);

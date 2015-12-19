@@ -112,6 +112,5 @@ namespace MyTeam.Controllers
             }
             return Json("Success");
         }
-
     }
 }

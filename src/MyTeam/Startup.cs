@@ -67,13 +67,13 @@ namespace MyTeam
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
 
-                if (env.IsDevelopment())
+            if (env.IsDevelopment())
                 {
                     app.UseBrowserLink();
                 }
                 else
                 {
-             //       app.UseExceptionHandler("/Error/Error");
+                    app.UseExceptionHandler("/Error/Error");
 
                     // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                     try

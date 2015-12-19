@@ -35,7 +35,7 @@ namespace MyTeam.Services.Domain
                       },
                       TeamId = teamId
                   }
-                ).OrderByDescending(s => s.StartDate);
+                ).OrderByDescending(s => s.StartDate).ToList();
         }
 
     

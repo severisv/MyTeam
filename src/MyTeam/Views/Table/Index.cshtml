@@ -9,6 +9,7 @@
 }
 
 
+
 <div mt-main>
     @if (Model.Teams?.Count() > 1)
     {
@@ -17,12 +18,12 @@
                 <ul class="nav nav-pills mt-justified">
                     @foreach (var team in Model.Teams)
                     {
-                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-route-teamid="@team.Id">@team.Name</a></li>
+                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="table" asp-action="index" asp-route-teamid="@team.Id">@team.Name</a></li>
                     }
                 </ul>
             </div>
         </div>
-    <hr/>
+        <hr/>
     }
 
 
@@ -39,17 +40,17 @@
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
         if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
         {
-            <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.CurrentSeason?.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
+            <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.SelectedSeason?.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
         }
 
     }
     else
     {
         <h2><i class="fa fa-trophy"></i> @Model.CurrentSeason.DisplayName</h2>
-        
+
         if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
         {
-            <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.CurrentSeason.Id"><i class='fa fa-edit'></i></a>
+            <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.SelectedSeason.Id"><i class='fa fa-edit'></i></a>
         }
         @Html.Partial("_Show", Model.Table)
         <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>

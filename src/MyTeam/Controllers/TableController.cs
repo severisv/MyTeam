@@ -26,11 +26,14 @@ namespace MyTeam.Controllers
                 ? SeasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
                 SeasonService.GetForTeam(teamId ?? Club.TeamIds.First());
 
-            var teams = DbContext.Teams.Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
-            {
-                Id = t.Id,
-                Name = t.Name
-            }).ToList();
+            var teams = DbContext.Teams
+                .OrderBy(t => t.SortOrder)
+                .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                })
+                .ToList();
 
             var model = new TableViewModel(seasons, teams, seasonId);
             if (model.SelectedSeason != null)

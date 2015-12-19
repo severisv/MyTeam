@@ -12,8 +12,15 @@ namespace MyTeam.Services.Repositories
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-
             var context = serviceProvider.GetService(typeof(ApplicationDbContext)) as ApplicationDbContext;
+            Initialize(context);
+        }
+
+
+
+        public static void Initialize(ApplicationDbContext context)
+        {
+
      
             var club = new Club()
             {

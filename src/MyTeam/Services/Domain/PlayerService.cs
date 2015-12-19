@@ -121,7 +121,7 @@ namespace MyTeam.Services.Domain
             player.BirthDate = model.BirthDate.AsDate();
             player.PositionsString = model.PositionsString;
             player.ProfileIsConfirmed = true;
-            _playerRepository.CommitChanges();
+            _applicationDbContext.SaveChanges();
             _cacheHelper.ClearCache(clubId, player.UserName);
         }
 
