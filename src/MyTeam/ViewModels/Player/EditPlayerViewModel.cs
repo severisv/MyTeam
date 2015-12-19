@@ -12,7 +12,7 @@ namespace MyTeam.ViewModels.Player
     public class EditPlayerViewModel : IValidatableObject
     {
         [RequiredNO]
-        public Guid Id { get; set; }
+        public Guid PlayerId { get; set; }
         [RequiredNO]
         [Display(Name = "Fornavn")]
         public string FirstName { get; set; }
@@ -58,7 +58,7 @@ namespace MyTeam.ViewModels.Player
 
         public EditPlayerViewModel(Models.Domain.Player player)
         {
-            Id = player.Id;
+            PlayerId = player.Id;
             FirstName = player.FirstName;
             MiddleName = player.MiddleName;
             LastName = player.LastName;

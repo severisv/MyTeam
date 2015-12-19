@@ -75,7 +75,7 @@ namespace MyTeam.Controllers
             {
                 PlayerService.EditPlayer(model, Club.ClubId);
                 Alert(AlertType.Success, "Profil lagret");
-                return Show(model.Id);
+                return Show(model.PlayerId);
 
             }
             return PartialView("_Edit", model);

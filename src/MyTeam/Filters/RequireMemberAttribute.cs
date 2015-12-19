@@ -44,9 +44,16 @@ namespace MyTeam.Filters
 
         private bool CurrentPageIsAboutUser(ActionExecutingContext actionContext, UserMember userPlayer)
         {
-            object targetPlayerId;
-            actionContext.ActionArguments.TryGetValue("playerId", out targetPlayerId);
-            if (userPlayer.Id == (targetPlayerId as Guid?)) return true;
+            var targetPlayerId = actionContext.HttpContext.Request.Query["playerId"];
+
+            if (string.IsNullOrWhiteSpace(targetPlayerId))
+                targetPlayerId = actionContext.HttpContext.Request.Form["PlayerId"];
+
+            Guid playerId;
+            Guid.TryParse(targetPlayerId, out playerId);
+
+            if (playerId == userPlayer.Id) return true;
+            
             return false;
 
         }

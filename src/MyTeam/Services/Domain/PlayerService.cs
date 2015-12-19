@@ -112,7 +112,7 @@ namespace MyTeam.Services.Domain
 
         public void EditPlayer(EditPlayerViewModel model, string clubId)
         {
-            var player = _playerRepository.GetSingle(model.Id);
+            var player = _playerRepository.GetSingle(model.PlayerId);
             player.FirstName = model.FirstName;
             player.MiddleName = model.MiddleName;
             player.LastName = model.LastName;
