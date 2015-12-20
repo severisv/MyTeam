@@ -66,9 +66,10 @@ namespace MyTeam.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("innlogging")]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null, bool local = false)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["Local"] = local;
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -107,7 +108,8 @@ namespace MyTeam.Controllers
         [Route("ny")]
         public IActionResult Register()
         {
-            return View();
+            var model = new RegisterViewModel();
+            return View(model);
         }
 
         //
@@ -132,7 +134,7 @@ namespace MyTeam.Controllers
                     //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToAction(nameof(NewsController.Index), "Home");
+                    return RedirectToAction(nameof(NewsController.Index), "News");
                 }
                 AddErrors(result);
             }
