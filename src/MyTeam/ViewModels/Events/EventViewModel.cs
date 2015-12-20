@@ -48,6 +48,7 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<AttendeeViewModel> Attending => Attendees?.Where(a => a.IsAttending);
         public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => !a.IsAttending);
+        public IEnumerable<AttendeeViewModel> DidAttend => Attendees?.Where(a => a.DidAttend);
 
         public bool IsGame => Type == EventType.Kamp;
         public bool IsTraining => Type == EventType.Trening;
@@ -71,6 +72,8 @@ namespace MyTeam.ViewModels.Events
         public bool SignupHasClosed() => DateTime < DateTime.Now;
 
         public bool SignoffHasClosed() => DateTime - DateTime.Now < new TimeSpan(0, Settings.Config.AllowedSignoffHours, 0, 0);
+
+        public bool HasPassed() => DateTime.Now - DateTime  > new TimeSpan(0, 1, 0, 0);
 
         public void SetAttendance(Guid memberId, bool isAttending)
         {
