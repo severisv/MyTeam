@@ -8,7 +8,10 @@
 
 <div class="mt-container">
     <h1 class="text-danger">@Res.Error</h1>
-    @Html.Partial("_ErrorSummary")
+    @if (User.IsDeveloper())
+    {
+        @Html.Partial("_ErrorSummary")
+    }
 </div>
 
 

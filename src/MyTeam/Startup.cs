@@ -67,6 +67,9 @@ namespace MyTeam
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
 
+            app.UseExceptionHandler("/Error/Error");
+
+
             if (env.IsDevelopment())
                 {
                     app.UseBrowserLink();

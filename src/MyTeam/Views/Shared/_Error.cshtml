@@ -7,11 +7,12 @@
     var guid = Guid.NewGuid();
 }
 
-<div mt-alert="@AlertType.Danger" >
+<div mt-alert="@AlertType.Danger">
     @Res.Error
 </div>
 
-@if (Model != null)
+
+@if (Model != null && User.IsDeveloper())
 {
     <p>
         <a data-toggle="collapse" href="#stacktrace-@guid"><i class="fa fa-warning"></i> Stacktrace</a>
