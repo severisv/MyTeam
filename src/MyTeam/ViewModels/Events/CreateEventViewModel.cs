@@ -27,10 +27,10 @@ namespace MyTeam.ViewModels.Events
         [RequiredNO]
         [Display(Name = Res.Time)]
         [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan Time { get; set; }
+        public string Time { get; set; }
         [Display(Name = Res.Time)]
         
-        public DateTime DateTime => Date.AsDate() ?? DateTime.MinValue + Time;
+        public DateTime DateTime => (Date.AsDate() ?? DateTime.MinValue) + (Time.AsTime()?? TimeSpan.MinValue);
         [Display(Name = Res.Location)]
         [RequiredNO]
         public string Location { get; set; }
@@ -70,7 +70,7 @@ namespace MyTeam.ViewModels.Events
 
         public CreateEventViewModel()
         {
-            Time = new TimeSpan(19,30,0);
+            Time = new TimeSpan(19,30,0).ToString();
             Date = DateTime.Now.Date.AddDays(4).ToNoFull();
             Mandatory = true;
             TeamIds = new List<Guid>();
@@ -83,7 +83,7 @@ namespace MyTeam.ViewModels.Events
 
             Type = ev.Type;
             Date = ev.DateTime.Date.ToNoFull();
-            Time = ev.DateTime.TimeOfDay;
+            Time = ev.DateTime.TimeOfDay.ToNo();
             Description = ev.Description;
             Headline = ev.Headline;
             Opponent = opponent;
@@ -186,7 +186,7 @@ namespace MyTeam.ViewModels.Events
                     Id = eventId,
                     Location = Location,
                     Type = Type,
-                    DateTime = date + Time,
+                    DateTime = date + Time.AsTime().Value,
                     Description = Description,
                     Headline = Headline,
                     Opponent = Opponent,
@@ -200,7 +200,7 @@ namespace MyTeam.ViewModels.Events
                     Id = eventId,
                     Location = Location,
                     Type = Type,
-                    DateTime = date + Time,
+                    DateTime = date + Time.AsTime().Value,
                     Description = Description,
                     Voluntary = !Mandatory,
                     Headline = Headline,
@@ -213,7 +213,7 @@ namespace MyTeam.ViewModels.Events
                 Id = eventId,
                 Location = Location,
                 Type = Type,
-                DateTime = date + Time,
+                DateTime = date + Time.AsTime().Value,
                 Description = Description,
                 Headline = Headline,
                 EventTeams = eventTeams

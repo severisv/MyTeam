@@ -19,5 +19,10 @@ namespace MyTeam
         {
             return datetime.ToString("dd.MM.yyyy");
         }
+
+        public static string ToNo(this TimeSpan timespan)
+        {
+            return timespan.ToString(@"hh\:mm");
+        }
     }
 }

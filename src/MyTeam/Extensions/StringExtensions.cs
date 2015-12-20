@@ -49,5 +49,19 @@ namespace MyTeam
             }
            
         }
+
+        public static TimeSpan? AsTime(this string str)
+        {
+         try
+            {
+                var dateArray = str.Split(':');
+                return new TimeSpan(int.Parse(dateArray[0]), int.Parse(dateArray[1]), 0);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+           
+        }
     }
 }
