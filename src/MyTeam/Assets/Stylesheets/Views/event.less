@@ -76,3 +76,55 @@
 select.event-teamSelect {
     height: 3.6em;
 }
+
+
+.r-above(@md-min, {
+
+    .show-event-container{
+        display:flex;
+    }
+    .event-col-1 {
+    flex: 1;
+}
+
+.event-col-2 {
+    flex: 2;
+}
+
+.event-col-3 {
+    flex: 3;
+}
+
+});
+
+
+ .r-under(@sm-max,{
+     .event-col-1 {
+         width: 11rem;
+         float:left;
+     } 
+     
+     .event-col-2 {
+                  min-width: 12rem;
+                  float:left;
+
+     }
+     .event-col-3 {
+                  float:left;
+                  display:block;
+                  margin-left: 11rem;
+
+     }
+ });
+   .r-under(@xxs-max,{
+     .event-col-1 {
+         width: 4rem;
+     } 
+        .event-col-3 {
+                  float:left;
+                  display:block;
+                  margin-left: 4rem;
+
+     }
+       
+ });

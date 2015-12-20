@@ -13,7 +13,7 @@
 {
 
 if(Model.SignupHasClosed()){
-    <a asp-action="registerattendance" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
+    <a asp-action="registerattendance" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> @Res.Register @Res.Attendance.ToLower()</span></a>
 }
 else {
     <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
@@ -21,13 +21,13 @@ else {
 }
 
 <div class="show-upcoming-event">
-    <div class="flex">
-        <div class="flex-1 event-icon">
+    <div class="show-event-container">
+        <div class="event-col-1 event-icon">
             <div>
                 <span mt-eventtype="@Model.Type" mt-hidename="true"></span>
             </div>
         </div>
-        <div class="flex-2">
+        <div class="event-col-2">
             <p>
                 <i class="fa fa-calendar"></i> @Model.DateTime.ToNo()
             </p>
@@ -44,7 +44,7 @@ else {
                 </p>
             }
         </div>
-        <div class="flex-3 ">
+        <div class="event-col-3 ">
             @if (Model.Type == EventType.Diverse)
             {
                 <h3 class="no-margin">@Html.DisplayFor(m => m.Headline)</h3>
