@@ -21,6 +21,7 @@ namespace MyTeam.Services.Domain
             var eventIds = _dbContext.Events
                 .Where(e => teamIds.Any(ti => e.EventTeams.Any(et => et.TeamId == ti)) &&
                             e.DateTime.Year == year &&
+                            e.Voluntary == false &&
                             (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id);
 
             var attendances = _dbContext.EventAttendances.Where(a => eventIds.Contains(a.EventId));
