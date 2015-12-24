@@ -1,6 +1,7 @@
 ﻿@using System.Threading.Tasks
+@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Settings
-@model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendanceViewModel.PlayerAttendanceViewModel>
+@model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendanceViewModel.RegisterAttendancePlayerViewModel>
 <div class="row">
     <ul class="list-users col-xs-11 col-md-10">
         @foreach (var player in Model)

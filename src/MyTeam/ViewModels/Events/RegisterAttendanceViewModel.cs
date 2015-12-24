@@ -1,44 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity.Metadata;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
-using MyTeam.Resources;
-using MyTeam.ViewModels.Attendance;
 
 namespace MyTeam.ViewModels.Events
 {
     public class RegisterAttendanceViewModel
     {
-        public IEnumerable<EventViewModel>  PreviousEvents { get; } 
-        public EventViewModel Training { get; }
-        private readonly IEnumerable<RegisterAttendanceViewModel.PlayerAttendanceViewModel> _players;
+        public IEnumerable<SimpleEventViewModel>  PreviousEvents { get; } 
+        public RegisterAttendanceEventViewModel Training { get; }
+        private readonly IEnumerable<RegisterAttendancePlayerViewModel> _players;
 
-        public IEnumerable<PlayerAttendanceViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
+        public IEnumerable<RegisterAttendancePlayerViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
 
-        public IEnumerable<PlayerAttendanceViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv).Where(p => Attendees.All(a => a.Id != p.Id));
+        public IEnumerable<RegisterAttendancePlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv).Where(p => Attendees.All(a => a.Id != p.Id));
 
-        public IEnumerable<PlayerAttendanceViewModel> OtherInactivePlayers => _players.Where(p => Attendees.All(a => a.Id != p.Id)).Where(p => OtherActivePlayers.All(a => a.Id != p.Id));
+        public IEnumerable<RegisterAttendancePlayerViewModel> OtherInactivePlayers => _players.Where(p => Attendees.All(a => a.Id != p.Id)).Where(p => OtherActivePlayers.All(a => a.Id != p.Id));
 
-        public RegisterAttendanceViewModel(EventViewModel training, IEnumerable<SimplePlayerDto> players, IEnumerable<EventViewModel> previousEvents)
+        public RegisterAttendanceViewModel(RegisterAttendanceEventViewModel training, IEnumerable<SimplePlayerDto> players, IEnumerable<SimpleEventViewModel> previousEvents)
         {
             Training = training;
-            _players = players.Select(p => new PlayerAttendanceViewModel(p, Training.Id,
+            _players = players.Select(p => new RegisterAttendancePlayerViewModel(p, Training.Id,
                     training.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
                 ));
           
             PreviousEvents = previousEvents;
         }
 
-        public class PlayerAttendanceViewModel : SimplePlayerDto
+        public class RegisterAttendancePlayerViewModel : SimplePlayerDto
         {
-            public AttendeeViewModel Attendance { get; }
+            public RegisterAttendanceAttendeeViewModel Attendance { get; }
             public Guid EventId { get; }
 
-            public PlayerAttendanceViewModel(SimplePlayerDto player, Guid eventId, AttendeeViewModel attendance)
+            public RegisterAttendancePlayerViewModel(SimplePlayerDto player, Guid eventId, RegisterAttendanceAttendeeViewModel attendance)
             {
                 Attendance = attendance;
                 Id = player.Id;
@@ -48,5 +43,7 @@ namespace MyTeam.ViewModels.Events
                 EventId = eventId;
             }
         }
+
+      
     }
 }

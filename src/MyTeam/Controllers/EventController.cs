@@ -29,8 +29,8 @@ namespace MyTeam.Controllers
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
         {
             var events = previous
-                ? EventService.GetPrevious(type, Club.TeamIds)
-                : EventService.GetUpcoming(type, Club.TeamIds);
+                ? EventService.GetPrevious(type, Club.Id)
+                : EventService.GetUpcoming(type, Club.Id);
             
             var model = new UpcomingEventsViewModel(events, type, previous);
 
@@ -152,9 +152,9 @@ namespace MyTeam.Controllers
         [Route("oppmote/bekreft")]
         public IActionResult RegisterAttendance(Guid eventId)
         {
-            var ev = EventService.GetEventViewModel(eventId);
+            var ev = EventService.GetRegisterAttendanceEventViewModel(eventId);
             var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
-            var previousEvents = EventService.GetPrevious(EventType.Trening, Club.TeamIds, 15).ToList();
+            var previousEvents = EventService.GetPreviousSimpleEvents(EventType.Trening, Club.Id, 15).ToList();
 
             if (ev == null) return new NotFoundResult(HttpContext);
 

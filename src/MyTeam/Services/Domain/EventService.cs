@@ -33,10 +33,10 @@ namespace MyTeam.Services.Domain
             return EventRepository.GetSingle(id);
         }
 
-        public IEnumerable<EventViewModel> GetUpcoming(EventType type, IEnumerable<Guid> teamIds, bool showAll = false)
+        public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
             return EventRepository.Get()
-                .Where(t => teamIds.Any(ti => t.EventTeams.Any(et => et.TeamId == ti)))  
+                .Where(t => t.ClubId == clubId)  
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime >= DateTime.Now)
                 .Where(t => t.SignupHasOpened())
@@ -50,21 +50,17 @@ namespace MyTeam.Services.Domain
         }
 
  
-        public IList<Event> GetAll(EventType type, IEnumerable<Guid> teamIds)
+        public IList<Event> GetAll(EventType type, Guid clubId)
         {
             return EventRepository.Get()
-                .Where(t => teamIds.Any(ti => t.EventTeams.Any(et => et.TeamId == ti)))
+                .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .ToList();
         }
 
-        public IEnumerable<EventViewModel> GetPrevious(EventType type, IEnumerable<Guid> teamIds, int? count = null)
+        public IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId, int? count = null)
         {
-            var result = EventRepository.Get()
-                .Where(t => teamIds.Any(ti => t.EventTeams.Any(et => et.TeamId == ti)))
-                .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime < DateTime.Now)
-                .OrderByDescending(e => e.DateTime);
+            var result = GetPastEvents(type, clubId);
 
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
@@ -78,6 +74,16 @@ namespace MyTeam.Services.Domain
                 return resultViewModels.Take(count.Value);
             }
             return resultViewModels;
+        }
+
+        private IOrderedQueryable<Event> GetPastEvents(EventType type, Guid clubId)
+        {
+            var result = EventRepository.Get()
+                .Where(t => t.ClubId == clubId)
+                .Where(t => type == EventType.Alle || t.Type == type)
+                .Where(t => t.DateTime < DateTime.Now)
+                .OrderByDescending(e => e.DateTime);
+            return result;
         }
 
         public void SetAttendance(Guid eventId, Guid memberId, bool isAttending, Guid clubId)
@@ -184,6 +190,36 @@ namespace MyTeam.Services.Domain
                     e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)),
                     e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 )).Single();
+        }
+
+        public RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid eventId)
+        {
+            return _dbContext.Events.Where(e => e.Id == eventId)
+                .Select(e => new RegisterAttendanceEventViewModel
+                {
+                    DateTime = e.DateTime,
+                    Attendees = e.Attendees.Select(a => new RegisterAttendanceAttendeeViewModel
+                    {
+                        MemberId = a.MemberId,
+                        IsAttending = a.IsAttending,
+                        DidAttend = a.DidAttend
+                    }),
+                    Id = e.Id,
+                    Location = e.Location,
+                    Type = e.Type
+                }).Single();
+        }
+
+        public IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid clubId, int take)
+        {
+            var query = GetPastEvents(trening, clubId);
+
+            return query.Take(15).Select(e => new SimpleEventViewModel
+            {
+                Id = e.Id,
+                DateTime = e.DateTime
+
+            }).ToList();
         }
     }
 }
