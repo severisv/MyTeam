@@ -11,7 +11,6 @@ namespace MyTeam.Models
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
-        public DbSet<Game> Games { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberTeam> MemberTeams { get; set; }
         public DbSet<EventTeam> EventTeams { get; set; }
@@ -19,7 +18,6 @@ namespace MyTeam.Models
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<Training> Trainings { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

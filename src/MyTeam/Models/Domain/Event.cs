@@ -12,6 +12,8 @@ namespace MyTeam.Models.Domain
     public class Event : Entity
     {
         [Required]
+        public Guid ClubId { get; set; }
+        [Required]
         public EventType Type { get; set; }
 
         [Required]
@@ -24,6 +26,8 @@ namespace MyTeam.Models.Domain
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
 
+        public Guid? ReportId { get; set; }
+        public virtual Article Report { get; set; }
         public virtual Club Club { get; set; }
         
         public virtual ICollection<EventTeam> EventTeams { get; set; }

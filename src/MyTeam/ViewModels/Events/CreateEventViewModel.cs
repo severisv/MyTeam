@@ -81,6 +81,7 @@ namespace MyTeam.ViewModels.Events
             var opponent = ev.Opponent;
             var voluntary = ev.Voluntary;
 
+            ClubId = ev.ClubId;
             Type = ev.Type;
             Date = ev.DateTime.Date.ToNoFull();
             Time = ev.DateTime.TimeOfDay.ToNo();
@@ -179,45 +180,19 @@ namespace MyTeam.ViewModels.Events
                 });
             }
 
-            if (Type == EventType.Kamp)
-            {
-                return new Game
+            return new Event
                 {
                     Id = eventId,
+                    ClubId = ClubId,
                     Location = Location,
                     Type = Type,
                     DateTime = date + Time.AsTime().Value,
                     Description = Description,
                     Headline = Headline,
                     Opponent = Opponent,
-                    EventTeams = eventTeams
-                };
-            }
-            else if (Type == EventType.Trening)
-            {
-                return new Training
-                {
-                    Id = eventId,
-                    Location = Location,
-                    Type = Type,
-                    DateTime = date + Time.AsTime().Value,
-                    Description = Description,
+                    EventTeams = eventTeams,
                     Voluntary = !Mandatory,
-                    Headline = Headline,
-                    EventTeams = eventTeams
                 };
-            }
-
-            return new Event
-            {
-                Id = eventId,
-                Location = Location,
-                Type = Type,
-                DateTime = date + Time.AsTime().Value,
-                Description = Description,
-                Headline = Headline,
-                EventTeams = eventTeams
-            };
         }
         
     }

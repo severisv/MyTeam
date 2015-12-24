@@ -98,7 +98,7 @@ namespace MyTeam.Controllers
 
                 else
                 {
-                    model.ClubId = HttpContext.GetClub().Id;
+                    model.ClubId = Club.Id;
                     var events = model.CreateEvents();
                     EventService.Add(Club.Id, events.ToArray());
                     result.AddRange(events.Select(e => new EventViewModel(e)));

@@ -12,6 +12,7 @@ namespace MyTeam.ViewModels.Events
     public class EventViewModel
     {
         public Guid Id { get; }
+        public Guid ClubId { get; }
         public EventType Type { get; }
         public DateTime DateTime { get;  }
         public string Location { get; }
@@ -23,10 +24,11 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
-        public EventViewModel(IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
+        public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary)
         {
             Id = eventId;
+            ClubId = clubId;
             Attendees = attendees;
             DateTime = dateTime;
             Location = location;
@@ -38,7 +40,7 @@ namespace MyTeam.ViewModels.Events
             TeamIds = teamIds;
         }
 
-        public EventViewModel(Event e) : this(e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary)
+        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary)
         {
             
         }

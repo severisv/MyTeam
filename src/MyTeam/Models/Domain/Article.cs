@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyTeam.Models.Domain
@@ -20,7 +19,7 @@ namespace MyTeam.Models.Domain
         public DateTime Published { get; set; }
 
         public virtual Member Author { get; set; }
-        public virtual Game Game { get; set; }
+        public virtual Event Game { get; set; }
         public virtual Club Club { get; set; }
 
     }

@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151224002342_v7")]
+    partial class v7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -203,6 +204,9 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Headline");
 
                     b.Property<string>("Location")
@@ -210,13 +214,15 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("Opponent");
 
-                    b.Property<Guid?>("ReportId");
-
                     b.Property<int>("Type");
 
                     b.Property<bool>("Voluntary");
 
                     b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Event");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
@@ -355,6 +361,23 @@ namespace MyTeam.Migrations
                     b.HasKey("Id");
                 });
 
+            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+                {
+                    b.HasBaseType("MyTeam.Models.Domain.Event");
+
+                    b.Property<Guid?>("ReportId");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Game");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Training", b =>
+                {
+                    b.HasBaseType("MyTeam.Models.Domain.Event");
+
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Training");
+                });
+
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
                 {
                     b.HasBaseType("MyTeam.Models.Domain.Member");
@@ -415,6 +438,10 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
                         .HasForeignKey("ClubId");
+
+                    b.HasOne("MyTeam.Models.Domain.Game")
+                        .WithOne()
+                        .HasForeignKey("MyTeam.Models.Domain.Article", "GameId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
@@ -422,10 +449,6 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
                         .HasForeignKey("ClubId");
-
-                    b.HasOne("MyTeam.Models.Domain.Article")
-                        .WithOne()
-                        .HasForeignKey("MyTeam.Models.Domain.Event", "ReportId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
@@ -487,6 +510,14 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
                         .HasForeignKey("ClubId");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+                {
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Training", b =>
+                {
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
