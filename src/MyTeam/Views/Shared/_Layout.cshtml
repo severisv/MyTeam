@@ -44,12 +44,17 @@
                     <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
                 }
             </ul>
+        </div>
+    
+       
+        <div class="navbar-topRight">
             @await Html.PartialAsync("_LoginPartial")
             @if (Context.UserIsMember())
             {
                 @Component.Invoke("NotificationButton")
             }
         </div>
+
         @if (Context.UserIsMember())
         {
             <ul id="submenu-internal" class="nav navbar-nav slide-down-child">
@@ -62,7 +67,6 @@
                 }
             </ul>
         }
-
     </div>
 </div>
 @Component.Invoke("PageHeader", ViewBag.PageName ?? ViewBag.Title ?? "", ViewBag.Subtext ?? "")

@@ -5,7 +5,7 @@
 @if (User.IsSignedIn())
 {
 
-    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right signout-form">
+    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-topRight--item navbar-right signout-form">
         <ul class="nav navbar-nav navbar-right">
             @*<li>
                 <a asp-controller="Manage" asp-action="Index" title="@Res.User"><i class="fa fa-user"></i></a>
@@ -18,7 +18,7 @@
 }
 else
 {
-    <ul id="login-wrapper" class="nav navbar-nav navbar-right">
+    <ul id="login-wrapper" class="nav navbar-nav navbar-right navbar-topRight--item">
         <li><a asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in"></i></a></li>
     </ul>
 }

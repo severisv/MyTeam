@@ -45,8 +45,7 @@
 
         .navbar-toggle {
             .icon-bar {
-                            background-color: @team-primary;
-
+                background-color: @team-primary;
             }
         }
     }
@@ -75,7 +74,6 @@
             &:focus, &.active {
                 background-color: lighten(@blueLightSubtle, 18);
             }
-
         }
     }
 }
@@ -119,14 +117,12 @@ i.fa {
     color: lighten(@blueDarkSubtle,10);
     border-color: @blueLightSubtle;
     background-color: lighten(@blueLightSubtle,25);
-
 }
 
 .alert-success {
     color: lighten(@greenDarkSubtle,0);
     border-color: lighten(@greenLightSubtle, 15);
     background-color: lighten(@greenLightSubtle,25);
-
 }
 
 .alert-infosubtle {
@@ -153,22 +149,22 @@ input.form-control, textarea.form-control, select.form-control {
     border-radius: 0;
 }
 
-    input {        
-        &.form-control[type='checkbox'] {
-            width: 33px;
-            margin: 0;
-            display: inline;
-            vertical-align: top;
-        }
+input {
+    &.form-control[type='checkbox'] {
+        width: 33px;
+        margin: 0;
+        display: inline;
+        vertical-align: top;
     }
+}
 
-    div.form-group {
-        div {
-            i.fa {
-                margin-top: 10px;
-            }
+div.form-group {
+    div {
+        i.fa {
+            margin-top: 10px;
         }
     }
+}
 
 
 
@@ -199,9 +195,9 @@ form {
 
 /* Responsive */
 @media (max-width: 429px) {
-  .hidden-xss {
-    display: none !important;
-  }
+    .hidden-xss {
+        display: none !important;
+    }
 }
 
 
@@ -213,17 +209,19 @@ ul.pager li a {
 
 
 /*Colours*/
-.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-               background-color: @blueLight;
-           }
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    background-color: @blueLight;
+}
 
 a {
     color: @blueLight;
+
     &:hover {
-            color: darken(@blueLight, 5);
-    } 
-     &:focus {
-            color: darken(@blueLight, 5);
+        color: darken(@blueLight, 5);
+    }
+
+    &:focus {
+        color: darken(@blueLight, 5);
     }
 }
 
@@ -237,9 +235,10 @@ a {
     color: @white;
     background-color: @blueLight;
     border-color: darken(@blueLight, 0);
+
     &:hover {
-            background-color: darken(@blueLight, 10);
-            border-color: darken(@blueLight, 10);
+        background-color: darken(@blueLight, 10);
+        border-color: darken(@blueLight, 10);
     }
 }
 
@@ -247,9 +246,10 @@ a {
     color: @white;
     background-color: @greenLight;
     border-color: darken(@greenLight, 5);
+
     &:hover {
-            background-color: darken(@greenLight, 5);
-            border-color: darken(@greenLight, 7);
+        background-color: darken(@greenLight, 5);
+        border-color: darken(@greenLight, 7);
     }
 }
 
@@ -257,9 +257,10 @@ a {
     color: @white;
     background-color: @redLight;
     border-color: darken(@redLight, 5);
+
     &:hover {
-            background-color: darken(@redLight, 5);
-            border-color: darken(@redLight, 7);
+        background-color: darken(@redLight, 5);
+        border-color: darken(@redLight, 7);
     }
 }
 
@@ -267,8 +268,14 @@ a {
     color: @white;
     background-color: @orangeLight;
     border-color: darken(@orangeLight, 5);
-    &:hover {
-            background-color: darken(@orangeLight, 5);
-            border-color: darken(@orangeLight, 7);
+
+    &:hover, &:focus {
+        background-color: darken(@orangeLight, 5);
+        border-color: darken(@orangeLight, 7);
     }
+}
+
+.btn-warning.active.focus, .btn-warning.active:focus, .btn-warning.active:hover, .btn-warning:active.focus, .btn-warning:active:focus, .btn-warning:active:hover, .open > .dropdown-toggle.btn-warning.focus, .open > .dropdown-toggle.btn-warning:focus, .open > .dropdown-toggle.btn-warning:hover {
+    background-color: darken(@orangeLight, 5);
+    border-color: darken(@orangeLight, 7);
 }

@@ -36,6 +36,9 @@
 }
 
 
+.r-under-xs(@rules) {
+	@media (max-width: @xs-max) { @rules(); }
+}
 .r-under-xxs(@rules) {
 	@media (max-width: @xxs-max) { @rules(); }
 }

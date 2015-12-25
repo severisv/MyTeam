@@ -8,14 +8,16 @@
 
 @foreach (var player in Model.Players)
 {
-    <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players" 
-       asp-controller="player" asp-action="show" asp-route-playerid="@player.Id" 
-       class="col-lg-3 col-md-4 col-xs-4 text-center mt-player-container">
-        <div class="image-container">
-            <img src="@Cloudinary.MemberImage(player.ImageMedium, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
-        </div>
-        <p>@Html.DisplayFor(p => player.Name)</p>
-    </a>
+    <div class="col-lg-3 col-md-4 col-xs-4 text-center mt-playerWrapper">
+        <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#show-players"
+           asp-controller="player" asp-action="show" asp-route-playerid="@player.Id"
+           class="mt-player-container ">
+            <div class="image-container">
+                <img src="@Cloudinary.MemberImage(player.ImageMedium, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
+            </div>
+            <p>@Html.DisplayFor(p => player.Name)</p>
+        </a>
+    </div>
 
 }
 
