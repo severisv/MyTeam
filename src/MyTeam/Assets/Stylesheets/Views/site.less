@@ -7,8 +7,7 @@ html {
 body {
     padding-bottom: 20px;
     text-shadow: 5px;
-    font-family: "jaf-bernino-sans-comp", sans-serif;
-    font-weight: 400;
+
     .backgroundImage(0px, 400px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_650,w_400/v1449177091/breddefotball/site_background.jpg');
     .backgroundImage(401px, 600px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_960,w_600/v1449177091/breddefotball/site_background.jpg');
     .backgroundImage(601px, 1023px, 'http://res.cloudinary.com/drdo17bnj/image/upload/c_fill,h_1030,w_1030/v1449177091/breddefotball/site_background.jpg');
@@ -35,7 +34,6 @@ body {
 .backgroundImage(@screenMin, @screenMax, @imageUrl) {
     @media (min-width: @screenMin) and (max-width: @screenMax) {
     background: linear-gradient(to bottom, fade(@team-secondary, 70) 0%, fade(@team-secondary, 70) 100%), url(@imageUrl) no-repeat center center fixed;
-    // background: fade(black, 75);
     }
 }
 
