@@ -122,6 +122,13 @@ i.fa {
 
 }
 
+.alert-success {
+    color: lighten(@greenDarkSubtle,0);
+    border-color: lighten(@greenLightSubtle, 15);
+    background-color: lighten(@greenLightSubtle,25);
+
+}
+
 .alert-infosubtle {
     color: @blueDark;
     background-color: fade(@blueLightSubtle, 50);
@@ -253,5 +260,15 @@ a {
     &:hover {
             background-color: darken(@redLight, 5);
             border-color: darken(@redLight, 7);
+    }
+}
+
+.btn-warning {
+    color: @white;
+    background-color: @orangeLight;
+    border-color: darken(@orangeLight, 5);
+    &:hover {
+            background-color: darken(@orangeLight, 5);
+            border-color: darken(@orangeLight, 7);
     }
 }
