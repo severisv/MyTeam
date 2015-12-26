@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyTeam.Models.Domain;
 
 namespace MyTeam.Models.Dto
@@ -10,7 +11,7 @@ namespace MyTeam.Models.Dto
         public string ClubId { get; }
         public string ShortName { get; }
         public string Name { get; }
-        public IEnumerable<Guid> TeamIds { get; }
+        public IEnumerable<Guid> TeamIds => Teams.Select(t => t.Id);
         public IEnumerable<TeamDto> Teams { get; }
         public string Favicon { get;  }
         public string Logo { get;  }

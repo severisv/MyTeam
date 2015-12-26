@@ -3,7 +3,7 @@
 
 @model MyTeam.Models.Domain.Table
 
-<table class="table table--striped tablesorter">
+<table id="leagueTable" class="table  table--striped tablesorter">
     <thead>
     <tr>
         <th class="hidden-xxs">@Res.Position</th>
@@ -11,7 +11,7 @@
         <th class="hidden-xs">@Res.Games</th>
         <th class="hidden-sm hidden-xs">@Res.Win</th>
         <th class="hidden-sm hidden-xs">@Res.Draw</th>
-        <th class="hidden-sm hidden-xs">@Res.Loss</thclass="hidden-sm>
+        <th class="hidden-sm hidden-xs">@Res.Loss</th>
         <th>@Res.GoalDifference</th>
         <th>@Res.Points</th>
     </tr>

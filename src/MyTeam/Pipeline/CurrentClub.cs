@@ -12,7 +12,7 @@ namespace MyTeam
         public string ClubId { get; }
         public string ShortName { get; }
         public string Name { get; }
-        public IEnumerable<Guid> TeamIds { get; }
+        public IEnumerable<Guid> TeamIds => Teams.Select(t => t.Id);
         public IEnumerable<CurrentTeam> Teams { get; }
         public string Favicon { get; }
         public string Logo { get; }
@@ -25,7 +25,6 @@ namespace MyTeam
                 ClubId = club.ClubId;
                 Name = club.Name;
                 ShortName = club.ShortName;
-                TeamIds = club.TeamIds;
                 Favicon = club.Favicon;
                 Logo = club.Logo;
                 Teams = club.Teams.Select(t => new CurrentTeam(t.Id, t.ShortName));
