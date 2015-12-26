@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Events
 {
@@ -20,7 +21,7 @@ namespace MyTeam.ViewModels.Events
         public string Description { get;  }
         public bool Voluntary { get; }
         public string Opponent { get; }
-        public IEnumerable<Guid> TeamIds { get; set; }
+        public IEnumerable<Guid> TeamIds { get; }
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
@@ -84,5 +85,12 @@ namespace MyTeam.ViewModels.Events
                 attendee.IsAttending = isAttending;
             }
         }
+
+        public CurrentTeam Team(IEnumerable<CurrentTeam> teams)
+        {
+            return teams.First(t => t.Id == TeamIds.First());
+        }
     }
+
+    
 }

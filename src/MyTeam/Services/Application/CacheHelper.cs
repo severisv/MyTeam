@@ -80,7 +80,7 @@ namespace MyTeam.Services.Application
             }
 
             club = ClubRepository.Get().Where(c => c.ClubIdentifier == clubId).Select(
-                c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => t.Id))
+                c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => new TeamDto(t.Id, t.ShortName)))
             ).Single();
             
 

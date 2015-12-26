@@ -1,10 +1,7 @@
 using System;
-using System.Diagnostics;
-using System.Threading;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
-using MyTeam.Models;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;
 

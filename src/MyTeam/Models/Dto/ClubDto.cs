@@ -11,17 +11,18 @@ namespace MyTeam.Models.Dto
         public string ShortName { get; }
         public string Name { get; }
         public IEnumerable<Guid> TeamIds { get; }
+        public IEnumerable<TeamDto> Teams { get; }
         public string Favicon { get;  }
         public string Logo { get;  }
 
 
-        public ClubDto(Guid id, string clubId, string name, string shortName, string logo, string favicon, IEnumerable<Guid> teamIds)
+        public ClubDto(Guid id, string clubId, string name, string shortName, string logo, string favicon, IEnumerable<TeamDto> teams)
         {
             Id = id;
             ClubId = clubId;
             Name = name;
             ShortName = shortName;
-            TeamIds = teamIds;
+            Teams = teams;
             Favicon = favicon;
             Logo = logo;
         }

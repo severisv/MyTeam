@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyTeam.Models.Dto;
 
 namespace MyTeam
@@ -12,6 +13,7 @@ namespace MyTeam
         public string ShortName { get; }
         public string Name { get; }
         public IEnumerable<Guid> TeamIds { get; }
+        public IEnumerable<CurrentTeam> Teams { get; }
         public string Favicon { get; }
         public string Logo { get; }
 
@@ -26,6 +28,7 @@ namespace MyTeam
                 TeamIds = club.TeamIds;
                 Favicon = club.Favicon;
                 Logo = club.Logo;
+                Teams = club.Teams.Select(t => new CurrentTeam(t.Id, t.ShortName));
             }
           
 
