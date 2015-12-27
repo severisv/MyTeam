@@ -30,7 +30,7 @@ namespace MyTeam.Controllers
                   Status = p.Status.ToString(),
                   Roles = p.Roles,
                   TeamIds = p.MemberTeams.Select(t => t.TeamId)
-              });
+              }).OrderBy(p => p.FullName);
 
             return new JsonResult(players);
         }
