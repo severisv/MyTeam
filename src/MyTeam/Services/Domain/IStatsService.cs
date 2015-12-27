@@ -7,7 +7,7 @@ namespace MyTeam.Services.Domain
 {
     public interface IStatsService
     {
-        IEnumerable<EventAttendanceViewModel> GetAttendance(IEnumerable<Guid> teamIds, int year);
-        IEnumerable<int> GetAttendanceYears(IEnumerable<Guid> teamIds);
+        IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year);
+        IEnumerable<int> GetAttendanceYears(Guid clubId);
     }
 }
