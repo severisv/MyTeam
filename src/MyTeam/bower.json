@@ -11,5 +11,6 @@
     "hammer.js": "*",
     "tablesorter": "*",
     "tinymce": "4.3.0"
+
   }
 }

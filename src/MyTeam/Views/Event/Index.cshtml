@@ -31,10 +31,13 @@
     </div>
 
     @Html.Partial("_ListEvents", Model.Events)
- 
-    <div class="event-showAll">
-        <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
-    </div>
+
+    @if (!Model.Previous)
+    {
+        <div class="event-showAll">
+            <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
+        </div>
+    }
 </div>
 
 @Html.Partial("_CoachMenu")

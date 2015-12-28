@@ -22,7 +22,7 @@ namespace MyTeam.TagHelpers
         {
 
             var innertag = new TagBuilder("i");
-            innertag.AddCssClass($"fa fa-{GetIconName(EventType)}");
+            innertag.AddCssClass($"{GetIconName(EventType)}");
             innertag.Attributes.Add("title", EventType.ToString());
 
             output.Content.Append(innertag);
@@ -34,13 +34,13 @@ namespace MyTeam.TagHelpers
             switch (type)
             {
                 case EventType.Alle:
-                    return "calendar";
+                    return "fa fa-calendar";
                 case EventType.Kamp:
-                    return "trophy";
+                    return "fa fa-trophy";
                 case EventType.Trening:
-                    return "flag";
+                    return "flaticon-couple40";
                 case EventType.Diverse:
-                    return "beer";
+                    return "fa fa-beer";
                 default:
                     return string.Empty;
 

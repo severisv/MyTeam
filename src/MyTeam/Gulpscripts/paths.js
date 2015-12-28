@@ -19,7 +19,7 @@ module.exports = {
 
     src: {
         root: root,
-        stylesheets: join("", './Assets/Stylesheets/*/*.less'),
+        stylesheets: join("", './Assets/Stylesheets/*/*.{less,css}'),
         scripts: [
             join("", './Assets/Scripts/*.js'),
             join("", './Assets/Scripts/ReactComponents/*.jsx'),
