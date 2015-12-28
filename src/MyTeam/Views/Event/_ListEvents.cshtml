@@ -1,0 +1,9 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.Events
+@model IEnumerable<MyTeam.ViewModels.Events.EventViewModel>
+
+@foreach (var ev in Model)
+{
+    @Html.Partial("_Show", ev)
+    @Html.Partial("_Signup", ev)
+}

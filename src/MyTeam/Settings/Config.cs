@@ -6,7 +6,7 @@ namespace MyTeam.Settings
 {
     public class Config
     {
-        public static int AllowedSignupDays = 11;
+        public static int AllowedSignupDays = 10;
         public static int AllowedSignoffHours = 2;
         public static int AllowedMonthsAheadInTimeForTrainingCreation = 11;
         

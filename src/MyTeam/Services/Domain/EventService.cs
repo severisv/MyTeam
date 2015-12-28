@@ -35,11 +35,16 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
-            return EventRepository.Get()
-                .Where(t => t.ClubId == clubId)  
+            var query = EventRepository.Get()
+                .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime >= DateTime.Now)
-                .Where(t => t.SignupHasOpened())
+                .Where(t => t.DateTime >= DateTime.Now);
+
+            if (!showAll)
+                query = query.Where(t => t.SignupHasOpened());
+
+
+                return query
                 .OrderBy(e => e.DateTime)
                 .Select(e =>
                 new EventViewModel(

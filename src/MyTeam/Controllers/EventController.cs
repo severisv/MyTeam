@@ -26,14 +26,19 @@ namespace MyTeam.Controllers
         public ApplicationDbContext DbContext { get; set; }
 
 
-        public IActionResult Index(EventType type = EventType.Alle, bool previous = false)
+        public IActionResult Index(EventType type = EventType.Alle, bool previous = false, bool showAll = false)
         {
             var events = previous
                 ? EventService.GetPrevious(type, Club.Id)
-                : EventService.GetUpcoming(type, Club.Id);
+                : EventService.GetUpcoming(type, Club.Id, showAll);
             
-            var model = new UpcomingEventsViewModel(events, type, previous);
 
+            if (Request.IsAjaxRequest())
+            {
+                events = events.Where(e => !e.SignupHasOpened());
+                return PartialView("_ListEvents", events);
+            }
+            var model = new UpcomingEventsViewModel(events, type, previous);
             return View("Index", model);
         }
 

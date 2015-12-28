@@ -30,11 +30,17 @@
         </div>
     </div>
 
-    @foreach (var ev in Model.Events)
-    {
-        @Html.Partial("_Show", ev)
-        @Html.Partial("_Signup", ev)
-    }
+    @Html.Partial("_ListEvents", Model.Events)
+ 
+    <div class="event-showAll">
+        <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
+    </div>
 </div>
 
 @Html.Partial("_CoachMenu")
+
+
+@section Scripts
+{
+    <script src="~/scripts/event/list.js"></script>
+}
