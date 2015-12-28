@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNet.Http;
 using MyTeam.Models.Dto;
 using MyTeam.Pipeline;
@@ -25,6 +26,15 @@ namespace MyTeam
         public static bool UserIsInRole(this HttpContext context, params string[] roles)
         {
             return context.Member().Roles.ContainsAny(roles);
+        }
+
+
+        public static string Elapsed(this HttpContext context)
+        {
+            var start = context.Items["RequestStart"] as DateTime?;
+            if (start != null)
+                return Math.Round((DateTime.Now - start.Value).TotalMilliseconds).ToString();
+            return string.Empty;
         }
     }
 }

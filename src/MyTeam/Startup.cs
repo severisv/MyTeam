@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using System;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
@@ -61,12 +63,12 @@ namespace MyTeam
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
+            app.LogStart();
 
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
             app.UseExceptionHandler("/Error/Error");
 
 
@@ -109,6 +111,8 @@ namespace MyTeam
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
+
+
             app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
@@ -116,36 +120,41 @@ namespace MyTeam
                         name: "default",
                         template: "{controller=News}/{action=Index}/{id?}");
                 });
-            }
+
+       
 
 
-            //catch (Exception ex)
-            //{
-            //    app.Run(async context =>
-            //    {
-            //        context.Response.ContentType = "text/plain";
-            //        await context.Response.WriteAsync(ex.Message);
-            //        var exceptions = new List<Exception>();
-            //        while (ex.InnerException != null)
-            //        {
-            //            exceptions.Add(ex);
-            //            ex = ex.InnerException;
-            //        }
-
-            //        exceptions.Reverse();
-            //        foreach (var exception in exceptions)
-            //        {
-            //            await context.Response.WriteAsync(exception.Message);
-            //        }
-
-            //        await context.Response.WriteAsync(ex.StackTrace.ToString());
+        }
 
 
-            //    });
-            //}
 
-            //}
-     //      }
+        //catch (Exception ex)
+        //{
+        //    app.Run(async context =>
+        //    {
+        //        context.Response.ContentType = "text/plain";
+        //        await context.Response.WriteAsync(ex.Message);
+        //        var exceptions = new List<Exception>();
+        //        while (ex.InnerException != null)
+        //        {
+        //            exceptions.Add(ex);
+        //            ex = ex.InnerException;
+        //        }
+
+        //        exceptions.Reverse();
+        //        foreach (var exception in exceptions)
+        //        {
+        //            await context.Response.WriteAsync(exception.Message);
+        //        }
+
+        //        await context.Response.WriteAsync(ex.StackTrace.ToString());
+
+
+        //    });
+        //}
+
+        //}
+        //      }
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);

@@ -1,4 +1,6 @@
-﻿@using System.ComponentModel
+﻿@using System
+@using System.ComponentModel
+@using System.Threading.Tasks
 @using MyTeam
 
 @using MyTeam.Models.Enums
@@ -81,5 +83,6 @@
 <script src="~/scripts/bundles/lib.bundle.js"></script>
 <script src="~/scripts/bundles/site.bundle.js"></script>
 @RenderSection("scripts", required: false)
+<script>console.log('Server side: @Context.Elapsed()ms');</script>
 </body>
 </html>

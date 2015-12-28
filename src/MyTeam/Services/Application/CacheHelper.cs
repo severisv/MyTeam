@@ -48,7 +48,9 @@ namespace MyTeam.Services.Application
                 return member;
             }
             
-            member = PlayerRepository.Get().Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name).Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
+            member = PlayerRepository.Get()
+                .Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name)
+                .Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
             {
@@ -80,7 +82,7 @@ namespace MyTeam.Services.Application
             }
 
             club = ClubRepository.Get().Where(c => c.ClubIdentifier == clubId).Select(
-                c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => new TeamDto(t.Id, t.ShortName)))
+                c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => new TeamDto(t.Id, t.ShortName)).ToList())
             ).Single();
             
 
@@ -125,10 +127,7 @@ namespace MyTeam.Services.Application
             var events = new List<Guid>();
             foreach (var id in teamIds)
             {
-             var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
-                  .Select(et => et.Event)
-                  .Where(e => e.SignupHasOpened() && !e.SignupHasClosed())
-                  .Select(e => e.Id).ToList();
+             var ids = _dbContext.EventTeams.Where(et => et.TeamId == id).Select(et => et.Event).Where(e => e.SignupHasOpened() && !e.SignupHasClosed()).Select(e => e.Id).ToList();
                 events.AddRange(ids);
             }
 

@@ -41,5 +41,15 @@ namespace MyTeam
             }
             return null;
         }
+
+
+        public static void LogStart(this IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                context.Items["RequestStart"] = DateTime.Now;
+                await next();
+            });
+        }
     }
 }

@@ -141,7 +141,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<SimplePlayerDto> GetDto(string clubId)
         {
-            return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto()
+            return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto
             {
                 Id = p.Id,
                 Name = p.Fullname,
