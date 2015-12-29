@@ -69,8 +69,6 @@ namespace MyTeam
             loggerFactory.AddDebug();
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
-            app.UseExceptionHandler("/Error/Error");
-
 
             if (env.IsDevelopment())
                 {

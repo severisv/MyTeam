@@ -155,7 +155,7 @@ select.event-teamSelect {
     margin-left: 1em;
     margin-top: 0.5em;
     display: inline-block;
-    color: @blueLightSubtle;
+    color: fade(@blueLightSubtle, 75);
     &.active {
         color: @link-color;
         &:hover {
@@ -178,7 +178,7 @@ select.event-teamSelect {
 }
 
 .event-signupMessageIcon {
-    color: @blueLightSubtle;
+    color: fade(darken(@blueDark, 10), 60);
     font-size: 0.8em;
     vertical-align: 0.2em;
 

@@ -228,7 +228,7 @@ a {
 
 .btn {
     transition: background-color 0.2s ease-out;
-    transition: border-color 0.1s ease-out;
+    transition: border-color 0.2s ease-out;
 }
 
 .btn-primary {
@@ -275,6 +275,15 @@ a {
     }
 }
 
+.btn-default {
+    color: @blueDark;
+    border-color: fade(@blueDark, 25);
+
+    &:hover, &:focus {
+        border-color: fade(@blueDark, 50);
+    }
+}
+
 .btn-warning.active.focus, .btn-warning.active:focus, .btn-warning.active:hover, .btn-warning:active.focus, .btn-warning:active:focus, .btn-warning:active:hover, .open > .dropdown-toggle.btn-warning.focus, .open > .dropdown-toggle.btn-warning:focus, .open > .dropdown-toggle.btn-warning:hover {
     background-color: darken(@orangeLight, 5);
     border-color: darken(@orangeLight, 7);
@@ -301,4 +310,16 @@ hr {
 
 .label-danger {
     background-color: @redLight;
+}
+
+
+/* Popover */
+
+.popover { 
+    border: 0; 
+    font-family: @fontLight;
+}
+
+.popover.right>.arrow {  
+    border-right-color: rgba(255,255,255,.25);
 }

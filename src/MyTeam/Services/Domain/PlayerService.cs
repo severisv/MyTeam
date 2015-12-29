@@ -147,7 +147,7 @@ namespace MyTeam.Services.Domain
                 Name = p.Fullname,
                 Status =  p.Status,
                 ImageSmall = p.ImageSmall
-            }).ToList();
+            }).ToList().OrderBy(p => p.Name);
         }
 
         public void TogglePlayerTeam(Guid teamId, Guid playerId, string clubName)

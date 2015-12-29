@@ -24,7 +24,7 @@ namespace MyTeam.Controllers
         [Route("oversikt")]
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
-            var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId);
+            var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId).OrderBy(p => p.FirstName);
 
             var model = new ShowPlayersViewModel(players, editMode, type);
             model.SelectedPlayerId = playerId;

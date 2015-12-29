@@ -1,23 +1,36 @@
-﻿@using System.Linq
-@using System.Threading.Tasks
+﻿@using System.Threading.Tasks
 @using Microsoft.AspNet.Mvc.Rendering
 @using MyTeam
-@using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
-@using MyTeam.ViewModels.Events
 @model MyTeam.ViewModels.Events.EventViewModel
 
 <hr />
 @if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
 {
 
-if(Model.SignupHasClosed()){
-    <a asp-action="registerattendance" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> @Res.Register @Res.Attendance.ToLower()</span></a>
-}
-else {
-    <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
-}
+    if (Model.Type == EventType.Trening)
+    {
+        if (Model.SignupHasClosed())
+        {
+
+            <a asp-action="registerattendance" asp-controller="event" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> @Res.Register @Res.Attendance.ToLower()</span></a>
+        }
+        else {
+            <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+        }
+    }
+    else if (Model.Type == EventType.Kamp)
+    {
+        if (!Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach))
+        {
+            <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i><span class="hidden-xs"> @Res.TeamSelection</span></a>
+
+        }
+        else {
+            <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+        }
+    }
 }
 
 <div class="show-upcoming-event">

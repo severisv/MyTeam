@@ -1,0 +1,79 @@
+﻿@using System.Threading.Tasks
+
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Game.RegisterSquadViewModel
+
+
+    <div mt-main>
+        <a asp-action="edit" asp-route-eventId="@Model.Training.Id" class="edit-link  pull-right" title="@Res.Edit @Res.Training.ToLower()"><i class="fa fa-edit"></i></a>
+        <div class="flex">
+            <div class="flex-1 event-icon align-center">
+                <div class="fa-3x">
+                    <span mt-eventtype="@Model.Training.Type" mt-hidename="true"></span>
+                </div>
+            </div>
+            <div class="flex-2 faded">
+                <p>
+                    <i class="fa fa-calendar"></i> @Model.Training.DateTime.ToString("ddd d MMMM")
+                </p>
+                <p>
+                    <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Training.Location)
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <h3 class="collapselink-parent">
+                    <a class="collapse-link " role="button" data-toggle="collapse" href="#ra-otherplayers-signedup" aria-expanded="true">
+                        Påmeldte spillere (@Model.Attendees.Count())
+                    </a>
+                </h3>
+                <div id="ra-otherplayers-signedup" class="collapse in">
+                    @Html.Partial("_RegisterAttendanceListPlayers", Model.Attendees)
+                </div>
+                <br/>
+                <h3 class="collapselink-parent">
+                    <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-active">
+                        Øvrige aktive (@Model.OtherActivePlayers.Count())
+                    </a>
+                </h3>
+                <div id="ra-otherplayers-active" class="collapse">
+                    @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherActivePlayers)
+                </div>
+                <br/>
+                <h3 class="collapselink-parent">
+                    <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-inactive">
+                        Øvrige inaktive (@Model.OtherInactivePlayers.Count())
+                    </a>
+                </h3>
+                <div id="ra-otherplayers-inactive" class="collapse">
+                    @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherInactivePlayers)
+
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <h2>Tropp</h2>
+                <div >
+                    <ul class="list-unstyled">
+                        @foreach (var player in Model.Squad)
+                        {
+                            <li class="squad-list">
+                                <a asp-controller="player" asp-action="show" asp-route-playerId="@player.Id"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+        @Html.Partial("_CoachMenu")
+<script>
+    var Routes = Routes || {}
+    Routes.SELECT_PLAYER = '@Html.Raw(Url.Action("SelectPlayer", "Game"))';
+</script>
+@section Scripts
+{
+    <script src="~/scripts/game/registerSquad.js"></script>
+}

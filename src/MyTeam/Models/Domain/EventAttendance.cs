@@ -12,6 +12,7 @@ namespace MyTeam.Models.Domain
         [Required]
         public bool IsAttending { get; set; }
         public bool DidAttend { get; set; }
+        public bool IsSelected { get; set; }
         public virtual Member Member { get; set; }
         public virtual Event Event { get; set; }
         public string SignupMessage { get; set; }

@@ -16,6 +16,7 @@ namespace MyTeam.Models
         public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Season> Seasons { get; set; }
+        public DbSet<Season> Squads { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Team> Teams { get; set; }
 

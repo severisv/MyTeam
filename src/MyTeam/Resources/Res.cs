@@ -81,6 +81,7 @@ namespace MyTeam.Resources
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
+        public static string TeamSelection = "Laguttak";
         public const string Team = "Lag";
 
         public static string Stats = "Statistikk";

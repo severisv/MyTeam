@@ -68,7 +68,7 @@ namespace MyTeam.ViewModels.Events
 
         public string GetSignupMessage(Guid memberId)
         {
-            return Attendees?.Single(a => a.MemberId == memberId).SignupMessage;
+            return Attendees?.FirstOrDefault(a => a.MemberId == memberId)?.SignupMessage;
         }
 
         public bool SignupHasOpened()
