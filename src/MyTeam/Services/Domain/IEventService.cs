@@ -20,5 +20,6 @@ namespace MyTeam.Services.Domain
         EventViewModel GetEventViewModel(Guid eventId);
         RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid eventId);
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);
+        void SignupMessage(Guid eventId, Guid memberId, string message);
     }
 }

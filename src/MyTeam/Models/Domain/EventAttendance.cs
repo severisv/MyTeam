@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyTeam.Models.Domain
 {
@@ -15,7 +14,6 @@ namespace MyTeam.Models.Domain
         public bool DidAttend { get; set; }
         public virtual Member Member { get; set; }
         public virtual Event Event { get; set; }
-
-
+        public string SignupMessage { get; set; }
     }
 }

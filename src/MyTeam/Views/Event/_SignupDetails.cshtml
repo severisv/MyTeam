@@ -1,77 +1,107 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata.Internal
+@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Events.EventViewModel
 
-
-@if (!Model.SignupHasClosed())
-{
-    <div>
-        <a class="btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true">@Res.IsAttending</a>
-        <a class="btn btn-lg btn-@(Model.IsNotAttending(User) ? "danger" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false">@Res.IsNotAttending</a>
-    </div>
-}
-<br/>
-<div mt-alert="@AlertType.Info" >@ViewBag.SignupMessage</div>
+<div id="event-signupDetails-@Model.Id">
 
 
-@if (!Model.IsGame) { 
-
-if (Model.HasPassed())
-{
-    <div id="signups-@Model.Id">
-        <div class="attendee-links">
-            <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
-                <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
-                <span class="flex-1 pull-right">&nbsp;</span>
-            </a>
+    @if (!Model.SignupHasClosed())
+    {
+        <div class="event-signupButtons">
+            <a class="btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true">@Res.IsAttending</a>
+            <a class="btn btn-lg btn-@(Model.IsNotAttending(User) ? "danger" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false">@Res.IsNotAttending</a>
+            <a class="event-addMessage" title="Beskjed til trenerne"><i class="fa fa-comment "></i></a><br />
+            <textarea class="form-control event-message" data-href="@Url.Action("SignupMessage", "Event", new {eventId = Model.Id})" placeholder="Brakk armen forrige kamp, så må ta det litt rolig">@Model.GetSignupMessage(Context.Member().Id)</textarea>
+            <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
+            <span class="label label-danger"><i class="fa fa-warning"></i></span>
         </div>
-        <div class="panel">
-            <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                <div class="flex">
+    }
 
-                    <ul class="list-unstyled flex-2">
-                        @foreach (var player in Model.DidAttend)
-                        {
-                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))</li>
-                        }
-                    </ul>
+    <br />
+    <div mt-alert="@AlertType.Info">@ViewBag.SignupMessage</div>
+
+
+    @if (!Model.IsGame)
+    {
+
+        if (Model.HasPassed())
+        {
+            <div id="signups-@Model.Id">
+                <div class="attendee-links">
+                    <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                        <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
+                        <span class="flex-1 pull-right">&nbsp;</span>
+                    </a>
+                </div>
+                <div class="panel">
+                    <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                        <div class="flex">
+
+                            <ul class="list-unstyled flex-2">
+                                @foreach (var player in Model.DidAttend)
+                                {
+                                    <li>
+                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-}
-else
-{
-    <div id="signups-@Model.Id">
-        <div class="attendee-links">
-            <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
-                <span class="flex-2">@Res.Attending (@(Model.Attending?.Count() ?? 0))</span>
-                <span class="flex-2">@Res.IsNotAttending (@(Model.NotAttending?.Count() ?? 0))</span>
-                <span class="flex-1 pull-right">&nbsp;</span>
-            </a>
-        </div>
-        <div class="panel">
-            <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                <div class="flex event-attendees ">
+        }
+        else
+        {
+            <div id="signups-@Model.Id">
+                <div class="attendee-links">
+                    <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                        <span class="flex-2">@Res.Attending (@(Model.Attending?.Count() ?? 0))</span>
+                        <span class="flex-2">@Res.IsNotAttending (@(Model.NotAttending?.Count() ?? 0))</span>
+                        <span class="flex-1 pull-right">&nbsp;</span>
+                    </a>
+                </div>
+                <div class="panel">
+                    <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                        <div class="flex event-attendees ">
 
-                    <ul class="list-unstyled flex-2">
-                        @foreach (var player in Model.Attending)
-                        {
-                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))</li>
-                        }
-                    </ul>
-                    <ul class="list-unstyled flex-3">
-                        @foreach (var player in Model.NotAttending)
-                        {
-                            <li>@Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))</li>
-                        }
-                    </ul>
+                            <ul class="list-unstyled flex-2">
+                                @foreach (var player in Model.Attending)
+                                {
+                                    <li>
+                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
+                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                    {
+                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                    }
+                                </li>
+                                }
+                            </ul>
+                            <ul class="list-unstyled flex-3">
+                                @foreach (var player in Model.NotAttending)
+                                {
+                                    <li>
+                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
+                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                    {
+                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                    }
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-}
+        }
+    }
+</div>
+
+@if (Context.Request.IsAjaxRequest())
+{
+    <script>applySignupFunctions('#event-signupDetails-@Model.Id');
+        global.applyScopedJsComponents('#event-signupDetails-@Model.Id');
+    </script>
 }

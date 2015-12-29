@@ -64,6 +64,23 @@ namespace MyTeam.Controllers
             return PartialView("_SignupDetails", ev);
         }
 
+
+        [HttpPost]
+        [RequireMember]
+        [Route("beskjed")]
+        public JsonResult SignupMessage(Guid eventId, string message)
+        {
+            if (ModelState.IsValid)
+            {
+                var reponse = new { Success = true };
+                EventService.SignupMessage(eventId, CurrentMember.Id, message);
+                return new JsonResult(reponse);
+            }
+
+            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
+        }
+
         [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("ny")]
         public IActionResult Create(EventType type = EventType.Trening)

@@ -66,6 +66,11 @@ namespace MyTeam.ViewModels.Events
             return NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
         }
 
+        public string GetSignupMessage(Guid memberId)
+        {
+            return Attendees?.Single(a => a.MemberId == memberId).SignupMessage;
+        }
+
         public bool SignupHasOpened()
         {
             if (Type == EventType.Diverse) return true;
@@ -90,6 +95,8 @@ namespace MyTeam.ViewModels.Events
         {
             return teams.First(t => t.Id == TeamIds.First());
         }
+
+      
     }
 
     

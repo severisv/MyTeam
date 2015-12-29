@@ -28,7 +28,6 @@
     margin-left: 16.66%;
 
 
-
     .panel {
         background-color: transparent;
         border: 0;
@@ -150,4 +149,30 @@ select.event-teamSelect {
 .event-showAll a {
     font-size: 1.2em;
     cursor: pointer;
+}
+
+.event-addMessage {
+    margin-left: 1em;
+    margin-top: 0.5em;
+    display: inline-block;
+    color: @blueLightSubtle;
+    &.active {
+        color: @link-color;
+        &:hover {
+            color: @link-color-hover;
+        }
+    }
+}
+
+.event-message {
+    margin-top: 0.5em;
+    max-width: 24em;
+    display:none;
+}
+
+.event-signupButtons {
+    .loader, .label {
+        display: none;
+        vertical-align: 2em;
+    }  
 }

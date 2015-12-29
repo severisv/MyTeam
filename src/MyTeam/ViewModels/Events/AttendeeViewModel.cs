@@ -12,8 +12,9 @@ namespace MyTeam.ViewModels.Events
         public Guid MemberId { get; }
         public Guid EventId { get; }
         public string Name => $"{FirstName} {LastName}";
+        public string SignupMessage { get; set; }
 
-        public AttendeeViewModel(Guid memberId, Guid eventId, string firstName, string lastName, string username, bool? isAttending, bool? didAttend)
+        public AttendeeViewModel(Guid memberId, Guid eventId, string firstName, string lastName, string username, string signupMessage, bool? isAttending, bool? didAttend)
         {
             EventId = eventId;
             MemberId = memberId;
@@ -22,6 +23,7 @@ namespace MyTeam.ViewModels.Events
             UserName = username;
             IsAttending = isAttending ?? false;
             DidAttend = didAttend ?? false;
+            SignupMessage = signupMessage;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace MyTeam.Services.Domain
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)).ToList(),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend)).ToList(),
                     e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 )).ToList();
         }
@@ -70,7 +70,7 @@ namespace MyTeam.Services.Domain
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend)),
                     e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 ));
 
@@ -192,7 +192,7 @@ namespace MyTeam.Services.Domain
             return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.IsAttending, a.DidAttend)).ToList(),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage,  a.IsAttending, a.DidAttend)).ToList(),
                     e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
                 )).Single();
         }
@@ -225,6 +225,14 @@ namespace MyTeam.Services.Domain
                 DateTime = e.DateTime
 
             }).ToList();
+        }
+
+        public void SignupMessage(Guid eventId, Guid memberId, string message)
+        {
+            var attendance = EventAttendanceRepository.Get().Single(a => a.EventId == eventId && a.MemberId == memberId);
+
+            attendance.SignupMessage = message;
+            _dbContext.SaveChanges();
         }
     }
 }
