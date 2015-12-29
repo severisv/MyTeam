@@ -1,14 +1,10 @@
 using System;
-using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
-using MyTeam.Resources;
 using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Attendance;
 using MyTeam.ViewModels.Game;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
 {
@@ -19,6 +15,8 @@ namespace MyTeam.Controllers
         public IEventService EventService { get; set; }
         [FromServices]
         public IPlayerService PlayerService { get; set; }
+        [FromServices]
+        public IGameService GameService { get; set; }
 
         [Route("")]
         public IActionResult Index()
@@ -32,7 +30,7 @@ namespace MyTeam.Controllers
         [Route("laguttak")]
         public IActionResult RegisterSquad(Guid eventId)
         {
-            var ev = EventService.GetRegisterAttendanceEventViewModel(eventId);
+            var ev = GameService.GetRegisterSquadEventViewModel(eventId);
 
             var players = PlayerService.GetDto(Club.ClubId);
 
@@ -47,11 +45,12 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("oppmote/bekreft")]
+        [Route("laguttak/velg")]
         public JsonResult SelectPlayer(Guid eventId, Guid playerId, bool isSelected)
         {
             if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
 
+            GameService.SelectPlayer(eventId, playerId, isSelected);
 
             return new JsonResult(JsonResponse.Success());
         }

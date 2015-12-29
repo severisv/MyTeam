@@ -20,9 +20,7 @@
                     <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Training.Location)
                 </p>
             </div>
-
         </div>
-
         <div class="row">
             <div class="col-sm-6 col-xs-12">
                 <h3 class="collapselink-parent">
@@ -31,7 +29,7 @@
                     </a>
                 </h3>
                 <div id="ra-otherplayers-signedup" class="collapse in">
-                    @Html.Partial("_RegisterAttendanceListPlayers", Model.Attendees)
+                    @Html.Partial("_RegisterSquadListPlayers", Model.Attendees)
                 </div>
                 <br/>
                 <h3 class="collapselink-parent">
@@ -40,7 +38,7 @@
                     </a>
                 </h3>
                 <div id="ra-otherplayers-active" class="collapse">
-                    @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherActivePlayers)
+                    @Html.Partial("_RegisterSquadListPlayers", Model.OtherActivePlayers)
                 </div>
                 <br/>
                 <h3 class="collapselink-parent">
@@ -49,18 +47,19 @@
                     </a>
                 </h3>
                 <div id="ra-otherplayers-inactive" class="collapse">
-                    @Html.Partial("_RegisterAttendanceListPlayers", Model.OtherInactivePlayers)
+                    @Html.Partial("_RegisterSquadListPlayers", Model.OtherInactivePlayers)
 
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12">
-                <h2>Tropp</h2>
+                <h2>Tropp (<span id="squadCount">@Model.Squad.Count()</span>)</h2>
+                <hr/>
                 <div >
-                    <ul class="list-unstyled">
+                    <ul id="squad" class="list-unstyled squad-list">
                         @foreach (var player in Model.Squad)
                         {
-                            <li class="squad-list">
-                                <a asp-controller="player" asp-action="show" asp-route-playerId="@player.Id"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                            <li id="@player.Id">
+                               <i class="flaticon-soccer18"></i>&nbsp;@player.Name
                             </li>
                         }
                     </ul>

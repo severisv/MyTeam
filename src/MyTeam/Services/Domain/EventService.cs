@@ -207,8 +207,7 @@ namespace MyTeam.Services.Domain
                     {
                         MemberId = a.MemberId,
                         IsAttending = a.IsAttending,
-                        DidAttend = a.DidAttend,
-                        IsSelected = a.IsSelected
+                        DidAttend = a.DidAttend
                     }).ToList(),
                     Id = e.Id,
                     Location = e.Location,

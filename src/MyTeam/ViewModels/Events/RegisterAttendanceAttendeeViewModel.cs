@@ -7,6 +7,5 @@ namespace MyTeam.ViewModels.Events
         public Guid MemberId { get; set; }
         public bool IsAttending { get; set; }
         public bool DidAttend { get; set; }
-        public bool IsSelected { get; set; }
     }
 }

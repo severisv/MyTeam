@@ -6,10 +6,10 @@ namespace MyTeam.ViewModels.Game
 {
     public class RegisterSquadPlayerViewModel : SimplePlayerDto
     {
-        public RegisterAttendanceAttendeeViewModel Attendance { get; }
+        public RegisterSquadAttendeeViewModel Attendance { get; }
         public Guid EventId { get; }
 
-        public RegisterSquadPlayerViewModel(SimplePlayerDto player, Guid eventId, RegisterAttendanceAttendeeViewModel attendance)
+        public RegisterSquadPlayerViewModel(SimplePlayerDto player, Guid eventId, RegisterSquadAttendeeViewModel attendance)
         {
             Attendance = attendance;
             Id = player.Id;
