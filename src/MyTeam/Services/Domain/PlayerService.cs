@@ -10,6 +10,7 @@ using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Application;
 using MyTeam.Services.Repositories;
+using MyTeam.Settings;
 using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Services.Domain
@@ -121,6 +122,9 @@ namespace MyTeam.Services.Domain
             player.BirthDate = model.BirthDate.AsDate();
             player.PositionsString = model.PositionsString;
             player.ProfileIsConfirmed = true;
+            player.ImageFull = model.ImageFull;
+            player.ImageMedium = model.ImageFull;
+            player.ImageSmall = model.ImageFull;
             _applicationDbContext.SaveChanges();
             _cacheHelper.ClearCache(clubId, player.UserName);
         }

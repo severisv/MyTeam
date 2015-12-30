@@ -14,7 +14,7 @@
 
 <script src="~/scripts/Bundles/cloudinary.bundle.js"></script>
 <script>
-
+    
     $.cloudinary.config({ cloud_name: '@cloudName', api_key: '@apiKey', signature: '@signature' });
 
     var formData = {
@@ -40,4 +40,5 @@
     $('.cloudinary-fileupload').bind('fileuploadprogress', function (e, data) {
         $('.cloudinary-progress-bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%');
     });
+
 </script>

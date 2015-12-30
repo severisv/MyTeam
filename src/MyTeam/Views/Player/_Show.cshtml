@@ -12,11 +12,6 @@
     @if (Context.Member().IsSelfOrAdmin(Model.Id))
     {
         <a class="edit-link edit-player-link "
-           data-ajax="true"
-           data-ajax-mode="replace"
-           data-ajax-update="#show-players"
-           data-ajax-complete="global.applyScopedJsComponents('#show-players')"
-           mt-pushstate="@Model.Fullname"
            asp-controller="player" asp-action="edit" asp-route-playerid="@Model.Id"><i class="fa fa-pencil-square-o"></i></a>
     }
     <table class="table">

@@ -9,80 +9,79 @@
     ViewData["Title"] = "Logg in";
 }
 
-<div class="container-narrow">
-    <div class="mt-container">
-        <div class="col-md-12 no-padding ">
-            <ul class="nav nav-pills mt-justified">
-                <li class="@(ViewBag.Local != true ?  "active" : "")"><a onClick="mt.showElement('#facebook-login'); mt.hideElement('#mt-login');"><i class="fa fa-facebook"></i> Med Facebook</a></li>
-                <li class="@(ViewBag.Local == true ?  "active" : "")"><a onClick="mt.showElement('#mt-login'); mt.hideElement('#facebook-login');"><i class="fa fa-user"></i>&nbsp;Med lokal brukerkonto</a></li>
-            </ul>
-        </div>
-        <div class="clearfix"></div>
-        <hr />
-        <div id="facebook-login" class="col-md-12 no-padding" style="@(ViewBag.Local == true ?  "display: none;" : "")">
-            <section>
-                @{
-                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+<div mt-main>
+    <div class="col-md-12 no-padding ">
+        <ul class="nav nav-pills mt-justified">
+            <li class="@(ViewBag.Local != true ?  "active" : "")"><a onClick="mt.showElement('#facebook-login'); mt.hideElement('#mt-login');"><i class="fa fa-facebook"></i> Med Facebook</a></li>
+            <li class="@(ViewBag.Local == true ?  "active" : "")"><a onClick="mt.showElement('#mt-login'); mt.hideElement('#facebook-login');"><i class="fa fa-user"></i>&nbsp;Med lokal brukerkonto</a></li>
+        </ul>
+    </div>
+    <div class="clearfix"></div>
+    <hr />
+    <div id="facebook-login" class="col-md-12 no-padding" style="@(ViewBag.Local == true ?  "display: none;" : "")">
+        <section>
+            @{
+                var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
 
-                    <form asp-controller="Account" asp-action="ExternalLogin"  asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                        <div>
-                            <p class="col-xs-12">
-                                @foreach (var provider in loginProviders)
-                                {
-                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
-                                }
-                            </p>
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                    <div>
+                        <p class="col-xs-12">
+                            @foreach (var provider in loginProviders)
+                            {
+                                <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        </section>
+    </div>
+    <div>
+
+        <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
+            <section>
+                <form asp-controller="Account" asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                    </form>
-                }
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <div class="checkbox">
+                                <input asp-for="RememberMe" />
+                                <label asp-for="RememberMe"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn btn-primary">Logg in</button>
+                        </div>
+                    </div>
+                    <p>
+                        <a asp-action="Register">Registrer en ny bruker?</a>
+                    </p>
+                    <p>
+                        <a asp-action="ForgotPassword">Glemt passordet?</a>
+                    </p>
+                </form>
             </section>
         </div>
-        <div>
 
-            <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
-                <section>
-                    <form asp-controller="Account" asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Email" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <input asp-for="Email" class="form-control" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Password" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <input asp-for="Password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <div class="checkbox">
-                                    <input asp-for="RememberMe" />
-                                    <label asp-for="RememberMe"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <button type="submit" class="btn btn-primary">Logg in</button>
-                            </div>
-                        </div>
-                        <p>
-                            <a asp-action="Register">Registrer en ny bruker?</a>
-                        </p>
-                        <p>
-                            <a asp-action="ForgotPassword">Glemt passordet?</a>
-                        </p>
-                    </form>
-                </section>
-            </div>
-
-        </div>
     </div>
 </div>
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

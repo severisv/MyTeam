@@ -13,7 +13,7 @@ namespace MyTeam.Settings
         public static string DefaultMember = "image/upload/v1448559418/default_player_dnwac0.gif";
 
 
-        public static string Image(string res, int? width = null, string fallback = "")
+        public static string Image(string res, int? width = null, int? height = null, string fallback = "")
         {
             if (string.IsNullOrWhiteSpace(res)) res = fallback;
 
@@ -21,7 +21,7 @@ namespace MyTeam.Settings
         }
 
 
-        public static string MemberImage(string res, int? width = null)
+        public static string MemberImage(string res, int? width = null, int? height = null)
         {
             if (string.IsNullOrEmpty(res))
             {
@@ -29,10 +29,10 @@ namespace MyTeam.Settings
             }
             else if (res.StartsWith("http")) return res;
 
-            return Resize($"{BaseLocation}{res}", width);
+            return Resize($"{BaseLocation}{res}", width, height);
         }
 
-        private static string Resize(string imageUrl, int? width)
+        private static string Resize(string imageUrl, int? width, int? height = null)
         {
             if (width == null) return imageUrl;
 
@@ -44,7 +44,14 @@ namespace MyTeam.Settings
             }
             if (insertAt != null)
             {
-                urlList.Insert((int)insertAt, $"c_scale,w_{width},q_100");
+                if (height == null)
+                {
+                    urlList.Insert((int) insertAt, $"c_scale,w_{width},q_100");
+                }
+                else
+                {
+                    urlList.Insert((int)insertAt, $"c_fill,h_{height},w_{width},q_100");
+                }
             }
 
             return string.Join("/", urlList);

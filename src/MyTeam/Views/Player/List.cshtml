@@ -49,3 +49,9 @@
         </ul>
     </div>
 }
+@if (Model.IsEditMode)
+{
+    @section Scripts {
+    @Component.Invoke("CloudinaryScripts")
+    }
+}

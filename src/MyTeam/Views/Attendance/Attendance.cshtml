@@ -22,7 +22,7 @@
         </ul>
     </div>
     <div mt-main>
-        <table class="table tablesorter">
+        <table class="table tablesorter attendance-table">
             <thead>
                 <tr>
                     <th>@Res.Player</th>
@@ -35,9 +35,9 @@
                 @foreach (var player in Model.Players)
                 {
                     <tr>
-                        <td><a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
-                            <img src="@Cloudinary.MemberImage(player.ImageSmall, 200)"/>
-                            &nbsp;
+                        <td class="attendance-player-image"><img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />                            &nbsp;
+
+<a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
                             @player.Name
                         </a>
                         </td>

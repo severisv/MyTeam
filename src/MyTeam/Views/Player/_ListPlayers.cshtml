@@ -13,7 +13,7 @@
            asp-controller="player" asp-action="show" asp-route-playerid="@player.Id"
            class="mt-player-container ">
             <div class="image-container">
-                <img src="@Cloudinary.MemberImage(player.ImageMedium, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
+                <img src="@Cloudinary.MemberImage(player.ImageMedium, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
             </div>
             <p>@Html.DisplayFor(p => player.Name)</p>
         </a>
