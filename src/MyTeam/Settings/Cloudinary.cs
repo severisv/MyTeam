@@ -13,7 +13,7 @@ namespace MyTeam.Settings
         public static string DefaultMember = "image/upload/v1448559418/default_player_dnwac0.gif";
 
 
-        public static string Image(string res, int? width = null, int? height = null, string fallback = "")
+        public static string Image(string res, int? width = null, string fallback = "")
         {
             if (string.IsNullOrWhiteSpace(res)) res = fallback;
 
