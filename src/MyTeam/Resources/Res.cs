@@ -40,6 +40,7 @@ namespace MyTeam.Resources
         public const string Event = "Arrangement";
         public const string FieldRequired = "Feltet er obligatorisk";
         public const string GoalDifference = "Målforskjell";
+        public const string Game = "Kamp";
         public const string Games = "Kamper";
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";

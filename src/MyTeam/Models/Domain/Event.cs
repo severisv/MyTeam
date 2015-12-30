@@ -13,6 +13,7 @@ namespace MyTeam.Models.Domain
     {
         [Required]
         public Guid ClubId { get; set; }
+        public Guid? SeasonId { get; set; }
         [Required]
         public EventType Type { get; set; }
 
@@ -44,6 +45,8 @@ namespace MyTeam.Models.Domain
         public bool IsTraining => Type == EventType.Trening;
         [NotMapped]
         public bool IsCustom => Type == EventType.Diverse;
+
+        public ICollection<Goal> Goals { get; set; }
 
 
         public bool IsAttending(ClaimsPrincipal user)

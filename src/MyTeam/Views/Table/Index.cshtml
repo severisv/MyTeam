@@ -1,6 +1,4 @@
-﻿@using System.Runtime.Remoting.Contexts
-@using Microsoft.Data.Entity.Metadata.Internal
-@using MyTeam
+﻿@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Table.TableViewModel
@@ -22,8 +20,6 @@
         </div>
         <hr/>
     }
-
-
     @if (Model.CurrentSeason == null)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
@@ -39,7 +35,6 @@
         {
             <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.SelectedSeason?.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
         }
-
     }
     else
     {
@@ -52,10 +47,7 @@
         @Html.Partial("_Show", Model.Table)
         <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
     }
-
 </div>
-
-
 @Html.Partial("_AdminMenu")
 
 @if (Model.Seasons?.Any() == true)
@@ -70,9 +62,7 @@
         </ul>
 
     </div>
-
 }
-
 @section Scripts {
-<script src="~/scripts/Table/table.js"></script>
-    }
+    <script src="~/scripts/Table/table.js"></script>
+}

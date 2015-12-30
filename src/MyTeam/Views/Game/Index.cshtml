@@ -1,7 +1,54 @@
-﻿@using System.Threading.Tasks
-
+﻿@using MyTeam
 @using MyTeam.Resources
+@model MyTeam.ViewModels.Game.GamesViewModel
 @{
     ViewBag.Title = Res.Games;
 }
+<div mt-main>
+    @if (Model.Teams?.Count() > 1)
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="nav nav-pills mt-justified">
+                    @foreach (var team in Model.Teams)
+                    {
+                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> @team.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <hr/>
+    }
+    @if (Model.Games?.Any() == true)
+    {
+        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
 
+    }
+    else
+    {
+        <h2><i class="fa fa-trophy"></i> @Model.SelectedSeason.DisplayName</h2>
+        @*@Html.Partial("_Show", Model.Games)*@
+    }
+
+</div>
+@Html.Partial("_AdminMenu")
+
+
+@if (Model.Seasons?.Any() == true)
+{
+    <div mt-sidebar>
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.Season.Pluralize()</li>
+            @foreach (var season in Model.Seasons)
+            {
+                <li><a class="@(Model.SelectedSeason.Year == season.Year ? "active" : "")" asp-controller="game" asp-action="index" asp-route-teamid="@Model.TeamId"asp-route-year="@season.Year">@season.DisplayName</a></li>
+            }
+        </ul>
+
+    </div>
+
+}
+
+@section Scripts {
+<script src="~/scripts/Table/table.js"></script>
+    }

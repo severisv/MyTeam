@@ -214,6 +214,8 @@ namespace MyTeam.Migrations
 
                     b.Property<Guid?>("ReportId");
 
+                    b.Property<Guid?>("SeasonId");
+
                     b.Property<int>("Type");
 
                     b.Property<bool>("Voluntary");
@@ -432,6 +434,10 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Article")
                         .WithOne()
                         .HasForeignKey("MyTeam.Models.Domain.Event", "ReportId");
+
+                    b.HasOne("MyTeam.Models.Domain.Season")
+                        .WithMany()
+                        .HasForeignKey("SeasonId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
+using MyTeam.Models.Enums;
 using MyTeam.ViewModels.Game;
 
 namespace MyTeam.Services.Domain
@@ -65,6 +67,42 @@ namespace MyTeam.Services.Domain
             var ev = _dbContext.Events.Single(e => e.Id == eventId);
             ev.IsPublished = true;
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<GameViewModel> GetGames(Guid teamId, int year)
+        {
+            var startDate = new DateTime(year, 1,1);
+            var endDate = new DateTime(year, 12,31);
+
+            var games = _dbContext.Events
+                .Where(e => e.Type == EventType.Kamp)
+                .Where(e => e.EventTeams.Count(et => et.TeamId == teamId) > 0)
+                .Where(e => e.DateTime.Date >= startDate && e.DateTime.Date <= endDate)
+                .Select(e => new GameViewModel
+                {
+                    DateTime = e.DateTime,
+                    Opponent = e.Opponent,
+                    Teams = e.EventTeams.Select(et => et.Team.Name)
+                    Id = e.Id,
+                    Goals = e.Goals.Count(),
+                    HomeScore = e.HomeScore,
+                    AwayScore = e.AwayScore
+                });
+
+        }
+
+        public IEnumerable<SeasonViewModel> GetSeasons(Guid teamId)
+        {
+
+            var years = _dbContext.Events
+                .Where(e => e.EventTeams.Count(et => et.TeamId == teamId) > 0)
+                .Where(e => e.Type == EventType.Kamp).Select(e => e.DateTime.Year).ToList().Distinct();
+            
+            return years.Select(y => new SeasonViewModel
+            {
+                TeamId = teamId,
+                Year = y
+            }).OrderByDescending(s => s.Year);
         }
     }
 }

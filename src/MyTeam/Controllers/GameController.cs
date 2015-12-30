@@ -1,10 +1,14 @@
 using System;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Game;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Controllers
 {
@@ -17,12 +21,31 @@ namespace MyTeam.Controllers
         public IPlayerService PlayerService { get; set; }
         [FromServices]
         public IGameService GameService { get; set; }
+        [FromServices]
+        public ISeasonService SeasonService { get; set; }
+        [FromServices]
+        public ApplicationDbContext DbContext { get; set; }
 
         [Route("")]
-        public IActionResult Index()
+        public IActionResult Index(int? year = null, Guid? teamId = null)
         {
-            Alert(AlertType.Info, "Det er ikke registrert noen kamper enda");
-            return View();
+            year = year ?? DateTime.Now.Year;
+            teamId = teamId ?? Club.TeamIds.First();
+
+            var seasons = GameService.GetSeasons(teamId.Value);
+
+            var teams = DbContext.Teams.OrderBy(t => t.SortOrder)
+                .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                })
+                .ToList();
+
+            var games = GameService.GetGames(teamId.Value, year.Value);
+            var model = new GamesViewModel(seasons, teams, year.Value, games, teamId.Value);
+
+            return View("Index", model);
         }
 
 
