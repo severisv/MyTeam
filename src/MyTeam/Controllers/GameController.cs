@@ -55,5 +55,17 @@ namespace MyTeam.Controllers
             return new JsonResult(JsonResponse.Success());
         }
 
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("laguttak/publiser")]
+        public JsonResult PublishSquad(Guid eventId)
+        {
+            if (eventId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId er null"));
+
+            GameService.PublishSquad(eventId);
+
+            return new JsonResult(JsonResponse.Success());
+        }
+
     }
 }

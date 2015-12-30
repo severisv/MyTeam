@@ -1,23 +1,26 @@
 ﻿@using System.Threading.Tasks
 
 @using MyTeam.Resources
+@using MyTeam.ViewModels.Game
 @model MyTeam.ViewModels.Game.RegisterSquadViewModel
 
 
-    <div mt-main>
-        <a asp-action="edit" asp-route-eventId="@Model.Training.Id" class="edit-link  pull-right" title="@Res.Edit @Res.Training.ToLower()"><i class="fa fa-edit"></i></a>
+    <div mt-main class="register-attendance">
+        <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link  pull-right" title="Rediger kamp"><i class="fa fa-edit"></i></a>
         <div class="flex">
             <div class="flex-1 event-icon align-center">
                 <div class="fa-3x">
-                    <span mt-eventtype="@Model.Training.Type" mt-hidename="true"></span>
+                    <span mt-eventtype="@Model.Game.Type" mt-hidename="true"></span>
                 </div>
             </div>
             <div class="flex-2 faded">
                 <p>
-                    <i class="fa fa-calendar"></i> @Model.Training.DateTime.ToString("ddd d MMMM")
+                    <i class="fa fa-calendar"></i> @Model.Game.DateTime.ToString("ddd d MMMM") 
+                    &nbsp;
+                    <span class="no-wrap"><i class="fa fa-clock-o"></i> @Model.Game.DateTime.ToString("HH:mm")</span>
                 </p>
-                <p>
-                    <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Training.Location)
+                 <p>
+                    <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Game.Location)
                 </p>
             </div>
         </div>
@@ -51,7 +54,7 @@
 
                 </div>
             </div>
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-sm-6 col-xs-12 ">
                 <h2>Tropp (<span id="squadCount">@Model.Squad.Count()</span>)</h2>
                 <hr/>
                 <div >
@@ -59,10 +62,30 @@
                         @foreach (var player in Model.Squad)
                         {
                             <li id="@player.Id">
-                               <i class="flaticon-soccer18"></i>&nbsp;@player.Name
+                                <i class="flaticon-soccer18"></i>&nbsp;@player.Name
                             </li>
                         }
                     </ul>
+                </div>
+                <hr/>
+                <div class="registerSquad-publish" id="registerSquad-publish">
+                    <div class="relative registerSquad-messageWrapper">
+                        <textarea id="publishMessage" class="form-control" data-href="@Url.Action("UpdateEventDescription", "Api", new {eventId = Model.Game.Id})" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
+                        <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
+                        <span class="label-feedback label label-success"><i class="fa fa-check"></i> Lagret</span>
+                    </div>
+                    <div>
+                        @if (Model.Game.IsPublished)
+                        {
+                            <div class="disabled btn btn-success btn-lg"><i class="fa fa-check-circle"></i> Publisert
+                            </div>
+                        }
+                        else
+                        {
+                            <button id="publishButton" data-href="@Url.Action("PublishSquad", "Game", new {eventId = Model.Game.Id})" class="btn btn-primary btn-lg"><span>Publisér tropp</span><i class="fa fa-spinner fa-spin"></i></button>
+                        }
+                        <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
+                    </div>
                 </div>
             </div>
         </div>

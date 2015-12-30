@@ -97,6 +97,36 @@
             </div>
         }
     }
+    else if (Model.IsPublished)
+    {
+        <div id="signups-@Model.Id">
+            <div class="attendee-links">
+                <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                    <span class="flex-2">Tropp (@(Model.Squad?.Count() ?? 0))</span>
+                    <span class="flex-1 pull-right">&nbsp;</span>
+                </a>
+            </div>
+            <div class="panel">
+                <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                    <div class="flex event-attendees ">
+
+                        <ul class="list-unstyled flex-2">
+                            @foreach (var player in Model.Squad)
+                            {
+                                <li>
+                                    <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                    {
+                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+}
 </div>
 
 @if (Context.Request.IsAjaxRequest())

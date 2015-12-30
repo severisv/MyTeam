@@ -7,10 +7,10 @@ namespace MyTeam.ViewModels.Game
 {
     public class RegisterSquadViewModel
     {
-        public RegisterSquadEventViewModel Training { get; }
+        public RegisterSquadEventViewModel Game { get; }
         private readonly IEnumerable<RegisterSquadPlayerViewModel> _players;
 
-        public IEnumerable<RegisterSquadPlayerViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
+        public IEnumerable<RegisterSquadPlayerViewModel> Attendees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
 
         public IEnumerable<RegisterSquadPlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv).Where(p => Attendees.All(a => a.Id != p.Id));
 
@@ -18,11 +18,11 @@ namespace MyTeam.ViewModels.Game
 
         public IEnumerable<RegisterSquadPlayerViewModel> Squad => _players.Where(p => p.Attendance?.IsSelected == true);
 
-        public RegisterSquadViewModel(RegisterSquadEventViewModel training, IEnumerable<SimplePlayerDto> players)
+        public RegisterSquadViewModel(RegisterSquadEventViewModel game, IEnumerable<SimplePlayerDto> players)
         {
-            Training = training;
-            _players = players.Select(p => new RegisterSquadPlayerViewModel(p, Training.Id,
-                    training.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
+            Game = game;
+            _players = players.Select(p => new RegisterSquadPlayerViewModel(p, Game.Id,
+                    game.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
                 ));
         }
     }

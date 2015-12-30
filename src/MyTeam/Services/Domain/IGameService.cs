@@ -8,5 +8,6 @@ namespace MyTeam.Services.Domain
     {
         void SelectPlayer(Guid eventId, Guid playerId, bool isSelected);
         RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId);
+        void PublishSquad(Guid eventId);
     }
 }

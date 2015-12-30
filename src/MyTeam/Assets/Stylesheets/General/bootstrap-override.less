@@ -251,6 +251,17 @@ a {
         background-color: darken(@greenLight, 5);
         border-color: darken(@greenLight, 7);
     }
+
+}
+
+.btn.disabled, .btn[disabled] {
+    opacity: 0.90;
+    cursor: default;
+}
+
+.btn-success.disabled.focus, .btn-success.disabled:focus, .btn-success.disabled:hover, .btn-success[disabled].focus, .btn-success[disabled]:focus, .btn-success[disabled]:hover, fieldset[disabled] .btn-success.focus, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success:hover {
+      background-color: @greenLight;
+    border-color: darken(@greenLight, 5);
 }
 
 .btn-danger {
@@ -312,7 +323,9 @@ hr {
     background-color: @redLight;
 }
 
-
+.label-feedback {
+    display:none;
+}
 /* Popover */
 
 .popover { 

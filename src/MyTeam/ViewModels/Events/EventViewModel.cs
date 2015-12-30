@@ -26,7 +26,7 @@ namespace MyTeam.ViewModels.Events
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
         public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
-            string headline, string description, string opponent, bool voluntary)
+            string headline, string description, string opponent, bool voluntary, bool isPublished)
         {
             Id = eventId;
             ClubId = clubId;
@@ -39,9 +39,10 @@ namespace MyTeam.ViewModels.Events
             Opponent = opponent;
             Voluntary = voluntary;
             TeamIds = teamIds;
+            IsPublished = isPublished;
         }
 
-        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary)
+        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished)
         {
             
         }
@@ -52,10 +53,12 @@ namespace MyTeam.ViewModels.Events
         public IEnumerable<AttendeeViewModel> Attending => Attendees?.Where(a => a.IsAttending);
         public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => !a.IsAttending);
         public IEnumerable<AttendeeViewModel> DidAttend => Attendees?.Where(a => a.DidAttend);
+        public IEnumerable<AttendeeViewModel> Squad => Attendees?.Where(a => a.IsSelected);
 
         public bool IsGame => Type == EventType.Kamp;
         public bool IsTraining => Type == EventType.Trening;
         public bool IsCustom => Type == EventType.Diverse;
+        public bool IsPublished { get;  }
 
         public bool IsAttending(ClaimsPrincipal user)
         {

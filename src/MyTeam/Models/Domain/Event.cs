@@ -25,6 +25,7 @@ namespace MyTeam.Models.Domain
 
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
+        public bool IsPublished { get; set; }
 
         public Guid? ReportId { get; set; }
         public virtual Article Report { get; set; }
@@ -43,6 +44,7 @@ namespace MyTeam.Models.Domain
         public bool IsTraining => Type == EventType.Trening;
         [NotMapped]
         public bool IsCustom => Type == EventType.Diverse;
+
 
         public bool IsAttending(ClaimsPrincipal user)
         {

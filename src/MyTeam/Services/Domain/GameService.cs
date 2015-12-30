@@ -54,9 +54,17 @@ namespace MyTeam.Services.Domain
                     }).ToList(),
                     Id = e.Id,
                     Location = e.Location,
-                    Type = e.Type
+                    Description = e.Description,
+                    Type = e.Type,
+                    IsPublished = e.IsPublished
                 }).Single();
         }
-    
+
+        public void PublishSquad(Guid eventId)
+        {
+            var ev = _dbContext.Events.Single(e => e.Id == eventId);
+            ev.IsPublished = true;
+            _dbContext.SaveChanges();
+        }
     }
 }

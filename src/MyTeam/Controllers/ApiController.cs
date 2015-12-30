@@ -6,7 +6,6 @@ using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
-using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 
 
@@ -17,6 +16,8 @@ namespace MyTeam.Controllers
     {
         [FromServices]
         public IPlayerService PlayerService { get; set; }
+        [FromServices]
+        public IEventService EventService { get; set; }
         [FromServices]
         public ApplicationDbContext DbContext { get; set; }
         
@@ -91,6 +92,21 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 PlayerService.TogglePlayerTeam(teamId, playerId, Club.ClubId);
+                var reponse = new { Success = true };
+                return new JsonResult(reponse);
+            }
+
+            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
+        }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public JsonResult UpdateEventDescription(Guid eventId, string description)
+        {
+            if (ModelState.IsValid)
+            {
+                EventService.UpdateDescription(eventId, description);
                 var reponse = new { Success = true };
                 return new JsonResult(reponse);
             }

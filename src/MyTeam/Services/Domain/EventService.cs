@@ -49,8 +49,8 @@ namespace MyTeam.Services.Domain
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend)).ToList(),
-                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
+                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
                 )).ToList();
         }
 
@@ -70,8 +70,8 @@ namespace MyTeam.Services.Domain
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend)),
-                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)),
+                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
                 ));
 
             if (count != null)
@@ -192,8 +192,8 @@ namespace MyTeam.Services.Domain
             return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage,  a.IsAttending, a.DidAttend)).ToList(),
-                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage,  a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
+                    e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
                 )).Single();
         }
 
@@ -232,6 +232,13 @@ namespace MyTeam.Services.Domain
             var attendance = EventAttendanceRepository.Get().Single(a => a.EventId == eventId && a.MemberId == memberId);
 
             attendance.SignupMessage = message;
+            _dbContext.SaveChanges();
+        }
+
+        public void UpdateDescription(Guid eventId, string description)
+        {
+            var ev = _dbContext.Events.Single(e => e.Id == eventId);
+            ev.Description = description;
             _dbContext.SaveChanges();
         }
     }
