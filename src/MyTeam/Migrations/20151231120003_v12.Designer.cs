@@ -8,8 +8,8 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20151231113801_v14")]
-    partial class v14
+    [Migration("20151231120003_v12")]
+    partial class v12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

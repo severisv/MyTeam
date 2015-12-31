@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace MyTeam.Migrations
 {
-    public partial class v11 : Migration
+    public partial class v12 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,11 +22,6 @@ namespace MyTeam.Migrations
             migrationBuilder.DropForeignKey(name: "FK_Season_Team_TeamId", table: "Season");
             migrationBuilder.DropForeignKey(name: "FK_Table_Season_SeasonId", table: "Table");
             migrationBuilder.DropForeignKey(name: "FK_Team_Club_ClubId", table: "Team");
-            migrationBuilder.AddColumn<bool>(
-                name: "IsPublished",
-                table: "Event",
-                nullable: false,
-                defaultValue: false);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -143,7 +138,6 @@ namespace MyTeam.Migrations
             migrationBuilder.DropForeignKey(name: "FK_Season_Team_TeamId", table: "Season");
             migrationBuilder.DropForeignKey(name: "FK_Table_Season_SeasonId", table: "Table");
             migrationBuilder.DropForeignKey(name: "FK_Team_Club_ClubId", table: "Team");
-            migrationBuilder.DropColumn(name: "IsPublished", table: "Event");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
