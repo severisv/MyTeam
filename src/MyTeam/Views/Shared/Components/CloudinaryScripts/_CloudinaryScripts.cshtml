@@ -1,28 +1,20 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Util
-@using Microsoft.Extensions.Configuration;
-@model IConfiguration
+@model MyTeam.ViewModels.Shared.CloudinaryConfiguration
 @{
-    var cloudName = Model["Integration:Cloudinary:CloudName"];
-    var apiKey = Model["Integration:Cloudinary:ApiKey"];
-    var apiSecret = Model["Integration:Cloudinary:ApiSecret"];
-    var unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-    var queryString = $"timestamp={unixTimestamp}{apiSecret}";
-    var signature = Sha1.HashStringForUTF8String(queryString);
 }
 
 <script src="~/scripts/Bundles/cloudinary.bundle.js"></script>
 <script>
     
-    $.cloudinary.config({ cloud_name: '@cloudName', api_key: '@apiKey', signature: '@signature' });
-
+    $.cloudinary.config({ cloud_name: '@Model.CloudName', api_key: '@Model.ApiKey', signature: '@Model.Signature' });
+     
     var formData = {
-        api_key: '@apiKey',
-        timestamp: '@unixTimestamp',
-        signature: '@signature'
+        api_key: '@Model.ApiKey',
+        timestamp: '@Model.UnixTimestamp',
+        signature: '@Model.Signature'
     }
-
+    
     $('.cloudinary-fileupload').each(function () {
         $(this).attr('data-form-data', JSON.stringify(formData));
     });
@@ -40,5 +32,4 @@
     $('.cloudinary-fileupload').bind('fileuploadprogress', function (e, data) {
         $('.cloudinary-progress-bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%');
     });
-
 </script>

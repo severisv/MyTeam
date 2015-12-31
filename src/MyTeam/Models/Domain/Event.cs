@@ -46,7 +46,9 @@ namespace MyTeam.Models.Domain
         [NotMapped]
         public bool IsCustom => Type == EventType.Diverse;
 
-        public ICollection<Goal> Goals { get; set; }
+        public int? HomeScore { get; set; }
+        public int? AwayScore { get; set; }
+        public bool IsHomeTeam { get; set; }
 
 
         public bool IsAttending(ClaimsPrincipal user)

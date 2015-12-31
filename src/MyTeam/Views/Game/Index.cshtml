@@ -19,15 +19,14 @@
         </div>
         <hr/>
     }
-    @if (Model.Games?.Any() == true)
+    @if (!Model.Games?.Any() == true)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
 
     }
     else
     {
-        <h2><i class="fa fa-trophy"></i> @Model.SelectedSeason.DisplayName</h2>
-        @*@Html.Partial("_Show", Model.Games)*@
+        @Html.Partial("_List", Model.Games)
     }
 
 </div>

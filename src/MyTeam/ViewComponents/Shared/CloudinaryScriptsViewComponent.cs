@@ -1,13 +1,14 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyTeam.Util;
 using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.Shared
 {
     public class CloudinaryScriptsViewComponent : ViewComponent
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
         public CloudinaryScriptsViewComponent(IConfigurationRoot configuration)
         {
@@ -16,7 +17,9 @@ namespace MyTeam.ViewComponents.Shared
 
         public IViewComponentResult Invoke()
         {
-            return View("_CloudinaryScripts", _configuration);
+            var model = new CloudinaryConfiguration(_configuration);
+
+            return View("_CloudinaryScripts", model);
         }
 
 

@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151231102755_v12")]
+    partial class v12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -197,7 +198,7 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AwayScore");
+                    b.Property<int>("AwayScore");
 
                     b.Property<Guid>("ClubId");
 
@@ -207,7 +208,7 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("Headline");
 
-                    b.Property<int?>("HomeScore");
+                    b.Property<int>("HomeScore");
 
                     b.Property<bool>("IsHomeTeam");
 

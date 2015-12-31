@@ -20,9 +20,19 @@ namespace MyTeam
             return datetime.ToString("dd.MM.yyyy");
         }
 
+        public static string ToNoShort(this DateTime datetime)
+        {
+            return datetime.ToString("dd.MM");
+        }
+
         public static string ToNo(this TimeSpan timespan)
         {
             return timespan.ToString(@"hh\:mm");
+        }
+
+        public static string ToNoTime(this DateTime dateTime)
+        {
+            return dateTime.ToString(@"hh\:mm");
         }
     }
 }

@@ -82,12 +82,15 @@ namespace MyTeam.Services.Domain
                 {
                     DateTime = e.DateTime,
                     Opponent = e.Opponent,
-                    Teams = e.EventTeams.Select(et => et.Team.Name)
+                    Teams = e.EventTeams.Select(et => et.Team.Name),
                     Id = e.Id,
-                    Goals = e.Goals.Count(),
                     HomeScore = e.HomeScore,
-                    AwayScore = e.AwayScore
-                });
+                    AwayScore = e.AwayScore,
+                    IsHomeTeam = e.IsHomeTeam,
+                    Location = e.Location
+                }).ToList();
+
+            return games;
 
         }
 
