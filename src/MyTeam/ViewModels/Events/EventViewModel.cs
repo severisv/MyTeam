@@ -30,7 +30,7 @@ namespace MyTeam.ViewModels.Events
         {
             Id = eventId;
             ClubId = clubId;
-            Attendees = attendees.OrderBy(a => a.FirstName);
+            Attendees = attendees?.OrderBy(a => a.FirstName);
             DateTime = dateTime;
             Location = location;
             Headline = headline;

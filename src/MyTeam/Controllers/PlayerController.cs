@@ -21,7 +21,7 @@ namespace MyTeam.Controllers
         [FromServices]
         public IPlayerService PlayerService { get; set; }
 
-        [Route("oversikt")]
+        [Route("")]
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
             var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId).OrderBy(p => p.FirstName);

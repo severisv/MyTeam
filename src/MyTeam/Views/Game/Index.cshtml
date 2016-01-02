@@ -5,20 +5,38 @@
     ViewBag.Title = Res.Games;
 }
 <div mt-main>
-    @if (Model.Teams?.Count() > 1)
-    {
-        <div class="row">
+    <div class="row">
+
+        @if (Model.Teams?.Count() > 1)
+        {
             <div class="col-sm-6">
                 <ul class="nav nav-pills mt-justified">
                     @foreach (var team in Model.Teams)
-                    {
+                {
                         <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> @team.Name</a></li>
                     }
                 </ul>
             </div>
-        </div>
-        <hr/>
-    }
+
+        }
+        @if (Model.Seasons.Any())
+        {
+            <div class="col-sm-3 col-xs-12 pull-right">
+                <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                    @foreach (var season in Model.Seasons)
+                {
+                        <option value="@Url.Action("Index", "Game", new {teamId = Model.TeamId, year = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year ? "selected" : "")">@season.DisplayName</option>
+                    }
+                </select>
+            </div>
+        }
+       
+    </div>
+
+    <hr />
+
+
+
     @if (!Model.Games?.Any() == true)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>

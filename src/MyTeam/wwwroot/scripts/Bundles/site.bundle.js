@@ -126,6 +126,7 @@ global.applyScopedJsComponents = function (selector) {
     applyConfirmDialogListeners($scope);
     applyActiveLinkSwapper($scope);
     applyAjaxLinkActions($scope);
+    applySelectLinkListeners($scope);
 }
 
 global.applyJsComponents = function() {
@@ -211,6 +212,14 @@ function applyAjaxLinkActions($scope) {
         if ($el.attr('mt-pushstate')) {
             layout.pushState($el.attr('href'), $el.attr('mt-pushstate'));
         }
+    });
+}
+
+function applySelectLinkListeners($scope) {
+    $scope.find('.linkSelect').on('change', function () {
+        var url = $(this).val();
+        window.location = url;
+
     });
 }
 
