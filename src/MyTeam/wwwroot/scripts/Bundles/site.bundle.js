@@ -139,6 +139,8 @@ global.applyJsComponents = function() {
     window.onpopstate = function () {
         location.reload();
     }
+
+  
     console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
 }
 
