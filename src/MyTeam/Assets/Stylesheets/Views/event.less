@@ -1,7 +1,4 @@
-﻿
-/* Events */
-
-
+﻿/* Events */
 
 .show-upcoming-event {
     p {
@@ -28,6 +25,9 @@
 .event-signup {
     margin-top: 20px;
     margin-left: 16.66%;
+    .r-under-xs({
+        margin-left:0;
+    });
 
 
     .panel {
@@ -50,8 +50,14 @@
         span:first-child {
 
             &:before {
-                margin-left: -1.7em;
                 margin-top: -0.1em;
+                 margin-left: -1.6em;
+                .r-under-xs({margin-left: -1.4em;});
+                .r-under-xxs({                
+                    margin-left: -1.1em;                                              
+                    font-size:0.7em;
+                    margin-top:0.3em;
+});
                 position: absolute;
                 content: "\f078";
                 font-family: FontAwesome;
@@ -64,8 +70,15 @@
 
         &.collapsed {
             span:first-child:before {
-                margin-left: -1.5em;
                 margin-top: 0;
+                margin-left: -1.4em;
+                .r-under-xs({margin-left: -1.2em;});
+                .r-under-xxs({ 
+                    margin-left: -0.85em;
+                    font-size:0.7em;
+                    margin-top: 0.4em;
+                    
+});
                 content: "\f054";
                 font-family: FontAwesome;
             }
@@ -149,6 +162,7 @@ select.event-teamSelect {
   .event-showAll {
           margin-top: 2em;
           margin-left: 1.5em;
+          .r-under-xs({margin-left:0 ;});
 
   }
 

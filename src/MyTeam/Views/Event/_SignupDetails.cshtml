@@ -33,18 +33,17 @@
                 <div class="attendee-links">
                     <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
                         <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
-                        <span class="flex-1 pull-right">&nbsp;</span>
                     </a>
                 </div>
                 <div class="panel">
                     <div id="attendees-@Model.Id" class="panel-collapse collapse">
                         <div class="flex">
-
                             <ul class="list-unstyled flex-2">
                                 @foreach (var player in Model.DidAttend)
                                 {
                                     <li>
-                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
+                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
+                                        <span>@player.FirstName</span><span>&nbsp;@player.LastName</span></a>
                                 </li>
                                 }
                             </ul>
@@ -60,7 +59,7 @@
                     <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
                         <span class="flex-2">@Res.Attending (@(Model.Attending?.Count() ?? 0))</span>
                         <span class="flex-2">@Res.IsNotAttending (@(Model.NotAttending?.Count() ?? 0))</span>
-                        <span class="flex-1 pull-right">&nbsp;</span>
+                        <span class="flex-1 pull-right hidden-xs">&nbsp;</span>
                     </a>
                 </div>
                 <div class="panel">
@@ -71,26 +70,31 @@
                                 @foreach (var player in Model.Attending)
                                 {
                                     <li>
-                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
-                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                            <i class="fa fa-user"></i>&nbsp;
+                                            <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
+                                        </a>                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
                                     }
                                 </li>
                                 }
                             </ul>
-                            <ul class="list-unstyled flex-3">
+                            <ul class="list-unstyled flex-2">
                                 @foreach (var player in Model.NotAttending)
                                 {
                                     <li>
-                                        @Html.Partial("Player/_Link", new Tuple<Guid, string>(player.MemberId, player.Name))
-                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
-                                    {
-                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                    }
-                                </li>
+                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                            <i class="fa fa-user"></i>&nbsp;
+                                            <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
+                                        </a>                                        @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                        {
+                                            <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                        }
+                                    </li>
                                 }
                             </ul>
+                            <div class="flex-1 hidden-xs">&nbsp;</div>
                         </div>
                     </div>
                 </div>
