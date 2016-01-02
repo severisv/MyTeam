@@ -43,12 +43,25 @@
                 <li><a asp-controller="stats" asp-action="index">@Res.Stats</a></li>
                 @if (Context.UserIsMember())
                 {
-                    <li><a class="slide-down-parent" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
+                    <li><a class="slide-down-parent hidden-xs" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
+
                 }
             </ul>
+        @if (Context.UserIsMember())
+        {
+            <hr class="visible-xs submenu-divider" />
+            <ul class="nav navbar-nav submenu visible-xs">
+                <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
+                <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
+                @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+                {
+                    <li><a asp-controller="admin" asp-action="index"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
+                }
+            </ul>
+        }
+
         </div>
-    
-       
         <div class="navbar-topRight">
             @await Html.PartialAsync("_LoginPartial")
             @if (Context.UserIsMember())
@@ -59,7 +72,7 @@
 
         @if (Context.UserIsMember())
         {
-            <ul id="submenu-internal" class="nav navbar-nav slide-down-child">
+            <ul id="submenu-internal" class="nav navbar-nav submenu slide-down-child  hidden-xs collapse">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
                 <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>

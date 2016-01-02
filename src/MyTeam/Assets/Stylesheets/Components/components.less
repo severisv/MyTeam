@@ -53,22 +53,32 @@
 /* Submenu */
 
 .slide-down-child {
-    display:none;
-    font-size: 90%;
+    display:none; 
+    @media screen and (max-width: 767px) {
+        margin: 10px 0px;
+        padding: 0 10px;
+        border-left: 2px solid @team-primary;
+    }
+        font-size: 90%;
+
+}
+
+.submenu {
     letter-spacing: 1px;
     width: 100%;
 
     li{
         margin-right:10px;
     }
-
     @media screen and (max-width: 767px) {
-        margin: 10px 0px;
-        padding: 0 10px;
-        border-left: 2px solid @team-primary;
+        padding-top: 15px;
     }
-
-  
+    
 }
 
+.submenu-divider {
+    border: 1px solid @team-primary;
+    border-radius: 5px;
+    margin: 0;
+}
 
