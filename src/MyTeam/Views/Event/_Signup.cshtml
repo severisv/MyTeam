@@ -4,14 +4,11 @@
 
 
 <div id="event-signup-@Model.Id" class="event-signup">
-    @if (!Context.Member().BelongsToTeam(Model.TeamIds.ToArray()) && Model.GameType != GameType.Treningskamp)
-    {
-        <div mt-alert="AlertType.Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
-    }
-    else if (Model.SignupHasOpened())
-    {
+  @if (Model.SignupHasOpened()){
+   
         @Html.Partial("_SignupDetails")
-    }
+      
+  }
 
 </div>
 
