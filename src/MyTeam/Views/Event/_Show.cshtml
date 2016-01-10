@@ -65,6 +65,10 @@
             else if (Model.Type == EventType.Kamp)
             {
                 <h3 class="no-margin">@Model.Team(Context.GetClub().Teams).ShortName <span class="event-opponentDivider">vs</span> @Html.DisplayFor(m => m.Opponent)</h3>
+                <span>
+                    @Model.GameType
+                </span>
+
             }
             <span class="description">
                 @Html.DisplayFor(m => m.Description)

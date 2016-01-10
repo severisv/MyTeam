@@ -3,7 +3,7 @@
     public enum GameType
     {
         Treningskamp,
-        Serie,
-        Cup
+        Seriekamp,
+        Cupkamp
     }
 }
