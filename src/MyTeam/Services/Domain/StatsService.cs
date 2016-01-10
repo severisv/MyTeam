@@ -23,7 +23,7 @@ namespace MyTeam.Services.Domain
                             e.DateTime < DateTime.Now.AddHours(1) &&
                             e.DateTime.Year == year &&
                             e.Voluntary == false &&
-                            (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id);
+                            (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id).ToList();
 
             var attendances = _dbContext.EventAttendances.Where(a => eventIds.Contains(a.EventId));
 
