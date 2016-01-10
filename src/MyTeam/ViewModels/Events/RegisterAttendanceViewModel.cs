@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
@@ -28,21 +27,7 @@ namespace MyTeam.ViewModels.Events
             PreviousEvents = previousEvents;
         }
 
-        public class RegisterAttendancePlayerViewModel : SimplePlayerDto
-        {
-            public RegisterAttendanceAttendeeViewModel Attendance { get; }
-            public Guid EventId { get; }
-
-            public RegisterAttendancePlayerViewModel(SimplePlayerDto player, Guid eventId, RegisterAttendanceAttendeeViewModel attendance)
-            {
-                Attendance = attendance;
-                Id = player.Id;
-                Name = player.Name;
-                ImageSmall = player.ImageSmall;
-                Status = player.Status;
-                EventId = eventId;
-            }
-        }
+       
 
       
     }

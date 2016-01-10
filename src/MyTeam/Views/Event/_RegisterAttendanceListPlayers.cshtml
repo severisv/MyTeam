@@ -1,13 +1,17 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata.Internal
 @using MyTeam.Settings
-@model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendanceViewModel.RegisterAttendancePlayerViewModel>
+@model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendancePlayerViewModel>
 <div class="row">
     <ul class="list-users col-xs-11 col-md-10">
         @foreach (var player in Model)
         {
             <li class="register-attendance-item">
                 <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)"/>@player.Name
+                <input class="pull-right form-control register-trainingVictory-input"
+                       data-player-id="@player.Id"
+                       data-event-id="@player.EventId"
+                       type="checkbox"
+                       @(player.Attendance?.WonTraining == true ? "checked" : "") />
                 <input class="pull-right form-control register-attendance-input"
                        data-player-id="@player.Id"
                        data-event-id="@player.EventId"

@@ -16,5 +16,6 @@ namespace MyTeam.Models.Domain
         public virtual Member Member { get; set; }
         public virtual Event Event { get; set; }
         public string SignupMessage { get; set; }
+        public bool WonTraining { get; set; }
     }
 }

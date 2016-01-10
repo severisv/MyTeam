@@ -207,7 +207,8 @@ namespace MyTeam.Services.Domain
                     {
                         MemberId = a.MemberId,
                         IsAttending = a.IsAttending,
-                        DidAttend = a.DidAttend
+                        DidAttend = a.DidAttend,
+                        WonTraining = a.WonTraining
                     }).ToList(),
                     Id = e.Id,
                     Location = e.Location,
@@ -239,6 +240,28 @@ namespace MyTeam.Services.Domain
         {
             var ev = _dbContext.Events.Single(e => e.Id == eventId);
             ev.Description = description;
+            _dbContext.SaveChanges();
+        }
+
+        public void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin)
+        {
+            var attendance = EventAttendanceRepository.Get().FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
+            if (attendance != null)
+            {
+                attendance.WonTraining = didWin;
+            }
+            else
+            {
+                attendance = new EventAttendance
+                {
+                    Id = Guid.NewGuid(),
+                    EventId = eventId,
+                    WonTraining = didWin,
+                    IsAttending = false,
+                    MemberId = playerId
+                };
+                _dbContext.EventAttendances.Add(attendance);
+            }
             _dbContext.SaveChanges();
         }
     }

@@ -33,6 +33,7 @@ namespace MyTeam.Services.Domain
                 EventType = e.Event.Type,
                 IsAttending = e.IsAttending,
                 MemberId = e.MemberId,
+                WonTraining = e.WonTraining,
                 Member = new AttendanceMemberViewModel
                 {
                     ImageSmall = e.Member.ImageSmall,

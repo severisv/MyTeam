@@ -198,5 +198,17 @@ namespace MyTeam.Controllers
 
             return new JsonResult(JsonResponse.Success());
         }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("oppmote/bekreftseier")]
+        public JsonResult ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin)
+        {
+            if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
+
+            EventService.ConfirmTrainingVictory(eventId, playerId, didWin);
+
+            return new JsonResult(JsonResponse.Success());
+        }
     }
 }
