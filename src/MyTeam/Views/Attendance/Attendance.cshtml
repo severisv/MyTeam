@@ -26,24 +26,26 @@
             <thead>
                 <tr>
                     <th>@Res.Player</th>
-                    <th><span mt-eventtype="@EventType.Trening" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Trening</span></th>
-                    <th><span mt-eventtype="@EventType.Kamp" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Kamp</span></th>
-                    <th><i title="@Res.NoShows" class="fa fa-warning"></i>&nbsp;<span class="hidden-xs">@Res.NoShows</span></th>
+                    <th class="score"><span mt-eventtype="@EventType.Trening" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Trening</span></th>
+                    <th class="score"><span mt-eventtype="@EventType.Kamp" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Kamp</span></th>
+                    <th class="score"><i title="@Res.NoShows" class="fa fa-warning"></i>&nbsp;<span class="hidden-xs">@Res.NoShows</span></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var player in Model.Players)
                 {
                     <tr>
-                        <td class="attendance-player-image"><img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />                            &nbsp;
-
-<a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
-                            @player.Name
-                        </a>
+                        <td class="attendance-player-image">
+                            <span class="attendance-playerImageContainer">
+                            <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />&nbsp;
+                        </span>
+                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
+                                @player.Name
+                            </a>
                         </td>
-                        <td>@player.Trainings</td>
-                        <td>@player.Games</td>
-                        <td>@player.NoShows</td>
+                        <td class="score" >@player.Trainings</td>
+                        <td class="score">@player.Games</td>
+                        <td class="score">@player.NoShows</td>
                     </tr>
                 }
             </tbody>
