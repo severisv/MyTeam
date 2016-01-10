@@ -192,6 +192,7 @@ namespace MyTeam.ViewModels.Events
                     Opponent = Opponent,
                     EventTeams = eventTeams,
                     Voluntary = !Mandatory,
+                    GameType = GameType.Treningskamp
                 };
         }
         

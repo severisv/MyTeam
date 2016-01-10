@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160110141345_v14")]
+    partial class v14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -205,7 +206,7 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int?>("GameType");
+                    b.Property<int>("GameType");
 
                     b.Property<string>("Headline");
 

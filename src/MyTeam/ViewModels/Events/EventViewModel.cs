@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Events
 {
@@ -15,6 +12,7 @@ namespace MyTeam.ViewModels.Events
         public Guid Id { get; }
         public Guid ClubId { get; }
         public EventType Type { get; }
+        public GameType? GameType { get; }
         public DateTime DateTime { get;  }
         public string Location { get; }
         public string Headline { get;  }
@@ -25,7 +23,7 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
-        public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, DateTime dateTime, string location,
+        public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, GameType? gameType, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary, bool isPublished)
         {
             Id = eventId;
@@ -36,13 +34,14 @@ namespace MyTeam.ViewModels.Events
             Headline = headline;
             Description = description;
             Type = type;
+            GameType = gameType;
             Opponent = opponent;
             Voluntary = voluntary;
             TeamIds = teamIds;
             IsPublished = isPublished;
         }
 
-        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished)
+        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished)
         {
             
         }
@@ -77,6 +76,7 @@ namespace MyTeam.ViewModels.Events
         public bool SignupHasOpened()
         {
             if (Type == EventType.Diverse) return true;
+            if (Type == EventType.Kamp && GameType == Models.Enums.GameType.Treningskamp) return true;
             return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
         }
 

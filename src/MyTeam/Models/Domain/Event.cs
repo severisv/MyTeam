@@ -16,6 +16,7 @@ namespace MyTeam.Models.Domain
         public Guid? SeasonId { get; set; }
         [Required]
         public EventType Type { get; set; }
+        public GameType? GameType { get; set; }
 
         [Required]
         public DateTime DateTime { get; set; }
