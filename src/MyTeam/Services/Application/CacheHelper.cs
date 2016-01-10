@@ -128,9 +128,7 @@ namespace MyTeam.Services.Application
             var events = new List<Guid>();
             foreach (var id in teamIds)
             {
-             var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
-                    .Select(et => et.Event).Where(e => (e.DateTime - DateTime.Now < new TimeSpan(4, 0, 0, 0, 0)) && (e.DateTime > DateTime.Now))
-                    .Select(e => e.Id).ToList();
+             var ids = _dbContext.EventTeams.Where(et => et.TeamId == id).Select(et => et.Event).Where(e => e.SignupHasOpened() && !e.SignupHasClosed()).Select(e => e.Id).ToList();
                 events.AddRange(ids);
             }
 
