@@ -46,6 +46,11 @@
     "**.user",
     "**.vspscc"
   ],
-  "scripts": {  
+  "scripts": {
+    "postrestore": [
+      "npm install",
+      "bower install",
+      "gulp"
+    ]
   }
 }
