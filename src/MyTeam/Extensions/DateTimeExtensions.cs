@@ -32,7 +32,7 @@ namespace MyTeam
 
         public static string ToNoTime(this DateTime dateTime)
         {
-            return dateTime.ToString(@"hh\:mm");
+            return dateTime.ToString(@"HH\:mm");
         }
     }
 }
