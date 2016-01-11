@@ -17,7 +17,7 @@ namespace MyTeam
                 var cacheHelper = app.ApplicationServices.GetService<ICacheHelper>();
 
                 var clubId = GetSubdomain(context);
-                if (clubId == null) clubId = "wamkam";
+                if (clubId == null || clubId == "breddefotball" || clubId == "bfstaging") clubId = "wamkam";
 
                 if (clubId != null)
                 {
