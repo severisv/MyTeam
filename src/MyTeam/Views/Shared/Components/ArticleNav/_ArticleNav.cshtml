@@ -5,7 +5,7 @@
 
 @if (Model.Any())
 {
-    <div mt-sidebar class="articleNav">
+    <div class="articleNav">
         @foreach (var group in Model.GroupBy(a => a.Published.ToString("MMMM", CultureInfo.CurrentCulture) + " " + a.Published.Year))
         {
             <ul class="nav nav-list">
