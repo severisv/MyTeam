@@ -4,8 +4,12 @@
 @{
     ViewBag.Title = Model.Headline;
 }
+<div class="mt-sidebar">
+    <div class="mt-container">
+        @Component.Invoke("ArticleNav", Context.GetClub().Id)
 
-@Component.Invoke("ArticleNav", Context.GetClub().Id)
+    </div>
+</div>
 
 @Html.Partial("_Show", Model)
 
