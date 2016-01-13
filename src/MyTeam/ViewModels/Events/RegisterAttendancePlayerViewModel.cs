@@ -12,7 +12,9 @@ namespace MyTeam.ViewModels.Events
         {
             Attendance = attendance;
             Id = player.Id;
-            Name = player.Name;
+            FirstName = player.FirstName;
+            MiddleName = player.MiddleName;
+            LastName = player.LastName;
             ImageSmall = player.ImageSmall;
             Status = player.Status;
             EventId = eventId;

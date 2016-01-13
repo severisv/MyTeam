@@ -50,7 +50,7 @@
     "postrestore": [
       "npm install",
       "bower install",
-      "gulp"
+      "gulp --production"
     ]
   }
 }

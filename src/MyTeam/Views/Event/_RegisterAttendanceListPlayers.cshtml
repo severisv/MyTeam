@@ -1,12 +1,13 @@
-﻿@using System.Threading.Tasks
+﻿@using System.Collections.Generic
+@using System.Threading.Tasks
 @using MyTeam.Settings
-@model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendancePlayerViewModel>
+@model System.Collections.Generic.IEnumerable<MyTeam.ViewModels.Events.RegisterAttendancePlayerViewModel>
 <div class="row">
     <ul class="list-users col-xs-11 col-md-10">
         @foreach (var player in Model)
         {
             <li class="register-attendance-item">
-                <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)"/>@player.Name
+                <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)"/>@player.ShortName
                 <input class="pull-right form-control register-trainingVictory-input"
                        data-player-id="@player.Id"
                        data-event-id="@player.EventId"

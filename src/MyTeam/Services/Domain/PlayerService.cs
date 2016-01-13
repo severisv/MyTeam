@@ -148,7 +148,9 @@ namespace MyTeam.Services.Domain
             return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto
             {
                 Id = p.Id,
-                Name = p.Fullname,
+             FirstName = p.FirstName,
+                 MiddleName  = p.MiddleName,
+                   LastName  = p.LastName,
                 Status =  p.Status,
                 ImageSmall = p.ImageSmall
             }).ToList().OrderBy(p => p.Name);

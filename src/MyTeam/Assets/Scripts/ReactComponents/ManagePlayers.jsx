@@ -17,7 +17,7 @@ var ManagePlayers = React.createClass({
       }
     },
 
-    componentDidMount() {
+    componentDidMount: function() {
         var that = this;
         $.getJSON(that.routes.GET_PLAYERS).then(function (response) {
             that.setState({
