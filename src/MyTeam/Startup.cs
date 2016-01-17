@@ -67,11 +67,11 @@ namespace MyTeam
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage();
 
             if (env.IsDevelopment())
                 {
+                    app.UseDeveloperExceptionPage();
+                    app.UseDatabaseErrorPage();
                     app.UseBrowserLink();
                 }
                 else

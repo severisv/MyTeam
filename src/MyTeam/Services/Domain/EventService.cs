@@ -197,9 +197,13 @@ namespace MyTeam.Services.Domain
                 )).Single();
         }
 
-        public RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid eventId)
+        public RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid? eventId)
         {
-            return _dbContext.Events.Where(e => e.Id == eventId)
+            var events = eventId != null
+                ? _dbContext.Events.Where(e => e.Id == eventId)
+                : _dbContext.Events.Where(e => e.Type == EventType.Trening && e.DateTime < DateTime.Now).OrderByDescending(e => e.DateTime);
+
+            return events
                 .Select(e => new RegisterAttendanceEventViewModel
                 {
                     DateTime = e.DateTime,
@@ -213,7 +217,7 @@ namespace MyTeam.Services.Domain
                     Id = e.Id,
                     Location = e.Location,
                     Type = e.Type
-                }).Single();
+                }).First();
         }
 
         public IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid clubId, int take)

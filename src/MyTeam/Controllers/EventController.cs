@@ -172,7 +172,7 @@ namespace MyTeam.Controllers
 
         [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("oppmote/bekreft")]
-        public IActionResult RegisterAttendance(Guid eventId)
+        public IActionResult RegisterAttendance(Guid? eventId  = null)
         {
             var ev = EventService.GetRegisterAttendanceEventViewModel(eventId);
             var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);

@@ -60,7 +60,7 @@
             @foreach (var ev in Model.PreviousEvents)
             {
                 <li ><a class="@(Model.Training.Id == ev.Id ? "active" : "" )" asp-controller="event" asp-action="registerattendance" asp-route-eventid="@ev.Id"><i class="fa fa-calendar"></i> @ev.DateTime.ToString("ddd d MMMM")
-</a></li>
+            </a></li>
             }
         </ul>
     </div>

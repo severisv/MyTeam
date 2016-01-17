@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam
 @using MyTeam.Models.Enums
 @using MyTeam.Resources
 @using MyTeam.Settings
@@ -8,50 +9,72 @@
     ViewBag.Title = Res.Attendance;
 }
 <div >
-    <div mt-sidebar mt-hide="false">
-        <ul class="nav nav-list">
-            <li class="nav-header">Sesong</li>
-            @foreach (var year in Model.Years)
-            {
-                <li>
-                    <a class="@(Model.Year == year ? "active" : "" )" asp-controller="stats" asp-action="attendance" asp-route-year="@year">
-                        @year
-                    </a>
-                </li>
-            }
-        </ul>
-    </div>
+
     <div mt-main>
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+        {
+            <div class="clearfix">
+                <a asp-controller="event" asp-action="registerattendance" class="btn btn-primary pull-right hidden-lg hidden-md"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
+            </div>
+            <br />
+        }
         <table class="table tablesorter attendance-table">
             <thead>
-                <tr>
-                    <th>@Res.Player</th>
-                    <th class="score"><span mt-eventtype="@EventType.Trening" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Trening</span></th>
-                    <th class="score"><i title="Treninger vunnet" class="flaticon-sports24"></i>&nbsp;<span class="hidden-xs">Treningsseiere</span></th>
-                    <th class="score"><span mt-eventtype="@EventType.Kamp" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Kamp</span></th>
-                    <th class="score"><i title="@Res.NoShows" class="fa fa-warning"></i>&nbsp;<span class="hidden-xs">@Res.NoShows</span></th>
-                </tr>
+            <tr>
+                <th>@Res.Player</th>
+                <th class="score"><span mt-eventtype="@EventType.Trening" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Trening</span></th>
+                <th class="score"><i title="Treninger vunnet" class="flaticon-sports24"></i>&nbsp;<span class="hidden-xs">Treningsseiere</span></th>
+                <th class="score"><span mt-eventtype="@EventType.Kamp" mt-hidename="true"></span>&nbsp;<span class="hidden-xs">@EventType.Kamp</span></th>
+                <th class="score"><i title="@Res.NoShows" class="fa fa-warning"></i>&nbsp;<span class="hidden-xs">@Res.NoShows</span></th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var player in Model.Players)
-                {
-                    <tr>
-                        <td class="attendance-player-image">
-                            <span class="attendance-playerImageContainer">
-                            <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />&nbsp;
-                        </span>
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
-                                @player.Name
-                            </a>
-                        </td>
-                        <td class="score" >@player.Trainings</td>
-                        <td class="score" >@player.TrainingVictories</td>
-                        <td class="score">@player.Games</td>
-                        <td class="score">@player.NoShows</td>
-                    </tr>
-                }
+            @foreach (var player in Model.Players)
+            {
+                <tr>
+                    <td class="attendance-player-image">
+                        <span class="attendance-playerImageContainer">
+                                <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />&nbsp;
+                            </span>
+                        <a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
+                            @player.Name
+                        </a>
+                    </td>
+                    <td class="score">@player.Trainings</td>
+                    <td class="score">@player.TrainingVictories</td>
+                    <td class="score">@player.Games</td>
+                    <td class="score">@player.NoShows</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
- 
+
+    <div class="mt-sidebar">
+
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+        {
+            <div class="mt-container">
+                <ul class="nav nav-list">
+                    <li class="nav-header">@Res.CoachMenu</li>
+                    <li><a asp-action="registerattendance" asp-controller="event"><i class='fa fa-check-square-o'></i> @Res.Register @Res.Attendance.ToLower()</a></li>
+                </ul>
+            </div>
+        }
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">Sesong</li>
+                @foreach (var year in Model.Years)
+                {
+                    <li>
+                        <a class="@(Model.Year == year ? "active" : "" )" asp-controller="stats" asp-action="attendance" asp-route-year="@year">
+                            @year
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+   
+
 </div>
