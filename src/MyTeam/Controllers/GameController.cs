@@ -90,5 +90,14 @@ namespace MyTeam.Controllers
             return new JsonResult(JsonResponse.Success());
         }
 
+
+
+        [Route("registrerhendelser")]
+        public IActionResult RegisterEvents(Guid? eventId)
+        {
+
+
+            return View("Index", model);
+        }
     }
 }
