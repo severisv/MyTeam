@@ -7,9 +7,9 @@
     "gulp-cssmin": "^0.1.7",
     "gulp-uglify": "^1.4.1",
     "gulp-less": "3.0.3",
-    "rimraf": "2.2.8",
-    "gulp-notify": "2.2.0",
-    "path": "0.12.7",
+    "rimraf": "^2.5.0",
+    "gulp-notify": "^2.2.0",
+    "path": "^0.12.7",
     "gulp-react": "^3.0.1",
     "gulp-babel": "^6.1.1",
     "babel": "^6.3.26",
@@ -18,7 +18,7 @@
     "gulp-if": "^2.0.0"
   },
   "dependencies": {
-    "jquery": "2.1.4",
+    "jquery": "^2.2.0",
     "bootbox": "4.4.0",
     "react": "0.13.0",
     "jquery.cloudinary": "1.0.25"
