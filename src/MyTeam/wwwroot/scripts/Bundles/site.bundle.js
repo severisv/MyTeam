@@ -1,1 +1,750 @@
-"use strict";function applySlideDownMenuListeners(){var e=$(".slide-down-parent"),t=$(e.data("submenu"));e.click(function(){1==e.data("isFocused")?(e.data("isFocused",!1),e.blur()):e.data("isFocused",!0)}),e.focusin(function(){t.slideDown(ANIMATION_DURATON)}),e.focusout(function(){t.slideUp(ANIMATION_DURATON),e.data("isFocused",!1),setTimeout(function(){},ANIMATION_DURATON)})}function applyConfirmDialogListeners(e){e.find("a.confirm-dialog").click(function(e){e.preventDefault();var t=$(this),a=t.attr("data-message");bootbox.confirm(a,function(e){e===!0&&(window.location=t.attr("href"))})})}function applyActiveLinkSwapper(e){e.find("ul.nav li").on("click",function(){$(this).siblings().removeClass("active"),$(this).addClass("active")})}function applyAjaxLinkActions(e){e.find("a[mt-pushstate]").on("click",function(){var e=$(this);e.attr("mt-pushstate")&&layout.pushState(e.attr("href"),e.attr("mt-pushstate"))})}function applySelectLinkListeners(e){e.find(".linkSelect").on("change",function(){var e=$(this).val();window.location=e})}var checkbox=checkbox||{};checkbox.showHideAssociatedElement=function(e,t,a){var s=e.checked;a&&(s=!e.checked),s?$(t).show():$(t).hide()},function(e){"function"==typeof define&&define.amd?define(["../datepicker"],e):e(jQuery.datepicker)}(function(e){return e.regional.no={closeText:"Lukk",prevText:"&#xAB;Forrige",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["søn","man","tir","ons","tor","fre","lør"],dayNames:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"],dayNamesMin:["sø","ma","ti","on","to","fr","lø"],weekHeader:"Uke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.setDefaults(e.regional.no),e.regional.no});var mt_fb=mt_fb||{};mt_fb.aquireUserToken=function(){function e(){var e=FB.getAccessToken();mt_fb.accessToken=e}function t(){!mt_fb.isLoaded==!0&&console.log("Facebook SDK not yet loaded ."),FB.getLoginStatus(function(t){"connected"===t.status?e():(FB.login(),e())})}return mt_fb.accessToken||t(),mt_fb.accessToken},mt_fb.getSearchUrl=function(){var e=mt_fb.aquireUserToken();if(e){var t="https://graph.facebook.com/v2.5/search";return{url:t,accessToken:e}}return null},mt_fb.getUserImageUrl=function(e){var t=mt_fb.aquireUserToken();if(t){var a="https://graph.facebook.com/v2.5/"+e+"/picture";return{url:a,accessToken:t}}return null};var ANIMATION_DURATON=300,global=global||{};global.applyScopedJsComponents=function(e){var t=$(e);t.find("input.datepicker").datepicker(),t.find("table.tablesorter").tablesorter(),t.find("a.mt-popover").popover({trigger:"hover"}),applyConfirmDialogListeners(t),applyActiveLinkSwapper(t),applyAjaxLinkActions(t),applySelectLinkListeners(t)},global.applyJsComponents=function(){var e=new Date,t=e.getMilliseconds();this.applyScopedJsComponents($(document)),applySlideDownMenuListeners(),window.onpopstate=function(){},console.log("global.js: "+((new Date).getMilliseconds()-t)+"ms")},global.applyJsComponents();var layout=layout||{};layout.setPageName=function(e){$(".mt-page-header").find("h1").html(e)},layout.pushState=function(e,t){history.pushState("",t,e),layout.setPageName(t)};var mt=mt||{};mt.deleteWithAjax=function(e){var t=$(e),a=t.data("href");$.post(a,function(e){$("#"+t.data("parent")).fadeOut(300,function(){$(this).remove()}),$("#alerts").html(e),$(".alert").effect("highlight",{},500)})},mt.alert=function(e,t){this.clearAlerts(),$("#"+e+" .alert-content").html(t),$("#"+e).removeClass("hidden"),$(".alert").effect("highlight",{},500)},mt.clearAlerts=function(){$("#alerts").find(".alert").addClass("hidden")},mt.showElement=function(e){$(e).show()},mt.hideElement=function(e){$(e).hide()};var AddPlayers=React.createClass({displayName:"AddPlayers",getInitialState:function(){return{users:[],currentUser:null,existingIds:[],validationMessage:"",addUsingFacebook:!0}},componentWillMount:function(){this.routes={ADD_PLAYER:Routes.ADD_PLAYER,GET_FACEBOOK_IDS:Routes.GET_FACEBOOK_IDS}},componentDidMount:function(){var e=this;$.getJSON(this.routes.GET_FACEBOOK_IDS).then(function(t){e.setState({existingIds:t.data})})},addPlayer:function(e){var t=this,a=this.validateUser(e),s=null!=e.picture?e.picture.data.url:null;a?this.setState({validationMessage:a}):$.post(this.routes.ADD_PLAYER,{firstname:e.first_name,middlename:e.middle_name,lastname:e.last_name,facebookid:e.id,emailAddress:e.email,imageSmall:s,imageMedium:e.imageMedium,imageLarge:e.imageLarge}).then(function(a){if("facebookAdd"==a.SuccessMessage){var s=t.state.existingIds;s.push(e.id),t.setState({existingIds:s})}else a.SuccessMessage?(t.setState({validationMessage:""}),mt.alert("success",a.SuccessMessage),t.clearEmailForm()):a.ValidationMessage&&t.setState({validationMessage:a.ValidationMessage})})},clearEmailForm:function(){$(".add-players input").val("")},changeAddMethod:function(e){"facebook"==e?this.setState({addUsingFacebook:!0}):this.setState({addUsingFacebook:!1})},validateUser:function(e){function t(e){var t=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;return t.test(e)}return e.id?null:""==e.first_name||""==e.last_name||""==e.email?"Alle feltene må fylles ut":t(e.email)?void 0:"Ugyldig e-postadresse"},render:function(){var e=this.state.addUsingFacebook?"active":"",t=this.state.addUsingFacebook?"":"active";return React.createElement("div",{className:"add-players"},React.createElement("h3",null,"Legg til spillere"),React.createElement("div",{className:"col-md-12 col-lg-8 no-padding"},React.createElement("ul",{className:"nav nav-pills mt-justified"},React.createElement("li",{className:e},React.createElement("a",{onClick:this.changeAddMethod.bind(null,"facebook")},React.createElement("i",{className:"fa fa-facebook"})," Med Facebook")),React.createElement("li",{className:t},React.createElement("a",{onClick:this.changeAddMethod.bind(null,"email")},React.createElement("i",{className:"fa fa-envelope"})," Med e-post"))),this.renderAddModule()))},renderAddModule:function(){return this.state.addUsingFacebook?React.createElement(FacebookAdd,{addPlayer:this.addPlayer,existingIds:this.state.existingIds}):React.createElement(EmailAdd,{addPlayer:this.addPlayer,validationMessage:this.state.validationMessage})}}),ManagePlayers=React.createClass({displayName:"ManagePlayers",getInitialState:function(){return{players:[],teams:[]}},componentWillMount:function(){this.routes=Routes,this.options={playerStatus:PlayerStatus,playerRoles:PlayerRoles}},componentDidMount:function(){var e=this;$.getJSON(e.routes.GET_PLAYERS).then(function(t){e.setState({players:t})}),$.getJSON(e.routes.GET_TEAMS).then(function(t){e.setState({teams:t.data})})},togglePlayerRole:function(e,t){var a=this;$.post(a.routes.TOGGLE_PLAYER_ROLE,{Id:e.Id,Role:t}).then(function(s){if(s.Success){var n=a.state.players;for(var r in a.state.players)if(n[r].Id==e.Id){var i=n[r].Roles.indexOf(t);i>-1?a.state.players[r].Roles.splice(i,1):a.state.players[r].Roles.push(t)}}a.forceUpdate()})},setPlayerStatus:function(e,t){var a=this;$.post(this.routes.SET_PLAYER_STATUS,{Id:e.Id,Status:t}).then(function(s){if(s.Success){var n=a.state.players;for(var r in a.state.players)n[r].Id==e.Id&&(a.state.players[r].Status=t)}a.forceUpdate()})},toggleTeam:function(e,t){var a=this;$.post(a.routes.TOGGLE_PLAYER_TEAM,{PlayerId:t,TeamId:e}).then(function(s){if(s.Success){var n=a.state.players;for(var r in a.state.players)if(n[r].Id==t){var i=a.state.players[r].TeamIds;i.indexOf(e)>-1?a.state.players[r].TeamIds=i.filter(function(t){return t!=e}):a.state.players[r].TeamIds.push(e)}}a.forceUpdate()})},renderPlayers:function(e){if(!this.state.players)return"";var t=this.state.players.filter(function(t){return t.Status==e?t:void 0}),a=this.options,s=this.routes,n=this.state.teams,r=this.setPlayerStatus,i=this.togglePlayerRole,l=this.toggleTeam,o=t.map(function(e,t){return React.createElement(ManagePlayer,{key:e.Id,player:e,setPlayerStatus:r,togglePlayerRole:i,options:a,routes:s,teams:n,toggleTeam:l})}),c=n.map(function(e,t){return React.createElement("div",{key:e.Id,className:"col-xs-1 no-padding subheadline align-center"},e.ShortName)});return React.createElement("div",{className:"manage-players"},React.createElement("div",{className:"row"},React.createElement("div",{className:"col-xs-3 headline"},React.createElement("strong",null,e)),React.createElement("div",{className:"col-xs-2 subheadline hidden-xs"},React.createElement("strong",null,"Status")),c,React.createElement("div",{className:"col-xs-3 subheadline hidden-xs"},React.createElement("strong",null,"Roller"))),React.createElement("div",null,o))},render:function(){return React.createElement("div",null,this.renderPlayers(this.options.playerStatus.Active),this.renderPlayers(this.options.playerStatus.Veteran),this.renderPlayers(this.options.playerStatus.Inactive))}}),EmailAdd=React.createClass({displayName:"EmailAdd",getInitialState:function(){return{firstname:"",lastname:"",email:""}},submit:function(){var e={first_name:this.state.firstname,last_name:this.state.lastname,email:this.state.email};this.props.addPlayer(e)},handleFirstnameChange:function(){this.setState({firstname:event.target.value})},handleLastnameChange:function(){this.setState({lastname:event.target.value})},handleEmailChange:function(){this.setState({email:event.target.value})},render:function(){return React.createElement("div",null,React.createElement("span",{className:"text-danger"},this.props.validationMessage),React.createElement("input",{onChange:this.handleEmailChange,className:"form-control",placeholder:"E-postadresse"}),React.createElement("input",{onChange:this.handleFirstnameChange,className:"form-control",placeholder:"Fornavn"}),React.createElement("input",{onChange:this.handleLastnameChange,className:"form-control",placeholder:"Etternavn"}),React.createElement("button",{onClick:this.submit,className:"btn btn-primary"},React.createElement("i",{className:"fa fa-plus"})," Legg til"))}}),FacebookAdd=React.createClass({displayName:"FacebookAdd",getInitialState:function(){return{users:[]}},setUsersAsync:function(e){var t=this,a=mt_fb.getSearchUrl();a&&$.getJSON(a.url,{q:e,type:"user",access_token:a.accessToken,limit:10,fields:"picture,name,first_name,last_name,middle_name"}).then(function(e){t.setState({users:e.data})})},handleChange:function(e){var t=e.target.value;t&&this.setUsersAsync(t)},addPlayer:function(e){function t(e,t){var a;return $.ajax({url:e.url,async:!1,data:{access_token:e.accessToken,height:t,width:t,redirect:0},success:function(e){a=e.data.url}}),a}var a=mt_fb.getUserImageUrl(e.id);e.imageMedium=t(a,400),e.imageLarge=t(a,800),this.props.addPlayer(e)},renderUsers:function(e,t){return this.state.users.map(function(a){var s=!1,n="",r="pull-right btn",i="";return t.indexOf(a.id)>-1?(r+=" btn-success",n="fa fa-check",s=!0,i="Lagt til"):(r+=" btn-primary",n="fa fa-plus",i="Legg til"),React.createElement("li",{key:a.id},React.createElement("img",{src:a.picture.data.url})," ",a.name,React.createElement("button",{onClick:e.bind(null,a),className:r,disabled:s},React.createElement("i",{className:n})," ",i))})},render:function(){return React.createElement("div",null,React.createElement("div",{className:"col-xs-12 no-padding"},React.createElement("input",{className:"form-control search",placeholder:"Søk etter personer",type:"text",onChange:this.handleChange}),React.createElement("i",{className:"fa fa-search search-icon"})),React.createElement("div",{className:"clearfix"}),React.createElement("div",{className:"list-users"},React.createElement("ul",null,this.renderUsers(this.addPlayer,this.props.existingIds))))}}),ManagePlayer=React.createClass({displayName:"ManagePlayer",getInitialState:function(){return{player:this.props.player}},setPlayerStatus:function(e){this.props.setPlayerStatus(this.state.player,e.target.value)},togglePlayerRole:function(e){this.props.togglePlayerRole(this.state.player,e)},renderStatusOptions:function(){var e=this.props.options.playerStatus,t=[];for(var a in e)t.push(React.createElement("option",{key:e[a]},e[a]));return React.createElement("select",{value:this.state.player.Status,className:"form-control",onChange:this.setPlayerStatus},t)},renderRoles:function(){var e=this.props.options.playerRoles,t=this.state.player,a=[];for(var s in e){var n=e[s],r="btn";r+=t.Roles.indexOf(n)>-1?" btn-primary":" btn-default",a.push(React.createElement("button",{onClick:this.togglePlayerRole.bind(null,n),key:t.Id+n,className:r},n))}return React.createElement("span",null,a)},render:function(){var e=this.state.player,t=this.props.toggleTeam,a=this.props.teams.map(function(a,s){var n=e.TeamIds.indexOf(a.Id)>-1;return React.createElement("div",{key:a.ShortName+e.Id,className:"col-xs-1 no-padding align-center"},React.createElement("input",{onClick:t.bind(null,a.Id,e.Id),type:"checkbox",checked:n,className:"form-control"}))}),s=this.props.routes.EDIT_PLAYER+"?playerId="+e.Id;return React.createElement("div",{className:"row list-player"},React.createElement("div",{className:"col-sm-3 mp-name"},e.FullName),React.createElement("div",{className:"col-sm-2 mp-status"},this.renderStatusOptions()),a,React.createElement("div",{className:"col-sm-5"},this.renderRoles(),React.createElement("a",{className:"pull-right",title:"Rediger spiller",href:s},React.createElement("i",{className:"fa fa-edit"}))))}});
+var checkbox = checkbox || {};
+
+checkbox.showHideAssociatedElement = function (element, associatedSelector, reverse) {
+    var show = element.checked;
+    if (reverse) {
+        show = !element.checked;
+    }
+
+    if (show) {
+        $(associatedSelector).show();
+    } else {
+        $(associatedSelector).hide();
+    }
+};
+
+
+
+
+
+
+
+
+/* Norwegian initialisation for the jQuery UI date picker plugin. */
+/* Written by Naimdjon Takhirov (naimdjon@gmail.com). */
+
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+
+        // AMD. Register as an anonymous module.
+        define(["../datepicker"], factory);
+    } else {
+
+        // Browser globals
+        factory(jQuery.datepicker);
+    }
+}(function (datepicker) {
+
+    datepicker.regional['no'] = {
+        closeText: 'Lukk',
+        prevText: '&#xAB;Forrige',
+        nextText: 'Neste&#xBB;',
+        currentText: 'I dag',
+        monthNames: ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'],
+        monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'],
+        dayNamesShort: ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør'],
+        dayNames: ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'],
+        dayNamesMin: ['sø', 'ma', 'ti', 'on', 'to', 'fr', 'lø'],
+        weekHeader: 'Uke',
+        dateFormat: 'dd.mm.yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    datepicker.setDefaults(datepicker.regional['no']);
+
+    return datepicker.regional['no'];
+
+}));
+
+
+var mt_fb = mt_fb || {};
+
+
+mt_fb.aquireUserToken = function () {
+    
+    function saveToken() {
+        var accessToken = FB.getAccessToken();
+        mt_fb.accessToken = accessToken;
+    }
+
+    function aquireToken() {
+        if (!mt_fb.isLoaded === true) {
+            console.log("Facebook SDK not yet loaded .");
+        }
+        FB.getLoginStatus(function (response) {
+            if (response.status === 'connected') {
+                saveToken();
+            } else {
+                FB.login();
+                saveToken();
+            }
+        });
+    }
+
+    if (!mt_fb.accessToken) {
+        aquireToken();
+    } 
+    return mt_fb.accessToken;
+
+};
+
+
+mt_fb.getSearchUrl = function () {
+
+    var accessToken = mt_fb.aquireUserToken();
+    if (accessToken) {
+        var url = "https://graph.facebook.com/v2.5/search" ;
+        return {
+            url: url,
+            accessToken: accessToken
+    };
+    }
+    return null;
+};
+
+mt_fb.getUserImageUrl = function(id) {
+    var accessToken = mt_fb.aquireUserToken();
+    if (accessToken) {
+        var url = "https://graph.facebook.com/v2.5/"+id+"/picture";
+        return {
+            url: url,
+            accessToken: accessToken
+        };
+    }
+    return null;
+}
+var ANIMATION_DURATON = 300;
+var global = global || {};
+
+global.applyScopedJsComponents = function (selector) {
+    var $scope = $(selector);
+    $scope.find('input.datepicker').datepicker();
+    $scope.find('table.tablesorter').tablesorter();
+    $scope.find('a.mt-popover').popover({ trigger: "hover" });
+    applyConfirmDialogListeners($scope);
+    applyActiveLinkSwapper($scope);
+    applyAjaxLinkActions($scope);
+    applySelectLinkListeners($scope);
+}
+
+global.applyJsComponents = function() {
+    var timestamp = new Date();
+    var start = timestamp.getMilliseconds();
+
+    this.applyScopedJsComponents($(document));
+    applySlideDownMenuListeners();
+    
+
+    window.onpopstate = function () {
+        //location.reload();
+    }
+    
+    console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
+}
+
+
+global.applyJsComponents();
+
+
+
+// Slide down
+function applySlideDownMenuListeners() {
+    var element = $('.slide-down-parent');
+    var subMenu = $(element.data('submenu'));
+
+    element.click(function () {
+
+        if (element.data('isFocused') == true) {
+            element.data('isFocused', false);
+            element.blur();
+        } else {
+            element.data('isFocused', true);
+        }
+    });
+
+    element.focusin(function () {
+        subMenu.slideDown(ANIMATION_DURATON);
+
+    });
+
+    element.focusout(function () {
+        subMenu.slideUp(ANIMATION_DURATON);
+        element.data('isFocused', false);
+        setTimeout(function() {
+
+        }, ANIMATION_DURATON);
+
+
+    });
+}
+
+// Confirm dialog
+function applyConfirmDialogListeners($scope) {
+    $scope.find('a.confirm-dialog').click(function (e) {
+        e.preventDefault();
+        var element = $(this);
+        var message = element.attr('data-message');
+
+        bootbox.confirm(message, function (result) {
+            if (result === true) {
+                window.location = element.attr('href');
+            }
+        });
+
+    });
+}
+
+// Active links
+function applyActiveLinkSwapper($scope) {
+    $scope.find('ul.nav li').on('click', function () {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+    });
+
+
+}// Active links
+function applyAjaxLinkActions($scope) {
+    $scope.find('a[mt-pushstate]').on('click', function () {
+        var $el = $(this);
+        if ($el.attr('mt-pushstate')) {
+            layout.pushState($el.attr('href'), $el.attr('mt-pushstate'));
+        }
+    });
+}
+
+function applySelectLinkListeners($scope) {
+    $scope.find('.linkSelect').on('change', function () {
+        var url = $(this).val();
+        window.location = url;
+
+    });
+}
+
+
+
+var layout = layout || {};
+
+layout.setPageName = function (text) {
+    $('.mt-page-header').find('h1').html(text);
+};
+
+layout.pushState = function (href, title) {
+    history.pushState('', title, href);
+    layout.setPageName(title);
+};
+
+
+
+
+
+
+
+
+var mt = mt || {};
+
+mt.deleteWithAjax = function(selector) {
+    var element = $(selector);
+    var href = element.data('href');
+    $.post(href, function (result) {
+        
+        $('#' + element.data('parent')).fadeOut(300, function() { $(this).remove(); });
+        $('#alerts').html(result);
+        $('.alert').effect("highlight", { }, 500 );
+    });
+}
+
+mt.alert = function (type, message) {
+    this.clearAlerts();
+    $('#' + type + " .alert-content").html(message);
+    $('#' + type).removeClass("hidden");
+    $('.alert').effect("highlight", {}, 500);
+}
+
+mt.clearAlerts = function () {
+    $('#alerts').find('.alert').addClass('hidden');
+}
+
+mt.showElement = function(selector) {
+    $(selector).show();
+}
+mt.hideElement = function(selector) {
+    $(selector).hide();
+}
+
+
+var AddPlayers = React.createClass({displayName: "AddPlayers",
+ 
+    getInitialState: function () {
+        return ({
+            users: [],
+            currentUser: null,
+            existingIds: [],
+            validationMessage: "",
+            addUsingFacebook: true
+
+        })
+    },
+
+    componentWillMount(){
+        this.routes = {
+                ADD_PLAYER: Routes.ADD_PLAYER,
+                GET_FACEBOOK_IDS: Routes.GET_FACEBOOK_IDS,
+                }
+    },
+
+    componentDidMount() {
+        $.getJSON(this.routes.GET_FACEBOOK_IDS).then(response => {
+            this.setState({
+                existingIds: response.data
+            })
+        }
+        );
+    },
+
+    addPlayer: function (user) {
+        var validationMessage = this.validateUser(user);
+        var imageSmall = user.picture != null ? user.picture.data.url : null;
+        if (validationMessage) this.setState({ validationMessage: validationMessage })
+            
+        else {
+            $.post(this.routes.ADD_PLAYER, {
+                firstname: user.first_name,
+                middlename: user.middle_name,
+                lastname: user.last_name,
+                facebookid: user.id,
+                emailAddress: user.email,
+                imageSmall: imageSmall,
+                imageMedium: user.imageMedium,
+                imageLarge: user.imageLarge             
+            }).then(data => {
+                if (data.SuccessMessage == "facebookAdd") {
+                    var ids = this.state.existingIds;
+                    ids.push(user.id)
+                    this.setState(
+                        {
+                            existingIds: ids
+                        })
+                }
+                else if (data.SuccessMessage) {
+                    this.setState({ validationMessage: "" });
+                    mt.alert("success", data.SuccessMessage);
+                    this.clearEmailForm();
+                }
+
+                else if (data.ValidationMessage) {
+                    this.setState({ validationMessage: data.ValidationMessage });
+                }
+
+            });
+        }
+
+    },
+
+    clearEmailForm: function(){
+        $('.add-players input').val('')
+    },
+
+    changeAddMethod: function (method) {
+        if (method == "facebook") this.setState({ addUsingFacebook: true })
+        else this.setState({ addUsingFacebook: false })
+    },
+
+    validateUser: function(user){
+        if (user.id) return null;
+
+        if (user.first_name == "" || user.last_name == "" || user.email == "") return "Alle feltene må fylles ut";
+
+        function validateEmail(email) {
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return re.test(email);
+        }
+        if (!validateEmail(user.email)) return "Ugyldig e-postadresse"
+
+    },
+    render: function () {
+        var addWithFacebookClass = this.state.addUsingFacebook ? "active" : "";
+        var addWithEmailClass = this.state.addUsingFacebook ? "" : "active";
+        return (React.createElement("div", {className: "add-players"}, 
+            React.createElement("h3", null, "Legg til spillere"), 
+                  
+
+                    React.createElement("div", {className: "col-md-12 col-lg-8 no-padding"}, 
+            React.createElement("ul", {className: "nav nav-pills mt-justified"}, 
+                   React.createElement("li", {className: addWithFacebookClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "facebook")}, React.createElement("i", {className: "fa fa-facebook"}), " Med Facebook")), 
+                   React.createElement("li", {className: addWithEmailClass}, React.createElement("a", {onClick: this.changeAddMethod.bind(null, "email")}, React.createElement("i", {className: "fa fa-envelope"}), " Med e-post"))
+            ), 
+            this.renderAddModule()
+        )
+        )
+        )
+    },
+        renderAddModule: function () {
+            if (this.state.addUsingFacebook)
+                return (React.createElement(FacebookAdd, {addPlayer: this.addPlayer, existingIds: this.state.existingIds}))
+            else 
+            return (React.createElement(EmailAdd, {addPlayer: this.addPlayer, validationMessage: this.state.validationMessage}))
+
+        }
+
+});
+
+
+
+"use strict";
+
+var ManagePlayers = React.createClass({displayName: "ManagePlayers",
+         
+    getInitialState: function () {
+        return ({
+            players: [],
+            teams: []
+        })
+    },
+
+    componentWillMount: function(){
+      this.routes = Routes,
+      this.options = {
+          playerStatus: PlayerStatus,
+          playerRoles: PlayerRoles
+      }
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        $.getJSON(that.routes.GET_PLAYERS).then(function (response) {
+            that.setState({
+                players: response
+            });
+        });
+
+        $.getJSON(that.routes.GET_TEAMS).then(function (response) {
+            that.setState({
+                teams: response.data
+            });
+        });
+    },
+
+    togglePlayerRole: function (player, role) {
+        var that = this;
+        $.post(that.routes.TOGGLE_PLAYER_ROLE, { Id: player.Id, Role: role }).then(function (response) {
+            if (response.Success) {
+                var players = that.state.players;
+                for (var i in that.state.players) {
+                    if (players[i].Id == player.Id) {
+                        var index = players[i].Roles.indexOf(role);
+                        if (index > -1) {
+                            that.state.players[i].Roles.splice(index, 1);
+                        } else {
+                            that.state.players[i].Roles.push(role);
+                        }
+                    }
+                }
+            }
+            that.forceUpdate();
+        });
+    },
+    setPlayerStatus: function (player, status) {
+   
+        $.post(this.routes.SET_PLAYER_STATUS, { Id: player.Id, Status: status}).then(response => {
+            if (response.Success) {
+                var players = this.state.players;
+                for (var i in this.state.players) {                    
+                    if (players[i].Id == player.Id) {
+                        this.state.players[i].Status = status;
+                    }
+                }
+            }
+            this.forceUpdate();
+        }
+      );
+
+    },
+    
+    toggleTeam: function (teamId, playerId) {
+
+        var that = this;
+        $.post(that.routes.TOGGLE_PLAYER_TEAM, { PlayerId: playerId, TeamId: teamId }).then(function (response) {
+            if (response.Success) {
+                var players = that.state.players;
+                for (var i in that.state.players) {
+                    if (players[i].Id == playerId) {
+                        var teamIds = that.state.players[i].TeamIds;
+                        if (teamIds.indexOf(teamId) > -1) {
+                            that.state.players[i].TeamIds = teamIds.filter(function (element) { return element != teamId; });
+                        }
+                        else {
+                            that.state.players[i].TeamIds.push(teamId);
+                        }
+                    }
+                }
+            }
+            that.forceUpdate();
+        });
+
+    },
+    
+    renderPlayers: function (playerStatus) {
+        if (!this.state.players) return "";
+
+        var players = this.state.players.filter(function (player) {
+            if (player.Status == playerStatus) {
+                return (player)
+            }
+        })
+
+        var options = this.options;
+        var routes = this.routes;
+        var teams = this.state.teams;
+        var setPlayerStatus = this.setPlayerStatus;
+        var togglePlayerRole = this.togglePlayerRole;
+        var toggleTeam = this.toggleTeam;
+        var playerElements = players.map(function (player, i) {
+            return (React.createElement(ManagePlayer, {key: player.Id, player: player, setPlayerStatus: setPlayerStatus, togglePlayerRole: togglePlayerRole, options: options, routes: routes, teams: teams, toggleTeam: toggleTeam}))
+        })
+
+        var teamElements = teams.map(function (team, i) {
+            return (React.createElement("div", {key: team.Id, className: "col-xs-1 no-padding subheadline align-center"}, team.ShortName))
+        });
+
+        return (React.createElement("div", {className: "manage-players"}, 
+    React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-xs-3 headline"}, React.createElement("strong", null, playerStatus)), 
+        React.createElement("div", {className: "col-xs-2 subheadline hidden-xs"}, React.createElement("strong", null, "Status")), 
+        teamElements, 
+        React.createElement("div", {className: "col-xs-3 subheadline hidden-xs"}, React.createElement("strong", null, "Roller"))
+    ), 
+    React.createElement("div", null, 
+        playerElements
+    )
+        ))
+    },
+
+    render: function () {
+        return (React.createElement("div", null, 
+            this.renderPlayers(this.options.playerStatus.Active), 
+            this.renderPlayers(this.options.playerStatus.Veteran), 
+            this.renderPlayers(this.options.playerStatus.Inactive)
+        ))
+    }
+
+});
+
+var EmailAdd = React.createClass({displayName: "EmailAdd",
+   
+    getInitialState: function () {
+        return { firstname: '', lastname: '', email: '' };
+    },
+    
+    submit: function(){
+        var user = {        
+            first_name: this.state.firstname,
+            last_name: this.state.lastname,
+            email: this.state.email            
+        }
+        this.props.addPlayer(user);
+    },
+
+    handleFirstnameChange : function(){ this.setState({firstname: event.target.value}) },
+    handleLastnameChange : function(){ this.setState({lastname: event.target.value}) },
+    handleEmailChange : function(){ this.setState({email: event.target.value}) },
+
+    render: function () {
+        return (
+                  React.createElement("div", null, 
+                       React.createElement("span", {className: "text-danger"}, this.props.validationMessage), 
+                      React.createElement("input", {onChange: this.handleEmailChange, className: "form-control", placeholder: "E-postadresse"}), 
+                      React.createElement("input", {onChange: this.handleFirstnameChange, className: "form-control", placeholder: "Fornavn"}), 
+                      React.createElement("input", {onChange: this.handleLastnameChange, className: "form-control", placeholder: "Etternavn"}), 
+                      React.createElement("button", {onClick: this.submit, className: "btn btn-primary"}, React.createElement("i", {className: "fa fa-plus"}), " Legg til")
+                  ))
+    }
+   
+        
+
+});
+
+
+
+var FacebookAdd = React.createClass({displayName: "FacebookAdd",
+
+    getInitialState: function () {
+        return ({
+            users: []
+        })
+    },
+
+
+    setUsersAsync: function (q) {
+
+        var url = mt_fb.getSearchUrl();
+        if (url) {
+            $.getJSON(url.url, {
+                q: q,
+                type: "user",
+                access_token: url.accessToken,
+                limit: 10,
+                fields: "picture,name,first_name,last_name,middle_name"
+            }).then(data => {
+                this.setState({
+                    users: data.data
+                });
+            });
+        }
+    },
+
+    handleChange: function (event) {
+        var q = event.target.value;
+        if (q) {
+            this.setUsersAsync(q);
+        }
+    },
+
+    addPlayer: function(user){
+                
+        function getImageUrl(url, size) {
+            var imageUrl;
+            $.ajax({
+                url: url.url,
+                async: false,
+                data: {
+                    access_token: url.accessToken,
+                    height: size,
+                    width: size,
+                    redirect: 0
+                },
+                success: function (response) {
+                    imageUrl = response.data.url;
+                }
+
+            });
+            return imageUrl;
+        }                  
+
+        var url = mt_fb.getUserImageUrl(user.id);
+        
+        user.imageMedium = getImageUrl(url, 400);
+        user.imageLarge = getImageUrl(url, 800);
+
+        this.props.addPlayer(user);
+    },
+
+    renderUsers: function (addPlayer, existingIds) {
+        return this.state.users.map(function (user) {
+
+            var disabled = false;
+            var icon = "";
+            var buttonClass = "pull-right btn";
+            var buttonText = ""
+            if (existingIds.indexOf(user.id) > -1) {
+                buttonClass += " btn-success"
+                icon = "fa fa-check";
+                disabled = true;
+                buttonText = "Lagt til"
+            }
+            else {
+                buttonClass += " btn-primary"
+                icon = "fa fa-plus"
+                buttonText = "Legg til"
+            }
+
+
+            return (React.createElement("li", {key: user.id}, 
+            React.createElement("img", {src: user.picture.data.url}), " ", user.name, 
+                    React.createElement("button", {onClick: addPlayer.bind(null, user), className: buttonClass, disabled: disabled}, React.createElement("i", {className: icon}), " ", buttonText)
+            ))
+        })
+    },
+
+
+    render: function () {
+        return (
+        React.createElement("div", null, 
+            React.createElement("div", {className: "col-xs-12 no-padding"}, 
+             React.createElement("input", {className: "form-control search", placeholder: "Søk etter personer", type: "text", onChange: this.handleChange}), 
+          React.createElement("i", {className: "fa fa-search search-icon"})
+               ), 
+          React.createElement("div", {className: "clearfix"}), 
+          React.createElement("div", {className: "list-users"}, 
+          React.createElement("ul", null, this.renderUsers(this.addPlayer, this.props.existingIds))
+          )
+        )
+    )
+    },
+
+});
+
+
+var ManagePlayer = React.createClass({displayName: "ManagePlayer",
+    getInitialState: function () {
+        return ({
+            player: this.props.player
+        })
+    },
+
+    setPlayerStatus: function(event){
+        this.props.setPlayerStatus(this.state.player, event.target.value)
+    },
+
+    togglePlayerRole: function(role){
+        this.props.togglePlayerRole(this.state.player, role)
+    },
+
+    renderStatusOptions: function () {
+
+        var statuses = this.props.options.playerStatus;
+        var statusList = [];
+        for (var key in statuses) {
+            statusList.push(React.createElement("option", {key: statuses[key]}, statuses[key]))
+        }
+
+        return (
+            React.createElement("select", {value: this.state.player.Status, className: "form-control", onChange: this.setPlayerStatus}, 
+               statusList
+           )
+            
+        )
+    },
+
+        renderRoles: function () {
+
+        var roles = this.props.options.playerRoles;
+        var player = this.state.player;
+        var buttons = [];
+        for (var key in roles) {
+            var role = roles[key];
+            var buttonClass = "btn";
+            if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
+            else buttonClass += " btn-default";
+            buttons.push(React.createElement("button", {onClick: this.togglePlayerRole.bind(null, role), key: player.Id+role, className: buttonClass}, role))
+        }
+        return (
+            React.createElement("span", null, 
+               buttons
+           )
+            
+        )
+    },
+
+    render: function () {
+
+        var player = this.state.player;
+        var toggleTeam = this.props.toggleTeam;
+        var teamElements = this.props.teams.map(function (team, i) {
+            var checked = player.TeamIds.indexOf(team.Id) > -1;
+            return (React.createElement("div", {key: team.ShortName + player.Id, className: "col-xs-1 no-padding align-center"}, React.createElement("input", {onClick: toggleTeam.bind(null, team.Id, player.Id), type: "checkbox", checked: checked, className: "form-control"})))
+        });
+        var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
+        return (React.createElement("div", {className: "row list-player"}, 
+               React.createElement("div", {className: "col-sm-3 mp-name"}, player.FullName), 
+               React.createElement("div", {className: "col-sm-2 mp-status"}, this.renderStatusOptions()), 
+                teamElements, 
+               React.createElement("div", {className: "col-sm-5"}, this.renderRoles(), 
+                    React.createElement("a", {className: "pull-right", title: "Rediger spiller", href: editPlayerHref}, React.createElement("i", {className: "fa fa-edit"}))
+                )
+        ))
+    }
+
+
+})

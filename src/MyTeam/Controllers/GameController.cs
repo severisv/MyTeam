@@ -96,6 +96,7 @@ namespace MyTeam.Controllers
         public IActionResult RegisterEvents(Guid? eventId)
         {
 
+            var model = new RegisterEventsViewModel();
 
             return View("Index", model);
         }

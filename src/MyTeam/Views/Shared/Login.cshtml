@@ -1,7 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Microsoft.AspNet.Identity
 @using MyTeam.Models
-@using MyTeam.ViewModels.Account
 @model MyTeam.ViewModels.Account.LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 
@@ -40,7 +39,7 @@
 
         <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
             <section>
-                <form asp-controller="Account" asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                <form asp-controller="Account"  asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                     <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Email" class="col-md-2 control-label"></label>
@@ -70,10 +69,10 @@
                         </div>
                     </div>
                     <p>
-                        <a asp-action="Register">Registrer en ny bruker?</a>
+                        <a asp-controller="account" asp-action="Register">Registrer en ny bruker?</a>
                     </p>
                     <p>
-                        <a asp-action="ForgotPassword">Glemt passordet?</a>
+                        <a asp-controller="account" asp-action="ForgotPassword">Glemt passordet?</a>
                     </p>
                 </form>
             </section>

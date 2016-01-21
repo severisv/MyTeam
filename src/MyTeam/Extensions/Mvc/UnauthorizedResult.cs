@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc.ModelBinding;
 using Microsoft.AspNet.Mvc.ViewFeatures;
@@ -14,9 +15,13 @@ namespace Microsoft.AspNet.Mvc
             {
                 this.ViewName = "_Unauthorized";
             }
-            else
+            else if (httpContext.User.IsSignedIn())
             {
                 this.ViewName = "Unauthorized";
+            }
+            else
+            {
+                this.ViewName = "Login";
             }
 
             this.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
