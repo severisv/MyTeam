@@ -1,0 +1,31 @@
+﻿{
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=BEKK-SEVERINSV\\SQLEXPRESS;Database=myteam;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Verbose",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+
+ "Authentication": {
+    "Facebook": {
+      "AppId": "",
+      "AppSecret": "",
+      "AppToken": ""
+    }
+  },
+
+  "Integration": {
+    "Cloudinary": {
+      "ApiKey": "",
+      "CloudName": "",
+      "ApiSecret": ""
+    }
+  }
+}
