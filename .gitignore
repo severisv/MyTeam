@@ -194,13 +194,10 @@ src/MyTeam/wwwroot/css
 src/MyTeam/wwwroot/lib
 src/MyTeam/config.json
 src/MyTeam/wwwroot/_references.js
-src/MyTeam/wwwroot/_references.js
-src/MyTeam/wwwroot/_references.js
-src/MyTeam/wwwroot/_references.js
-src/MyTeam/wwwroot/_references.js
 src/MyTeam/wwwroot/scripts/site.bundle.js
 src/MyTeam/wwwroot/scripts/lib.bundle.js
 src/MyTeam/project.lock.json
 src/MyTeam/appsettings.json
-src/MyTeam/project.lock.json
 test/MyTeam.Test/project.lock.json
+*.stackdump
+
