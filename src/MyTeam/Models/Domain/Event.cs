@@ -13,7 +13,6 @@ namespace MyTeam.Models.Domain
     {
         [Required]
         public Guid ClubId { get; set; }
-        public Guid? SeasonId { get; set; }
         [Required]
         public EventType Type { get; set; }
         public GameType? GameType { get; set; }
@@ -27,7 +26,6 @@ namespace MyTeam.Models.Domain
 
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
-        public bool IsPublished { get; set; }
 
         public Guid? ReportId { get; set; }
         public virtual Article Report { get; set; }
@@ -47,10 +45,10 @@ namespace MyTeam.Models.Domain
         [NotMapped]
         public bool IsCustom => Type == EventType.Diverse;
 
+        public bool IsPublished { get; set; }
         public int? HomeScore { get; set; }
         public int? AwayScore { get; set; }
         public bool IsHomeTeam { get; set; }
-
 
         public bool IsAttending(ClaimsPrincipal user)
         {

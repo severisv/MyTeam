@@ -11,6 +11,12 @@ namespace Microsoft.AspNet.Mvc
 
         public UnauthorizedResult(HttpContext httpContext)
         {
+            this.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+            {
+                Model = null
+            };
+
+
             if (httpContext.Request.IsAjaxRequest())
             {
                 this.ViewName = "_Unauthorized";
@@ -22,12 +28,10 @@ namespace Microsoft.AspNet.Mvc
             else
             {
                 this.ViewName = "Login";
+                this.ViewData.Add("returnUrl", httpContext.Request.Path.Value);
             }
 
-            this.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-            {
-                Model = null
-            };
+           
         }
     }
 }

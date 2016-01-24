@@ -36,7 +36,6 @@
         </section>
     </div>
     <div>
-
         <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
             <section>
                 <form asp-controller="Account"  asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
