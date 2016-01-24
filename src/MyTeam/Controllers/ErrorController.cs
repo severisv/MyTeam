@@ -4,14 +4,11 @@ using Microsoft.AspNet.Mvc;
 
 namespace MyTeam.Controllers
 {
+    [Route("")]
     public class ErrorController : BaseController
     {
 
-        public IActionResult Index()
-        {
-            return Error();
-        }
-
+        [Route("error")]
         public IActionResult Error(Exception e = null)
         {
             if(Request.IsAjaxRequest())
@@ -21,8 +18,10 @@ namespace MyTeam.Controllers
 
         }
 
+        [Route("404")]
         public IActionResult NotFound()
         {
+            HttpContext.Response.StatusCode = 404;
             if(Request.IsAjaxRequest())
                 return PartialView("_NotFound");
 

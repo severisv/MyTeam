@@ -102,25 +102,27 @@ namespace MyTeam
                 app.UseStaticFiles();
 
                 app.UseIdentity();
-
-                app.UseFacebookAuthentication(options =>
+             
+            app.UseFacebookAuthentication(options =>
                 {
                     options.AppId = Configuration["Authentication:Facebook:AppId"];
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-
-
             app.LoadTenantData();
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=News}/{action=Index}/{id?}");
-                });
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=News}/{action=Index}/{id?}");
+            });
+            
 
-       
-
+            app.Run(async context =>
+            {
+                context.Response.Redirect("/404");
+                await context.Response.WriteAsync("");
+            });
 
         }
 
