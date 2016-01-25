@@ -24,12 +24,14 @@
 
                 <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                     <div>
-                        <p class="col-xs-12">
+                        <div class="col-xs-12 login--providerLogin">
                             @foreach (var provider in loginProviders)
                             {
                                 <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
                             }
-                        </p>
+                        </div>
+
+
                     </div>
                 </form>
             }

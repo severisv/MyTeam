@@ -10,13 +10,15 @@ namespace MyTeam.ViewModels.Account
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "E-post")]
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Passord")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Husk meg?")]
         public bool RememberMe { get; set; }
     }
 }
