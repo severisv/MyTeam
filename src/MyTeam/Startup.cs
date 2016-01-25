@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -45,7 +46,16 @@ namespace MyTeam
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>((options => {
+
+                options.Cookies.ApplicationCookie.CookieName = "_myt";
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(8);
+                options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonLetterOrDigit = false;
+                options.Password.RequiredLength = 7;
+            }))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -102,7 +112,7 @@ namespace MyTeam
                 app.UseStaticFiles();
 
                 app.UseIdentity();
-             
+
             app.UseFacebookAuthentication(options =>
                 {
                     options.AppId = Configuration["Authentication:Facebook:AppId"];
