@@ -24,7 +24,7 @@ namespace MyTeam.Controllers
         [Route("")]
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
         {
-            var players = PlayerRepository.Get().Where(p => p.Status == type && p.Club.ClubIdentifier == HttpContext.GetClub().ClubId).OrderBy(p => p.FirstName);
+            var players = PlayerService.GetPlayers(type, Club.Id);
 
             var model = new ShowPlayersViewModel(players, editMode, type);
             model.SelectedPlayerId = playerId;
@@ -32,7 +32,6 @@ namespace MyTeam.Controllers
             ViewBag.PageName = model.SelectedPlayer != null ?
                 model.SelectedPlayer.Name: 
                 Res.PlayersOfType(type);
-
 
             return View("List",model);
         }
@@ -42,8 +41,8 @@ namespace MyTeam.Controllers
         {
             if (Request.IsAjaxRequest())
             {
-                var player = PlayerRepository.GetSingle(playerId);
-                return PartialView("_Show", player);
+                var model = PlayerService.GetSingle(playerId);
+                return PartialView("_Show", model);
             }
             return List(playerId: playerId);           
            
@@ -58,7 +57,7 @@ namespace MyTeam.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                var player = PlayerRepository.GetSingle(playerId);
+                var player = PlayerService.GetSingle(playerId);
                 return PartialView("_Edit", new EditPlayerViewModel(player));
             }
             return List(playerId: playerId, editMode: true);

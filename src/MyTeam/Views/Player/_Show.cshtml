@@ -1,9 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
-@using MyTeam.Models.Domain
-@using MyTeam.Resources
-@using MyTeam.Settings
-@model MyTeam.Models.Domain.Player
+@model MyTeam.ViewModels.Player.ShowPlayerViewModel
 
 <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
     <img src="@Cloudinary.MemberImage(Model.ImageFull, 400)" />

@@ -1,7 +1,4 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata
-@using MyTeam.Resources
-@using MyTeam.Settings
 @model MyTeam.ViewModels.Player.ShowPlayersViewModel
 
 
@@ -18,7 +15,6 @@
             <p>@Html.DisplayFor(p => player.Name)</p>
         </a>
     </div>
-
 }
 
 @if (!Model.Players.Any())

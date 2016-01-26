@@ -15,7 +15,6 @@ namespace MyTeam.Models.Domain
         [Display(Name = Res.AssistCount)]
         public virtual int AssistCount { get; set; }
 
-        public virtual int PracticeCount { get; set; }
         [Required]
         public PlayerStatus Status { get; set; }
 

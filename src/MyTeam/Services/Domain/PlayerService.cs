@@ -35,7 +35,7 @@ namespace MyTeam.Services.Domain
             string imageSmall, string imageMedium, string imageLarge)
         {
             var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
-                _playerRepository.Get().FirstOrDefault(p => p.UserName == emailAddress):
+                _playerRepository.Get().FirstOrDefault(p => p.UserName == emailAddress) :
                 _playerRepository.Get().FirstOrDefault(p => p.FacebookId == facebookId);
 
 
@@ -48,7 +48,7 @@ namespace MyTeam.Services.Domain
                 }
             }
 
-   
+
             if (existingPlayer == null)
             {
                 var club = _clubRepository.Get().Single(c => c.ClubIdentifier == clubId);
@@ -75,17 +75,15 @@ namespace MyTeam.Services.Domain
 
                 return JsonResponse.Success(message);
             }
-            else return JsonResponse.ValidationFailed($"{Res.Player} {Res.IsAlready.ToLower()} {Res.Added.ToLower()}");
+            return JsonResponse.ValidationFailed($"{Res.Player} {Res.IsAlready.ToLower()} {Res.Added.ToLower()}");
         }
 
-     
+
         public IEnumerable<string> GetFacebookIds()
         {
             return _playerRepository.Get().Select(p => p.FacebookId);
         }
-
-     
-
+        
         public void SetPlayerStatus(Guid id, PlayerStatus status, string clubName)
         {
             var player = _playerRepository.GetSingle(id);
@@ -148,10 +146,10 @@ namespace MyTeam.Services.Domain
             return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto
             {
                 Id = p.Id,
-             FirstName = p.FirstName,
-                 MiddleName  = p.MiddleName,
-                   LastName  = p.LastName,
-                Status =  p.Status,
+                FirstName = p.FirstName,
+                MiddleName = p.MiddleName,
+                LastName = p.LastName,
+                Status = p.Status,
                 ImageSmall = p.ImageSmall
             }).ToList().OrderBy(p => p.Name);
         }
@@ -180,6 +178,53 @@ namespace MyTeam.Services.Domain
             _applicationDbContext.SaveChanges();
             _cacheHelper.ClearCache(clubName, userName);
 
+        }
+
+        public ShowPlayerViewModel GetSingle(Guid playerId)
+        {
+            var player = _applicationDbContext.Players.Where(p => p.Id == playerId)
+                .Select(p => new ShowPlayerViewModel
+            {
+                Id = p.Id,
+                BirthDate = p.BirthDate,
+                FirstName = p.FirstName,
+                MiddleName = p.MiddleName,
+                LastName = p.LastName,
+                UserName = p.UserName,
+                StartDate = p.StartDate,
+                Phone = p.Phone,
+                ImageFull = p.ImageFull,
+                ImageMedium = p.ImageMedium,
+                PositionsString = p.PositionsString
+            }).Single();
+
+            var practiceCount =
+                _applicationDbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == DateTime.Now.Year);
+
+            player.PracticeCount = practiceCount;
+
+            return player;
+        }
+
+        public IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
+        {
+            return 
+                _applicationDbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
+                    .OrderBy(p => p.FirstName)
+                    .Select(p => new ShowPlayerViewModel
+                    {
+                        Id = p.Id,
+                        BirthDate = p.BirthDate,
+                        FirstName = p.FirstName,
+                        MiddleName = p.MiddleName,
+                        LastName = p.LastName,
+                        UserName = p.UserName,
+                        StartDate = p.StartDate,
+                        Phone = p.Phone,
+                        ImageFull = p.ImageFull,
+                        ImageMedium = p.ImageMedium,
+                        PositionsString = p.PositionsString
+                    }).ToList();
         }
     }
 }

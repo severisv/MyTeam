@@ -56,7 +56,7 @@ namespace MyTeam.ViewModels.Player
             
         }
 
-        public EditPlayerViewModel(Models.Domain.Player player)
+        public EditPlayerViewModel(ShowPlayerViewModel player)
         {
             PlayerId = player.Id;
             FirstName = player.FirstName;
