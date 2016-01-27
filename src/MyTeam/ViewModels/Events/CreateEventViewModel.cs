@@ -59,6 +59,11 @@ namespace MyTeam.ViewModels.Events
         public IList<TeamViewModel> Teams { get; set; }
 
 
+        [Display(Name = Res.Type)]
+        public GameType? GameType { get; set; }
+
+        public GameType[] GameTypes => Enum.GetValues(typeof(GameType)).Cast<GameType>().ToArray();
+
         public bool IsEditMode => EventId.HasValue;
         
         public bool HasOccured => IsEditMode && DateTime < DateTime.Now;
@@ -67,12 +72,16 @@ namespace MyTeam.ViewModels.Events
         public Guid? EventId { get; set; }
         public Guid ClubId { get; set; }
 
+        [Display(Name = Res.HomeGround)]
+        public bool IsHomeTeam { get; set; }
+
 
         public CreateEventViewModel()
         {
             Time = new TimeSpan(19,30,0).ToString();
             Date = DateTime.Now.Date.AddDays(4).ToNoFull();
             Mandatory = true;
+            IsHomeTeam = true;
             TeamIds = new List<Guid>();
         }
 
@@ -92,6 +101,8 @@ namespace MyTeam.ViewModels.Events
             EventId = ev.Id;
             Mandatory = !voluntary;
             TeamIds = ev.TeamIds.ToList();
+            IsHomeTeam = ev.IsHomeTeam;
+            GameType = ev.GameType;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -192,7 +203,8 @@ namespace MyTeam.ViewModels.Events
                     Opponent = Opponent,
                     EventTeams = eventTeams,
                     Voluntary = !Mandatory,
-                    GameType = GameType.Treningskamp
+                    GameType = GameType,
+                    IsHomeTeam = IsHomeTeam
                 };
         }
         

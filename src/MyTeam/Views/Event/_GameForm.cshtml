@@ -6,7 +6,7 @@
 {
     <div class="form-group">
         <label class="col-xs-2 control-label" asp-for="TeamIds"></label>
-        <div class="col-xs-10">
+        <div class="col-xs-6">
 
             <select name="TeamIds" class="form-control">
                 @for (int i = 0; i < Model.Teams.Count(); i++)
@@ -27,19 +27,45 @@
             </select>
 
             @for (int i = 0; i < Model.Teams.Count(); i++)
-                {
-                <input type="hidden" asp-for="Teams[i].Id" />
-                <input type="hidden" asp-for="Teams[i].Name" />
+            {
+                <input type="hidden" asp-for="Teams[i].Id"/>
+                <input type="hidden" asp-for="Teams[i].Name"/>
             }
             <span asp-validation-for="TeamIds" class="text-danger"></span>
+        </div>
+
+        <label class="col-xs-2 control-label" asp-for="IsHomeTeam"></label>
+        <div class="col-xs-2">
+            <input asp-for="IsHomeTeam" class="form-control" />
         </div>
     </div>
 
     <div class="form-group">
         <label mt-for="Opponent" mt-icon="users" class="col-xs-2 control-label"></label>
         <div class="col-xs-10">
-            <input asp-for="Opponent" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Opponent)" />
+            <input asp-for="Opponent" class="form-control" placeholder="@Html.DisplayNameFor(m => m.Opponent)"/>
             <span asp-validation-for="Opponent" class="text-danger"></span>
         </div>
     </div>
+    <div class="form-group">
+        <label class="col-xs-2 control-label" asp-for="GameType"></label>
+        <div class="col-xs-10">
+            <select name="GameType" class="form-control">
+              @foreach(var gameType in Model.GameTypes)
+                {
+                    if (Model.GameType == gameType)
+                    {
+                        <option selected value="@gameType">@gameType.ToString()</option>
+
+                    }
+                    else
+                    {
+                        <option value="@gameType">@gameType.ToString()</option>
+                    }
+              }
+            </select>
+            <span asp-validation-for="GameType" class="text-danger"></span>
+        </div>
+    </div>
+
 }

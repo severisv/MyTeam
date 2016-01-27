@@ -50,7 +50,7 @@ namespace MyTeam.Services.Domain
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
                     e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).ToList();
         }
 
@@ -71,7 +71,7 @@ namespace MyTeam.Services.Domain
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
                     e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 ));
 
             if (count != null)
@@ -139,6 +139,8 @@ namespace MyTeam.Services.Domain
             ev.Opponent = model.Opponent;
             ev.DateTime = model.DateTime;
             ev.Voluntary = !model.Mandatory;
+            ev.GameType = model.GameType;
+            ev.IsHomeTeam = model.IsHomeTeam;
 
             foreach (var id in model.TeamIds)
             {
@@ -193,7 +195,7 @@ namespace MyTeam.Services.Domain
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
                     e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage,  a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).Single();
         }
 

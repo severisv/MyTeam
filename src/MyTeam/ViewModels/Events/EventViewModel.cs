@@ -18,13 +18,14 @@ namespace MyTeam.ViewModels.Events
         public string Headline { get;  }
         public string Description { get;  }
         public bool Voluntary { get; }
+        public bool IsHomeTeam { get; }
         public string Opponent { get; }
         public IEnumerable<Guid> TeamIds { get; }
 
         public IEnumerable<AttendeeViewModel> Attendees { get;  }
 
         public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, GameType? gameType, DateTime dateTime, string location,
-            string headline, string description, string opponent, bool voluntary, bool isPublished)
+            string headline, string description, string opponent, bool voluntary, bool isPublished, bool isHomeTeam)
         {
             Id = eventId;
             ClubId = clubId;
@@ -39,9 +40,10 @@ namespace MyTeam.ViewModels.Events
             Voluntary = voluntary;
             TeamIds = teamIds;
             IsPublished = isPublished;
+            IsHomeTeam = isHomeTeam;
         }
 
-        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished)
+        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), null, e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam)
         {
             
         }

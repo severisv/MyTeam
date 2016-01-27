@@ -45,8 +45,7 @@ namespace MyTeam.Resources
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
         public const string Home = "Nyheter";
-
-
+        public const string HomeGround = "Hjemme";
         public const string Internal = "Intern";
         public const string IsAttending = "Stiller";
         public const string IsAlready = "Er allerede";
@@ -82,6 +81,8 @@ namespace MyTeam.Resources
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
+        public const string Type = "Type";
+
         public static string TeamSelection = "Laguttak";
         public const string Team = "Lag";
 
