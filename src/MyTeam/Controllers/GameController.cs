@@ -55,7 +55,7 @@ namespace MyTeam.Controllers
         {
             var ev = GameService.GetRegisterSquadEventViewModel(eventId);
 
-            var players = PlayerService.GetDto(Club.ClubId);
+            var players = PlayerService.GetDto(Club.Id);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 

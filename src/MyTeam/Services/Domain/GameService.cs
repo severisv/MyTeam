@@ -58,7 +58,8 @@ namespace MyTeam.Services.Domain
                     Location = e.Location,
                     Description = e.Description,
                     Type = e.Type,
-                    IsPublished = e.IsPublished
+                    IsPublished = e.IsPublished,
+                    TeamIds = e.EventTeams.Select(et => et.TeamId).ToList()
                 }).Single();
         }
 

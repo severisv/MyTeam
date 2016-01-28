@@ -13,5 +13,6 @@ namespace MyTeam.ViewModels.Game
         public bool IsPublished { get; set; }
         public DateTime DateTime { get; set; }
         public EventType Type { get; set; }
+        public IEnumerable<Guid> TeamIds { get; set; }
     }
 }

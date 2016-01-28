@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MyTeam.Models.Enums;
 
 namespace MyTeam.Models.Dto
@@ -13,5 +14,6 @@ namespace MyTeam.Models.Dto
         public string ShortName => $"{FirstName} {LastName}";
         public string ImageSmall { get; set; }
         public PlayerStatus Status { get; set; }
-      }
+        public IEnumerable<Guid> TeamIds { get; set; }
+    }
 }

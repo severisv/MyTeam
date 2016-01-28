@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Identity;
+using Microsoft.Data.Entity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
@@ -141,17 +142,27 @@ namespace MyTeam.Services.Domain
             _playerRepository.CommitChanges();
         }
 
-        public IEnumerable<SimplePlayerDto> GetDto(string clubId)
+        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId)
         {
-            return _playerRepository.Get().Where(p => p.Club.ClubIdentifier == clubId).Select(p => new SimplePlayerDto
+            var players = _playerRepository.Get().Where(p => p.ClubId == clubId)
+                .Select(p => new SimplePlayerDto
             {
                 Id = p.Id,
                 FirstName = p.FirstName,
                 MiddleName = p.MiddleName,
                 LastName = p.LastName,
                 Status = p.Status,
-                ImageSmall = p.ImageSmall
+                ImageSmall = p.ImageSmall,
             }).ToList().OrderBy(p => p.Name);
+
+            var playerIds = players.Select(p => p.Id);
+            var memberTeams = _applicationDbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
+            foreach (var player in players)
+            {
+                player.TeamIds = memberTeams.Where(mt => mt.MemberId == player.Id).Select(mt => mt.TeamId).ToList();
+            }
+            return players;
+
         }
 
         public void TogglePlayerTeam(Guid teamId, Guid playerId, string clubName)

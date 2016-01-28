@@ -19,6 +19,7 @@ namespace MyTeam.ViewModels.Game
             ImageSmall = player.ImageSmall;
             Status = player.Status;
             EventId = eventId;
+            TeamIds = player.TeamIds;
         }
     }
 }

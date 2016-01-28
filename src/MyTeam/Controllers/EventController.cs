@@ -175,7 +175,7 @@ namespace MyTeam.Controllers
         public IActionResult RegisterAttendance(Guid? eventId  = null)
         {
             var ev = EventService.GetRegisterAttendanceEventViewModel(eventId);
-            var players = PlayerService.GetDto(HttpContext.GetClub().ClubId);
+            var players = PlayerService.GetDto(Club.Id);
             var previousEvents = EventService.GetPreviousSimpleEvents(EventType.Trening, Club.Id, 15).ToList();
 
             if (ev == null) return new NotFoundResult(HttpContext);
