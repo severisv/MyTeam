@@ -202,3 +202,4 @@ test/MyTeam.Test/project.lock.json
 *.stackdump
 
 .vs/config/applicationhost.config
+.fake/
