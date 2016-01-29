@@ -34,7 +34,6 @@
   },
 
   "frameworks": {
-    "dnx451": { },
     "dnxcore50": { }
   },
 
@@ -49,7 +48,6 @@
   "scripts": {
     "postrestore": [
       "npm install",
-      "bower install",
       "gulp --production"
     ]
   }
