@@ -7,7 +7,7 @@ require('./Gulpscripts/less');
 var paths = require('./Gulpscripts/paths');
 
 
-gulp.task('default', ['less', 'js', 'js-lib']);
+gulp.task('default', ['less', 'js', 'js-lib', 'js-cloudinary']);
 gulp.task('watch', ['default', 'watch-js', 'watch-js-lib', 'watch-less']);
 
 

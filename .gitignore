@@ -205,3 +205,4 @@ test/MyTeam.Test/project.lock.json
 .fake/
 src/MyTeam/wwwroot/scripts/Bundles/
 
+.deploy/
