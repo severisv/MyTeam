@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
@@ -14,7 +15,7 @@ namespace MyTeam.Controllers
     public class MemberController : BaseController
     {
         [FromServices]
-        public IRepository<Player> PlayerRepository { get; set; }
+        public ApplicationDbContext DbContext { get; set; }
 
         [Route("lagliste")]
         public IActionResult Index(PlayerStatus status = PlayerStatus.Aktiv)
@@ -22,18 +23,18 @@ namespace MyTeam.Controllers
 
             ViewBag.Title = Res.SquadList;
 
-            var players = PlayerRepository.Get()
+            var players = DbContext.Players
                 .Where(p => p.Club.ClubIdentifier == HttpContext.GetClub().ClubId)
                 .Where(p => p.Status == status)
                 .OrderBy(p => p.FirstName)
                 .Select(p => new MemberInfoViewModel{
-                Id = p.Id,
-                Name = p.Name,
-                Status = p.Status,
-                ImageSmall = p.ImageSmall,
-                Phone = p.Phone,
-                Email = p.Email
-            });
+                    Id = p.Id,
+                    Name = p.Name,
+                    Status = p.Status,
+                    ImageSmall = p.ImageSmall,
+                    Phone = p.Phone,
+                    Email = p.Email
+                });
             var model = new MemberListViewModel(players, status);
             return View("ListMembers", model);
         }

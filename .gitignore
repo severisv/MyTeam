@@ -203,3 +203,5 @@ test/MyTeam.Test/project.lock.json
 
 .vs/config/applicationhost.config
 .fake/
+src/MyTeam/wwwroot/scripts/Bundles/
+
