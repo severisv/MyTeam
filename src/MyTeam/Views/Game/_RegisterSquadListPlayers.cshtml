@@ -14,7 +14,7 @@
                        data-event-id="@player.EventId"
                        type="checkbox"
                        @(player.Attendance?.IsSelected == true ? "checked" : "")/>
-                <span id="playerAttendance-@player.Id" class="pull-right register-attendance-attendance">0%</span>
+                <span id="playerAttendance-@player.Id" title="Oppmøte siste 6 uker" class="pull-right register-attendance-attendance">0%</span>
                 @if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))
                 {
                     <a class="mt-popover registerSquad-messageIcon pull-right" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
