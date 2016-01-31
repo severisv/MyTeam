@@ -1,12 +1,12 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Settings
 @model System.Collections.Generic.IEnumerable<MyTeam.ViewModels.Game.RegisterSquadPlayerViewModel>
 <div class="row">
-    <ul class="list-users col-xs-11 col-md-10">
+    <ul class="list-users">
         @foreach (var player in Model)
         {
             <li class="register-attendance-item" >
-                <img class="hidden-xxs" src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)"/>@player.ShortName
+                <img class="hidden-xxs" src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)"/>
+                @player.ShortName
 
                 <input class="pull-right form-control register-attendance-input"
                        data-player-id="@player.Id"
@@ -14,6 +14,7 @@
                        data-event-id="@player.EventId"
                        type="checkbox"
                        @(player.Attendance?.IsSelected == true ? "checked" : "")/>
+                <span id="playerAttendance-@player.Id" class="pull-right register-attendance-attendance">0%</span>
                 @if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))
                 {
                     <a class="mt-popover registerSquad-messageIcon pull-right" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>

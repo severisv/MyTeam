@@ -9,5 +9,7 @@ namespace MyTeam.Services.Domain
     {
         IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year);
         IEnumerable<int> GetAttendanceYears(Guid clubId);
+        
+
     }
 }
