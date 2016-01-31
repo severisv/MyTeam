@@ -89,3 +89,12 @@ $('#publishMessage').on('input', (function () {
 
 
 }));
+
+
+$.getJSON(Routes.GET_ATTENDANCE, function (data) {
+    var players = data.data;
+    for (var i in players) {
+        var player = players[i];
+        $('#playerAttendance-' + player.PlayerId).html(player.Attendance+"%");
+    }
+});

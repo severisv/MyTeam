@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
@@ -23,17 +24,34 @@ namespace MyTeam.Controllers
         
         public JsonResult GetPlayers()
         {
-            var players = DbContext.Players.Where(p => p.Club.Id == Club.Id).Select(p =>
+            var players = DbContext.Players.Where(p => p.Club.Id == Club.Id)
+                .Select(p =>
               new
               {
                   Id = p.Id,
                   FullName = p.Name,
                   Status = p.Status.ToString(),
                   Roles = p.Roles,
-                  TeamIds = p.MemberTeams.Select(t => t.TeamId)
-              }).OrderBy(p => p.FullName);
+              }).OrderBy(p => p.FullName).ToList();
 
-            return new JsonResult(players);
+            var playerIds = players.Select(p => p.Id);
+            var memberTeams = DbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
+
+            var result = new List<Object>();
+            foreach (var p in players)
+            {
+                result.Add(new
+                {
+                    p.Id,
+                    p.FullName,
+                    p.Status,
+                    p.Roles,
+                    TeamIds = memberTeams.Where(mt => mt.MemberId == p.Id).Select(mt => mt.TeamId).ToList()
+            });
+                    
+            }
+
+            return new JsonResult(result);
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
@@ -128,5 +146,6 @@ namespace MyTeam.Controllers
             }
             return Json("Success");
         }
+
     }
 }
