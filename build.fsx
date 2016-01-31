@@ -3,7 +3,6 @@
 open Fake
 open Fake.AppVeyor
 open System.IO
-open Fake.NpmHelper
 
 [<AutoOpen>]
 module Helpers = 
@@ -17,7 +16,17 @@ module Helpers =
                       ) System.TimeSpan.MaxValue
         if result <> 0 then failwith (sprintf "'%s' failed" cmdPath + " " + args)
 
-    
+    let findOnPath name = 
+        let executable = tryFindFileOnPath name
+        match executable with
+            | Some exec -> exec
+            | None -> failwith (sprintf "'%s' can't find" name)
+
+    let npm args target = 
+        let executable = findOnPath "npm.cmd"
+        shellExec executable args target
+   
+
     let bower args target = 
         let executable = tryFindFileOnPath (if isUnix then "bower" else "bower.cmd")
         match executable with
@@ -79,11 +88,7 @@ module Targets =
   )
   
   Target "NpmRestore" (fun _ ->
-     Npm (fun p ->
-              { p with
-                  Command = Install Standard
-                  WorkingDirectory = webDir
-              })
+     npm "install" webDir
   )
 
   Target "BowerRestore" (fun _ ->
