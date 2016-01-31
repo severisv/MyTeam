@@ -6,7 +6,7 @@ var ManagePlayers = React.createClass({
         return ({
             players: [],
             teams: []
-        })
+        });
     },
 
     componentWillMount: function(){
@@ -52,19 +52,18 @@ var ManagePlayers = React.createClass({
         });
     },
     setPlayerStatus: function (player, status) {
-   
-        $.post(this.routes.SET_PLAYER_STATUS, { Id: player.Id, Status: status}).then(response => {
+        var that = this;
+        $.post(that.routes.SET_PLAYER_STATUS, { Id: player.Id, Status: status }).then(function (response) {
             if (response.Success) {
-                var players = this.state.players;
-                for (var i in this.state.players) {                    
+                var players = that.state.players;
+                for (var i in that.state.players) {
                     if (players[i].Id == player.Id) {
-                        this.state.players[i].Status = status;
+                        that.state.players[i].Status = status;
                     }
                 }
             }
-            this.forceUpdate();
-        }
-      );
+            that.forceUpdate();
+        });
 
     },
     
@@ -94,11 +93,11 @@ var ManagePlayers = React.createClass({
     renderPlayers: function (playerStatus) {
         if (!this.state.players) return "";
 
-        var players = this.state.players.filter(function (player) {
+        var players = this.state.players.filter(function(player) {
             if (player.Status == playerStatus) {
                 return (player)
             }
-        })
+        });
 
         var options = this.options;
         var routes = this.routes;
@@ -106,9 +105,9 @@ var ManagePlayers = React.createClass({
         var setPlayerStatus = this.setPlayerStatus;
         var togglePlayerRole = this.togglePlayerRole;
         var toggleTeam = this.toggleTeam;
-        var playerElements = players.map(function (player, i) {
+        var playerElements = players.map(function(player, i) {
             return (<ManagePlayer key={player.Id} player={player} setPlayerStatus={setPlayerStatus} togglePlayerRole={togglePlayerRole} options={options} routes={routes} teams={teams} toggleTeam={toggleTeam} />)
-        })
+        });
 
         var teamElements = teams.map(function (team, i) {
             return (<div key={team.Id} className="col-xs-1 no-padding subheadline align-center">{team.ShortName}</div>)
@@ -124,7 +123,7 @@ var ManagePlayers = React.createClass({
     <div>
         {playerElements}
     </div>
-        </div>)
+        </div>);
     },
 
     render: function () {
@@ -132,7 +131,7 @@ var ManagePlayers = React.createClass({
             {this.renderPlayers(this.options.playerStatus.Active)}
             {this.renderPlayers(this.options.playerStatus.Veteran)}
             {this.renderPlayers(this.options.playerStatus.Inactive)}
-        </div>)
+        </div>);
     }
 
 });

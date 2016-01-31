@@ -22,42 +22,32 @@ module Helpers =
             | Some exec -> exec
             | None -> failwith (sprintf "'%s' can't find" name)
 
-    let npm args target = 
+    let npm args workingDir = 
         let executable = findOnPath "npm.cmd"
-        shellExec executable args target
+        shellExec executable args workingDir
    
+    let bower args workingDir = 
+        let executable = findOnPath "bower.cmd"
+        shellExec executable args workingDir
 
-    let bower args target = 
-        let executable = tryFindFileOnPath (if isUnix then "bower" else "bower.cmd")
-        match executable with
-            | Some bower -> shellExec bower args target
-            | None -> failwith ("can't find bower")
+    let gulp args workingDir = 
+        let executable = findOnPath "gulp.cmd"
+        shellExec executable args workingDir
+  
+    let dnu args workingDir = 
+        let executable = findOnPath "dnu.cmd"
+        shellExec executable args workingDir
 
-    let gulp args target = 
-            let executable = tryFindFileOnPath (if isUnix then "gulp" else "gulp.cmd")
-            match executable with
-                | Some gulp -> shellExec gulp args target
-                | None -> failwith ("can't find gulp")
-
-
-    let dnu args target = 
-        let executable = tryFindFileOnPath (if isUnix then "dnu" else "dnu.cmd")
-        match executable with
-            | Some dnu -> shellExec dnu args target
-            | None -> failwith ("can't find dnu")
+          
+    let dnx args workingDir = 
+            let executable = findOnPath "dnx.exe"
+            shellExec executable args workingDir    
+   
+    let dnvm args workingDir = 
+        let executable = findOnPath "dnvm.cmd"
+        shellExec executable args workingDir    
             
-    let dnx args target = 
-        let executable = tryFindFileOnPath (if isUnix then "dnx" else "dnx.exe")
-        match executable with
-            | Some dnx -> shellExec dnx args target
-            | None -> failwith ("can't find dnx") 
-            
-    let dnvm args target = 
-        let executable = tryFindFileOnPath (if isUnix then "dnvm" else "dnvm.cmd")
-        match executable with
-            | Some dnvm -> shellExec dnvm args target
-            | None -> failwith ("can't find dnvm")            
-                                                        
+                                                          
     type DnuCommands =
         | Restore
         | Build
