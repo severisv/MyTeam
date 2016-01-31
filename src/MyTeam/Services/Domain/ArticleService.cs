@@ -35,7 +35,7 @@ namespace MyTeam.Services.Domain
                 new ArticleViewModel
                 {
                     Id = a.Id,
-                    Author = new MemberViewModel {Fullname = a.Author.Fullname},
+                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
@@ -60,7 +60,7 @@ namespace MyTeam.Services.Domain
                     GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
                     Published = a.Published
-                }).Single(); 
+                }).Single();
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
@@ -71,17 +71,17 @@ namespace MyTeam.Services.Domain
                     .OrderByDescending(a => a.Published);
 
             var totalCount = query.Count();
-                  
-                    
-              return new PagedList<SimpleArticleDto>(query.Skip(skip).Take(take)
-                    .Take(take)
-                    .Select(a => new SimpleArticleDto
-                    {
-                        Id = a.Id,
-                        Headline = a.Headline,
-                        Published = a.Published
-                    }),
-                    skip, take, totalCount);
+
+
+            return new PagedList<SimpleArticleDto>(query.Skip(skip).Take(take)
+                  .Take(take)
+                  .Select(a => new SimpleArticleDto
+                  {
+                      Id = a.Id,
+                      Headline = a.Headline,
+                      Published = a.Published
+                  }),
+                  skip, take, totalCount);
         }
 
 
@@ -126,6 +126,19 @@ namespace MyTeam.Services.Domain
             var article = _articleRepository.GetSingle(articleId);
             _dbContext.Articles.Remove(article);
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<CommentViewModel> GetComments(Guid articleId)
+        {
+            var result = new List<CommentViewModel>();
+            for (int i = 0; i < 10; i++)
+            {
+                result.Add(new CommentViewModel(new Guid("988aa9f1-109e-4e20-aea0-63cf67d2ccc7"),
+                                                new Guid("cf75b268-63ed-49ec-a6e7-592ec172270f"),
+                                                DateTime.Now, 
+                                                "Test hei dette er en kul og akkurat passe lang kommentar! Ja jeg er enig, veldig bra testdata. :) :( :)"));
+            }
+            return result;
         }
     }
 

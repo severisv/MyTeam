@@ -78,6 +78,11 @@ namespace MyTeam.Controllers
         }
 
 
+        public PartialViewResult GetComments(Guid articleId)
+        {
+            var comments = ArticleService.GetComments(articleId);
+            return PartialView("_GetComments", comments);
+        }
 
     }
 }

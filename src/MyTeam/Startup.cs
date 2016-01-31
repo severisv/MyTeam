@@ -78,7 +78,7 @@ namespace MyTeam
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
                     app.UseDatabaseErrorPage();

@@ -1,0 +1,12 @@
+﻿@using System.Threading.Tasks
+@model IEnumerable<MyTeam.ViewModels.News.CommentViewModel>
+@foreach (var comment in Model)
+{
+    <div class="news-comment">
+        <img src=""/>
+        <div>
+            <h5>Tone</h5>
+            <p>@comment.Content</p>
+        </div>
+    </div>
+}

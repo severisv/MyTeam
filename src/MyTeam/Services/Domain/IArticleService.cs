@@ -14,5 +14,7 @@ namespace MyTeam.Services.Domain
         PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take);
         ArticleViewModel CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
         void Delete(Guid articleId);
+
+        IEnumerable<CommentViewModel> GetComments(Guid articleId);
     }
 }
