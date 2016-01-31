@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Localization;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +49,8 @@ namespace MyTeam
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>((options => {
+            services.AddIdentity<ApplicationUser, IdentityRole>((options =>
+            {
 
                 options.Cookies.ApplicationCookie.CookieName = "_myt";
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(8);
@@ -79,39 +83,45 @@ namespace MyTeam
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                    app.UseDatabaseErrorPage();
-                    app.UseBrowserLink();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Error/Error");
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error/Error");
 
-                    // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                    try
+                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                try
+                {
+                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                        .CreateScope())
                     {
-                        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                            .CreateScope())
-                        {
-                            var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                        var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-//                            dbContext.Database.EnsureDeleted();
-                            dbContext.Database.EnsureCreated();
-                            dbContext.Database.Migrate();
-                            BootstrapData.Initialize(app.ApplicationServices);
+                        //                            dbContext.Database.EnsureDeleted();
+                        dbContext.Database.EnsureCreated();
+                        dbContext.Database.Migrate();
+                        BootstrapData.Initialize(app.ApplicationServices);
                     }
                 }
-                    catch
-                    {
-                    }
+                catch
+                {
                 }
+            }
 
-                app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
-                app.UseStaticFiles();
+            app.UseStaticFiles();
 
-                app.UseIdentity();
+            app.UseIdentity();
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
+                SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
+            }, new RequestCulture(new CultureInfo("nb-NO")));
 
             app.UseFacebookAuthentication(options =>
                 {
@@ -126,7 +136,7 @@ namespace MyTeam
                     name: "default",
                     template: "{controller=News}/{action=Index}/{id?}");
             });
-            
+
 
             app.Run(async context =>
             {
