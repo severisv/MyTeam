@@ -47,10 +47,7 @@
   ],
   "scripts": {
     "postrestore": [
-      "npm install",
-      "npm install bower -g",
-      "bower install",
-      "gulp --production"
+
     ]
   }
 }
