@@ -3,9 +3,10 @@
 open Fake
 open Fake.AppVeyor
 open System.IO
+open Fake.NpmHelper
 
 [<AutoOpen>]
-module Dnu = 
+module Helpers = 
 
     let shellExec cmdPath args target = 
         let result = ExecProcess (
@@ -15,6 +16,20 @@ module Dnu =
                         info.Arguments <- args
                       ) System.TimeSpan.MaxValue
         if result <> 0 then failwith (sprintf "'%s' failed" cmdPath + " " + args)
+
+    
+    let bower args target = 
+        let executable = tryFindFileOnPath (if isUnix then "bower" else "bower.cmd")
+        match executable with
+            | Some bower -> shellExec bower args target
+            | None -> failwith ("can't find bower")
+
+    let gulp args target = 
+            let executable = tryFindFileOnPath (if isUnix then "gulp" else "gulp.cmd")
+            match executable with
+                | Some gulp -> shellExec gulp args target
+                | None -> failwith ("can't find gulp")
+
 
     let dnu args target = 
         let executable = tryFindFileOnPath (if isUnix then "dnu" else "dnu.cmd")
@@ -34,17 +49,15 @@ module Dnu =
             | Some dnvm -> shellExec dnvm args target
             | None -> failwith ("can't find dnvm")            
                                                         
-    type Commands =
+    type DnuCommands =
         | Restore
         | Build
-        | Test
         | Publish
      
-    let Cmd command target = 
+    let Dnu command target = 
         match command with
             | Restore -> (dnu "restore" target)
             | Build -> (dnu "build --configuration release" target)
-            | Test -> (dnx "test" target)
             | Publish -> (dnu "publish --configuration release -o .deploy src/MyTeam" target)
 
 
@@ -64,25 +77,40 @@ module Targets =
   Target "Clean" (fun() ->
     CleanDirs [buildDir; deployDir]
   )
-
-  Target "RestorePackages" (fun _ ->
-     Cmd Restore ""
-     |> ignore
+  
+  Target "NpmRestore" (fun _ ->
+     Npm (fun p ->
+              { p with
+                  Command = Install Standard
+                  WorkingDirectory = webDir
+              })
   )
 
+  Target "BowerRestore" (fun _ ->
+        bower "install" webDir
+        )
    
+  Target "GulpCompile" (fun _ ->
+     gulp "--production" webDir
+  )
+
+  Target "RestorePackages" (fun _ ->
+     Dnu Restore ""
+     |> ignore
+  )
+     
   Target "Build" (fun _ ->
      projects 
-     |> Seq.iter (fun proj -> Cmd Build proj |> ignore)
+     |> Seq.iter (fun proj -> Dnu Build proj |> ignore)
   )
 
   Target "Test" (fun _ ->
      testProjects
-     |> Seq.iter (fun proj -> Cmd Test proj |> ignore)
+     |> Seq.iter (fun proj -> dnx "test" proj |> ignore)
   )
 
   Target "Publish" (fun _ ->
-     Cmd Publish "" |> ignore
+     Dnu Publish "" |> ignore
   )
 
   Target "Default" (fun _ -> 
@@ -90,6 +118,9 @@ module Targets =
   )
 
 "Clean"
+==> "NpmRestore"
+==> "BowerRestore"
+==> "GulpCompile"
 ==> "RestorePackages"
 ==> "Build"
 ==> "Test"
