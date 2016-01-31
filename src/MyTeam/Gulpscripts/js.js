@@ -6,7 +6,6 @@ var notify = require('gulp-notify');
 var _ = require('./utils');
 var uglify = require('gulp-uglify');
 var react = require('gulp-react');
-var babel = require('gulp-babel');
 var args = require('yargs').argv;
 var gif = require('gulp-if');
 
@@ -16,8 +15,6 @@ gulp.task('js', function () {
     return gulp.src(paths.src.scripts)
       .pipe(concat('site.bundle.js'))
       .pipe(react())
-       .on('error', _.plumb.errorHandler)
-      .pipe(gif(isProduction, babel()))
        .on('error', _.plumb.errorHandler)
       .pipe(gif(isProduction, uglify()))
       .on('error', _.plumb.errorHandler)

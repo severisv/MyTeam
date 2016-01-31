@@ -46,10 +46,7 @@
     "**.vspscc"
   ],
   "scripts": {
-    "postrestore": [
-      "npm install",
-      "bower install",
-      "gulp --production"
+    "postrestore": [   
     ]
   }
 }

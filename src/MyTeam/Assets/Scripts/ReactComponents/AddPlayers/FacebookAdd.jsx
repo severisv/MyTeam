@@ -3,7 +3,7 @@
     getInitialState: function () {
         return ({
             users: []
-        })
+        });
     },
 
 
@@ -11,14 +11,15 @@
 
         var url = mt_fb.getSearchUrl();
         if (url) {
+            var that = this;
             $.getJSON(url.url, {
                 q: q,
                 type: "user",
                 access_token: url.accessToken,
                 limit: 10,
                 fields: "picture,name,first_name,last_name,middle_name"
-            }).then(data => {
-                this.setState({
+            }).then(function (data) {
+                that.setState({
                     users: data.data
                 });
             });
@@ -62,7 +63,7 @@
     },
 
     renderUsers: function (addPlayer, existingIds) {
-        return this.state.users.map(function (user) {
+        return this.state.users.map(function(user) {
 
             var disabled = false;
             var icon = "";
@@ -73,8 +74,7 @@
                 icon = "fa fa-check";
                 disabled = true;
                 buttonText = "Lagt til"
-            }
-            else {
+            } else {
                 buttonClass += " btn-primary"
                 icon = "fa fa-plus"
                 buttonText = "Legg til"
@@ -84,14 +84,14 @@
             return (<li key={user.id}>
             <img src={user.picture.data.url} /> {user.name}
                     <button onClick={addPlayer.bind(null, user)} className={buttonClass} disabled={disabled}><i className={icon}></i> {buttonText}</button>
-            </li>)
-        })
+            </li>);
+        });
     },
 
 
     render: function () {
         return (
-        <div>
+            <div>
             <div className="col-xs-12 no-padding">
              <input className="form-control search" placeholder="Søk etter personer" type="text" onChange={this.handleChange} />
           <i className="fa fa-search search-icon"></i>
@@ -101,7 +101,7 @@
           <ul>{this.renderUsers(this.addPlayer, this.props.existingIds)}</ul>
           </div>
         </div>
-    )
-    },
+        );
+    }
 
 });
