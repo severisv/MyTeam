@@ -14,7 +14,7 @@
         {
             <div mt-alert="AlertType.Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
         }
-        else
+        else if(!Model.IsPublished)
         {
             <div class="event-signupButtons">
                 <a class="btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true">@Res.IsAttending</a>
@@ -73,33 +73,34 @@
                 </div>
                 <div class="panel">
                     <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                        <hr class="sm" />
                         <div class="flex event-attendees ">
 
                             <ul class="list-unstyled flex-2">
                                 @foreach (var player in Model.Attending)
                                 {
                                     <li>
-                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
-                                        </a>                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
-                                    {
-                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                    }
-                                </li>
+                                        </a> @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                             {
+                                                 <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                             }
+                                    </li>
                                 }
                             </ul>
                             <ul class="list-unstyled flex-2">
                                 @foreach (var player in Model.NotAttending)
                                 {
                                     <li>
-                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
-                                        </a>                                        @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
-                                        {
-                                            <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                        }
+                                        </a> @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                             {
+                                                 <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                             }
                                     </li>
                                 }
                             </ul>
@@ -113,7 +114,7 @@
     else if (Model.IsPublished)
     {
         <div id="signups-@Model.Id">
-            <div class="attendee-links">
+            <div class="attendee-links attendee-links--game">
                 <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
                     <span class="flex-2">Tropp (@(Model.Squad?.Count() ?? 0))</span>
                     <span class="flex-1 pull-right">&nbsp;</span>
@@ -121,13 +122,14 @@
             </div>
             <div class="panel">
                 <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                    <div class="flex event-attendees ">
+                    <hr class="sm"/>   
+                    <div class="flex event-attendees game">
 
                         <ul class="list-unstyled flex-2">
                             @foreach (var player in Model.Squad)
                             {
                                 <li>
-                                    <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    <a class="attendee" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
