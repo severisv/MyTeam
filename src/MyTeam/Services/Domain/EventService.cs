@@ -91,7 +91,7 @@ namespace MyTeam.Services.Domain
             return result;
         }
 
-        public void SetAttendance(Guid eventId, Guid memberId, bool isAttending, Guid clubId)
+        public AttendeeViewModel SetAttendance(Guid eventId, Guid memberId, bool isAttending, Guid clubId)
         {
 
             var attendance = _dbContext.EventAttendances.SingleOrDefault(e => e.EventId == eventId && e.MemberId == memberId);
@@ -112,6 +112,13 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCacheByMemberId(clubId, memberId);
 
+            return
+                _dbContext.Players.Where(p => p.Id == memberId)
+                    .Select(
+                        p =>
+                            new AttendeeViewModel(memberId, eventId, p.FirstName, p.LastName, p.UserName,
+                                attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected))
+                    .Single();
         }
 
         public void Add(Guid clubId, params Event[] events)

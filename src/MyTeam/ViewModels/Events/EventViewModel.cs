@@ -22,14 +22,14 @@ namespace MyTeam.ViewModels.Events
         public string Opponent { get; }
         public IEnumerable<Guid> TeamIds { get; }
 
-        public IEnumerable<AttendeeViewModel> Attendees { get;  }
+        public IList<AttendeeViewModel> Attendees { get;  }
 
         public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, GameType? gameType, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary, bool isPublished, bool isHomeTeam)
         {
             Id = eventId;
             ClubId = clubId;
-            Attendees = attendees?.OrderBy(a => a.FirstName);
+            Attendees = attendees?.OrderBy(a => a.FirstName).ToList();
             DateTime = dateTime;
             Location = location;
             Headline = headline;
@@ -88,12 +88,18 @@ namespace MyTeam.ViewModels.Events
 
         public bool HasPassed() => DateTime.Now - DateTime  > new TimeSpan(0, 1, 0, 0);
 
-        public void SetAttendance(Guid memberId, bool isAttending)
+        public void SetAttendance(AttendeeViewModel attendeeViewModel, bool isAttending)
         {
-            foreach (var attendee in Attendees.Where(a => a.MemberId == memberId))
+            var attendee = 
+                Attendees.FirstOrDefault(a => a.MemberId == attendeeViewModel.MemberId);
+
+            if (attendee != null)
             {
                 attendee.IsAttending = isAttending;
             }
+            else
+                Attendees.Add(attendeeViewModel);
+
         }
 
         public CurrentTeam Team(IEnumerable<CurrentTeam> teams)

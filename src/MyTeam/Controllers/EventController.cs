@@ -58,8 +58,8 @@ namespace MyTeam.Controllers
             }
             else
             {
-                EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending, Club.Id);
-                ev.SetAttendance(CurrentMember.Id, isAttending);
+                var attendee = EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending, Club.Id);
+                ev.SetAttendance(attendee, isAttending);
             }
             return PartialView("_SignupDetails", ev);
         }
