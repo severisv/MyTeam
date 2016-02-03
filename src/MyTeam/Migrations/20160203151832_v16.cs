@@ -23,7 +23,6 @@ namespace MyTeam.Migrations
             migrationBuilder.DropForeignKey(name: "FK_Table_Season_SeasonId", table: "Table");
             migrationBuilder.DropForeignKey(name: "FK_Team_Club_ClubId", table: "Team");
             migrationBuilder.DropColumn(name: "PracticeCount", table: "Member");
-            migrationBuilder.DropColumn(name: "SeasonId", table: "Event");
             migrationBuilder.CreateTable(
                 name: "Comment",
                 columns: table => new
