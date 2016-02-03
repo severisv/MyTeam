@@ -1,0 +1,14 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.News
+@model PostCommentViewModel
+
+<div id="article-commentForm">
+    <form asp-controller="News" asp-action="PostComment">
+        <input type="hidden" asp-for="ArticleId"/>
+        <span asp-validation-for="Content" class="text-danger"></span>
+        <textarea asp-for="Content" 
+                       class="form-control"
+                       placeholder="Skriv din kommentar"></textarea>
+        <input class="btn btn-primary" type="submit" value="Kommentér"/>
+    </form>
+</div>

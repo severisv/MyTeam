@@ -16,5 +16,6 @@ namespace MyTeam.Services.Domain
         void Delete(Guid articleId);
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);
+        CommentViewModel PostComment(Guid articleId, string content, Guid memberId);
     }
 }

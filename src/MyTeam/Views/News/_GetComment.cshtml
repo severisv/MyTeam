@@ -1,0 +1,11 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.News
+@model MyTeam.ViewModels.News.CommentViewModel
+
+<div class="news-comment">
+    <img src="@Cloudinary.MemberImage(Model.Member.ImageSmall, 100)"/>
+    <div>
+        <h5>@Model.Member.FullName</h5>
+        <p>@Model.Content</p>
+    </div>
+</div>

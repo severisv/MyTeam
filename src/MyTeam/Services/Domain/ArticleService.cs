@@ -14,7 +14,7 @@ namespace MyTeam.Services.Domain
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public ArticleService(IRepository<Article> articleRepository, ApplicationDbContext dbContext)
+        public ArticleService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -125,16 +125,31 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<CommentViewModel> GetComments(Guid articleId)
         {
-            var result = new List<CommentViewModel>();
-            
-            for (int i = 0; i < 10; i++)
+            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
+            return query.Select(a =>
+                new CommentViewModel(
+                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageSmall),
+                    articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
+        }
+
+        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId)
+        {
+            var comment = new Comment
             {
-                result.Add(new CommentViewModel(new Guid("988aa9f1-109e-4e20-aea0-63cf67d2ccc7"),
-                                                new Guid("cf75b268-63ed-49ec-a6e7-592ec172270f"),
-                                                DateTime.Now, 
-                                                "Test hei dette er en kul og akkurat passe lang kommentar! Ja jeg er enig, veldig bra testdata. :) :( :)"));
-            }
-            return result;
+                ArticleId = articleId,
+                Content = content,
+                MemberId = memberId,
+                Date = DateTime.Now,
+            };
+
+            _dbContext.Comments.Add(comment);
+            _dbContext.SaveChanges();
+
+            var member =_dbContext.Members.Where(m => m.Id == memberId)
+                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageSmall))
+                    .Single();
+            
+            return new CommentViewModel(member, articleId, comment.Date, content);
         }
     }
 

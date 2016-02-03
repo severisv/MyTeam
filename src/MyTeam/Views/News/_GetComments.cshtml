@@ -1,12 +1,15 @@
 ﻿@using System.Threading.Tasks
-@model IEnumerable<MyTeam.ViewModels.News.CommentViewModel>
-@foreach (var comment in Model)
+@using MyTeam.ViewModels.News
+@model GetCommentsViewModel
+@foreach (var comment in Model.Comments)
 {
-    <div class="news-comment">
-        <img src=""/>
-        <div>
-            <h5>Tone</h5>
-            <p>@comment.Content</p>
-        </div>
-    </div>
+    @Html.Partial("_GetComment", comment)
+}
+
+@if (Context.UserIsMember())
+{
+    @Html.Partial("_PostComment", new PostCommentViewModel
+{
+    ArticleId = Model.ArticleId
+})
 }

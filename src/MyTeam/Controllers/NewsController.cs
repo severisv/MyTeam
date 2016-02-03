@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
@@ -77,11 +78,25 @@ namespace MyTeam.Controllers
             return RedirectToAction("Edit", articleId);
         }
 
+        [Route(BaseRoute + "kommenter")]
+        [RequireMember]
+        [HttpPost]
+        public IActionResult PostComment(PostCommentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var comment = ArticleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
+                return PartialView("_GetComment", comment);
+            }
+            return PartialView("_PostComment", model);
+        }
+
+
 
         public PartialViewResult GetComments(Guid articleId)
         {
             var comments = ArticleService.GetComments(articleId);
-            return PartialView("_GetComments", comments);
+            return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId));
         }
 
     }
