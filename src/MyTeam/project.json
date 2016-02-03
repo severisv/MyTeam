@@ -30,7 +30,8 @@
 
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel",
-    "ef": "EntityFramework.Commands"
+    "ef": "EntityFramework.Commands",
+    "install-dnx-watch": "dnu commands install Microsoft.Dnx.Watcher"
   },
 
   "frameworks": {
