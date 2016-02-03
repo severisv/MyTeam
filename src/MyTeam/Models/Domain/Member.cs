@@ -59,6 +59,7 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
   
     }
 }
