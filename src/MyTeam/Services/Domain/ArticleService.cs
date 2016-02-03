@@ -12,21 +12,16 @@ namespace MyTeam.Services.Domain
 {
     class ArticleService : IArticleService
     {
-
-        private readonly IRepository<Article> _articleRepository;
         private readonly ApplicationDbContext _dbContext;
 
         public ArticleService(IRepository<Article> articleRepository, ApplicationDbContext dbContext)
         {
-            _articleRepository = articleRepository;
             _dbContext = dbContext;
         }
 
         public PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take)
         {
-            var query = _articleRepository.Get();
-            query = query
-                .Where(a => a.ClubId == clubId)
+            var query = _dbContext.Articles.Where(a => a.ClubId == clubId)
                 .OrderByDescending(a => a.Published);
 
             var totalCount = query.Count();
@@ -49,7 +44,7 @@ namespace MyTeam.Services.Domain
 
         public ArticleViewModel Get(Guid articleId)
         {
-            return _articleRepository.Get().Where(a => a.Id == articleId).Select(a =>
+            return _dbContext.Articles.Where(a => a.Id == articleId).Select(a =>
                 new ArticleViewModel
                 {
                     Id = articleId,
@@ -66,7 +61,7 @@ namespace MyTeam.Services.Domain
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
         {
             var skip = 0;
-            var query = _articleRepository.Get()
+            var query = _dbContext.Articles
                     .Where(a => a.ClubId == clubId)
                     .OrderByDescending(a => a.Published);
 
@@ -107,14 +102,14 @@ namespace MyTeam.Services.Domain
                 _dbContext.SaveChanges();
 
             }
-            var article = _articleRepository.GetSingle(articleId);
+            var article = _dbContext.Articles.Single(a => a.Id == articleId);
 
             if (!model.IsNew)
             {
                 article.Content = model.Content;
                 article.ImageUrl = model.ImageUrl;
                 article.Headline = model.Headline;
-                _articleRepository.CommitChanges();
+                _dbContext.SaveChanges();
             }
 
 
@@ -123,7 +118,7 @@ namespace MyTeam.Services.Domain
 
         public void Delete(Guid articleId)
         {
-            var article = _articleRepository.GetSingle(articleId);
+            var article = _dbContext.Articles.Single(a => a.Id == articleId);
             _dbContext.Articles.Remove(article);
             _dbContext.SaveChanges();
         }
@@ -131,6 +126,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<CommentViewModel> GetComments(Guid articleId)
         {
             var result = new List<CommentViewModel>();
+            
             for (int i = 0; i < 10; i++)
             {
                 result.Add(new CommentViewModel(new Guid("988aa9f1-109e-4e20-aea0-63cf67d2ccc7"),
