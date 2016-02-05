@@ -9,11 +9,11 @@
 
         @if (Model.Teams?.Count() > 1)
         {
-            <div class="col-sm-6">
+            <div class="col-sm-6 col-xs-7 ">
                 <ul class="nav nav-pills mt-justified">
                     @foreach (var team in Model.Teams)
                 {
-                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> @team.Name</a></li>
+                    <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                     }
                 </ul>
             </div>
@@ -21,7 +21,7 @@
         }
         @if (Model.Seasons.Any())
         {
-            <div class="col-sm-3 col-xs-12 pull-right">
+            <div class="col-sm-3 col-xs-5 pull-right">
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var season in Model.Seasons)
                 {
