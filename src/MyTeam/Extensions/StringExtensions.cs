@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace MyTeam
 {
@@ -22,12 +23,16 @@ namespace MyTeam
             "diverse"
         };
 
-        public static string Truncate(this string str, int length = 300)
+        public static string Truncate(this string str, int length = 450)
         {
             if(str.Length > 300) return $"{str?.Substring(0, length)}...";
             return str;
         }
 
+        public static string StripHtmlTags(this string str)
+        {
+            return Regex.Replace(str, "<.*?>", String.Empty);
+        }
 
         public static DateTime? AsDate(this string str)
         {
