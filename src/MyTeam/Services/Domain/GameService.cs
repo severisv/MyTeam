@@ -88,7 +88,8 @@ namespace MyTeam.Services.Domain
                     HomeScore = e.HomeScore,
                     AwayScore = e.AwayScore,
                     IsHomeTeam = e.IsHomeTeam,
-                    Location = e.Location
+                    Location = e.Location,
+                    GameType = e.GameType
                 }).ToList();
 
             return games;

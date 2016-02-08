@@ -9,9 +9,10 @@
     @foreach (var game in Model)
     {
         <tr>
-            <td class="hidden-xs"><i class="fa fa-calendar"></i> @game.DateTime.ToNoShort()&nbsp;&nbsp;<i class="fa fa-clock-o"></i> @game.DateTime.ToNoTime()</td>
+            <td class="hidden-xs"><i title="@game.GameType" class="@Icons.GameType(game.GameType)"></i></td>
+            <td class="hidden-xs"><i class="fa fa-calendar"></i> @game.DateTime.ToNoShort()</td>
             <td class="gamesTable-team gamesTable-team--left">@game.HomeTeam</td>
-            <td class="gamesTable-team">@game.HomeScore - @game.AwayScore</td>
+            <td class="gamesTable-team"><span class="gameResult gameResult--@game.Outcome">@game.HomeScore - @game.AwayScore</span></td>
             <td class="gamesTable-team gamesTable-team--right">@game.AwayTeam</td>
             <td class="hidden-xs"><i class="fa fa-map-marker"></i> @game.Location</td>
         </tr>

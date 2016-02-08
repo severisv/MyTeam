@@ -1,12 +1,10 @@
 ﻿@using MyTeam
-@using MyTeam.Resources
 @model MyTeam.ViewModels.Game.GamesViewModel
 @{
     ViewBag.Title = Res.Games;
 }
 <div mt-main>
     <div class="row">
-
         @if (Model.Teams?.Count() > 1)
         {
             <div class="col-sm-6 col-xs-7 ">
@@ -30,13 +28,8 @@
                 </select>
             </div>
         }
-       
     </div>
-
     <hr />
-
-
-
     @if (!Model.Games?.Any() == true)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
