@@ -108,7 +108,8 @@ namespace MyTeam.Controllers
         public IActionResult Show(Guid gameId)
         {
 
-            var model = new ShowGameViewModel();
+            var game = GameService.GetGame(gameId);
+            var model = new ShowGameViewModel(game);
 
             return View("Show", model);
         }

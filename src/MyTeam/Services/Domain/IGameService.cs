@@ -12,5 +12,6 @@ namespace MyTeam.Services.Domain
         void PublishSquad(Guid eventId);
         IEnumerable<GameViewModel> GetGames(Guid teamId, int year);
         IEnumerable<SeasonViewModel> GetSeasons(Guid teamId);
+        GameViewModel GetGame(Guid gameId);
     }
 }

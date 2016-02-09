@@ -1,9 +1,9 @@
 ﻿
-.gamesTable tr td {
-    line-height: 1.5em;
+table.gamesTable tr td {
+    line-height: 2.5rem;
     font-size: 1.25em;
     text-align: center;
-
+    padding: 1.25rem 0;
     &.gameType {
         font-size: 1.5em;
     }
@@ -58,4 +58,22 @@
     &:focus {
         text-decoration: none;
     }
+}
+
+.game-header {
+     .r-under-xs({
+        font-size: 1.5em;
+    });
+     .r-under-xxs({
+        font-size: 1.2em;
+    });
+}
+
+.game-score{
+    font-size: 1.5em;
+    padding: 0 1em;
+    .r-under-xs({
+        padding: 0 0.5em;
+        font-size: 1.2em;
+    });
 }

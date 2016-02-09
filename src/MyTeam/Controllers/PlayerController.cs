@@ -45,7 +45,6 @@ namespace MyTeam.Controllers
                 return PartialView("_Show", model);
             }
             return List(playerId: playerId);           
-           
         }
 
         [Route("endre")]

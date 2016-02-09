@@ -1,11 +1,38 @@
-﻿@model MyTeam.ViewModels.Game.ShowGameViewModel
+﻿@using MyTeam
+@using MyTeam.Settings
+@model MyTeam.ViewModels.Game.ShowGameViewModel
 @{
     ViewBag.Title = $"{Model.Game.HomeTeam} - {Model.Game.AwayTeam}";
 }
 
 <div class="mt-main">
-    <div class="mt-container"></div>
+    <div class="mt-container">
+        <h3 class="game-header">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
+        <hr />
 
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-calendar pull-right"></i>
+                </p>
+                <p class="col-sm-8">@Model.Game.DateTime.ToNoFull()</p>
+                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-clock-o pull-right"></i>
+                </p>
+                <p class="col-sm-8">@Model.Game.DateTime.ToNoTime()</p>
+            </div>
+            <div class="col-sm-6">
+                <p class="col-sm-4 col-xs-2">
+                    <i class="@Icons.GameType(Model.Game.GameType) pull-right"></i>
+                </p>
+                <p class="col-sm-8">@Model.Game.GameType</p>
+                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-map-marker pull-right"></i>
+                </p>
+                <p class="col-sm-8">@Model.Game.Location</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-3"></div>
+        </div>
+    </div>
 </div>
 <div class="mt-sidebar">
 

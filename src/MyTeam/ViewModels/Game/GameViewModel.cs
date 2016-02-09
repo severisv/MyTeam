@@ -18,8 +18,6 @@ namespace MyTeam.ViewModels.Game
         public string Location { get; set; }
         public GameType? GameType { get; set; }
 
-        public int? ActualHomeScore => IsHomeTeam ? HomeScore : AwayScore;
-        public int? ActualAwayScore => IsHomeTeam ? AwayScore : HomeScore;
         public string HomeTeam => IsHomeTeam ? Teams.First() : Opponent;
         public string AwayTeam => IsHomeTeam ?  Opponent : Teams.First();
 
