@@ -101,5 +101,16 @@ namespace MyTeam.Controllers
 
             return View("Index", model);
         }
+
+
+
+        [Route("vis")]
+        public IActionResult Show(Guid gameId)
+        {
+
+            var model = new ShowGameViewModel();
+
+            return View("Show", model);
+        }
     }
 }

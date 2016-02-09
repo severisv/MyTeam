@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
+@using MyTeam.Settings
 @using MyTeam.ViewModels.Game
 
 @model IEnumerable<GameViewModel>
@@ -8,13 +9,13 @@
   <tbody>
     @foreach (var game in Model)
     {
-        <tr>
-            <td class="hidden-xs"><i title="@game.GameType" class="@Icons.GameType(game.GameType)"></i></td>
-            <td class="hidden-xs"><i class="fa fa-calendar"></i> @game.DateTime.ToNoShort()</td>
+        <tr class="games-showGameLink mt-anchor" data-href="@Url.Action("Show", new {gameId = game.Id})">
+            <td class="hidden-xs gameType"><i title="@game.GameType" class="@Icons.GameType(game.GameType)"></i></td>
+            <td class="hidden-xs"><i class="text-subtle fa fa-calendar"></i> @game.DateTime.ToNoShort()</td>
             <td class="gamesTable-team gamesTable-team--left">@game.HomeTeam</td>
             <td class="gamesTable-team"><span class="gameResult gameResult--@game.Outcome">@game.HomeScore - @game.AwayScore</span></td>
             <td class="gamesTable-team gamesTable-team--right">@game.AwayTeam</td>
-            <td class="hidden-xs"><i class="fa fa-map-marker"></i> @game.Location</td>
+            <td class="hidden-xs"><i class="text-subtle fa fa-map-marker"></i> @game.Location</td>
         </tr>
     }
     </tbody>

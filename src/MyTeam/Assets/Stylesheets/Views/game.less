@@ -3,13 +3,20 @@
     line-height: 1.5em;
     font-size: 1.25em;
     text-align: center;
+
+    &.gameType {
+        font-size: 1.5em;
+    }
 }
 
 .gamesTable tr td.gamesTable-team {
     font-size: 1.5em;
+
     .r-under-xxs( {
         font-size: 1em;
-    }    );
+    }
+
+    );
     font-family: @fontBold;
 
     &.gamesTable-team--left {
@@ -21,10 +28,34 @@
     }
 }
 
-.gameResult{
+.gameResult {
     border-radius: 1em;
     padding: 0.2em 0.65em;
 }
-.gameResult--win { background: @greenLight; }
-.gameResult--draw { background: @yellowLight; }
-.gameResult--loss { background: @redLight; }
+
+.gameResult--win {
+    background: @greenLight;
+}
+
+.gameResult--draw {
+    background: @yellowLight;
+}
+
+.gameResult--loss {
+    background: @redLight;
+}
+
+
+.games-showGameLink {
+    transition: all 0.25s ease-out;
+    cursor: pointer;
+
+    &:hover {
+        background-color: fade(@team-primary, 50) !important;
+        text-decoration: none;
+    }
+
+    &:focus {
+        text-decoration: none;
+    }
+}

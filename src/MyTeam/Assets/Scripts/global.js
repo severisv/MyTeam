@@ -10,6 +10,7 @@ global.applyScopedJsComponents = function (selector) {
     applyActiveLinkSwapper($scope);
     applyAjaxLinkActions($scope);
     applySelectLinkListeners($scope);
+    applyMtAnchorListeners($scope);
 }
 
 global.applyJsComponents = function() {
@@ -19,7 +20,6 @@ global.applyJsComponents = function() {
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
     
-
     window.onpopstate = function () {
         //location.reload();
     }
@@ -101,6 +101,12 @@ function applySelectLinkListeners($scope) {
     $scope.find('.linkSelect').on('change', function () {
         var url = $(this).val();
         window.location = url;
+    });
+}
 
+function applyMtAnchorListeners($scope) {
+    $scope.find('.mt-anchor').on('click', function () {
+        var url = $(this).data('href');
+        window.location = url;
     });
 }
