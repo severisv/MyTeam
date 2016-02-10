@@ -1,11 +1,9 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.AspNet.Identity
-@using MyTeam.Models
 @model MyTeam.ViewModels.Account.LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = "Logg in";
+    ViewBag.PageName = "Logg in";
 }
 
 <div mt-main>

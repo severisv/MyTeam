@@ -55,6 +55,7 @@ namespace MyTeam.Resources
         public const string LastUpdated = "Sist oppdatert";
         public const string Loss = "Tap";
         public const string Logout = "Logg ut";
+        public const string Login = "Logg inn";
 
         public const string Location = "Sted";
         public const string HallOfFame = "Hall of Fame";

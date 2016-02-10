@@ -14,7 +14,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta title="@club?.ShortName - @ViewBag.Title"/>
-    <title>@club?.Name - @ViewBag.Title</title>
+    <title>@club?.Name@(ViewBag.Title != null ? " - " :"")@ViewBag.Title</title>
     <link rel="icon" type="image/png" href="@Cloudinary.Image(club?.Favicon ?? club?.Logo)">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles.bundle.css" />

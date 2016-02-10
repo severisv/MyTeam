@@ -8,6 +8,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
+using MyTeam.Resources;
 using MyTeam.Services;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
@@ -54,6 +55,7 @@ namespace MyTeam.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["Title"] = Res.Login;
             var model = new LoginViewModel();
             return View(model);
         }
