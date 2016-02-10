@@ -138,11 +138,14 @@ namespace MyTeam
             });
 
 
-            app.Run(async context =>
+            if (env.IsProduction())
             {
-                context.Response.Redirect("/404");
-                await context.Response.WriteAsync("");
-            });
+                app.Run(async context =>
+                {
+                    context.Response.Redirect("/404");
+                    await context.Response.WriteAsync("");
+                });
+            }
 
         }
 

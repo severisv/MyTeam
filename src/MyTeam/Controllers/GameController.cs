@@ -101,5 +101,17 @@ namespace MyTeam.Controllers
 
             return View("Index", model);
         }
+
+
+
+        [Route("vis")]
+        public IActionResult Show(Guid gameId)
+        {
+
+            var game = GameService.GetGame(gameId);
+            var model = new ShowGameViewModel(game);
+
+            return View("Show", model);
+        }
     }
 }

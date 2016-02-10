@@ -10,5 +10,4 @@ namespace MyTeam.ViewModels.Game
         public IEnumerable<PlayerDto> Squad { get; set; } 
         
     }
-
 }

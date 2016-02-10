@@ -109,5 +109,23 @@ namespace MyTeam.Services.Domain
                 Year = y
             }).OrderByDescending(s => s.Year);
         }
+
+        public GameViewModel GetGame(Guid gameId)
+        {
+            return  _dbContext.Events
+              .Where(e => e.Id == gameId)
+              .Select(e => new GameViewModel
+              {
+                  DateTime = e.DateTime,
+                  Opponent = e.Opponent,
+                  Teams = e.EventTeams.Select(et => et.Team.Name),
+                  Id = e.Id,
+                  HomeScore = e.HomeScore,
+                  AwayScore = e.AwayScore,
+                  IsHomeTeam = e.IsHomeTeam,
+                  Location = e.Location,
+                  GameType = e.GameType
+              }).ToList().Single();
+        }
     }
 }
