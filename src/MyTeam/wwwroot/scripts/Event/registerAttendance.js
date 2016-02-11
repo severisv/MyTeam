@@ -32,7 +32,6 @@ $('.register-trainingVictory-input').click(function () {
     var playerId = element.data('playerId');
     var value = element.is(":checked");
     element.parent().find('i.fa-spinner').show();
-    console.log(Routes.CONFIRM_TRAININGVICTORY)
     $.post(Routes.CONFIRM_TRAININGVICTORY,
     {
         playerId: playerId,
