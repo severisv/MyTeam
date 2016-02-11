@@ -2,6 +2,6 @@
 
 var addPlayers = React.createElement(AddPlayers);
 
-React.render(addPlayers, document.getElementById("add-players"));
+ReactDOM.render(addPlayers, document.getElementById("add-players"));
 
 

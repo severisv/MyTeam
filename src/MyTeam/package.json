@@ -11,7 +11,8 @@
     "gulp-notify": "^2.2.0",
     "gulp-react": "^3.0.1",
     "yargs": "^3.31.0",
-    "gulp-if": "^2.0.0"
+    "gulp-if": "^2.0.0",
+    "react-dom": "^0.14.7"
   },
   "dependencies": {
     "jquery": "^2.2.0",

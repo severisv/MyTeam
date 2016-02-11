@@ -14,9 +14,9 @@ var EmailAdd = React.createClass({
         this.props.addPlayer(user);
     },
 
-    handleFirstnameChange : function(){ this.setState({firstname: event.target.value}) },
-    handleLastnameChange : function(){ this.setState({lastname: event.target.value}) },
-    handleEmailChange : function(){ this.setState({email: event.target.value}) },
+    handleFirstnameChange: function (event) { this.setState({ firstname: event.target.value }) },
+    handleLastnameChange: function (event) { this.setState({ lastname: event.target.value }) },
+    handleEmailChange: function (event) { this.setState({ email: event.target.value }) },
 
     render: function () {
         return (

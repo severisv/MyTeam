@@ -33,7 +33,8 @@ module.exports = {
             bower("bootstrap/dist/js/bootstrap.js"),
             bower("jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"),
             npm("bootbox/bootbox.js"),
-            npm("react/dist/react.js")
+            npm("react/dist/react.js"),
+            npm("react-dom/dist/react-dom.js")
         ],
         cloudinary: [
             npm("jquery.cloudinary/js/jquery.ui.widget.js"),
