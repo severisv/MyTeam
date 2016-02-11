@@ -13,7 +13,7 @@
 <div class="mt-main">
     @Html.Partial("_Show", Model)
 
-    <div class="mt-container">
+    <div class="mt-container comments-container">
         <h3>Kommentarer</h3>
         <div id="article-comments" data-get-comments-url="@Url.Action("GetComments","News", new { articleId = Model.Id })" >
             <i class="fa-spinner fa fa-spin"></i>

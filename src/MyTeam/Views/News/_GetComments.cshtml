@@ -3,13 +3,7 @@
 @model GetCommentsViewModel
 @foreach (var comment in Model.Comments)
 {
-    @Html.Partial("_GetComment", comment)
+    @Html.Partial("_Comment", comment)
 }
 
-@if (Context.UserIsMember())
-{
-    @Html.Partial("_PostComment", new PostCommentViewModel
-{
-    ArticleId = Model.ArticleId
-})
-}
+@Html.Partial("_CommentForm", Model.ArticleId)

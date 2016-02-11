@@ -128,12 +128,14 @@ namespace MyTeam.Services.Domain
             var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
             return query.Select(a =>
                 new CommentViewModel(
-                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageSmall),
+                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageSmall, a.MemberId),
                     articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
         }
 
         public CommentViewModel PostComment(Guid articleId, string content, Guid memberId)
         {
+
+
             var comment = new Comment
             {
                 ArticleId = articleId,
@@ -146,11 +148,11 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
 
             var member =_dbContext.Members.Where(m => m.Id == memberId)
-                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageSmall))
+                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageSmall, m.Id))
                     .Single();
             
             return new CommentViewModel(member, articleId, comment.Date, content);
         }
     }
-
+    
 }

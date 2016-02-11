@@ -88,7 +88,7 @@ namespace MyTeam.Controllers
                 var comment = ArticleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
                 return PartialView("_GetComment", comment);
             }
-            return PartialView("_PostComment", model);
+            return Content("");
         }
 
 
