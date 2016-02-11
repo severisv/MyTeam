@@ -23,7 +23,7 @@ var ManagePlayer = React.createClass({
         }
 
         return (
-            <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>          
+          <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>          
                {statusList}
            </select>
             
@@ -37,7 +37,7 @@ var ManagePlayer = React.createClass({
         var buttons = [];
         for (var key in roles) {
             var role = roles[key];
-            var buttonClass = "btn";
+            var buttonClass = "btn btn-sm";
             if (player.Roles.indexOf(role) > -1) buttonClass += " btn-primary";
             else buttonClass += " btn-default";
             buttons.push(<button onClick={this.togglePlayerRole.bind(null, role)} key={player.Id+role} className={buttonClass}>{role}</button>)
@@ -63,7 +63,7 @@ var ManagePlayer = React.createClass({
                <div className="col-sm-3 mp-name">{player.FullName}</div>
                <div className="col-sm-2 mp-status">{this.renderStatusOptions()}</div>
                 {teamElements}
-               <div className="col-sm-5">{this.renderRoles()}
+               <div className="col-sm-5 mp-roles">{this.renderRoles()}
                     <a className="pull-right" title="Rediger spiller" href={editPlayerHref}><i className="fa fa-edit"></i></a>
                 </div>
         </div>)

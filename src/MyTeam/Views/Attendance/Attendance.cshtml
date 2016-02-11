@@ -1,8 +1,5 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
-@using MyTeam.Models.Enums
-@using MyTeam.Resources
-@using MyTeam.Settings
 @model MyTeam.ViewModels.Attendance.AttendanceViewModel
 
 @{
@@ -11,12 +8,12 @@
 <div >
 
     <div mt-main>
-        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.AttendanceTaker))
         {
             <div class="clearfix">
-                <a asp-controller="event" asp-action="registerattendance" class="btn btn-primary pull-right hidden-lg hidden-md"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
+                <a asp-controller="event" asp-action="registerattendance" class="btn btn-primary btn-sm pull-right hidden-lg hidden-md"><i class="fa fa-check-square-o"></i> @Res.Register @Res.Attendance.ToLower()</a>
             </div>
-            <br />
+            <br/>
         }
         <table class="table tablesorter attendance-table">
             <thead>
@@ -52,7 +49,7 @@
 
     <div class="mt-sidebar">
 
-        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.AttendanceTaker))
         {
             <div class="mt-container">
                 <ul class="nav nav-list">

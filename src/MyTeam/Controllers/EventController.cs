@@ -170,7 +170,7 @@ namespace MyTeam.Controllers
             return Index();
         }
 
-        [RequireMember(Roles.Coach, Roles.Admin)]
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
         [Route("oppmote/bekreft")]
         public IActionResult RegisterAttendance(Guid? eventId  = null)
         {
@@ -188,7 +188,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
         [Route("oppmote/bekreft")]
         public JsonResult ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
         {
@@ -200,7 +200,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
         [Route("oppmote/bekreftseier")]
         public JsonResult ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin)
         {
