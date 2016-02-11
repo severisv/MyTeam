@@ -1,0 +1,10 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.News
+@model Guid
+@if (Context.UserIsMember())
+{
+    @Html.Partial("_PostComment", new PostCommentViewModel
+{
+    ArticleId = Model
+})
+}

@@ -1,0 +1,9 @@
+﻿@using System.Threading.Tasks
+@using MyTeam.ViewModels.News
+@model GetCommentsViewModel
+@foreach (var comment in Model.Comments)
+{
+    @Html.Partial("_Comment", comment)
+}
+
+@Html.Partial("_CommentForm", Model.ArticleId)

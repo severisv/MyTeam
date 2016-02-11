@@ -28,7 +28,7 @@ namespace MyTeam.Services.Repositories
                 ShortName = "Wam-Kam",
                 Name = "Wam-Kam FK",
                 ClubIdentifier = "wamkam",
-                Logo = "image/upload/v1448650992/wamkam/wamkam.png",
+                Logo = "image/upload/v1450865103/wamkam/wamkam_sm.png",
                 Favicon = "image/upload/v1448650991/wamkam/favicon.png",
             };
 

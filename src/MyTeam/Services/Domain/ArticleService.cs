@@ -12,21 +12,16 @@ namespace MyTeam.Services.Domain
 {
     class ArticleService : IArticleService
     {
-
-        private readonly IRepository<Article> _articleRepository;
         private readonly ApplicationDbContext _dbContext;
 
-        public ArticleService(IRepository<Article> articleRepository, ApplicationDbContext dbContext)
+        public ArticleService(ApplicationDbContext dbContext)
         {
-            _articleRepository = articleRepository;
             _dbContext = dbContext;
         }
 
         public PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take)
         {
-            var query = _articleRepository.Get();
-            query = query
-                .Where(a => a.ClubId == clubId)
+            var query = _dbContext.Articles.Where(a => a.ClubId == clubId)
                 .OrderByDescending(a => a.Published);
 
             var totalCount = query.Count();
@@ -35,7 +30,7 @@ namespace MyTeam.Services.Domain
                 new ArticleViewModel
                 {
                     Id = a.Id,
-                    Author = new MemberViewModel {Fullname = a.Author.Fullname},
+                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
@@ -49,7 +44,7 @@ namespace MyTeam.Services.Domain
 
         public ArticleViewModel Get(Guid articleId)
         {
-            return _articleRepository.Get().Where(a => a.Id == articleId).Select(a =>
+            return _dbContext.Articles.Where(a => a.Id == articleId).Select(a =>
                 new ArticleViewModel
                 {
                     Id = articleId,
@@ -60,28 +55,28 @@ namespace MyTeam.Services.Domain
                     GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
                     Published = a.Published
-                }).Single(); 
+                }).Single();
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
         {
             var skip = 0;
-            var query = _articleRepository.Get()
+            var query = _dbContext.Articles
                     .Where(a => a.ClubId == clubId)
                     .OrderByDescending(a => a.Published);
 
             var totalCount = query.Count();
-                  
-                    
-              return new PagedList<SimpleArticleDto>(query.Skip(skip).Take(take)
-                    .Take(take)
-                    .Select(a => new SimpleArticleDto
-                    {
-                        Id = a.Id,
-                        Headline = a.Headline,
-                        Published = a.Published
-                    }),
-                    skip, take, totalCount);
+
+
+            return new PagedList<SimpleArticleDto>(query.Skip(skip).Take(take)
+                  .Take(take)
+                  .Select(a => new SimpleArticleDto
+                  {
+                      Id = a.Id,
+                      Headline = a.Headline,
+                      Published = a.Published
+                  }),
+                  skip, take, totalCount);
         }
 
 
@@ -107,14 +102,14 @@ namespace MyTeam.Services.Domain
                 _dbContext.SaveChanges();
 
             }
-            var article = _articleRepository.GetSingle(articleId);
+            var article = _dbContext.Articles.Single(a => a.Id == articleId);
 
             if (!model.IsNew)
             {
                 article.Content = model.Content;
                 article.ImageUrl = model.ImageUrl;
                 article.Headline = model.Headline;
-                _articleRepository.CommitChanges();
+                _dbContext.SaveChanges();
             }
 
 
@@ -123,10 +118,41 @@ namespace MyTeam.Services.Domain
 
         public void Delete(Guid articleId)
         {
-            var article = _articleRepository.GetSingle(articleId);
+            var article = _dbContext.Articles.Single(a => a.Id == articleId);
             _dbContext.Articles.Remove(article);
             _dbContext.SaveChanges();
         }
-    }
 
+        public IEnumerable<CommentViewModel> GetComments(Guid articleId)
+        {
+            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
+            return query.Select(a =>
+                new CommentViewModel(
+                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageSmall, a.MemberId),
+                    articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
+        }
+
+        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId)
+        {
+
+
+            var comment = new Comment
+            {
+                ArticleId = articleId,
+                Content = content,
+                MemberId = memberId,
+                Date = DateTime.Now,
+            };
+
+            _dbContext.Comments.Add(comment);
+            _dbContext.SaveChanges();
+
+            var member =_dbContext.Members.Where(m => m.Id == memberId)
+                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageSmall, m.Id))
+                    .Single();
+            
+            return new CommentViewModel(member, articleId, comment.Date, content);
+        }
+    }
+    
 }

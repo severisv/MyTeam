@@ -9,11 +9,12 @@ namespace MyTeam.Models
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Club> Clubs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberTeam> MemberTeams { get; set; }
-        public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Season> Squads { get; set; }

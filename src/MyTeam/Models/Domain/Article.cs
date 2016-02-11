@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyTeam.Models.Domain
@@ -21,6 +22,7 @@ namespace MyTeam.Models.Domain
         public virtual Member Author { get; set; }
         public virtual Event Game { get; set; }
         public virtual Club Club { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
 
     }
 }

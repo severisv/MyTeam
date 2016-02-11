@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.News;
@@ -75,7 +76,26 @@ namespace MyTeam.Controllers
             return RedirectToAction("Edit", articleId);
         }
 
+        [Route(BaseRoute + "kommenter")]
+        [RequireMember]
+        [HttpPost]
+        public IActionResult PostComment(PostCommentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var comment = ArticleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
+                return PartialView("_GetComment", comment);
+            }
+            return Content("");
+        }
 
+
+
+        public PartialViewResult GetComments(Guid articleId)
+        {
+            var comments = ArticleService.GetComments(articleId);
+            return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId));
+        }
 
     }
 }

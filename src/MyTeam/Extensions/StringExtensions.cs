@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Microsoft.AspNet.Mvc.Rendering;
 
 namespace MyTeam
 {
@@ -61,5 +62,16 @@ namespace MyTeam
             }
            
         }
+
+        public static HtmlString IncludeLinebreaks(this string str)
+        {
+            var htmlEncoder = new Microsoft.Extensions.WebEncoders.HtmlEncoder();
+            var result = string.Join(
+                "<br/>",
+                str.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(x => htmlEncoder.HtmlEncode(x))
+            );
+            return new HtmlString(result);
+        }
+
     }
 }
