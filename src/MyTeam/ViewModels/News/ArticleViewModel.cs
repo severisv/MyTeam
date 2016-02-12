@@ -11,8 +11,7 @@ namespace MyTeam.ViewModels.News
         public string Content { get; set; }
         public string ImageUrl { get; set; }
         public DateTime Published { get; set; }
-
+        public int CommentCount { get; set; }
         public MemberViewModel Author { get; set; }
-     
     }
 }

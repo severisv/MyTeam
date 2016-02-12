@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam
 @model MyTeam.ViewModels.News.ArticleViewModel
 @{
     ViewBag.Title = Model.Headline;
@@ -14,7 +15,7 @@
     @Html.Partial("_Show", Model)
 
     <div class="mt-container comments-container">
-        <h3>Kommentarer</h3>
+        <h3>Kommentarer (<span id="comments-count">@Model.CommentCount</span>)</h3>
         <div id="article-comments" data-get-comments-url="@Url.Action("GetComments","News", new { articleId = Model.Id })" >
             <i class="fa-spinner fa fa-spin"></i>
         </div>

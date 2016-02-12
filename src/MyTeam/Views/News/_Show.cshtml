@@ -32,7 +32,7 @@
                         @Html.Raw(Model.Content.StripHtmlTags().Truncate())
                     </div>
                     <hr />
-                    <a asp-action="show" asp-route-articleId="@Model.Id">Les hele</a>
+                    <a asp-action="show" asp-route-articleId="@Model.Id">Les hele og kommentér (@Model.CommentCount)</a>
                 }
                 else
                 {

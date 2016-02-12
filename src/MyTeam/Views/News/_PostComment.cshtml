@@ -6,6 +6,7 @@
     <form asp-controller="News" asp-action="PostComment">
         <input type="hidden" asp-for="ArticleId"/>
         <span asp-validation-for="Content" class="text-danger"></span>
+        <span id="comment-validation-text" class="text-danger"></span>
         <textarea asp-for="Content" 
                        class="form-control"
                        placeholder="Skriv din kommentar"></textarea>

@@ -36,7 +36,8 @@ namespace MyTeam.Services.Domain
                     Content = a.Content,
                     GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
-                    Published = a.Published
+                    Published = a.Published,
+                    CommentCount = (int)a.Comments.Count()
                 });
 
             return new PagedList<ArticleViewModel>(articles.Skip(skip).Take(take), skip, take, totalCount);
@@ -54,8 +55,9 @@ namespace MyTeam.Services.Domain
                     Content = a.Content,
                     GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
-                    Published = a.Published
-                }).Single();
+                    Published = a.Published,
+                    CommentCount = (int)a.Comments.Count()
+        }).Single();
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
@@ -113,7 +115,7 @@ namespace MyTeam.Services.Domain
             }
 
 
-            return Get(articleId); ;
+            return Get(articleId);
         }
 
         public void Delete(Guid articleId)
