@@ -5,7 +5,11 @@
 @if (Context.UserIsMember())
 {
     @Html.Partial("_PostComment", new PostCommentViewModel
+    {
+        ArticleId = Model
+    })
+}
+else
 {
-    ArticleId = Model
-})
+    <p class="text-info"><i class="fa fa-info"></i> Kun medlemmer kan kommentere</p>
 }
