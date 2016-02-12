@@ -75,7 +75,7 @@ namespace MyTeam.Services.Domain
             var startDate = new DateTime(year, 1,1);
             var endDate = new DateTime(year, 12,31);
 
-            var games = _dbContext.Events
+            var games = _dbContext.Games
                 .Where(e => e.Type == EventType.Kamp)
                 .Where(e => e.EventTeams.Count(et => et.TeamId == teamId) > 0)
                 .Where(e => e.DateTime.Date >= startDate && e.DateTime.Date <= endDate)
@@ -112,7 +112,7 @@ namespace MyTeam.Services.Domain
 
         public GameViewModel GetGame(Guid gameId)
         {
-            return  _dbContext.Events
+            return  _dbContext.Games
               .Where(e => e.Id == gameId)
               .Select(e => new GameViewModel
               {

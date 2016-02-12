@@ -27,8 +27,6 @@ namespace MyTeam.Models.Domain
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
 
-        public Guid? ReportId { get; set; }
-        public virtual Article Report { get; set; }
         public virtual Club Club { get; set; }
         
         public virtual ICollection<EventTeam> EventTeams { get; set; }
@@ -46,8 +44,6 @@ namespace MyTeam.Models.Domain
         public bool IsCustom => Type == EventType.Diverse;
 
         public bool IsPublished { get; set; }
-        public int? HomeScore { get; set; }
-        public int? AwayScore { get; set; }
         public bool IsHomeTeam { get; set; }
 
         public bool IsAttending(ClaimsPrincipal user)

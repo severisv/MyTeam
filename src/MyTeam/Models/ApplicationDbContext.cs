@@ -11,6 +11,7 @@ namespace MyTeam.Models
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Game> Games { get; set; }
         public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
         public DbSet<Member> Members { get; set; }
