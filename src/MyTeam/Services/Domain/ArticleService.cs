@@ -34,7 +34,6 @@ namespace MyTeam.Services.Domain
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
-                    GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
                     Published = a.Published,
                     CommentCount = (int)a.Comments.Count()
@@ -53,7 +52,6 @@ namespace MyTeam.Services.Domain
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
-                    GameId = a.GameId,
                     ImageUrl = a.ImageUrl,
                     Published = a.Published,
                     CommentCount = (int)a.Comments.Count()
@@ -95,7 +93,6 @@ namespace MyTeam.Services.Domain
                     Headline = model.Headline,
                     ClubId = clubId,
                     AuthorId = authorId,
-                    GameId = model.GameId,
                     Content = model.Content,
                     ImageUrl = model.ImageUrl,
                     Published = DateTime.Now

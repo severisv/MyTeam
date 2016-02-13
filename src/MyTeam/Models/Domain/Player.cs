@@ -23,6 +23,10 @@ namespace MyTeam.Models.Domain
         public string[] Positions => PositionsString?.Split(',');
         public virtual string PositionsString { get; set; }
 
+        public virtual ICollection<Goal> Goals { get; set; }
+        public virtual ICollection<Goal> Assists { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
+
         public Player()
         {
 
