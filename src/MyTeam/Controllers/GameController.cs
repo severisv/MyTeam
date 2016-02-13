@@ -113,5 +113,15 @@ namespace MyTeam.Controllers
 
             return View("Show", model);
         }
+
+        [Route("registrerresultat")]
+        public IActionResult RegisterResult(Guid gameId)
+        {
+
+            var game = GameService.GetGame(gameId);
+            var model = new ShowGameViewModel(game);
+
+            return View("RegisterResult", model);
+        }
     }
 }

@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using MyTeam.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
+using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
 {
-    public class Event : Entity
+    public class Event : Entity, IEvent
     {
         [Required]
         public Guid ClubId { get; set; }
@@ -46,24 +46,14 @@ namespace MyTeam.Models.Domain
         public bool IsPublished { get; set; }
         public bool IsHomeTeam { get; set; }
 
-        public bool IsAttending(ClaimsPrincipal user)
-        {
-            return Attending?.Any(a => a.UserName == user.Identity.Name) == true;
-        }
-        public bool IsNotAttending(ClaimsPrincipal user)
-        {
-            return NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
-        }
+        public bool IsAttending(ClaimsPrincipal user) => Attending?.Any(a => a.UserName == user.Identity.Name) == true;
+   
+        public bool IsNotAttending(ClaimsPrincipal user) => NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
 
         public bool SignupHasOpened()
         {
             if (Type == EventType.Diverse) return true;
-            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays,0,0,0,0);
+            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
         }
-
-        public bool SignupHasClosed() => DateTime < DateTime.Now;
-            
-        public bool SignoffHasClosed() => DateTime - DateTime.Now < new TimeSpan(0,Settings.Config.AllowedSignoffHours,0,0);
-        
     }
 }

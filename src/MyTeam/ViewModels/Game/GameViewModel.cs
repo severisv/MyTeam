@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Enums;
+using MyTeam.Models.Shared;
 
 namespace MyTeam.ViewModels.Game
 {
-    public class GameViewModel
+    public class GameViewModel : IEvent
     {
         public DateTime DateTime { get; set; }
         public string Opponent { get; set; }
