@@ -42,7 +42,12 @@ namespace MyTeam.Migrations
                     Opponent = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Voluntary = table.Column<bool>(nullable: false),
-                    ReportId = table.Column<Guid>(nullable: true)
+                    ReportId = table.Column<Guid>(nullable: true),
+                    HomeScore = table.Column<int>(nullable: true),
+                    AwayScore = table.Column<int>(nullable: true),
+                    IsHomeTeam = table.Column<bool>(nullable: false),
+                    IsPublished = table.Column<bool>(nullable: false),
+
                 },
                 constraints: table =>
                 {
