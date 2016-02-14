@@ -191,21 +191,22 @@ namespace MyTeam.ViewModels.Events
                 });
             }
 
-            return new Event
-                {
-                    Id = eventId,
-                    ClubId = ClubId,
-                    Location = Location,
-                    Type = Type,
-                    DateTime = date + Time.AsTime().Value,
-                    Description = Description,
-                    Headline = Headline,
-                    Opponent = Opponent,
-                    EventTeams = eventTeams,
-                    Voluntary = !Mandatory,
-                    GameType = GameType,
-                    IsHomeTeam = IsHomeTeam
-                };
+            var ev = Type == EventType.Kamp ? new Models.Domain.Game() : new Event();
+
+            ev.Id = eventId;
+            ev.ClubId = ClubId;
+            ev.Location = Location;
+            ev.Type = Type;
+            ev.DateTime = date + Time.AsTime().Value;
+            ev.Description = Description;
+            ev.Headline = Headline;
+            ev.Opponent = Opponent;
+            ev.EventTeams = eventTeams;
+            ev.Voluntary = !Mandatory;
+            ev.GameType = GameType;
+            ev.IsHomeTeam = IsHomeTeam;
+
+            return ev;
         }
         
     }
