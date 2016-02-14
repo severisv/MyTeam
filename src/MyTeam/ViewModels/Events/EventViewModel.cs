@@ -60,6 +60,7 @@ namespace MyTeam.ViewModels.Events
         public bool IsTraining => Type == EventType.Trening;
         public bool IsCustom => Type == EventType.Diverse;
         public bool IsPublished { get;  }
+        public Guid? TeamId { get; }
 
         public bool IsAttending(ClaimsPrincipal user)
         {

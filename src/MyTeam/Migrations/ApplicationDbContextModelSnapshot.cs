@@ -219,7 +219,6 @@ namespace MyTeam.Migrations
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd();
 
-                b.Property<int?>("AwayScore");
 
                 b.Property<Guid>("ClubId");
 
@@ -231,9 +230,7 @@ namespace MyTeam.Migrations
 
                 b.Property<string>("Headline");
 
-                b.Property<int?>("HomeScore");
-
-                b.Property<bool>("IsHomeTeam");
+                b.Property<bool>("IsHomeTeam");     
 
                 b.Property<bool>("IsPublished");
 
@@ -242,11 +239,11 @@ namespace MyTeam.Migrations
 
                 b.Property<string>("Opponent");
 
-                b.Property<Guid?>("ReportId");
-
                 b.Property<int>("Type");
 
                 b.Property<bool>("Voluntary");
+
+                b.Property<string>("Discriminator").IsRequired();
 
                 b.HasKey("Id");
             });
@@ -375,6 +372,22 @@ namespace MyTeam.Migrations
                 b.HasKey("Id");
             });
 
+            modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+
+                b.Property<Guid?>("PlayerId");
+
+                b.Property<Guid>("GameId");
+
+                b.Property<int>("TimeInMinutes");
+
+                b.Property<string>("Discriminator").IsRequired();
+
+                b.HasKey("Id");
+            });
+
+
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
             {
                 b.Property<Guid>("Id")
@@ -408,6 +421,17 @@ namespace MyTeam.Migrations
                 b.Property<int>("Status");
 
                 b.HasAnnotation("Relational:DiscriminatorValue", "Player");
+            });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+            {
+                b.HasBaseType("MyTeam.Models.Domain.Event");
+
+                b.Property<int?>("HomeScore");
+
+                b.Property<int?>("AwayScore");
+
+                b.HasAnnotation("Relational:DiscriminatorValue", "Game");
             });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -451,6 +475,10 @@ namespace MyTeam.Migrations
                 b.HasOne("MyTeam.Models.Domain.Club")
                     .WithMany()
                     .HasForeignKey("ClubId");
+
+                b.HasOne("MyTeam.Models.Domain.Game")
+                .WithMany()
+                 .HasForeignKey("GameId");
             });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Comment", b =>
@@ -470,9 +498,6 @@ namespace MyTeam.Migrations
                     .WithMany()
                     .HasForeignKey("ClubId");
 
-                b.HasOne("MyTeam.Models.Domain.Article")
-                    .WithOne()
-                    .HasForeignKey("MyTeam.Models.Domain.Event", "ReportId");
             });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
@@ -534,6 +559,24 @@ namespace MyTeam.Migrations
                 b.HasOne("MyTeam.Models.Domain.Club")
                     .WithMany()
                     .HasForeignKey("ClubId");
+            });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
+            {
+                b.HasOne("MyTeam.Models.Domain.Player")
+                    .WithMany()
+                    .HasForeignKey("PlayerId");
+
+                b.HasOne("MyTeam.Models.Domain.Game")
+               .WithMany()
+
+               .HasForeignKey("GameId");
+
+            });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+            {
+
             });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>

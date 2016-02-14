@@ -45,6 +45,12 @@ namespace MyTeam.Models
                 .HasForeignKey(c => c.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Team>()
+               .HasMany(e => e.Games)
+               .WithOne(c => c.Team)
+               .HasForeignKey(c => c.TeamId)
+               .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
