@@ -430,9 +430,7 @@ namespace MyTeam.Migrations
                 b.Property<int?>("HomeScore");
 
                 b.Property<int?>("AwayScore");
-
-                b.Property<Guid>("TeamId");
-
+                
                 b.HasAnnotation("Relational:DiscriminatorValue", "Game");
             });
 
@@ -578,9 +576,7 @@ namespace MyTeam.Migrations
 
             modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
             {
-                b.HasOne("MyTeam.Models.Domain.Team")
-                   .WithMany()
-                   .HasForeignKey("TeamId");
+         
             });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
