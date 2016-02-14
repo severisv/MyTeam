@@ -127,5 +127,16 @@ namespace MyTeam.Services.Domain
                   GameType = e.GameType
               }).ToList().Single();
         }
+
+        public void SetHomeScore(Guid gameId, int? value)
+        {
+            _dbContext.Games.Single(g => g.Id == gameId).HomeScore = value;
+            _dbContext.SaveChanges();
+        }
+        public void SetAwayScore(Guid gameId, int? value)
+        {
+            _dbContext.Games.Single(g => g.Id == gameId).AwayScore = value;
+            _dbContext.SaveChanges();
+        }
     }
 }

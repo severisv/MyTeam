@@ -13,5 +13,7 @@ namespace MyTeam.Services.Domain
         IEnumerable<GameViewModel> GetGames(Guid teamId, int year);
         IEnumerable<SeasonViewModel> GetSeasons(Guid teamId);
         GameViewModel GetGame(Guid gameId);
+        void SetHomeScore(Guid gameId, int? value);
+        void SetAwayScore(Guid gameId, int? value);
     }
 }
