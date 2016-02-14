@@ -44,7 +44,6 @@ namespace MyTeam.Models
                 .WithOne(c => c.Team)
                 .HasForeignKey(c => c.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
-
            
         }
     }

@@ -35,6 +35,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
+
             var query = EventRepository.Get()
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
