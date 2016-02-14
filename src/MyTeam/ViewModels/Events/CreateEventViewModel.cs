@@ -206,11 +206,7 @@ namespace MyTeam.ViewModels.Events
             ev.GameType = GameType;
             ev.IsHomeTeam = IsHomeTeam;
 
-            if (Type == EventType.Kamp)
-            {
-                ((Models.Domain.Game) ev).TeamId = TeamIds.Single();
-            }
-
+          
             return ev;
         }
         
