@@ -11,6 +11,7 @@ namespace MyTeam.Resources
         public const string Actions = "Handlinger";
         public const string Attending = "Kommer";
         public const string Attendance = "Oppmøte";
+        public const string Assist = "Assist";
         public const string AssistCount = "Assists";
         public const string Add = "Legg til";
         public const string Added = "Lagt til";
@@ -39,6 +40,7 @@ namespace MyTeam.Resources
         public const string Error = "Det oppstod en feil";
         public const string Event = "Arrangement";
         public const string FieldRequired = "Feltet er obligatorisk";
+        public const string Goal = "Mål";
         public const string GoalDifference = "Målforskjell";
         public const string Game = "Kamp";
         public const string Games = "Kamper";
@@ -77,11 +79,13 @@ namespace MyTeam.Resources
         public const string Phone = "Telefon";
         public const string Player = "Spiller";
         public const string Points = "Poeng";
+        public const string RedCard = "Rødt kort";
         public const string Register = "Registrer";
         public const string Recurring = "Ukentlig";
         public const string RecurringExplaination = "Hvis man haker av for at treningen skal være ukentlig vil det opprettes en trening for hver uke på samme tidspunkt frem til datoen som er spesifisert";
         public const string Retired = "Pensjonerte";
         public static string RetiredPlayers => $"{Retired} {Players}";
+
         public const string Type = "Type";
 
         public static string TeamSelection = "Laguttak";
@@ -130,6 +134,7 @@ namespace MyTeam.Resources
         public const string User = "Bruker";
         public const string Voluntary = "Frivillig";
         public const string Win = "Seier";
+        public const string YellowCard = "Gult kort";
 
 
 

@@ -39,7 +39,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-3"></div>
+            <div id="registerResult-addEvent"
+                 data-get-players-url="@Url.Action("GetPlayers", "Api")" 
+                 data-get-gameeventtypes-url="@Url.Action("GetEventTypes", "GameApi")" 
+            class="col-xs-offset-2 col-sm-offset4"></div>
         </div>
     </div>
 </div>
@@ -47,3 +50,8 @@
 
 
 </div>
+
+@section Scripts
+{
+    <script src="~/scripts/Game/registerResult.js"></script>
+}

@@ -12,5 +12,5 @@ namespace MyTeam.Models.Domain
         public virtual Game Game { get; set; }
         public virtual Player Player { get; set; }
 
-    }
+       }
 }

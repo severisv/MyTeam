@@ -3,7 +3,7 @@ var ManagePlayer = React.createClass({
     getInitialState: function () {
         return ({
             player: this.props.player
-        })
+        });
     },
 
     setPlayerStatus: function(event){
@@ -23,11 +23,10 @@ var ManagePlayer = React.createClass({
         }
 
         return (
-          <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>          
+            <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>          
                {statusList}
            </select>
-            
-        )
+        );
     },
 
         renderRoles: function () {

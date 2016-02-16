@@ -91,24 +91,22 @@ namespace MyTeam
                 else
                 {
                     app.UseExceptionHandler("/Error/Error");
+            }
 
-                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                try
+            // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
-                    {
-                        var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-                        //                            dbContext.Database.EnsureDeleted();
-                        dbContext.Database.EnsureCreated();
-                        dbContext.Database.Migrate();
-                        BootstrapData.Initialize(app.ApplicationServices);
-                    }
+                    var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                    dbContext.Database.EnsureCreated();
+                    dbContext.Database.Migrate();
+                    BootstrapData.Initialize(app.ApplicationServices);
                 }
-                catch
-                {
-                }
+            }
+            catch
+            {
             }
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -116,7 +114,7 @@ namespace MyTeam
             app.UseStaticFiles();
 
             app.UseIdentity();
-
+            
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
