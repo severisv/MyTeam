@@ -2,7 +2,10 @@
     getInitialState: function () {
         return ({
             players: [],
-            eventTypes: []
+            eventTypes: [],
+            constants: {
+                GOAL : 'Goal'
+            }
         });
     },
 
@@ -27,13 +30,10 @@
     actions: {
         
     },
-  
-
     render: function () {
 
         return(<RegisterEventsView model={this.state} actions={this.actions}></RegisterEventsView>);
-    }
-       
+    }      
         
     
 });

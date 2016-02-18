@@ -45,15 +45,14 @@ namespace MyTeam.Controllers
      
         public IActionResult GetEventTypes()
         {
-            var asd = GameEventType.Goal.DisplayName();
-
-            var gameEventTypes = Enum.GetValues(typeof (GameEventType)).Cast<GameEventType>().Select(e =>
+            var gameEventTypes = Enum.GetValues(typeof (GameEventType)).Cast<GameEventType>()
+                .Where(e => e != GameEventType.Assist)
+                .Select(e =>
                 new
                 {
                     Name = e.DisplayName(),
                     Value = e.ToString()
                 });
-
          
             return new JsonResult(gameEventTypes);
         }
