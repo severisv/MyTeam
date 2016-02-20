@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.Entity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -137,6 +138,16 @@ namespace MyTeam.Services.Domain
         {
             _dbContext.Games.Single(g => g.Id == gameId).AwayScore = value;
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<PlayerViewModel> GetSquad(Guid gameId)
+        {
+            return _dbContext.EventAttendances.Where(e => e.EventId == gameId && e.IsSelected)
+                    .Select(g => new PlayerViewModel
+                    {
+                        Id = g.Member.Id,
+                        FullName = g.Member.Fullname
+                    }).ToList();
         }
     }
 }

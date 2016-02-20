@@ -6,12 +6,10 @@ namespace MyTeam.Models.Enums
     public enum GameEventType
     {
         [Display(Name = Res.Goal)]
-        Goal,
-        [Display(Name = Res.Assist)]
-        Assist,
+        Goal = 0,
         [Display(Name = Res.YellowCard)]
-        YellowCard,
+        YellowCard = 1,
         [Display(Name = Res.RedCard)]
-        RedCard
+        RedCard = 2
     }
 }

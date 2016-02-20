@@ -20,13 +20,15 @@
             }
         }
         <h3 class="game-header">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-sm-6">
-                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-calendar pull-right"></i>
+                <p class="col-sm-4 col-xs-2">
+                    <i class="fa fa-13x fa-calendar pull-right"></i>
                 </p>
                 <p class="col-sm-8">@Model.Game.DateTime.ToNoFull()</p>
-                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-clock-o pull-right"></i>
+                <p class="col-sm-4 col-xs-2">
+                    <i class="fa fa-13x fa-clock-o pull-right"></i>
                 </p>
                 <p class="col-sm-8">@Model.Game.DateTime.ToNoTime()</p>
             </div>
@@ -35,13 +37,20 @@
                     <i class="@Icons.GameType(Model.Game.GameType) pull-right"></i>
                 </p>
                 <p class="col-sm-8">@Model.Game.GameType</p>
-                <p class="col-sm-4 col-xs-2"><i class="fa fa-13x fa-map-marker pull-right"></i>
+                <p class="col-sm-4 col-xs-2">
+                    <i class="fa fa-13x fa-map-marker pull-right"></i>
                 </p>
                 <p class="col-sm-8">@Model.Game.Location</p>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-sm-offset-3"></div>
+            <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+                <div id="game-showEvents"
+                     data-get-players-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
+                     data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
+                     data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})">
+            </div>
         </div>
     </div>
 </div>
@@ -49,3 +58,8 @@
 
 
 </div>
+
+@section Scripts
+{
+    <script src="~/scripts/Game/show.js"></script>
+}

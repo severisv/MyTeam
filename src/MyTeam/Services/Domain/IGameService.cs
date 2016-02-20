@@ -15,5 +15,6 @@ namespace MyTeam.Services.Domain
         GameViewModel GetGame(Guid gameId);
         void SetHomeScore(Guid gameId, int? value);
         void SetAwayScore(Guid gameId, int? value);
+        IEnumerable<PlayerViewModel> GetSquad(Guid gameId);
     }
 }

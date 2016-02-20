@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MyTeam.Models.Enums;
 
 namespace MyTeam.Models.Domain
@@ -12,9 +13,9 @@ namespace MyTeam.Models.Domain
         public Guid? AssistedById { get; set; }
         public GameEventType Type { get; set; }
         public virtual Player AssistedBy { get; set; }
-        public int TimeInMinutes { get; set; }
+        public DateTime CreatedDate { get; set; }
         public virtual Game Game { get; set; }
         public virtual Player Player { get; set; }
 
-       }
+      }
 }

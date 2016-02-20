@@ -70,7 +70,7 @@ namespace MyTeam
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddInstance(Configuration);
 
-            Registrations.Setup(services);
+            services.RegisterDependencies();
 
         }
 

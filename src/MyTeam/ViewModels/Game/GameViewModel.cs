@@ -36,5 +36,4 @@ namespace MyTeam.ViewModels.Game
 
       
     }
-
 }

@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
@@ -42,19 +38,16 @@ namespace MyTeam.Controllers
         }
 
 
-     
-        public IActionResult GetEventTypes()
+
+        public IActionResult GetSquad(Guid gameId)
         {
-            var gameEventTypes = Enum.GetValues(typeof (GameEventType)).Cast<GameEventType>()
-                .Where(e => e != GameEventType.Assist)
-                .Select(e =>
-                new
-                {
-                    Name = e.DisplayName(),
-                    Value = e.ToString()
-                });
-         
-            return new JsonResult(gameEventTypes);
+       
+            var squad = GameService.GetSquad(gameId);
+            return new JsonResult(squad);
+
         }
+
+
+
     }
 }

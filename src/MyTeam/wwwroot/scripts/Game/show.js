@@ -1,5 +1,5 @@
 ﻿
-var element = $('#registerResult-addEvent');
+var element = $('#game-showEvents');
 
 
 var registerEvents = React.createElement(RegisterEvents, { routes: {
@@ -8,7 +8,8 @@ var registerEvents = React.createElement(RegisterEvents, { routes: {
     ADD_EVENT: element.data('add-gameevent-url'),
     GET_EVENTS: element.data('get-gameevents-url'),
     DELETE_EVENT: element.data('delete-event-url')
-}});
+},
+ editMode: false});
 
 
-ReactDOM.render(registerEvents, document.getElementById("registerResult-addEvent"));
+ReactDOM.render(registerEvents, document.getElementById("game-showEvents"));
