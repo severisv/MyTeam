@@ -41,7 +41,6 @@ namespace MyTeam.Controllers
 
         public IActionResult GetSquad(Guid gameId)
         {
-       
             var squad = GameService.GetSquad(gameId);
             return new JsonResult(squad);
 

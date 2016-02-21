@@ -4,7 +4,8 @@
             players: [],
             eventTypes: [],
             events: [],
-            editMode: this.props.editMode
+            editMode: this.props.editMode,
+            squad: []
 
         });
     },
@@ -13,7 +14,7 @@
         var that = this;
         $.getJSON(that.props.routes.GET_PLAYERS).then(function (response) {
             that.setState({
-                players: response
+                squad: response
             });
         });
         $.getJSON(that.props.routes.GET_EVENTTYPES).then(function (response) {
@@ -97,17 +98,17 @@
 
 
     getPlayerName: function (playerId) {
-        var players = this.state.players.filter(function (player) {
+        var squad = this.state.squad.filter(function (player) {
             return player.Id == playerId
         });
-        if (players.length > 0) return players[0].FullName;
+        if (squad.length > 0) return squad[0].FullName;
         else return "Selvmål";
     },
 
-    getEventPlayers: function(type) {
+    getEventPlayers: function (type) {
         return type == 0 ?
-          [{ Id: 'ingen', FullName: "( Selvmål )" }].concat(this.state.players) :
-          this.state.players;
+          [{ Id: 'ingen', FullName: "( Selvmål )" }].concat(this.state.squad) :
+          this.state.squad;
     },
 
     render: function () {
@@ -124,14 +125,23 @@
 
         return (
             <div className="game-showEventsWrapper">
-                <ListEvents model={this.state} actions={actions}></ListEvents>
-                {this.renderEditView(actions)}
-            </div>);
+                        <div className="row">
+                    <div className="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1">
+                    <ListEvents model={this.state} actions={actions}></ListEvents>
+                        {this.renderEditView(actions)}
+                       </div>
+                  </div>
+                <div className="row">
+                    <div className="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+                <ListSquad model={this.state} actions={actions}></ListSquad>
+                    </div>
+               </div>
+        </div>);
     },
 
-    renderEditView:function(actions) {
+    renderEditView: function (actions) {
         if (this.props.editMode != false) {
-            return(<RegisterEventsView model={this.state} actions={actions }></RegisterEventsView>)
+            return (<RegisterEventsView model={this.state} actions={actions }></RegisterEventsView>)
         }
     }
 

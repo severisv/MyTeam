@@ -3,11 +3,11 @@
     render: function () {
         var model = this.props.model;
         var actions = this.props.actions;
-        var assistPlayers = [{ Id: 'ingen', FullName: "( Ingen )" }].concat(model.players.filter(function(element){return element.Id != model.PlayerId}));
+        var assistPlayers = [{ Id: 'ingen', FullName: "( Ingen )" }].concat(model.squad.filter(function (element) { return element.Id != model.PlayerId }));
         return (<div>
                    <br />
 
-        <div className="form-horizontal">
+        <div className="form-horizontal clearfix">
             <div className="row">
                 <div className="col-xs-12">
         <div className="col-sm-12 form-group no-padding">

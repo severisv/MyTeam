@@ -147,7 +147,9 @@ namespace MyTeam.Services.Domain
                     {
                         Id = g.Member.Id,
                         FullName = g.Member.Fullname
-                    }).ToList();
+                    })
+                    .ToList()
+                    .OrderBy(p => p.FullName);
         }
     }
 }
