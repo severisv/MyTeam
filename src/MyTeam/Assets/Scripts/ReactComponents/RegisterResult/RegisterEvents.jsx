@@ -1,4 +1,4 @@
-﻿var RegisterEventsView = React.createClass({
+﻿var RegisterEvents = React.createClass({
 
     render: function () {
         var model = this.props.model;

@@ -141,7 +141,7 @@
 
     renderEditView: function (actions) {
         if (this.props.editMode != false) {
-            return (<RegisterEventsView model={this.state} actions={actions }></RegisterEventsView>)
+            return (<RegisterEvents model={this.state} actions={actions }></RegisterEvents>)
         }
     }
 
