@@ -5,7 +5,8 @@
             eventTypes: [],
             events: [],
             editMode: this.props.editMode,
-            squad: []
+            squad: [],
+            showPlayerUrl : this.props.routes.SHOW_PLAYER
 
         });
     },
@@ -126,6 +127,8 @@
         return (
             <div className="game-showEventsWrapper">
                         <div className="row">
+                                                    <br />
+
                     <div className="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1">
                     <ListEvents model={this.state} actions={actions}></ListEvents>
                         {this.renderEditView(actions)}
@@ -133,6 +136,8 @@
                   </div>
                 <div className="row">
                     <div className="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+                        <br />
+                        <br />
                 <ListSquad model={this.state} actions={actions}></ListSquad>
                     </div>
                </div>

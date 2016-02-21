@@ -17,20 +17,30 @@
             {model.events.map(function(event, i)
             {
                 return(<div key={i} className="gameEvent">
-                          <span className="no-wrap"><i className={iconClassName(event.Type)}></i>&nbsp;&nbsp;{actions.getPlayerName(event.PlayerId)}</span><span>&nbsp; </span>
-                           {that.renderAssist(event, actions)}
+                          <span className="no-wrap"><i className={iconClassName(event.Type)}></i>&nbsp;&nbsp;
+                             {that.renderPlayerLink(actions, event, model)}
+                           </span><span>&nbsp; </span>
+                           {that.renderAssist(event, actions, model)}
                            {that.renderDeleteButton(event, actions, model)}
                 </div>)
             
             })}</div>
             )
-
-       
-   
     },
-    renderAssist: function (event, actions) {
+
+    renderPlayerLink: function (actions, event, model) {
+        if (event.PlayerId) {
+            var showPlayerUrl = model.showPlayerUrl + '?playerId=' + event.PlayerId
+            return (<a className="underline" href={showPlayerUrl}>{actions.getPlayerName(event.PlayerId)}</a>)
+        } else {
+            return (<span>{actions.getPlayerName(event.PlayerId)}</span>)
+        }
+    },
+
+    renderAssist: function (event, actions, model) {
         if (event.AssistedById) {
-            return(<span className="no-wrap">( <i className="flaticon-football119"></i> {actions.getPlayerName(event.AssistedById)} )</span>)
+            var showPlayerUrl = model.showPlayerUrl + '?playerId=' + event.AssistedById
+            return(<span className="no-wrap">( <i className="flaticon-football119"></i> <a className="underline" href={showPlayerUrl}>{actions.getPlayerName(event.AssistedById)}</a> )</span>)
         }
     },
     renderDeleteButton: function (event, actions, model) {

@@ -5,12 +5,13 @@
         var actions = this.props.actions;
         return (<div>
                 <br />
-                    <h4>Tropp</h4>
+                    <h5>Tropp</h5>
     <div className="flex flex-justify-center game-squadList">
                 <ul className="list-unstyled">
-                    {model.squad.map(function(player) {
+                    {model.squad.map(function (player) {
+                        var showPlayerUrl = model.showPlayerUrl + '?playerId='+player.Id
                         return(<li key={player.Id}>
-                                    <i className="flaticon-soccer18"></i>&nbsp;<a className="underline">{player.FullName}</a>
+                                    <i className="flaticon-soccer18"></i>&nbsp;<a href={showPlayerUrl} className="underline">{player.FullName}</a>
                                 </li>)
 })}
                 </ul>

@@ -7,7 +7,9 @@ var registerEvents = React.createElement(ShowGame, { routes: {
     GET_EVENTTYPES: element.data('get-gameeventtypes-url'),
     ADD_EVENT: element.data('add-gameevent-url'),
     GET_EVENTS: element.data('get-gameevents-url'),
-    DELETE_EVENT: element.data('delete-event-url')
+    DELETE_EVENT: element.data('delete-event-url'),
+    SHOW_PLAYER: element.data('show-player-url')
+
 }});
 
 
