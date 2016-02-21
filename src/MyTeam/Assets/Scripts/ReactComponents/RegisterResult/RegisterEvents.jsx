@@ -15,13 +15,13 @@
                 <div className="col-sm-9">
                     <select className="form-control" onChange={actions.handleEventChange}>
                         {model.eventTypes.map(function (type) {
-                        return (
+                            return (
                     <option key={type.Value} value={type.Value}>{type.Name}</option>);
-                    })}
+                        })}
                     </select>
                     <span className="text-danger"></span>
-            </div>
-            </div>
+                </div>
+        </div>
             <div className="col-sm-12 form-group no-padding">
             <label className="col-sm-3 control-label">Hvem</label>
             <div className="col-sm-9">
@@ -29,24 +29,20 @@
                     {actions.getEventPlayers(model.Type).map(function (player) {
                         return (
                             <option key={player.Id} value={player.Id}>{player.FullName}</option>);
-                          })}
+                    })}
                 </select>
                 <span className="text-danger"></span>
             </div>
-
-
             </div>
-
-                        {this.renderAssistForm(model, actions,assistPlayers)}
-                    </div>
-
+                    {this.renderAssistForm(model, actions, assistPlayers)}
                 </div>
+            </div>
                      <div className="col-sm-12 form-group no-padding">
                          <div className="col-sm-offset-3 col-xs-12">
                         <button className="btn btn-primary" onClick={actions.handleSubmit}>Legg til</button>
                          </div>
                      </div>
-            </div>
+        </div>
         </div>
     );
     },

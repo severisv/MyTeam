@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
@@ -25,7 +26,7 @@ namespace MyTeam.Controllers
                         Value = e,
                         ValueName = e.ToString()
                     });
-         
+
             return new JsonResult(gameEventTypes);
         }
 
@@ -43,7 +44,6 @@ namespace MyTeam.Controllers
 
         public IActionResult Get(Guid gameId)
         {
-
             var events = GameEventService.GetGameEvents(gameId);
 
             return new JsonResult(events);
