@@ -40,5 +40,7 @@ namespace MyTeam
         }
 
         public bool Exists => Id != Guid.Empty;
+
+        public string HighlightSelfClass(Guid playerId) => playerId == Id ? "userPlayer" : "";
     }
 }

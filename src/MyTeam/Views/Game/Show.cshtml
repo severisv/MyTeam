@@ -20,36 +20,39 @@
             }
         }
         <h3 class="game-header">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
-        <hr />
-        <div class="row">
-            <div class="col-sm-6">
-                <p class="col-sm-4 col-xs-2">
-                    <i class="fa fa-13x fa-calendar pull-right"></i>
-                </p>
-                <p class="col-sm-8">@Model.Game.DateTime.ToNoFull()</p>
-                <p class="col-sm-4 col-xs-2">
-                    <i class="fa fa-13x fa-clock-o pull-right"></i>
-                </p>
-                <p class="col-sm-8">@Model.Game.DateTime.ToNoTime()</p>
-            </div>
-            <div class="col-sm-6">
-                <p class="col-sm-4 col-xs-2">
-                    <i class="@Icons.GameType(Model.Game.GameType) pull-right"></i>
-                </p>
-                <p class="col-sm-8">@Model.Game.GameType</p>
-                <p class="col-sm-4 col-xs-2">
-                    <i class="fa fa-13x fa-map-marker pull-right"></i>
-                </p>
-                <p class="col-sm-8">@Model.Game.Location</p>
+        <hr/>
+        <div class="row game-details">
+            <div class="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1 no-padding">
+                <div class="col-sm-5">
+                    <p class="col-sm-4 col-xs-2">
+                        <i class="fa fa-13x fa-calendar pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.DateTime.ToNoFull()</p>
+                    <p class="col-sm-4 col-xs-2">
+                        <i class="fa fa-13x fa-clock-o pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.DateTime.ToNoTime()</p>
+                </div>
+                <div class="col-sm-7">
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="@Icons.GameType(Model.Game.GameType) pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.GameType</p>
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="fa fa-13x fa-map-marker pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.Location</p>
+                </div>
             </div>
         </div>
-
+        <br/>
         <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+            <div class="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1">
                 <div id="game-showEvents"
                      data-get-players-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
                      data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
                      data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})">
+                </div>
             </div>
         </div>
     </div>
@@ -59,7 +62,6 @@
 
 </div>
 
-@section Scripts
-{
+@section Scripts {
     <script src="~/scripts/Game/show.js"></script>
 }

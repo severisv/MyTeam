@@ -104,7 +104,7 @@
         else return "Selvmål";
     },
 
-    getEventPlayers(type) {
+    getEventPlayers: function(type) {
         return type == 0 ?
           [{ Id: 'ingen', FullName: "( Selvmål )" }].concat(this.state.players) :
           this.state.players;
@@ -125,7 +125,7 @@
         return (
             <div className="game-showEventsWrapper">
                 <ListEvents model={this.state} actions={actions}></ListEvents>
-              {this.renderEditView(actions)}
+                {this.renderEditView(actions)}
             </div>);
     },
 

@@ -17,7 +17,7 @@
             {model.events.map(function(event, i)
             {
                 return(<div key={i} className="gameEvent">
-                          <i className={iconClassName(event.Type)} ></i><span> {actions.getPlayerName(event.PlayerId)}</span>
+                          <span className="no-wrap"><i className={iconClassName(event.Type)}></i>&nbsp;&nbsp;{actions.getPlayerName(event.PlayerId)}</span><span>&nbsp; </span>
                            {that.renderAssist(event, actions)}
                            {that.renderDeleteButton(event, actions, model)}
                 </div>)
@@ -30,7 +30,7 @@
     },
     renderAssist: function (event, actions) {
         if (event.AssistedById) {
-            return(<span className="no-wrap"> ( <i className="flaticon-football119"></i> {actions.getPlayerName(event.AssistedById)} )</span>)
+            return(<span className="no-wrap">( <i className="flaticon-football119"></i> {actions.getPlayerName(event.AssistedById)} )</span>)
         }
     },
     renderDeleteButton: function (event, actions, model) {

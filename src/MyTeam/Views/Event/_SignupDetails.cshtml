@@ -1,8 +1,6 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
 @using MyTeam
-@using MyTeam.Models.Enums
-@using MyTeam.Resources
 @model MyTeam.ViewModels.Events.EventViewModel
 
 <div id="event-signupDetails-@Model.Id">
@@ -25,20 +23,15 @@
                 <span class="label label-danger"><i class="fa fa-warning"></i></span>
             </div>
         }
-
-
     }
-
     <br />
     <div mt-alert="@AlertType.Info">@ViewBag.SignupMessage</div>
-
-
     @if (!Model.IsGame)
     {
 
         if (Model.HasPassed())
         {
-            <div id="signups-@Model.Id">
+            <div id="signups-@Model.Id" class="signups-training-hasPassed">
                 <div class="attendee-links">
                     <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
                         <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
@@ -46,12 +39,12 @@
                 </div>
                 <div class="panel">
                     <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                        <div class="flex">
+                        <div class="flex event-attendees">
                             <ul class="list-unstyled flex-2">
                                 @foreach (var player in Model.DidAttend)
                                 {
                                     <li>
-                                        <a asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
                                         <span>@player.FirstName</span><span>&nbsp;@player.LastName</span></a>
                                 </li>
                                 }
@@ -80,13 +73,17 @@
                                 @foreach (var player in Model.Attending)
                                 {
                                     <li>
-                                        <a class="attendee" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
                                             <i class="fa fa-user"></i>&nbsp;
-                                            <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
-                                        </a> @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
-                                             {
-                                                 <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                             }
+                                            <span>@player.FirstName</span>
+                                            <span class="hidden-xs">@player.LastName</span>
+                                            <span class="hidden-sm hidden-md hidden-lg">@player.LastInitials</span>
+
+                                        </a> 
+                                        @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                        {
+                                            <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                        }
                                     </li>
                                 }
                             </ul>
@@ -94,9 +91,11 @@
                                 @foreach (var player in Model.NotAttending)
                                 {
                                     <li>
-                                        <a class="attendee" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
                                             <i class="fa fa-user"></i>&nbsp;
-                                            <span>@player.FirstName</span><span class="hidden-xxs">&nbsp;@player.LastName</span>
+                                            <span>@player.FirstName</span>
+                                            <span class="hidden-xs">@player.LastName</span>
+                                            <span class="hidden-sm hidden-md hidden-lg">@player.LastInitials</span>
                                         </a> @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                              {
                                                  <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
@@ -129,7 +128,7 @@
                             @foreach (var player in Model.Squad)
                             {
                                 <li>
-                                    <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>

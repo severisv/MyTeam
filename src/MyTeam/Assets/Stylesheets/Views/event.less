@@ -24,15 +24,38 @@
 
 .event-signup {
     margin-left: 16.66%;
-    .r-under-xs({
-        margin-left:0;
+
+      .r-under-xs({
+        margin-left: 2em;        
     });
 
-
+      .r-under-xxs({
+             margin-left:1em;
+    });
     .panel {
         background-color: transparent;
         border: 0;
     }
+}
+.event-signup--kamp {
+      .r-under-xs({
+        margin-left: 16.66%;
+    });
+     .r-under-xxs({
+        margin-left: 10%;
+    });
+  
+}
+
+.signups-training-hasPassed {
+    .r-under-xs({
+             margin-left: 16.66%;
+
+    });
+       .r-under-xxs({
+        margin-left: 10%;
+    });
+
 }
 
 
@@ -61,9 +84,9 @@
                  margin-left: -1.6em;
                 .r-under-xs({margin-left: -1.4em;});
                 .r-under-xxs({                
-                    margin-left: -1.1em;                                              
+                    margin-left: -1.3em;                                              
                     font-size:0.7em;
-                    margin-top:0.2em;
+                    margin-top:0.25em;
 });
                 position: absolute;
                 content: "\f078";
@@ -79,9 +102,9 @@
                 margin-left: -1.4em;
                 .r-under-xs({margin-left: -1.2em;});
                 .r-under-xxs({ 
-                    margin-left: -0.85em;
+                    margin-left: -1.1em;
                     font-size:0.7em;
-                    margin-top: 0.3em;
+                    margin-top: 0.35em;
                     
 });
                 content: "\f054";
@@ -113,6 +136,9 @@
 
 .event-attendees .attendee {
     color: @black-faded;
+    &.userPlayer {
+            color: @greenDarkSubtle;
+        }
       &:hover {
         color: @black;
     }
@@ -234,3 +260,4 @@ select.event-teamSelect {
 
     .r-under-xs({ line-height: 2.22em;});
 }
+

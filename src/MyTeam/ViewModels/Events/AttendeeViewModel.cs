@@ -14,6 +14,7 @@ namespace MyTeam.ViewModels.Events
         public Guid EventId { get; }
         public string Name => $"{FirstName} {LastName}";
         public string SignupMessage { get; set; }
+        public string LastInitials => $"{LastName.Substring(0,1)}";
 
         public AttendeeViewModel(Guid memberId, Guid eventId, string firstName, string lastName, string username, string signupMessage, bool? isAttending, bool? didAttend, bool? isSelected)
         {
