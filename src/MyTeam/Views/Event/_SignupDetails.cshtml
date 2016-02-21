@@ -82,7 +82,7 @@
                                         </a> 
                                         @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                         {
-                                            <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                            <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
                                         }
                                     </li>
                                 }
@@ -98,7 +98,7 @@
                                             <span class="hidden-sm hidden-md hidden-lg">@player.LastInitials</span>
                                         </a> @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                              {
-                                                 <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                                 <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
                                              }
                                     </li>
                                 }
@@ -131,7 +131,7 @@
                                     <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
-                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
                                     }
                                 </li>
                             }
