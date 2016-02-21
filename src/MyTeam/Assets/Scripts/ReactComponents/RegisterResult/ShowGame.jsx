@@ -1,4 +1,4 @@
-﻿var RegisterEvents = React.createClass({
+﻿var ShowGame = React.createClass({
     getInitialState: function () {
         return ({
             players: [],
