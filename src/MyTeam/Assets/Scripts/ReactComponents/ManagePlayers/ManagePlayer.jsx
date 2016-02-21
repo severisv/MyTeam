@@ -19,9 +19,9 @@ var ManagePlayer = React.createClass({
         var statuses = this.props.options.playerStatus;
         var statusList = [];
         for (var key in statuses) {
-            statusList.push(<option  key={statuses[key]}>{statuses[key]}</option>)
+            statusList.push(<option value={statuses[key]} key={statuses[key]}>{statuses[key]}</option>)
         }
-
+        
         return (
             <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>          
                {statusList}
