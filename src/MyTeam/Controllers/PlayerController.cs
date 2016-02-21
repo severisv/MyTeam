@@ -30,7 +30,7 @@ namespace MyTeam.Controllers
             model.SelectedPlayerId = playerId;
 
             ViewBag.PageName = model.SelectedPlayer != null ?
-                model.SelectedPlayer.Name: 
+                model.SelectedPlayer.Fullname: 
                 Res.PlayersOfType(type);
 
             return View("List",model);
