@@ -55,7 +55,7 @@ function applySignupFunctions(scope) {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(function () {
             postSignupMessage(element, message);
-        }, 750);
+        }, 1200);
 
 
 
