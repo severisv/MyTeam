@@ -97,6 +97,21 @@
         })
     },
 
+    removePlayerFromSquad: function (playerId) {
+        var that = this;
+        $.post(that.props.routes.SELECT_PLAYER,
+            { eventId: that.props.gameId, playerId: playerId, isSelected: false }
+        ).then(function (response) {
+            if (response.Success) {
+                that.setState({
+                    squad: that.state.squad.filter(function (player) {
+                        return player.Id != playerId
+                    })
+                })
+            }
+        })
+    },
+
 
     getPlayerName: function (playerId) {
         var squad = this.state.squad.filter(function (player) {
@@ -120,7 +135,8 @@
             handleSubmit: this.handleSubmit,
             getPlayerName: this.getPlayerName,
             deleteEvent: this.deleteEvent,
-            getEventPlayers: this.getEventPlayers
+            getEventPlayers: this.getEventPlayers,
+            removePlayerFromSquad: this.removePlayerFromSquad
         }
 
 

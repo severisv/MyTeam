@@ -38,13 +38,16 @@
                 <p class="col-sm-8">@Model.Game.Location</p>
             </div>
         </div>
-                <div id="registerResult-addEvent"
+        <div id="registerResult-addEvent"
+                     data-gameid="@Model.Game.Id"
                      data-get-players-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
                      data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
                      data-add-gameevent-url="@Url.Action("Add", "GameEventApi", new {gameId = Model.Game.Id})"
                      data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"
                      data-delete-event-url="@Url.Action("Delete", "GameEventApi", new {gameId = Model.Game.Id})"
-                     ></div>
+                     data-show-player-url="@Url.Action("Show", "Player")"
+                     data-select-player-url="@Url.Action("SelectPlayer", "Game")">
+                    </div>
             </div>
 </div>
 <div class="mt-sidebar">
