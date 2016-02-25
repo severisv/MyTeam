@@ -1,17 +1,13 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
-@using MyTeam.Models.Enums
-@using MyTeam.Resources
-
 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
 {
-
     <div mt-sidebar>
-        <ul class="nav nav-list">
+        <ul class="nav nav-list adminMenu">
             <li class="nav-header">@Res.CoachMenu</li>
-            <li><a asp-action="create" asp-controller="event"><i class='fa fa-plus'></i> @Res.CreateEvent</a></li>
-            <li><a asp-action="index" asp-controller="admin"><i class='fa fa-user'></i> @Res.ManagePlayers</a></li>
-            <li><a asp-action="addplayers" asp-controller="admin"><i class='fa fa-plus'></i> @Res.Add @Res.Players.ToLower()</a></li>        </ul>
+            @Html.Partial("_CoachMenuItems")
+
+        </ul>
     </div>
 
 }

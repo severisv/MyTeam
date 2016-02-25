@@ -53,16 +53,16 @@ var ManagePlayer = React.createClass({
 
         var player = this.state.player;
         var toggleTeam = this.props.toggleTeam;
-        var teamElements = this.props.teams.map(function (team, i) {
+        var teamElements = this.props.teams.map(function (team) {
             var checked = player.TeamIds.indexOf(team.Id) > -1;
-            return (<div key={team.ShortName + player.Id} className="col-xs-1 no-padding align-center"><input onClick={toggleTeam.bind(null, team.Id, player.Id)} type="checkbox" checked={checked} className="form-control" /></div>)
+            return (<div key={team.ShortName + player.Id} className="col-xs-2 col-sm-1 no-padding align-center"><input onClick={toggleTeam.bind(null, team.Id, player.Id)} type="checkbox" checked={checked} className="form-control" /></div>)
         });
         var editPlayerHref = this.props.routes.EDIT_PLAYER + "?playerId=" + player.Id;
         return (<div className="row list-player">
                <div className="col-sm-3 mp-name">{player.FullName}</div>
-               <div className="col-sm-2 mp-status">{this.renderStatusOptions()}</div>
+               <div className="col-sm-2 col-xs-7  mp-status">{this.renderStatusOptions()}</div>
                 {teamElements}
-               <div className="col-sm-5 mp-roles">{this.renderRoles()}
+               <div className="col-sm-5 col-xs-12 mp-roles">{this.renderRoles()}
                     <a className="pull-right" title="Rediger spiller" href={editPlayerHref}><i className="fa fa-edit"></i></a>
                 </div>
         </div>)

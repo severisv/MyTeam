@@ -110,12 +110,12 @@ var ManagePlayers = React.createClass({
         });
 
         var teamElements = teams.map(function (team, i) {
-            return (<div key={team.Id} className="col-xs-1 no-padding subheadline align-center">{team.ShortName}</div>)
+            return (<div key={team.Id} className="col-sm-1  col-xs-2 no-padding subheadline align-center">{team.ShortName}</div>)
         });
 
         return (<div className="manage-players">
     <div className="row">
-        <div className="col-xs-3 headline"><strong>{playerStatus}</strong></div>
+        <div className="col-sm-3 col-xs-7 headline"><strong>{playerStatus}</strong></div>
         <div className="col-xs-2 subheadline hidden-xs"><strong>Status</strong></div>
         {teamElements}
         <div className="col-xs-3 subheadline hidden-xs"><strong>Roller</strong></div>

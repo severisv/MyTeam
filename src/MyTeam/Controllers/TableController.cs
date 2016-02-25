@@ -31,7 +31,8 @@ namespace MyTeam.Controllers
                 .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
                     Id = t.Id,
-                    Name = t.Name
+                    Name = t.Name,
+                    ShortName = t.ShortName
                 })
                 .ToList();
 

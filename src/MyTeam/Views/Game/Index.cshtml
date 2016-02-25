@@ -23,7 +23,7 @@
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var season in Model.Seasons)
                 {
-                        <option value="@Url.Action("Index", "Game", new {teamId = Model.TeamId, year = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year ? "selected" : "")">@season.DisplayName</option>
+                        <option value="@Url.Action("Index", "Game", new {teamId = Model.TeamId, year = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year)">@season.DisplayName</option>
                     }
                 </select>
             </div>

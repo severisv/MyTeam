@@ -109,7 +109,7 @@ hr.sm {
 
 .linkSelect {
     max-width: 7em;
-    margin-top: 0.25em;
+    .r-under-xs({    margin-top: 0.25em;});
     background: transparent;
     font-size: 1.5em;
     text-align: center;
@@ -117,5 +117,8 @@ hr.sm {
             color: @link-color;
     option {
         background: rgba(0,0,0,0.1);
+    }
+    &:hover {
+        border:1px solid @link-color;
     }
 }
