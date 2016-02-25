@@ -30,7 +30,8 @@ namespace MyTeam.Services.Repositories
                 ClubIdentifier = "wamkam",
                 Logo = "image/upload/v1450865103/wamkam/wamkam_sm.png",
                 Favicon = "image/upload/v1448650991/wamkam/favicon.png",
-            };
+                Description = "Waldemarskameratene FK er en norsk breddefotballklubb stiftet 21.08.2007. Klubben har to lag, Wam-Kam 1 og Wam-Kam 2, som deltar hhv. i 4. og 8. divisjon i seriesystemet til Oslo Fotballkrets."
+        };
 
 
             if (!context.Clubs.Any())

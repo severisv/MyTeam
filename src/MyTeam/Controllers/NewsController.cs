@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
@@ -14,14 +16,15 @@ namespace MyTeam.Controllers
 
         [FromServices]
         public IArticleService ArticleService { get; set; }
+        [FromServices]
+        public ApplicationDbContext DbContext { get; set; }
 
         [Route("")]
         [Route("nyheter")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
             var model = ArticleService.Get(HttpContext.GetClub().Id, skip, take);
-            ViewBag.MetaDescription =
-                "Waldemarskameratene FK er en norsk breddefotballklubb stiftet 21.08.2007. Klubben har to lag, Wam-Kam 1 og Wam-Kam 2, som deltar hhv. i 4. og 8. divisjon i seriesystemet til Oslo Fotballkrets.";
+            ViewBag.MetaDescription = DbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
             return View("Index", model);
         }
 

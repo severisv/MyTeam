@@ -16,6 +16,7 @@ namespace MyTeam.Models.Domain
         [Required]
         public string Logo { get; set; }
         public string Favicon { get; set; }
+        public string Description { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
         public virtual ICollection<Member> Members { get; set; } 
         public virtual ICollection<Event> Events { get; set; } 
