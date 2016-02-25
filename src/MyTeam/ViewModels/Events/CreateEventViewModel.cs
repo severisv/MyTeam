@@ -191,7 +191,10 @@ namespace MyTeam.ViewModels.Events
                 });
             }
 
-            var ev = Type == EventType.Kamp ? new Models.Domain.Game() : new Event();
+            var ev = Type == EventType.Kamp ? new Models.Domain.Game
+            {
+                TeamId = TeamIds.Single()
+            } : new Event();
 
             ev.Id = eventId;
             ev.ClubId = ClubId;

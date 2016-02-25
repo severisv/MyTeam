@@ -12,19 +12,19 @@
            asp-controller="player" asp-action="edit" asp-route-playerid="@Model.Id"><i class="fa fa-pencil-square-o"></i></a>
     }
     <table class="table">
-        <tr><td><label asp-for="Positions"></label></td><td>@Html.DisplayFor(m => m.PositionsString)</td></tr>
-        <tr><td><label asp-for="GameCount"></label></td><td>@Html.DisplayFor(m => m.GameCount)</td></tr>
-        <tr><td><label asp-for="GoalCount"></label></td><td>@Html.DisplayFor(m => m.GoalCount)</td></tr>
-        <tr><td><label asp-for="AssistCount"></label></td><td>@Html.DisplayFor(m => m.AssistCount)</td></tr>
-        <tr><td><label asp-for="StartDate">@Res.StartDate</label> </td><td>@Html.DisplayFor(m => m.StartYear)</td></tr>
-        <tr><td><label asp-for="BirthDate"></label></td><td>@Html.DisplayFor(m => m.BirthDate)</td></tr>
+        <tr><td><label asp-for="Positions"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.PositionsString)</td></tr>
+        <tr><td><label asp-for="StartDate">@Res.StartDate</label> </td><td class="playerStats--value">@Html.DisplayFor(m => m.StartYear)</td></tr>
+        <tr><td><label asp-for="BirthDate"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.BirthDate)</td></tr>
         <tr class="br"><td colspan="2"></td></tr>
-   @if (Context.Member().Exists)
-   {
-            <tr><td><label asp-for="PracticeCount">Treninger i @DateTime.Now.Year</label></td><td>@Html.DisplayFor(m => m.PracticeCount)</td></tr>
-            <tr><td><label asp-for="Email"></label></td><td>@Html.DisplayFor(m => m.Email)</td></tr>
-            <tr><td><label asp-for="Phone"></label></td><td>@Html.DisplayFor(m => m.Phone)</td></tr>
-   }
+    </table>
+    <div class="ajax-load" href="@Url.Action("GetStats", "Player", new {playerId = Model.Id})" ></div>
+    <table class="table">
+        @if (Context.Member().Exists)
+        {
+            <tr><td><label asp-for="PracticeCount">Treninger i @DateTime.Now.Year</label></td><td class="playerStats--value">@Html.DisplayFor(m => m.PracticeCount)</td></tr>
+            <tr><td><label asp-for="Email"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Email)</td></tr>
+            <tr><td><label asp-for="Phone"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Phone)</td></tr>
+        }
     </table>
 </div>
 

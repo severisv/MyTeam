@@ -34,6 +34,6 @@ namespace MyTeam.ViewModels.Game
             }
         }
 
-      
+        public bool HasScore => HomeScore != null && AwayScore != null;
     }
 }

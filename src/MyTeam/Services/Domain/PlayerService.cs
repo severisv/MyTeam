@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
@@ -11,7 +10,7 @@ using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Application;
 using MyTeam.Services.Repositories;
-using MyTeam.Settings;
+using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.Player;
 
 namespace MyTeam.Services.Domain
@@ -236,6 +235,34 @@ namespace MyTeam.Services.Domain
                         ImageMedium = p.ImageMedium,
                         PositionsString = p.PositionsString
                     }).ToList();
+        }
+
+        public IEnumerable<PlayerStatsViewModel> GetStats(Guid playerId, IEnumerable<Guid> teamIds)
+        {
+            var events = _applicationDbContext.GameEvents
+                .Include(ge => ge.Game)
+                .Where(e => e.PlayerId == playerId || e.AssistedById == playerId)
+                .ToList();
+
+            var games = _applicationDbContext.Games.Where(g => teamIds.Contains(g.TeamId))
+                .Select(g => new GameAttendanceViewModel { 
+                Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
+                TeamId = g.TeamId
+                }).ToList();
+
+            var grouped = events.GroupBy(e => e.Game.TeamId);
+
+
+            return grouped.Select(
+                @group => new PlayerStatsViewModel(
+                    playerId, 
+                    @group.Key,
+                    @group.Select(ge => new GameEventViewModel
+                    {
+                        AssistedById = ge.AssistedById, PlayerId = ge.PlayerId, GameId = @group.Key, Type = ge.Type
+                    }),
+                     games.Where(g => g.TeamId == @group.Key).Sum(g => g.Attendances)
+                    )).ToList().OrderByDescending(p => p.GameCount);
         }
     }
 }

@@ -131,7 +131,7 @@ namespace MyTeam.Services.Domain
 
         public void Delete(Guid clubId, Guid eventId)
         {
-            var ev = EventRepository.GetSingle(eventId);
+            var ev = _dbContext.Events.Single(e => e.Id == eventId);
             _dbContext.Remove(ev);
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCache(clubId);
@@ -139,8 +139,12 @@ namespace MyTeam.Services.Domain
 
         public void Update(CreateEventViewModel model, Guid clubId)
         {
-            var ev = _dbContext.Events.Include(e => e.EventTeams)
+            var ev = model.Type == EventType.Kamp ?
+                 _dbContext.Games.Include(e => e.EventTeams)
+                .Single(e => e.Id == model.EventId):
+                _dbContext.Events.Include(e => e.EventTeams)
                 .Single(e => e.Id == model.EventId);
+
             ev.Description = model.Description;
             ev.Headline = model.Headline;
             ev.Location = model.Location;
@@ -149,6 +153,11 @@ namespace MyTeam.Services.Domain
             ev.Voluntary = !model.Mandatory;
             ev.GameType = model.GameType;
             ev.IsHomeTeam = model.IsHomeTeam;
+
+            if (ev.Type == EventType.Kamp)
+            {
+                ((Game)ev).TeamId = model.TeamIds.Single();
+            }
 
             foreach (var id in model.TeamIds)
             {

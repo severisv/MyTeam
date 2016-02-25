@@ -32,5 +32,10 @@ namespace MyTeam
           
 
         }
+
+        public string GetTeamName(Guid teamId)
+        {
+            return Teams.SingleOrDefault(t => t.Id == teamId)?.ShortName;
+        }
     }
 }

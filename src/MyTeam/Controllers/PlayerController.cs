@@ -47,6 +47,16 @@ namespace MyTeam.Controllers
             return List(playerId: playerId);           
         }
 
+
+        [Route("stats")]
+        public IActionResult GetStats(Guid playerId)
+        {
+            var model = PlayerService.GetStats(playerId, Club.TeamIds);
+            return PartialView("_GetStats", model);
+         
+        }
+
+
         [Route("endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId, bool filterRedirect = false)

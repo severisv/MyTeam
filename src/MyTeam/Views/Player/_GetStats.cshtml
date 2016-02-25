@@ -1,0 +1,14 @@
+﻿@using System.Threading.Tasks
+@model IEnumerable<MyTeam.ViewModels.Player.PlayerStatsViewModel>
+
+@foreach (var item in Model)
+{
+    <h4 class="no-padding"><i class="flaticon-football43"></i> @Context.GetClub().GetTeamName(item.TeamId)</h4>
+    <table class="table playerStats">
+        <tr><td><label>@Res.GameCount</label></td><td class="playerStats--value">@Html.DisplayFor(m => item.GameCount)</td></tr>
+        <tr><td><label>@Res.GoalCount </label></td><td class="playerStats--value"><i class="fa fa-soccer-ball-o"></i> @Html.DisplayFor(m => item.GoalCount)</td></tr>
+        <tr><td><label>@Res.AssistCount </label></td><td class="playerStats--value"><i class="flaticon-football119"></i> @Html.DisplayFor(m => item.AssistCount)</td></tr>
+        <tr><td><label>Gule</label></td><td class="playerStats--value"><i class="icon icon-card-yellow"></i> @Html.DisplayFor(m => item.YellowCards)</td></tr>
+        <tr><td><label>Røde </label></td><td class="playerStats--value"><i class="icon icon-card-red"></i> @Html.DisplayFor(m => item.RedCards)</td></tr>
+    </table>
+}

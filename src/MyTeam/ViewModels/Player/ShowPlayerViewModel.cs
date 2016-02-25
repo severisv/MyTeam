@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Player
 {
@@ -31,13 +32,6 @@ namespace MyTeam.ViewModels.Player
         public string ImageMedium { get; set; }
         public string Fullname => $"{FirstName} {MiddleName} {LastName}";
 
-        [Display(Name = Res.GameCount)]
-        public int GameCount { get; set; }
-        [Display(Name = Res.GoalCount)]
-        public int GoalCount { get; set; }
-        [Display(Name = Res.AssistCount)]
-        public int AssistCount { get; set; }
-
         public int PracticeCount { get; set; }
 
         [Display(Name = Res.Positions)]
@@ -46,3 +40,5 @@ namespace MyTeam.ViewModels.Player
         public string Name => $"{FirstName} {LastName}";
     }
 }
+
+

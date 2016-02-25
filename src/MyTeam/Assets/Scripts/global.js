@@ -12,6 +12,7 @@ global.applyScopedJsComponents = function (selector) {
     applySelectLinkListeners($scope);
     applyMtAnchorListeners($scope);
     ajax.applyFormUpdateListener($scope);
+    ajax.applyLoadListener($scope);
 }
 
 global.applyJsComponents = function() {

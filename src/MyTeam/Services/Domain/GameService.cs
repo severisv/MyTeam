@@ -93,7 +93,7 @@ namespace MyTeam.Services.Domain
                     GameType = e.GameType
                 }).ToList();
 
-            return games;
+            return games.OrderBy(g => g.DateTime);
 
         }
 

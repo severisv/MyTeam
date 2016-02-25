@@ -46,14 +46,16 @@
                 </div>
             </div>
         </div>
-        <div id="game-showEvents"
-             data-gameid="@Model.Game.Id"
-             data-get-squad-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
-             data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
-             data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"
-             data-show-player-url="@Url.Action("Show", "Player")">
-        </div>
-         
+        @if (Model.Game.HasScore)
+        {
+            <div id="game-showEvents"
+                 data-gameid="@Model.Game.Id"
+                 data-get-squad-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
+                 data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
+                 data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"
+                 data-show-player-url="@Url.Action("Show", "Player")">
+            </div>
+        }
     </div>
 </div>
 <div class="mt-sidebar">

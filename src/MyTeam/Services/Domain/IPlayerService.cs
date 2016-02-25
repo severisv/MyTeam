@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -21,5 +19,6 @@ namespace MyTeam.Services.Domain
         void TogglePlayerTeam(Guid teamId, Guid guid, string clubName);
         ShowPlayerViewModel GetSingle(Guid playerId);
         IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId);
+        IEnumerable<PlayerStatsViewModel> GetStats(Guid playerId, IEnumerable<Guid> teamIds);
     }
 }

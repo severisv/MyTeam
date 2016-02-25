@@ -15,5 +15,13 @@ ajax.applyFormUpdateListener = function ($scope) {
 }
 
 
-
-
+ajax.applyLoadListener = function($scope)
+{
+    $scope.find('.ajax-load').each(function() {
+        var element = $(this);
+        var href = element.attr('href');
+        $.get(href).then(function(data) {
+            element.html((data));
+        })
+    });
+}
