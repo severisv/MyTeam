@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace MyTeam.ViewModels.Account
 {
@@ -10,16 +8,18 @@ namespace MyTeam.ViewModels.Account
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "E-post")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Passordet {0} må inneholde minst {2} tegn.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        [Display(Name = "Passord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bekreft passord")]
+        [Compare("Password", ErrorMessage = "Passordene stemmer ikke overens.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

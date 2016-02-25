@@ -18,7 +18,10 @@ namespace MyTeam.Controllers
         {
             var events =
                 DbContext.Events
-                .Where(e => e.Type == EventType.Trening && e.DateTime <= DateTime.Now && e.DateTime >= DateTime.Now.AddDays(-42))
+                .Where(e => e.Type == EventType.Trening 
+                        && e.DateTime <= DateTime.Now 
+                        && e.DateTime >= DateTime.Now.AddDays(-42)
+                        && e.Voluntary == false)
                 .Select(e => new { EventId = e.Id, TeamIds = e.EventTeams.Select(et => et.TeamId).ToList()})
                 .ToList();
             

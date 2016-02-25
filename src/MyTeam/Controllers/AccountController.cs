@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,7 +25,6 @@ namespace MyTeam.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IPlayerService _playerService;
         private readonly ICacheHelper _cacheHelper;
@@ -33,7 +33,6 @@ namespace MyTeam.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IPlayerService playerService,
             ICacheHelper cacheHelper)
@@ -41,7 +40,6 @@ namespace MyTeam.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _cacheHelper = cacheHelper;
             _playerService = playerService;
@@ -126,12 +124,11 @@ namespace MyTeam.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "Bekreft din konto",
+                        "Bekreft kontoen din ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(NewsController.Index), "News");
@@ -300,9 +297,9 @@ namespace MyTeam.Controllers
 
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = user.Email }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Nullstill passord",
-                   "Du kan nulstille passordet dit ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
+                   "Du kan nullstille passordet dit ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
                 return View("ForgotPasswordConfirmation");
             }
 
@@ -325,9 +322,14 @@ namespace MyTeam.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("passord/nullstill")]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword(string code = null, string email = "")
         {
-            return code == null ? View("Error") : View();
+            var model = new ResetPasswordViewModel
+            {
+                Code = code,
+                Email = email
+            };
+            return code == null ? View("Error") : View(model);
         }
 
         //
@@ -414,10 +416,6 @@ namespace MyTeam.Controllers
             if (model.SelectedProvider == "Email")
             {
                 await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
-            }
-            else if (model.SelectedProvider == "Phone")
-            {
-                await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
             }
 
             return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });

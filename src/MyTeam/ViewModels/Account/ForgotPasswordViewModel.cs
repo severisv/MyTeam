@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+
 
 namespace MyTeam.ViewModels.Account
 {
@@ -10,6 +7,7 @@ namespace MyTeam.ViewModels.Account
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "E-postadresse")]
         public string Email { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Microsoft.Extensions.Configuration;
 using MyTeam.Util;
 

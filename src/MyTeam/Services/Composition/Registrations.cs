@@ -32,6 +32,9 @@ namespace MyTeam.Services.Composition
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<ILogger, Logger>();
 
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+
+
 
         }
     }

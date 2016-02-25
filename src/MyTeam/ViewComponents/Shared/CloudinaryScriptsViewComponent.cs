@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyTeam.Util;
 using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.Shared
