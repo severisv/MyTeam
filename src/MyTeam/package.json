@@ -2,7 +2,7 @@
   "name": "ASP.NET",
   "version": "0.0.0",
   "devDependencies": {
-
+      "gulp-sourcemaps":"^1.6.0"      
   },
   "dependencies": {
     "jquery": "^2.2.0",
@@ -21,6 +21,4 @@
     "gulp-if": "^2.0.0",
     "react-dom": "^0.14.7"
   }
-
-
 }
