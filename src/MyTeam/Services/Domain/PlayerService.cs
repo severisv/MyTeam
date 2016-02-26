@@ -241,7 +241,7 @@ namespace MyTeam.Services.Domain
         {
             var events = _applicationDbContext.GameEvents
                 .Include(ge => ge.Game)
-                .Where(e => e.PlayerId == playerId || e.AssistedById == playerId)
+                .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp )
                 .ToList();
 
             var games = _applicationDbContext.Games.Where(g => teamIds.Contains(g.TeamId))

@@ -7,8 +7,19 @@
     <table class="table playerStats">
         <tr><td><label>@Res.GameCount</label></td><td class="playerStats--value">@Html.DisplayFor(m => item.GameCount)</td></tr>
         <tr><td><label>@Res.GoalCount </label></td><td class="playerStats--value"><i class="fa fa-soccer-ball-o"></i> @Html.DisplayFor(m => item.GoalCount)</td></tr>
-        <tr><td><label>@Res.AssistCount </label></td><td class="playerStats--value"><i class="flaticon-football119"></i> @Html.DisplayFor(m => item.AssistCount)</td></tr>
-        <tr><td><label>Gule</label></td><td class="playerStats--value"><i class="icon icon-card-yellow"></i> @Html.DisplayFor(m => item.YellowCards)</td></tr>
-        <tr><td><label>Røde </label></td><td class="playerStats--value"><i class="icon icon-card-red"></i> @Html.DisplayFor(m => item.RedCards)</td></tr>
+      @if (item.AssistCount > 0)
+      {
+          <tr><td><label>@Res.AssistCount </label></td><td class="playerStats--value"><i class="flaticon-football119"></i> @Html.DisplayFor(m => item.AssistCount)</td></tr>
+      }
+        <tr><td><label>Kort</label></td><td class="playerStats--value">
+            @if (item.YellowCards > 0)
+            {
+                <i class="icon icon-card-yellow"></i> @Html.DisplayFor(m => item.YellowCards)
+            }
+                 @if (item.RedCards > 0)
+                 {
+                    <i class="icon icon-card-red"></i> @Html.DisplayFor(m => item.RedCards)
+                 }
+        </td></tr>
     </table>
 }
