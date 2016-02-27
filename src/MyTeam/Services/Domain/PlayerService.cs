@@ -83,7 +83,7 @@ namespace MyTeam.Services.Domain
         {
             return _playerRepository.Get().Select(p => p.FacebookId);
         }
-        
+
         public void SetPlayerStatus(Guid id, PlayerStatus status, string clubName)
         {
             var player = _playerRepository.GetSingle(id);
@@ -145,14 +145,14 @@ namespace MyTeam.Services.Domain
         {
             var players = _playerRepository.Get().Where(p => p.ClubId == clubId)
                 .Select(p => new SimplePlayerDto
-            {
-                Id = p.Id,
-                FirstName = p.FirstName,
-                MiddleName = p.MiddleName,
-                LastName = p.LastName,
-                Status = p.Status,
-                ImageSmall = p.ImageSmall,
-            }).ToList().OrderBy(p => p.Name);
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    Status = p.Status,
+                    ImageSmall = p.ImageSmall,
+                }).ToList().OrderBy(p => p.Name);
 
             var playerIds = players.Select(p => p.Id);
             var memberTeams = _applicationDbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
@@ -194,19 +194,19 @@ namespace MyTeam.Services.Domain
         {
             var player = _applicationDbContext.Players.Where(p => p.Id == playerId)
                 .Select(p => new ShowPlayerViewModel
-            {
-                Id = p.Id,
-                BirthDate = p.BirthDate,
-                FirstName = p.FirstName,
-                MiddleName = p.MiddleName,
-                LastName = p.LastName,
-                UserName = p.UserName,
-                StartDate = p.StartDate,
-                Phone = p.Phone,
-                ImageFull = p.ImageFull,
-                ImageMedium = p.ImageMedium,
-                PositionsString = p.PositionsString
-            }).Single();
+                {
+                    Id = p.Id,
+                    BirthDate = p.BirthDate,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    UserName = p.UserName,
+                    StartDate = p.StartDate,
+                    Phone = p.Phone,
+                    ImageFull = p.ImageFull,
+                    ImageMedium = p.ImageMedium,
+                    PositionsString = p.PositionsString
+                }).Single();
 
             var practiceCount =
                 _applicationDbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == DateTime.Now.Year);
@@ -218,7 +218,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
-            return 
+            return
                 _applicationDbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
                     .Select(p => new ShowPlayerViewModel
@@ -241,28 +241,34 @@ namespace MyTeam.Services.Domain
         {
             var events = _applicationDbContext.GameEvents
                 .Include(ge => ge.Game)
-                .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp )
+                .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp)
                 .ToList();
 
-            var games = _applicationDbContext.Games.Where(g => teamIds.Contains(g.TeamId))
-                .Select(g => new GameAttendanceViewModel { 
-                Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
-                TeamId = g.TeamId
+            var games = _applicationDbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp)
+                .Select(g => new GameAttendanceViewModel
+                {
+                    Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
+                    TeamId = g.TeamId
                 }).ToList();
 
             var grouped = events.GroupBy(e => e.Game.TeamId);
 
+            return teamIds.Select(teamId =>
+                new PlayerStatsViewModel(
+                        playerId, teamId,
+                            grouped.SingleOrDefault(g => g.Key == teamId)?.Select(ge => new GameEventViewModel
+                            {
+                                AssistedById = ge.AssistedById,
+                                PlayerId = ge.PlayerId,
+                                GameId = ge.Game.Id,
+                                Type = ge.Type
+                            }),
+                             games.Where(g => g.TeamId == teamId).Sum(g => g.Attendances)
+                    ))
+                    .ToList()
+                    .OrderByDescending(p => p.GameCount);
 
-            return grouped.Select(
-                @group => new PlayerStatsViewModel(
-                    playerId, 
-                    @group.Key,
-                    @group.Select(ge => new GameEventViewModel
-                    {
-                        AssistedById = ge.AssistedById, PlayerId = ge.PlayerId, GameId = @group.Key, Type = ge.Type
-                    }),
-                     games.Where(g => g.TeamId == @group.Key).Sum(g => g.Attendances)
-                    )).ToList().OrderByDescending(p => p.GameCount);
+
         }
     }
 }

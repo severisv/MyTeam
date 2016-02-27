@@ -24,7 +24,7 @@ namespace MyTeam.ViewModels.Player
         public PlayerStatsViewModel(Guid playerId, Guid teamId, IEnumerable<GameEventViewModel> gameEvents, int gameAttendances)
         {
             PlayerId = playerId;
-            GameEvents = gameEvents;
+            GameEvents = gameEvents ?? Enumerable.Empty<GameEventViewModel>();
             TeamId = teamId;
             GameCount = gameAttendances;
         }
