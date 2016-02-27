@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
-using MyTeam.Services.Repositories;
 
 namespace MyTeam.Services.Application
 {
@@ -18,15 +14,10 @@ namespace MyTeam.Services.Application
             new MemoryCacheEntryOptions {SlidingExpiration = new TimeSpan(0, 0, 0, 15) };
 
         public IMemoryCache Cache { get; set; }
-        public IRepository<Player> PlayerRepository { get; set; }
-        public IRepository<Club> ClubRepository { get; set; }
         private readonly ApplicationDbContext _dbContext;
 
-        public CacheHelper(IRepository<Player> playerRepository, IRepository<Club> clubRepository, IMemoryCache cache,
-            ApplicationDbContext dbContext)
+        public CacheHelper(IMemoryCache cache, ApplicationDbContext dbContext)
         {
-            PlayerRepository = playerRepository;
-            ClubRepository = clubRepository;
             Cache = cache;
             _dbContext = dbContext;
         }
@@ -48,7 +39,7 @@ namespace MyTeam.Services.Application
                 return member;
             }
             
-            member = PlayerRepository.Get()
+            member = _dbContext.Players
                 .Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name)
                 .Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
@@ -82,7 +73,7 @@ namespace MyTeam.Services.Application
             }
 
 
-            club = ClubRepository.Get().Where(c => c.ClubIdentifier == clubId).Select(
+            club = _dbContext.Clubs.Where(c => c.ClubIdentifier == clubId).Select(
                 c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder).Select(t => new TeamDto(t.Id, t.ShortName)).ToList())
             ).Single();
             

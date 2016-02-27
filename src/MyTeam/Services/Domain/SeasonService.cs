@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
-using MyTeam.Models.Domain;
-using MyTeam.Services.Repositories;
+using MyTeam.Models;
 using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Services.Domain
 {
     class SeasonService : ISeasonService
     {
-        private readonly IRepository<Season> _seasonRepository;
+        private readonly ApplicationDbContext _dbContext;
 
-        public SeasonService(IRepository<Season> seasonRepository)
+        public SeasonService(ApplicationDbContext dbContext)
         {
-            _seasonRepository = seasonRepository;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<SeasonViewModel> GetForTeam(Guid teamId)
         {
-            return _seasonRepository.Get()
+            return _dbContext.Seasons
                 .Where(s => s.TeamId == teamId)
                 .Select(s =>
                   new SeasonViewModel
@@ -41,7 +39,7 @@ namespace MyTeam.Services.Domain
     
         public IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId)
         {
-            var teamId = _seasonRepository.Get().Where(s => s.Id == seasonId).Select(s => s.Team.Id).Single();
+            var teamId = _dbContext.Seasons.Where(s => s.Id == seasonId).Select(s => s.Team.Id).Single();
             return GetForTeam(teamId);
         }
       

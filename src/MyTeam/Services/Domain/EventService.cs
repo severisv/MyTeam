@@ -4,7 +4,6 @@ using System.Linq;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
-using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Events;
 using Microsoft.Data.Entity;
 using MyTeam.Services.Application;
@@ -13,30 +12,25 @@ namespace MyTeam.Services.Domain
 {
     public class EventService : IEventService
     {
-        public IRepository<Event> EventRepository { get; set; }
-        public IRepository<EventAttendance> EventAttendanceRepository { get; set; }
-        public IRepository<Player> PlayerRepository { get; set; }
+
         private readonly ApplicationDbContext _dbContext;
         private readonly ICacheHelper _cacheHelper;
 
-        public EventService(IRepository<Event> eventRepository, IRepository<EventAttendance> eventAttendanceRepository, IRepository<Player> playerRepository, ApplicationDbContext dbContext, ICacheHelper cacheHelper)
+        public EventService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
-            EventRepository = eventRepository;
-            EventAttendanceRepository = eventAttendanceRepository;
-            PlayerRepository = playerRepository;
             _dbContext = dbContext;
             _cacheHelper = cacheHelper;
         }
 
         public Event Get(Guid id)
         {
-            return EventRepository.GetSingle(id);
+            return _dbContext.Events.Single(e => e.Id == id);
         }
 
         public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
 
-            var query = EventRepository.Get()
+            var query = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime >= DateTime.Now);
@@ -58,7 +52,7 @@ namespace MyTeam.Services.Domain
  
         public IList<Event> GetAll(EventType type, Guid clubId)
         {
-            return EventRepository.Get()
+            return _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .ToList();
@@ -84,7 +78,7 @@ namespace MyTeam.Services.Domain
 
         private IOrderedQueryable<Event> GetPastEvents(EventType type, Guid clubId)
         {
-            var result = EventRepository.Get()
+            var result = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime < DateTime.Now)
@@ -186,7 +180,7 @@ namespace MyTeam.Services.Domain
 
         public void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
         {
-            var attendance = EventAttendanceRepository.Get().FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
+            var attendance = _dbContext.EventAttendances.FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
             if (attendance != null)
             {
                 attendance.DidAttend = didAttend;
@@ -253,7 +247,7 @@ namespace MyTeam.Services.Domain
 
         public void SignupMessage(Guid eventId, Guid memberId, string message)
         {
-            var attendance = EventAttendanceRepository.Get().Single(a => a.EventId == eventId && a.MemberId == memberId);
+            var attendance = _dbContext.EventAttendances.Single(a => a.EventId == eventId && a.MemberId == memberId);
 
             attendance.SignupMessage = message;
             _dbContext.SaveChanges();
@@ -268,7 +262,7 @@ namespace MyTeam.Services.Domain
 
         public void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin)
         {
-            var attendance = EventAttendanceRepository.Get().FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
+            var attendance = _dbContext.EventAttendances.FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
             if (attendance != null)
             {
                 attendance.WonTraining = didWin;

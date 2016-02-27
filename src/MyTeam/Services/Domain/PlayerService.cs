@@ -9,7 +9,6 @@ using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Application;
-using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.Player;
 
@@ -18,40 +17,36 @@ namespace MyTeam.Services.Domain
 
     class PlayerService : IPlayerService
     {
-        private readonly IRepository<Player> _playerRepository;
-        private readonly IRepository<Club> _clubRepository;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
         private readonly ICacheHelper _cacheHelper;
 
-        public PlayerService(IRepository<Player> playerRepository, IRepository<Club> clubRepository, ApplicationDbContext applicationDbContext, ICacheHelper cacheHelper)
+        public PlayerService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
-            _playerRepository = playerRepository;
-            _clubRepository = clubRepository;
             _cacheHelper = cacheHelper;
-            _applicationDbContext = applicationDbContext;
+            _dbContext = dbContext;
         }
 
         public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress,
             string imageSmall, string imageMedium, string imageLarge)
         {
             var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
-                _playerRepository.Get().FirstOrDefault(p => p.UserName == emailAddress) :
-                _playerRepository.Get().FirstOrDefault(p => p.FacebookId == facebookId);
+                _dbContext.Players.FirstOrDefault(p => p.UserName == emailAddress) :
+                _dbContext.Players.FirstOrDefault(p => p.FacebookId == facebookId);
 
 
             if (!string.IsNullOrWhiteSpace(facebookId) && string.IsNullOrWhiteSpace(emailAddress))
             {
-                var correspondingUserLogin = _applicationDbContext.UserLogins.FirstOrDefault(u => u.ProviderKey == facebookId);
+                var correspondingUserLogin = _dbContext.UserLogins.FirstOrDefault(u => u.ProviderKey == facebookId);
                 if (correspondingUserLogin != null)
                 {
-                    emailAddress = _applicationDbContext.Users.Single(u => u.Id == correspondingUserLogin.UserId).Email;
+                    emailAddress = _dbContext.Users.Single(u => u.Id == correspondingUserLogin.UserId).Email;
                 }
             }
 
 
             if (existingPlayer == null)
             {
-                var club = _clubRepository.Get().Single(c => c.ClubIdentifier == clubId);
+                var club = _dbContext.Clubs.Single(c => c.ClubIdentifier == clubId);
 
                 var player = new Player
                 {
@@ -66,8 +61,8 @@ namespace MyTeam.Services.Domain
                     MiddleName = middleName
                 };
 
-                _applicationDbContext.Players.Add(player);
-                _playerRepository.CommitChanges();
+                _dbContext.Players.Add(player);
+                _dbContext.SaveChanges();
 
                 var message = string.IsNullOrWhiteSpace(facebookId)
                     ? $"{Res.Player} {Res.Added.ToLower()}"
@@ -81,20 +76,20 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<string> GetFacebookIds()
         {
-            return _playerRepository.Get().Select(p => p.FacebookId);
+            return _dbContext.Players.Select(p => p.FacebookId);
         }
 
         public void SetPlayerStatus(Guid id, PlayerStatus status, string clubName)
         {
-            var player = _playerRepository.GetSingle(id);
+            var player = _dbContext.Players.Single(p => p.Id == id);
             player.Status = status;
-            _playerRepository.CommitChanges();
+            _dbContext.SaveChanges();
             _cacheHelper.ClearCache(clubName, player.UserName);
         }
 
         public void TogglePlayerRole(Guid id, string role, string clubName)
         {
-            var player = _playerRepository.GetSingle(id);
+            var player = _dbContext.Players.Single(p => p.Id == id);
             var roles = player.Roles.ToList();
             if (roles.Any(r => r == role))
             {
@@ -105,13 +100,13 @@ namespace MyTeam.Services.Domain
                 roles.Add(role);
             }
             player.RolesString = string.Join(",", roles);
-            _playerRepository.CommitChanges();
+            _dbContext.SaveChanges();
             _cacheHelper.ClearCache(clubName, player.UserName);
         }
 
         public void EditPlayer(EditPlayerViewModel model, string clubId)
         {
-            var player = _playerRepository.GetSingle(model.PlayerId);
+            var player = _dbContext.Players.Single(p => p.Id == model.PlayerId);
             player.FirstName = model.FirstName;
             player.MiddleName = model.MiddleName;
             player.LastName = model.LastName;
@@ -123,14 +118,14 @@ namespace MyTeam.Services.Domain
             player.ImageFull = model.ImageFull;
             player.ImageMedium = model.ImageFull;
             player.ImageSmall = model.ImageFull;
-            _applicationDbContext.SaveChanges();
+            _dbContext.SaveChanges();
             _cacheHelper.ClearCache(clubId, player.UserName);
         }
 
         public void AddEmailToPlayer(string facebookId, string email)
         {
             if (string.IsNullOrWhiteSpace(facebookId)) return;
-            var players = _playerRepository.Get().Where(p => p.FacebookId == facebookId).ToList();
+            var players = _dbContext.Players.Where(p => p.FacebookId == facebookId).ToList();
             foreach (var player in players)
             {
                 if (string.IsNullOrWhiteSpace(player.UserName))
@@ -138,12 +133,12 @@ namespace MyTeam.Services.Domain
                     player.UserName = email;
                 }
             }
-            _playerRepository.CommitChanges();
+            _dbContext.SaveChanges();
         }
 
         public IEnumerable<SimplePlayerDto> GetDto(Guid clubId)
         {
-            var players = _playerRepository.Get().Where(p => p.ClubId == clubId)
+            var players = _dbContext.Players.Where(p => p.ClubId == clubId)
                 .Select(p => new SimplePlayerDto
                 {
                     Id = p.Id,
@@ -155,7 +150,7 @@ namespace MyTeam.Services.Domain
                 }).ToList().OrderBy(p => p.Name);
 
             var playerIds = players.Select(p => p.Id);
-            var memberTeams = _applicationDbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
+            var memberTeams = _dbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
             foreach (var player in players)
             {
                 player.TeamIds = memberTeams.Where(mt => mt.MemberId == player.Id).Select(mt => mt.TeamId).ToList();
@@ -167,10 +162,10 @@ namespace MyTeam.Services.Domain
         public void TogglePlayerTeam(Guid teamId, Guid playerId, string clubName)
         {
 
-            var existingTeam = _applicationDbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
+            var existingTeam = _dbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
             if (existingTeam != null)
             {
-                _applicationDbContext.Remove(existingTeam);
+                _dbContext.Remove(existingTeam);
             }
             else
             {
@@ -180,19 +175,19 @@ namespace MyTeam.Services.Domain
                     MemberId = playerId,
                     TeamId = teamId
                 };
-                _applicationDbContext.Add(memberTeam);
+                _dbContext.Add(memberTeam);
             }
 
-            var userName = _applicationDbContext.Members.Where(m => m.Id == playerId).Select(p => p.UserName).Single();
+            var userName = _dbContext.Members.Where(m => m.Id == playerId).Select(p => p.UserName).Single();
 
-            _applicationDbContext.SaveChanges();
+            _dbContext.SaveChanges();
             _cacheHelper.ClearCache(clubName, userName);
 
         }
 
         public ShowPlayerViewModel GetSingle(Guid playerId)
         {
-            var player = _applicationDbContext.Players.Where(p => p.Id == playerId)
+            var player = _dbContext.Players.Where(p => p.Id == playerId)
                 .Select(p => new ShowPlayerViewModel
                 {
                     Id = p.Id,
@@ -209,7 +204,7 @@ namespace MyTeam.Services.Domain
                 }).Single();
 
             var practiceCount =
-                _applicationDbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == DateTime.Now.Year);
+                _dbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == DateTime.Now.Year);
 
             player.PracticeCount = practiceCount;
 
@@ -219,7 +214,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return
-                _applicationDbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
+                _dbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
                     .Select(p => new ShowPlayerViewModel
                     {
@@ -239,12 +234,12 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<PlayerStatsViewModel> GetStats(Guid playerId, IEnumerable<Guid> teamIds)
         {
-            var events = _applicationDbContext.GameEvents
+            var events = _dbContext.GameEvents
                 .Include(ge => ge.Game)
                 .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp)
                 .ToList();
 
-            var games = _applicationDbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp)
+            var games = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp)
                 .Select(g => new GameAttendanceViewModel
                 {
                     Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),

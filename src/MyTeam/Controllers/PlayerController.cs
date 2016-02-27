@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
-using MyTeam.Models.Domain;
+using MyTeam.Models;
 using MyTeam.Models.Enums;
-using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
-using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Player;
 
 
@@ -17,7 +14,7 @@ namespace MyTeam.Controllers
     public class PlayerController : BaseController
     {
         [FromServices]
-        public IRepository<Player> PlayerRepository { get; set; }
+        public ApplicationDbContext DbContext { get; set; }
         [FromServices]
         public IPlayerService PlayerService { get; set; }
 
@@ -26,8 +23,10 @@ namespace MyTeam.Controllers
         {
             var players = PlayerService.GetPlayers(type, Club.Id);
 
-            var model = new ShowPlayersViewModel(players, editMode, type);
-            model.SelectedPlayerId = playerId;
+            var model = new ShowPlayersViewModel(players, editMode, type)
+            {
+                SelectedPlayerId = playerId
+            };
 
             ViewBag.PageName = model.SelectedPlayer != null ?
                 model.SelectedPlayer.Fullname: 
