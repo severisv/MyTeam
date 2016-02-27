@@ -10,8 +10,15 @@ form {
 /* Table */
 table.table {
     tr {
+        th {
+            font-size: 0.9em;
+            color: @black-faded;
+            text-transform: uppercase;
+        }
+
         td {
             border-top: 1px solid fade(black, 5);
+          
         }
 
         &.br {
@@ -35,3 +42,11 @@ table.table {
 table .team-primary {
     background: fade(@team-primary, 40) !important;
 }
+
+#leagueTable tr th,
+#leagueTable tr td {
+                   text-align: center;
+            &.table-text { text-align: left;}
+             }
+
+             
