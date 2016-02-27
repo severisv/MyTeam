@@ -5,7 +5,6 @@ using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
-using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
@@ -81,7 +80,7 @@ namespace MyTeam.Services.Domain
 
 
 
-        public ArticleViewModel CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
+        public void CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
         {
             var articleId = model.IsNew ? Guid.NewGuid() : model.ArticleId;
 
@@ -110,9 +109,6 @@ namespace MyTeam.Services.Domain
                 article.Headline = model.Headline;
                 _dbContext.SaveChanges();
             }
-
-
-            return Get(articleId);
         }
 
         public void Delete(Guid articleId)

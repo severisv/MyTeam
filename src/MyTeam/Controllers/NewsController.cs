@@ -59,8 +59,8 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var article = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
-                return View("Show", article);
+                ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
+                return RedirectToAction("Show", new {articleId = model.ArticleId});
             }
             return View("Edit", model);
 

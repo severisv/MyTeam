@@ -12,7 +12,7 @@ namespace MyTeam.Services.Domain
         PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take);
         ArticleViewModel Get(Guid articleId);
         PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take);
-        ArticleViewModel CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
+        void CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
         void Delete(Guid articleId);
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);
