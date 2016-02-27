@@ -2,18 +2,26 @@
 /* Tablesorter */
 
 table.tablesorter thead tr .header {
-    background-image: url(../lib/tablesorter/themes/blue/bg.gif);
-    background-repeat: no-repeat;
-    background-position: center right;
+    
+    &:after {
+        font-family: FontAwesome;
+        content: "\f0dc";
+        float:right;
+        color: @link-color;
+    }
     cursor: pointer;
 }
 
 table.tablesorter thead tr .headerSortUp {
-    background-image: url(../lib/tablesorter/themes/blue/asc.gif);
+     &:after {
+        content: "\f0de";      
+    }
 }
 
 table.tablesorter thead tr .headerSortDown {
-    background-image: url(../lib/tablesorter/themes/blue/desc.gif);
+     &:after {
+        content: "\f0dd";  
+    }
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
@@ -22,5 +30,4 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 
 table.tablesorter .nosort {
     pointer-events: none;
-    background: none !important;
 }
