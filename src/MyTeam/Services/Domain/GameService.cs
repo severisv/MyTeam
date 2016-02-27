@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Data.Entity;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
@@ -150,6 +149,34 @@ namespace MyTeam.Services.Domain
                     })
                     .ToList()
                     .OrderBy(p => p.FullName);
+        }
+
+        public void AddGames(List<ParsedGame> games, Guid clubId)
+        {
+            var gameEntities = games.Select(game => new Game
+            {
+                Id = game.Id,
+                DateTime = game.DateTime,
+                IsHomeTeam = game.IsHomeTeam,
+                AwayScore = game.AwayScore,
+                HomeScore = game.HomeScore,
+                Location = game.Location,
+                Opponent = game.Opponent,
+                TeamId = game.TeamId,
+                GameType = game.GameType,
+                Type = EventType.Kamp,
+                ClubId = clubId,
+                EventTeams = new List<EventTeam>
+                {
+                    new EventTeam
+                {
+                    Id = Guid.NewGuid(),
+                    TeamId = game.TeamId,
+                    EventId = game.Id
+                }}
+        }).ToList();
+            _dbContext.Games.AddRange(gameEntities);
+            _dbContext.SaveChanges();
         }
     }
 }

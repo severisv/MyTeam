@@ -19,10 +19,14 @@ namespace MyTeam.Settings
             {
                 case Models.Enums.GameType.Seriekamp:
                     return "fa fa-trophy";
-                case Models.Enums.GameType.Cupkamp:
+                case Models.Enums.GameType.Norgesmesterskapet:
                     return "flaticon-football42";
                 case Models.Enums.GameType.Treningskamp:
                     return "icon-handshake";
+                case Models.Enums.GameType.Kretsmesterskapet:
+                    return "flaticon-football33";
+                case Models.Enums.GameType.ObosCup:
+                    return "flaticon-trophy4";
                 default:
                     return string.Empty;
             }

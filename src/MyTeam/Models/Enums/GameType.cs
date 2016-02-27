@@ -1,9 +1,14 @@
-﻿namespace MyTeam.Models.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MyTeam.Models.Enums
 {
     public enum GameType
     {
         Treningskamp,
         Seriekamp,
-        Cupkamp
+        Norgesmesterskapet,
+        Kretsmesterskapet,
+        [Display(Name = "OBOS Cup")]
+        ObosCup
     }
 }

@@ -6,7 +6,7 @@
         var that = this;
         return (<div>
                 <br />
-                    <h5>Tropp</h5>
+                    <h5>{model.squad.length > 0 ? "Tropp" :""}</h5>
     <div className="flex flex-justify-center game-squadList">
                 <ul className="list-unstyled">
                     {model.squad.map(function (player) {

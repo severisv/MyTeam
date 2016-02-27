@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -29,7 +28,6 @@ namespace MyTeam.Controllers
         [Route("")]
         public IActionResult Index(int? year = null, Guid? teamId = null)
         {
-            year = year ?? DateTime.Now.Year;
             teamId = teamId ?? Club.TeamIds.First();
 
             var seasons = GameService.GetSeasons(teamId.Value);
@@ -43,6 +41,8 @@ namespace MyTeam.Controllers
                 })
                 .ToList();
 
+            year = year ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
+            
             var games = GameService.GetGames(teamId.Value, year.Value);
             var model = new GamesViewModel(seasons, teams, year.Value, games, teamId.Value);
 
@@ -92,18 +92,6 @@ namespace MyTeam.Controllers
         }
 
 
-
-        [Route("registrerhendelser")]
-        public IActionResult RegisterEvents(Guid? eventId)
-        {
-
-            var model = new RegisterEventsViewModel();
-
-            return View("Index", model);
-        }
-
-
-
         [Route("vis")]
         public IActionResult Show(Guid gameId)
         {
@@ -122,6 +110,50 @@ namespace MyTeam.Controllers
             var model = new ShowGameViewModel(game);
 
             return View("RegisterResult", model);
+        }
+
+
+        [Route("terminliste")]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult AddGames(Guid? teamId)
+        {
+            var teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+            {
+                Id = t.Id,
+                Name = t.Name
+            }).ToList();
+
+           var model =  new AddGamesViewModel
+            {
+               Teams  = teams,
+               TeamId = teamId ?? Guid.Empty
+           };
+            return View(model);
+        }
+
+        [Route("terminliste")]
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult AddGames(AddGamesViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View("AddGamesConfirm",  model);
+            }
+            return View(model);
+        }
+
+        [Route("terminliste/bekreft")]
+        [HttpPost]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult AddGamesConfirm(AddGamesViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                GameService.AddGames(model.Games.Games, Club.Id);
+                return RedirectToAction("Index", "Game", new {year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, teamId = model.TeamId});
+            }
+            return View(model);
         }
     }
 }

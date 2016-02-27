@@ -11,7 +11,7 @@ namespace MyTeam
         {
             return enumValue.GetType()
                             .GetMember(enumValue.ToString())
-                            .First().GetCustomAttribute<DisplayAttribute>().GetName();
+                            .First().GetCustomAttribute<DisplayAttribute>()?.GetName() ?? enumValue.ToString();
         }
     }
 }

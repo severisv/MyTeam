@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using MyTeam.ViewModels.Events;
 using MyTeam.ViewModels.Game;
 
 namespace MyTeam.Services.Domain
@@ -16,5 +15,6 @@ namespace MyTeam.Services.Domain
         void SetHomeScore(Guid gameId, int? value);
         void SetAwayScore(Guid gameId, int? value);
         IEnumerable<PlayerViewModel> GetSquad(Guid gameId);
+        void AddGames(List<ParsedGame> games, Guid clubId);
     }
 }

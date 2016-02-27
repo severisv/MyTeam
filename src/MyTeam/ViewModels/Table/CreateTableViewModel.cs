@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using MyTeam.Models.Domain;
 using MyTeam.Resources;
 
 namespace MyTeam.ViewModels.Table
 {
     public class CreateTableViewModel : IValidatableObject
     {
+     
 
         public string TableString { get; set; }
         [Required]

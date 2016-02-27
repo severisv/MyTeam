@@ -124,13 +124,28 @@ namespace MyTeam.Resources
 "12	Bøkeby	        0	0	0	0	0 - 0	      0	0	0	0 - 0	0	0	0	0 - 0	0	0            \n";
 
 
-        public const string Time = "Klokkeslett";
-        public const string Training = "Trening";
-        public const string Trainings = "Treninger";
-        public const string ToDate = "Til dato";
-        public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
-        public const string Unauthorized = "Ingen tilgang";
-        public const string Update = "Oppdater";
+        public const string SubmitGames = "Lim inn terminliste på formatet \n" +
+                                          "Dato \t  Dag   \t    Tid  \t Hjemmelag \t   3 : 1  \t  Bortelag \t    Sted \neks:\n\n" +
+"14.04.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t0 : 2	\tHøybr/Stovn \tJordal kunstgress \n" +
+"21.04.2015	\ttirsdag	\t20:15\t	Oldenborg \t2	1 : 2	\tWam-Kam Tørteberg kunstgress \n" +
+"28.04.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t0 : 3     \tHeggedal \tJordal kunstgress \n" +
+"05.05.2015	\ttirsdag	\t20:15\t	Fossum	          \t3 : 5	\tWam-Kam \tFossum kunstgress \n" +
+"12.05.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t1 : 5	\tGrüner \tJordal kunstgress \n" +
+"19.05.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t1 : 5	\tFortuna \tJordal kunstgress \n" +
+"26.05.2015	\ttirsdag	\t20:15\t	Vestli	         \t0 : 1	\tWam-Kam \tVestli kunstgress \n" +
+"02.06.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t0 : 7	\tAsker 2	\tJordal kunstgress\n" +
+"09.06.2015	\ttirsdag	\t20:15\t	Oslojuvelene	\t4 : 0	\tWam-Kam \tBjølsen kunstgress\n" +
+"16.06.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t3 : 5	\tVollen \tJordal kunstgress \n" +
+"04.08.2015	\ttirsdag	\t20:15\t	Høybr/Stovn	\t3 : 2	\tWam-Kam \tHøybråten kunstgress";                                          
+                                                                                                                                           
+
+       public const string Time = "Klokkeslett";
+       public const string Training = "Trening";
+       public const string Trainings = "Treninger";
+       public const string ToDate = "Til dato";
+       public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
+       public const string Unauthorized = "Ingen tilgang";
+       public const string Update = "Oppdater";
         public const string User = "Bruker";
         public const string Voluntary = "Frivillig";
         public const string Win = "Seier";
@@ -146,3 +161,5 @@ namespace MyTeam.Resources
         }
     }
 }
+
+

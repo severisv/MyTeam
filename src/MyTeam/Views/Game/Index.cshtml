@@ -11,11 +11,10 @@
                 <ul class="nav nav-pills mt-justified">
                     @foreach (var team in Model.Teams)
                 {
-                    <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
+                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                     }
                 </ul>
             </div>
-
         }
         @if (Model.Seasons.Any())
         {
@@ -33,7 +32,6 @@
     @if (!Model.Games?.Any() == true)
     {
         <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
-
     }
     else
     {
@@ -41,8 +39,7 @@
     }
 
 </div>
-@Html.Partial("_AdminMenu")
-
+@Html.Partial("_AdminMenu", Model.TeamId)
 
 @if (Model.Seasons?.Any() == true)
 {
@@ -51,14 +48,13 @@
             <li class="nav-header">@Res.Season.Pluralize()</li>
             @foreach (var season in Model.Seasons)
             {
-                <li><a class="@(Model.SelectedSeason.Year == season.Year ? "active" : "")" asp-controller="game" asp-action="index" asp-route-teamid="@Model.TeamId"asp-route-year="@season.Year">@season.DisplayName</a></li>
+                <li><a class="@(Model.SelectedSeason.Year == season.Year ? "active" : "")" asp-controller="game" asp-action="index" asp-route-teamid="@Model.TeamId" asp-route-year="@season.Year">@season.DisplayName</a></li>
             }
         </ul>
 
     </div>
-
 }
 
 @section Scripts {
-<script src="~/scripts/Table/table.js"></script>
-    }
+    <script src="~/scripts/Table/table.js"></script>
+}

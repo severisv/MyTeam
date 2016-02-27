@@ -11,7 +11,6 @@ namespace MyTeam.ViewModels.Game
         public DateTime DateTime { get; set; }
         public string Opponent { get; set; }
         public IEnumerable<string> Teams { get; set; }
-        public int Goals { get; set; }
         public int? HomeScore { get; set; }
         public int? AwayScore { get; set; }
         public bool IsHomeTeam { get; set; }
