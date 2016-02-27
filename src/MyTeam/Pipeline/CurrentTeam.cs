@@ -6,11 +6,13 @@ namespace MyTeam
     {
         public Guid Id { get; }
         public string ShortName { get; }
+        public string Name { get; set; }
 
-        public CurrentTeam(Guid id, string shortName)
+        public CurrentTeam(Guid id, string shortName, string name)
         {
             Id = id;
             ShortName = shortName;
+            Name = name;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace MyTeam.Services.Domain
         void SelectPlayer(Guid eventId, Guid playerId, bool isSelected);
         RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId);
         void PublishSquad(Guid eventId);
-        IEnumerable<GameViewModel> GetGames(Guid teamId, int year);
+        IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName);
         IEnumerable<SeasonViewModel> GetSeasons(Guid teamId);
         GameViewModel GetGame(Guid gameId);
         void SetHomeScore(Guid gameId, int? value);

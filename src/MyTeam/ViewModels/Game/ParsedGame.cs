@@ -83,5 +83,6 @@ namespace MyTeam.ViewModels.Game
             }
         }
 
+        public string LocationShort => Location.Replace(" kunstgress", "");
     }
 }

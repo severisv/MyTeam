@@ -70,20 +70,19 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<GameViewModel> GetGames(Guid teamId, int year)
+        public IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName)
         {
             var startDate = new DateTime(year, 1,1);
             var endDate = new DateTime(year, 12,31);
 
             var games = _dbContext.Games
-                .Where(e => e.Type == EventType.Kamp)
-                .Where(e => e.EventTeams.Count(et => et.TeamId == teamId) > 0)
+                .Where(e => e.TeamId == teamId)
                 .Where(e => e.DateTime.Date >= startDate && e.DateTime.Date <= endDate)
                 .Select(e => new GameViewModel
                 {
                     DateTime = e.DateTime,
                     Opponent = e.Opponent,
-                    Teams = e.EventTeams.Select(et => et.Team.Name),
+                    Teams = new List<string> {teamName},
                     Id = e.Id,
                     HomeScore = e.HomeScore,
                     AwayScore = e.AwayScore,
@@ -99,9 +98,9 @@ namespace MyTeam.Services.Domain
         public IEnumerable<SeasonViewModel> GetSeasons(Guid teamId)
         {
 
-            var years = _dbContext.Events
-                .Where(e => e.EventTeams.Count(et => et.TeamId == teamId) > 0)
-                .Where(e => e.Type == EventType.Kamp).Select(e => e.DateTime.Year).ToList().Distinct();
+            var years = _dbContext.Games
+                .Where(e => e.TeamId == teamId)
+                .Select(e => e.DateTime.Year).ToList().Distinct();
             
             return years.Select(y => new SeasonViewModel
             {

@@ -27,7 +27,7 @@ namespace MyTeam
                 ShortName = club.ShortName;
                 Favicon = club.Favicon;
                 Logo = club.Logo;
-                Teams = club.Teams.Select(t => new CurrentTeam(t.Id, t.ShortName));
+                Teams = club.Teams.Select(t => new CurrentTeam(t.Id, t.ShortName, t.Name));
             }
           
 

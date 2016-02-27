@@ -34,5 +34,6 @@ namespace MyTeam.ViewModels.Game
         }
 
         public bool HasScore => HomeScore != null && AwayScore != null;
+        public string LocationShort => Location.Replace(" kunstgress", "");
     }
 }

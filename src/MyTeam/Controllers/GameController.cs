@@ -32,8 +32,8 @@ namespace MyTeam.Controllers
 
             var seasons = GameService.GetSeasons(teamId.Value);
 
-            var teams = DbContext.Teams.OrderBy(t => t.SortOrder)
-                .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
+            var teams = Club.Teams
+                .Select(t => new TeamViewModel
                 {
                     Id = t.Id,
                     Name = t.Name,
@@ -43,7 +43,7 @@ namespace MyTeam.Controllers
 
             year = year ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
             
-            var games = GameService.GetGames(teamId.Value, year.Value);
+            var games = GameService.GetGames(teamId.Value, year.Value, teams.Single(t => t.Id == teamId.Value).Name);
             var model = new GamesViewModel(seasons, teams, year.Value, games, teamId.Value);
 
             return View("Index", model);
