@@ -39,7 +39,7 @@ namespace MyTeam.Settings
         private static string GetFacebookImage(string facebookId, int? width)
         {
             var type = "large";
-            if (width < 51) type = "small";
+            if (width < 51) type = "square";
             else if (width < 101) type = "normal";
 
             return $"https://graph.facebook.com/{facebookId}/picture?type={type}";
