@@ -31,9 +31,10 @@ namespace MyTeam.Controllers
                     Id = p.Id,
                     Name = p.Name,
                     Status = p.Status,
-                    ImageSmall = p.ImageSmall,
+                    Image = p.ImageFull,
                     Phone = p.Phone,
-                    Email = p.Email
+                    Email = p.Email,
+                    FacebookId = p.FacebookId
                 });
             var model = new MemberListViewModel(players, status);
             return View("ListMembers", model);

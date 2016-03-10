@@ -1,4 +1,6 @@
 ﻿@using System.Threading.Tasks
+@using MyTeam.Resources
+@using MyTeam.Settings
 @model MyTeam.ViewModels.Player.ShowPlayersViewModel
 
 
@@ -14,7 +16,7 @@
            class="mt-player-container "
            onclick="window.scrollTo(0,0);">
             <div class="image-container">
-                <img src="@Cloudinary.MemberImage(player.ImageMedium, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
+                <img src="@Cloudinary.MemberImage(player.ImageFull, player.FacebookId, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
             </div>
             <p>@Html.DisplayFor(p => player.Name)</p>
         </a>

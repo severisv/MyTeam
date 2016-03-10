@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Player
 {
@@ -29,7 +28,7 @@ namespace MyTeam.ViewModels.Player
 
         public int? StartYear => StartDate?.Year;
         public string ImageFull { get; set; }
-        public string ImageMedium { get; set; }
+        
         public string Fullname => $"{FirstName} {MiddleName} {LastName}";
 
         public int PracticeCount { get; set; }
@@ -38,6 +37,7 @@ namespace MyTeam.ViewModels.Player
         public string[] Positions => PositionsString?.Split(',');
         public string PositionsString { get; set; }
         public string Name => $"{FirstName} {LastName}";
+        public string FacebookId { get; set; }
     }
 }
 

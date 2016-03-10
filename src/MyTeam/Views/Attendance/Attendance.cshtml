@@ -1,5 +1,8 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
+@using MyTeam.Models.Enums
+@using MyTeam.Resources
+@using MyTeam.Settings
 @model MyTeam.ViewModels.Attendance.AttendanceViewModel
 
 @{
@@ -31,7 +34,7 @@
                 <tr>
                     <td class="attendance-player-image">
                         <span class="attendance-playerImageContainer">
-                                <img src="@Cloudinary.MemberImage(player.ImageSmall, 50, 50)" />&nbsp;
+                                <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)" />&nbsp;
                             </span>
                         <a asp-controller="player" asp-action="show" asp-route-playerid="@player.PlayerId">
                             @player.Name

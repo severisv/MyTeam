@@ -44,11 +44,15 @@ namespace MyTeam.ViewModels.Player
         [Display(Name = Res.Positions)]
         public string[] Positions { get; set; }
 
+        public string FacebookId { get; set; }
+
+
         public SelectList AllPositions => new SelectList(Enum.GetValues(typeof(Position)).Cast<Position>().Select(v => new SelectListItem
         {
             Text = v.ToString(),
             Value = ((int)v).ToString()
         }).ToList(), "Value", "Text");
+
 
 
         public EditPlayerViewModel()
@@ -67,6 +71,7 @@ namespace MyTeam.ViewModels.Player
             StartDate = player.StartDate.ToNoFull();
             BirthDate = player.BirthDate.ToNoFull();
             Positions = player.Positions;
+            FacebookId = player.FacebookId;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

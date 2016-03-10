@@ -15,7 +15,7 @@ namespace MyTeam.ViewModels.Events
             FirstName = player.FirstName;
             MiddleName = player.MiddleName;
             LastName = player.LastName;
-            ImageSmall = player.ImageSmall;
+            ImageFull = player.ImageFull;
             Status = player.Status;
             EventId = eventId;
         }

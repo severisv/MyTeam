@@ -36,12 +36,12 @@ namespace MyTeam.Services.Domain
                 WonTraining = e.WonTraining,
                 Member = new AttendanceMemberViewModel
                 {
-                    ImageSmall = e.Member.ImageSmall,
+                    Image = e.Member.ImageFull,
                     Id = e.MemberId,
-                    Name = e.Member.Name
+                    Name = e.Member.Name,
+                    FacebookId = e.Member.FacebookId
                 }
             }).ToList();
-
         }
 
         public IEnumerable<int> GetAttendanceYears(Guid clubId)
