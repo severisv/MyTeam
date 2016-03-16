@@ -46,10 +46,13 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<int> GetAttendanceYears(Guid clubId)
         {
-            return _dbContext.Events
-                .Where(e => e.ClubId == clubId 
-                && (e.Type == EventType.Trening || e.Type == EventType.Kamp))
-                .Select(e => e.DateTime.Year).ToList().Distinct();
+            return _dbContext.EventAttendances
+             .Where(e => e.Event.ClubId == clubId
+                    && (e.Event.Type == EventType.Trening || e.Event.Type == EventType.Kamp))
+             .Select(ea => ea.Event.DateTime.Year)
+             .ToList()
+             .Distinct()
+             .OrderByDescending(y => y);
         }
     }
 }

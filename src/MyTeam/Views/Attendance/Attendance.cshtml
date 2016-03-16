@@ -67,7 +67,7 @@
                 @foreach (var year in Model.Years)
                 {
                     <li>
-                        <a class="@(Model.Year == year ? "active" : "" )" asp-controller="stats" asp-action="attendance" asp-route-year="@year">
+                        <a class="@(Model.Year == year ? "active" : "" )" asp-controller="attendance" asp-action="attendance" asp-route-year="@year">
                             @year
                         </a>
                     </li>
