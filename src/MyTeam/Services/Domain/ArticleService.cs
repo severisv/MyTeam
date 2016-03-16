@@ -123,7 +123,7 @@ namespace MyTeam.Services.Domain
             var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
             return query.Select(a =>
                 new CommentViewModel(
-                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageSmall, a.MemberId),
+                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageFull, a.MemberId),
                     articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
         }
 
@@ -143,7 +143,7 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
 
             var member =_dbContext.Members.Where(m => m.Id == memberId)
-                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageSmall, m.Id))
+                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageFull, m.Id))
                     .Single();
             
             return new CommentViewModel(member, articleId, comment.Date, content);

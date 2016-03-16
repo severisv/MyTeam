@@ -22,7 +22,9 @@ namespace MyTeam.ViewModels.Attendance
                     Games = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Kamp),
                     NoShows = _attendance.Where(a => a.IsAttending && !a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
                     TrainingVictories = _attendance.Where(a => a.MemberId == player.Id).Count(a => a.WonTraining),
-                    ImageSmall =  player.ImageSmall
+                    Image =  player.Image,
+                    FacebookId = player.FacebookId
+
                 }).ToList()
                 .Where(p => p.Games > 0 || p.Trainings > 0 || p.NoShows > 0)
                 .OrderByDescending(p => p.Trainings)

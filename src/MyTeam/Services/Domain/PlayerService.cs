@@ -55,8 +55,6 @@ namespace MyTeam.Services.Domain
                     LastName = lastName,
                     UserName = emailAddress,
                     ClubId = club.Id,
-                    ImageSmall = imageSmall,
-                    ImageMedium = imageMedium,
                     ImageFull = imageLarge,
                     MiddleName = middleName
                 };
@@ -116,8 +114,6 @@ namespace MyTeam.Services.Domain
             player.PositionsString = model.PositionsString;
             player.ProfileIsConfirmed = true;
             player.ImageFull = model.ImageFull;
-            player.ImageMedium = model.ImageFull;
-            player.ImageSmall = model.ImageFull;
             _dbContext.SaveChanges();
             _cacheHelper.ClearCache(clubId, player.UserName);
         }
@@ -146,7 +142,7 @@ namespace MyTeam.Services.Domain
                     MiddleName = p.MiddleName,
                     LastName = p.LastName,
                     Status = p.Status,
-                    ImageSmall = p.ImageSmall,
+                    ImageFull = p.ImageFull,
                 }).ToList().OrderBy(p => p.Name);
 
             var playerIds = players.Select(p => p.Id);
@@ -199,8 +195,8 @@ namespace MyTeam.Services.Domain
                     StartDate = p.StartDate,
                     Phone = p.Phone,
                     ImageFull = p.ImageFull,
-                    ImageMedium = p.ImageMedium,
-                    PositionsString = p.PositionsString
+                    PositionsString = p.PositionsString,
+                    FacebookId = p.FacebookId
                 }).Single();
 
             var practiceCount =
@@ -227,8 +223,8 @@ namespace MyTeam.Services.Domain
                         StartDate = p.StartDate,
                         Phone = p.Phone,
                         ImageFull = p.ImageFull,
-                        ImageMedium = p.ImageMedium,
-                        PositionsString = p.PositionsString
+                        PositionsString = p.PositionsString,
+                        FacebookId = p.FacebookId
                     }).ToList();
         }
 

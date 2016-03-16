@@ -7,7 +7,7 @@
       mt-pushstate="@Model.Fullname">
     <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
         <div class="cloudinary-preview editPlayer-image ">
-            <img div src="@Cloudinary.MemberImage(Model.ImageFull, 400)"/>
+            <img div src="@Cloudinary.MemberImage(Model.ImageFull, Model.FacebookId, 400)"/>
         </div>
         <input name="file" type="file"
                class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageFull"/>

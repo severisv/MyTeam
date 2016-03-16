@@ -42,10 +42,7 @@ namespace MyTeam.Models.Domain
 
         [NotMapped]
         public int? StartYear => StartDate?.Year;
-        public string Imagename { get; set; }
 
-        public string ImageSmall { get; set; }
-        public string ImageMedium { get; set; }
         public string ImageFull { get; set; }
 
         public bool ProfileIsConfirmed { get; set; }

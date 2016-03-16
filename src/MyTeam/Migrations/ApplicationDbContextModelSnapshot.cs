@@ -322,12 +322,6 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("ImageFull");
 
-                    b.Property<string>("ImageMedium");
-
-                    b.Property<string>("ImageSmall");
-
-                    b.Property<string>("Imagename");
-
                     b.Property<string>("LastName");
 
                     b.Property<string>("MiddleName");
