@@ -11,7 +11,7 @@ namespace MyTeam.Services.Domain
         Event Get(Guid id);
         IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false);
         IList<Event> GetAll(EventType type, Guid clubId);
-        IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId, int? count = null);
+        IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId);
         AttendeeViewModel SetAttendance(Guid eventId, Guid playerId,  bool isAttending, Guid clubId);
         void Add(Guid clubId, params  Event[] ev);
         void Delete(Guid clubId, Guid eventId);

@@ -30,23 +30,43 @@ namespace MyTeam.Services.Domain
         public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
 
-            var query = _dbContext.Events
+            var queryable = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime >= DateTime.Now);
 
             if (!showAll)
-                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp));
+                queryable = queryable.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp));
 
 
-                return query
+            var query = queryable
+                .Include(t => t.EventTeams)
+                .Include(t => t.Attendees)
+                .ToList();
+
+            var result = query
                 .OrderBy(e => e.DateTime)
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected, null)).ToList(),
                     e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).ToList();
+
+
+            var memberIds = result.SelectMany(e => e.Attendees.Select(a => a.MemberId)).Distinct();
+
+            var members =
+                _dbContext.Members.Where(m => memberIds.Contains(m.Id))
+                    .Select(m => new AttendeePlayerViewModel(m.Id, m.FirstName, m.LastName, m.UserName)).ToList();
+
+
+            foreach (var attendee in result.SelectMany(ev => ev.Attendees))
+            {
+                attendee.Player = members.Single(m => m.Id == attendee.MemberId);
+            }
+
+            return result;
         }
 
  
@@ -58,22 +78,35 @@ namespace MyTeam.Services.Domain
                 .ToList();
         }
 
-        public IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId, int? count = null)
+        public IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId)
         {
-            var result = GetPastEvents(type, clubId);
+            var queryable = GetPastEvents(type, clubId);
+
+            var result = queryable
+                .Include(t => t.EventTeams)
+                .Include(t => t.Attendees)
+                .ToList();
 
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected)),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, a.EventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected, null)),
                     e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
-                ));
+                )).ToList();
 
-            if (count != null)
+            var memberIds = resultViewModels.SelectMany(e => e.Attendees.Select(a => a.MemberId)).Distinct();
+
+            var members =
+                _dbContext.Members.Where(m => memberIds.Contains(m.Id))
+                    .Select(m => new AttendeePlayerViewModel(m.Id, m.FirstName, m.LastName, m.UserName)).ToList();
+
+
+            foreach (var attendee in resultViewModels.SelectMany(ev => ev.Attendees))
             {
-                return resultViewModels.Take(count.Value);
+                attendee.Player = members.Single(m => m.Id == attendee.MemberId);
             }
-            return resultViewModels.ToList();
+
+            return resultViewModels;
         }
 
         private IOrderedQueryable<Event> GetPastEvents(EventType type, Guid clubId)
@@ -111,8 +144,8 @@ namespace MyTeam.Services.Domain
                 _dbContext.Players.Where(p => p.Id == memberId)
                     .Select(
                         p =>
-                            new AttendeeViewModel(memberId, eventId, p.FirstName, p.LastName, p.UserName,
-                                attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected))
+                            new AttendeeViewModel(memberId, eventId, attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected,
+                                new AttendeePlayerViewModel(memberId, p.FirstName, p.LastName, p.UserName)))
                     .Single();
         }
 
@@ -205,7 +238,7 @@ namespace MyTeam.Services.Domain
             return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.SignupMessage,  a.IsAttending, a.DidAttend, a.IsSelected)).ToList(),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage,  a.IsAttending, a.DidAttend, a.IsSelected, new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName))).ToList(),
                     e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).Single();
         }

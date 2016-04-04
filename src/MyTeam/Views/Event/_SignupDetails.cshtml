@@ -31,28 +31,31 @@
 
         if (Model.HasPassed())
         {
-            <div id="signups-@Model.Id" class="signups-training-hasPassed">
-                <div class="attendee-links">
-                    <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
-                        <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
-                    </a>
-                </div>
-                <div class="panel">
-                    <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                        <div class="flex event-attendees">
-                            <ul class="list-unstyled flex-2">
-                                @foreach (var player in Model.DidAttend)
-                                {
-                                    <li>
-                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
-                                        <span>@player.FirstName</span><span>&nbsp;@player.LastName</span></a>
-                                </li>
-                                }
-                            </ul>
+            if (Model.Type == EventType.Trening)
+            {
+                <div id="signups-@Model.Id" class="signups-training-hasPassed">
+                    <div class="attendee-links">
+                        <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                            <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
+                        </a>
+                    </div>
+                    <div class="panel">
+                        <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                            <div class="flex event-attendees">
+                                <ul class="list-unstyled flex-2">
+                                    @foreach (var player in Model.DidAttend)
+                                    {
+                                        <li>
+                                            <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
+                                                <span>@player.FirstName</span><span>&nbsp;@player.LastName</span></a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
         else
         {
