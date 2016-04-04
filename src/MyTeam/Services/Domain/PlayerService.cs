@@ -235,7 +235,10 @@ namespace MyTeam.Services.Domain
                 .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp)
                 .ToList();
 
-            var games = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp)
+            var games = _dbContext.Games.Where(
+                          g => teamIds.Contains(g.TeamId) && 
+                          g.GameType != GameType.Treningskamp &&
+                          g.DateTime < DateTime.Now)
                 .Select(g => new GameAttendanceViewModel
                 {
                     Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
