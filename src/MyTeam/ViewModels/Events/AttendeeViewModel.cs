@@ -8,7 +8,7 @@ namespace MyTeam.ViewModels.Events
         public string FirstName => Player?.FirstName;
         public string LastName => Player?.LastName;
         public AttendeePlayerViewModel Player { get; set; }
-        public bool IsAttending { get; set; }
+        public bool? IsAttending { get; set; }
         public bool IsSelected { get; }
         public bool DidAttend { get; }
         public Guid MemberId { get; }
@@ -21,7 +21,7 @@ namespace MyTeam.ViewModels.Events
         {
             EventId = eventId;
             MemberId = memberId;
-            IsAttending = isAttending ?? false;
+            IsAttending = isAttending;
             DidAttend = didAttend ?? false;
             IsSelected = isSelected ?? false;
             SignupMessage = signupMessage;

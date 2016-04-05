@@ -11,7 +11,7 @@ namespace MyTeam.ViewModels.Events
         public RegisterAttendanceEventViewModel Training { get; }
         private readonly IEnumerable<RegisterAttendancePlayerViewModel> _players;
 
-        public IEnumerable<RegisterAttendancePlayerViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
+        public IEnumerable<RegisterAttendancePlayerViewModel> Attendees => _players.Where(p => Training.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending == true));
 
         public IEnumerable<RegisterAttendancePlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv).Where(p => Attendees.All(a => a.Id != p.Id));
 

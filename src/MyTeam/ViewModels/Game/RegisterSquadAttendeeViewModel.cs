@@ -7,6 +7,6 @@ namespace MyTeam.ViewModels.Game
         public Guid MemberId { get; set; }
         public bool IsSelected { get; set; }
         public string SignupMessage { get; set; }
-        public bool IsAttending { get; set; }
+        public bool? IsAttending { get; set; }
     }
 }

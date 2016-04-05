@@ -50,10 +50,8 @@ namespace MyTeam.ViewModels.Events
         }
 
      
-
-
-        public IEnumerable<AttendeeViewModel> Attending => Attendees?.Where(a => a.IsAttending);
-        public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => !a.IsAttending);
+        public IEnumerable<AttendeeViewModel> Attending => Attendees?.Where(a => a.IsAttending == true);
+        public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => a.IsAttending == false);
         public IEnumerable<AttendeeViewModel> DidAttend => Attendees?.Where(a => a.DidAttend);
         public IEnumerable<AttendeeViewModel> Squad => Attendees?.Where(a => a.IsSelected);
 
@@ -61,7 +59,6 @@ namespace MyTeam.ViewModels.Events
         public bool IsTraining => Type == EventType.Trening;
         public bool IsCustom => Type == EventType.Diverse;
         public bool IsPublished { get;  }
-        public Guid? TeamId { get; }
 
         public bool IsAttending(ClaimsPrincipal user)
         {

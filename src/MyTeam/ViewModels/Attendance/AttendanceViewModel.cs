@@ -20,7 +20,7 @@ namespace MyTeam.ViewModels.Attendance
                     Name = player.Name,
                     Trainings = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
                     Games = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Kamp),
-                    NoShows = _attendance.Where(a => a.IsAttending && !a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
+                    NoShows = _attendance.Where(a => a.IsAttending == true && !a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
                     TrainingVictories = _attendance.Where(a => a.MemberId == player.Id).Count(a => a.WonTraining),
                     Image =  player.Image,
                     FacebookId = player.FacebookId

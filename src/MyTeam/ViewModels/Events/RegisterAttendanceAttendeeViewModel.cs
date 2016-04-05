@@ -5,7 +5,7 @@ namespace MyTeam.ViewModels.Events
     public class RegisterAttendanceAttendeeViewModel
     {
         public Guid MemberId { get; set; }
-        public bool IsAttending { get; set; }
+        public bool? IsAttending { get; set; }
         public bool DidAttend { get; set; }
         public bool WonTraining { get; set; }
     }

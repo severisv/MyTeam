@@ -10,11 +10,11 @@ namespace MyTeam.ViewModels.Game
         public RegisterSquadEventViewModel Game { get; }
         private readonly IEnumerable<RegisterSquadPlayerViewModel> _players;
 
-        public IEnumerable<RegisterSquadPlayerViewModel> Attendees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending));
+        public IEnumerable<RegisterSquadPlayerViewModel> Attendees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending == true));
 
-        public IEnumerable<RegisterSquadPlayerViewModel> Declinees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && !a.IsAttending));
+        public IEnumerable<RegisterSquadPlayerViewModel> Declinees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending == false));
 
-        public IEnumerable<RegisterSquadPlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv && p.TeamIds.ContainsAny(Game.TeamIds)).Where(p => Game.Attendees.All(a => a.MemberId != p.Id));
+        public IEnumerable<RegisterSquadPlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv && p.TeamIds.ContainsAny(Game.TeamIds)).Where(p => Game.Attendees.All(a => a.IsAttending == null || a.MemberId != p.Id));
 
         public IEnumerable<RegisterSquadPlayerViewModel> OtherInactivePlayers => _players.Where(p => Game.Attendees.All(a => a.MemberId != p.Id)).Where(p => OtherActivePlayers.All(a => a.Id != p.Id));
 

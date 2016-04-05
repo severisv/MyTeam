@@ -32,9 +32,9 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<EventAttendance> Attendees { get; set; }
         [NotMapped]
-        public virtual IEnumerable<Member> Attending => Attendees?.Where(a => a.IsAttending).Select(a => a.Member);
+        public virtual IEnumerable<Member> Attending => Attendees?.Where(a => a.IsAttending == true).Select(a => a.Member);
         [NotMapped]
-        public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => !a.IsAttending).Select(a => a.Member);
+        public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => a.IsAttending == false).Select(a => a.Member);
 
         [NotMapped]
         public bool IsGame => Type == EventType.Kamp;

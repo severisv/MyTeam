@@ -32,7 +32,6 @@ namespace MyTeam.Services.Domain
                     Id = Guid.NewGuid(),
                     EventId = eventId,
                     IsSelected = isSelected,
-                    IsAttending = false,
                     MemberId = playerId
                 };
                 _dbContext.EventAttendances.Add(attendance);
