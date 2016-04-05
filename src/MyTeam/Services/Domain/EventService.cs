@@ -105,7 +105,6 @@ namespace MyTeam.Services.Domain
             {
                 attendee.Player = members.Single(m => m.Id == attendee.MemberId);
             }
-
             return resultViewModels;
         }
 

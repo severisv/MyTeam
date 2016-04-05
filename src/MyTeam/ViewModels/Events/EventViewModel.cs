@@ -22,14 +22,15 @@ namespace MyTeam.ViewModels.Events
         public string Opponent { get; }
         public IEnumerable<Guid> TeamIds { get; }
 
-        public IList<AttendeeViewModel> Attendees { get;  }
+        public IList<AttendeeViewModel> Attendees => _attendees?.OrderBy(a => a.FirstName).ToList();
+        private readonly IEnumerable<AttendeeViewModel> _attendees;
 
         public EventViewModel(Guid clubId, IEnumerable<Guid> teamIds, IEnumerable<AttendeeViewModel> attendees, Guid eventId, EventType type, GameType? gameType, DateTime dateTime, string location,
             string headline, string description, string opponent, bool voluntary, bool isPublished, bool isHomeTeam)
         {
             Id = eventId;
             ClubId = clubId;
-            Attendees = attendees?.OrderBy(a => a.FirstName).ToList();
+            _attendees = attendees;
             DateTime = dateTime;
             Location = location;
             Headline = headline;
