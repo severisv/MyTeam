@@ -4,8 +4,6 @@
 @model MyTeam.ViewModels.Events.EventViewModel
 
 <div id="event-signupDetails-@Model.Id">
-
-   
     @if (!Model.SignupHasClosed())
     {
         if (!Context.Member().BelongsToTeam(Model.TeamIds.ToArray()) && Model.GameType != GameType.Treningskamp)
