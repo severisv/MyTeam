@@ -11,5 +11,6 @@ namespace MyTeam.ViewModels.Attendance
         public EventType EventType { get; set; }
         public bool? IsAttending { get; set; }
         public bool WonTraining { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

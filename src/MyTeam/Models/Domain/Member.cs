@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MyTeam.Models.Shared;
 using MyTeam.Resources;
 
 namespace MyTeam.Models.Domain
 {
-    public class Member : Entity
+    public class Member : Entity, IMember
     {
         [Required]
         public string FirstName { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Attendance;
+using MyTeam.ViewModels.Stats;
 
 namespace MyTeam.Services.Domain
 {
@@ -9,7 +9,9 @@ namespace MyTeam.Services.Domain
     {
         IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year);
         IEnumerable<int> GetAttendanceYears(Guid clubId);
-        
 
+
+        IEnumerable<PlayerStats> GetStats(Guid teamId, int selectedYear);
+        IEnumerable<int> GetStatsYears(Guid teamId);
     }
 }

@@ -10,26 +10,25 @@ namespace MyTeam.ViewModels.Game
 
         public IEnumerable<SeasonViewModel> Seasons { get; }
         public IList<TeamViewModel> Teams { get; }
-        public Guid TeamId { get;  }
+        public string TeamName { get;  }
         private readonly int _year;
 
         public SeasonViewModel SelectedSeason => Seasons.SingleOrDefault(s => s.Year == _year) ?? CurrentSeason;
 
         public SeasonViewModel CurrentSeason => Seasons.FirstOrDefault(s => s.Year == DateTime.Now.Year) ?? new SeasonViewModel
             {
-                TeamId =TeamId,
                 Year = DateTime.Now.Year
             };
 
         public IEnumerable<GameViewModel> Games { get; }
 
-        public GamesViewModel(IEnumerable<SeasonViewModel> seasons, IList<TeamViewModel> teams, int year, IEnumerable<GameViewModel> games, Guid teamId)
+        public GamesViewModel(IEnumerable<SeasonViewModel> seasons, IList<TeamViewModel> teams, int year, IEnumerable<GameViewModel> games, string teamName)
         {
             Teams = teams;
             Seasons = seasons;
             _year = year;
             Games = games;
-            TeamId = teamId;
+            TeamName = teamName;
         }
 
       

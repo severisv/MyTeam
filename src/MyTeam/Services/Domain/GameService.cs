@@ -103,7 +103,6 @@ namespace MyTeam.Services.Domain
             
             return years.Select(y => new SeasonViewModel
             {
-                TeamId = teamId,
                 Year = y
             }).OrderByDescending(s => s.Year);
         }

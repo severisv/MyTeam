@@ -1,6 +1,8 @@
+using System;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
-using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
+using MyTeam.ViewModels.Stats;
 
 namespace MyTeam.Controllers
 {
@@ -10,10 +12,18 @@ namespace MyTeam.Controllers
         [FromServices]
         public IStatsService StatsService { get; set; }
 
-        public IActionResult Index()
+        [Route("{lag?}/{aar:int?}")]
+        public IActionResult Index(string lag = null, int? aar = null)
         {
-            Alert(AlertType.Info, "Det er ikke registrert noe statistikk enda");
-            return View();
+            var selectedYear = aar ?? DateTime.Now.Year;
+            var teamName = lag ?? Club.Teams.First().ShortName;
+            var teamId = Club.Teams.First(t => t.ShortName == teamName).Id;
+            var stats = StatsService.GetStats(teamId, selectedYear);
+            var years = StatsService.GetStatsYears(teamId);
+
+            var model = new StatsViewModel(Club.Teams, teamName, selectedYear, years, stats);
+
+            return View(model);
         }
         
 

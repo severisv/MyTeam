@@ -25,12 +25,13 @@ namespace MyTeam.Controllers
         [FromServices]
         public ApplicationDbContext DbContext { get; set; }
 
-        [Route("")]
-        public IActionResult Index(int? year = null, Guid? teamId = null)
+        [Route("{lag?}/{aar:int?}")]
+        public IActionResult Index(string lag = null, int ? aar = null)
         {
-            teamId = teamId ?? Club.TeamIds.First();
+            var team = lag ?? Club.Teams.First().ShortName;
+            var teamId = Club.Teams.First(t => t.ShortName == team).Id;
 
-            var seasons = GameService.GetSeasons(teamId.Value);
+            var seasons = GameService.GetSeasons(teamId);
 
             var teams = Club.Teams
                 .Select(t => new TeamViewModel
@@ -41,10 +42,10 @@ namespace MyTeam.Controllers
                 })
                 .ToList();
 
-            year = year ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
+            var year = aar ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
             
-            var games = GameService.GetGames(teamId.Value, year.Value, teams.Single(t => t.Id == teamId.Value).Name);
-            var model = new GamesViewModel(seasons, teams, year.Value, games, teamId.Value);
+            var games = GameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
+            var model = new GamesViewModel(seasons, teams, year, games, team);
 
             return View("Index", model);
         }
