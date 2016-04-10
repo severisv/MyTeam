@@ -18,6 +18,7 @@ namespace MyTeam.ViewModels.Events
             ImageFull = player.ImageFull;
             Status = player.Status;
             EventId = eventId;
+            FacebookId = player.FacebookId;
         }
     }
 }

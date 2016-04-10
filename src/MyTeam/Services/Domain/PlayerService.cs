@@ -138,6 +138,7 @@ namespace MyTeam.Services.Domain
                 .Select(p => new SimplePlayerDto
                 {
                     Id = p.Id,
+                    FacebookId = p.FacebookId,
                     FirstName = p.FirstName,
                     MiddleName = p.MiddleName,
                     LastName = p.LastName,

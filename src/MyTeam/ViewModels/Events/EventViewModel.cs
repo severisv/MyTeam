@@ -30,7 +30,7 @@ namespace MyTeam.ViewModels.Events
         {
             Id = eventId;
             ClubId = clubId;
-            _attendees = attendees.ToList();
+            _attendees = (attendees ?? Enumerable.Empty<AttendeeViewModel>()).ToList();
             DateTime = dateTime;
             Location = location;
             Headline = headline;

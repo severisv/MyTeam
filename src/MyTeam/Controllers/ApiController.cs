@@ -134,17 +134,14 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult ApplyMigrations()
+        public IActionResult Now()
         {
-            try
-            {
-                DbContext.Database.Migrate();
-            }
-            catch (Exception e)
-            {
-                return View("_Error", e);
-            }
-            return Json("Success");
+                return Json(new
+                {
+                    DateTime.Now,
+                    Date = DateTime.Now.ToShortDateString(),
+                    Time = DateTime.Now.ToShortTimeString()
+                });
         }
 
     }
