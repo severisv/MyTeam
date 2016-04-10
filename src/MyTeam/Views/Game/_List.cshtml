@@ -10,11 +10,11 @@
     {
         <tr class="games-showGameLink mt-anchor" data-href="@Url.Action("Show", new {gameId = game.Id})">
             <td class="hidden-xs gameType"><i title="@game.GameType.DisplayName()" class="@Icons.GameType(game.GameType)"></i></td>
-            <td class="hidden-xs"><i class="text-subtle fa fa-calendar"></i> @game.DateTime.ToNoShort()</td>
+            <td class="hidden-xs gamesTable-date"><i class="text-subtle fa fa-calendar"></i> @game.DateTime.ToNoShort()</td>
             <td class="gamesTable-team gamesTable-team--left">@game.HomeTeam</td>
             <td class="gamesTable-team"><span class="gameResult gameResult--@game.Outcome">@game.HomeScore - @game.AwayScore</span></td>
             <td class="gamesTable-team gamesTable-team--right">@game.AwayTeam</td>
-            <td class="hidden-xs"><i class="text-subtle fa fa-map-marker"></i> @game.LocationShort</td>
+            <td class="hidden-xs"><i class="text-subtle fa fa-map-marker"></i> @game.LocationShort.Truncate(16, excludeDots: true)</td>
         </tr>
     }
     </tbody>

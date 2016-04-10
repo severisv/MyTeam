@@ -24,9 +24,10 @@ namespace MyTeam
             "diverse"
         };
 
-        public static string Truncate(this string str, int length = 450)
+        public static string Truncate(this string str, int length = 450, bool excludeDots = false)
         {
-            if(str.Length > length) return $"{str?.Substring(0, length)}...";
+            var dots = excludeDots ? "" : "...";
+            if (str.Length > length) return $"{str?.Substring(0, length)}{dots}";
             return str;
         }
 
