@@ -18,7 +18,7 @@ namespace MyTeam.Services.Domain
         IEnumerable<SimplePlayerDto> GetDto(Guid clubId);
         void TogglePlayerTeam(Guid teamId, Guid guid, string clubName);
         ShowPlayerViewModel GetSingle(Guid playerId);
-        IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId);
+        IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId);
         IEnumerable<PlayerStatsViewModel> GetStats(Guid playerId, IEnumerable<Guid> teamIds);
     }
 }

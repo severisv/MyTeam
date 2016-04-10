@@ -19,31 +19,29 @@ namespace MyTeam.Controllers
         public IPlayerService PlayerService { get; set; }
 
         [Route("")]
-        public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv, Guid? playerId = null, bool editMode = false)
+        public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv)
         {
             var players = PlayerService.GetPlayers(type, Club.Id);
+            
+            var model = new ShowPlayersViewModel(players, type);
 
-            var model = new ShowPlayersViewModel(players, editMode, type)
-            {
-                SelectedPlayerId = playerId
-            };
-
-            ViewBag.PageName = model.SelectedPlayer != null ?
-                model.SelectedPlayer.Fullname: 
-                Res.PlayersOfType(type);
+            ViewBag.PageName = Res.PlayersOfType(type);
 
             return View("List",model);
         }
 
-        [Route("vis")]
+        [Route("vis/{playerId}")]
         public IActionResult Show(Guid playerId)
         {
+            var selectedPlayer = PlayerService.GetSingle(playerId);
             if (Request.IsAjaxRequest())
             {
-                var model = PlayerService.GetSingle(playerId);
-                return PartialView("_Show", model);
+                return PartialView("_Show", selectedPlayer);
             }
-            return List(playerId: playerId);           
+
+            var players = PlayerService.GetPlayers(selectedPlayer.Status, Club.Id);
+            var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
+            return View("Show", model);  
         }
 
 
@@ -52,7 +50,6 @@ namespace MyTeam.Controllers
         {
             var model = PlayerService.GetStats(playerId, Club.TeamIds);
             return PartialView("_GetStats", model);
-         
         }
 
 
@@ -63,12 +60,16 @@ namespace MyTeam.Controllers
             if(filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
+            var selectedPlayer = PlayerService.GetSingle(playerId);
+
             if (Request.IsAjaxRequest())
             {
-                var player = PlayerService.GetSingle(playerId);
-                return PartialView("_Edit", new EditPlayerViewModel(player));
+                return PartialView("_Edit", new EditPlayerViewModel(selectedPlayer));
             }
-            return List(playerId: playerId, editMode: true);
+
+            var players = PlayerService.GetPlayers(selectedPlayer.Status, Club.Id);
+            var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
+            return View("Edit", model);
 
         }
 

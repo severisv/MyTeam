@@ -2,11 +2,11 @@
 @using MyTeam.ViewModels.Player
 @model ShowPlayersViewModel
 @{
-    ViewBag.Title = Res.Players;
+    ViewBag.Title = Model.SelectedPlayer?.Fullname;
 }
 
 <div mt-main  inner-id="show-players">
-        @Html.Partial("_ListPlayers")
+            @Html.Partial("_Edit", new EditPlayerViewModel(Model.SelectedPlayer))
 </div>
 
 <div mt-sidebar>
@@ -17,5 +17,8 @@
     </ul>
 </div>
 
-
 @Html.Partial("_ListPlayersSidebar")
+
+@section Scripts {
+    @Component.Invoke("CloudinaryScripts")
+}

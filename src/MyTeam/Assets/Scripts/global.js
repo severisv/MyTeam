@@ -13,6 +13,7 @@ global.applyScopedJsComponents = function (selector) {
     applyMtAnchorListeners($scope);
     ajax.applyFormUpdateListener($scope);
     ajax.applyLoadListener($scope);
+    ajax.applyLoadIcon($scope);
 }
 
 global.applyJsComponents = function() {
@@ -83,13 +84,14 @@ function applyConfirmDialogListeners($scope) {
 
 // Active links
 function applyActiveLinkSwapper($scope) {
-    $scope.find('ul.nav li').on('click', function () {
+    $scope.find('ul.nav li').on('click', function() {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
     });
 
+}
 
-}// Active links
+// Active links
 function applyAjaxLinkActions($scope) {
     $scope.find('a[mt-pushstate]').on('click', function () {
         var $el = $(this);

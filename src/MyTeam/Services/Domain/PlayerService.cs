@@ -197,7 +197,8 @@ namespace MyTeam.Services.Domain
                     Phone = p.Phone,
                     ImageFull = p.ImageFull,
                     PositionsString = p.PositionsString,
-                    FacebookId = p.FacebookId
+                    FacebookId = p.FacebookId,
+                    Status = p.Status
                 }).Single();
 
             var practiceCount =
@@ -207,25 +208,20 @@ namespace MyTeam.Services.Domain
 
             return player;
         }
-
-        public IEnumerable<ShowPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
+        
+        public IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return
                 _dbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
-                    .Select(p => new ShowPlayerViewModel
+                    .Select(p => new ListPlayerViewModel
                     {
                         Id = p.Id,
-                        BirthDate = p.BirthDate,
                         FirstName = p.FirstName,
                         MiddleName = p.MiddleName,
                         LastName = p.LastName,
-                        UserName = p.UserName,
-                        StartDate = p.StartDate,
-                        Phone = p.Phone,
-                        ImageFull = p.ImageFull,
-                        PositionsString = p.PositionsString,
-                        FacebookId = p.FacebookId
+                        FacebookId = p.FacebookId,
+                        Image = p.ImageFull
                     }).ToList();
         }
 

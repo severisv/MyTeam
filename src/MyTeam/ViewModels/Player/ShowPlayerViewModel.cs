@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MyTeam.Models.Enums;
 using MyTeam.Resources;
 
 namespace MyTeam.ViewModels.Player
@@ -15,6 +16,8 @@ namespace MyTeam.ViewModels.Player
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string UserName { get; set; }
+
+        public PlayerStatus Status { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = Res.StartDate)]

@@ -2,11 +2,11 @@
 @using MyTeam.ViewModels.Player
 @model ShowPlayersViewModel
 @{
-    ViewBag.Title = Res.Players;
+    ViewBag.Title = Model.SelectedPlayer?.Fullname;
 }
 
 <div mt-main  inner-id="show-players">
-        @Html.Partial("_ListPlayers")
+    @Html.Partial("_Show", Model.SelectedPlayer)
 </div>
 
 <div mt-sidebar>
@@ -16,6 +16,4 @@
         <li><a asp-controller="player" asp-action="list" asp-route-type="@PlayerStatus.Veteran"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Veteran)</a></li>
     </ul>
 </div>
-
-
 @Html.Partial("_ListPlayersSidebar")
