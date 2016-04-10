@@ -27,8 +27,13 @@
         else if(Context.UserIsInRole(Roles.Coach, Roles.Admin))
         {
             <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+                }
         }
-    }
+        else if (Model.Type == EventType.Diverse && Context.UserIsInRole(Roles.Coach, Roles.Admin))
+        {
+            <a asp-action="edit" asp-route-eventId = "@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+        }
+
 
 
 <div class="show-upcoming-event">
