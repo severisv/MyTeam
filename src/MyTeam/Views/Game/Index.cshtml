@@ -11,7 +11,7 @@
                 <ul class="nav nav-pills mt-justified">
                     @foreach (var team in Model.Teams)
                 {
-                        <li class="@(Model.TeamName == team.ShortName ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-lag="@team.ShortName"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
+                        <li class="@(Model.TeamName == team.ShortName ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedSeason.Year" ><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                     }
                 </ul>
             </div>
@@ -22,7 +22,7 @@
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var season in Model.Seasons)
                 {
-                        <option value="@Url.Action("Index", "Game", new {team = Model.TeamName, year = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year)">@season.DisplayName</option>
+                        <option value="@Url.Action("Index", "Game", new {lag = Model.TeamName, aar = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year)">@season.DisplayName</option>
                     }
                 </select>
             </div>

@@ -14,7 +14,7 @@
                     <ul class="nav nav-pills mt-justified">
                         @foreach (var team in Model.Teams)
                         {
-                            <li class="@(Model.Team == team.ShortName ? "active" : "")"><a asp-controller="stats" asp-action="index" asp-route-lag="@team.ShortName"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
+                            <li class="@(Model.Team == team.ShortName ? "active" : "")"><a asp-controller="stats" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedYear"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                         }
                     </ul>
                 </div>
