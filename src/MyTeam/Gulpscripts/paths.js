@@ -32,7 +32,6 @@ module.exports = {
             bower("jquery-ui/jquery-ui.js"),
             bower("tablesorter/jquery.tablesorter.js"),
             bower("bootstrap/dist/js/bootstrap.js"),
-            bower("jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"),
             npm("bootbox/bootbox.js"),
             npm("react/dist/react.js"),
             npm("react-dom/dist/react-dom.js")

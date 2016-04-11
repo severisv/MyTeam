@@ -27,15 +27,50 @@ ajax.applyLoadListener = function($scope)
     });
 }
 
-ajax.applyLoadIcon = function ($scope) {
-    $scope.find('a').each(function () {
+ajax.applyAjaxLinkListeners = function ($scope) {
+    $scope.find('a.ajax-link').each(function () {
         var element = $(this);
-        if (element.data('ajax') == true) {
-            console.log("ol000")
-            var target = $(element.data('ajax-update'))
-            element.on('click',function() {
-                target.html('<i class="mt-loader fa fa-spin fa-spinner"></i>')
-            })
-        }
+            var target = $(element.data('ajax-update'));
+            var href = element.attr('href');
+
+            element.click(function (e) {
+                e.preventDefault();
+                target.addClass("ajax-replace");
+                target.addClass("ajax-replace--hidden");
+                $.get(href, function(response) {
+
+                    target.html(response);
+                    target.removeClass("ajax-replace--hidden");
+                    global.applyScopedJsComponents(target);
+                });
+            });
+    });
+
+    $scope.find('a.ajax-post').each(function () {
+        var element = $(this);
+        var target = $(element.data('ajax-update'));
+        var href = element.attr('href');
+
+        element.click(function (e) {
+            e.preventDefault();
+            $.get(href, function (response) {
+                target.html(response);
+                global.applyScopedJsComponents(target);
+            });
+        });
+    });
+
+    $scope.find('form.ajax-form').each(function () {
+        var element = $(this);
+        var target = $(element.data('ajax-update'));
+        var href = element.attr('action');
+
+        element.submit(function (e) {
+            e.preventDefault();
+            $.post(href, element.serialize(), function (response) {
+                target.html(response);
+                global.applyScopedJsComponents(target);
+            });
+        });
     });
 }
