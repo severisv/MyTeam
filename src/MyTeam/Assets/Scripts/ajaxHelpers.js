@@ -40,11 +40,12 @@ ajax.applyAjaxLinkListeners = function ($scope) {
 
                 setTimeout(function () { 
                     $.get(href, function (response) {
+                        window.scrollTo(0, 0);
                         target.html(response);
                         target.removeClass("ajax-replace--hidden");
                         global.applyScopedJsComponents(target);
                     });
-                }, 80);
+                }, 50);
             });
     });
 

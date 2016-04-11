@@ -7,8 +7,7 @@
 {
     <div class="col-lg-3 col-md-4 col-xs-4 text-center mt-playerWrapper">
         <a class="ajax-link mt-player-container" data-ajax-update="#show-players"
-           asp-controller="player" asp-action="show" asp-route-playerid="@player.Id"
-           onclick="window.scrollTo(0,0);">
+           asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
             <div class="image-container">
                 <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
             </div>
