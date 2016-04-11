@@ -3,7 +3,7 @@
     <ul class="list-users">
         @foreach (var player in Model)
         {
-            <li class="register-attendance-item" >
+            <li class="register-attendance-item registerSquad-player" >
                 <img class="hidden-xxs" src="@Cloudinary.MemberImage(player.ImageFull, player.FacebookId, 50, 50)"/>
                 @player.ShortName
 
