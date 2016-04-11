@@ -4,8 +4,6 @@
   "dependencies": {
     "bootstrap": "~3.3.4",
     "jquery-ui": "^1.11.4",
-    "jquery-validation": "~1.11.1",
-    "jquery-validation-unobtrusive": "~3.2.2",
     "Font-Awesome": "4.4.0",
     "hammer.js": "*",
     "tablesorter": "*",

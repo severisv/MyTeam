@@ -54,7 +54,7 @@ namespace MyTeam
 
                 options.Cookies.ApplicationCookie.CookieName = "_myt";
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(16);
-                options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                //options.Cookies.ApplicationCookie.SlidingExpiration = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonLetterOrDigit = false;

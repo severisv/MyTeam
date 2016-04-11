@@ -37,12 +37,14 @@ ajax.applyAjaxLinkListeners = function ($scope) {
                 e.preventDefault();
                 target.addClass("ajax-replace");
                 target.addClass("ajax-replace--hidden");
-                $.get(href, function(response) {
 
-                    target.html(response);
-                    target.removeClass("ajax-replace--hidden");
-                    global.applyScopedJsComponents(target);
-                });
+                setTimeout(function () { 
+                    $.get(href, function (response) {
+                        target.html(response);
+                        target.removeClass("ajax-replace--hidden");
+                        global.applyScopedJsComponents(target);
+                    });
+                }, 80);
             });
     });
 
