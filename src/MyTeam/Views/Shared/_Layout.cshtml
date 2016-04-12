@@ -70,14 +70,13 @@
                     @Html.Partial("_CoachMenuItems")
                 </ul>
                 }
-
         }
-
         </div>
         <div class="navbar-topRight">
             @await Html.PartialAsync("_LoginPartial")
             @if (Context.UserIsMember())
             {
+                @Html.Partial("_UserInfo", Context.Member())
                 @Component.Invoke("NotificationButton")
             }
         </div>

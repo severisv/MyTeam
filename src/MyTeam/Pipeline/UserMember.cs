@@ -7,6 +7,9 @@ namespace MyTeam
     public class UserMember
     {
         public Guid Id { get; }
+        public string FacebookId { get; }
+        public string FirstName { get; }
+        public string Image { get; }
         public string[] Roles { get; }
         public Guid[] TeamIds { get; }
         public bool ProfileIsConfirmed { get; }
@@ -20,6 +23,9 @@ namespace MyTeam
                 Roles = player.Roles;
                 TeamIds = player.TeamIds;
                 ProfileIsConfirmed = player.ProfileIsConfirmed;
+                FacebookId = player.FacebookId;
+                Image = player.Image;
+                FirstName = player.FirstName;
             }
             else
             {

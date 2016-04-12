@@ -41,7 +41,7 @@ namespace MyTeam.Services.Application
             
             member = _dbContext.Players
                 .Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name)
-                .Select(p => new PlayerDto(p.Id, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
+                .Select(p => new PlayerDto(p.Id, p.FirstName,  p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
             {

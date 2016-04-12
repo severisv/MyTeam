@@ -1,0 +1,1 @@
+cmd /k dnx-watch web

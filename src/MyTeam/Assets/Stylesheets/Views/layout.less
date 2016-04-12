@@ -116,7 +116,7 @@ div[mt-sidebar] {
     line-height: 1.6;
     color: rgba(0, 0, 0, 0.9);
     box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
-    margin-bottom: 1em;
+    margin-bottom: 1.25em;
     overflow: hidden;
 
     p {
@@ -279,4 +279,26 @@ div[mt-sidebar] {
 
  .mt-loader {
     margin-left: 1em;
+ }
+
+ .login-image-wrapper {
+     float: right;
+     margin-top: 20px;
+     margin-right: 1em;
+     .r-under-xs({
+         margin-top: 8px;
+         margin-right: 2em;
+     });
+ }
+
+
+  .login-image-wrapper img {
+     -webkit-filter: grayscale(100%);
+     filter: grayscale(100%);
+     border-radius: 50%;
+     height: 40px;
+      .r-under-xs({
+         height: 34px;
+     });
+
  }
