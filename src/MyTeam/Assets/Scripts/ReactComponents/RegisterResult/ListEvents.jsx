@@ -12,6 +12,7 @@
         var that = this;
         var iconClassName = this.getIconClassName
 
+
         return (
             <div className="col-sm-offset-1 gameEvents">
             {model.events.map(function(event, i)

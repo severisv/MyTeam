@@ -6,16 +6,20 @@
             events: [],
             editMode: this.props.editMode,
             squad: [],
-            showPlayerUrl : this.props.routes.SHOW_PLAYER
+            showPlayerUrl: this.props.routes.SHOW_PLAYER,
+            loadingPlayers: true,
+            loadingEvents: true
 
         });
     },
 
     componentDidMount: function () {
-        var that = this;
-        $.getJSON(that.props.routes.GET_SQUAD).then(function (response) {
+        var that = this;    
+         $.getJSON(that.props.routes.GET_EVENTS).then(function (response) {
+
             that.setState({
-                squad: response
+                events: response,
+                loadingEvents: false
             });
         });
         $.getJSON(that.props.routes.GET_PLAYERS).then(function (response) {
@@ -34,10 +38,11 @@
                 Type: response[0].Value
             });
         });
-        $.getJSON(that.props.routes.GET_EVENTS).then(function (response) {
-
+       
+            $.getJSON(that.props.routes.GET_SQUAD).then(function (response) {
             that.setState({
-                events: response
+                squad: response,
+                loadingPlayers: false
             });
         });
     },
@@ -183,17 +188,22 @@
             handleAddPlayerChange: this.handleAddPlayerChange
         }
 
-
+        var eventsClassName = "col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1 u-fade-in";
+        if(this.state.loadingEvents) eventsClassName += " u-fade-in--hidden"
+        var playersClassName = "col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 u-fade-in";
+        if(this.state.loadingPlayers) playersClassName += " u-fade-in--hidden"
         return (
             <div className="game-showEventsWrapper">
-                        <div className="row">
-                    <div className="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1">
+                 <div className="row">  
+                    <div className={this.state.loadingEvents ? "text-center" : "hidden" }><i className="fa fa-spinner fa-spin"></i></div>
+                    <div className={eventsClassName}>
                     <ListEvents model={this.state} actions={actions}></ListEvents>
                         {this.renderEditView(actions)}
                        </div>
                   </div>
                 <div className="row">
-                    <div className="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+                    <div className={this.state.loadingPlayers ? "text-center" : "hidden" }><i className="fa fa-spinner fa-spin"></i></div>
+                    <div className={playersClassName}>
                 <ListSquad model={this.state} actions={actions}></ListSquad>
                         {this.renderAddView(actions)}
 
