@@ -32,118 +32,124 @@
             }
         </div>
     </div>
-    @if (Model.Goals.Any())
-    {
-        <div class="mt-container mt-container--left stats">
-            <h3>Mål</h3>
-            <table class="listMembers table col-xs-12">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th><i class="fa fa-soccer-ball-o"></i></th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var player in Model.Goals)
+    <div class="mt-wrapper--left">
+        @if (Model.Goals.Any())
+        {
+            <div class="mt-container stats">
+                <h3>Mål</h3>
+                <table class="listMembers table col-xs-12">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th><i class="fa fa-soccer-ball-o"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Goals)
                 {
-                    <tr>
-                        <td class="image">
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                @player.Name()
-                            </a>
-                        </td>
-                        <td>
-                            @player.Goals
-                        </td>
-                    </tr>
+                            <tr>
+                                <td class="image">
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        @player.Name()
+                                    </a>
+                                </td>
+                                <td>
+                                    @player.Goals
+                                </td>
+                            </tr>
 
-                }
-                </tbody>
-            </table>
-        </div>
-    }
-    @if (Model.Assists.Any())
-    {
-        <div class="mt-container mt-container--right stats">
-            <h3>Assists</h3>
-            <table class="listMembers table col-xs-12">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th><i class="flaticon-football119"></i></th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var player in Model.Assists)
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="mt-wrapper--right">
+
+        @if (Model.Assists.Any())
+        {
+            <div class="mt-container  stats">
+                <h3>Assists</h3>
+                <table class="listMembers table col-xs-12">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th><i class="flaticon-football119"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Assists)
                 {
-                    <tr>
-                        <td class="image">
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                @player.Name()
-                            </a>
-                        </td>
-                        <td>
-                            @player.Assists
-                        </td>
-                    </tr>
+                            <tr>
+                                <td class="image">
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        @player.Name()
+                                    </a>
+                                </td>
+                                <td>
+                                    @player.Assists
+                                </td>
+                            </tr>
 
-                }
-                </tbody>
-            </table>
-        </div>
-    }
-    @if (Model.Cards.Any())
-    {
-        <div class="mt-container mt-container--right stats">
-            <h3>Kort</h3>
-            <table class="listMembers table col-xs-12">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th class="u-relative"><i class="icon icon-card-yellow"></i></th>
-                    <th class="u-relative"><i class="icon icon-card-red"></i></th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var player in Model.Cards)
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        @if (Model.Cards.Any())
+        {
+            <div class="mt-container stats">
+                <h3>Kort</h3>
+                <table class="listMembers table col-xs-12">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th class="u-relative"><i class="icon icon-card-yellow"></i></th>
+                            <th class="u-relative"><i class="icon icon-card-red"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Cards)
                 {
-                    <tr>
-                        <td class="image">
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
-                                @player.Name()
-                            </a>
-                        </td>
-                        <td>
-                            @player.YellowCards
-                        </td>
-                        <td>
-                            @player.RedCards
-                        </td>
-                    </tr>
+                            <tr>
+                                <td class="image">
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 50, 50)" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        @player.Name()
+                                    </a>
+                                </td>
+                                <td>
+                                    @player.YellowCards
+                                </td>
+                                <td>
+                                    @player.RedCards
+                                </td>
+                            </tr>
 
-                }
-                </tbody>
-            </table>
-        </div>
-    }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
 </div>
 
 
