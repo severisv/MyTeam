@@ -149,6 +149,13 @@
         if (squad.length > 0) return squad[0].FullName;
         else return "Selvmål";
     },
+    getPlayerShortName: function (playerId) {
+        var squad = this.state.squad.filter(function (player) {
+            return player.Id == playerId
+        });
+        if (squad.length > 0) return squad[0].FirstName + " " + squad[0].LastName;
+        else return "Selvmål";
+    },
 
     getEventPlayers: function (type) {
         return type == 0 ?
@@ -167,6 +174,7 @@
             handleAssistChange: this.handleAssistChange,
             handleSubmit: this.handleSubmit,
             getPlayerName: this.getPlayerName,
+            getPlayerShortName: this.getPlayerShortName,
             deleteEvent: this.deleteEvent,
             getEventPlayers: this.getEventPlayers,
             removePlayerFromSquad: this.removePlayerFromSquad,

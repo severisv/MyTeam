@@ -142,6 +142,9 @@ namespace MyTeam.Services.Domain
                     .Select(g => new PlayerViewModel
                     {
                         Id = g.Member.Id,
+                        FirstName = g.Member.FirstName,
+                        MiddleName = g.Member.MiddleName,
+                        LastName = g.Member.LastName,
                         FullName = g.Member.Fullname
                     })
                     .ToList()
