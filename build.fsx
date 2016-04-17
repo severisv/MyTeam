@@ -68,7 +68,6 @@ module Helpers =
 
 [<AutoOpen>]
 module Settings =
-  let buildDir = "./.build/"
   let deployDir = "./.deploy/"
   let webDir = "src/MyTeam/"
   let projectFiles = !! "src/*/project.json" ++ "test/*/project.json"
@@ -80,7 +79,7 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [buildDir; deployDir]
+    CleanDirs [deployDir]
   )
   
   Target "NpmRestore" (fun _ ->
