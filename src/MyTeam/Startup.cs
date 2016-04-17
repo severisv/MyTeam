@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
-using MyTeam.Services;
 using MyTeam.Services.Composition;
 using MyTeam.Services.Repositories;
 
