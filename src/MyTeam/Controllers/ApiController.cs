@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
