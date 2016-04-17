@@ -2,6 +2,8 @@
 #r @"packages/FAKE/tools/FakeLib.dll"
 open Fake
 open Fake.AppVeyor
+open Fake.FileSystemHelper
+open Fake.EnvironmentHelper
 open System.IO
 
 [<AutoOpen>]
@@ -46,7 +48,11 @@ module Helpers =
     let dnvm args workingDir = 
         let executable = findOnPath "dnvm.cmd"
         shellExec executable args workingDir    
-            
+    
+    let msdeploy args workingDir = 
+        let currentDir = FileSystemHelper.currentDirectory
+        let executable = sprintf "%s\.webdeploy\msdeploy.exe" currentDir
+        shellExec executable args workingDir            
                                                           
     type DnuCommands =
         | Restore
@@ -56,8 +62,8 @@ module Helpers =
     let Dnu command target = 
         match command with
             | Restore -> (dnu "restore" target)
-            | Build -> (dnu "build --configuration release" target)
-            | Publish -> (dnu "publish --configuration release -o .deploy src/MyTeam" target)
+            | Build -> (dnu "build --configuration Release" target)
+            | Publish -> (dnu "publish --configuration Release --out .deploy src/MyTeam --runtime dnx-clr-win-x86.1.0.0-rc1-final " target)
 
 
 [<AutoOpen>]
@@ -106,7 +112,16 @@ module Targets =
 
   Target "Publish" (fun _ ->
      Dnu Publish "" |> ignore
-  )
+  )  
+  
+  Target "Deploy" (fun _ ->
+     let currentDir = FileSystemHelper.currentDirectory
+     let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
+     let password = EnvironmentHelper.environVar "DEPLOY_PWD"
+     let args = sprintf "-source:IisApp='%s\.deploy\wwwroot' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension  -retryAttempts:2" currentDir appName appName appName password
+     msdeploy args "" |> ignore
+  )    
+
 
   Target "Default" (fun _ -> 
     ()
@@ -120,6 +135,10 @@ module Targets =
 ==> "Build"
 ==> "Test"
 ==> "Publish"
+==> "Deploy"
 ==> "Default"
 
 RunTargetOrDefault "Default"
+
+
+

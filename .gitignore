@@ -207,3 +207,4 @@ src/MyTeam/wwwroot/scripts/Bundles/
 
 .deploy/
 setdeploycredentials.cmd
+src/MyTeam/appsettings.Development.json
