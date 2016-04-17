@@ -51,7 +51,7 @@ module Helpers =
     
     let msdeploy args workingDir = 
         let currentDir = FileSystemHelper.currentDirectory
-        let executable = sprintf "%s\.webdeploy\msdeploy.exe" currentDir
+        let executable = sprintf "%s\webdeploy\msdeploy.exe" currentDir
         shellExec executable args workingDir            
                                                           
     type DnuCommands =
