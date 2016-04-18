@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Microsoft.Extensions.Caching.Memory;
@@ -116,19 +117,18 @@ namespace MyTeam.Services.Application
                 notifications = new Dictionary<Guid, MemberNotification>();
             }
             
-            var events = new List<Guid>();
-            foreach (var id in teamIds)
-            {
-                var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
-                    .Select(et => et.Event).Where(e => (e.DateTime - DateTime.Now < new TimeSpan(4, 0, 0, 0, 0)) && (e.DateTime > DateTime.Now))
+            var now = DateTime.Now;
+            var events = _dbContext.Events.Where(
+                    e => e.ClubId == clubId && 
+                    e.DateTime - now < new TimeSpan(4, 0, 0, 0, 0) && 
+                    (e.DateTime > now))
                     .Select(e => e.Id).ToList();
-                events.AddRange(ids);
-            }
 
-            var currentEvents = events.Distinct().ToList();
+            var ids = _dbContext.EventTeams.Where(et => events.Contains(et.EventId) && teamIds.Contains(et.TeamId)).Select(et => et.EventId).ToList().Distinct();
 
-            var count = currentEvents.Count();
-            var answered = _dbContext.EventAttendances.Count(a => a.MemberId == memberId && currentEvents.Any(ce => ce == a.EventId));
+
+            var count = ids.Count();
+            var answered = _dbContext.EventAttendances.Count(a => a.MemberId == memberId && ids.Contains(a.EventId));
 
             var memberNotification = new MemberNotification
             {
@@ -136,7 +136,7 @@ namespace MyTeam.Services.Application
             };
 
             notifications[memberId] = memberNotification;
-            
+
             Cache.Set(key, notifications, _cacheOptions);
            
             return memberNotification;

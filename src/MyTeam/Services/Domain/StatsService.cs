@@ -19,9 +19,10 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year)
         {
+            var now = DateTime.Now;
             var eventIds = _dbContext.Events
                 .Where(e => e.ClubId == clubId &&
-                            e.DateTime < DateTime.Now.AddHours(1) &&
+                            e.DateTime < now.AddHours(1) &&
                             e.DateTime.Year == year &&
                             e.Voluntary == false &&
                             (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id).ToList();

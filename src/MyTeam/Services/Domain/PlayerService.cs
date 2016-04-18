@@ -184,6 +184,7 @@ namespace MyTeam.Services.Domain
 
         public ShowPlayerViewModel GetSingle(Guid playerId)
         {
+            var now = DateTime.Now;
             var player = _dbContext.Players.Where(p => p.Id == playerId)
                 .Select(p => new ShowPlayerViewModel
                 {
@@ -202,7 +203,7 @@ namespace MyTeam.Services.Domain
                 }).Single();
 
             var practiceCount =
-                _dbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == DateTime.Now.Year);
+                _dbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == now.Year);
 
             player.PracticeCount = practiceCount;
 
@@ -232,10 +233,11 @@ namespace MyTeam.Services.Domain
                 .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp)
                 .ToList();
 
+            var now = DateTime.Now;
             var games = _dbContext.Games.Where(
                           g => teamIds.Contains(g.TeamId) && 
                           g.GameType != GameType.Treningskamp &&
-                          g.DateTime < DateTime.Now)
+                          g.DateTime < now)
                 .Select(g => new GameAttendanceViewModel
                 {
                     Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),

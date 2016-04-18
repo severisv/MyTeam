@@ -29,11 +29,11 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
         {
-
+            var now = DateTime.Now;
             var queryable = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime >= DateTime.Now);
+                .Where(t => t.DateTime >= now);
 
             if (!showAll)
                 queryable = queryable.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp));
@@ -110,10 +110,11 @@ namespace MyTeam.Services.Domain
 
         private IOrderedQueryable<Event> GetPastEvents(EventType type, Guid clubId)
         {
+            var now = DateTime.Now;
             var result = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime < DateTime.Now)
+                .Where(t => t.DateTime < now)
                 .OrderByDescending(e => e.DateTime);
             return result;
         }
@@ -244,9 +245,11 @@ namespace MyTeam.Services.Domain
 
         public RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid? eventId)
         {
+            var now = DateTime.Now;
+
             var events = eventId != null
                 ? _dbContext.Events.Where(e => e.Id == eventId)
-                : _dbContext.Events.Where(e => e.Type == EventType.Trening && e.DateTime < DateTime.Now).OrderByDescending(e => e.DateTime);
+                : _dbContext.Events.Where(e => e.Type == EventType.Trening && e.DateTime < now).OrderByDescending(e => e.DateTime);
 
             return events
                 .Select(e => new RegisterAttendanceEventViewModel

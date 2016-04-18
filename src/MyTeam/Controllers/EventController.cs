@@ -32,7 +32,6 @@ namespace MyTeam.Controllers
                 ? EventService.GetPrevious(type, Club.Id)
                 : EventService.GetUpcoming(type, Club.Id, showAll);
             
-
             if (Request.IsAjaxRequest())
             {
                 events = events.Where(e => !e.SignupHasOpened());
@@ -167,7 +166,7 @@ namespace MyTeam.Controllers
 
             Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
-            return Index();
+            return RedirectToAction("Index");
         }
 
         [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
