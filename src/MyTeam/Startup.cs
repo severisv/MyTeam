@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -72,12 +71,14 @@ namespace MyTeam
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.LogStart();
+            try
+            {
+                app.LogStart();
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+                if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
                     app.UseDatabaseErrorPage();
@@ -86,92 +87,68 @@ namespace MyTeam
                 else
                 {
                     app.UseExceptionHandler("/Error/Error");
-            }
-
-            // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-            try
-            {
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                    .CreateScope())
-                {
-                    var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                    dbContext.Database.EnsureCreated();
-                    dbContext.Database.Migrate();
-                    BootstrapData.Initialize(app.ApplicationServices);
                 }
-            }
-            catch
-            {
-            }
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                try
+                {
+                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                        .CreateScope())
+                    {
+                        var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                        dbContext.Database.EnsureCreated();
+                        dbContext.Database.Migrate();
+                        BootstrapData.Initialize(app.ApplicationServices);
+                    }
+                }
+                catch (Exception e)
+                {
+                    app.WriteException(e, env);
+                }
 
-            app.UseStaticFiles();
+                app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
-            app.UseIdentity();
-            
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
-                SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
-            }, new RequestCulture(new CultureInfo("nb-NO")));
+                app.UseStaticFiles();
 
-            app.UseFacebookAuthentication(options =>
+                app.UseIdentity();
+
+                app.UseRequestLocalization(new RequestLocalizationOptions
+                {
+                    SupportedCultures = new List<CultureInfo> {new CultureInfo("nb-NO")},
+                    SupportedUICultures = new List<CultureInfo> {new CultureInfo("nb-NO")}
+                }, new RequestCulture(new CultureInfo("nb-NO")));
+
+                app.UseFacebookAuthentication(options =>
                 {
                     options.AppId = Configuration["Authentication:Facebook:AppId"];
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-            app.LoadTenantData();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=News}/{action=Index}/{id?}");
-            });
-
-
-            if (env.IsProduction())
-            {
-                app.Run(async context =>
+                app.LoadTenantData();
+                app.UseMvc(routes =>
                 {
-                    context.Response.Redirect("/404");
-                    await context.Response.WriteAsync("");
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=News}/{action=Index}/{id?}");
                 });
+
+
+                if (env.IsProduction())
+                {
+                    app.Run(async context =>
+                    {
+                        context.Response.Redirect("/404");
+                        await context.Response.WriteAsync("");
+                    });
+                }
+
             }
-
+            catch (Exception e)
+            {
+                app.WriteException(e, env);
+            }
         }
-
-
-
-        //catch (Exception ex)
-        //{
-        //    app.Run(async context =>
-        //    {
-        //        context.Response.ContentType = "text/plain";
-        //        await context.Response.WriteAsync(ex.Message);
-        //        var exceptions = new List<Exception>();
-        //        while (ex.InnerException != null)
-        //        {
-        //            exceptions.Add(ex);
-        //            ex = ex.InnerException;
-        //        }
-
-        //        exceptions.Reverse();
-        //        foreach (var exception in exceptions)
-        //        {
-        //            await context.Response.WriteAsync(exception.Message);
-        //        }
-
-        //        await context.Response.WriteAsync(ex.StackTrace.ToString());
-
-
-        //    });
-        //}
-
-        //}
-        //      }
-
+        
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
