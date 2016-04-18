@@ -117,10 +117,11 @@ namespace MyTeam.Services.Application
             }
             
             var events = new List<Guid>();
+            var now = DateTime.Now;
             foreach (var id in teamIds)
             {
                 var ids = _dbContext.EventTeams.Where(et => et.TeamId == id)
-                    .Select(et => et.Event).Where(e => (e.DateTime - DateTime.Now < new TimeSpan(4, 0, 0, 0, 0)) && (e.DateTime > DateTime.Now))
+                    .Select(et => et.Event).Where(e => (e.DateTime - now < new TimeSpan(4, 0, 0, 0, 0)) && (e.DateTime > now))
                     .Select(e => e.Id).ToList();
                 events.AddRange(ids);
             }
