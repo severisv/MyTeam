@@ -96,14 +96,12 @@ namespace MyTeam
                         .CreateScope())
                     {
                         var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                        dbContext.Database.EnsureCreated();
                         dbContext.Database.Migrate();
-                        BootstrapData.Initialize(app.ApplicationServices);
                     }
                 }
                 catch (Exception e)
                 {
-                    app.WriteException(e, env);
+                    if (env.IsDevelopment()) app.WriteException(e);
                 }
 
                 app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -145,7 +143,8 @@ namespace MyTeam
             }
             catch (Exception e)
             {
-                app.WriteException(e, env);
+                if (env.IsDevelopment()) app.WriteException(e);
+                else app.Write("Det oppstod en feil");
             }
         }
         
