@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -12,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services.Composition;
-using MyTeam.Services.Repositories;
 
 
 namespace MyTeam
@@ -77,6 +77,10 @@ namespace MyTeam
 
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
+                    
+                var sourceSwitch = new SourceSwitch("LoggingSample") {Level = SourceLevels.Warning };
+                loggerFactory.AddTraceSource(sourceSwitch, new EventLogTraceListener("Application"));
+
 
                 if (env.IsDevelopment())
                 {
@@ -139,6 +143,8 @@ namespace MyTeam
                         await context.Response.WriteAsync("");
                     });
                 }
+
+          
 
             }
             catch (Exception e)

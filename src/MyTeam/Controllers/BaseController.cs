@@ -5,7 +5,7 @@ using MyTeam.Services.Application;
 
 namespace MyTeam.Controllers
 {
-   // [HandleError]
+   [HandleError]
     public class BaseController : Controller
     {
         [FromServices]
