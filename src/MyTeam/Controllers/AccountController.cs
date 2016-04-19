@@ -127,7 +127,7 @@ namespace MyTeam.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Bekreft din konto",
                         "Bekreft kontoen din ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(NewsController.Index), "News");
                 }
@@ -233,7 +233,7 @@ namespace MyTeam.Controllers
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.SignInAsync(user, isPersistent: true);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
 
                         _playerService.AddEmailToPlayer(model.FacebookId, model.Email);

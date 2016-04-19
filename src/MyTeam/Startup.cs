@@ -51,8 +51,8 @@ namespace MyTeam
             services.AddIdentity<ApplicationUser, IdentityRole>((options =>
             {
 
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(30);
-                //options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(16);
+                options.Cookies.ApplicationCookie.SlidingExpiration = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonLetterOrDigit = false;
@@ -77,10 +77,6 @@ namespace MyTeam
 
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
-                    
-                var sourceSwitch = new SourceSwitch("LoggingSample") {Level = SourceLevels.Warning };
-                loggerFactory.AddTraceSource(sourceSwitch, new EventLogTraceListener("Application"));
-
 
                 if (env.IsDevelopment())
                 {
