@@ -10,7 +10,7 @@
     <div className="flex flex-justify-center game-squadList">
                 <ul className="list-unstyled">
                     {model.squad.map(function (player) {
-                        var showPlayerUrl = model.showPlayerUrl + '?playerId='+player.Id
+                        var showPlayerUrl = model.showPlayerUrl + '/'+player.Id
                         return(<li key={player.Id}>
                                     <i className="flaticon-soccer18"></i>&nbsp;<a href={showPlayerUrl} className="underline">{player.FullName}</a>
                                     {that.renderDeleteButton(player, actions, model)}

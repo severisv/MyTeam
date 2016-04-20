@@ -30,7 +30,7 @@ namespace MyTeam.Controllers
             return View("List",model);
         }
 
-        [Route("vis/{playerId}")]
+        [Route("vis/{playerId?}")]
         public IActionResult Show(Guid playerId)
         {
             var selectedPlayer = PlayerService.GetSingle(playerId);
