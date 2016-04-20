@@ -3,7 +3,7 @@ var global = global || {};
 
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
-    $scope.find('input.datepicker').datepicker();
+    applyDatepickers($scope);
     $scope.find('table.tablesorter').tablesorter();
     $scope.find('a.mt-popover').popover({ trigger: "hover" });
     applyConfirmDialogListeners($scope);
@@ -113,4 +113,8 @@ function applyMtAnchorListeners($scope) {
         var url = $(this).data('href');
         window.location = url;
     });
+}
+
+function applyDatepickers($scole) {
+    console.log("No datepicker installed")
 }

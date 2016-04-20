@@ -29,7 +29,6 @@ module.exports = {
         
         lib: [
             npm("jquery/dist/jquery.js"),
-            bower("jquery-ui/jquery-ui.js"),
             bower("tablesorter/jquery.tablesorter.js"),
             bower("bootstrap/dist/js/bootstrap.js"),
             npm("bootbox/bootbox.js"),
