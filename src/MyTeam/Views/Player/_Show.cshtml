@@ -18,7 +18,7 @@
         {
             <tr><td><label asp-for="PracticeCount">Treninger i @DateTime.Now.Year</label></td><td class="playerStats--value">@Html.DisplayFor(m => m.PracticeCount)</td></tr>
             <tr><td><label asp-for="Email"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Email)</td></tr>
-            <tr><td><label asp-for="Phone"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Phone)</td></tr>
+            <tr><td><label asp-for="Phone"></label></td><td class="playerStats--value"><a href="tel:@Model.Phone">@Model.Phone</a></td></tr>
         }
     </table>
     <div class="ajax-load" href="@Url.Action("GetStats", "Player", new {playerId = Model.Id})" ></div>
