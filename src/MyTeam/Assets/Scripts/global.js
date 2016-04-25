@@ -115,6 +115,9 @@ function applyMtAnchorListeners($scope) {
     });
 }
 
-function applyDatepickers($scole) {
-    console.log("No datepicker installed")
+function applyDatepickers($scope) {
+    $scope.find('.datepicker').each(function(element) {
+        var datepicker = React.createElement(Datepicker);
+    });
+
 }
