@@ -29,7 +29,6 @@
 
     addPlayer: function (user) {
         var validationMessage = this.validateUser(user);
-        var imageSmall = user.picture != null ? user.picture.data.url : null;
         if (validationMessage) this.setState({ validationMessage: validationMessage });
 
         else {
@@ -39,10 +38,7 @@
                 middlename: user.middle_name,
                 lastname: user.last_name,
                 facebookid: user.id,
-                emailAddress: user.email,
-                imageSmall: imageSmall,
-                imageMedium: user.imageMedium,
-                imageLarge: user.imageLarge
+                emailAddress: user.email
             }).then(function (data) {
                 if (data.SuccessMessage == "facebookAdd") {
                     var ids = that.state.existingIds;

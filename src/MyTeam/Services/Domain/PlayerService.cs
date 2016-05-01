@@ -26,8 +26,7 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress,
-            string imageSmall, string imageMedium, string imageLarge)
+        public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress)
         {
             var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
                 _dbContext.Players.FirstOrDefault(p => p.UserName == emailAddress) :
@@ -55,7 +54,6 @@ namespace MyTeam.Services.Domain
                     LastName = lastName,
                     UserName = emailAddress,
                     ClubId = club.Id,
-                    ImageFull = imageLarge,
                     MiddleName = middleName
                 };
 

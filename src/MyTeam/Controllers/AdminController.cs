@@ -42,7 +42,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = PlayerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress, model.ImageSmall, model.ImageMedium, model.ImageLarge);
+                var response = PlayerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress);
                 return new JsonResult(response);
            }
 

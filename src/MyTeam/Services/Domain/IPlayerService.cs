@@ -9,7 +9,7 @@ namespace MyTeam.Services.Domain
 {
     public interface IPlayerService
     {
-        JsonResponseMessage Add(string clubId, string facebookId, string firstName,string middleName, string lastName, string emailAddress, string imageSmall, string imageMedium, string imageLarge);
+        JsonResponseMessage Add(string clubId, string facebookId, string firstName,string middleName, string lastName, string emailAddress);
         IEnumerable<string> GetFacebookIds();
         void SetPlayerStatus(Guid id, PlayerStatus status, string clubName);
         void TogglePlayerRole(Guid id, string role, string clubName);
