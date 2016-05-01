@@ -27,3 +27,4 @@ mt.hideElement = function(selector) {
     $(selector).hide();
 }
 
+module.exports = mt;

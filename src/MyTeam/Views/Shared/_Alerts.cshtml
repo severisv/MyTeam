@@ -12,14 +12,14 @@
 else
 {
     <script>
-        mt.clearAlerts();
+        window.mt.clearAlerts();
         @foreach(var value in Enum.GetValues(typeof(AlertType)))
         {
             var alert = ViewData[$"AjaxAlert{value}"] as string;
             if (alert != null)
             {
                 var alertType = value.ToString().ToLower();
-                <text>mt.alert('@alertType','@alert');</text>
+                <text>window.mt.alert('@alertType', '@alert');</text>
             }
         }
     </script>

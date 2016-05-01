@@ -1,4 +1,4 @@
-﻿var ListEvents = React.createClass({
+﻿module.exports = React.createClass({
 
     getIconClassName: function (type) {
       if(type == 0) return "fa fa-soccer-ball-o"  

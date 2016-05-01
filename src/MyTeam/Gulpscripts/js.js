@@ -1,6 +1,6 @@
 // js
 var gulp = require("gulp");
-var concat = require('gulp-concat');
+var browserify = require('browserify');
 var paths = require('./paths');
 var notify = require('gulp-notify');
 var _ = require('./utils');
@@ -8,14 +8,22 @@ var uglify = require('gulp-uglify');
 var react = require('gulp-react');
 var args = require('yargs').argv;
 var gif = require('gulp-if');
+var source = require('vinyl-source-stream');
+var concat = require('gulp-concat');
 
 var isProduction = args.production;
 
 gulp.task('js', function () {
-    return gulp.src(paths.src.scripts)
-      .pipe(concat('site.bundle.js'))
-      .pipe(react())
-       .on('error', _.plumb.errorHandler)
+
+    var bundle =  browserify({
+        debug: !isProduction
+    });
+
+    bundle.add(paths.src.scriptsRoot);
+
+    bundle.bundle()
+      .pipe(source('site.bundle.js'))
+      .on('error', _.plumb.errorHandler)
       .pipe(gif(isProduction, uglify()))
       .on('error', _.plumb.errorHandler)
       .pipe(gulp.dest(paths.dest.scripts))

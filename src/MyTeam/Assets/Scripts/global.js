@@ -1,5 +1,6 @@
 ﻿var ANIMATION_DURATON = 300;
 var global = global || {};
+var ajax = require('./ajaxHelpers')
 
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
@@ -117,7 +118,8 @@ function applyMtAnchorListeners($scope) {
 
 function applyDatepickers($scope) {
     $scope.find('.datepicker').each(function(element) {
-        var datepicker = React.createElement(Datepicker);
     });
 
 }
+
+module.exports = global;

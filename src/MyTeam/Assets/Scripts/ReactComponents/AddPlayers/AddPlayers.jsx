@@ -1,4 +1,4 @@
-﻿var AddPlayers = React.createClass({
+﻿module.exports = React.createClass({
 
     getInitialState: function () {
         return ({

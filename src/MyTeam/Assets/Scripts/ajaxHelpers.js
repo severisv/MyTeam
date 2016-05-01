@@ -43,7 +43,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
                         window.scrollTo(0, 0);
                         target.html(response);
                         target.removeClass("ajax-replace--hidden");
-                        global.applyScopedJsComponents(target);
+                        window.global.applyScopedJsComponents(target);
                     });
                 }, 50);
             });
@@ -58,7 +58,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
             e.preventDefault();
             $.get(href, function (response) {
                 target.html(response);
-                global.applyScopedJsComponents(target);
+                window.global.applyScopedJsComponents(target);
             });
         });
     });
@@ -72,8 +72,10 @@ ajax.applyAjaxLinkListeners = function ($scope) {
             e.preventDefault();
             $.post(href, element.serialize(), function (response) {
                 target.html(response);
-                global.applyScopedJsComponents(target);
+                window.global.applyScopedJsComponents(target);
             });
         });
     });
 }
+
+module.exports = ajax;

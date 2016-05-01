@@ -26,6 +26,7 @@ module.exports = {
             join("", './Assets/Scripts/ReactComponents/*.jsx'),
             join("", './Assets/Scripts/ReactComponents/*/*.jsx')
         ],
+        scriptsRoot : './Assets/Scripts/app.js',
         
         lib: [
             npm("jquery/dist/jquery.js"),

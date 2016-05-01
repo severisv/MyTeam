@@ -28,7 +28,7 @@
 @if (Context.Request.IsAjaxRequest())
 {
     <script>
-        layout.pushState('@Html.Raw(Url.Action("Show", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
+        window.layout.pushState('@Html.Raw(Url.Action("Show", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
     </script>
     @Html.Partial("_Alerts");
 }

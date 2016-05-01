@@ -9,8 +9,8 @@
 <div mt-main>
     <div class="col-md-12 no-padding ">
         <ul class="nav nav-pills mt-justified">
-            <li class="@(ViewBag.Local != true ?  "active" : "")"><a onClick="mt.showElement('#facebook-login'); mt.hideElement('#mt-login');"><i class="fa fa-facebook"></i> Med Facebook</a></li>
-            <li class="@(ViewBag.Local == true ?  "active" : "")"><a onClick="mt.showElement('#mt-login'); mt.hideElement('#facebook-login');"><i class="fa fa-user"></i>&nbsp;Med lokal brukerkonto</a></li>
+            <li class="@(ViewBag.Local != true ?  "active" : "")"><a onClick="window.mt.showElement('#facebook-login'); mt.hideElement('#mt-login');"><i class="fa fa-facebook"></i> Med Facebook</a></li>
+            <li class="@(ViewBag.Local == true ?  "active" : "")"><a onClick="window.mt.showElement('#mt-login'); mt.hideElement('#facebook-login');"><i class="fa fa-user"></i>&nbsp;Med lokal brukerkonto</a></li>
         </ul>
     </div>
     <div class="clearfix"></div>
