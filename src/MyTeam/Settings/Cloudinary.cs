@@ -1,16 +1,24 @@
 ﻿using System.Linq;
+using Microsoft.Extensions.OptionsModel;
 
 namespace MyTeam.Settings
 {
-    public static class Cloudinary
+    public class Cloudinary : ICloudinary
     {
+        public string DefaultArticle { get; }
+        private readonly string _defaultMember;
+        private readonly string _cloudName;
+        private string BaseLocation => $"http://res.cloudinary.com/{_cloudName}/";
 
-        public static string BaseLocation = "http://res.cloudinary.com/drdo17bnj/";
-        public static string DefaultArticle = "image/upload/v1448309373/article_default_hnwnxo.jpg";
-        public static string DefaultMember = "image/upload/v1448559418/default_player_dnwac0.gif";
+        public Cloudinary(IOptions<CloudinaryOptions> options)
+        {
+            _cloudName = options.Value.CloudName;
+            _defaultMember = options.Value.DefaultMember ?? "image/upload/v1448559418/default_player_dnwac0.gif";
+            DefaultArticle = options.Value.DefaultArticle ?? "image/upload/v1448309373/article_default_hnwnxo.jpg";
+        }
 
 
-        public static string Image(string res, int? width = null, string fallback = "")
+        public string Image(string res, int? width = null, string fallback = "")
         {
             if (string.IsNullOrWhiteSpace(res)) res = fallback;
 
@@ -18,13 +26,13 @@ namespace MyTeam.Settings
         }
 
 
-        public static string MemberImage(string res, string facebookId, int? width = null, int? height = null)
+        public string MemberImage(string res, string facebookId, int? width = null, int? height = null)
         {
             if (string.IsNullOrEmpty(res))
             {
-                res = !string.IsNullOrEmpty(facebookId) ? 
-                    GetFacebookImage(facebookId, width) : 
-                    DefaultMember;
+                res = !string.IsNullOrEmpty(facebookId)
+                    ? GetFacebookImage(facebookId, width)
+                    : _defaultMember;
             }
 
             if (res.StartsWith("http")) return res;
@@ -32,7 +40,7 @@ namespace MyTeam.Settings
             return Resize($"{BaseLocation}{res}", width, height);
         }
 
-        private static string GetFacebookImage(string facebookId, int? width)
+        private string GetFacebookImage(string facebookId, int? width)
         {
             var type = "large";
             if (width < 51) type = "square";
@@ -41,7 +49,7 @@ namespace MyTeam.Settings
             return $"https://graph.facebook.com/{facebookId}/picture?type={type}";
         }
 
-        private static string Resize(string imageUrl, int? width, int? height = null)
+        private string Resize(string imageUrl, int? width, int? height = null)
         {
             if (width == null) return imageUrl;
 
@@ -59,7 +67,7 @@ namespace MyTeam.Settings
                 }
                 else
                 {
-                    urlList.Insert((int)insertAt, $"c_fill,h_{height},w_{width},q_100");
+                    urlList.Insert((int) insertAt, $"c_fill,h_{height},w_{width},q_100");
                 }
             }
 

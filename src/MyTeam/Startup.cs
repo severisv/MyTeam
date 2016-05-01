@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services.Composition;
+using MyTeam.Settings;
 
 
 namespace MyTeam
@@ -61,8 +62,10 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
 
+            services.AddMvc();
+            
             services.AddInstance(Configuration);
             services.RegisterDependencies();
 
