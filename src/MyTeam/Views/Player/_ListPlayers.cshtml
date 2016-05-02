@@ -9,7 +9,7 @@
         <a class="ajax-link mt-player-container" data-ajax-update="#show-players"
            asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
             <div class="image-container">
-                <img src="@Cloudinary.MemberImage(player.Image, player.FacebookId, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
+                <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 200, 200)" title="@Html.DisplayFor(p => player.Name)" alt="">
             </div>
             <p>@Html.DisplayFor(p => player.Name)</p>
         </a>

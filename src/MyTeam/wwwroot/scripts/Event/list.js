@@ -65,3 +65,4 @@ function applySignupFunctions(scope) {
 }
 
 applySignupFunctions('body');
+

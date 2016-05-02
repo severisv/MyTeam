@@ -3,7 +3,7 @@
 @model MyTeam.ViewModels.Player.ShowPlayerViewModel
 
 <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
-    <img src="@Cloudinary.MemberImage(Model.ImageFull, Model.FacebookId, 400)" />
+    <img src="@Context.Cloudinary().MemberImage(Model.ImageFull, Model.FacebookId, 400)" />
 </div>
 <div class="col-sm-6 col-md-6 col-lg-6 player-info">
     @if (Context.Member().IsSelfOrAdmin(Model.Id))
@@ -18,7 +18,7 @@
         {
             <tr><td><label asp-for="PracticeCount">Treninger i @DateTime.Now.Year</label></td><td class="playerStats--value">@Html.DisplayFor(m => m.PracticeCount)</td></tr>
             <tr><td><label asp-for="Email"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Email)</td></tr>
-            <tr><td><label asp-for="Phone"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.Phone)</td></tr>
+            <tr><td><label asp-for="Phone"></label></td><td class="playerStats--value"><a href="tel:@Model.Phone">@Model.Phone</a></td></tr>
         }
     </table>
     <div class="ajax-load" href="@Url.Action("GetStats", "Player", new {playerId = Model.Id})" ></div>
@@ -28,7 +28,7 @@
 @if (Context.Request.IsAjaxRequest())
 {
     <script>
-        layout.pushState('@Html.Raw(Url.Action("Show", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
+        window.layout.pushState('@Html.Raw(Url.Action("Show", "Player", new {@playerId = Model.Id}).ToLower())', '@Html.Raw(Model.Fullname)')
     </script>
     @Html.Partial("_Alerts");
 }

@@ -9,7 +9,7 @@
         <input asp-for="ArticleId" type="hidden"/>
         <input asp-for="ImageUrl" type="hidden"/>
         <div class="cloudinary-preview news-imageWrapper">
-            <img src="@Cloudinary.Image(Model.ImageUrl, 900, Cloudinary.DefaultArticle)" />
+            <img src="@Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle)" />
         </div>
         <input name="file" type="file"
                class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageUrl"/>

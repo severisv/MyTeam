@@ -20,6 +20,7 @@ namespace MyTeam.ViewModels.Game
             Status = player.Status;
             EventId = eventId;
             TeamIds = player.TeamIds;
+            FacebookId = player.FacebookId;
         }
     }
 }

@@ -49,11 +49,24 @@ module Helpers =
         let executable = findOnPath "dnvm.cmd"
         shellExec executable args workingDir    
     
+
+    let rec execMsdeploy executable args workingDir attempt attempts = 
+        try 
+            shellExec executable args workingDir
+        with | _ ->  
+            if attempt > 0 then 
+                printf "MsDeploy attempt %i: \n" (1+attempts-attempt)
+                execMsdeploy executable args workingDir (attempt-1) attempts
+            else
+                printf "MsDeploy failed after %i attempts \n" attempts
+                reraise()
+
     let msdeploy args workingDir = 
         let currentDir = FileSystemHelper.currentDirectory
         let executable = sprintf "%s\webdeploy\msdeploy.exe" currentDir
-        shellExec executable args workingDir            
-                                                          
+        execMsdeploy executable args workingDir 3 3                  
+                 
+                                                  
     type DnuCommands =
         | Restore
         | Build
@@ -118,7 +131,7 @@ module Targets =
      let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
      let password = EnvironmentHelper.environVar "DEPLOY_PWD"
      let args = sprintf "-source:IisApp='%s\.deploy\wwwroot' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension  -retryAttempts:2" currentDir appName appName appName password
-     msdeploy args "" |> ignore
+     msdeploy args "" |> ignore 
   )    
 
 
@@ -138,6 +151,3 @@ module Targets =
 ==> "Default"
 
 RunTargetOrDefault "Default"
-
-
-

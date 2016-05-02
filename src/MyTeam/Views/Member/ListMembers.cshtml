@@ -25,7 +25,7 @@
                 <tr>
                     <td class="hidden-xs image">
                         <a asp-controller="player" asp-action="show" asp-route-playerid="@member.Id">
-                            <img src="@Cloudinary.MemberImage(member.Image, member.FacebookId, 50, 50)"/>
+                            <img src="@Context.Cloudinary().MemberImage(member.Image, member.FacebookId, 50, 50)"/>
                         </a>
                     </td>
                     <td>
@@ -34,10 +34,10 @@
                         </a>
                     </td>
                     <td>
-                        @member.Phone
+                        <a href="tel:@member.Phone">@member.Phone</a>
                     </td>
                     <td class="hidden-xs">
-                        @member.Email
+                        <a href="mailto:@member.Email">@member.Email</a>
                     </td>
                 </tr>
 

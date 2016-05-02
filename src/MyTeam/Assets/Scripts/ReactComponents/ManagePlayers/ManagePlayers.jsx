@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-var ManagePlayers = React.createClass({
+module.exports = React.createClass({
          
     getInitialState: function () {
         return ({

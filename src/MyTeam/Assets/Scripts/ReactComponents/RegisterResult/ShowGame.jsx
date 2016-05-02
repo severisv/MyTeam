@@ -1,4 +1,4 @@
-﻿var ShowGame = React.createClass({
+﻿module.exports = React.createClass({
     getInitialState: function () {
         return ({
             players: [],

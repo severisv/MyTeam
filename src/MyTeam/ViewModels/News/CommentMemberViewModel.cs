@@ -7,12 +7,14 @@ namespace MyTeam.ViewModels.News
         public string FullName { get;  }
         public string ImageSmall { get;  }
         public Guid? Id { get; }
+        public string FacebookId { get; set; }
 
-        public CommentMemberViewModel(string fullName, string imageSmall, Guid? memberId)
+        public CommentMemberViewModel(string fullName, string imageSmall, Guid? memberId, string facebookId)
         {
             FullName = fullName;
             ImageSmall = imageSmall;
             Id = memberId;
+            FacebookId = facebookId;
         }
 
     }

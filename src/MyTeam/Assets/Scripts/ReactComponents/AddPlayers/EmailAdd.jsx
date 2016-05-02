@@ -1,5 +1,5 @@
 ﻿
-var EmailAdd = React.createClass({
+module.exports = React.createClass({
    
     getInitialState: function () {
         return { firstname: '', lastname: '', email: '' };

@@ -16,13 +16,6 @@ namespace MyTeam.ViewModels.Admin
         [Required]
         public string LastName { get; set; }
 
-        [Url]
-        public string ImageSmall { get; set; }
-        [Url]
-        public string ImageMedium { get; set; }
-        [Url]
-        public string ImageLarge { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();

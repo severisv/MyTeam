@@ -1,9 +1,10 @@
 ﻿var ANIMATION_DURATON = 300;
 var global = global || {};
+var ajax = require('./ajaxHelpers')
 
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
-    $scope.find('input.datepicker').datepicker();
+    applyDatepickers($scope);
     $scope.find('table.tablesorter').tablesorter();
     $scope.find('a.mt-popover').popover({ trigger: "hover" });
     applyConfirmDialogListeners($scope);
@@ -114,3 +115,11 @@ function applyMtAnchorListeners($scope) {
         window.location = url;
     });
 }
+
+function applyDatepickers($scope) {
+    $scope.find('.datepicker').each(function(element) {
+    });
+
+}
+
+module.exports = global;

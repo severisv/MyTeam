@@ -143,5 +143,10 @@ namespace MyTeam.Controllers
                 });
         }
 
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult TestException()
+        {
+            throw new Exception("Boom");
+        }
     }
 }

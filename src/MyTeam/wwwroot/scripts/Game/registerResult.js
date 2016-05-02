@@ -2,7 +2,7 @@
 var element = $('#registerResult-addEvent');
 
 
-var registerEvents = React.createElement(ShowGame, {
+var registerEvents = React.createElement(window.ShowGame, {
     routes: {
         GET_PLAYERS: element.data('get-players-url'),
         GET_SQUAD: element.data('get-squad-url'),

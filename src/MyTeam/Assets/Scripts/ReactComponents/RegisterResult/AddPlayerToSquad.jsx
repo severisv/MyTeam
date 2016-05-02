@@ -1,4 +1,4 @@
-﻿var AddPlayerToSquad = React.createClass({
+﻿module.exports = React.createClass({
 
     render: function () {
         var model = this.props.model;

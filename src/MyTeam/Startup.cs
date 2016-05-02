@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services.Composition;
-using MyTeam.Services.Repositories;
+using MyTeam.Settings;
 
 
 namespace MyTeam
@@ -51,8 +52,8 @@ namespace MyTeam
             services.AddIdentity<ApplicationUser, IdentityRole>((options =>
             {
 
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(30);
-                //options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(16);
+                options.Cookies.ApplicationCookie.SlidingExpiration = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonLetterOrDigit = false;
@@ -61,8 +62,10 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
 
+            services.AddMvc();
+            
             services.AddInstance(Configuration);
             services.RegisterDependencies();
 
@@ -139,6 +142,8 @@ namespace MyTeam
                         await context.Response.WriteAsync("");
                     });
                 }
+
+          
 
             }
             catch (Exception e)

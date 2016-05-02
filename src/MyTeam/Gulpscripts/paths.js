@@ -26,10 +26,10 @@ module.exports = {
             join("", './Assets/Scripts/ReactComponents/*.jsx'),
             join("", './Assets/Scripts/ReactComponents/*/*.jsx')
         ],
+        scriptsRoot : './Assets/Scripts/app.js',
         
         lib: [
             npm("jquery/dist/jquery.js"),
-            bower("jquery-ui/jquery-ui.js"),
             bower("tablesorter/jquery.tablesorter.js"),
             bower("bootstrap/dist/js/bootstrap.js"),
             npm("bootbox/bootbox.js"),

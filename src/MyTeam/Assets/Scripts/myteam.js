@@ -7,7 +7,6 @@ mt.deleteWithAjax = function(selector) {
         
         $('#' + element.data('parent')).fadeOut(300, function() { $(this).remove(); });
         $('#alerts').html(result);
-        $('.alert').effect("highlight", { }, 500 );
     });
 }
 
@@ -15,7 +14,6 @@ mt.alert = function (type, message) {
     this.clearAlerts();
     $('#' + type + " .alert-content").html(message);
     $('#' + type).removeClass("hidden");
-    $('.alert').effect("highlight", {}, 500);
 }
 
 mt.clearAlerts = function () {
@@ -29,3 +27,4 @@ mt.hideElement = function(selector) {
     $(selector).hide();
 }
 
+module.exports = mt;

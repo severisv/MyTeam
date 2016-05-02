@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
+using MyTeam.Settings;
 using ILogger = MyTeam.Services.Application.ILogger;
 
 namespace MyTeam.Services.Composition
@@ -19,6 +20,7 @@ namespace MyTeam.Services.Composition
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<ILogger, Logger>();
+            services.AddTransient<ICloudinary, Cloudinary>();
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
 

@@ -4,7 +4,7 @@
 <div class="news-comment clearfix">
     <div class="comment-container comment-imageContainer">
         <a asp-controller="Player" asp-action="Show" asp-route-playerId="@Model.Member.Id" title="@Model.Member.FullName">
-            <img src="@Cloudinary.MemberImage(Model.Member.ImageSmall, 60, 70)" />
+            <img src="@Context.Cloudinary().MemberImage(Model.Member.ImageSmall, Model.Member.FacebookId, 60, 70)" />
         </a>
     </div>
     <div class="comment-container comment-contentContainer">

@@ -208,3 +208,4 @@ src/MyTeam/wwwroot/scripts/Bundles/
 .deploy/
 setdeploycredentials.cmd
 src/MyTeam/appsettings.Development.json
+src/MyTeam/appsettings.Production.json

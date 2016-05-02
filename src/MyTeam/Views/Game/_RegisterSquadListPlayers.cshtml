@@ -4,7 +4,7 @@
         @foreach (var player in Model)
         {
             <li class="register-attendance-item registerSquad-player" >
-                <img class="hidden-xxs" src="@Cloudinary.MemberImage(player.ImageFull, player.FacebookId, 50, 50)"/>
+                <img class="hidden-xxs" src="@Context.Cloudinary().MemberImage(player.ImageFull, player.FacebookId, 50, 50)"/>
                 @player.ShortName
 
                 <input class="pull-right form-control register-attendance-input"

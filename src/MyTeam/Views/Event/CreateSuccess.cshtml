@@ -14,7 +14,7 @@
                 @Html.Partial("_Show", ev)
             </div>
             <div class="flex-1 align-center flex-center">
-                <a onclick="mt.deleteWithAjax(this)" data-parent="@ev.Id" style="margin-top: 40px;" class="btn btn-danger" data-href="@Url.Action("Delete", new { @eventId = ev.Id })" title="@Res.Delete"><i class="fa fa-trash"></i></a>
+                <a onclick="window.mt.deleteWithAjax(this)" data-parent="@ev.Id" style="margin-top: 40px;" class="btn btn-danger" data-href="@Url.Action("Delete", new { @eventId = ev.Id })" title="@Res.Delete"><i class="fa fa-trash"></i></a>
             </div>
         </div>
     }

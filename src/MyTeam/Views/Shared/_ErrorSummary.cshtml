@@ -1,14 +1,11 @@
-﻿@using System
-@using System.Collections.Generic
-@using Microsoft.Data.Entity.Metadata.Internal
-@model Exception
+﻿@model Exception
 
 <div>
     @if (Model != null)
     {
 
         <hr />
-        <div style="overflow:scroll">
+        <div >
             @{
                 var exceptions = new List<Exception>();
                 var exception = Model;

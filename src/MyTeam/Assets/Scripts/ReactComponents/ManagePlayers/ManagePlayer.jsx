@@ -1,5 +1,5 @@
 ﻿
-var ManagePlayer = React.createClass({
+module.exports = React.createClass({
     getInitialState: function () {
         return ({
             player: this.props.player
