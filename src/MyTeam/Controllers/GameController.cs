@@ -69,7 +69,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
+        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         [Route("laguttak/velg")]
         public JsonResult SelectPlayer(Guid eventId, Guid playerId, bool isSelected)
         {

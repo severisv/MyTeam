@@ -9,7 +9,7 @@
 
 <div class="mt-main">
     <div class="mt-container">
-        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.NewsWriter))
         {
             if (Model.Game.HasPassed())
             {

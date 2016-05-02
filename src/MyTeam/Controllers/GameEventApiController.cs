@@ -31,7 +31,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach)]
+        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult Add(GameEventViewModel model)
         {
             if (ModelState.IsValid)
@@ -51,7 +51,7 @@ namespace MyTeam.Controllers
 
 
         [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach)]
+        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult Delete(Guid eventId)
         {
             if (ModelState.IsValid)
