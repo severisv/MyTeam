@@ -5,10 +5,10 @@ var paths = require('./paths');
 var notify = require('gulp-notify');
 var _ = require('./utils');
 var uglify = require('gulp-uglify');
-var react = require('gulp-react');
 var args = require('yargs').argv;
 var gif = require('gulp-if');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
 
 var isProduction = args.production;
@@ -23,6 +23,8 @@ gulp.task('js', function () {
 
     bundle.bundle()
       .pipe(source('site.bundle.js'))
+      .on('error', _.plumb.errorHandler)
+      .pipe(gif(isProduction, buffer()))
       .on('error', _.plumb.errorHandler)
       .pipe(gif(isProduction, uglify()))
       .on('error', _.plumb.errorHandler)
