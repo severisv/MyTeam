@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
+using MyTeam.Settings;
 using MyTeam.Util;
 
 namespace MyTeam.ViewModels.Shared
@@ -13,11 +13,11 @@ namespace MyTeam.ViewModels.Shared
         public int UnixTimestamp { get; }
 
 
-        public CloudinaryConfiguration(IConfiguration config)
+        public CloudinaryConfiguration(CloudinaryOptions options)
         {
-           CloudName = config["Integration:Cloudinary:CloudName"];
-           ApiKey = config["Integration:Cloudinary:ApiKey"];
-           ApiSecret = config["Integration:Cloudinary:ApiSecret"];
+           CloudName = options.CloudName;
+           ApiKey = options.ApiKey;
+           ApiSecret = options.ApiSecret;
            UnixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
         var queryString = $"timestamp={UnixTimestamp}{ApiSecret}";
