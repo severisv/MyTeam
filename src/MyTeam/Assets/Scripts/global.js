@@ -117,7 +117,8 @@ function applyMtAnchorListeners($scope) {
 }
 
 function applyDatepickers($scope) {
-    $scope.find('.datepicker').each(function(element) {
+    $scope.find('.datepicker').each(function (element) {
+        var datepicker = require('./ReactComponents/Shared/Datepicker.jsx');
     });
 
 }
