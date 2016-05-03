@@ -22,19 +22,16 @@ else
     <br />
 }
 
-
 <form asp-action="Create" method="post" class="form-horizontal createEventForm" role="form">
-    @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
-
     <input asp-for="Type" type="hidden" />
     <input asp-for="EventId" type="hidden" />
-
     <div class="col-sm-6 col-xs-12">
-
         <div class="form-group">
             <label mt-for="Date" mt-icon="calendar" class="col-xs-2 control-label"></label>
             <div class="col-xs-10">
-                <input asp-for="Date" type="text" class="form-control datepicker" />
+                <div class="datepicker" data-value="@Html.DisplayFor(m => m.Date)" id="Date">
+                    <input asp-for="Date" type="text" class="form-control" />
+                </div>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>

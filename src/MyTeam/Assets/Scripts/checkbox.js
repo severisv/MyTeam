@@ -13,6 +13,7 @@ checkbox.showHideAssociatedElement = function (element, associatedSelector, reve
     }
 };
 
+module.exports = checkbox;
 
 
 

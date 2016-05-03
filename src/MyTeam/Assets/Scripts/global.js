@@ -1,6 +1,8 @@
 ﻿var ANIMATION_DURATON = 300;
 var global = global || {};
-var ajax = require('./ajaxHelpers')
+var ajax = require('./ajaxHelpers');
+var ReactDOM = require('react-dom');
+var React = require('react');
 
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
@@ -117,8 +119,11 @@ function applyMtAnchorListeners($scope) {
 }
 
 function applyDatepickers($scope) {
-    $scope.find('.datepicker').each(function (element) {
-        var datepicker = require('./ReactComponents/Shared/Datepicker.jsx');
+    $scope.find('.datepicker').each(function (i, element) {
+        var $el = $(element);
+        var Datepicker = require('./ReactComponents/Shared/Datepicker.jsx');
+        var datepickerElement = React.createElement(Datepicker, { value: $el.data('value'), name: $el.attr('id') })
+        ReactDOM.render(datepickerElement, element);
     });
 
 }

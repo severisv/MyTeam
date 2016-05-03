@@ -60,12 +60,16 @@
 
         <div class="form-group">
             <label asp-for="BirthDate"></label>
-            <input asp-for="BirthDate" type="text" class="form-control datepicker" />
+            <span class="datepicker" data-value="@Html.DisplayFor(m => m.BirthDate)" id="BirthDate">
+                <input asp-for="BirthDate" type="text" class="form-control" />
+            </span>            
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="StartDate"></label>
-            <input asp-for="StartDate" type="text" class="form-control datepicker" />
+            <span class="datepicker" data-value="@Html.DisplayFor(m => m.StartDate)" id="StartDate">
+                <input asp-for="StartDate" type="text" class="form-control" />
+            </span>
             <span asp-validation-for="StartDate" class="text-danger"></span>
         </div>
         <div class="form-group">

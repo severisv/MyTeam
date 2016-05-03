@@ -49,12 +49,14 @@
             <label mt-for="Recurring" mt-icon="refresh" class="col-xs-2 control-label"></label>
             <div class="col-xs-10 flex">
                 <div class="flex-1">
-                    <input asp-for="Recurring" type="checkbox" class="form-control" onclick="checkbox.showHideAssociatedElement(this, '#ToDateWrapper')" />
+                    <input asp-for="Recurring" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#ToDateWrapper')" />
                     <a mt-tooltip="@Res.RecurringExplaination"></a>
                 </div>
                 <div class="flex-2">
                     <span id="ToDateWrapper" @(Model.Recurring ? String.Empty : "hidden")>
-                        <input asp-for="ToDate" class="form-control datepicker" placeholder="@Html.DisplayNameFor(m => m.ToDate)" />
+                        <span class="datepicker" data-value="@Html.DisplayFor(m => m.ToDate)" id="ToDate">
+                            <input asp-for="ToDate" type="text" class="form-control" />
+                        </span>
                     </span>
                 </div>
             </div>

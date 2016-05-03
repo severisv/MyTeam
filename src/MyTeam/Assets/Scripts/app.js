@@ -11,7 +11,7 @@ window.AddPlayerToSquad = require('./ReactComponents/RegisterResult/AddPlayerToS
 window.ShowGame = require('./ReactComponents/RegisterResult/ShowGame.jsx')
 
 require('./ajaxHelpers')
-require('./checkbox')
+window.checkbox = require('./checkbox')
 require('./facebook')
 window.global = require('./global')
 window.layout = require('./layout')
