@@ -5,13 +5,10 @@ var react = require('react');
 require('moment/locale/nb');
 moment.locale('nb');
 
-
-
-
 var Datepicker = react.createClass({
 
     getInitialState() {
-        var date = this.props.value ? moment(this.props.value, 'DD.MM.YYYY') : moment();
+        var date = this.props.value ? moment(this.props.value, 'DD.MM.YYYY') : undefined;
         return { value: date };
     },
 
