@@ -81,11 +81,10 @@ namespace MyTeam
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
-                if (env.IsDevelopment())
+                if (env.IsDevelopment() || env.IsStaging())
                 {
                     app.UseDeveloperExceptionPage();
                     app.UseDatabaseErrorPage();
-                    app.UseBrowserLink();
                 }
                 else
                 {
