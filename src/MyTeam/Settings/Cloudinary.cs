@@ -18,11 +18,11 @@ namespace MyTeam.Settings
         }
 
 
-        public string Image(string res, int? width = null, string fallback = "")
+        public string Image(string res, int? width = null, string fallback = "", int quality = 100)
         {
             if (string.IsNullOrWhiteSpace(res)) res = fallback;
 
-            return Resize($"{BaseLocation}{res}", width);
+            return Resize($"{BaseLocation}{res}", width, quality: quality);
         }
 
 
@@ -49,7 +49,7 @@ namespace MyTeam.Settings
             return $"https://graph.facebook.com/{facebookId}/picture?type={type}";
         }
 
-        private string Resize(string imageUrl, int? width, int? height = null)
+        private string Resize(string imageUrl, int? width, int? height = null, int quality = 100)
         {
             if (width == null) return imageUrl;
 
@@ -63,11 +63,11 @@ namespace MyTeam.Settings
             {
                 if (height == null)
                 {
-                    urlList.Insert((int) insertAt, $"c_scale,w_{width},q_100");
+                    urlList.Insert((int) insertAt, $"c_scale,w_{width},q_{quality}");
                 }
                 else
                 {
-                    urlList.Insert((int) insertAt, $"c_fill,h_{height},w_{width},q_100");
+                    urlList.Insert((int) insertAt, $"c_fill,h_{height},w_{width},q_{quality}");
                 }
             }
 

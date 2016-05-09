@@ -3,20 +3,19 @@
 @model MyTeam.ViewModels.News.ArticleViewModel
 @{
     var isShortVersion = ViewData["isShortVersion"] as bool? == true;
+    var articleImageUrl = Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle, quality: 85);
 }
-
-
 
 <div class="news-item mt-container">
     <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short":"")">
         @if (isShortVersion)
         {
-            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle)"/>
+            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@articleImageUrl"/>
             </a>
         }
         else
         {
-            <img src="@Context.Cloudinary().Image(Model.ImageUrl, 800, Context.Cloudinary().DefaultArticle)" />
+            <img src="@articleImageUrl" />
             }
         </div>
         @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
