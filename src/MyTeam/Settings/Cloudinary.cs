@@ -37,7 +37,7 @@ namespace MyTeam.Settings
 
             if (res.StartsWith("http")) return res;
 
-            return Resize($"{BaseLocation}{res}", width, height);
+            return Resize($"{BaseLocation}{res}", width, height, quality: 90);
         }
 
         private string GetFacebookImage(string facebookId, int? width)
