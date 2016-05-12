@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNet.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.News;
@@ -19,8 +18,8 @@ namespace MyTeam.Controllers
         [FromServices]
         public ApplicationDbContext DbContext { get; set; }
 
-        [Route("")]
-        [Route("nyheter")]
+        [Route("{skip:int?}/{take:int?}")]
+        [Route("nyheter/{skip:int?}/{take:int?}")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
             var model = ArticleService.Get(HttpContext.GetClub().Id, skip, take);
