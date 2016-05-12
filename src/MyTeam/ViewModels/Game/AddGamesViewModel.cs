@@ -18,6 +18,7 @@ namespace MyTeam.ViewModels.Game
         public Guid TeamId { get; set; }
         public GameType GameType { get; set; }
         public string TeamName => Teams?.SingleOrDefault(t => t.Id == TeamId)?.Name;
+        public string ShortTeamName => Teams?.SingleOrDefault(t => t.Id == TeamId)?.ShortName;
 
         public virtual GamesList Games
         {

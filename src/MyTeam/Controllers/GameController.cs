@@ -116,18 +116,19 @@ namespace MyTeam.Controllers
 
         [Route("terminliste")]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult AddGames(Guid? teamId)
+        public IActionResult AddGames()
         {
             var teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
             {
                 Id = t.Id,
-                Name = t.Name
+                Name = t.Name,
+                ShortName = t.ShortName
             }).ToList();
 
            var model =  new AddGamesViewModel
             {
                Teams  = teams,
-               TeamId = teamId ?? Guid.Empty
+               TeamId = Guid.Empty
            };
             return View(model);
         }
@@ -152,7 +153,7 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 GameService.AddGames(model.Games.Games, Club.Id);
-                return RedirectToAction("Index", "Game", new {year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, teamId = model.TeamId});
+                return RedirectToAction("Index", "Game", new {year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, lag = model.ShortTeamName });
             }
             return View(model);
         }

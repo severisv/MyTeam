@@ -16,6 +16,7 @@ namespace MyTeam.ViewModels.Game
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(_gamesString)) return new List<ParsedGame>();
                     return ParseGames(_gamesString);
 
                 }
