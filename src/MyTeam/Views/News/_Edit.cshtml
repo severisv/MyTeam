@@ -3,16 +3,17 @@
 
 
 <div class="col-xs-12">
-
-
     <form asp-action="edit" method="post">
         <input asp-for="ArticleId" type="hidden"/>
         <input asp-for="ImageUrl" type="hidden"/>
         <div class="cloudinary-preview news-imageWrapper">
-            <img src="@Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle)" />
+            <img src="@Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle)"/>
         </div>
-        <input name="file" type="file"
-               class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageUrl"/>
+        <div class="form-file-upload-wrapper">
+            <input name="file" type="file"
+                   class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageUrl" />
+        </div>
+       
         @if (!Model.IsNew)
         {
             <a class="btn btn-danger pull-right confirm-dialog"

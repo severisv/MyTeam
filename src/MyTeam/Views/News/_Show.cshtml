@@ -3,7 +3,7 @@
 @model MyTeam.ViewModels.News.ArticleViewModel
 @{
     var isShortVersion = ViewData["isShortVersion"] as bool? == true;
-    var articleImageUrl = Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle, quality: 85);
+    var articleImageUrl = Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle, quality: 85, format: "jpg");
 }
 
 <div class="news-item mt-container">

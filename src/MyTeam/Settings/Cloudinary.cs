@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.OptionsModel;
+using Microsoft.SqlServer.Server;
 
 namespace MyTeam.Settings
 {
@@ -18,11 +20,11 @@ namespace MyTeam.Settings
         }
 
 
-        public string Image(string res, int? width = null, string fallback = "", int quality = 100)
+        public string Image(string res, int? width = null, string fallback = "", int quality = 100, string format = null)
         {
             if (string.IsNullOrWhiteSpace(res)) res = fallback;
 
-            return Resize($"{BaseLocation}{res}", width, quality: quality);
+            return Resize($"{BaseLocation}{res}", width, quality: quality, format: format);
         }
 
 
@@ -49,7 +51,7 @@ namespace MyTeam.Settings
             return $"https://graph.facebook.com/{facebookId}/picture?type={type}";
         }
 
-        private string Resize(string imageUrl, int? width, int? height = null, int quality = 100)
+        private string Resize(string imageUrl, int? width, int? height = null, int quality = 100, string format = null)
         {
             if (width == null) return imageUrl;
 
@@ -70,8 +72,19 @@ namespace MyTeam.Settings
                     urlList.Insert((int) insertAt, $"c_fill,h_{height},w_{width},q_{quality}");
                 }
             }
+            var result = string.Join("/", urlList);
 
-            return string.Join("/", urlList);
+
+            if (format != null)
+            {
+                result = Regex.Replace(result, ".png", $".{format}", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, ".jpg", $".{format}", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, ".jpeg", $".{format}", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, ".bmp", $".{format}", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, ".tiff", $".{format}", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, ".gif", $".{format}", RegexOptions.IgnoreCase);
+            }
+            return result;
         }
     }
 }
