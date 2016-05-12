@@ -13,9 +13,10 @@
         {
             if (Model.Game.HasPassed())
             {
+
                 <a asp-action="registerresult" asp-route-gameId="@Model.Game.Id" class="btn btn-default pull-right" title="Registrer resultat"><i class="flaticon-goal"></i></a>
             }
-            else
+            else if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
             {
                 <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
             }
