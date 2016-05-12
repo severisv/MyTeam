@@ -12,7 +12,7 @@
                 <li class="nav-header">@group.Key</li>
                 @foreach (var article in group)
                 {
-                    <li><a asp-controller="news" asp-action="show" asp-route-articleid="@article.Id">@article.Headline.Truncate(30)</a></li>
+                    <li><a asp-controller="news" asp-action="show" asp-route-name="@article.Name">@article.Headline.Truncate(30)</a></li>
                 }
             </ul>
             <br />

@@ -10,7 +10,7 @@
     <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short":"")">
         @if (isShortVersion)
         {
-            <a asp-action="show" asp-route-articleId="@Model.Id"><img src="@articleImageUrl"/>
+            <a asp-action="show" asp-route-name="@Model.Name"><img src="@articleImageUrl"/>
             </a>
         }
         else
@@ -20,7 +20,7 @@
         </div>
         @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
         {
-            <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-articleId="@Model.Id"><i class='fa fa-edit'></i></a>
+            <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-navn="@Model.Name"><i class='fa fa-edit'></i></a>
         }
         <h2>@Model.Headline</h2>
         <p class="news-author"><a class="underline" asp-controller="player" asp-action="show" asp-route-playerId="@Model.AuthorId">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span></p>
@@ -31,7 +31,7 @@
                         @Html.Raw(Model.Content.StripHtmlTags().Truncate())
                     </div>
                     <hr />
-                    <a class="underline" asp-action="show" asp-route-articleId="@Model.Id">Les hele og kommentér (@Model.CommentCount)</a>
+                    <a class="underline" asp-action="show" asp-route-name="@Model.Name">Les hele og kommentér (@Model.CommentCount)</a>
                 }
                 else
                 {

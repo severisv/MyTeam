@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
@@ -28,7 +29,7 @@ namespace MyTeam.Services.Domain
             var articles = query.Select(a =>
                 new ArticleViewModel
                 {
-                    Id = a.Id,
+                    Name = a.Name,
                     Author = new MemberViewModel { Fullname = a.Author.Fullname },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
@@ -41,12 +42,13 @@ namespace MyTeam.Services.Domain
             return new PagedList<ArticleViewModel>(articles.Skip(skip).Take(take), skip, take, totalCount);
         }
 
-        public ArticleViewModel Get(Guid articleId)
+        public ArticleViewModel Get(Guid clubId, string name)
         {
-            return _dbContext.Articles.Where(a => a.Id == articleId).Select(a =>
+            return _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId).Select(a =>
                 new ArticleViewModel
                 {
-                    Id = articleId,
+                    Id = a.Id,
+                    Name = a.Name,
                     Author = new MemberViewModel { Fullname = a.Author.Fullname },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
@@ -73,23 +75,28 @@ namespace MyTeam.Services.Domain
                   {
                       Id = a.Id,
                       Headline = a.Headline,
-                      Published = a.Published
+                      Published = a.Published,
+                      Name = a.Name
                   }),
                   skip, take, totalCount);
         }
 
 
 
-        public void CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
+        public string CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId)
         {
             var articleId = model.IsNew ? Guid.NewGuid() : model.ArticleId;
 
             if (model.IsNew)
             {
+              
+                var name = CreateArticleName(model.Headline);
+
                 var newArticle = new Article
                 {
                     Id = articleId,
                     Headline = model.Headline,
+                    Name = name,
                     ClubId = clubId,
                     AuthorId = authorId,
                     Content = model.Content,
@@ -109,6 +116,24 @@ namespace MyTeam.Services.Domain
                 article.Headline = model.Headline;
                 _dbContext.SaveChanges();
             }
+            return article.Name;
+        }
+
+        private string CreateArticleName(string headline)
+        {
+            var name = headline.Replace(" ", "-").ToLower();
+            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+            name = rgx.Replace(name, "");
+
+            var i = 1;
+            while (true)
+            {
+                var existingArticles = _dbContext.Articles.Count(a => a.Name == name);
+                if (existingArticles > 0) name += $"-{i}";
+                else break;
+                i++;
+            }
+            return name;
         }
 
         public void Delete(Guid articleId)

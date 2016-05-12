@@ -4,6 +4,7 @@ namespace MyTeam.ViewModels.News
 {
     public class ArticleViewModel
     {
+        public string Name { get; set; }
         public Guid Id { get; set; }
         public Guid? GameId { get; set; }
         public Guid? AuthorId { get; set; }

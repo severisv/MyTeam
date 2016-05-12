@@ -10,9 +10,9 @@ namespace MyTeam.Services.Domain
     public interface IArticleService
     {
         PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take);
-        ArticleViewModel Get(Guid articleId);
+        ArticleViewModel Get(Guid clubId, string name);
         PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take);
-        void CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
+        string CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
         void Delete(Guid articleId);
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);

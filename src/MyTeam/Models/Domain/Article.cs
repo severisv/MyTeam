@@ -12,6 +12,8 @@ namespace MyTeam.Models.Domain
         public Guid? GameId { get; set; }
         public Guid? AuthorId { get; set; }
         [Required]
+        public string Name { get; set; }
+        [Required]
         public string Headline { get; set; }
         [Required]
         public string Content { get; set; }

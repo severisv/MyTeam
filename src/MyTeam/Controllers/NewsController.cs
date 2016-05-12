@@ -27,10 +27,10 @@ namespace MyTeam.Controllers
             return View("Index", model);
         }
 
-        [Route(BaseRoute+"vis")]
-        public IActionResult Show(Guid articleId)
+        [Route(BaseRoute+"vis/{name}")]
+        public IActionResult Show(string name)
         {
-            var model = ArticleService.Get(articleId);
+            var model = ArticleService.Get(Club.Id, name);
             return View("Show", model);
         }
 
@@ -44,9 +44,9 @@ namespace MyTeam.Controllers
 
         [Route(BaseRoute+"endre")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
-        public IActionResult Edit(Guid articleId)
+        public IActionResult Edit(string navn)
         {
-            var article = ArticleService.Get(articleId);
+            var article = ArticleService.Get(Club.Id, navn);
             var model = new EditArticleViewModel(article);
             return View(model);
         }
@@ -58,8 +58,8 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
-                return RedirectToAction("Show", new {articleId = model.ArticleId});
+                var name = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
+                return RedirectToAction("Show", new { name = name});
             }
             return View("Edit", model);
 
@@ -90,9 +90,7 @@ namespace MyTeam.Controllers
             }
             return Content("");
         }
-
-
-
+        
         public PartialViewResult GetComments(Guid articleId)
         {
             var comments = ArticleService.GetComments(articleId);

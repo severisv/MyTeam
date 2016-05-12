@@ -11,6 +11,7 @@ namespace MyTeam.ViewModels.News
         public Guid ArticleId { get; set; }
         [RequiredNO]
         public string Headline { get; set; }
+        public string Name { get; set; }
         [RequiredNO]
         public string Content { get; set; }
         public string ImageUrl { get; set; }
@@ -25,6 +26,7 @@ namespace MyTeam.ViewModels.News
         public EditArticleViewModel(ArticleViewModel article)
         {
             ArticleId = article.Id;
+            Name = article.Name;
             Headline = article.Headline;
             Content = article.Content;
             ImageUrl = article.ImageUrl;
