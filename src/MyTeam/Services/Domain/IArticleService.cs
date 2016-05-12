@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
 using MyTeam.ViewModels.News;

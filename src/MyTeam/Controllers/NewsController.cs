@@ -34,6 +34,14 @@ namespace MyTeam.Controllers
             return View("Show", model);
         }
 
+        [Route(BaseRoute + "vis")]
+        public IActionResult ShowFallback(Guid articleId)
+        {
+            var article = DbContext.Articles.Single(a => a.Id == articleId);
+            return RedirectToAction("Show", new {name = article.Name});
+        }
+
+
         [Route(BaseRoute+"ny")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Create()
