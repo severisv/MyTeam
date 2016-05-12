@@ -77,12 +77,12 @@ namespace MyTeam.Settings
 
             if (format != null)
             {
-                result = Regex.Replace(result, ".png", $".{format}", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, ".jpg", $".{format}", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, ".jpeg", $".{format}", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, ".bmp", $".{format}", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, ".tiff", $".{format}", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, ".gif", $".{format}", RegexOptions.IgnoreCase);
+                result = result.Replace(".png", $".{format}");
+                result = result.Replace(".PNG", $".{format}");
+                result = result.Replace(".bmp", $".{format}");
+                result = result.Replace(".BMP", $".{format}");
+                result = result.Replace(".tiff", $".{format}");
+                result = result.Replace(".TIFF", $".{format}");
             }
             return result;
         }
