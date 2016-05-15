@@ -13,16 +13,21 @@ namespace MyTeam.Services.Domain
         {
             _dbContext = dbContext;
         }
-        
+
         public Table GetTable(Guid seasonId)
         {
             return _dbContext.Tables.Where(t => t.SeasonId == seasonId).OrderByDescending(t => t.CreatedDate).FirstOrDefault();
-             
+
         }
 
         public void Create(Guid seasonId, string tableString)
         {
+
             var table = new Table(seasonId, tableString);
+
+            var existingTables = _dbContext.Tables.Where(t => t.SeasonId == seasonId);
+            if(existingTables != null) _dbContext.Tables.RemoveRange(existingTables);
+
             _dbContext.Add(table);
             _dbContext.SaveChanges();
         }
@@ -38,6 +43,12 @@ namespace MyTeam.Services.Domain
             };
             _dbContext.Seasons.Add(season);
             _dbContext.SaveChanges();
+        }
+
+        public void RefreshTables()
+        {
+            var now = DateTime.Now;
+            var seasons = _dbContext.Seasons.Where(s => s.StartDate <= now && s.EndDate >= now && s.AutoUpdateTable && !string.IsNullOrWhiteSpace(s.TableSourceUrl));
         }
     }
 }

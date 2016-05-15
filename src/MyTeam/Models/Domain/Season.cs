@@ -16,9 +16,8 @@ namespace MyTeam.Models.Domain
 
         public virtual Team Team { get; set; }
         public virtual ICollection<Table> Tables { get; set; }
-
-
-      
+        public bool AutoUpdateTable { get; set; }
+                public string TableSourceUrl { get; set; }
 
     }
 }
