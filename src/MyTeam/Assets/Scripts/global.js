@@ -8,7 +8,7 @@ global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
     applyDatepickers($scope);
     $scope.find('table.tablesorter').tablesorter();
-    $scope.find('a.mt-popover').popover({ trigger: "hover" });
+    $scope.find('a.mt-popover').popover({ trigger: 'hover' });
     applyConfirmDialogListeners($scope);
     applyActiveLinkSwapper($scope);
     applyAjaxLinkActions($scope);
@@ -17,21 +17,22 @@ global.applyScopedJsComponents = function (selector) {
     ajax.applyFormUpdateListener($scope);
     ajax.applyLoadListener($scope);
     ajax.applyAjaxLinkListeners($scope);
-}
+};
 
-global.applyJsComponents = function() {
+global.applyJsComponents = function () {
     var timestamp = new Date();
     var start = timestamp.getMilliseconds();
 
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
-    
+
     window.onpopstate = function () {
         //location.reload();
-    }
-    
-    console.log("global.js: " + (new Date().getMilliseconds() - start) + "ms");
-}
+    };
+
+
+    console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
+};
 
 
 global.applyJsComponents();
@@ -39,7 +40,7 @@ global.applyJsComponents();
 
 
 // Slide down
-function applySlideDownMenuListeners() {
+function applySlideDownMenuListeners () {
     var element = $('.slide-down-parent');
     var subMenu = $(element.data('submenu'));
 
@@ -61,7 +62,7 @@ function applySlideDownMenuListeners() {
     element.focusout(function () {
         subMenu.slideUp(ANIMATION_DURATON);
         element.data('isFocused', false);
-        setTimeout(function() {
+        setTimeout(function () {
 
         }, ANIMATION_DURATON);
 
@@ -70,7 +71,7 @@ function applySlideDownMenuListeners() {
 }
 
 // Confirm dialog
-function applyConfirmDialogListeners($scope) {
+function applyConfirmDialogListeners ($scope) {
     $scope.find('a.confirm-dialog').click(function (e) {
         e.preventDefault();
         var element = $(this);
@@ -81,13 +82,12 @@ function applyConfirmDialogListeners($scope) {
                 window.location = element.attr('href');
             }
         });
-
     });
 }
 
 // Active links
-function applyActiveLinkSwapper($scope) {
-    $scope.find('ul.nav li').on('click', function() {
+function applyActiveLinkSwapper ($scope) {
+    $scope.find('ul.nav li').on('click', function () {
         $(this).siblings().removeClass('active');
         $(this).addClass('active');
     });
@@ -95,7 +95,7 @@ function applyActiveLinkSwapper($scope) {
 }
 
 // Active links
-function applyAjaxLinkActions($scope) {
+function applyAjaxLinkActions ($scope) {
     $scope.find('a[mt-pushstate]').on('click', function () {
         var $el = $(this);
         if ($el.attr('mt-pushstate')) {
@@ -104,28 +104,27 @@ function applyAjaxLinkActions($scope) {
     });
 }
 
-function applySelectLinkListeners($scope) {
+function applySelectLinkListeners ($scope) {
     $scope.find('.linkSelect').on('change', function () {
         var url = $(this).val();
         window.location = url;
     });
 }
 
-function applyMtAnchorListeners($scope) {
+function applyMtAnchorListeners ($scope) {
     $scope.find('.mt-anchor').on('click', function () {
         var url = $(this).data('href');
         window.location = url;
     });
 }
 
-function applyDatepickers($scope) {
+function applyDatepickers ($scope) {
     $scope.find('.datepicker').each(function (i, element) {
         var $el = $(element);
         var Datepicker = require('./ReactComponents/Shared/Datepicker.jsx');
         var datepickerElement = React.createElement(Datepicker, { value: $el.data('value'), name: $el.attr('id') })
         ReactDOM.render(datepickerElement, element);
     });
-
 }
 
 module.exports = global;

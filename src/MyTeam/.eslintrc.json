@@ -1,0 +1,15 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "standard"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 5,
+        "sourceType": "script"
+    },
+    "rules":{
+        "indent": ["error", 4],
+        "semi": ["error", "always"]
+    }
+
+}
