@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
-using MyTeam.ViewModels.Table;
 using ScrapySharp.Extensions;
 
 namespace MyTeam.Services.Domain
@@ -12,10 +12,12 @@ namespace MyTeam.Services.Domain
     class TableService : ITableService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<TableService> _logger;
 
-        public TableService(ApplicationDbContext dbContext)
+        public TableService(ApplicationDbContext dbContext, ILogger<TableService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
         
         public void Update(Guid seasonId, string tableString)
@@ -45,15 +47,17 @@ namespace MyTeam.Services.Domain
 
             foreach (var season in seasons)
             {
-                var tableString = ScrapeTable(season);
-                Update(season.Id, tableString);
+                try
+                {
+                    var tableString = ScrapeTable(season);
+                    Update(season.Id, tableString);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
+                }
             }
-
         }
-
-      
-
-
 
         private string ScrapeTable(Season season)
         {
