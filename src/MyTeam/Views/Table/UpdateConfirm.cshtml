@@ -1,5 +1,4 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Resources
 @model MyTeam.ViewModels.Table.CreateTableViewModel
 @{
     ViewBag.Title = Res.Table;
@@ -8,11 +7,15 @@
 <div class="mt-container">
 
     <div class="col-xs-12">
-        @Html.Partial("_Show", Model.Table)
+        @Html.Partial("_Show", new Table(Model.SeasonId, Model.ConvertTableString()))
         <form asp-action="Save" method="post">
             <div class="form-group">
                 <input asp-for="TableString" type="hidden" />
-                <input asp-for="SeasonId" type="hidden" />
+                <input asp-for="SeasonId" type="hidden"/>
+                <input asp-for="Team" type="hidden" />
+                <input asp-for="StartDate" type="hidden" />
+                <input asp-for="EndDate" type="hidden"/>
+                <input asp-for="Name" type="hidden" />
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">@Res.Save</button>

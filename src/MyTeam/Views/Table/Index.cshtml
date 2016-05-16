@@ -37,14 +37,6 @@
             <a class="btn btn-lg btn-primary" asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a>
         }
     }
-    else if (Model.Table == null)
-    {
-        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
-        if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
-        {
-            <a class="btn btn-lg btn-primary" asp-action="update" asp-route-seasonId="@Model.SelectedSeason?.Id"><i class='fa fa-plus'></i> @Res.Add @Res.Table.ToLower()</a>
-        }
-    }
     else
     {
         <h2><i class="fa fa-trophy"></i> @Model.SelectedSeason.DisplayName</h2>
@@ -53,8 +45,11 @@
         {
             <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.SelectedSeason.Id"><i class='fa fa-edit'></i></a>
         }
-        @Html.Partial("_Show", Model.Table)
-        <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
+        if (Model.Table != null)
+        {
+            <text>@Html.Partial("_Show", Model.Table)</text>
+            <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
+        }
     }
 </div>
 @Html.Partial("_AdminMenu")

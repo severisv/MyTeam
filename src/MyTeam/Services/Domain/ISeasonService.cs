@@ -8,5 +8,7 @@ namespace MyTeam.Services.Domain
     {
         IEnumerable<SeasonViewModel> GetForTeam(Guid teamId);
         IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId);
+        void Delete(Guid seasonId);
+        void Update(Guid seasonId, string name, bool autoUpdate, string sourceUrl);
     }
 }

@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using MyTeam.Resources;
 
 namespace MyTeam.ViewModels.Table
 {
-    public class CreateTableViewModel : IValidatableObject
+    public class CreateTableViewModel : UpdateSeasonViewModel, IValidatableObject
     {
      
-
-        public string TableString { get; set; }
-        [Required]
-        public Guid SeasonId { get; set; }
-
-        public string Season { get; set; }
-        public string Team { get; set; }
-
-        public virtual Models.Domain.Table Table
+        public virtual ParsedTable Table
         {
             get
             {
                 try
                 {
-                    return new Models.Domain.Table(SeasonId, TableString);
+                    return new ParsedTable(SeasonId, TableString);
                 }
                 catch
                 {
@@ -30,6 +23,7 @@ namespace MyTeam.ViewModels.Table
                 }
             }
         }
+
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -41,6 +35,28 @@ namespace MyTeam.ViewModels.Table
                 result.Add(new ValidationResult(Res.InvalidInput, new[] { nameof(TableString) }));
             }
             return result;
+        }
+
+        public string ConvertTableString()
+        {
+            return string.Join("|", Table.Lines.Select(JoinLine));
+        }
+
+      
+
+        public string JoinLine(ParsedTableTeam tableteam)
+        {
+            return string.Join(";", new[]
+           {
+                tableteam.Position.ToString(),
+                tableteam.Name,
+                tableteam.Wins.ToString(),
+                tableteam.Draws.ToString(),
+                tableteam.Losses.ToString(),
+                tableteam.GoalsFor.ToString(),
+                tableteam.GoalsAgainst.ToString(),
+                tableteam.Points.ToString()
+            });
         }
     }
 }

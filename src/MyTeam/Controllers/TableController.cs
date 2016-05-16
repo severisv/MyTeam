@@ -37,11 +37,7 @@ namespace MyTeam.Controllers
                 .ToList();
 
             var model = new TableViewModel(seasons, teams, seasonId);
-            if (model.SelectedSeason != null)
-            {
-                var table = TableService.GetTable(model.SelectedSeason.Id);
-                model.Table = table;
-            }
+          
             return View("Index", model);
         }
 
@@ -54,11 +50,30 @@ namespace MyTeam.Controllers
             new CreateTableViewModel
             {
                 SeasonId = seasonId,
-                Season = s.Name,
-                Team = s.Team.Name
+                Name = s.Name,
+                StartDate = s.StartDate,
+                EndDate = s.EndDate,
+                Team = s.Team.Name,
+                SourceUrl = s.TableSourceUrl,
+                AutoUpdate = s.AutoUpdateTable
             }).Single();
             return View(model);
         }
+
+        [HttpPost]
+        [Route("oppdatersesong")]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult UpdateSeason(UpdateSeasonViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                SeasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl);
+                Alert(AlertType.Success, "Instillinger lagret");
+            }
+            return View("Update", model);
+        }
+
+
 
         [HttpPost]
         [Route("oppdater")]
@@ -70,7 +85,14 @@ namespace MyTeam.Controllers
                 return View("UpdateConfirm", model);
             }
             return View(model);
+        }
 
+        [Route("slett")]
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult Delete(Guid seasonId)
+        {
+            SeasonService.Delete(seasonId);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -80,10 +102,9 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                TableService.Create(model.SeasonId, model.TableString);
-
+                TableService.Update(model.SeasonId, model.ConvertTableString());
                 Alert(AlertType.Success, $"{Res.Table} {Res.Saved.ToLower()}");
-                return RedirectToAction("index", "Table" , new { seasonId= model.SeasonId});
+                return RedirectToAction("Index", "Table" , new { seasonId= model.SeasonId});
             }
             return new ErrorResult(HttpContext);
         }

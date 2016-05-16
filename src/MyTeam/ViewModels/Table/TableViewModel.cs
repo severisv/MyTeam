@@ -6,8 +6,8 @@ namespace MyTeam.ViewModels.Table
 {
     public class TableViewModel
     {
-   
-        public Models.Domain.Table Table { get; set; }
+
+        public Models.Domain.Table Table => SelectedSeason?.Table;
         public IEnumerable<SeasonViewModel> Seasons { get; set; }
         public IList<TeamViewModel> Teams { get; set; }
         private readonly Guid? _selectedSeasonId;

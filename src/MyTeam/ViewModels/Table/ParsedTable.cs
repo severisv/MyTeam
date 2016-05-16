@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using MyTeam.Models.Domain;
 
-namespace MyTeam.Models.Domain
+namespace MyTeam.ViewModels.Table
 {
-    public class Table : Entity
+    public class ParsedTable
     {
         [Required]
         public Guid SeasonId { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
         [NotMapped]
-        public IList<TableTeam> Lines => ParseTable(TableString);
+        public IList<ParsedTableTeam> Lines => ParseTable(TableString);
         [Required]
         public string TableString { get; set; }
         public virtual Season Season { get; set; }
 
-        public Table()
+        public ParsedTable()
         {
             
         }
 
-        public Table(Guid seasonId, string table)
+        public ParsedTable(Guid seasonId, string table)
         {
-
             CreatedDate = DateTime.Now;
             SeasonId = seasonId;
             TableString = table;
@@ -42,11 +42,11 @@ namespace MyTeam.Models.Domain
             }
         }
 
-        private IList<TableTeam> ParseTable(string tableString)
+        private IList<ParsedTableTeam> ParseTable(string tableString)
         {
-            var table = tableString.Split('|');
+            var table = tableString.Split('\n');
 
-            return table.Select(line => new TableTeam(line)).Where(tableTeam => tableTeam.Position > -1).ToList();
+            return table.Select(line => new ParsedTableTeam(line)).Where(tableTeam => tableTeam.Position > -1).ToList();
         }
     }
 }

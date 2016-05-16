@@ -31,7 +31,8 @@ namespace MyTeam.Services.Domain
                           Id = s.TeamId,
                           Name = s.Team.Name
                       },
-                      TeamId = teamId
+                      TeamId = teamId,
+                      TableString = s.TableString
                   }
                 ).OrderByDescending(s => s.StartDate).ToList();
         }
@@ -42,6 +43,21 @@ namespace MyTeam.Services.Domain
             var teamId = _dbContext.Seasons.Where(s => s.Id == seasonId).Select(s => s.Team.Id).Single();
             return GetForTeam(teamId);
         }
-      
+
+        public void Delete(Guid seasonId)
+        {
+            var season =_dbContext.Seasons.Single(s => s.Id == seasonId);
+            _dbContext.Seasons.Remove(season);
+            _dbContext.SaveChanges();
+        }
+
+        public void Update(Guid seasonId, string name, bool autoupdateTable, string tableSourceUrl = "")
+        {
+            var season = _dbContext.Seasons.Single(s => s.Id == seasonId);
+            season.Name = name;
+            season.AutoUpdateTable = autoupdateTable;
+            season.TableSourceUrl = tableSourceUrl;
+            _dbContext.SaveChanges();
+        }
     }
 }
