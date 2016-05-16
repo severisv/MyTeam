@@ -19,5 +19,9 @@ namespace MyTeam.ViewModels.Table
         [RequiredNO]
         [Display(Name = "Tittel")]
         public string Name { get; set; }
+        [Display(Name = "Automatisk oppdatering")]
+        public bool AutoUpdate { get; set; }
+        [Url(ErrorMessage = "Lenken må være en gyldig url")]
+        public string SourceUrl { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿@using System.Threading.Tasks
-@using MyTeam.Resources
 @model MyTeam.ViewModels.Table.CreateSeasonViewModel
 @{
     ViewBag.Title = $"{Res.Create} {Res.Season.ToLower()}";
@@ -38,6 +37,22 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
         </div>
+        <div class="form-group">
+            <label asp-for="AutoUpdate" class="col-xs-2 control-label"></label>
+            <div class="col-xs-1">
+                <input asp-for="AutoUpdate" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateTableWrapper')"/>
+                <span asp-validation-for="AutoUpdate" class="text-danger"></span>
+            </div>
+
+            <span id="AutoUpdateTableWrapper"  @(Model.AutoUpdate ? String.Empty : "hidden")>
+            <label class="col-xs-4 text-right">URL til tabell på fotball.no</label>
+                <span class="col-xs-5 "><input class="form-control " asp-for="SourceUrl" type="text" /></span>
+                <span asp-validation-for="SourceUrl" class="text-danger"></span>
+            </span>
+
+        </div>
+
+        
         <div class="form-group">
 
             <div class="col-xs-offset-2 col-xs-10">

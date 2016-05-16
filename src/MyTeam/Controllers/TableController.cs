@@ -132,7 +132,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                TableService.CreateSeason(model.TeamId, model.Year.Value, model.Name);
+                TableService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl);
 
                 Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
                 return Index();

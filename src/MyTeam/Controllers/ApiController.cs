@@ -7,6 +7,7 @@ using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
+using MyTeam.ViewModels.Table;
 
 
 namespace MyTeam.Controllers
@@ -141,6 +142,16 @@ namespace MyTeam.Controllers
                     Date = DateTime.Now.ToShortDateString(),
                     Time = DateTime.Now.ToShortTimeString()
                 });
+        }
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        public IActionResult Convert()
+        {
+            
+            return Json(new
+            {
+                DateTime.Now
+            });
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]

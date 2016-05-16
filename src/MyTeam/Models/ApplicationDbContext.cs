@@ -2,6 +2,7 @@
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyTeam.Models.Domain;
+using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Models
 {
@@ -20,7 +21,6 @@ namespace MyTeam.Models
         public DbSet<Player> Players { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Season> Squads { get; set; }
-        public DbSet<Table> Tables { get; set; }
         public DbSet<Team> Teams { get; set; }
 
 
