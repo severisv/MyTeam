@@ -3,9 +3,31 @@ cls
 NuGet.exe "Install" "FAKE" "-OutputDirectory" "packages" "-ExcludeVersion"
 call npm install bower -g
 call npm install gulp -g
-call npm install npm@3
-call npm --v
+call npm install npm@3 -g
 set PATH=%APPDATA%\npm;%PATH%
+
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+call npm --v
+
 
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 
