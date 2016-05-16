@@ -32,7 +32,8 @@ namespace MyTeam.Services.Domain
                           Name = s.Team.Name
                       },
                       TeamId = teamId,
-                      TableString = s.TableString
+                      TableString = s.TableString,
+                      TableUpdated = s.TableUpdated
                   }
                 ).OrderByDescending(s => s.StartDate).ToList();
         }

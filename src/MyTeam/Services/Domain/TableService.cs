@@ -24,6 +24,7 @@ namespace MyTeam.Services.Domain
         {
             var season = _dbContext.Seasons.Single(s => s.Id == seasonId);
             season.TableString = tableString;
+            season.TableUpdated = DateTime.Now;
             _dbContext.SaveChanges();
         }
 

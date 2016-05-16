@@ -48,7 +48,7 @@
         if (Model.Table != null)
         {
             <text>@Html.Partial("_Show", Model.Table)</text>
-            <span class="subtle ft-sm">@Res.LastUpdated: @Model.Table.CreatedDate.ToString("d MMM yy kl HH:mm")</span>
+            <span class="subtle ft-sm">@Res.LastUpdated: @Model.TableUpdatedDate.Value.ToString("d MMM yy kl HH:mm")</span>
         }
     }
 </div>

@@ -15,6 +15,7 @@ namespace MyTeam.ViewModels.Table
         public SeasonViewModel SelectedSeason => Seasons.SingleOrDefault(s => s.Id == _selectedSeasonId) ?? CurrentSeason;
 
         public SeasonViewModel CurrentSeason => Seasons.FirstOrDefault(s => s.StartDate.Date >= DateTime.Now.Date) ?? Seasons.FirstOrDefault();
+        public DateTime? TableUpdatedDate => SelectedSeason?.TableUpdated;
 
         public TableViewModel(IEnumerable<SeasonViewModel> seasons, IList<TeamViewModel>  teams, Guid? seasonId)
         {
