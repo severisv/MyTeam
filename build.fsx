@@ -7,9 +7,9 @@ open Fake.EnvironmentHelper
 open System.IO
 
 [<AutoOpen>]
-module Helpers = 
+module Helpers =
 
-    let shellExec cmdPath args target = 
+    let shellExec cmdPath args target =
         let result = ExecProcess (
                       fun info ->
                         info.FileName <- cmdPath
@@ -18,61 +18,64 @@ module Helpers =
                       ) System.TimeSpan.MaxValue
         if result <> 0 then failwith (sprintf "'%s' failed" cmdPath + " " + args)
 
-    let findOnPath name = 
+    let findOnPath name =
         let executable = tryFindFileOnPath name
         match executable with
             | Some exec -> exec
             | None -> failwith (sprintf "'%s' can't find" name)
 
-    let npm args workingDir = 
+    let npm args workingDir =
         let executable = findOnPath "npm.cmd"
+        printf "running npm command with node version: "
+        shellExec executable "--v" workingDir
         shellExec executable args workingDir
-   
-    let bower args workingDir = 
+
+
+    let bower args workingDir =
         let executable = findOnPath "bower.cmd"
         shellExec executable args workingDir
 
-    let gulp args workingDir = 
+    let gulp args workingDir =
         let executable = findOnPath "gulp.cmd"
         shellExec executable args workingDir
-  
-    let dnu args workingDir = 
+
+    let dnu args workingDir =
         let executable = findOnPath "dnu.cmd"
         shellExec executable args workingDir
 
-          
-    let dnx args workingDir = 
-            let executable = findOnPath "dnx.exe"
-            shellExec executable args workingDir    
-   
-    let dnvm args workingDir = 
-        let executable = findOnPath "dnvm.cmd"
-        shellExec executable args workingDir    
-    
 
-    let rec execMsdeploy executable args workingDir attempt attempts = 
-        try 
+    let dnx args workingDir =
+            let executable = findOnPath "dnx.exe"
             shellExec executable args workingDir
-        with | _ ->  
-            if attempt > 0 then 
+
+    let dnvm args workingDir =
+        let executable = findOnPath "dnvm.cmd"
+        shellExec executable args workingDir
+
+
+    let rec execMsdeploy executable args workingDir attempt attempts =
+        try
+            shellExec executable args workingDir
+        with | _ ->
+            if attempt > 0 then
                 printf "MsDeploy attempt %i: \n" (1+attempts-attempt)
                 execMsdeploy executable args workingDir (attempt-1) attempts
             else
                 printf "MsDeploy failed after %i attempts \n" attempts
                 reraise()
 
-    let msdeploy args workingDir = 
+    let msdeploy args workingDir =
         let currentDir = FileSystemHelper.currentDirectory
         let executable = sprintf "%s\webdeploy\msdeploy.exe" currentDir
-        execMsdeploy executable args workingDir 3 3                  
-                 
-                                                  
+        execMsdeploy executable args workingDir 3 3
+
+
     type DnuCommands =
         | Restore
         | Build
         | Publish
-     
-    let Dnu command target = 
+
+    let Dnu command target =
         match command with
             | Restore -> (dnu "restore" target)
             | Build -> (dnu "build --configuration Release" target)
@@ -94,7 +97,7 @@ module Targets =
   Target "Clean" (fun() ->
     CleanDirs [deployDir]
   )
-  
+
   Target "NpmRestore" (fun _ ->
      npm "install" webDir
   )
@@ -102,7 +105,7 @@ module Targets =
   Target "BowerRestore" (fun _ ->
         bower "install" webDir
         )
-   
+
   Target "GulpCompile" (fun _ ->
      gulp "--production" webDir
   )
@@ -111,9 +114,9 @@ module Targets =
      Dnu Restore ""
      |> ignore
   )
-     
+
   Target "Build" (fun _ ->
-     projects 
+     projects
      |> Seq.iter (fun proj -> Dnu Build proj |> ignore)
   )
 
@@ -124,18 +127,18 @@ module Targets =
 
   Target "Publish" (fun _ ->
      Dnu Publish "" |> ignore
-  )  
-  
+  )
+
   Target "Deploy" (fun _ ->
      let currentDir = FileSystemHelper.currentDirectory
      let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
      let password = EnvironmentHelper.environVar "DEPLOY_PWD"
      let args = sprintf "-source:IisApp='%s\.deploy\wwwroot' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension  -retryAttempts:2" currentDir appName appName appName password
-     msdeploy args "" |> ignore 
-  )    
+     msdeploy args "" |> ignore
+  )
 
 
-  Target "Default" (fun _ -> 
+  Target "Default" (fun _ ->
     ()
   )
 

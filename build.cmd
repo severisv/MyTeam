@@ -6,29 +6,6 @@ call npm install gulp -g
 call npm install npm@3 -g
 set PATH=%APPDATA%\npm;%PATH%
 
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-call npm --v
-
-
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 
 "packages\FAKE\tools\Fake.exe" build.fsx %*
