@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
@@ -22,7 +20,7 @@ namespace MyTeam.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes["class"] = $" pull-right {Class}";
+            output.Attributes.Add("class", $" pull-right {Class}");
 
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");

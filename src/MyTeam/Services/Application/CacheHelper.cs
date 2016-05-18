@@ -144,7 +144,7 @@ namespace MyTeam.Services.Application
 
         public void ClearNotificationCache(Guid clubId)
         {
-            Cache.Set(clubId.ToString(), null);
+            Cache.Set<Dictionary<Guid, MemberNotification>>(clubId.ToString(), null);
         }
 
         public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)

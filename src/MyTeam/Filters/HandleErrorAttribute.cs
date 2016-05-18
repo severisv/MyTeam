@@ -1,8 +1,7 @@
 ﻿using System;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace MyTeam.Filters
