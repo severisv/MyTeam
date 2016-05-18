@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -14,16 +14,21 @@ namespace MyTeam.Controllers
     [Route("kamper")]
     public class GameController : BaseController
     {
-        [FromServices]
-        public IEventService EventService { get; set; }
-        [FromServices]
-        public IPlayerService PlayerService { get; set; }
-        [FromServices]
-        public IGameService GameService { get; set; }
-        [FromServices]
-        public ISeasonService SeasonService { get; set; }
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
+     
+
+        private readonly IGameService _gameService;
+        private readonly IPlayerService _playerService;
+        private readonly ApplicationDbContext _dbContext;
+
+        public GameController(IPlayerService playerService, ApplicationDbContext dbContext,
+            IGameService gameService)
+        {
+            _playerService = playerService;
+            _dbContext = dbContext;
+            _gameService = gameService;
+        }
+
+
 
         [Route("{lag?}/{aar:int?}")]
         public IActionResult Index(string lag = null, int ? aar = null)
@@ -31,7 +36,7 @@ namespace MyTeam.Controllers
             var team = lag ?? Club.Teams.First().ShortName;
             var teamId = Club.Teams.First(t => t.ShortName == team).Id;
 
-            var seasons = GameService.GetSeasons(teamId);
+            var seasons = _gameService.GetSeasons(teamId);
 
             var teams = Club.Teams
                 .Select(t => new TeamViewModel
@@ -44,7 +49,7 @@ namespace MyTeam.Controllers
 
             var year = aar ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
             
-            var games = GameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
+            var games = _gameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
             var model = new GamesViewModel(seasons, teams, year, games, team);
 
             return View("Index", model);
@@ -55,9 +60,9 @@ namespace MyTeam.Controllers
         [Route("laguttak")]
         public IActionResult RegisterSquad(Guid eventId)
         {
-            var ev = GameService.GetRegisterSquadEventViewModel(eventId);
+            var ev = _gameService.GetRegisterSquadEventViewModel(eventId);
 
-            var players = PlayerService.GetDto(Club.Id);
+            var players = _playerService.GetDto(Club.Id);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
@@ -75,7 +80,7 @@ namespace MyTeam.Controllers
         {
             if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
 
-            GameService.SelectPlayer(eventId, playerId, isSelected);
+            _gameService.SelectPlayer(eventId, playerId, isSelected);
 
             return new JsonResult(JsonResponse.Success());
         }
@@ -87,7 +92,7 @@ namespace MyTeam.Controllers
         {
             if (eventId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId er null"));
 
-            GameService.PublishSquad(eventId);
+            _gameService.PublishSquad(eventId);
 
             return new JsonResult(JsonResponse.Success());
         }
@@ -97,7 +102,7 @@ namespace MyTeam.Controllers
         public IActionResult Show(Guid gameId)
         {
 
-            var game = GameService.GetGame(gameId);
+            var game = _gameService.GetGame(gameId);
             var model = new ShowGameViewModel(game);
 
             return View("Show", model);
@@ -107,7 +112,7 @@ namespace MyTeam.Controllers
         public IActionResult RegisterResult(Guid gameId)
         {
 
-            var game = GameService.GetGame(gameId);
+            var game = _gameService.GetGame(gameId);
             var model = new ShowGameViewModel(game);
 
             return View("RegisterResult", model);
@@ -118,7 +123,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult AddGames()
         {
-            var teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+            var teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -152,7 +157,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                GameService.AddGames(model.Games.Games, Club.Id);
+                _gameService.AddGames(model.Games.Games, Club.Id);
                 return RedirectToAction("Index", "Game", new {year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, lag = model.ShortTeamName });
             }
             return View(model);

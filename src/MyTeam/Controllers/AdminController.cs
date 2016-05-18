@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
@@ -13,11 +13,14 @@ namespace MyTeam.Controllers
     [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
-        [FromServices]
-        public IConfigurationRoot Configuration { get; set; }
-        [FromServices]
-        public IPlayerService PlayerService { get; set; }
+        private readonly IConfigurationRoot _configuration;
+        private readonly IPlayerService _playerService;
 
+        public AdminController(IConfigurationRoot configuration, IPlayerService playerService)
+        {
+            _configuration = configuration;
+            _playerService = playerService;
+        }
 
 
         public IActionResult Index()
@@ -29,7 +32,7 @@ namespace MyTeam.Controllers
         public IActionResult AddPlayers()
         {
 
-            var facebookAppId = Configuration["Authentication:Facebook:AppId"];
+            var facebookAppId = _configuration["Authentication:Facebook:AppId"];
 
             var model = new AddPlayersViewModel(facebookAppId);
 
@@ -42,7 +45,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = PlayerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress);
+                var response = _playerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress);
                 return new JsonResult(response);
            }
 

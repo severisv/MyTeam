@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -13,20 +14,25 @@ namespace MyTeam.Controllers
     [Route("tabell")]
     public class TableController : BaseController
     {
-        [FromServices]
-        public ISeasonService SeasonService { get; set; }
-        [FromServices]
-        public ITableService TableService { get; set; }
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
+
+        private readonly ISeasonService _seasonService;
+        private readonly ITableService _tableService;
+        private readonly ApplicationDbContext _dbContext;
+
+        public TableController(ISeasonService seasonService, ITableService tableService, ApplicationDbContext dbContext)
+        {
+            _seasonService = seasonService;
+            _tableService = tableService;
+            _dbContext = dbContext;
+        }
 
         public IActionResult Index(Guid? teamId = null, Guid? seasonId = null)
         {
             var seasons = seasonId != null
-                ? SeasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
-                SeasonService.GetForTeam(teamId ?? Club.TeamIds.First());
+                ? _seasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
+                _seasonService.GetForTeam(teamId ?? Club.TeamIds.First());
 
-            var teams = DbContext.Teams
+            var teams = _dbContext.Teams
                 .OrderBy(t => t.SortOrder)
                 .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
@@ -46,7 +52,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Update(Guid seasonId)
         {
-            var model = DbContext.Seasons.Where(s => s.Id == seasonId).Select(s =>
+            var model = _dbContext.Seasons.Where(s => s.Id == seasonId).Select(s =>
             new CreateTableViewModel
             {
                 SeasonId = seasonId,
@@ -67,7 +73,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                SeasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl);
+                _seasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl);
                 Alert(AlertType.Success, "Instillinger lagret");
             }
             return View("Update", model);
@@ -91,7 +97,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Delete(Guid seasonId)
         {
-            SeasonService.Delete(seasonId);
+            _seasonService.Delete(seasonId);
             return RedirectToAction("Index");
         }
 
@@ -102,7 +108,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                TableService.Update(model.SeasonId, model.ConvertTableString());
+                _tableService.Update(model.SeasonId, model.ConvertTableString());
                 Alert(AlertType.Success, $"{Res.Table} {Res.Saved.ToLower()}");
                 return RedirectToAction("Index", "Table" , new { seasonId= model.SeasonId});
             }
@@ -116,7 +122,7 @@ namespace MyTeam.Controllers
         {
             var model = new CreateSeasonViewModel
             {
-                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                Teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
                     Id = t.Id,
                     Name = t.Name
@@ -132,7 +138,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                TableService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl);
+                _tableService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl);
 
                 Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
                 return Index();

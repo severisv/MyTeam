@@ -1,6 +1,6 @@
 using System;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;

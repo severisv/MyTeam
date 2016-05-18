@@ -5,7 +5,7 @@ using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.ViewModels.Events;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using MyTeam.Services.Application;
 
 namespace MyTeam.Services.Domain

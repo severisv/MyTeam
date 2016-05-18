@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;

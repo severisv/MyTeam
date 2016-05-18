@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.Shared

@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Resources;
@@ -213,7 +213,7 @@ namespace MyTeam.Controllers
         [Route("innlogging/ekstern/bekreftelse")]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-            if (User.IsSignedIn())
+            if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction(nameof(ManageController.Index), "Manage");
             }

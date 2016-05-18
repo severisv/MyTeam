@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyTeam.Services.Application;
 using MyTeam.ViewModels.Shared;
 

@@ -1,11 +1,9 @@
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
-using MyTeam.Services.Repositories;
 using MyTeam.ViewModels.Member;
 
 namespace MyTeam.Controllers
@@ -14,8 +12,12 @@ namespace MyTeam.Controllers
     [Route("intern")]
     public class MemberController : BaseController
     {
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
+        private readonly ApplicationDbContext _dbContext;
+
+        public MemberController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         [Route("lagliste")]
         public IActionResult Index(PlayerStatus status = PlayerStatus.Aktiv)
@@ -23,7 +25,7 @@ namespace MyTeam.Controllers
 
             ViewBag.Title = Res.SquadList;
 
-            var players = DbContext.Players
+            var players = _dbContext.Players
                 .Where(p => p.Club.ClubIdentifier == HttpContext.GetClub().ClubId)
                 .Where(p => p.Status == status)
                 .OrderBy(p => p.FirstName)

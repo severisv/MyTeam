@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Data.Entity.Metadata;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 

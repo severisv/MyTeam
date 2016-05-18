@@ -1,10 +1,9 @@
-using System.Security.Claims;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc.ModelBinding;
-using Microsoft.AspNet.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MyTeam;
 
-namespace Microsoft.AspNet.Mvc
+namespace Microsoft.AspNetCore.Mvc
 {
     public class UnauthorizedResult : ViewResult
     {
@@ -21,7 +20,7 @@ namespace Microsoft.AspNet.Mvc
             {
                 this.ViewName = "_Unauthorized";
             }
-            else if (httpContext.User.IsSignedIn())
+            else if (httpContext.User.Identity.IsAuthenticated)
             {
                 this.ViewName = "Unauthorized";
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -18,19 +18,23 @@ namespace MyTeam.Controllers
     [Route("intern/arrangementer")]
     public class EventController : BaseController
     {
-        [FromServices]
-        public IEventService EventService { get; set; }
-        [FromServices]
-        public IPlayerService PlayerService { get; set; }
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
 
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IEventService _eventService;
+        private readonly IPlayerService _playerService;
 
+        public EventController(ApplicationDbContext dbContext, IEventService eventService, IPlayerService playerService)
+        {
+            _playerService = playerService;
+            _eventService = eventService;
+            _dbContext = dbContext;
+        }
+        
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false, bool showAll = false)
         {
             var events = previous
-                ? EventService.GetPrevious(type, Club.Id)
-                : EventService.GetUpcoming(type, Club.Id, showAll);
+                ? _eventService.GetPrevious(type, Club.Id)
+                : _eventService.GetUpcoming(type, Club.Id, showAll);
             
             if (Request.IsAjaxRequest())
             {
@@ -45,7 +49,7 @@ namespace MyTeam.Controllers
         [Route("pamelding")]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
-            var ev = EventService.GetEventViewModel(eventId);
+            var ev = _eventService.GetEventViewModel(eventId);
 
             if (isAttending == false && ev.SignoffHasClosed())
             {
@@ -57,7 +61,7 @@ namespace MyTeam.Controllers
             }
             else
             {
-                var attendee = EventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending, Club.Id);
+                var attendee = _eventService.SetAttendance(ev.Id, CurrentMember.Id, isAttending, Club.Id);
                 ev.SetAttendance(attendee, isAttending);
             }
             return PartialView("_SignupDetails", ev);
@@ -72,7 +76,7 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 var reponse = new { Success = true };
-                EventService.SignupMessage(eventId, CurrentMember.Id, message);
+                _eventService.SignupMessage(eventId, CurrentMember.Id, message);
                 return new JsonResult(reponse);
             }
 
@@ -88,7 +92,7 @@ namespace MyTeam.Controllers
             var model = new CreateEventViewModel()
             {
                 Type = type,
-                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                Teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
                   Id = t.Id,
                   Name = t.Name  
@@ -113,15 +117,15 @@ namespace MyTeam.Controllers
                 var result = new List<EventViewModel>();
                 if (model.EventId.HasValue)
                 {
-                    EventService.Update(model, Club.Id);
-                    result.Add(EventService.GetEventViewModel(model.EventId.Value));
+                    _eventService.Update(model, Club.Id);
+                    result.Add(_eventService.GetEventViewModel(model.EventId.Value));
                 }
 
                 else
                 {
                     model.ClubId = Club.Id;
                     var events = model.CreateEvents();
-                    EventService.Add(Club.Id, events.ToArray());
+                    _eventService.Add(Club.Id, events.ToArray());
                     result.AddRange(events.Select(e => new EventViewModel(e)));
                 }
 
@@ -136,13 +140,13 @@ namespace MyTeam.Controllers
         [Route("endre")]
         public IActionResult Edit(Guid eventId)
         {
-            var ev = EventService.GetEventViewModel(eventId);
+            var ev = _eventService.GetEventViewModel(eventId);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
             var model = new CreateEventViewModel(ev)
             {
-                Teams = DbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
+                Teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
                     Id = t.Id,
                     Name = t.Name
@@ -158,11 +162,11 @@ namespace MyTeam.Controllers
         [Route("slett")]
         public IActionResult Delete(Guid eventId)
         {
-            var ev = EventService.Get(eventId);
+            var ev = _eventService.Get(eventId);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
-            EventService.Delete(Club.Id, eventId);
+            _eventService.Delete(Club.Id, eventId);
 
             Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
@@ -173,9 +177,9 @@ namespace MyTeam.Controllers
         [Route("oppmote/bekreft")]
         public IActionResult RegisterAttendance(Guid? eventId  = null)
         {
-            var ev = EventService.GetRegisterAttendanceEventViewModel(eventId);
-            var players = PlayerService.GetDto(Club.Id);
-            var previousEvents = EventService.GetPreviousSimpleEvents(EventType.Trening, Club.Id, 15).ToList();
+            var ev = _eventService.GetRegisterAttendanceEventViewModel(eventId);
+            var players = _playerService.GetDto(Club.Id);
+            var previousEvents = _eventService.GetPreviousSimpleEvents(EventType.Trening, Club.Id, 15).ToList();
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
@@ -193,7 +197,7 @@ namespace MyTeam.Controllers
         {
             if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
 
-            EventService.ConfirmAttendance(eventId, playerId, didAttend);
+            _eventService.ConfirmAttendance(eventId, playerId, didAttend);
 
             return new JsonResult(JsonResponse.Success());
         }
@@ -205,7 +209,7 @@ namespace MyTeam.Controllers
         {
             if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
 
-            EventService.ConfirmTrainingVictory(eventId, playerId, didWin);
+            _eventService.ConfirmTrainingVictory(eventId, playerId, didWin);
 
             return new JsonResult(JsonResponse.Success());
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -13,15 +13,18 @@ namespace MyTeam.Controllers
     [Route("spillere")]
     public class PlayerController : BaseController
     {
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
-        [FromServices]
-        public IPlayerService PlayerService { get; set; }
+        private readonly IPlayerService _playerService;
+
+        public PlayerController(IPlayerService playerService)
+        {
+            _playerService = playerService;
+        }
+
 
         [Route("")]
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv)
         {
-            var players = PlayerService.GetPlayers(type, Club.Id);
+            var players = _playerService.GetPlayers(type, Club.Id);
             
             var model = new ShowPlayersViewModel(players, type);
 
@@ -33,13 +36,13 @@ namespace MyTeam.Controllers
         [Route("vis/{playerId?}")]
         public IActionResult Show(Guid playerId)
         {
-            var selectedPlayer = PlayerService.GetSingle(playerId);
+            var selectedPlayer = _playerService.GetSingle(playerId);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);
             }
 
-            var players = PlayerService.GetPlayers(selectedPlayer.Status, Club.Id);
+            var players = _playerService.GetPlayers(selectedPlayer.Status, Club.Id);
             var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
             return View("Show", model);  
         }
@@ -48,7 +51,7 @@ namespace MyTeam.Controllers
         [Route("stats")]
         public IActionResult GetStats(Guid playerId)
         {
-            var model = PlayerService.GetStats(playerId, Club.TeamIds);
+            var model = _playerService.GetStats(playerId, Club.TeamIds);
             return PartialView("_GetStats", model);
         }
 
@@ -60,14 +63,14 @@ namespace MyTeam.Controllers
             if(filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
-            var selectedPlayer = PlayerService.GetSingle(playerId);
+            var selectedPlayer = _playerService.GetSingle(playerId);
 
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Edit", new EditPlayerViewModel(selectedPlayer));
             }
 
-            var players = PlayerService.GetPlayers(selectedPlayer.Status, Club.Id);
+            var players = _playerService.GetPlayers(selectedPlayer.Status, Club.Id);
             var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
             return View("Edit", model);
 
@@ -81,7 +84,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.EditPlayer(model, Club.ClubId);
+                _playerService.EditPlayer(model, Club.ClubId);
                 Alert(AlertType.Success, "Profil lagret");
                 return Show(model.PlayerId);
 
