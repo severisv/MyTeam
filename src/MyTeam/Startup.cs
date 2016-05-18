@@ -53,7 +53,8 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
+            services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
+
             
             services.AddMvc();
 
@@ -104,8 +105,8 @@ namespace MyTeam
 
                 //app.UseRequestLocalization(new RequestLocalizationOptions
                 //{
-                //    SupportedCultures = new List<CultureInfo> {new CultureInfo("nb-NO")},
-                //    SupportedUICultures = new List<CultureInfo> {new CultureInfo("nb-NO")}
+                //    SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
+                //    SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
                 //}, new RequestCulture(new CultureInfo("nb-NO")));
 
                 app.UseFacebookAuthentication(new FacebookOptions

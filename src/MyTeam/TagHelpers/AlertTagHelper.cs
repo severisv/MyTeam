@@ -21,12 +21,12 @@ namespace MyTeam.TagHelpers
             var alert = new Alert(Type, message);
 
             var hidden = string.IsNullOrWhiteSpace(message) ? "hidden" : "";
-            output.Attributes["class"] = $"alert alert-{Type.ToString().ToLower()} {hidden}";
-            output.Attributes["id"] = Type.ToString().ToLower();
+            output.Attributes.Add("class",$"alert alert-{Type.ToString().ToLower()} {hidden}");
+            output.Attributes.Add("id",Type.ToString().ToLower());
 
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{alert.Icon}");
-            output.Content.Append(innertag);
+            output.Content.Append(innertag.ToString());
             output.Content.AppendHtml($" <span class='alert-content'>{alert.Message}</span>");
             output.Content.AppendHtml("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
         }

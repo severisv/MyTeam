@@ -30,7 +30,7 @@ namespace MyTeam.TagHelpers
 
             if (!string.IsNullOrWhiteSpace(InnerId)) innertag.Attributes["id"] = InnerId;
 
-            output.Content.Append(innertag);
+            output.Content.Append(innertag.ToString());
         }
 
 

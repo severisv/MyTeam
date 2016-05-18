@@ -198,9 +198,9 @@ namespace MyTeam.Controllers
                 // If the user does not have an account, then ask the user to create an account.
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
-                var idClaim = info.ExternalPrincipal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+                var idClaim = info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
                 ViewData["FacebookId"] = idClaim.Value;
-                var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
             }
         }
@@ -477,11 +477,7 @@ namespace MyTeam.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
-        }
+        
 
         private IActionResult RedirectToLocal(string returnUrl)
         {

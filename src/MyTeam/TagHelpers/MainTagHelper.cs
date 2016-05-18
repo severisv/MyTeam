@@ -21,7 +21,7 @@ namespace MyTeam.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes["class"] = $"{Class}";
+            output.Attributes.Add("class", $"{Class}");
 
             var innertag = new TagBuilder("div");
             innertag.AddCssClass("mt-container");
@@ -32,7 +32,7 @@ namespace MyTeam.TagHelpers
 
             if (!string.IsNullOrWhiteSpace(InnerId)) innertag.Attributes["id"] = InnerId;
 
-            output.Content.SetContent(innertag);
+            output.Content.SetContent(innertag.ToString());
         }
     }
 }

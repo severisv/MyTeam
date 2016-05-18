@@ -15,7 +15,7 @@ namespace MyTeam
 
         public static UserMember Member(this HttpContext context) => new UserMember(context.Items[PipelineConstants.MemberKey] as PlayerDto);
         
-        public static ICloudinary Cloudinary(this HttpContext context) => context.ApplicationServices.GetService<ICloudinary>();
+        public static ICloudinary Cloudinary(this HttpContext context) => context.RequestServices.GetService<ICloudinary>();
         
         public static bool UserIsMember(this HttpContext context) => context.Member().Exists;
     
