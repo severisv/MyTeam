@@ -48,7 +48,10 @@
         if (Model.Table != null)
         {
             <text>@Html.Partial("_Show", Model.Table)</text>
-            <span class="subtle ft-sm">@Res.LastUpdated: @Model.TableUpdatedDate.Value.ToString("d MMM yy kl HH:mm")</span>
+            @if (Model.SelectedSeason?.IsActive == true)
+            {
+                <span class="subtle ft-sm">@Res.LastUpdated: @Model.TableUpdatedDate.Value.ToString("d MMM kl HH:mm")</span>
+            }
         }
     }
 </div>

@@ -15,5 +15,6 @@ namespace MyTeam.ViewModels.Table
         public string DisplayName => StartDate.Year == EndDate.Year ? $"{Name} - {EndDate.Year}" : $"{Name} - {StartDate.Year} / {EndDate.Year}";
         public string DisplayNameShort => StartDate.Year == EndDate.Year ? $"{EndDate.Year}" : $"{StartDate.Year} / {EndDate.Year}";
         public DateTime TableUpdated { get; set; }
+        public bool? IsActive => StartDate <= DateTime.Now && DateTime.Now <= EndDate;
     }
 }
