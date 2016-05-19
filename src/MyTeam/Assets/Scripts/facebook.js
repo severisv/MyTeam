@@ -54,3 +54,5 @@ mt_fb.getUserImageUrl = function(id) {
     }
     return null;
 }
+
+module.exports = mt_fb;
