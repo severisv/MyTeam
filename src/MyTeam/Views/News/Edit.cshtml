@@ -8,7 +8,7 @@
 
 <div class="mt-sidebar">
     <div class="mt-container">
-        @Component.InvokeAsync("ArticleNav", Context.GetClub().Id)
+        @await Component.InvokeAsync("ArticleNav", Context.GetClub().Id)
     </div>
 </div>
 
@@ -17,6 +17,6 @@
 </div>
 
 @section Scripts {
-    @Component.InvokeAsync("CloudinaryScripts")
+    @await Component.InvokeAsync("CloudinaryScripts")
     @Html.Partial("Scripts/_TinyMCE", "Content")
 }

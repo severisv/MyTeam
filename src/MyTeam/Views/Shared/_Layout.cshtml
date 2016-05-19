@@ -77,7 +77,7 @@
             @if (Context.UserIsMember())
             {
                 @Html.Partial("_UserInfo", Context.Member())
-                @Component.InvokeAsync("NotificationButton")
+                @await Component.InvokeAsync("NotificationButton")
             }
         </div>
 
@@ -95,7 +95,7 @@
         }
     </div>
 </div>
-@Component.InvokeAsync("PageHeader", new { headline = ViewBag.PageName ?? ViewBag.Title ?? "", content = ViewBag.Subtext ?? "" }})
+@await Component.InvokeAsync("PageHeader", new { headline = ViewBag.PageName ?? ViewBag.Title ?? "", content = ViewBag.Subtext ?? "" })
 <div id="main-container" class="container">
     <div id="alerts" class="col-lg-9 col-md-9">
         @Html.Partial("_Alerts")

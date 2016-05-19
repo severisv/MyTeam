@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
 
@@ -23,10 +24,19 @@ namespace MyTeam.Models
         public DbSet<Season> Squads { get; set; }
         public DbSet<Team> Teams { get; set; }
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            foreach (var entity in builder.Model.GetEntityTypes())
+            {
+                entity.Relational().TableName = entity.DisplayName();
+            }
 
             builder.Entity<Member>()
                 .HasMany(e => e.EventAttendances)
@@ -63,6 +73,12 @@ namespace MyTeam.Models
                .WithMany(c => c.Assists)
                .HasForeignKey(c => c.AssistedById)
                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Member>()
+              .HasOne(p => p.Club)
+              .WithMany(b => b.Members)
+              .HasForeignKey(p => p.ClubId);
+
 
         }
     }
