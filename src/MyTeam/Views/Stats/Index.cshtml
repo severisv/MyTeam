@@ -157,14 +157,16 @@
 
 @if (Model.Years?.Any() == true)
 {
-    <div mt-sidebar>
-        <ul class="nav nav-list">
-            <li class="nav-header">@Res.Season.Pluralize()</li>
-            @foreach (var year in Model.Years)
-            {
-                <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="@year">@year</a></li>
-            }
-        </ul>
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.Season.Pluralize()</li>
+                @foreach (var year in Model.Years)
+                {
+                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="@year">@year</a></li>
+                }
+            </ul>
 
-    </div>
-}
+        </div>
+        </div>
+        }

@@ -12,11 +12,13 @@
     </div>
 </div>
 
-<div mt-main>
-    @Html.Partial("_Edit")
+<div class="mt-main">
+    <div class="mt-container">
+        @Html.Partial("_Edit")
+    </div>
 </div>
 
-@section Scripts {
-    @await Component.InvokeAsync("CloudinaryScripts")
-    @Html.Partial("Scripts/_TinyMCE", "Content")
-}
+    @section Scripts {
+        @await Component.InvokeAsync("CloudinaryScripts")
+        @Html.Partial("Scripts/_TinyMCE", "Content")
+    }

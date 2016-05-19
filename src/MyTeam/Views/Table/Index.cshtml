@@ -3,73 +3,77 @@
 @{
     ViewBag.Title = Res.Table;
 }
-<div mt-main>
-    @if (Model.Teams?.Count() > 1)
-    {
-        <div class="row">
-            <div class="col-sm-6 col-xs-7">
-                <ul class="nav nav-pills mt-justified">
-                    @foreach (var team in Model.Teams)
-                    {
-                        <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="table" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
-                    }
-                </ul>
-            </div>
-            @if (Model.Seasons.Any())
-            {
-                <div class="col-sm-3 col-xs-5 pull-right">
-                    <select class="linkSelect form-control pull-right hidden-md hidden-lg">
-                        @foreach (var season in Model.Seasons)
+<div class="mt-main">
+    <div class="mt-container">
+        @if (Model.Teams?.Count() > 1)
+        {
+            <div class="row">
+                <div class="col-sm-6 col-xs-7">
+                    <ul class="nav nav-pills mt-justified">
+                        @foreach (var team in Model.Teams)
                         {
-                            <option value="@Url.Action("Index", "Table", new {teamId = Model.CurrentSeason?.TeamId, seasonId = season.Id})" selected="@(Model.SelectedSeason.Id == season.Id)">@season.DisplayNameShort</option>
+                            <li class="@(Model.CurrentSeason?.TeamId == team.Id ? "active" : "")"><a asp-controller="table" asp-action="index" asp-route-teamid="@team.Id"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                         }
-                    </select>
+                    </ul>
                 </div>
-            }
-        </div>
-        <hr/>
-    }
-    @if (Model.CurrentSeason == null)
-    {
-        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
-        if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
-        {
-            <a class="btn btn-lg btn-primary" asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a>
+                @if (Model.Seasons.Any())
+                {
+                    <div class="col-sm-3 col-xs-5 pull-right">
+                        <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                            @foreach (var season in Model.Seasons)
+                            {
+                                <option value="@Url.Action("Index", "Table", new {teamId = Model.CurrentSeason?.TeamId, seasonId = season.Id})" selected="@(Model.SelectedSeason.Id == season.Id)">@season.DisplayNameShort</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+            <hr />
         }
-    }
-    else
-    {
-        <h2><i class="fa fa-trophy"></i> @Model.SelectedSeason.DisplayName</h2>
-
-        if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+        @if (Model.CurrentSeason == null)
         {
-            <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.SelectedSeason.Id"><i class='fa fa-edit'></i></a>
-        }
-        if (Model.Table != null)
-        {
-            <text>@Html.Partial("_Show", Model.Table)</text>
-            @if (Model.SelectedSeason?.IsActive == true)
+            <div mt-alert="Info">@Res.DoesNotExistAny @Res.Table.ToLower()</div>
+            if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
             {
-                <span class="subtle ft-sm">@Res.LastUpdated: @Model.TableUpdatedDate.Value.ToString("d MMM kl HH:mm")</span>
+                <a class="btn btn-lg btn-primary" asp-action="createseason"><i class='fa fa-plus'></i> @Res.Add @Res.Season.ToLower()</a>
             }
         }
-    }
+        else
+        {
+            <h2><i class="fa fa-trophy"></i> @Model.SelectedSeason.DisplayName</h2>
+
+            if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+            {
+                <a class="pull-right edit-link" asp-action="update" asp-route-seasonId="@Model.SelectedSeason.Id"><i class='fa fa-edit'></i></a>
+            }
+            if (Model.Table != null)
+            {
+                <text>@Html.Partial("_Show", Model.Table)</text>
+                @if (Model.SelectedSeason?.IsActive == true)
+                {
+                    <span class="subtle ft-sm">@Res.LastUpdated: @Model.TableUpdatedDate.Value.ToString("d MMM kl HH:mm")</span>
+                }
+            }
+        }
+    </div>
 </div>
 @Html.Partial("_AdminMenu")
 
 @if (Model.Seasons?.Any() == true)
 {
-    <div mt-sidebar>
-        <ul class="nav nav-list">
-            <li class="nav-header">@Res.Season.Pluralize()</li>
-            @foreach (var season in Model.Seasons)
-            {
-                <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-controller="table" asp-action="index" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
-            }
-        </ul>
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.Season.Pluralize()</li>
+                @foreach (var season in Model.Seasons)
+                {
+                    <li><a class="@(Model.SelectedSeason.Id == season.Id ? "active" : "")" asp-controller="table" asp-action="index" asp-route-seasonid="@season.Id">@season.DisplayNameShort</a></li>
+                }
+            </ul>
 
-    </div>
-}
-@section Scripts {
-    <script src="~/scripts/Table/table.js"></script>
-}
+        </div>
+        </div>
+        }
+        @section Scripts {
+            <script src="~/scripts/Table/table.js"></script>
+        }

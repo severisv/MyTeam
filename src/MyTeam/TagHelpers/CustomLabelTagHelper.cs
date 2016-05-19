@@ -70,7 +70,7 @@ namespace MyTeam.TagHelpers
                     }
                     else
                     {
-                        output.Content.SetContent(childContent.ToString());
+                        output.Content.SetContent(childContent.GetContent());
                     }
                 }
             }

@@ -3,58 +3,62 @@
 @{
     ViewBag.Title = Res.Games;
 }
-<div mt-main>
-    <div class="row">
-        @if (Model.Teams?.Count() > 1)
-        {
-            <div class="col-sm-6 col-xs-7 ">
-                <ul class="nav nav-pills mt-justified">
-                    @foreach (var team in Model.Teams)
+<div class="mt-main">
+    <div class="mt-container">
+        <div class="row">
+            @if (Model.Teams?.Count() > 1)
+            {
+                <div class="col-sm-6 col-xs-7 ">
+                    <ul class="nav nav-pills mt-justified">
+                        @foreach (var team in Model.Teams)
                 {
-                        <li class="@(Model.TeamName == team.ShortName ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedSeason.Year" ><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
-                    }
-                </ul>
-            </div>
-        }
-        @if (Model.Seasons.Any())
-        {
-            <div class="col-sm-3 col-xs-5 pull-right">
-                <select class="linkSelect form-control pull-right hidden-md hidden-lg">
-                    @foreach (var season in Model.Seasons)
+                            <li class="@(Model.TeamName == team.ShortName ? "active" : "")"><a asp-controller="game" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedSeason.Year"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if (Model.Seasons.Any())
+            {
+                <div class="col-sm-3 col-xs-5 pull-right">
+                    <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                        @foreach (var season in Model.Seasons)
                 {
-                        <option value="@Url.Action("Index", "Game", new {lag = Model.TeamName, aar = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year)">@season.DisplayName</option>
-                    }
-                </select>
-            </div>
+                            <option value="@Url.Action("Index", "Game", new {lag = Model.TeamName, aar = season.Year})" selected="@(Model.SelectedSeason.Year == season.Year)">@season.DisplayName</option>
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+        <hr />
+        @if (!Model.Games?.Any() == true)
+        {
+            <div mt-alert="Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
         }
-    </div>
-    <hr />
-    @if (!Model.Games?.Any() == true)
-    {
-        <div mt-alert="AlertType.Info">@Res.DoesNotExistAny @Res.Games.ToLower()</div>
-    }
-    else
-    {
-        @Html.Partial("_List", Model.Games)
-    }
+        else
+        {
+            @Html.Partial("_List", Model.Games)
+        }
 
+    </div>
 </div>
 @Html.Partial("_AdminMenu")
 
 @if (Model.Seasons?.Any() == true)
 {
-    <div mt-sidebar>
-        <ul class="nav nav-list">
-            <li class="nav-header">@Res.Season.Pluralize()</li>
-            @foreach (var season in Model.Seasons)
-            {
-                <li><a class="@(Model.SelectedSeason.Year == season.Year ? "active" : "")" asp-controller="game" asp-action="index" asp-route-lag="@Model.TeamName" asp-route-aar="@season.Year">@season.DisplayName</a></li>
-            }
-        </ul>
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.Season.Pluralize()</li>
+                @foreach (var season in Model.Seasons)
+                {
+                    <li><a class="@(Model.SelectedSeason.Year == season.Year ? "active" : "")" asp-controller="game" asp-action="index" asp-route-lag="@Model.TeamName" asp-route-aar="@season.Year">@season.DisplayName</a></li>
+                }
+            </ul>
 
-    </div>
-}
+        </div>
+        </div>
+        }
 
-@section Scripts {
-    <script src="~/scripts/Table/table.js"></script>
-}
+        @section Scripts {
+            <script src="~/scripts/Table/table.js"></script>
+        }

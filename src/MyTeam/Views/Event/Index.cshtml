@@ -4,39 +4,41 @@
 @{
     ViewBag.Title = Model.Title;
 }
-<div mt-main>
-    <div class="clearfix">
-        <div class="col-sm-6 col-xs-12 no-padding-left">
-            <ul class="nav nav-pills mt-justified">
-                <li class="@(!Model.Previous ? "active" : "")"><a asp-controller="event" asp-action="index" asp-route-type="@Model.Type"><i class="@Icons.Upcoming hidden-xss"></i>&nbsp;@Res.Upcoming</a></li>
-                <li class="@(Model.Previous ? "active" : "")"><a asp-controller="event" asp-action="index" asp-route-type="@Model.Type" asp-route-previous="true"><i class="@Icons.Previous hidden-xss"></i>&nbsp;@Res.Previous</a></li>
-            </ul>
+<div class="mt-main">
+    <div class="mt-container">
+        <div class="clearfix">
+            <div class="col-sm-6 col-xs-12 no-padding-left">
+                <ul class="nav nav-pills mt-justified">
+                    <li class="@(!Model.Previous ? "active" : "")"><a asp-controller="event" asp-action="index" asp-route-type="@Model.Type"><i class="@Icons.Upcoming hidden-xss"></i>&nbsp;@Res.Upcoming</a></li>
+                    <li class="@(Model.Previous ? "active" : "")"><a asp-controller="event" asp-action="index" asp-route-type="@Model.Type" asp-route-previous="true"><i class="@Icons.Previous hidden-xss"></i>&nbsp;@Res.Previous</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-offset-2 col-sm-4 hidden-xs no-padding-right">
+                <ul class="nav nav-pills mt-justified">
+                    @foreach (EventType type in Enum.GetValues(typeof(EventType)))
+                    {
+                        <li class="@(type == Model.Type ? "active" : "")"><a asp-route-type="@type" asp-route-previous="@Model.Previous"><span mt-eventtype="@type" mt-hidename="true"></span></a></li>
+                    }
+                </ul>
+            </div>
         </div>
 
-        <div class="col-sm-offset-2 col-sm-4 hidden-xs no-padding-right">
-            <ul class="nav nav-pills mt-justified">
-                @foreach (EventType type in Enum.GetValues(typeof(EventType)))
-                {
-                    <li class="@(type == Model.Type ? "active" : "")"><a asp-route-type="@type" asp-route-previous="@Model.Previous"><span mt-eventtype="@type" mt-hidename="true" ></span></a></li>
-                }
-            </ul>
-        </div>
+        @Html.Partial("_ListEvents", Model.Events)
+
+        @if (!Model.Previous)
+        {
+            <div class="event-showAll">
+                <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-type="@Model.Type" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
+            </div>
+        }
     </div>
-
-    @Html.Partial("_ListEvents", Model.Events)
-
-    @if (!Model.Previous)
-    {
-        <div class="event-showAll">
-            <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-type="@Model.Type" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
-        </div>
-    }
 </div>
 
-@Html.Partial("_CoachMenu")
+    @Html.Partial("_CoachMenu")
 
 
-@section Scripts
+    @section Scripts
 {
-    <script src="~/scripts/event/list.js"></script>
-}
+        <script src="~/scripts/event/list.js"></script>
+    }
