@@ -1,3 +1,5 @@
+var facebook = require('../../facebook.js')
+
 ﻿module.exports = React.createClass({
 
     getInitialState: function () {
@@ -9,7 +11,7 @@
 
     setUsersAsync: function (q) {
 
-        var url = window.mt_fb.getSearchUrl();
+        var url = facebook.getSearchUrl();
         if (url) {
             var that = this;
             $.getJSON(url.url, {
@@ -54,7 +56,7 @@
             return imageUrl;
         }                  
 
-        var url = mt_fb.getUserImageUrl(user.id);
+        var url = facebook.getUserImageUrl(user.id);
         
         user.imageMedium = getImageUrl(url, 400);
         user.imageLarge = getImageUrl(url, 800);
