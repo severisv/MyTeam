@@ -1,4 +1,6 @@
-﻿@using MyTeam
+﻿@using System.ComponentModel
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam
 @model MyTeam.ViewModels.News.EditArticleViewModel
 @{
     ViewBag.Title = Model.IsNew ? "Skriv artikkel" : "Rediger artikkel";
@@ -6,7 +8,7 @@
 
 <div class="mt-sidebar">
     <div class="mt-container">
-        @Component.Invoke("ArticleNav", Context.GetClub().Id)
+        @Component.InvokeAsync("ArticleNav", Context.GetClub().Id)
     </div>
 </div>
 
@@ -15,6 +17,6 @@
 </div>
 
 @section Scripts {
-    @Component.Invoke("CloudinaryScripts")
+    @Component.InvokeAsync("CloudinaryScripts")
     @Html.Partial("Scripts/_TinyMCE", "Content")
 }
