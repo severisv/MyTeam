@@ -9,7 +9,7 @@
 
     setUsersAsync: function (q) {
 
-        var url = mt_fb.getSearchUrl();
+        var url = window.mt_fb.getSearchUrl();
         if (url) {
             var that = this;
             $.getJSON(url.url, {
