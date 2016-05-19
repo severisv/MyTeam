@@ -7,7 +7,7 @@
 <div class="mt-container">
 
     <form asp-controller="Account" asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="col-md-10 col-sm-12">
             <input asp-for="FacebookId" type="hidden" value="@ViewData["FacebookId"]" />
             <p class="text-info">

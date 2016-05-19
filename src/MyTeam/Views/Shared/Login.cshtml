@@ -39,7 +39,7 @@
         <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
             <section>
                 <form asp-controller="Account"  asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Email" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
