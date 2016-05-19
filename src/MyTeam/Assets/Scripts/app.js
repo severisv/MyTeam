@@ -12,7 +12,7 @@ window.ShowGame = require('./ReactComponents/RegisterResult/ShowGame.jsx')
 
 require('./ajaxHelpers')
 window.checkbox = require('./checkbox')
-require('./facebook')
+window.mt_fb = require('./facebook')
 window.global = require('./global')
 window.layout = require('./layout')
 window.mt = require('./myteam')
