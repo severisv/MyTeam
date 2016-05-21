@@ -53,9 +53,12 @@
 
             </div>
         </div>
-        @Html.Partial("_CoachMenu")
+    </div>
 
-        <div class="mt-sidebar">
+
+        @Html.Partial("_CoachMenu")
+    <div class="mt-sidebar">
+
         <div class="mt-container">
             <ul class="nav nav-list">
                 <li class="nav-header">Siste treninger</li>
@@ -69,9 +72,9 @@
                 }
             </ul>
         </div>
-        </div>
     </div>
 </div>
+
     <script>
         var Routes = Routes || {}
         Routes.CONFIRM_ATTENDANCE = '@Html.Raw(Url.Action("ConfirmAttendance", "Event"))';

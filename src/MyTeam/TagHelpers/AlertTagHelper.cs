@@ -26,7 +26,7 @@ namespace MyTeam.TagHelpers
 
             var innertag = new TagBuilder("i");
             innertag.AddCssClass($"fa fa-{alert.Icon}");
-            output.Content.Append(innertag.ToString());
+            output.Content.AppendHtml(innertag);
             output.Content.AppendHtml($" <span class='alert-content'>{alert.Message}</span>");
             output.Content.AppendHtml("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
         }

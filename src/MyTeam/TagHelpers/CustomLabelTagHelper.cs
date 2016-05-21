@@ -18,10 +18,6 @@ namespace MyTeam.TagHelpers
         [HtmlAttributeName(IconAttributeName)]
         public string Icon { get; set; }
 
-        /// <summary>
-        /// Creates a new <see cref="LabelTagHelper"/>.
-        /// </summary>
-        /// <param name="generator">The <see cref="IHtmlGenerator"/>.</param>
         public CustomLabelTagHelper(IHtmlGenerator generator)
         {
             Generator = generator;
@@ -33,15 +29,10 @@ namespace MyTeam.TagHelpers
 
         protected IHtmlGenerator Generator { get; }
 
-        /// <summary>
-        /// An expression to be evaluated against the current model.
-        /// </summary>
-        [HtmlAttributeName(ForAttributeName)]
+     [HtmlAttributeName(ForAttributeName)]
         public ModelExpression For { get; set; }
 
-        /// <inheritdoc />
-        /// <remarks>Does nothing if <see cref="For"/> is <c>null</c>.</remarks>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+  public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var tagBuilder = Generator.GenerateLabel(
                 ViewContext,
@@ -70,7 +61,7 @@ namespace MyTeam.TagHelpers
                     }
                     else
                     {
-                        output.Content.SetContent(childContent.GetContent());
+                        output.Content.SetHtmlContent(childContent.GetContent());
                     }
                 }
             }

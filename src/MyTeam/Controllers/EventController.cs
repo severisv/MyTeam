@@ -111,7 +111,7 @@ namespace MyTeam.Controllers
         public IActionResult Create(CreateEventViewModel model)
         {
             ViewBag.Title = Res.CreateEvent;
-
+            
             if (ModelState.IsValid)
             {
                 var result = new List<EventViewModel>();

@@ -9,11 +9,14 @@
         <div class="cloudinary-preview editPlayer-image ">
             <img div src="@Context.Cloudinary().MemberImage(Model.ImageFull, Model.FacebookId, 400)"/>
         </div>
-        <input name="file" type="file"
-               class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageFull"/>
-        <div class="clearfix"></div>
+        <div class="form-file-upload-wrapper">
 
-    </div>
+            <input name="file" type="file"
+                   class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageFull"/>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
     <div class="col-sm-6 col-md-6 col-lg-6 player-info">
 
         @*<div class="form-group">

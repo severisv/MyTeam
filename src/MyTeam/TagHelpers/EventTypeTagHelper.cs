@@ -25,7 +25,7 @@ namespace MyTeam.TagHelpers
             innertag.AddCssClass($"{GetIconName(EventType)}");
             innertag.Attributes.Add("title", EventType.ToString());
 
-            output.Content.Append(innertag.ToString());
+            output.Content.AppendHtml(innertag);
             if (!HideName) output.Content.AppendHtml($"<span class='{TextClass}'>&nbsp;&nbsp;{EventType}</span>");
         }
 

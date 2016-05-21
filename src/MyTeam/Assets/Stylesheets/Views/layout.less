@@ -19,8 +19,7 @@
     );
 }
 
-div.mt-main,
-div[mt-main] {
+div.mt-main {
     float: left;
 
     .r-above(@sm-max, {
@@ -44,7 +43,7 @@ div[mt-main] {
     min-height: 24em;
 }
 
-.container-narrow [mt-main] {
+.container-narrow .mt-main {
     .r-above(@md-min+1, {
         width: 68%;
     }
@@ -52,8 +51,7 @@ div[mt-main] {
     );
 }
 
-div.mt-sidebar,
-div[mt-sidebar] {
+div.mt-sidebar {
     width: 24%;
     float:right;
     .r-above(@md-max, {
@@ -70,8 +68,7 @@ div[mt-sidebar] {
 }
 
 
-.container-narrow div.mt-sidebar,
-.container-narrow div[mt-sidebar] {
+.container-narrow div.mt-sidebar {
     width: 29%;
 }
 

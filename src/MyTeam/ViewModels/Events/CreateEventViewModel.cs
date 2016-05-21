@@ -145,7 +145,7 @@ namespace MyTeam.ViewModels.Events
             {
                 if (string.IsNullOrWhiteSpace(Headline))
                 {
-                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Opponent) }));
+                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Headline) }));
                 }
             }
 

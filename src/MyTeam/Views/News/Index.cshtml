@@ -17,7 +17,7 @@
         </div>
     }
     <div class="mt-container">
-        @await Component.InvokeAsync("ArticleNav", Context.GetClub().Id)
+        @await Component.InvokeAsync("ArticleNav", new { clubId = Context.GetClub().Id})
     </div>
     <div class="mt-container">
 
