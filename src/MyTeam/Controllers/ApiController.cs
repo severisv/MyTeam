@@ -29,7 +29,7 @@ namespace MyTeam.Controllers
 
         public JsonResult GetPlayers()
         {
-            var players = _dbContext.Players.Where(p => p.Club.Id == Club.Id)
+            var players = _dbContext.Players.Where(p => p.ClubId == Club.Id)
                 .Select(p =>
               new
               {

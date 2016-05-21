@@ -53,8 +53,6 @@ namespace MyTeam.Models.Domain
         [NotMapped]
         public string Name => $"{FirstName} {LastName}";
 
-        [NotMapped]
-        public virtual Club Club { get; set; }
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }

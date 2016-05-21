@@ -21,9 +21,10 @@ namespace MyTeam
 
                 if (clubId != null)
                 {
-                    context.Items[PipelineConstants.ClubKey] = cacheHelper.GetCurrentClub(clubId);
+                    var club = cacheHelper.GetCurrentClub(clubId);
+                    context.Items[PipelineConstants.ClubKey] = club;
                     var username = context.User.Identity.Name;
-                    context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, clubId);
+                    context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, club.Id);
                 }
                 await next();
             });

@@ -26,7 +26,7 @@ namespace MyTeam.Controllers
             ViewBag.Title = Res.SquadList;
 
             var players = _dbContext.Players
-                .Where(p => p.Club.ClubIdentifier == HttpContext.GetClub().ClubId)
+                .Where(p => p.ClubId == HttpContext.GetClub().Id)
                 .Where(p => p.Status == status)
                 .OrderBy(p => p.FirstName)
                 .Select(p => new MemberInfoViewModel{
