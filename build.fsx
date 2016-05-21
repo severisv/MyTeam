@@ -136,9 +136,9 @@ module Targets =
   )
 
 "Clean"
-//==> "NpmRestore"
-//==> "BowerRestore"
-//==> "GulpCompile"
+==> "NpmRestore"
+==> "BowerRestore"
+==> "GulpCompile"
 ==> "RestorePackages"
 ==> "Build"
 ==> "Test"
