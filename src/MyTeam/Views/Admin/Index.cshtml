@@ -1,5 +1,5 @@
 ﻿@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Metadata
+@using Microsoft.EntityFrameworkCore.Metadata
 @using MyTeam
 @using MyTeam.Models.Domain
 @using MyTeam.Models.Enums
@@ -10,15 +10,17 @@
 }
 
 
-<div mt-main>
-    <div id="manage-players">
-        
-    </div>
-</div>
+<div class="mt-main">
+    <div class="mt-container">
+        <div id="manage-players">
 
-@Html.Partial("_CoachMenu")
-@Html.Partial("_JsConstants")
-@section Scripts
+        </div>
+        </div>
+    </div>
+
+    @Html.Partial("_CoachMenu")
+    @Html.Partial("_JsConstants")
+    @section Scripts
 {
-    <script src="~/scripts/Admin/manageplayers.js"></script>
-}
+        <script src="~/scripts/Admin/manageplayers.js"></script>
+    }

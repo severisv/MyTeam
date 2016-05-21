@@ -5,20 +5,24 @@
     ViewBag.Title = Model.SelectedPlayer?.Fullname;
 }
 
-<div mt-main  inner-id="show-players">
-            @Html.Partial("_Edit", new EditPlayerViewModel(Model.SelectedPlayer))
+<div class="mt-main">
+    <div id="show-players" class="mt-container">
+        @Html.Partial("_Edit", new EditPlayerViewModel(Model.SelectedPlayer))
+    </div>
 </div>
 
-<div mt-sidebar>
-    <ul class="nav nav-list">
-        <li class="nav-header">@Res.Submenu</li>
-        <li><a asp-controller="player" asp-action="list" asp-route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
-        <li><a asp-controller="player" asp-action="list" asp-route-type="@PlayerStatus.Veteran"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Veteran)</a></li>
-    </ul>
-</div>
+<div class="mt-sidebar">
+    <div class="mt-container">
+        <ul class="nav nav-list">
+            <li class="nav-header">@Res.Submenu</li>
+            <li><a asp-controller="player" asp-action="list" asp-route-type="@PlayerStatus.Aktiv"><i class='fa fa-user'></i> @Res.PlayersOfType(PlayerStatus.Aktiv)</a></li>
+            <li><a asp-controller="player" asp-action="list" asp-route-type="@PlayerStatus.Veteran"><i class='fa fa-trophy'></i> @Res.PlayersOfType(PlayerStatus.Veteran)</a></li>
+        </ul>
+    </div>
+    </div>
 
-@Html.Partial("_ListPlayersSidebar")
+    @Html.Partial("_ListPlayersSidebar")
 
-@section Scripts {
-    @Component.Invoke("CloudinaryScripts")
-}
+    @section Scripts {
+        @await Component.InvokeAsync("CloudinaryScripts")
+    }

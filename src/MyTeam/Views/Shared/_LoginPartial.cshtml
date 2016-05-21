@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @using System.Threading.Tasks
 
-@if (User.IsSignedIn())
+@if (User.Identity.IsAuthenticated)
 {
 
     <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-topRight--item navbar-right signout-form">

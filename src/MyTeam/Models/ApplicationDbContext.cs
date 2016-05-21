@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Metadata;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
 
@@ -20,15 +21,35 @@ namespace MyTeam.Models
         public DbSet<MemberTeam> MemberTeams { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Season> Seasons { get; set; }
-        public DbSet<Season> Squads { get; set; }
         public DbSet<Team> Teams { get; set; }
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Member>()
+
+            builder.Entity<Article>().ToTable("Article");
+            builder.Entity<Club>().ToTable("Club");
+            builder.Entity<Comment>().ToTable("Comment");
+            builder.Entity<Event>().ToTable("Event");
+            builder.Entity<Game>().ToTable("Game");
+            builder.Entity<GameEvent>().ToTable("GameEvent");
+            builder.Entity<EventTeam>().ToTable("EventTeam");
+            builder.Entity<EventAttendance>().ToTable("EventAttendance");
+            builder.Entity<Member>().ToTable("Member");
+            builder.Entity<MemberTeam>().ToTable("MemberTeam");
+            builder.Entity<Player>().ToTable("Player");
+            builder.Entity<Season>().ToTable("Season");
+            builder.Entity<Member>().ToTable("Member");
+            builder.Entity<Team>().ToTable("Team");
+
+
+        builder.Entity<Member>()
                 .HasMany(e => e.EventAttendances)
                 .WithOne(c => c.Member)
                 .HasForeignKey(c => c.MemberId)
@@ -63,6 +84,8 @@ namespace MyTeam.Models
                .WithMany(c => c.Assists)
                .HasForeignKey(c => c.AssistedById)
                .OnDelete(DeleteBehavior.Restrict);
+
+           
 
         }
     }

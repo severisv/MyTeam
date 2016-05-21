@@ -9,14 +9,18 @@
 
 @if (Model.Players.Any())
 {
-    <div mt-sidebar>
-        <ul class="nav nav-list">
-            <li class="nav-header">@Res.PlayersOfType(Model.Status)</li>
-            @foreach (var player in Model.Players)
-            {
-                <li><a class="ajax-link" data-ajax-update="#show-players" 
-                       asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name()</a></li>
-            }
-        </ul>
-    </div>
-}
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.PlayersOfType(Model.Status)</li>
+                @foreach (var player in Model.Players)
+                {
+                    <li>
+                        <a class="ajax-link" data-ajax-update="#show-players"
+                           asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name()</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        </div>
+        }

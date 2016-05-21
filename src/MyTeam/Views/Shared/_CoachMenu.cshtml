@@ -2,12 +2,14 @@
 @using MyTeam
 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
 {
-    <div mt-sidebar>
-        <ul class="nav nav-list adminMenu">
-            <li class="nav-header">@Res.CoachMenu</li>
-            @Html.Partial("_CoachMenuItems")
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list adminMenu">
+                <li class="nav-header">@Res.CoachMenu</li>
+                @Html.Partial("_CoachMenuItems")
 
-        </ul>
-    </div>
+            </ul>
+        </div>
+        </div>
 
-}
+        }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Table;
 
 
 namespace MyTeam.Controllers
@@ -15,16 +14,22 @@ namespace MyTeam.Controllers
     [RequireMember]
     public class ApiController : BaseController
     {
-        [FromServices]
-        public IPlayerService PlayerService { get; set; }
-        [FromServices]
-        public IEventService EventService { get; set; }
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
-        
+     
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IEventService _eventService;
+        private readonly IPlayerService _playerService;
+
+        public ApiController(ApplicationDbContext dbContext, IEventService eventService, IPlayerService playerService)
+        {
+            _playerService = playerService;
+            _eventService = eventService;
+            _dbContext = dbContext;
+        }
+
+
         public JsonResult GetPlayers()
         {
-            var players = DbContext.Players.Where(p => p.Club.Id == Club.Id)
+            var players = _dbContext.Players.Where(p => p.ClubId == Club.Id)
                 .Select(p =>
               new
               {
@@ -35,7 +40,7 @@ namespace MyTeam.Controllers
               }).OrderBy(p => p.FullName).ToList();
 
             var playerIds = players.Select(p => p.Id);
-            var memberTeams = DbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
+            var memberTeams = _dbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
 
             var result = new List<Object>();
             foreach (var p in players)
@@ -57,7 +62,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult GetFacebookIds()
         {
-            var ids = PlayerService.GetFacebookIds();
+            var ids = _playerService.GetFacebookIds();
             return new JsonResult(new { data = ids });
         }
 
@@ -67,7 +72,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.SetPlayerStatus(id, status, Club.ClubId);
+                _playerService.SetPlayerStatus(id, status, Club.ClubId);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
@@ -82,7 +87,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.TogglePlayerRole(id, role, Club.ClubId);
+                _playerService.TogglePlayerRole(id, role, Club.ClubId);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
@@ -94,7 +99,7 @@ namespace MyTeam.Controllers
 
         public JsonResult GetTeams()
         {
-            var teams = DbContext.Teams
+            var teams = _dbContext.Teams
                 .OrderBy(c => c.SortOrder)
                 .Where(c => c.ClubId == Club.Id).Select(t => new {
                 Id = t.Id,
@@ -109,7 +114,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                PlayerService.TogglePlayerTeam(teamId, playerId, Club.ClubId);
+                _playerService.TogglePlayerTeam(teamId, playerId, Club.ClubId);
                 var reponse = new { Success = true };
                 return new JsonResult(reponse);
             }
@@ -124,7 +129,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                EventService.UpdateDescription(eventId, description);
+                _eventService.UpdateDescription(eventId, description);
                 var reponse = new { Success = true };
                 return new JsonResult(reponse);
             }

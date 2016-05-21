@@ -1,109 +1,112 @@
 ﻿@using System.Threading.Tasks
 @model MyTeam.ViewModels.Game.RegisterSquadViewModel
 
-
-<div mt-main class="register-attendance">
-    <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link  pull-right" title="Rediger kamp"><i class="fa fa-edit"></i></a>
-    <div class="flex">
-        <div class="flex-1 event-icon align-center">
-            <div class="fa-3x">
-                <span mt-eventtype="@Model.Game.Type" mt-hidename="true"></span>
-            </div>
-        </div>
-        <div class="flex-2 faded">
-            <p>
-                <i class="fa fa-calendar"></i> @Model.Game.DateTime.ToString("ddd d MMMM")
-                &nbsp;
-                <span class="no-wrap"><i class="fa fa-clock-o"></i> @Model.Game.DateTime.ToString("HH:mm")</span>
-            </p>
-            <p>
-                <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Game.Location)
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-xs-12">
-            <h3 class="collapselink-parent">
-                <a class="collapse-link " role="button" data-toggle="collapse" href="#ra-otherplayers-signedup" aria-expanded="true">
-                    Påmeldte spillere (@Model.Attendees.Count())
-                </a>
-            </h3>
-            <div id="ra-otherplayers-signedup" class="collapse in">
-                @Html.Partial("_RegisterSquadListPlayers", Model.Attendees)
-            </div>
-            <br/>
-            <h3 class="collapselink-parent">
-                <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-declinees" aria-expanded="true">
-                    Kan ikke (@Model.Declinees.Count())
-                </a>
-            </h3>
-            <div id="ra-declinees" class="collapse">
-                @Html.Partial("_RegisterSquadListPlayers", Model.Declinees)
-            </div>
-            <br/>
-            <h3 class="collapselink-parent">
-                <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-active">
-                    Ikke svart (@Model.OtherActivePlayers.Count())
-                </a>
-            </h3>
-            <div id="ra-otherplayers-active" class="collapse">
-                @Html.Partial("_RegisterSquadListPlayers", Model.OtherActivePlayers)
-            </div>
-            <br/>
-            <h3 class="collapselink-parent">
-                <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-inactive">
-                    Øvrige ikke svart (@Model.OtherInactivePlayers.Count())
-                </a>
-            </h3>
-            <div id="ra-otherplayers-inactive" class="collapse">
-                @Html.Partial("_RegisterSquadListPlayers", Model.OtherInactivePlayers)
-
-            </div>
-        </div>
-        <div class="col-sm-6 col-xs-12 ">
-            <h2>Tropp (<span id="squadCount">@Model.Squad.Count()</span>)
-            </h2>
-            <hr/>
-            <div >
-                <ul id="squad" class="list-unstyled squad-list">
-                    @foreach (var player in Model.Squad)
-                    {
-                        <li id="@player.Id">
-                            <i class="flaticon-soccer18"></i>&nbsp;@player.Name
-                        </li>
-                    }
-                </ul>
-            </div>
-            <hr/>
-            <div class="registerSquad-publish" id="registerSquad-publish">
-                <div class="relative registerSquad-messageWrapper">
-                    <textarea id="publishMessage" class="form-control" data-href="@Url.Action("UpdateEventDescription", "Api", new {eventId = Model.Game.Id})" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
-                    <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
-                    <span class="label-feedback label label-success"><i class="fa fa-check"></i> Lagret</span>
+    <div class="mt-main  register-attendance">
+        <div class="mt-container register-attendance">
+            <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link  pull-right" title="Rediger kamp"><i class="fa fa-edit"></i></a>
+            <div class="flex">
+                <div class="flex-1 event-icon align-center">
+                    <div class="fa-3x">
+                        <span mt-eventtype="@Model.Game.Type" mt-hidename="true"></span>
+                    </div>
                 </div>
-                <div>
-                    @if (Model.Game.IsPublished)
-                    {
-                        <div class="disabled btn btn-success btn-lg"><i class="fa fa-check-circle"></i> Publisert
+                <div class="flex-2 faded">
+                    <p>
+                        <i class="fa fa-calendar"></i> @Model.Game.DateTime.ToString("ddd d MMMM")
+                        &nbsp;
+                        <span class="no-wrap"><i class="fa fa-clock-o"></i> @Model.Game.DateTime.ToString("HH:mm")</span>
+                    </p>
+                    <p>
+                        <i class="fa fa-map-marker"></i> @Html.DisplayFor(m => m.Game.Location)
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <h3 class="collapselink-parent">
+                        <a class="collapse-link " role="button" data-toggle="collapse" href="#ra-otherplayers-signedup" aria-expanded="true">
+                            Påmeldte spillere (@Model.Attendees.Count())
+                        </a>
+                    </h3>
+                    <div id="ra-otherplayers-signedup" class="collapse in">
+                        @Html.Partial("_RegisterSquadListPlayers", Model.Attendees)
+                    </div>
+                    <br />
+                    <h3 class="collapselink-parent">
+                        <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-declinees" aria-expanded="true">
+                            Kan ikke (@Model.Declinees.Count())
+                        </a>
+                    </h3>
+                    <div id="ra-declinees" class="collapse">
+                        @Html.Partial("_RegisterSquadListPlayers", Model.Declinees)
+                    </div>
+                    <br />
+                    <h3 class="collapselink-parent">
+                        <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-active">
+                            Ikke svart (@Model.OtherActivePlayers.Count())
+                        </a>
+                    </h3>
+                    <div id="ra-otherplayers-active" class="collapse">
+                        @Html.Partial("_RegisterSquadListPlayers", Model.OtherActivePlayers)
+                    </div>
+                    <br />
+                    <h3 class="collapselink-parent">
+                        <a class="collapse-link collapsed" role="button" data-toggle="collapse" href="#ra-otherplayers-inactive">
+                            Øvrige ikke svart (@Model.OtherInactivePlayers.Count())
+                        </a>
+                    </h3>
+                    <div id="ra-otherplayers-inactive" class="collapse">
+                        @Html.Partial("_RegisterSquadListPlayers", Model.OtherInactivePlayers)
+
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12 ">
+                    <h2>
+                        Tropp (<span id="squadCount">@Model.Squad.Count()</span>)
+                    </h2>
+                    <hr />
+                    <div>
+                        <ul id="squad" class="list-unstyled squad-list">
+                            @foreach (var player in Model.Squad)
+                            {
+                                <li id="@player.Id">
+                                    <i class="flaticon-soccer18"></i>&nbsp;@player.Name
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <hr />
+                    <div class="registerSquad-publish" id="registerSquad-publish">
+                        <div class="relative registerSquad-messageWrapper">
+                            <textarea id="publishMessage" class="form-control" data-href="@Url.Action("UpdateEventDescription", "Api", new {eventId = Model.Game.Id})" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
+                            <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
+                            <span class="label-feedback label label-success"><i class="fa fa-check"></i> Lagret</span>
                         </div>
-                    }
-                    else
-                    {
-                        <button id="publishButton" data-href="@Url.Action("PublishSquad", "Game", new {eventId = Model.Game.Id})" class="btn btn-primary btn-lg"><span>Publisér tropp</span><i class="fa fa-spinner fa-spin"></i></button>
-                    }
-                    <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
+                        <div>
+                            @if (Model.Game.IsPublished)
+                            {
+                                <div class="disabled btn btn-success btn-lg">
+                                    <i class="fa fa-check-circle"></i> Publisert
+                                </div>
+                            }
+                            else
+                            {
+                                <button id="publishButton" data-href="@Url.Action("PublishSquad", "Game", new {eventId = Model.Game.Id})" class="btn btn-primary btn-lg"><span>Publisér tropp</span><i class="fa fa-spinner fa-spin"></i></button>
+                            }
+                            <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        </div>
         @Html.Partial("_CoachMenu")
-<script>
-    var Routes = Routes || {}
-    Routes.SELECT_PLAYER = '@Html.Raw(Url.Action("SelectPlayer", "Game"))';
-    Routes.GET_ATTENDANCE = '@Html.Raw(Url.Action("GetRecentAttendance", "AttendanceApi", new {teamId = Model.Game.TeamIds.First()}))';
-</script>
-@section Scripts
+        <script>
+            var Routes = Routes || {}
+            Routes.SELECT_PLAYER = '@Html.Raw(Url.Action("SelectPlayer", "Game"))';
+            Routes.GET_ATTENDANCE = '@Html.Raw(Url.Action("GetRecentAttendance", "AttendanceApi", new {teamId = Model.Game.TeamIds.First()}))';
+        </script>
+        @section Scripts
 {
-    <script src="~/scripts/game/registerSquad.js"></script>
-}
+            <script src="~/scripts/game/registerSquad.js"></script>
+        }

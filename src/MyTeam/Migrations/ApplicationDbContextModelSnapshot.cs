@@ -1,8 +1,8 @@
-using System;
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Metadata;
-using Microsoft.Data.Entity.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using MyTeam.Models;
 
 namespace MyTeam.Migrations
@@ -13,10 +13,10 @@ namespace MyTeam.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
+                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id");
 
@@ -32,12 +32,12 @@ namespace MyTeam.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .HasAnnotation("Relational:Name", "RoleNameIndex");
+                        .HasName("RoleNameIndex");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetRoles");
+                    b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -51,10 +51,12 @@ namespace MyTeam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetRoleClaims");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -68,10 +70,12 @@ namespace MyTeam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetUserClaims");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -84,10 +88,12 @@ namespace MyTeam.Migrations
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetUserLogins");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -95,7 +101,26 @@ namespace MyTeam.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("MyTeam.Models.ApplicationUser", b =>
@@ -138,12 +163,12 @@ namespace MyTeam.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasAnnotation("Relational:Name", "EmailIndex");
+                        .HasName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
-                        .HasAnnotation("Relational:Name", "UserNameIndex");
+                        .HasName("UserNameIndex");
 
-                    b.HasAnnotation("Relational:TableName", "AspNetUsers");
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
@@ -171,6 +196,14 @@ namespace MyTeam.Migrations
                     b.Property<DateTime>("Published");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("Article");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Club", b =>
@@ -195,6 +228,8 @@ namespace MyTeam.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.ToTable("Club");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Comment", b =>
@@ -217,11 +252,18 @@ namespace MyTeam.Migrations
                     b.Property<Guid?>("MemberId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("ClubId");
 
@@ -240,7 +282,8 @@ namespace MyTeam.Migrations
 
                     b.Property<bool>("IsPublished");
 
-                    b.Property<string>("Location");
+                    b.Property<string>("Location")
+                        .IsRequired();
 
                     b.Property<string>("Opponent");
 
@@ -250,9 +293,11 @@ namespace MyTeam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+                    b.HasIndex("ClubId");
 
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Event");
+                    b.ToTable("Event");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
@@ -276,6 +321,12 @@ namespace MyTeam.Migrations
                     b.Property<bool>("WonTraining");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("EventAttendance");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventTeam", b =>
@@ -288,6 +339,12 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("TeamId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("EventTeam");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
@@ -306,6 +363,14 @@ namespace MyTeam.Migrations
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssistedById");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("GameEvent");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
@@ -322,11 +387,13 @@ namespace MyTeam.Migrations
 
                     b.Property<string>("FacebookId");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<string>("ImageFull");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<string>("MiddleName");
 
@@ -342,9 +409,11 @@ namespace MyTeam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+                    b.HasIndex("ClubId");
 
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Member");
+                    b.ToTable("Member");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Member");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.MemberTeam", b =>
@@ -357,6 +426,12 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("TeamId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("MemberTeam");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
@@ -381,6 +456,10 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("TeamId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Season");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
@@ -399,6 +478,10 @@ namespace MyTeam.Migrations
                     b.Property<int>("SortOrder");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.ToTable("Team");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
@@ -411,7 +494,11 @@ namespace MyTeam.Migrations
 
                     b.Property<Guid>("TeamId");
 
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Game");
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Game");
+
+                    b.HasDiscriminator().HasValue("Game");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
@@ -428,39 +515,46 @@ namespace MyTeam.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasAnnotation("Relational:DiscriminatorValue", "Player");
+                    b.ToTable("Player");
+
+                    b.HasDiscriminator().HasValue("Player");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
                         .WithMany()
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("MyTeam.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("MyTeam.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
+                    b.HasOne("MyTeam.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
@@ -471,7 +565,8 @@ namespace MyTeam.Migrations
 
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
-                        .HasForeignKey("ClubId");
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Game")
                         .WithOne()
@@ -482,7 +577,8 @@ namespace MyTeam.Migrations
                 {
                     b.HasOne("MyTeam.Models.Domain.Article")
                         .WithMany()
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Member")
                         .WithMany()
@@ -493,14 +589,16 @@ namespace MyTeam.Migrations
                 {
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
-                        .HasForeignKey("ClubId");
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Event")
                         .WithMany()
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Member")
                         .WithMany()
@@ -511,7 +609,8 @@ namespace MyTeam.Migrations
                 {
                     b.HasOne("MyTeam.Models.Domain.Event")
                         .WithMany()
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Team")
                         .WithMany()
@@ -526,7 +625,8 @@ namespace MyTeam.Migrations
 
                     b.HasOne("MyTeam.Models.Domain.Game")
                         .WithMany()
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Player")
                         .WithMany()
@@ -537,14 +637,16 @@ namespace MyTeam.Migrations
                 {
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
-                        .HasForeignKey("ClubId");
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.MemberTeam", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Member")
                         .WithMany()
-                        .HasForeignKey("MemberId");
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.Domain.Team")
                         .WithMany()
@@ -555,14 +657,16 @@ namespace MyTeam.Migrations
                 {
                     b.HasOne("MyTeam.Models.Domain.Team")
                         .WithMany()
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Club")
                         .WithMany()
-                        .HasForeignKey("ClubId");
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
@@ -570,10 +674,6 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Team")
                         .WithMany()
                         .HasForeignKey("TeamId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Player", b =>
-                {
                 });
         }
     }

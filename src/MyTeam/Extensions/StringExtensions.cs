@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Linq;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Encodings.Web;
 
 namespace MyTeam
 {
@@ -66,10 +67,9 @@ namespace MyTeam
 
         public static HtmlString IncludeLinebreaks(this string str)
         {
-            var htmlEncoder = new Microsoft.Extensions.WebEncoders.HtmlEncoder();
             var result = string.Join(
                 "<br/>",
-                str.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(x => htmlEncoder.HtmlEncode(x))
+                str.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(x => HtmlEncoder.Default.Encode(x))
             );
             return new HtmlString(result);
         }

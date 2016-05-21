@@ -8,7 +8,7 @@
     {
         if (!Context.Member().BelongsToTeam(Model.TeamIds.ToArray()) && Model.GameType != GameType.Treningskamp)
         {
-            <div mt-alert="AlertType.Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
+            <div mt-alert="Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
         }
         else if(!Model.IsPublished)
         {

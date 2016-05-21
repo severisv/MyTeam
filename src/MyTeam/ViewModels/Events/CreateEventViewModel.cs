@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
@@ -145,7 +145,7 @@ namespace MyTeam.ViewModels.Events
             {
                 if (string.IsNullOrWhiteSpace(Headline))
                 {
-                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Opponent) }));
+                    result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(Headline) }));
                 }
             }
 

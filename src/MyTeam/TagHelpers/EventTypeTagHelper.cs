@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using MyTeam.Models.Enums;
 
 namespace MyTeam.TagHelpers
@@ -25,7 +25,7 @@ namespace MyTeam.TagHelpers
             innertag.AddCssClass($"{GetIconName(EventType)}");
             innertag.Attributes.Add("title", EventType.ToString());
 
-            output.Content.Append(innertag);
+            output.Content.AppendHtml(innertag);
             if (!HideName) output.Content.AppendHtml($"<span class='{TextClass}'>&nbsp;&nbsp;{EventType}</span>");
         }
 

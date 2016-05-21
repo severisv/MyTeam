@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -12,10 +11,14 @@ namespace MyTeam.Controllers
 {
     public class GameEventApiController : BaseController
     {
-        [FromServices]
-        public IGameEventService GameEventService { get; set; }
 
-        
+        private readonly IGameEventService _gameEventService;
+       
+        public GameEventApiController(IGameEventService gameEventService)
+        {
+            _gameEventService = gameEventService;
+        }
+
         public IActionResult GetTypes()
         {
             var gameEventTypes = Enum.GetValues(typeof (GameEventType)).Cast<GameEventType>()
@@ -36,7 +39,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var gameEvent = GameEventService.AddGameEvent(model);
+                var gameEvent = _gameEventService.AddGameEvent(model);
                 return new JsonResult(gameEvent);
             }
             return new JsonResult(JsonResponse.Failure);
@@ -44,7 +47,7 @@ namespace MyTeam.Controllers
 
         public IActionResult Get(Guid gameId)
         {
-            var events = GameEventService.GetGameEvents(gameId);
+            var events = _gameEventService.GetGameEvents(gameId);
 
             return new JsonResult(events);
         }
@@ -56,7 +59,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                GameEventService.Delete(eventId);
+                _gameEventService.Delete(eventId);
                 return new JsonResult(JsonResponse.Success());
             }
             return new JsonResult(JsonResponse.Failure);

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.TagHelpers;
-using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.AspNet.Razor.TagHelpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace MyTeam.TagHelpers
 {
@@ -18,10 +18,6 @@ namespace MyTeam.TagHelpers
         [HtmlAttributeName(IconAttributeName)]
         public string Icon { get; set; }
 
-        /// <summary>
-        /// Creates a new <see cref="LabelTagHelper"/>.
-        /// </summary>
-        /// <param name="generator">The <see cref="IHtmlGenerator"/>.</param>
         public CustomLabelTagHelper(IHtmlGenerator generator)
         {
             Generator = generator;
@@ -33,15 +29,10 @@ namespace MyTeam.TagHelpers
 
         protected IHtmlGenerator Generator { get; }
 
-        /// <summary>
-        /// An expression to be evaluated against the current model.
-        /// </summary>
-        [HtmlAttributeName(ForAttributeName)]
+     [HtmlAttributeName(ForAttributeName)]
         public ModelExpression For { get; set; }
 
-        /// <inheritdoc />
-        /// <remarks>Does nothing if <see cref="For"/> is <c>null</c>.</remarks>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+  public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var tagBuilder = Generator.GenerateLabel(
                 ViewContext,
@@ -63,14 +54,14 @@ namespace MyTeam.TagHelpers
                 {
                     var childContent = await output.GetChildContentAsync();
 
-                    if (childContent.IsWhiteSpace)
+                    if (childContent.IsEmptyOrWhiteSpace)
                     {
                         // Provide default label text since there was nothing useful in the Razor source.
                         output.Content.SetHtmlContent($"<i class='fa fa-{Icon}'></i>");
                     }
                     else
                     {
-                        output.Content.SetContent(childContent);
+                        output.Content.SetHtmlContent(childContent.GetContent());
                     }
                 }
             }

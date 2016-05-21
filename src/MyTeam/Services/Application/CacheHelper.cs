@@ -23,10 +23,8 @@ namespace MyTeam.Services.Application
             _dbContext = dbContext;
         }
 
-        public PlayerDto GetPlayerFromUser(string name, string clubId)
+        public PlayerDto GetPlayerFromUser(string name, Guid clubId)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(clubId)) return null;
-
             var key = name + clubId;
 
             object cachedValue;
@@ -41,7 +39,7 @@ namespace MyTeam.Services.Application
             }
             
             member = _dbContext.Players
-                .Where(p => clubId == p.Club.ClubIdentifier && p.UserName == name)
+                .Where(p => clubId == p.ClubId && p.UserName == name)
                 .Select(p => new PlayerDto(p.Id, p.FirstName,  p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
@@ -144,7 +142,7 @@ namespace MyTeam.Services.Application
 
         public void ClearNotificationCache(Guid clubId)
         {
-            Cache.Set(clubId.ToString(), null);
+            Cache.Set<Dictionary<Guid, MemberNotification>>(clubId.ToString(), null);
         }
 
         public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)

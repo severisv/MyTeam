@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -13,31 +13,37 @@ namespace MyTeam.Controllers
     {
         private const string BaseRoute = "nyheter/";
 
-        [FromServices]
-        public IArticleService ArticleService { get; set; }
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
+     
+        private readonly IArticleService _articleService;
+        private readonly ApplicationDbContext _dbContext;
+
+        public NewsController(IArticleService articleService, ApplicationDbContext dbContext)
+        {
+            _articleService = articleService;
+            _dbContext = dbContext;
+        }
+
 
         [Route("{skip:int?}/{take:int?}")]
         [Route("nyheter/{skip:int?}/{take:int?}")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
-            var model = ArticleService.Get(HttpContext.GetClub().Id, skip, take);
-            ViewBag.MetaDescription = DbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
+            var model = _articleService.Get(HttpContext.GetClub().Id, skip, take);
+            ViewBag.MetaDescription = _dbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
             return View("Index", model);
         }
 
         [Route(BaseRoute+"vis/{name}")]
         public IActionResult Show(string name)
         {
-            var model = ArticleService.Get(Club.Id, name);
+            var model = _articleService.Get(Club.Id, name);
             return View("Show", model);
         }
 
         [Route(BaseRoute + "vis")]
         public IActionResult ShowFallback(Guid articleId)
         {
-            var article = DbContext.Articles.Single(a => a.Id == articleId);
+            var article = _dbContext.Articles.Single(a => a.Id == articleId);
             return RedirectToAction("Show", new {name = article.Name});
         }
 
@@ -54,7 +60,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Edit(string navn)
         {
-            var article = ArticleService.Get(Club.Id, navn);
+            var article = _articleService.Get(Club.Id, navn);
             var model = new EditArticleViewModel(article);
             return View(model);
         }
@@ -66,7 +72,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var name = ArticleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
+                var name = _articleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
                 return RedirectToAction("Show", new { name = name});
             }
             return View("Edit", model);
@@ -79,7 +85,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                ArticleService.Delete(articleId);
+                _articleService.Delete(articleId);
 
                 return RedirectToAction("Index");
             }
@@ -93,7 +99,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var comment = ArticleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
+                var comment = _articleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
                 return PartialView("_GetComment", comment);
             }
             return Content("");
@@ -101,7 +107,7 @@ namespace MyTeam.Controllers
         
         public PartialViewResult GetComments(Guid articleId)
         {
-            var comments = ArticleService.GetComments(articleId);
+            var comments = _articleService.GetComments(articleId);
             return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId));
         }
 

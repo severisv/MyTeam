@@ -17,14 +17,14 @@
         </div>
     }
     <div class="mt-container">
-        @Component.Invoke("ArticleNav", Context.GetClub().Id)
+        @await Component.InvokeAsync("ArticleNav", new { clubId = Context.GetClub().Id})
     </div>
     <div class="mt-container">
 
         <h4><i class="fa fa-twitter"></i> Siste Tweets</h4>
         <a class="twitter-timeline" href="https://twitter.com/WamKam" data-widget-id="672159319203430401" data-tweet-limit="5" data-chrome="nofooter transparent noheader noborders noscrollbar">Tweets by WamKam</a>
     </div>
-    
+
 </div>
 
 <div class="mt-main">
@@ -34,35 +34,35 @@
 
 
 
-
-
 @if (Model.HasPrevious || Model.HasNext)
 {
-    <div mt-main>
-        <nav class="news-pager">
-            <ul class="pager">
-                @if (Model.HasPrevious)
+    <div class="mt-main">
+        <div class="mt-container">
+            <nav class="news-pager">
+                <ul class="pager">
+                    @if (Model.HasPrevious)
                 {
-                    <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take="@Model.Take"><span aria-hidden="true">&larr;</span> Nyere</a></li>
-                }
-                else
+                        <li class="previous"><a asp-route-skip="@Model.SkipPrevious" asp-route-take="@Model.Take"><span aria-hidden="true">&larr;</span> Nyere</a></li>
+                    }
+                    else
+                    {
+                        <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Nyere</a></li>
+                    }
+                    @if (Model.HasNext)
                 {
-                    <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Nyere</a></li>
-                }
-                @if (Model.HasNext)
-                {
-                    <li class="next @(Model.HasNext ? "" : "disabled")"><a asp-route-skip="@Model.SkipNext" asp-route-take="@Model.Take">Eldre <span aria-hidden="true">&rarr;</span></a></li>
-                }
-                else
-                {
-                    <li class="next disabled"><a>Eldre <span aria-hidden="true">&rarr;</span></a></li>
-                }
+                        <li class="next @(Model.HasNext ? "" : "disabled")"><a asp-route-skip="@Model.SkipNext" asp-route-take="@Model.Take">Eldre <span aria-hidden="true">&rarr;</span></a></li>
+                    }
+                    else
+                    {
+                        <li class="next disabled"><a>Eldre <span aria-hidden="true">&rarr;</span></a></li>
+                    }
 
-            </ul>
-        </nav>
-    </div>
-}
+                </ul>
+            </nav>
+        </div>
+        </div>
+        }
 
-@section Scripts {
-    @Html.Partial("Scripts/_TwitterFeed")
-}
+        @section Scripts {
+            @Html.Partial("Scripts/_TwitterFeed")
+        }

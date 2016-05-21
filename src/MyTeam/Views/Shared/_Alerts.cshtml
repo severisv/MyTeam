@@ -1,13 +1,11 @@
-﻿@using System.Threading.Tasks
-@using MyTeam
-@using MyTeam.Models.Enums
+﻿@using MyTeam.Models.Enums
 @if (!Context.Request.IsAjaxRequest())
 {
-        <div mt-alert="AlertType.Success">@ViewBag.AlertSuccess</div>
-        <div mt-alert="AlertType.Info">@ViewBag.AlertInfo</div>
-        <div mt-alert="AlertType.InfoSubtle">@ViewBag.AlertInfoSubtle</div>
-        <div mt-alert="AlertType.Warning">@ViewBag.AlertWarning</div>
-        <div mt-alert="AlertType.Danger">@ViewBag.AlertDanger</div>
+        <div mt-alert="Success">@ViewBag.AlertSuccess</div>
+        <div mt-alert="Info">@ViewBag.AlertInfo</div>
+        <div mt-alert="InfoSubtle">@ViewBag.AlertInfoSubtle</div>
+        <div mt-alert="Warning">@ViewBag.AlertWarning</div>
+        <div mt-alert="Danger">@ViewBag.AlertDanger</div>
 }
 else
 {

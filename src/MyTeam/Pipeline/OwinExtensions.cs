@@ -1,6 +1,6 @@
 using System;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;
@@ -21,9 +21,10 @@ namespace MyTeam
 
                 if (clubId != null)
                 {
-                    context.Items[PipelineConstants.ClubKey] = cacheHelper.GetCurrentClub(clubId);
+                    var club = cacheHelper.GetCurrentClub(clubId);
+                    context.Items[PipelineConstants.ClubKey] = club;
                     var username = context.User.Identity.Name;
-                    context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, clubId);
+                    context.Items[PipelineConstants.MemberKey] = cacheHelper.GetPlayerFromUser(username, club.Id);
                 }
                 await next();
             });

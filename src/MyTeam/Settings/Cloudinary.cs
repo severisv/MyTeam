@@ -1,7 +1,5 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.SqlServer.Server;
+using Microsoft.Extensions.Options;
 
 namespace MyTeam.Settings
 {

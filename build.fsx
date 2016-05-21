@@ -39,19 +39,10 @@ module Helpers =
         let executable = findOnPath "gulp.cmd"
         shellExec executable args workingDir
 
-    let dnu args workingDir =
-        let executable = findOnPath "dnu.cmd"
+    let dotnet args workingDir =
+        let executable = findOnPath "dotnet.exe"
         shellExec executable args workingDir
-
-
-    let dnx args workingDir =
-            let executable = findOnPath "dnx.exe"
-            shellExec executable args workingDir
-
-    let dnvm args workingDir =
-        let executable = findOnPath "dnvm.cmd"
-        shellExec executable args workingDir
-
+        
 
     let rec execMsdeploy executable args workingDir attempt attempts =
         try
@@ -70,16 +61,18 @@ module Helpers =
         execMsdeploy executable args workingDir 3 3
 
 
-    type DnuCommands =
+    type DotnetCommands =
         | Restore
         | Build
         | Publish
+        | Test
 
-    let Dnu command target =
+    let Dotnet command target =
         match command with
-            | Restore -> (dnu "restore" target)
-            | Build -> (dnu "build --configuration Release" target)
-            | Publish -> (dnu "publish --configuration Release --out .deploy src/MyTeam --runtime dnx-clr-win-x86.1.0.0-rc1-final " target)
+            | Restore -> (dotnet "restore" target)
+            | Build -> (dotnet "build --configuration Release" target)
+            | Publish -> (dotnet "publish --configuration Release -o .deploy src/MyTeam " target)
+            | Test -> (dotnet "test" target)
 
 
 [<AutoOpen>]
@@ -111,22 +104,22 @@ module Targets =
   )
 
   Target "RestorePackages" (fun _ ->
-     Dnu Restore ""
+     Dotnet Restore ""
      |> ignore
   )
 
   Target "Build" (fun _ ->
      projects
-     |> Seq.iter (fun proj -> Dnu Build proj |> ignore)
+     |> Seq.iter (fun proj -> Dotnet Build proj |> ignore)
   )
 
   Target "Test" (fun _ ->
      testProjects
-     |> Seq.iter (fun proj -> dnx "test" proj |> ignore)
+     |> Seq.iter (fun proj -> Dotnet Test proj |> ignore)
   )
 
   Target "Publish" (fun _ ->
-     Dnu Publish "" |> ignore
+     Dotnet Publish "" |> ignore
   )
 
   Target "Deploy" (fun _ ->
@@ -143,9 +136,9 @@ module Targets =
   )
 
 "Clean"
-==> "NpmRestore"
-==> "BowerRestore"
-==> "GulpCompile"
+//==> "NpmRestore"
+//==> "BowerRestore"
+//==> "GulpCompile"
 ==> "RestorePackages"
 ==> "Build"
 ==> "Test"

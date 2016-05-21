@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
 
@@ -8,14 +8,18 @@ namespace MyTeam.Controllers
 {
     public class AttendanceApiController : BaseController
     {
-        [FromServices]
-        public ApplicationDbContext DbContext { get; set; }
+        private readonly ApplicationDbContext _dbContext;
+
+        public AttendanceApiController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public JsonResult GetRecentAttendance(Guid teamId)
         {
             var now = DateTime.Now;
             var events =
-                DbContext.Events
+                _dbContext.Events
                 .Where(e => e.Type == EventType.Trening
                         && e.DateTime <= now
                         && e.DateTime >= now.AddDays(-56)
@@ -25,7 +29,7 @@ namespace MyTeam.Controllers
 
             var eventIds = events.Where(e => e.TeamIds.Contains(teamId)).Select(e => e.EventId);
 
-            var eventAttendences = DbContext.EventAttendances
+            var eventAttendences = _dbContext.EventAttendances
                 .Where(ea => eventIds.Contains(ea.EventId) && ea.DidAttend)
                 .Select(ea => new
                 {

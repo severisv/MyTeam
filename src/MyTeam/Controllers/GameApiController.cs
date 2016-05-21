@@ -1,6 +1,5 @@
 using System;
-using System.Threading;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
@@ -10,17 +9,20 @@ namespace MyTeam.Controllers
 {
     public class GameApiController : BaseController
     {
-        [FromServices]
-        public IGameService GameService { get; set; }
+        private readonly IGameService _gameService;
 
-
+        public GameApiController(IGameService gameService)
+        {
+            _gameService = gameService;
+        }
+        
         [HttpPost]
         [RequireMember(Roles.Admin, Roles.Coach)]
         public IActionResult SetHomeScore(Guid gameId, int? value)
         {
             if (ModelState.IsValid)
             {
-                GameService.SetHomeScore(gameId, value);
+                _gameService.SetHomeScore(gameId, value);
                 return new JsonResult(JsonResponse.Success());
             }
             return new JsonResult(JsonResponse.Failure);
@@ -32,7 +34,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                GameService.SetAwayScore(gameId, value);
+                _gameService.SetAwayScore(gameId, value);
                 return new JsonResult(JsonResponse.Success());
             }
             return new JsonResult(JsonResponse.Failure);
@@ -42,7 +44,7 @@ namespace MyTeam.Controllers
 
         public IActionResult GetSquad(Guid gameId)
         {
-            var squad = GameService.GetSquad(gameId);
+            var squad = _gameService.GetSquad(gameId);
             return new JsonResult(squad);
 
         }
