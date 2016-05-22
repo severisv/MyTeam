@@ -126,10 +126,9 @@ module Targets =
      let currentDir = FileSystemHelper.currentDirectory
      let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
      let password = EnvironmentHelper.environVar "DEPLOY_PWD"
-     let args = sprintf "-source:IisApp='%s\.deploy' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension  -retryAttempts:2" currentDir appName appName appName password
+     let args = sprintf "-source:IisApp='%s\.deploy' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic',EnableMSDeployAppOffline='True' -verb:sync -enableLink:contentLibExtension  -retryAttempts:2" currentDir appName appName appName password
      msdeploy args "" |> ignore
   )
-
 
   Target "Default" (fun _ ->
     ()
