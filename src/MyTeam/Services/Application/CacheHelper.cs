@@ -25,6 +25,8 @@ namespace MyTeam.Services.Application
 
         public PlayerDto GetPlayerFromUser(string name, Guid clubId)
         {
+            if (string.IsNullOrWhiteSpace(name)) return null;
+
             var key = name + clubId;
 
             object cachedValue;
