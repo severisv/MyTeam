@@ -209,3 +209,4 @@ src/MyTeam/wwwroot/scripts/Bundles/
 setdeploycredentials.cmd
 src/MyTeam/appsettings.Development.json
 src/MyTeam/appsettings.Production.json
+.vs/
