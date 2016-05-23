@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using MyTeam;
 
-namespace Microsoft.AspNetCore.Mvc
+namespace MyTeam.Extensions.Mvc
 {
     public class UnauthorizedResult : ViewResult
     {

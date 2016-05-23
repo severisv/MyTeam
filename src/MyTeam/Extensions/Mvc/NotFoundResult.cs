@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using MyTeam;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.AspNetCore.Mvc
+namespace MyTeam.Extensions.Mvc
 {
     public class NotFoundResult : ViewResult
     {

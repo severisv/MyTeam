@@ -1,7 +1,5 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Routing;
 using MyTeam.Controllers;
 
 namespace MyTeam.Filters
@@ -36,7 +34,7 @@ namespace MyTeam.Filters
 
             if (!userPlayer.Exists || _roles != null && !userPlayer.Roles.ContainsAny(_roles))
             {
-                actionContext.Result = new UnauthorizedResult(actionContext.HttpContext);
+                actionContext.Result = new Extensions.Mvc.UnauthorizedResult(actionContext.HttpContext);
             }
 
             

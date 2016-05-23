@@ -8,6 +8,7 @@ using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.Table;
+using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
 
 namespace MyTeam.Controllers
 {

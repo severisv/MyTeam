@@ -18,7 +18,7 @@ namespace MyTeam.Controllers
         }
 
         [Route("404")]
-        public IActionResult NotFound()
+        public IActionResult NotFoundAction()
         {
             HttpContext.Response.StatusCode = 404;
             if(Request.IsAjaxRequest())
