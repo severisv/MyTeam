@@ -57,7 +57,7 @@ namespace MyTeam
 
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
 
-            
+            services.AddLocalization();
             services.AddMvc();
 
             services.AddSingleton(Configuration);
@@ -105,11 +105,12 @@ namespace MyTeam
 
                 app.UseIdentity();
 
-                //app.UseRequestLocalization(new RequestLocalizationOptions
-                //{
-                //    SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
-                //    SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
-                //}, new RequestCulture(new CultureInfo("nb-NO")));
+                app.UseRequestLocalization(new RequestLocalizationOptions
+                {
+                    DefaultRequestCulture = new RequestCulture("nb-NO"),
+                    SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
+                    SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
+                });
 
                 app.UseFacebookAuthentication(new FacebookOptions
                 {
