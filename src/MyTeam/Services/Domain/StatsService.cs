@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
@@ -60,10 +61,13 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<PlayerStats> GetStats(Guid teamId, int selectedYear)
         {
-            var gameEvents = _dbContext.GameEvents
-                .Where(ge => ge.Game.TeamId == teamId && ge.Game.DateTime.Year == selectedYear && ge.Game.GameType != GameType.Treningskamp).ToList();
+            var games = _dbContext.Games.Where(g => g.TeamId == teamId && g.DateTime.Year == selectedYear && g.GameType != GameType.Treningskamp)
+                .Select(g => g.Id).ToList();
 
-            var playerIds = gameEvents.Select(p => p.PlayerId).Concat(gameEvents.Select(p => p.AssistedById)).Distinct();
+            var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId)).ToList();
+            var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected).Select(ea => ea.MemberId).ToList();
+            
+            var playerIds = attendances.Select(p => p).Distinct();
 
             var players = _dbContext.Members.Where(p => playerIds.Contains(p.Id))
                 .Select(p => new PlayerStats
@@ -77,10 +81,13 @@ namespace MyTeam.Services.Domain
                     Goals = gameEvents.Count(ge => ge.Type == GameEventType.Goal && ge.PlayerId == p.Id),
                     Assists = gameEvents.Count(ge => ge.Type == GameEventType.Goal && ge.AssistedById == p.Id),
                     YellowCards = gameEvents.Count(ge => ge.Type == GameEventType.YellowCard && ge.PlayerId == p.Id),
-                    RedCards = gameEvents.Count(ge => ge.Type == GameEventType.RedCard && ge.PlayerId == p.Id)
+                    RedCards = gameEvents.Count(ge => ge.Type == GameEventType.RedCard && ge.PlayerId == p.Id),
+                    Games = attendances.Count(a => a == p.Id)
                 });
+
             return players.ToList();
         }
+
 
         public IEnumerable<int> GetStatsYears(Guid teamId)
         {

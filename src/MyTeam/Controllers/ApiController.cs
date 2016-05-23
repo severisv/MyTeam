@@ -149,16 +149,7 @@ namespace MyTeam.Controllers
                 });
         }
 
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult Convert()
-        {
-            
-            return Json(new
-            {
-                DateTime.Now
-            });
-        }
-
+    
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult TestException()
         {

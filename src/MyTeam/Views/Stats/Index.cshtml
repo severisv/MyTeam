@@ -149,7 +149,44 @@
             </div>
         }
     </div>
+    <div class="mt-wrapper--left">
+        @if (Model.Games.Any())
+        {
+            <div class="mt-container stats">
+                <h3>Kamper</h3>
+                <table class="listMembers table col-xs-12">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Games)
+                {
+                            <tr>
+                                <td class="image">
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">
+                                        @player.Name()
+                                    </a>
+                                </td>
+                                <td class="text-right">
+                                    @player.Games
+                                </td>
+                            </tr>
 
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
 </div>
 
 
