@@ -88,8 +88,7 @@ namespace MyTeam
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
+                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                     {
                         var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
                         dbContext.Database.Migrate();
@@ -97,7 +96,7 @@ namespace MyTeam
                 }
                 catch (Exception e)
                 {
-                    if (env.IsDevelopment()) app.WriteException(e);
+                    if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
                 }
 
 
@@ -143,7 +142,7 @@ namespace MyTeam
             }
             catch (Exception e)
             {
-                if (env.IsDevelopment()) app.WriteException(e);
+                if (env.IsDevelopment() || env.IsStaging() ) app.WriteException(e);
                 else app.Write("Det oppstod en feil");
             }
         }

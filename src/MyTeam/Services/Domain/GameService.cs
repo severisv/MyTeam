@@ -4,6 +4,7 @@ using System.Linq;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
+using MyTeam.Services.Application;
 using MyTeam.ViewModels.Game;
 
 namespace MyTeam.Services.Domain
@@ -12,10 +13,12 @@ namespace MyTeam.Services.Domain
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ICacheHelper _cacheHelper;
 
-        public GameService(ApplicationDbContext dbContext)
+        public GameService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
             _dbContext = dbContext;
+            _cacheHelper = cacheHelper;
         }
 
         public void SelectPlayer(Guid eventId, Guid playerId, bool isSelected)
@@ -67,6 +70,7 @@ namespace MyTeam.Services.Domain
             var ev = _dbContext.Events.Single(e => e.Id == eventId);
             ev.IsPublished = true;
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCache(ev.ClubId);
         }
 
         public IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName)

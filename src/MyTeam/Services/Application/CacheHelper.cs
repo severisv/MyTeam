@@ -121,7 +121,9 @@ namespace MyTeam.Services.Application
             var events = _dbContext.Events.Where(
                     e => e.ClubId == clubId && 
                     e.DateTime - now < new TimeSpan(4, 0, 0, 0, 0) && 
-                    (e.DateTime > now))
+                    (e.DateTime > now) &&
+                    !e.IsPublished
+                    )
                     .Select(e => e.Id).ToList();
 
             var ids = _dbContext.EventTeams.Where(et => events.Contains(et.EventId) && teamIds.Contains(et.TeamId)).Select(et => et.EventId).ToList().Distinct();
