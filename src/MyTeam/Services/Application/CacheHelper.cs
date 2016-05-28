@@ -130,11 +130,14 @@ namespace MyTeam.Services.Application
 
 
             var count = ids.Count();
-            var answered = _dbContext.EventAttendances.Count(a => a.MemberId == memberId && ids.Contains(a.EventId));
+            var answeredEvents = _dbContext.EventAttendances.Where(a => a.MemberId == memberId && ids.Contains(a.EventId)).Select(ea => ea.EventId).ToList();
+            var answeredCount = answeredEvents.Count();
+            var unansweredEventIds = ids.Where(i => !answeredEvents.Contains(i)).Distinct();
 
             var memberNotification = new MemberNotification
             {
-                UnansweredEvents = count - answered
+                UnansweredEvents = count - answeredCount,
+                UnansweredEventIds = unansweredEventIds
             };
 
             notifications[memberId] = memberNotification;

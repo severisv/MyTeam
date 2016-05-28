@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
-@model MyTeam.ViewModels.Shared.NotificationButtonViewModel
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model MyTeam.Models.Dto.MemberNotification
 
 @{
     Layout = null;
@@ -10,7 +11,9 @@
     <ul class="notification-button nav navbar-nav navbar-right navbar-topRight--item">
         <li class="dropdown"><button class="dropdown-toggle btn btn-warning" data-toggle="dropdown"><i class="fa fa-bell-o"></i></button>
             <ul class="dropdown-menu">
-                <li><a asp-controller="event" asp-action="index"><i class="fa fa-calendar"></i>&nbsp;<span class="hidden-xxs">Du har </span><b>@Model.UnansweredEvents</b> @(Model.UnansweredEvents > 1 ? "ubesvarte arrangementer" : "ubesvart arrangement")</a></li>
+                <li><a asp-controller="event" asp-action="index" asp-fragment="@Model.UnansweredEventIds.FirstOrDefault()"><i class="fa fa-calendar"></i>&nbsp;
+                    <span class="hidden-xxs">Du har </span><b>@Model.UnansweredEvents</b> @(Model.UnansweredEvents > 1 ? "ubesvarte arrangementer" : "ubesvart arrangement")</a>
+                </li>
             </ul>
         </li>
     </ul>

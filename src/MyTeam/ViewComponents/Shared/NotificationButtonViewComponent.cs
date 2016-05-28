@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyTeam.Services.Application;
-using MyTeam.ViewModels.Shared;
 
 namespace MyTeam.ViewComponents.Shared
 {
@@ -16,12 +15,8 @@ namespace MyTeam.ViewComponents.Shared
         public IViewComponentResult Invoke()
         {
             var member = HttpContext.Member();
-            var notifications = _cacheHelper.GetNotifications(member.Id, HttpContext.GetClub().Id, member.TeamIds);
-
-        var model = new NotificationButtonViewModel
-            {
-                UnansweredEvents = notifications.UnansweredEvents
-        };
+            var model = _cacheHelper.GetNotifications(member.Id, HttpContext.GetClub().Id, member.TeamIds);
+            
             return View("_NotificationButton", model);
         }
       
