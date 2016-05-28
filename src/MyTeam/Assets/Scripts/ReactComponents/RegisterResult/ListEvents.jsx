@@ -1,8 +1,8 @@
 ﻿module.exports = React.createClass({
 
     getIconClassName: function (type) {
-      if(type == 0) return "fa fa-soccer-ball-o"  
-      if(type == 1) return "icon icon-card-yellow"  
+      if(type == 0) return "fa fa-soccer-ball-o"
+      if(type == 1) return "icon icon-card-yellow"
       if(type == 2) return "icon icon-card-red"  ;
     },
 
@@ -24,7 +24,7 @@
                            {that.renderAssist(event, actions, model)}
                            {that.renderDeleteButton(event, actions, model)}
                 </div>)
-            
+
             })}</div>
             )
     },
@@ -50,6 +50,6 @@
 
         }
     }
-    
+
 });
 

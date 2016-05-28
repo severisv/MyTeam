@@ -35,6 +35,9 @@ namespace MyTeam.Controllers
               {
                   Id = p.Id,
                   FullName = p.Name,
+                  FirstName = p.FirstName,
+                  MiddleName = p.MiddleName,
+                  LastName = p.LastName,
                   Status = p.Status.ToString(),
                   Roles = p.Roles,
               }).OrderBy(p => p.FullName).ToList();
@@ -49,6 +52,9 @@ namespace MyTeam.Controllers
                 {
                     p.Id,
                     p.FullName,
+                    p.FirstName,
+                    p.MiddleName,
+                    p.LastName,
                     p.Status,
                     p.Roles,
                     TeamIds = memberTeams.Where(mt => mt.MemberId == p.Id).Select(mt => mt.TeamId).ToList()

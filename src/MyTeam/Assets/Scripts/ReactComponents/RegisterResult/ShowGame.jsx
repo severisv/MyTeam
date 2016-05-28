@@ -14,7 +14,7 @@
     },
 
     componentDidMount: function () {
-        var that = this;    
+        var that = this;
          $.getJSON(that.props.routes.GET_EVENTS).then(function (response) {
 
             that.setState({
@@ -29,7 +29,7 @@
             that.setState({
                 AddPlayerId: that.getPlayersNotInSquad()[0].Id
             })
-           
+
         });
         $.getJSON(that.props.routes.GET_EVENTTYPES).then(function (response) {
 
@@ -38,7 +38,7 @@
                 Type: response[0].Value
             });
         });
-       
+
             $.getJSON(that.props.routes.GET_SQUAD).then(function (response) {
             that.setState({
                 squad: response,
@@ -122,7 +122,7 @@
         ).then(function (response) {
             if (response.Success) {
                 var player = that.state.players.filter(function (player) { return player.Id == that.state.AddPlayerId })
-                that.setState({ squad: player.concat(that.state.squad).sort(function (a, b) { return a.FullName.localeCompare(b.FullName) }) })
+                that.setState({ squad: player.concat(that.state.squad).sort(function (a, b) { return a.FirstName.localeCompare(b.FirstName) }) })
                 that.setState({
                     AddPlayerId: that.getPlayersNotInSquad()[0].Id
                 })
@@ -151,7 +151,7 @@
         var squad = this.state.squad.filter(function (player) {
             return player.Id == playerId
         });
-        if (squad.length > 0) return squad[0].FullName;
+        if (squad.length > 0) return squad[0].FirstName;
         else return "Selvmål";
     },
     getPlayerShortName: function (playerId) {
@@ -194,7 +194,7 @@
         if(this.state.loadingPlayers) playersClassName += " u-fade-in--hidden"
         return (
             <div className="game-showEventsWrapper">
-                 <div className="row">  
+                 <div className="row">
                     <div className={this.state.loadingEvents ? "text-center" : "hidden" }><i className="fa fa-spinner fa-spin"></i></div>
                     <div className={eventsClassName}>
                     <ListEvents model={this.state} actions={actions}></ListEvents>
@@ -218,7 +218,7 @@
             return (<RegisterEvents model={this.state} actions={actions }></RegisterEvents>)
         }
     },
-    
+
     renderAddView: function (actions) {
         if (this.props.editMode != false) {
             return (<AddPlayerToSquad model={this.state} actions={actions}></AddPlayerToSquad>
