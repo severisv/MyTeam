@@ -15,10 +15,13 @@
             <div class="event-signupButtons">
                 <a class="ajax-post btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")" data-ajax="true" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="true">@Res.IsAttending</a>
                 <a class="ajax-post btn btn-lg btn-@(Model.IsNotAttending(User) ? "danger" : "default")" data-ajax="true" data-ajax-update="#event-signup-@Model.Id" asp-action="signup" asp-route-eventId="@Model.Id" asp-route-isattending="false">@Res.IsNotAttending</a>
-                <a class="event-addMessage" title="Beskjed til trenerne"><i class="fa fa-comment "></i></a><br />
-                <textarea class="form-control event-message" data-href="@Url.Action("SignupMessage", "Event", new {eventId = Model.Id})" placeholder="Beskjed til trenerne">@Model.GetSignupMessage(Context.Member().Id)</textarea>
-                <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
-                <span class="label label-danger"><i class="fa fa-warning"></i></span>
+                @if (Model.IsAttending(User) || Model.IsNotAttending(User) || Model.IsGame)
+                {
+                    <a class="event-addMessage" title="Beskjed til trenerne"><i class="fa fa-comment "></i></a><br />
+                        <textarea class="form-control event-message" data-href="@Url.Action("SignupMessage", "Event", new {eventId = Model.Id})" placeholder="Beskjed til trenerne">@Model.GetSignupMessage(Context.Member().Id)</textarea>
+                        <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
+                        <span class="label label-danger"><i class="fa fa-warning"></i></span>
+                }
             </div>
         }
     }

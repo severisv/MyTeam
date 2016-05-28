@@ -69,7 +69,7 @@ namespace MyTeam.Services.Domain
             return result;
         }
 
- 
+
         public IList<Event> GetAll(EventType type, Guid clubId)
         {
             return _dbContext.Events
@@ -168,7 +168,7 @@ namespace MyTeam.Services.Domain
         {
             var ev = model.Type == EventType.Kamp ?
                  _dbContext.Games.Include(e => e.EventTeams)
-                .Single(e => e.Id == model.EventId):
+                .Single(e => e.Id == model.EventId) :
                 _dbContext.Events.Include(e => e.EventTeams)
                 .Single(e => e.Id == model.EventId);
 
@@ -238,7 +238,7 @@ namespace MyTeam.Services.Domain
             return _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage,  a.IsAttending, a.DidAttend, a.IsSelected, new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName))).ToList(),
+                    e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected, new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName))).ToList(),
                     e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).Single();
         }
@@ -282,7 +282,18 @@ namespace MyTeam.Services.Domain
 
         public void SignupMessage(Guid eventId, Guid memberId, string message)
         {
-            var attendance = _dbContext.EventAttendances.Single(a => a.EventId == eventId && a.MemberId == memberId);
+            var attendance = _dbContext.EventAttendances.SingleOrDefault(a => a.EventId == eventId && a.MemberId == memberId);
+
+            if (attendance == null)
+            {
+                attendance = new EventAttendance
+                {
+                    Id = Guid.NewGuid(),
+                    EventId = eventId,
+                    MemberId = memberId
+                };
+                _dbContext.EventAttendances.Add(attendance);
+            }
 
             attendance.SignupMessage = message;
             _dbContext.SaveChanges();
