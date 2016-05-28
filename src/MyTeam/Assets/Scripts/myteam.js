@@ -27,4 +27,10 @@ mt.hideElement = function(selector) {
     $(selector).hide();
 }
 
+mt.refreshNotificationButton = function () {
+    $.get('/notifications', function (result) {
+        $('#notification-button').html(result);
+    });
+}
+
 module.exports = mt;

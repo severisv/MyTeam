@@ -53,12 +53,18 @@ ajax.applyAjaxLinkListeners = function ($scope) {
         var element = $(this);
         var target = $(element.data('ajax-update'));
         var href = element.attr('href');
+        var completeFunction = element.data('ajax-complete');
 
         element.click(function (e) {
             e.preventDefault();
             $.get(href, function (response) {
                 target.html(response);
                 window.global.applyScopedJsComponents(target);
+
+                if (completeFunction) {
+                    eval(completeFunction);
+                }
+                
             });
         });
     });

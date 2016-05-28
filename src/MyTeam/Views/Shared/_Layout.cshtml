@@ -77,9 +77,11 @@
             @if (Context.UserIsMember())
             {
                 @Html.Partial("_UserInfo", Context.Member())
-                @await Component.InvokeAsync("NotificationButton")
-            }
-        </div>
+                <ul id="notification-button" class="notification-button nav navbar-nav navbar-right navbar-topRight--item">
+                    @await Component.InvokeAsync("NotificationButton")
+              </ul>
+                    }
+</div>
 
         @if (Context.UserIsMember())
         {

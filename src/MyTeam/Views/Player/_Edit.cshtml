@@ -3,7 +3,6 @@
 @model MyTeam.ViewModels.Player.EditPlayerViewModel
 <form asp-controller="Player" asp-action="Edit" method="post" class="ajax-form form-horizontal" role="form"
       data-ajax-update="#show-players"
-      data-ajax-complete="global.applyScopedJsComponents('#show-players');"
       mt-pushstate="@Model.Fullname">
     <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
         <div class="cloudinary-preview editPlayer-image ">
