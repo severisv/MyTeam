@@ -36,7 +36,12 @@ namespace MyTeam.Controllers
             var events = previous
                 ? _eventService.GetPrevious(type, Club.Id)
                 : _eventService.GetUpcoming(type, Club.Id, showAll);
-            
+
+            if (!CurrentMember.Roles.Contains(Roles.Admin))
+            {
+                events = events.Where(e => e.TeamIds.ContainsAny(CurrentMember.TeamIds));
+            }
+
             if (Request.IsAjaxRequest())
             {
                 events = events.Where(e => !e.SignupHasOpened());
