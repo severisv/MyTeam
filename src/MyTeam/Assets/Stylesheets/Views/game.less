@@ -14,11 +14,13 @@ table.gamesTable tr td {
 .gamesTable tr td.gamesTable-team {
     font-size: 1.25em;
 
-    .r-under-xxs( {
+    .r-under-xs( {
         font-size: 1em;
-    }
+    });
 
-    );
+    .r-under-xxs( {
+        font-size: 0.9em;
+    });
     font-family: @fontBold;
 
     &.gamesTable-team--left {
@@ -30,10 +32,16 @@ table.gamesTable tr td {
     }
 }
 
-.gamesTable-date {
+.gamesTable tr td.gamesTable-date {
     min-width: 3.6em;
     font-size: 1em;
     i {font-size: 0.75em;}
+     .r-under-xs( {
+        font-size: 0.9em;
+        });
+     .r-under-xxs( {
+        font-size: 0.8em;
+    });
 }
 
 .gameResult {
@@ -155,3 +163,15 @@ table.gamesTable tr td {
     }
 }
 
+.game-scoreTable{
+    font-size: 1.4em;
+    margin: 0 auto;
+}
+
+.game-scoreTable td {
+    padding: 0 0.5em;
+}
+
+.game-scoreTable--score {
+    font-size: 1.75em;
+}
