@@ -1,0 +1,45 @@
+﻿@using System.Security.Policy
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
+@model IEnumerable<RemedyRate>
+<div class="mt-main">
+    <div class="mt-container">
+        <ul class="nav nav-pills mt-justified">
+            <li class=""><a asp-route-status=""><i class="fa fa-user"></i>&nbsp;Asd</a></li>
+        </ul>
+        <br />
+        <table class="fine-rates table tablesorter col-xs-12">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Sats</th>
+                    @if (Context.UserIsInRole(Roles.Admin))
+                    {
+                        <th class="nosort"></th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rate in Model)
+            {
+                    <tr class="@rate.Id">
+                        <td>@rate.Name</td>
+                        <td>@rate.Description</td>
+                        <td>@rate.Rate</td>
+                        <td class="text-center">
+                            <a asp-action="edit" asp-route-rateId="@rate.Id" title="Rediger"><i class="fa fa-edit"></i></a>
+                            &nbsp;
+                            <a class="confirm-dialog"
+                               asp-action="delete"
+                               asp-route-rateId="@rate.Id"
+                               title="@Res.Delete" data-message="Er du sikker på at du vil slette @rate.Name?"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

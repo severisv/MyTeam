@@ -12,6 +12,7 @@ namespace MyTeam.Services.Composition
         {
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IArticleService, ArticleService>();
+            services.AddTransient<IFineService, FineService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IGameEventService, GameEventService>();
