@@ -12,5 +12,7 @@ namespace MyTeam.ViewModels.Member
         public string Phone { get; set; }
         public string Email { get; set; }
         public string FacebookId { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string BirthYear => BirthDate?.Year.ToString() ?? "";
     }
 }

@@ -18,6 +18,7 @@
                     <th>@Res.Phone</th>
 
                     <th class="hidden-xs">@Res.Email</th>
+                    <th class="visible-lg">Født</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,9 @@
                         </td>
                         <td class="hidden-xs">
                             <a href="mailto:@member.Email">@member.Email</a>
+                        </td>
+                        <td class="visible-lg">
+                            @member.BirthYear
                         </td>
                     </tr>
 
