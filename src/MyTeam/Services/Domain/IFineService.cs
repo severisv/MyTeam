@@ -8,5 +8,6 @@ namespace MyTeam.Services.Domain
     {
         IEnumerable<RemedyRate> GetRates(Guid id);
         void DeleteRate(Guid rateId);
+        void AddRate(RemedyRate rate);
     }
 }

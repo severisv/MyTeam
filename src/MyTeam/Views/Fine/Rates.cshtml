@@ -5,7 +5,9 @@
 <div class="mt-main">
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
-            <li class=""><a asp-route-status=""><i class="fa fa-user"></i>&nbsp;Asd</a></li>
+            <li class=""><a asp-action="index" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
+            <li class=""><a asp-action="summary"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li class="active"><a asp-action="rates"><i class="fa fa-usd"></i>&nbsp;Botsatser</a></li>
         </ul>
         <br />
         <table class="fine-rates table tablesorter col-xs-12">
@@ -14,28 +16,31 @@
                     <th>Navn</th>
                     <th>Beskrivelse</th>
                     <th>Sats</th>
-                    @if (Context.UserIsInRole(Roles.Admin))
+                    @if (Context.UserIsInRole(Roles.Finemaster))
                     {
                         <th class="nosort"></th>
                     }
-
                 </tr>
             </thead>
             <tbody>
                 @foreach (var rate in Model)
-            {
+           { 
                     <tr class="@rate.Id">
                         <td>@rate.Name</td>
                         <td>@rate.Description</td>
                         <td>@rate.Rate</td>
-                        <td class="text-center">
-                            <a asp-action="edit" asp-route-rateId="@rate.Id" title="Rediger"><i class="fa fa-edit"></i></a>
-                            &nbsp;
-                            <a class="confirm-dialog"
-                               asp-action="delete"
-                               asp-route-rateId="@rate.Id"
-                               title="@Res.Delete" data-message="Er du sikker på at du vil slette @rate.Name?"><i class="fa fa-trash"></i></a>
-                        </td>
+                        @if (Context.UserIsInRole(Roles.Finemaster))
+                        {
+                            <td class="text-center">
+                                <a asp-action="edit" asp-route-rateId="@rate.Id" title="Rediger"><i class="fa fa-edit"></i></a>
+                                &nbsp;
+                                <a class="confirm-dialog"
+                                   asp-controller="fine"
+                                   asp-action="delete"
+                                   asp-route-rateId="@rate.Id"
+                                   title="@Res.Delete" data-message="Er du sikker på at du vil slette @rate.Name?"><i class="fa fa-trash"></i></a>
+                            </td>                       
+                        }                      
                     </tr>
 
                 }

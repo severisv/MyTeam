@@ -15,7 +15,7 @@ namespace MyTeam.Resources
         public const string AssistCount = "Assists";
         public const string Add = "Legg til";
         public const string Added = "Lagt til";
-        public const string AdminPage = "Trenersiden";
+        public const string AdminPage = "Admin";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
         public static string Archive => "Arkiv";

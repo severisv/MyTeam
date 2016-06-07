@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
-using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
-
+using MyTeam.Models.Domain;
 
 namespace MyTeam.Controllers
 {
@@ -29,12 +28,22 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("satser/slett/{id}")]
-        public JsonResult Delete(Guid id)
+        [Route("satser/slett/{rateId}")]
+        public IActionResult Delete(Guid rateId)
         {
-            _fineService.DeleteRate(id);
+            _fineService.DeleteRate(rateId);
+            var remedyRates = _fineService.GetRates(Club.Id);
 
-            return new JsonResult(JsonResponse.Success());
+            return View("Rates", remedyRates);
+
+        }
+
+        [Route("satser/leggtil")]
+        public IActionResult Add(RemedyRate rate)
+        {
+            _fineService.AddRate(rate);
+
+            return View("_ShowRate", rate);
 
         }
     }

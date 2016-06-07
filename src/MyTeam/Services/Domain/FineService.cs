@@ -11,6 +11,12 @@ namespace MyTeam.Services.Domain
 
         }
 
+        public void AddRate(RemedyRate rate)
+        {
+            rate.Id = Guid.NewGuid();
+            
+        }
+
         public IEnumerable<RemedyRate> GetRates(Guid id)
         {
             return new List<RemedyRate>

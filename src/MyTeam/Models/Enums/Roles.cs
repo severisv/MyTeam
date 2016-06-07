@@ -6,6 +6,7 @@
         public const string Coach = "Trener";
         public const string NewsWriter = "Skribent";
         public const string AttendanceTaker = "Oppmøte";
+        public const string Finemaster = "Botsjef";
         public const string DenyAll = "DenyAll";
     }
 }
