@@ -47,4 +47,9 @@
             </tbody>
         </table>
     </div>
+    @if (Context.UserIsInRole(Roles.Finemaster))
+    {
+       @Html.Partial("_AddRate", new RemedyRate())
+    }
+      
 </div>

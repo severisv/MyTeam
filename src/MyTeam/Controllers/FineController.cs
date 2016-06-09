@@ -32,10 +32,8 @@ namespace MyTeam.Controllers
         public IActionResult Delete(Guid rateId)
         {
             _fineService.DeleteRate(rateId);
-            var remedyRates = _fineService.GetRates(Club.Id);
 
-            return View("Rates", remedyRates);
-
+           return RedirectToAction("Index");
         }
 
         [Route("satser/leggtil")]
