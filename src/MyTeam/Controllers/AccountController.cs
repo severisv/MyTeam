@@ -213,11 +213,7 @@ namespace MyTeam.Controllers
         [Route("innlogging/ekstern/bekreftelse")]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction(nameof(ManageController.Index), "Manage");
-            }
-
+         
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
