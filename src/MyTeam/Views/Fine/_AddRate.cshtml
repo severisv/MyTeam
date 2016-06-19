@@ -1,26 +1,44 @@
 ﻿@using System.Security.Policy
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
-@model RemedyRate
+@using MyTeam.ViewModels.Fine
+@model RemedyRateViewModel
 <div class="mt-container">
-    <h2>Legg til sats</h2>
-    <form asp-action="Create" method="post" class="form-inline" role="form">              
-        <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" type="text" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" type="text" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Rate" class="control-label"></label>
-            <input asp-for="Rate" type="text" class="form-control" />
-            <span asp-validation-for="Rate" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">@Res.Add</button>
-    </form>
-
+    <div class="col-sm-8 col-sm-offset-2">
+        <h2>Legg til sats</h2>
+        <form asp-action="Add" asp-controller="Fine" method="post"
+              class="form-horizontal @(ViewBag.DisableAjax == true ? "" : "ajax-form")"
+              data-ajax-append="#fine-rates-tbody"
+              role="form">
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Name" type="text" data-ajax-update-requiredfield class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Description" type="text" class="form-control"/>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rate" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Rate" type="text" data-ajax-update-requiredfield class="form-control"/>
+                    <span asp-validation-for="Rate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                    <button
+                        @(ViewBag.DisableAjax == true ? "" : "disabled")
+                        type="submit" class="btn btn-primary"><span class="form-submitText">@Res.Add</span><i class="fa fa-spinner fa-spin"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

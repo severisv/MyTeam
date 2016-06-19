@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Services.Domain;
 using MyTeam.Models.Domain;
+using MyTeam.ViewModels.Fine;
 
 namespace MyTeam.Controllers
 {
@@ -33,16 +35,41 @@ namespace MyTeam.Controllers
         {
             _fineService.DeleteRate(rateId);
 
-           return RedirectToAction("Index");
+           return RedirectToAction("Rates");
         }
 
         [Route("satser/leggtil")]
-        public IActionResult Add(RemedyRate rate)
+        [HttpPost]
+        public IActionResult Add(RemedyRateViewModel model)
         {
-            _fineService.AddRate(rate);
+            if (Request.IsAjaxRequest())
+            {
+                if (ModelState.IsValid)
+                {
+                    model.Id = Guid.NewGuid();
+                    _fineService.AddRate(Club.Id, model);
+                    return PartialView("_ShowRate", model);
+                }
 
-            return View("_ShowRate", rate);
+                return PartialView("_ShowRate", null);
+            }
+           
+            if (ModelState.IsValid)
+            {
+                _fineService.UpdateRate(model);
+                return RedirectToAction("Rates");
+            }
+            return PartialView("Edit", model);
 
         }
+
+        [Route("satser/endre")]
+        public IActionResult Edit(Guid rateId)
+        {
+            var model = _fineService.GetRate(rateId);
+            return View(model);
+
+        }
+       
     }
 }

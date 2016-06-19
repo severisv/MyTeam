@@ -55,3 +55,32 @@ select:hover {
 .validation-red {
     color: @red;
 }
+
+form input[type=submit],
+form button {
+    min-width: 6em;
+
+}
+
+form input[type=submit].isSubmitting,
+form button.isSubmitting  {
+    .fa-spin{
+        display: inline-block;
+        margin-top: 0 !important;
+    }
+    .form-submitText {
+        display: none;
+    }
+
+}
+
+
+form input[type=submit]:not(.isSubmitting),
+form button:not(.isSubmitting) {
+    .fa-spin{
+        display: none;
+    }
+    .form-submitText {
+        display: inline-block;
+    }}
+

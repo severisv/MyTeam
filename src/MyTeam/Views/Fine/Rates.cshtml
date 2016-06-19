@@ -1,7 +1,12 @@
 ﻿@using System.Security.Policy
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
-@model IEnumerable<RemedyRate>
+@using MyTeam.ViewModels.Fine
+@model IEnumerable<RemedyRateViewModel>
+
+@{ 
+    ViewBag.Title = "Bøtesatser";
+}
 <div class="mt-main">
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
@@ -13,8 +18,8 @@
         <table class="fine-rates table tablesorter col-xs-12">
             <thead>
                 <tr>
-                    <th>Navn</th>
-                    <th>Beskrivelse</th>
+                    <th>@Res.Name</th>
+                    <th>@Res.Description</th>
                     <th>Sats</th>
                     @if (Context.UserIsInRole(Roles.Finemaster))
                     {
@@ -22,26 +27,10 @@
                     }
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="fine-rates-tbody">
                 @foreach (var rate in Model)
-           { 
-                    <tr class="@rate.Id">
-                        <td>@rate.Name</td>
-                        <td>@rate.Description</td>
-                        <td>@rate.Rate</td>
-                        @if (Context.UserIsInRole(Roles.Finemaster))
-                        {
-                            <td class="text-center">
-                                <a asp-action="edit" asp-route-rateId="@rate.Id" title="Rediger"><i class="fa fa-edit"></i></a>
-                                &nbsp;
-                                <a class="confirm-dialog"
-                                   asp-controller="fine"
-                                   asp-action="delete"
-                                   asp-route-rateId="@rate.Id"
-                                   title="@Res.Delete" data-message="Er du sikker på at du vil slette @rate.Name?"><i class="fa fa-trash"></i></a>
-                            </td>                       
-                        }                      
-                    </tr>
+                { 
+                  @Html.Partial("_ShowRate", rate)
 
                 }
             </tbody>
@@ -49,7 +38,7 @@
     </div>
     @if (Context.UserIsInRole(Roles.Finemaster))
     {
-       @Html.Partial("_AddRate", new RemedyRate())
+       @Html.Partial("_AddRate", new RemedyRateViewModel())
     }
       
 </div>

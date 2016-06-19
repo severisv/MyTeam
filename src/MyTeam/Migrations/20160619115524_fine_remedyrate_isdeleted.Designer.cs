@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160619115524_fine_remedyrate_isdeleted")]
+    partial class fine_remedyrate_isdeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
@@ -347,30 +348,6 @@ namespace MyTeam.Migrations
                     b.ToTable("EventTeam");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Fine", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ExtraRate");
-
-                    b.Property<DateTime?>("Issued");
-
-                    b.Property<Guid>("MemberId");
-
-                    b.Property<DateTime?>("Paid");
-
-                    b.Property<Guid>("RemedyRateId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("RemedyRateId");
-
-                    b.ToTable("Fines");
-                });
-
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -456,26 +433,6 @@ namespace MyTeam.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("MemberTeam");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.RemedyRate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ClubId");
-
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Rate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RemedyRates");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
@@ -659,19 +616,6 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Team")
                         .WithMany()
                         .HasForeignKey("TeamId");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.Fine", b =>
-                {
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MyTeam.Models.Domain.RemedyRate")
-                        .WithMany()
-                        .HasForeignKey("RemedyRateId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
