@@ -16,7 +16,7 @@ using UnauthorizedResult = MyTeam.Extensions.Mvc.UnauthorizedResult;
 namespace MyTeam.Controllers
 {
     [RequireMember]
-    [Route("intern/arrangementer")]
+    [Route("intern")]
     public class EventController : BaseController
     {
 
@@ -30,7 +30,14 @@ namespace MyTeam.Controllers
             _eventService = eventService;
             _dbContext = dbContext;
         }
-        
+
+
+        [Route("arrangementer")]
+        public IActionResult IndexRedirect()
+        {
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Index(EventType type = EventType.Alle, bool previous = false, bool showAll = false)
         {
             var events = previous
@@ -76,7 +83,7 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember]
-        [Route("beskjed")]
+        [Route("paamelding/beskjed")]
         public JsonResult SignupMessage(Guid eventId, string message)
         {
             if (ModelState.IsValid)
@@ -91,7 +98,7 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("ny")]
+        [Route("arrangement/ny")]
         public IActionResult Create(EventType type = EventType.Trening)
         {
 
@@ -113,7 +120,7 @@ namespace MyTeam.Controllers
 
         [RequireMember(Roles.Coach, Roles.Admin)]
         [HttpPost]
-        [Route("ny")]
+        [Route("arrangement/ny")]
         public IActionResult Create(CreateEventViewModel model)
         {
             ViewBag.Title = Res.CreateEvent;
@@ -143,7 +150,7 @@ namespace MyTeam.Controllers
 
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("endre")]
+        [Route("arrangement/endre")]
         public IActionResult Edit(Guid eventId)
         {
             var ev = _eventService.GetEventViewModel(eventId);
@@ -165,7 +172,7 @@ namespace MyTeam.Controllers
         }
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("slett")]
+        [Route("arrangement/slett")]
         public IActionResult Delete(Guid eventId)
         {
             var ev = _eventService.Get(eventId);

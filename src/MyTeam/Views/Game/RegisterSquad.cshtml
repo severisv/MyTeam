@@ -80,7 +80,7 @@
                         <div class="relative registerSquad-messageWrapper">
                             <textarea id="publishMessage" class="form-control" data-href="@Url.Action("UpdateEventDescription", "Api", new {eventId = Model.Game.Id})" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
                             <span class="label-feedback label label-danger"><i class="fa fa-warning"></i></span>
-                            <span class="label-feedback label label-success"><i class="fa fa-check"></i> Lagret</span>
+                            <span class="label-feedback label label-success"><i class="fa fa-check"></i></span>
                         </div>
                         <div>
                             @if (Model.Game.IsPublished)
