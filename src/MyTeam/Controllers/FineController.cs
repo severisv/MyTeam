@@ -1,75 +1,63 @@
 ﻿using System;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Services.Domain;
-using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Fine;
+using MyTeam.Models.Enums;
 
 namespace MyTeam.Controllers
 {
     [RequireMember]
-    [Route("intern/bot")]
+    [Route("intern/boter")]
     public class FineController : BaseController
     {
 
         private readonly IFineService _fineService;
+        private readonly IPlayerService _playerService;
+        private readonly IRemedyRateService _rateService;
 
-        public FineController(IFineService fineService)
+
+        public FineController(IFineService fineService, IRemedyRateService rateService, IPlayerService playerService)
         {
             _fineService = fineService;
+            _playerService = playerService;
+            _rateService = rateService;
         }
 
-        [Route("satser")]
-        public IActionResult Rates()
+        [Route("vis/{aar:int?}/{spillerId?}")]
+        public IActionResult List(int? aar = null, Guid? memberId = null)
         {
-            var remedyRates = _fineService.GetRates(Club.Id);
+            var fines = _fineService.Get(Club.Id, aar ?? DateTime.Now.Year, memberId);
+            var rates = _rateService.GetRates(Club.Id);
+            var players = _playerService.GetDto(Club.Id, PlayerStatus.Aktiv);
 
-            return View(remedyRates);
-
-        }
-
-
-        [Route("satser/slett/{rateId}")]
-        public IActionResult Delete(Guid rateId)
-        {
-            _fineService.DeleteRate(rateId);
-
-           return RedirectToAction("Rates");
-        }
-
-        [Route("satser/leggtil")]
-        [HttpPost]
-        public IActionResult Add(RemedyRateViewModel model)
-        {
-            if (Request.IsAjaxRequest())
-            {
-                if (ModelState.IsValid)
-                {
-                    model.Id = Guid.NewGuid();
-                    _fineService.AddRate(Club.Id, model);
-                    return PartialView("_ShowRate", model);
-                }
-
-                return PartialView("_ShowRate", null);
-            }
-           
-            if (ModelState.IsValid)
-            {
-                _fineService.UpdateRate(model);
-                return RedirectToAction("Rates");
-            }
-            return PartialView("Edit", model);
-
-        }
-
-        [Route("satser/endre")]
-        public IActionResult Edit(Guid rateId)
-        {
-            var model = _fineService.GetRate(rateId);
+            var model = new ListFineViewModel(fines, rates, players);
             return View(model);
 
         }
-       
+
+
+        [Route("slett/{rateId}")]
+        public IActionResult Delete(Guid rateId)
+        {
+            _fineService.Delete(rateId);
+
+            return RedirectToAction("Rates");
+        }
+
+        [Route("leggtil")]
+        [HttpPost]
+        public IActionResult Add(AddFineViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var fineId = _fineService.Add(model);
+                var fine = _fineService.Get(fineId);
+                return PartialView("_Show", fine);
+            }
+
+            return PartialView("_Show", null);
+        }       
+
     }
 }

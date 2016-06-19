@@ -1,5 +1,5 @@
 ﻿@using MyTeam.Resources
-@using MyTeam.ViewModels.Fine
+@using MyTeam.ViewModels.RemedyRate
 @model RemedyRateViewModel
 @if (Model != null)
 {
@@ -9,14 +9,14 @@
         <td>@Model.Rate,-</td>
         @if (Context.UserIsInRole(Roles.Finemaster))
         {
-            <td class="text-center">
+            <td class="text-center">        
                 <a asp-action="edit" asp-route-rateId="@Model.Id" title="Rediger"><i class="fa fa-edit"></i></a>
-                &nbsp;
+                &nbsp; 
                 <a class="confirm-dialog"
                    asp-controller="fine"
                    asp-action="delete"
                    asp-route-rateId="@Model.Id"
-                   title="@Res.Delete" data-message="Er du sikker på at du vil slette @Model.Name?"><i class="fa fa-trash"></i></a>
+                   title="@Res.Delete" data-message="Er du sikker på at du vil slette @Model.Description?"><i class="fa fa-trash"></i></a>
             </td>
         }
     </tr>

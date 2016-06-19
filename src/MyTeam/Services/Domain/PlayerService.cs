@@ -130,9 +130,11 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId)
+        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null)
         {
-            var players = _dbContext.Players.Where(p => p.ClubId == clubId)
+            var query = _dbContext.Players.Where(p => p.ClubId == clubId);
+            if (status != null) query = query.Where(p => p.Status == status);
+            var players = query
                 .Select(p => new SimplePlayerDto
                 {
                     Id = p.Id,

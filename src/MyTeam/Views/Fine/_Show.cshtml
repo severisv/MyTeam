@@ -1,0 +1,30 @@
+﻿@using MyTeam.Resources
+@using MyTeam.ViewModels.Fine
+@model FineViewModel
+@if (Model != null)
+{
+    <tr class="@Model.Id">
+        <td>@Model.Name</td>
+        <td>@Model.Description&nbsp;
+        @if (!string.IsNullOrWhiteSpace(Model.Comment))
+        {
+            <a class="mt-popover" data-container="body" data-content="@Model.Comment" data-placement="top" data-toggle="popover" href="javascript:void(0);">
+                <i class="fa fa-info-circle"></i>
+            </a>
+        }
+        </td>
+        <td>@Model.Rate,-</td>
+        <td>@Model.Issued.ToNoShort()</td>
+        <td><i class="fa @(Model.IsPaid ? "fa-check" : "")"></i></td>
+        @if (Context.UserIsInRole(Roles.Finemaster))
+        {
+            <td class="text-center">
+                <a class="confirm-dialog"
+                   asp-controller="fine"
+                   asp-action="delete"
+                   asp-route-rateId="@Model.Id"
+                   title="@Res.Delete" data-message="Er du sikker på at du vil slette @Model.Name?"><i class="fa fa-trash"></i></a>
+            </td>
+        }
+    </tr>
+}

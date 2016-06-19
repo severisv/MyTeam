@@ -18,62 +18,60 @@ namespace MyTeam.Services.Domain
         }
 
 
-        public void UpdateRate(RemedyRateViewModel model)
+       
+        public void Delete(Guid fineId)
         {
-            var rate = _dbContext.RemedyRates.Single(r => r.Id == model.Id);
-
-            rate.Name = model.Name;
-            rate.Description = model.Description;
-            rate.Rate = model.Rate.Value;
+            var fine = _dbContext.Fines.Single(r => r.Id == fineId);
+            _dbContext.Fines.Remove(fine);
             _dbContext.SaveChanges();
         }
 
-        public void DeleteRate(Guid rateId)
+        public Guid Add(AddFineViewModel model)
         {
-            var rate = _dbContext.RemedyRates.Single(r => r.Id == rateId);
-            rate.IsDeleted = true;
-            _dbContext.SaveChanges();
-        }
-
-        public void AddRate(Guid clubId, RemedyRateViewModel model)
-        {
-            var rate = new RemedyRate
+            var fine = new Fine
             {
-                Id = model.Id,
-                ClubId = clubId,
-                Description = model.Description,
-                Name = model.Name,
-                Rate = model.Rate.Value
+                Id = Guid.NewGuid(),
+                ExtraRate = model.ExtraRate,
+                Comment = model.Comment,
+                MemberId = model.MemberId.Value,
+                RemedyRateId = model.RateId.Value,
+                Issued = DateTime.Now         
             };
-            _dbContext.Add(rate);
+            _dbContext.Add(fine);
             _dbContext.SaveChanges();
+            return fine.Id;
         }
 
-        public RemedyRateViewModel GetRate(Guid rateId)
+        public FineViewModel Get(Guid id)
         {
-            var query = _dbContext.RemedyRates.Where(r => r.Id == rateId);
+            var query = _dbContext.Fines.Where(r => r.Id == id);
 
             return Select(query).Single();
         }
 
-        public IEnumerable<RemedyRateViewModel> GetRates(Guid clubId)
+        public IEnumerable<FineViewModel> Get(Guid clubId, int year, Guid? memberId)
         {
-            var query = _dbContext.RemedyRates.Where(r => r.ClubId == clubId && !r.IsDeleted);
+            var query = _dbContext.Fines.Where(f => f.Rate.ClubId == clubId && f.Issued.Year == year);
+
+            if (memberId != null) query = query.Where(f => f.MemberId == memberId);
 
             return Select(query);
+
         }
 
-        private static List<RemedyRateViewModel> Select(IQueryable<RemedyRate> query)
+        private static List<FineViewModel> Select(IQueryable<Fine> query)
         {
-            return query
-                .Select(r => new RemedyRateViewModel
-                {
-                    Description = r.Description,
-                    Rate = r.Rate,
-                    Id = r.Id,
-                    Name = r.Name
-                })
-                .ToList();
+            return query.Select(f => new FineViewModel {
+                Id = f.Id,
+                Description = f.Rate.Name,
+                Name = f.Member.Name,
+                Issued = f.Issued,
+                PaidDate = f.Paid,
+                StandardRate = f.Rate.Rate,
+                ExtraRate = f.ExtraRate,
+                Comment = f.Comment 
+            }).ToList();
+
         }
     }
 }

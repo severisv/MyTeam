@@ -1,0 +1,59 @@
+﻿@using System.Security.Policy
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
+@using MyTeam.ViewModels.Fine
+@model AddFineViewModel
+<div class="mt-container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <h2>Registrer bot</h2>
+        <form asp-action="Add" asp-controller="Fine" method="post"
+              class="form-horizontal @(ViewBag.DisableAjax == true ? "" : "ajax-form")"
+              data-ajax-append="#fine-rates-tbody"
+              role="form">
+            <div class="form-group">
+                <label class="control-label col-xs-3">Hvem</label>
+                <div class="col-xs-9">
+                    <select asp-for="MemberId" type="text" class="form-control">
+                        @foreach(var member in Model.Players)
+                        {
+                            <option value="@member.Id">@member.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3">Hva</label>
+                <div class="col-xs-9">
+                    <select asp-for="RateId" type="text" class="form-control">
+                        @foreach (var rate in Model.Rates)
+                        {
+                            <option value="@rate.Id">@rate.Name&nbsp;&nbsp;(@rate.Rate,-)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RateId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExtraRate" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="ExtraRate" type="text" placeholder="Eventuelt tillegg til normalsats" class="form-control"/>
+                    <span asp-validation-for="ExtraRate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Comment" type="text" placeholder="Eventuell kommentar" class="form-control" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                    <button
+                        type="submit" class="btn btn-primary"><span class="form-submitText">@Res.Add</span><i class="fa fa-spinner fa-spin"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

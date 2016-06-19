@@ -1,0 +1,43 @@
+﻿@using System.Security.Policy
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
+@using MyTeam.ViewModels.Fine
+@model ListFineViewModel
+
+@{ 
+    ViewBag.Title = "Bøter";
+}
+<div class="mt-main">
+    <div class="mt-container">
+        <ul class="nav nav-pills mt-justified">
+            <li class=""><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
+            <li class="active"><a asp-action="list" asp-controller="fine" ><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
+        </ul>
+        <br />
+        <table class="fine-rates table tablesorter col-xs-12">
+            <thead>
+                <tr>
+                    <th>@Res.Name</th>
+                    <th>@Res.Description</th>
+                    <th>Sats</th>
+                    <th>@Res.Date</th>
+                    @if (Context.UserIsInRole(Roles.Finemaster))
+                    {
+                        <th class="nosort"></th>
+                    }
+                </tr>
+            </thead>
+            <tbody id="fine-rates-tbody">
+                @foreach (var fine in Model.Fines)
+                { 
+                  @Html.Partial("_Show", fine)
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Context.UserIsInRole(Roles.Finemaster))
+    {
+       @Html.Partial("_Add", new AddFineViewModel(Model.Rates, Model.Players))
+    }
+</div>

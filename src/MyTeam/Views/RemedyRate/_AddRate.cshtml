@@ -1,12 +1,12 @@
 ﻿@using System.Security.Policy
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
-@using MyTeam.ViewModels.Fine
+@using MyTeam.ViewModels.RemedyRate
 @model RemedyRateViewModel
 <div class="mt-container">
     <div class="col-sm-8 col-sm-offset-2">
         <h2>Legg til sats</h2>
-        <form asp-action="Add" asp-controller="Fine" method="post"
+        <form asp-action="Add" asp-controller="RemedyRate" method="post"
               class="form-horizontal @(ViewBag.DisableAjax == true ? "" : "ajax-form")"
               data-ajax-append="#fine-rates-tbody"
               role="form">

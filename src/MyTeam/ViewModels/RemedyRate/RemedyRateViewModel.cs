@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
 using MyTeam.Validation.Attributes;
 
-namespace MyTeam.ViewModels.Fine
+namespace MyTeam.ViewModels.RemedyRate
 {
     public class RemedyRateViewModel
     {

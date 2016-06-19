@@ -1,7 +1,7 @@
 ﻿@using System.Security.Policy
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
-@using MyTeam.ViewModels.Fine
+@using MyTeam.ViewModels.RemedyRate
 @model IEnumerable<RemedyRateViewModel>
 
 @{ 
@@ -10,9 +10,9 @@
 <div class="mt-main">
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
-            <li class=""><a asp-action="index" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
-            <li class=""><a asp-action="summary"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
-            <li class="active"><a asp-action="rates"><i class="fa fa-usd"></i>&nbsp;Botsatser</a></li>
+            <li class=""><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
+            <li class=""><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li class="active"><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
         </ul>
         <br />
         <table class="fine-rates table tablesorter col-xs-12">
