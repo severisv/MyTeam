@@ -60,7 +60,7 @@ namespace MyTeam.Services.Domain
         {
             var query = _dbContext.RemedyRates.Where(r => r.ClubId == clubId && !r.IsDeleted);
 
-            return Select(query);
+            return Select(query).OrderBy(r => r.Name);
         }
 
         private static List<RemedyRateViewModel> Select(IQueryable<RemedyRate> query)

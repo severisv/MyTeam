@@ -87,6 +87,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
         var element = $(this);
         var target = $(element.data('ajax-update'));
         var appendTarget = $(element.data('ajax-append'));
+        var prependTarget = $(element.data('ajax-prepend'));
         var href = element.attr('action');
 
         var submitButton = element.find('input[type=submit], button');
@@ -96,9 +97,19 @@ ajax.applyAjaxLinkListeners = function ($scope) {
 
             submitButton.addClass('isSubmitting');
             $.post(href, element.serialize(), function (response) {
-                target.html(response);
-                appendTarget.append(response);
-                window.global.applyScopedJsComponents(target);
+                if (target.length) {
+                    target.html(response);
+                    window.global.applyScopedJsComponents(target);
+                }
+                if (appendTarget.length) {
+                    appendTarget.append(response);
+                    window.global.applyScopedJsComponents(appendTarget);
+                }
+                if (prependTarget.length) {
+                    prependTarget.prepend(response);
+                    window.global.applyScopedJsComponents(prependTarget);
+                }
+
                 element.find('input[type=text], textarea').val('');
                 submitButton.removeClass('isSubmitting');
                 if (formIsValid(element)) {
@@ -115,6 +126,16 @@ ajax.applyAjaxLinkListeners = function ($scope) {
             } else {
                 submitButton.prop('disabled', true);
             }
+        });
+    });
+
+    $scope.find('input[type=checkbox].ajax-checkbox').each(function () {
+        var element = $(this);
+        var href = element.data('ajax-href');
+
+        element.click(function (e) {
+            var value = e.target.value === 'on';
+            $.post(href, { value: value });
         });
     });
 };

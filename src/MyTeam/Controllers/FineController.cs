@@ -42,7 +42,7 @@ namespace MyTeam.Controllers
         {
             _fineService.Delete(rateId);
 
-            return RedirectToAction("Rates");
+            return RedirectToAction("List");
         }
 
         [Route("leggtil")]
@@ -57,7 +57,14 @@ namespace MyTeam.Controllers
             }
 
             return PartialView("_Show", null);
-        }       
+        }
+
+        [Route("betalt")]
+        [HttpPost]
+        public void SetPaid(Guid fineId, bool value)
+        {
+            _fineService.SetPaid(fineId, value);
+        }
 
     }
 }

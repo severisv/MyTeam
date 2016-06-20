@@ -15,9 +15,16 @@
         </td>
         <td>@Model.Rate,-</td>
         <td>@Model.Issued.ToNoShort()</td>
-        <td><i class="fa @(Model.IsPaid ? "fa-check" : "")"></i></td>
+       
         @if (Context.UserIsInRole(Roles.Finemaster))
         {
+            <td class="text-center no-padding">
+                <input type="checkbox" 
+                       class="ajax-checkbox"
+                       checked="@Model.IsPaid"
+                       data-ajax-href="@Url.Action("SetPaid", "Fine", new { fineId = Model.Id })"
+                       />
+            </td>
             <td class="text-center">
                 <a class="confirm-dialog"
                    asp-controller="fine"
@@ -25,6 +32,13 @@
                    asp-route-rateId="@Model.Id"
                    title="@Res.Delete" data-message="Er du sikker på at du vil slette @Model.Name?"><i class="fa fa-trash"></i></a>
             </td>
+        }
+        else
+        {
+            <td class="text-center">
+                <i class="fa @(Model.IsPaid ? "fa-check" : "fa-times")"></i>
+            </td>
+
         }
     </tr>
 }

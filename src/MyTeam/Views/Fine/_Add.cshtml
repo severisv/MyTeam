@@ -8,7 +8,7 @@
         <h2>Registrer bot</h2>
         <form asp-action="Add" asp-controller="Fine" method="post"
               class="form-horizontal @(ViewBag.DisableAjax == true ? "" : "ajax-form")"
-              data-ajax-append="#fine-rates-tbody"
+              data-ajax-prepend="#fine-rates-tbody"
               role="form">
             <div class="form-group">
                 <label class="control-label col-xs-3">Hvem</label>

@@ -55,13 +55,14 @@ namespace MyTeam.Services.Domain
 
             if (memberId != null) query = query.Where(f => f.MemberId == memberId);
 
-            return Select(query);
+            return Select(query).OrderByDescending(f => f.Issued);
 
         }
 
         private static List<FineViewModel> Select(IQueryable<Fine> query)
         {
             return query.Select(f => new FineViewModel {
+                MemberId = f.MemberId,
                 Id = f.Id,
                 Description = f.Rate.Name,
                 Name = f.Member.Name,
@@ -72,6 +73,13 @@ namespace MyTeam.Services.Domain
                 Comment = f.Comment 
             }).ToList();
 
+        }
+
+        public void SetPaid(Guid fineId, bool value)
+        {
+            var fine = _dbContext.Fines.Single(f => f.Id == fineId);
+            fine.Paid = value ? (DateTime?)DateTime.Now : null;
+            _dbContext.SaveChanges();
         }
     }
 }

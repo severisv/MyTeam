@@ -10,5 +10,6 @@ namespace MyTeam.Services.Domain
         void Delete(Guid rateId);
         Guid Add(AddFineViewModel rate);
         FineViewModel Get(Guid rateId);
+        void SetPaid(Guid fineId, bool value);
     }
 }
