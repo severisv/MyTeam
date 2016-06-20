@@ -70,7 +70,9 @@ namespace MyTeam.Services.Domain
                 PaidDate = f.Paid,
                 StandardRate = f.Rate.Rate,
                 ExtraRate = f.ExtraRate,
-                Comment = f.Comment 
+                Comment = f.Comment,
+                FirstName = f.Member.FirstName,
+                LastName = f.Member.LastName
             }).ToList();
 
         }
@@ -80,6 +82,11 @@ namespace MyTeam.Services.Domain
             var fine = _dbContext.Fines.Single(f => f.Id == fineId);
             fine.Paid = value ? (DateTime?)DateTime.Now : null;
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<int> GetYears(Guid clubId)
+        {
+            return _dbContext.Fines.Where(c => c.Rate.ClubId == clubId).Select(c => c.Issued.Year).ToList().Distinct().OrderByDescending(y => y);
         }
     }
 }

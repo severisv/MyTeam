@@ -11,6 +11,10 @@ namespace MyTeam.ViewModels.Fine
         [RequiredNO]
         [Display(Name = Res.Name)]
         public string Name { get; set; }
+        [Display(Name = Res.Name)]
+        public string FirstName { get; set; }
+        [Display(Name = Res.Name)]
+        public string LastName { get; set; }
         public Guid MemberId { get; set; }
         public DateTime Issued { get; set; }
         public DateTime? PaidDate { get; set; }

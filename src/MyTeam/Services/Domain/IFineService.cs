@@ -11,5 +11,6 @@ namespace MyTeam.Services.Domain
         Guid Add(AddFineViewModel rate);
         FineViewModel Get(Guid rateId);
         void SetPaid(Guid fineId, bool value);
+        IEnumerable<int> GetYears(Guid id);
     }
 }

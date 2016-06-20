@@ -7,33 +7,57 @@
 @{ 
     ViewBag.Title = "Bøter";
 }
-<div class="mt-main">
+<div class="mt-main fine">
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
             <li class=""><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
-            <li class="active"><a asp-action="list" asp-controller="fine" ><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li class="active"><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
             <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
         </ul>
-        <br />
-        <table class="fine-rates table tablesorter col-xs-12">
-            <thead>
-                <tr>
-                    <th>@Res.Name</th>
-                    <th>@Res.Description</th>
-                    <th>Beløp</th>
-                    <th>@Res.Date</th>
-                    <th class="text-center nosort">Betalt</th>
-                    @if (Context.UserIsInRole(Roles.Finemaster))
+    </div>
+    <div class="mt-container">
+        @if (Model.Players.Count() > 1)
+            {
+            <div class="pull-right">
+                <select class="linkSelect form-control pull-right">
+                    <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear})">- Alle spillere -</option>
+                    @foreach (var player in Model.Players)
                     {
-                        <th class="nosort"></th>
+                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear, memberId = player.Id})" selected="@(Model.SelectedPlayer?.Id == player.Id)">@player.ShortName</option>
                     }
-                </tr>
+                </select>
+            </div>
+        }
+        @if (Model.Years.Count() > 1)
+            {
+            <div class="pull-right">
+                <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                    @foreach (var year in Model.Years)
+                {
+                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
+                    }
+                </select>
+            </div>
+        }
+        <table class="fine-rates table col-xs-12">
+            <thead>
+            <tr>
+                <th><i class="fa fa-user"></i> Hvem</th>
+                <th><i class="fa fa-question"></i> Hva</th>
+                <th><i class="fa fa-money"></i><span class="hidden-xs"> Beløp</span></th>
+                <th class="hidden-xs"><i class="fa fa-calendar"></i> @Res.Date</th>
+                <th class="text-center nosort"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> Betalt</span></th>
+                @if (Context.UserIsInRole(Roles.Finemaster))
+                {
+                    <th class="nosort"></th>
+                }
+            </tr>
             </thead>
             <tbody id="fine-rates-tbody">
-                @foreach (var fine in Model.Fines)
-                { 
-                  @Html.Partial("_Show", fine)
-                }
+            @foreach (var fine in Model.Fines)
+            {
+                @Html.Partial("_Show", fine)
+            }
             </tbody>
         </table>
     </div>
@@ -42,3 +66,20 @@
        @Html.Partial("_Add", new AddFineViewModel(Model.Rates, Model.Players))
     }
 </div>
+
+
+@if (Model.Years.Count() > 1)
+{
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.Season.Pluralize()</li>
+                @foreach (var year in Model.Years)
+                {
+                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="fine" asp-action="list" asp-route-memberId="@Model.SelectedPlayer?.Id" asp-route-aar="@year">@year</a></li>
+                }
+            </ul>
+
+        </div>
+    </div>
+}
