@@ -25,7 +25,20 @@ namespace MyTeam.Controllers
             _rateService = rateService;
         }
 
-        [Route("vis/{aar:int?}/{spillerId?}")]
+        [Route("{aar:int?}")]
+        public IActionResult Index(int? aar = null)
+        {
+            var year = aar ?? DateTime.Now.Year;
+            var years = _fineService.GetYears(Club.Id);
+
+
+            var model = new IndexViewModel(years, year);
+            return View(model);
+
+        }
+
+
+        [Route("vis/{aar:int?}/{memberId?}")]
         public IActionResult List(int? aar = null, Guid? memberId = null)
         {
             var year = aar ?? DateTime.Now.Year;

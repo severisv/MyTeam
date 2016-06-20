@@ -4,7 +4,10 @@
 @if (Model != null)
 {
     <tr class="@Model.Id">
-        <td>@Model.FirstName <span class="hidden-xs">@Model.LastName</span><span class="visible-xs">@Model.LastName.Substring(0,1).</span></td>
+        <td>
+            <span class="no-wrap hidden-xs">@Model.FirstName @Model.LastName</span>
+            <span class="no-wrap visible-xs">@Model.FirstName @Model.LastName.Substring(0, 1).</span>
+        </td>
         <td>@Model.Description&nbsp;
         @if (!string.IsNullOrWhiteSpace(Model.Comment))
         {

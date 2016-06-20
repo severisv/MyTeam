@@ -1,0 +1,55 @@
+﻿@using System.Security.Policy
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
+@model MyTeam.ViewModels.Fine.IndexViewModel
+
+@{ 
+    ViewBag.Title = "Botoversikt";
+}
+<div class="mt-main fine">
+    <div class="mt-container">
+        <ul class="nav nav-pills mt-justified">
+            <li class="active"><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
+            <li class=""><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
+        </ul>
+    </div>
+    <div class="mt-container">
+        @if (Model.Years.Count() > 1)
+            {
+            <div class="pull-right">
+                <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                    @foreach (var year in Model.Years)
+                {
+                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
+                    }
+                </select>
+            </div>
+        }
+        <table class="table col-xs-12">
+            <thead>
+            <tr>              
+            </tr>
+            </thead>
+            <tbody >
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@if (Model.Years.Count() > 1)
+{
+    <div class="mt-sidebar">
+        <div class="mt-container">
+            <ul class="nav nav-list">
+                <li class="nav-header">@Res.Season.Pluralize()</li>
+                @foreach (var year in Model.Years)
+                {
+                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="fine" asp-action="list" asp-route-aar="@year">@year</a></li>
+                }
+            </ul>
+
+        </div>
+    </div>
+}
