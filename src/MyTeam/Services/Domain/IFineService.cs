@@ -6,7 +6,7 @@ namespace MyTeam.Services.Domain
 {
     public interface IFineService
     {
-        IEnumerable<FineViewModel> Get(Guid clubId, int year, Guid? memberId);
+        IEnumerable<FineViewModel> Get(Guid clubId, int year, Guid? memberId = null);
         void Delete(Guid rateId);
         Guid Add(AddFineViewModel rate);
         FineViewModel Get(Guid rateId);

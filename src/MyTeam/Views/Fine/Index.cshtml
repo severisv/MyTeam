@@ -21,17 +21,44 @@
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var year in Model.Years)
                 {
-                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
+                        <option value="@Url.Action("index", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
                     }
                 </select>
             </div>
         }
-        <table class="table col-xs-12">
+        <h3 class="pull-left">Total:&nbsp;&nbsp;&nbsp;&nbsp;<span class="green">@Model.TotalSum,-</span></h3>
+        <table class="listMembers tablesorter table col-xs-12">
             <thead>
-            <tr>              
-            </tr>
+                <tr>
+                    <th class="nosort"></th>
+                    <th>Navn</th>
+                    <th class="text-center"><i class="fa fa-money"></i><span class="hidden-xs">&nbsp;&nbsp;Utestående</span></th>
+                    <th class="text-center"><i class="fa fa-money"></i><span class="hidden-xs">&nbsp;&nbsp;Total</span></th>
+                </tr>
             </thead>
-            <tbody >
+            <tbody>
+                @foreach (var player in Model.FineSummaries)
+                {
+                    <tr>
+                        <td class="image">
+                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.MemberId">
+                                <img src="@Context.Cloudinary().MemberImage(player.PlayerImage, player.FacebookId, 50, 50)" />
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.MemberId">
+                                @player.Name
+                            </a>
+                        </td>
+                        <td class="text-center red">
+                            @if (player.Due > 0){<span>@player.Due,-</span>}
+                        </td>
+                        <td class="text-right">
+                            @player.Total,-
+                        </td>
+                    </tr>
+
+                }
             </tbody>
         </table>
     </div>
@@ -46,7 +73,7 @@
                 <li class="nav-header">@Res.Season.Pluralize()</li>
                 @foreach (var year in Model.Years)
                 {
-                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="fine" asp-action="list" asp-route-aar="@year">@year</a></li>
+                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="fine" asp-action="index" asp-route-aar="@year">@year</a></li>
                 }
             </ul>
 

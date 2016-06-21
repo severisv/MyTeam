@@ -72,7 +72,9 @@ namespace MyTeam.Services.Domain
                 ExtraRate = f.ExtraRate,
                 Comment = f.Comment,
                 FirstName = f.Member.FirstName,
-                LastName = f.Member.LastName
+                LastName = f.Member.LastName,
+                MemberImage = f.Member.Image,
+                FacebookId = f.Member.FacebookId
             }).ToList();
 
         }

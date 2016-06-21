@@ -29,6 +29,8 @@ namespace MyTeam.ViewModels.Fine
 
         public string Comment { get; set; }
         public string Description { get; set; }
+        public string MemberImage { get; set; }
+        public string FacebookId { get; set; }
 
     }
 }

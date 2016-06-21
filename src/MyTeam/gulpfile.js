@@ -1,4 +1,4 @@
-/// <binding ProjectOpened='watch' />
+/// <binding />
 var gulp = require("gulp");
 var rimraf = require("rimraf");
 

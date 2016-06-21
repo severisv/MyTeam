@@ -30,9 +30,9 @@ namespace MyTeam.Controllers
         {
             var year = aar ?? DateTime.Now.Year;
             var years = _fineService.GetYears(Club.Id);
+            var fines = _fineService.Get(Club.Id, year);
 
-
-            var model = new IndexViewModel(years, year);
+            var model = new IndexViewModel(years, year, fines);
             return View(model);
 
         }
