@@ -3,7 +3,7 @@
 @using MyTeam.Resources
 @model MyTeam.ViewModels.Fine.IndexViewModel
 
-@{ 
+@{
     ViewBag.Title = "Botoversikt";
 }
 <div class="mt-main fine">
@@ -15,13 +15,25 @@
         </ul>
     </div>
     <div class="mt-container">
+        @if (Model.PaymentInfo.Due > 0){
+            <div class="fine-userDue">
+                <div class="pull-left">
+                    <img src="@Context.Cloudinary().MemberImage(Model.PaymentInfo.Image, Model.PaymentInfo.FacebookId, 100, 100)" />
+                </div>
+                <div ><h3 class="text-left "><span class="no-wrap" >Du skylder: <span class="red">@Model.PaymentInfo.Due,-</span></span></h3>
+                    <h5 class="text-left">Betalingsinformasjon:</h5> @Model.PaymentInfo.PaymentInfo
+                </div>
+            </div>
+        }
+
+
         @if (Model.Years.Count() > 1)
             {
             <div class="pull-right">
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var year in Model.Years)
                 {
-                        <option value="@Url.Action("index", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
+                        <option value="@Url.Action("index", "Fine", new {aar = year })" selected="@(Model.SelectedYear == year)">@year</option>
                     }
                 </select>
             </div>

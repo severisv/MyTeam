@@ -2,9 +2,9 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
 @using MyTeam.ViewModels.RemedyRate
-@model IEnumerable<RemedyRateViewModel>
+@model MyTeam.ViewModels.RemedyRate.IndexViewModel
 
-@{ 
+@{
     ViewBag.Title = "Bøtesatser";
 }
 <div class="mt-main">
@@ -15,6 +15,15 @@
             <li class="active"><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
         </ul>
         <br />
+        @if (Context.UserIsInRole(Roles.Finemaster))
+        {
+            <div class="fine-paymentinfo fine-paymentinfo--xs">
+                <h4>Betalingsinformasjon</h4>
+                <textarea class="form-control ajax-update" data-href="@Url.Action("SetPaymentInfo", "Fine")" type="text" placeholder="Bøter kan betales med Vipps til .....">@Model.PaymentInfo</textarea>
+                <br />
+            </div>
+         }
+
         <table class="fine-rates table tablesorter col-xs-12">
             <thead>
                 <tr>
@@ -28,8 +37,8 @@
                 </tr>
             </thead>
             <tbody id="fine-rates-tbody">
-                @foreach (var rate in Model)
-                { 
+                @foreach (var rate in Model.RemedyRates)
+                {
                   @Html.Partial("_ShowRate", rate)
 
                 }
@@ -40,5 +49,17 @@
     {
        @Html.Partial("_AddRate", new RemedyRateViewModel())
     }
-      
+
 </div>
+
+ @if (Context.UserIsInRole(Roles.Finemaster))
+    {
+<div class="mt-sidebar">
+    <div class="mt-container">
+        <div class="fine-paymentinfo">
+            <h4>Betalingsinformasjon</h4>
+            <textarea class="form-control ajax-update" data-href="@Url.Action("SetPaymentInfo", "Fine")" type="text" placeholder="Bøter kan betales med Vipps til .....">@Model.PaymentInfo</textarea>
+        </div>
+    </div>
+</div>
+}

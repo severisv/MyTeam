@@ -17,8 +17,6 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-
-       
         public void Delete(Guid fineId)
         {
             var fine = _dbContext.Fines.Single(r => r.Id == fineId);
@@ -28,14 +26,17 @@ namespace MyTeam.Services.Domain
 
         public Guid Add(AddFineViewModel model)
         {
+            var rate = _dbContext.RemedyRates.Single(r => r.Id == model.RateId);
+
             var fine = new Fine
             {
                 Id = Guid.NewGuid(),
-                ExtraRate = model.ExtraRate,
+                Amount = (model.ExtraRate ?? 0) + rate.Rate,
                 Comment = model.Comment,
                 MemberId = model.MemberId.Value,
                 RemedyRateId = model.RateId.Value,
-                Issued = DateTime.Now         
+                Issued = DateTime.Now,
+                RateName = rate.Name,
             };
             _dbContext.Add(fine);
             _dbContext.SaveChanges();
@@ -61,15 +62,15 @@ namespace MyTeam.Services.Domain
 
         private static List<FineViewModel> Select(IQueryable<Fine> query)
         {
-            return query.Select(f => new FineViewModel {
+            return query.Select(f => new FineViewModel
+            {
                 MemberId = f.MemberId,
                 Id = f.Id,
-                Description = f.Rate.Name,
+                Description = f.RateName,
                 Name = f.Member.Name,
                 Issued = f.Issued,
                 PaidDate = f.Paid,
-                StandardRate = f.Rate.Rate,
-                ExtraRate = f.ExtraRate,
+                Rate = f.Amount,
                 Comment = f.Comment,
                 FirstName = f.Member.FirstName,
                 LastName = f.Member.LastName,
@@ -82,13 +83,45 @@ namespace MyTeam.Services.Domain
         public void SetPaid(Guid fineId, bool value)
         {
             var fine = _dbContext.Fines.Single(f => f.Id == fineId);
-            fine.Paid = value ? (DateTime?)DateTime.Now : null;
+            fine.Paid = value ? (DateTime?) DateTime.Now : null;
             _dbContext.SaveChanges();
         }
 
         public IEnumerable<int> GetYears(Guid clubId)
         {
-            return _dbContext.Fines.Where(c => c.Rate.ClubId == clubId).Select(c => c.Issued.Year).ToList().Distinct().OrderByDescending(y => y);
+            return
+                _dbContext.Fines.Where(c => c.Rate.ClubId == clubId)
+                    .Select(c => c.Issued.Year)
+                    .ToList()
+                    .Distinct()
+                    .OrderByDescending(y => y);
+        }
+
+        public string GetPaymentInformation(Guid clubId)
+        {
+            return _dbContext.PaymentInformation.FirstOrDefault(s => s.ClubId == clubId)?.Info ?? String.Empty;
+        }
+
+        public void UpdatePaymentInformation(Guid clubId, string paymentInformation)
+        {
+            var paymentInfo = _dbContext.PaymentInformation.FirstOrDefault(s => s.ClubId == clubId);
+
+            if (paymentInfo == null)
+            {
+                paymentInfo = new PaymentInformation
+                {
+                    Id = Guid.NewGuid(),
+                    ClubId = clubId
+                };
+                _dbContext.PaymentInformation.Add(paymentInfo);
+            }
+            paymentInfo.Info = paymentInformation;
+            _dbContext.SaveChanges();
+        }
+
+        public int GetDueAmount(Guid memberId)
+        {
+            return _dbContext.Fines.Where(f => f.Paid == null && f.MemberId == memberId).Sum(f => f.Amount);
         }
     }
 }

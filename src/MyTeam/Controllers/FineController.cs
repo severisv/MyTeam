@@ -31,8 +31,11 @@ namespace MyTeam.Controllers
             var year = aar ?? DateTime.Now.Year;
             var years = _fineService.GetYears(Club.Id);
             var fines = _fineService.Get(Club.Id, year);
-
-            var model = new IndexViewModel(years, year, fines);
+            var currentUserDue = _fineService.GetDueAmount(CurrentMember.Id);
+            var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
+            var paymentInfoModel = new PaymentInfoViewModel(CurrentMember.Image, CurrentMember.FacebookId, paymentInfo, currentUserDue);
+            
+            var model = new IndexViewModel(years, year, fines, paymentInfoModel);
             return View(model);
 
         }
@@ -82,6 +85,10 @@ namespace MyTeam.Controllers
         {
             _fineService.SetPaid(fineId, value);
         }
+
+        [Route("betalingsinformasjon")]
+        [HttpPost]
+        public void SetPaymentInfo(string value) => _fineService.UpdatePaymentInformation(Club.Id, value);        
 
     }
 }

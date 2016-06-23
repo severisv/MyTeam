@@ -14,6 +14,6 @@ namespace MyTeam.Models.Domain
 
         public bool IsDeleted { get; set; }
 
-        public virtual IEnumerable<Fine> Fines { get; set; }
+        public virtual ICollection<Fine> Fines { get; set; }
     }
 }

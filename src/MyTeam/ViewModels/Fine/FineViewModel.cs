@@ -22,9 +22,7 @@ namespace MyTeam.ViewModels.Fine
         [Display(Name = "Sats")]
         [Range(1, 1000000, ErrorMessage = "Boten må være på mer enn 0")]
 
-        public int? ExtraRate { get; set; }
-        public int? StandardRate { get; set; }
-        public int Rate => ExtraRate ?? 0 + StandardRate ?? 0;
+        public int Rate { get; set; }
         public bool IsPaid => PaidDate != null;
 
         public string Comment { get; set; }

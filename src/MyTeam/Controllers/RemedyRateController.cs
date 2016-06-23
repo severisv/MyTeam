@@ -12,18 +12,22 @@ namespace MyTeam.Controllers
     {
 
         private readonly IRemedyRateService _remedyRateService;
+        private readonly IFineService _fineService;
 
-        public RemedyRateController(IRemedyRateService remedyRateService)
+        public RemedyRateController(IRemedyRateService remedyRateService, IFineService fineService)
         {
             _remedyRateService = remedyRateService;
+            _fineService = fineService;
         }
 
         [Route("")]
         public IActionResult Index()
         {
             var remedyRates = _remedyRateService.GetRates(Club.Id);
+            var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
 
-            return View(remedyRates);
+            var model = new IndexViewModel(remedyRates, paymentInfo);
+            return View(model);
 
         }
 

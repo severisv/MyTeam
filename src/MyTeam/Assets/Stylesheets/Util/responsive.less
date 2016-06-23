@@ -61,9 +61,19 @@
 	@media (min-width: @sm-min) { @rules(); }
 }
 
-.r-above-xxs(@rules) {
-	@media (min-width: @xs-min) { @rules(); }
+.r-above-xs(@rules) {
+	@media (min-width: @sm-min) { @rules(); }
 }
+
+.r-above-sm(@rules) {
+	@media (min-width: @md-min) { @rules(); }
+}
+
+.r-above-md(@rules) {
+	@media (min-width: @lg-min) { @rules(); }
+}
+
+
 
 
 .hidden-xxs {

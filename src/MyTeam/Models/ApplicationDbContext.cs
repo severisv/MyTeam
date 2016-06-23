@@ -21,6 +21,7 @@ namespace MyTeam.Models
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberTeam> MemberTeams { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<PaymentInformation> PaymentInformation { get; set; }
         public DbSet<RemedyRate> RemedyRates { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Team> Teams { get; set; }

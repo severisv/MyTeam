@@ -8,9 +8,10 @@ using MyTeam.Models;
 namespace MyTeam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160623182806_fine_standardrate_name")]
+    partial class fine_standardrate_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
@@ -352,9 +353,9 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Amount");
-
                     b.Property<string>("Comment");
+
+                    b.Property<int?>("ExtraRate");
 
                     b.Property<DateTime>("Issued");
 
@@ -365,6 +366,8 @@ namespace MyTeam.Migrations
                     b.Property<string>("RateName");
 
                     b.Property<Guid>("RemedyRateId");
+
+                    b.Property<int?>("StandardRate");
 
                     b.HasKey("Id");
 
@@ -460,20 +463,6 @@ namespace MyTeam.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("MemberTeam");
-                });
-
-            modelBuilder.Entity("MyTeam.Models.Domain.PaymentInformation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ClubId");
-
-                    b.Property<string>("Info");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentInformation");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.RemedyRate", b =>

@@ -12,5 +12,9 @@ namespace MyTeam.Services.Domain
         FineViewModel Get(Guid rateId);
         void SetPaid(Guid fineId, bool value);
         IEnumerable<int> GetYears(Guid id);
+        string GetPaymentInformation(Guid clubId);
+        void UpdatePaymentInformation(Guid clubId, string paymentInformation);
+        int GetDueAmount(Guid memberId);
     }
+
 }
