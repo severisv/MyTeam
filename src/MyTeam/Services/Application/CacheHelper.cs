@@ -134,10 +134,18 @@ namespace MyTeam.Services.Application
             var answeredCount = answeredEvents.Count();
             var unansweredEventIds = ids.Where(i => !answeredEvents.Contains(i)).Distinct();
 
+
+            var fineDate = DateTime.Now.AddDays(7);
+            var hasDueFines = _dbContext.Fines.Any(f => f.Issued <= fineDate && f.Paid == null && f.MemberId == memberId);
+            var due = 0;
+            if (hasDueFines)
+                due = _dbContext.Fines.Where(f => f.Paid == null && f.MemberId == memberId).Sum(f => f.Amount);
+
             var memberNotification = new MemberNotification
             {
                 UnansweredEvents = count - answeredCount,
-                UnansweredEventIds = unansweredEventIds
+                UnansweredEventIds = unansweredEventIds,
+                DueAmount = due
             };
 
             notifications[memberId] = memberNotification;

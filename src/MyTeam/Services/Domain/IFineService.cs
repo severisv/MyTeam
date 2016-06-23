@@ -10,7 +10,7 @@ namespace MyTeam.Services.Domain
         void Delete(Guid rateId);
         Guid Add(AddFineViewModel rate);
         FineViewModel Get(Guid rateId);
-        void SetPaid(Guid fineId, bool value);
+        void SetPaid(Guid clubId, Guid fineId, bool value);
         IEnumerable<int> GetYears(Guid id);
         string GetPaymentInformation(Guid clubId);
         void UpdatePaymentInformation(Guid clubId, string paymentInformation);

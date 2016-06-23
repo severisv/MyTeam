@@ -18,12 +18,13 @@
         </td>
         <td>@Model.Rate,-</td>
         <td class="hidden-xs">@Model.Issued.ToNoShort()</td>
-       
+
         @if (Context.UserIsInRole(Roles.Finemaster))
         {
             <td class="text-center no-padding">
-                <input type="checkbox" 
+                <input type="checkbox"
                        class="ajax-checkbox"
+                       data-ajax-complete="window.mt.refreshNotificationButton()"
                        checked="@Model.IsPaid"
                        data-ajax-href="@Url.Action("SetPaid", "Fine", new { fineId = Model.Id })"
                        />

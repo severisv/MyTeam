@@ -10,9 +10,24 @@
 { 
         <li class="dropdown"><button class="dropdown-toggle btn btn-warning" data-toggle="dropdown"><i class="fa fa-bell-o"></i></button>
             <ul class="dropdown-menu">
-                <li><a asp-controller="event" asp-action="index" asp-fragment="event-@Model.UnansweredEventIds.FirstOrDefault()"><i class="fa fa-calendar"></i>&nbsp;
-                    <span class="hidden-xxs">Du har </span><b>@Model.UnansweredEvents</b> @(Model.UnansweredEvents > 1 ? "ubesvarte arrangementer" : "ubesvart arrangement")</a>
-                </li>
+                @if (Model.UnansweredEvents > 0)
+                {
+                    <li>
+                        <a asp-controller="event" asp-action="index" asp-fragment="event-@Model.UnansweredEventIds.FirstOrDefault()">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span class="hidden-xxs">Du har </span><b>@Model.UnansweredEvents</b> @(Model.UnansweredEvents > 1 ? "ubesvarte arrangementer" : "ubesvart arrangement")
+                        </a>
+                    </li>
+                }
+                @if (Model.DueAmount > 0)
+                {
+                    <li>
+                        <a asp-controller="fine" asp-action="index">
+                            <i class="fa fa-money"></i>&nbsp;
+                             Du skylder <span class="red">@Model.DueAmount,-</span>
+                        </a>
+                    </li>
+                }
             </ul>
         </li>
 }

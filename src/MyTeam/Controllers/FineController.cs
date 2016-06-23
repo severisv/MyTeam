@@ -83,7 +83,7 @@ namespace MyTeam.Controllers
         [HttpPost]
         public void SetPaid(Guid fineId, bool value)
         {
-            _fineService.SetPaid(fineId, value);
+            _fineService.SetPaid(Club.Id, fineId, value);
         }
 
         [Route("betalingsinformasjon")]

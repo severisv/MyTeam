@@ -132,10 +132,14 @@ ajax.applyAjaxLinkListeners = function ($scope) {
     $scope.find('input[type=checkbox].ajax-checkbox').each(function () {
         var element = $(this);
         var href = element.data('ajax-href');
+        var completeFunction = element.data('ajax-complete');
 
         element.click(function (e) {
             var value = e.target.value === 'on';
-            $.post(href, { value: value });
+            $.post(href, { value: value }).done(function (data) {
+                   console.log(completeFunction);
+                    eval(completeFunction);
+            });
         });
     });
 };

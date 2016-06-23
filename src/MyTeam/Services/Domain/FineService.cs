@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Domain;
 using MyTeam.Models;
+using MyTeam.Services.Application;
 using MyTeam.ViewModels.Fine;
 
 namespace MyTeam.Services.Domain
@@ -11,10 +12,12 @@ namespace MyTeam.Services.Domain
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ICacheHelper _cacheHelper;
 
-        public FineService(ApplicationDbContext dbContext)
+        public FineService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
             _dbContext = dbContext;
+            _cacheHelper = cacheHelper;
         }
 
         public void Delete(Guid fineId)
@@ -80,11 +83,12 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public void SetPaid(Guid fineId, bool value)
+        public void SetPaid(Guid clubId, Guid fineId, bool value)
         {
             var fine = _dbContext.Fines.Single(f => f.Id == fineId);
             fine.Paid = value ? (DateTime?) DateTime.Now : null;
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCacheByMemberId(clubId, fine.MemberId);
         }
 
         public IEnumerable<int> GetYears(Guid clubId)
