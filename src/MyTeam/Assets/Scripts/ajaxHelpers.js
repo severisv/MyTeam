@@ -134,8 +134,8 @@ ajax.applyAjaxLinkListeners = function ($scope) {
         var href = element.data('ajax-href');
         var completeFunction = element.data('ajax-complete');
 
-        element.click(function (e) {
-            var value = e.target.value === 'on';
+        element.change(function (e) {
+            var value = e.target.checked;
             $.post(href, { value: value }).done(function (data) {
                     eval(completeFunction);
             });
