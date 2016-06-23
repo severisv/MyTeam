@@ -34,7 +34,7 @@
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var year in Model.Years)
                 {
-                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear })" selected="@(Model.SelectedYear == year)">@year</option>
+                        <option value="@Url.Action("List", "Fine", new {aar = year, memberId = Model.SelectedPlayer?.Id })" selected="@(Model.SelectedYear == year)">@year</option>
                     }
                 </select>
             </div>

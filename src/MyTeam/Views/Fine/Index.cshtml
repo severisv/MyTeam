@@ -26,7 +26,6 @@
                 </select>
             </div>
         }
-        <h3 class="pull-left">Total:&nbsp;&nbsp;&nbsp;&nbsp;<span class="green">@Model.TotalSum,-</span></h3>
         <table class="listMembers tablesorter table col-xs-12">
             <thead>
                 <tr>
@@ -59,6 +58,12 @@
                     </tr>
 
                 }
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right">Total</td>
+                <td class="text-right text-bold">@Model.TotalSum,-</td>
+            </tr>
             </tbody>
         </table>
     </div>
