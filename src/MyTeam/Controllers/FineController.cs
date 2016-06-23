@@ -58,6 +58,7 @@ namespace MyTeam.Controllers
 
 
         [Route("slett/{rateId}")]
+        [RequireMember(Roles.Finemaster)]
         public IActionResult Delete(Guid rateId)
         {
             _fineService.Delete(Club.Id, rateId);
@@ -67,6 +68,7 @@ namespace MyTeam.Controllers
 
         [Route("leggtil")]
         [HttpPost]
+        [RequireMember(Roles.Finemaster)]
         public IActionResult Add(AddFineViewModel model)
         {
             if (ModelState.IsValid)
@@ -81,6 +83,7 @@ namespace MyTeam.Controllers
 
         [Route("betalt")]
         [HttpPost]
+        [RequireMember(Roles.Finemaster)]
         public void SetPaid(Guid fineId, bool value)
         {
             _fineService.SetPaid(Club.Id, fineId, value);
@@ -88,6 +91,7 @@ namespace MyTeam.Controllers
 
         [Route("betalingsinformasjon")]
         [HttpPost]
+        [RequireMember(Roles.Finemaster)]
         public void SetPaymentInfo(string value) => _fineService.UpdatePaymentInformation(Club.Id, value);        
 
     }

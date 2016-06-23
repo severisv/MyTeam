@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
+using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.RemedyRate;
 
@@ -33,6 +34,7 @@ namespace MyTeam.Controllers
 
 
         [Route("slett/{rateId}")]
+        [RequireMember(Roles.Finemaster)]
         public IActionResult Delete(Guid rateId)
         {
             _remedyRateService.Delete(rateId);
@@ -42,6 +44,7 @@ namespace MyTeam.Controllers
 
         [Route("endre")]
         [HttpPost]
+        [RequireMember(Roles.Finemaster)]
         public IActionResult Add(RemedyRateViewModel model)
         {
             if (Request.IsAjaxRequest())
@@ -66,6 +69,7 @@ namespace MyTeam.Controllers
         }
 
         [Route("endre")]
+        [RequireMember(Roles.Finemaster)]
         public IActionResult Edit(Guid rateId)
         {
             var model = _remedyRateService.Get(rateId);
