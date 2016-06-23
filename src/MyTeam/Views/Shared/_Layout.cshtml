@@ -17,7 +17,7 @@
     <title>@club?.Name@(ViewBag.Title != null ? " - " : "")@ViewBag.Title</title>
     <link rel="icon" type="image/png" href="@Context.Cloudinary().Image(club?.Favicon ?? club?.Logo)">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/style.css?v5" />
     <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.css"/>
     <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -62,7 +62,7 @@
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
                 <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
-                <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>  
+                <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
             </ul>
             if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
                 {
@@ -109,7 +109,7 @@
     <footer></footer>
 </div>
 <script src="~/scripts/bundles/lib.bundle.js"></script>
-<script src="~/scripts/bundles/site.bundle.js"></script>
+<script src="~/scripts/bundles/site.bundle.js?v5"></script>
 @RenderSection("scripts", required: false)
 <script>console.log('Server side: @Context.Elapsed()ms');</script>
 </body>
