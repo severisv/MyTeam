@@ -7,7 +7,7 @@ namespace MyTeam.Services.Domain
     public interface IFineService
     {
         IEnumerable<FineViewModel> Get(Guid clubId, int year, Guid? memberId = null);
-        void Delete(Guid rateId);
+        void Delete(Guid clubId, Guid fineId);
         Guid Add(AddFineViewModel rate);
         FineViewModel Get(Guid rateId);
         void SetPaid(Guid clubId, Guid fineId, bool value);

@@ -137,7 +137,6 @@ ajax.applyAjaxLinkListeners = function ($scope) {
         element.click(function (e) {
             var value = e.target.value === 'on';
             $.post(href, { value: value }).done(function (data) {
-                   console.log(completeFunction);
                     eval(completeFunction);
             });
         });

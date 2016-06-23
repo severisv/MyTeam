@@ -20,11 +20,12 @@ namespace MyTeam.Services.Domain
             _cacheHelper = cacheHelper;
         }
 
-        public void Delete(Guid fineId)
+        public void Delete(Guid clubId, Guid fineId)
         {
             var fine = _dbContext.Fines.Single(r => r.Id == fineId);
             _dbContext.Fines.Remove(fine);
             _dbContext.SaveChanges();
+            _cacheHelper.ClearNotificationCacheByMemberId(clubId, fine.MemberId);
         }
 
         public Guid Add(AddFineViewModel model)

@@ -60,7 +60,7 @@ namespace MyTeam.Controllers
         [Route("slett/{rateId}")]
         public IActionResult Delete(Guid rateId)
         {
-            _fineService.Delete(rateId);
+            _fineService.Delete(Club.Id, rateId);
 
             return RedirectToAction("List");
         }
