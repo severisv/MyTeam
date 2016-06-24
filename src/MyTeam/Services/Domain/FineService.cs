@@ -39,7 +39,7 @@ namespace MyTeam.Services.Domain
                 Comment = model.Comment,
                 MemberId = model.MemberId.Value,
                 RemedyRateId = model.RateId.Value,
-                Issued = DateTime.Now,
+                Issued = model.Date ?? DateTime.Now,
                 RateName = rate.Name,
             };
             _dbContext.Add(fine);

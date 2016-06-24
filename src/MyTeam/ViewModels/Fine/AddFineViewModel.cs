@@ -15,6 +15,9 @@ namespace MyTeam.ViewModels.Fine
         [RequiredNO]
         public Guid? RateId { get; set; }
 
+        [Display(Name = "Dato")]
+        public DateTime? Date { get; set; }
+
         [Display(Name = "Tillegg")]
         public int? ExtraRate { get; set; }
         [Display(Name = "Kommentar")]
