@@ -122,13 +122,13 @@
     {
         <div id="signups-@Model.Id">
             <div class="attendee-links attendee-links--game">
-                <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                <a class="flex " role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="true" data-parent="#signups-@Model.Id">
                     <span class="flex-2">Tropp (@(Model.Squad?.Count() ?? 0))</span>
                     <span class="flex-1 pull-right">&nbsp;</span>
                 </a>
             </div>
             <div class="panel">
-                <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                <div id="attendees-@Model.Id" class="panel-collapse collapse in">
                     <hr class="sm"/>   
                     <div class="flex event-attendees game">
 
