@@ -52,12 +52,12 @@
                 {
                     <tr>
                         <td class="image">
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.MemberId">
+                            <a asp-controller="fine" asp-action="list" asp-route-aar="@Model.SelectedYear" asp-route-memberid="@player.MemberId">
                                 <img src="@Context.Cloudinary().MemberImage(player.PlayerImage, player.FacebookId, 50, 50)" />
                             </a>
                         </td>
                         <td>
-                            <a asp-controller="player" asp-action="show" asp-route-playerid="@player.MemberId">
+                            <a asp-controller="fine" asp-action="list" asp-route-aar="@Model.SelectedYear" asp-route-memberid="@player.MemberId">
                                 @player.Name
                             </a>
                         </td>

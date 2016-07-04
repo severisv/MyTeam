@@ -14,21 +14,21 @@
             <div class="form-group">
                 <label asp-for="Name" class="control-label col-xs-3"></label>
                 <div class="col-xs-9">
-                    <input asp-for="Name" type="text" data-ajax-update-requiredfield class="form-control"/>
+                    <input asp-for="Name" type="text" data-ajax-update-requiredfield data-ajax-update-clear class="form-control"/>
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label col-xs-3"></label>
                 <div class="col-xs-9">
-                    <input asp-for="Description" type="text" class="form-control"/>
+                    <input asp-for="Description" type="text" class="form-control" data-ajax-update-clear />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Rate" class="control-label col-xs-3"></label>
                 <div class="col-xs-9">
-                    <input asp-for="Rate" type="text" data-ajax-update-requiredfield class="form-control"/>
+                    <input asp-for="Rate" type="text" data-ajax-update-requiredfield data-ajax-update-clear class="form-control"/>
                     <span asp-validation-for="Rate" class="text-danger"></span>
                 </div>
             </div>

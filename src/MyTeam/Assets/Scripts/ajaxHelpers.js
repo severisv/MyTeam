@@ -110,7 +110,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
                     window.global.applyScopedJsComponents(prependTarget);
                 }
 
-                element.find('input[type=text], textarea').val('');
+                element.find('input[data-ajax-update-clear], textarea[data-ajax-update-clear]').val('');
                 submitButton.removeClass('isSubmitting');
                 if (formIsValid(element)) {
                     submitButton.prop('disabled', false);

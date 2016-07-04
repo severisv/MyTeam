@@ -46,14 +46,14 @@
             <div class="form-group">
                 <label asp-for="ExtraRate" class="control-label col-xs-3"></label>
                 <div class="col-xs-9">
-                    <input asp-for="ExtraRate" type="text" placeholder="Eventuelt tillegg til normalsats" class="form-control"/>
+                    <input asp-for="ExtraRate" type="text" placeholder="Eventuelt tillegg til normalsats" class="form-control" data-ajax-update-clear />
                     <span asp-validation-for="ExtraRate" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Comment" class="control-label col-xs-3"></label>
                 <div class="col-xs-9">
-                    <input asp-for="Comment" type="text" placeholder="Eventuell kommentar" class="form-control" />
+                    <input asp-for="Comment" type="text" placeholder="Eventuell kommentar" class="form-control" data-ajax-update-clear />
                     <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
             </div>
