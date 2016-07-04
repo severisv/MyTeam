@@ -31,6 +31,7 @@
     }
     <br />
     <div mt-alert="@AlertType.Info">@ViewBag.SignupMessage</div>
+    <div class="event-signup-listplayers">
     @if (!Model.IsGame)
     {
 
@@ -87,7 +88,7 @@
                                             <span class="hidden-xs">@player.LastName</span>
                                             <span class="hidden-sm hidden-md hidden-lg">@player.LastInitials</span>
 
-                                        </a> 
+                                        </a>
                                         @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                         {
                                             <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
@@ -129,7 +130,7 @@
             </div>
             <div class="panel">
                 <div id="attendees-@Model.Id" class="panel-collapse collapse in">
-                    <hr class="sm"/>   
+                    <hr class="sm"/>
                     <div class="flex event-attendees game">
 
                         <ul class="list-unstyled flex-2">
@@ -149,6 +150,7 @@
             </div>
         </div>
 }
+</div>
 </div>
 
 @if (Context.Request.IsAjaxRequest())
