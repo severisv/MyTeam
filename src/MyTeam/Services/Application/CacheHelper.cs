@@ -116,11 +116,12 @@ namespace MyTeam.Services.Application
             {
                 notifications = new Dictionary<Guid, MemberNotification>();
             }
-            
+
             var now = DateTime.Now;
+            var inFourDays = now.AddDays(4);
             var events = _dbContext.Events.Where(
                     e => e.ClubId == clubId && 
-                    e.DateTime - now < new TimeSpan(4, 0, 0, 0, 0) && 
+                    e.DateTime  < inFourDays && 
                     (e.DateTime > now) &&
                     !e.IsPublished
                     )
