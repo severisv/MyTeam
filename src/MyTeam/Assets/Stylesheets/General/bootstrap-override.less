@@ -217,6 +217,8 @@ ul.pager li a {
 
 .pagination>li>a, .pagination>li>span {
     color:@link-color;
+    min-width: 3em;
+    text-align: center
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
     background-color: @link-color;
@@ -225,6 +227,11 @@ ul.pager li a {
 
 .pagination {
     margin-bottom: 0;
+}
+
+nav.nav-pagination {
+    margin: 0 auto;
+    max-width: 39em;
 }
 
 
