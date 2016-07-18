@@ -1,6 +1,6 @@
 {
-  "name": "ASP.NET",
-  "version": "0.0.0",
+  "name": "myteam",
+  "version": "1.0.0",
   "devDependencies": {
     "eslint": "^2.10.0",
     "eslint-config-standard": "^5.3.1",

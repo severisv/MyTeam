@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
+using MyTeam.Models.General;
 using MyTeam.ViewModels.Events;
 
 namespace MyTeam.Services.Domain
@@ -9,9 +10,9 @@ namespace MyTeam.Services.Domain
     public interface IEventService
     {
         Event Get(Guid id);
-        IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false);
+        PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false);
         IList<Event> GetAll(EventType type, Guid clubId);
-        IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId);
+        PagedList<EventViewModel> GetPrevious(IEnumerable<Guid> teamIds, EventType type, int page);
         AttendeeViewModel SetAttendance(Guid eventId, Guid playerId,  bool isAttending, Guid clubId);
         void Add(Guid clubId, params  Event[] ev);
         void Delete(Guid clubId, Guid eventId);
@@ -22,6 +23,5 @@ namespace MyTeam.Services.Domain
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);
         void SignupMessage(Guid eventId, Guid memberId, string message);
         void UpdateDescription(Guid eventId, string description);
-        void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin);
-    }
+        void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin);}
 }

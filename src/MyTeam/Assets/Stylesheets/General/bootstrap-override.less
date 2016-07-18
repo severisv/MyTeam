@@ -215,6 +215,19 @@ ul.pager li a {
 }
 
 
+.pagination>li>a, .pagination>li>span {
+    color:@link-color;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: @link-color;
+    border-color: @link-color;
+}
+
+.pagination {
+    margin-bottom: 0;
+}
+
+
 /*Colours*/
 .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
     background-color: @blueLight;
@@ -343,3 +356,4 @@ hr {
 .popover.right>.arrow {
     border-right-color: rgba(255,255,255,.25);
 }
+

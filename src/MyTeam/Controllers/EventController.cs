@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
+using MyTeam.Models.General;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
@@ -31,7 +32,6 @@ namespace MyTeam.Controllers
             _dbContext = dbContext;
         }
 
-
         [Route("arrangementer")]
         public IActionResult IndexRedirect()
         {
@@ -41,30 +41,46 @@ namespace MyTeam.Controllers
         [Route("{type?}")]
         public IActionResult Index(EventType type = EventType.Alle, bool showAll = false)
         {
-            var events = _eventService.GetUpcoming(type, Club.Id, showAll);
+            var teamIds = CurrentMember.Roles.ContainsAny(Roles.Admin, Roles.Coach)
+              ? Club.TeamIds
+              : CurrentMember.TeamIds;
+
+            var events = _eventService.GetUpcoming(type, Club.Id, teamIds, showAll);
 
             if (Request.IsAjaxRequest())
             {
-                events = events.Where(e => !e.SignupHasOpened());
+                events = new PagedList<EventViewModel>(events.Where(e => !e.SignupHasOpened()), events.Skip, events.Take, events.TotalCount);
                 return PartialView("_ListEvents", events);
             }
-            var model = new UpcomingEventsViewModel(events, type, CurrentMember, previous: false);
+            var model = new UpcomingEventsViewModel(events, type, previous: false);
             return View("Index", model);
         }
 
 
-        [Route("arrangementer/tidligere/{type?}")]
-        public IActionResult Previous(EventType type = EventType.Alle)
+        [Route("arrangementer/tidligere/{type?}/{page:int?}")]
+        public IActionResult Previous(EventType type = EventType.Alle, int page = 1)
         {
-            var events = _eventService.GetPrevious(type, Club.Id);
+            var teamIds = CurrentMember.Roles.ContainsAny(Roles.Admin, Roles.Coach)
+                ? Club.TeamIds
+                : CurrentMember.TeamIds;
+
+            var events = _eventService.GetPrevious(teamIds, type, page);
             
-            if (Request.IsAjaxRequest())
-            {
-                events = events.Where(e => !e.SignupHasOpened());
-                return PartialView("_ListEvents", events);
-            }
-            var model = new UpcomingEventsViewModel(events, type, CurrentMember, previous: true);
+            var model = new UpcomingEventsViewModel(events, type, previous: true);
             return View("Index", model);
+        }
+
+
+        [Route("prev")]
+        public IActionResult Prev(EventType type = EventType.Alle, int page = 1)
+        {
+            var teamIds = CurrentMember.Roles.ContainsAny(Roles.Admin, Roles.Coach)
+                ? Club.TeamIds
+                : CurrentMember.TeamIds;
+
+            var events = _eventService.GetPrevious(teamIds, type, page);
+
+            return new JsonResult(events);
         }
 
 

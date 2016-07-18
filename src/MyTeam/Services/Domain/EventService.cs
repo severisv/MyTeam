@@ -6,6 +6,7 @@ using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.ViewModels.Events;
 using Microsoft.EntityFrameworkCore;
+using MyTeam.Models.General;
 using MyTeam.Services.Application;
 
 namespace MyTeam.Services.Domain
@@ -27,7 +28,7 @@ namespace MyTeam.Services.Domain
             return _dbContext.Events.Single(e => e.Id == id);
         }
 
-        public IEnumerable<EventViewModel> GetUpcoming(EventType type, Guid clubId, bool showAll = false)
+        public PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false)
         {
             var now = DateTime.Now;
             var queryable = _dbContext.Events
@@ -53,6 +54,7 @@ namespace MyTeam.Services.Domain
                     e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
                 )).ToList();
 
+            result = result.Where(r => r.TeamIds.ContainsAny(teamIds)).ToList();
 
             var memberIds = result.SelectMany(e => e.Attendees.Select(a => a.MemberId)).Distinct();
 
@@ -65,8 +67,7 @@ namespace MyTeam.Services.Domain
             {
                 attendee.Player = members.Single(m => m.Id == attendee.MemberId);
             }
-
-            return result;
+            return new PagedList<EventViewModel>(result, 0, 0, result.Count);
         }
 
 
@@ -78,11 +79,16 @@ namespace MyTeam.Services.Domain
                 .ToList();
         }
 
-        public IEnumerable<EventViewModel> GetPrevious(EventType type, Guid clubId)
+        public PagedList<EventViewModel> GetPrevious(IEnumerable<Guid> teamIds, EventType type, int page)
         {
-            var queryable = GetPastEvents(type, clubId);
+            var pageSize = 10;
+            var skip = pageSize*(page - 1);
 
-            var result = queryable
+            var queryable = GetPastEvents(type, teamIds);
+
+            var totalCount = queryable.Count();
+
+            var result = queryable.Skip(skip).Take(pageSize)
                 .Include(t => t.EventTeams)
                 .Include(t => t.Attendees)
                 .ToList();
@@ -105,14 +111,14 @@ namespace MyTeam.Services.Domain
             {
                 attendee.Player = members.Single(m => m.Id == attendee.MemberId);
             }
-            return resultViewModels;
+            return new PagedList<EventViewModel>(resultViewModels, skip, pageSize, totalCount);
         }
 
-        private IOrderedQueryable<Event> GetPastEvents(EventType type, Guid clubId)
+        private IOrderedQueryable<Event> GetPastEvents(EventType type, IEnumerable<Guid> teamIds)
         {
             var now = DateTime.Now;
             var result = _dbContext.Events
-                .Where(t => t.ClubId == clubId)
+                .Where(t => t.EventTeams.Any(et => teamIds.Contains(et.TeamId)))
                 .Where(t => type == EventType.Alle || t.Type == type)
                 .Where(t => t.DateTime < now)
                 .OrderByDescending(e => e.DateTime);
@@ -268,9 +274,14 @@ namespace MyTeam.Services.Domain
                 }).First();
         }
 
-        public IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid clubId, int take)
+        public IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType type, Guid clubId, int take)
         {
-            var query = GetPastEvents(trening, clubId);
+            var now = DateTime.Now;
+            var query = _dbContext.Events
+                .Where(t => t.ClubId == clubId)
+                .Where(t => t.Type == type)
+                .Where(t => t.DateTime < now)
+                .OrderByDescending(e => e.DateTime);
 
             return query.Take(15).Select(e => new SimpleEventViewModel
             {

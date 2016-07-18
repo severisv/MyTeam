@@ -32,13 +32,16 @@
                 <a id="event-showAll" asp-controller="event" asp-action="index" asp-route-type="@Model.Type" asp-route-showall="true"><i class="fa fa-plus-circle"></i> Vis alle</a>
             </div>
         }
+        else
+        {
+            @Html.Partial("_Pager", Model)            
+        }
     </div>
 </div>
+@Html.Partial("_CoachMenu")
 
-    @Html.Partial("_CoachMenu")
 
-
-    @section Scripts
+@section Scripts
 {
-        <script src="~/scripts/event/list.js"></script>
-    }
+    <script src="~/scripts/event/list.js"></script>
+}

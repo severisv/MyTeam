@@ -46,7 +46,8 @@
         </div>
         <div class="event-col-2">
             <p>
-                <i class="fa fa-calendar"></i> @Model.DateTime.ToNo()
+                <i class="fa fa-calendar"></i> @Model.DateTime.ToNo()@if (Model.DateTime.Year != DateTime.Now.Year)
+                {<span> @Model.DateTime.Year</span>}
             </p>
             <p>
                 <i class="fa fa-clock-o"></i> @Model.DateTime.ToString("HH:mm")
