@@ -14,7 +14,6 @@ var concat = require('gulp-concat');
 var isProduction = args.production;
 
 gulp.task('js', function () {
-
     var bundle =  browserify({
         debug: !isProduction
     });
@@ -31,7 +30,7 @@ gulp.task('js', function () {
       .pipe(gulp.dest(paths.dest.scripts))
       .on('error', _.plumb.errorHandler)
       .pipe(notify('Compiled javascript'));
-    
+
 });
 
 gulp.task('js-lib', function () {
@@ -41,7 +40,7 @@ gulp.task('js-lib', function () {
         .pipe(gulp.dest(paths.dest.scripts))
         .on('error', _.plumb.errorHandler)
         .pipe(notify('Compiled javascript libraries'));
-    
+
 });
 
 gulp.task('js-cloudinary', function () {
@@ -51,7 +50,7 @@ gulp.task('js-cloudinary', function () {
         .pipe(gulp.dest(paths.dest.scripts))
         .on('error', _.plumb.errorHandler)
         .pipe(notify('Compiled Cloudinary javascript'));
-    
+
 });
 
 
