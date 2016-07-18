@@ -75,15 +75,15 @@ namespace MyTeam
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
-                if (env.IsDevelopment() || env.IsStaging())
-                {
+                //if (env.IsDevelopment() || env.IsStaging())
+                //{
                     app.UseDeveloperExceptionPage();
                     app.UseDatabaseErrorPage();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Error/Error");
-                }
+                //}
+                //else
+                //{
+                //    app.UseExceptionHandler("/Error/Error");
+                //}
 
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
@@ -96,7 +96,8 @@ namespace MyTeam
                 }
                 catch (Exception e)
                 {
-                    if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
+                    //if (env.IsDevelopment() || env.IsStaging())
+                    app.WriteException(e);
                 }
 
 
@@ -142,8 +143,9 @@ namespace MyTeam
             }
             catch (Exception e)
             {
-                if (env.IsDevelopment() || env.IsStaging() ) app.WriteException(e);
-                else app.Write("Det oppstod en feil");
+                app.WriteException(e);
+                //if (env.IsDevelopment() || env.IsStaging() ) app.WriteException(e);
+                //else app.Write("Det oppstod en feil");
             }
         }
     }
