@@ -38,25 +38,35 @@ namespace MyTeam.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Index(EventType type = EventType.Alle, bool previous = false, bool showAll = false)
+        [Route("{type?}")]
+        public IActionResult Index(EventType type = EventType.Alle, bool showAll = false)
         {
-            var events = previous
-                ? _eventService.GetPrevious(type, Club.Id)
-                : _eventService.GetUpcoming(type, Club.Id, showAll);
-
-            if (!CurrentMember.Roles.Contains(Roles.Admin))
-            {
-                events = events.Where(e => e.TeamIds.ContainsAny(CurrentMember.TeamIds));
-            }
+            var events = _eventService.GetUpcoming(type, Club.Id, showAll);
 
             if (Request.IsAjaxRequest())
             {
                 events = events.Where(e => !e.SignupHasOpened());
                 return PartialView("_ListEvents", events);
             }
-            var model = new UpcomingEventsViewModel(events, type, previous);
+            var model = new UpcomingEventsViewModel(events, type, CurrentMember, previous: false);
             return View("Index", model);
         }
+
+
+        [Route("arrangementer/tidligere/{type?}")]
+        public IActionResult Previous(EventType type = EventType.Alle)
+        {
+            var events = _eventService.GetPrevious(type, Club.Id);
+            
+            if (Request.IsAjaxRequest())
+            {
+                events = events.Where(e => !e.SignupHasOpened());
+                return PartialView("_ListEvents", events);
+            }
+            var model = new UpcomingEventsViewModel(events, type, CurrentMember, previous: true);
+            return View("Index", model);
+        }
+
 
         [ValidateModelState]
         [Route("pamelding")]
