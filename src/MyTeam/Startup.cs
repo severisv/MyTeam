@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
+using MyTeam.Services.Application;
 using MyTeam.Services.Composition;
 using MyTeam.Settings;
 
@@ -117,10 +118,9 @@ namespace MyTeam
                     AppId = Configuration["Authentication:Facebook:AppId"],
                     AppSecret = Configuration["Authentication:Facebook:AppSecret"]
                 });
-                    
-          
 
-                app.LoadTenantData();
+
+                app.LoadTenantData(app.ApplicationServices.GetService<ICacheHelper>());
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(
