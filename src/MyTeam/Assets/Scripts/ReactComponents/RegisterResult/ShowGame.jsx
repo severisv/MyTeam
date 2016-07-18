@@ -1,4 +1,6 @@
-﻿module.exports = React.createClass({
+﻿var React = require('react');
+
+module.exports = React.createClass({
     getInitialState: function () {
         return ({
             players: [],
@@ -28,7 +30,7 @@
             });
             that.setState({
                 addPlayerId: that.getPlayersNotInSquad()[0].id
-            })
+            });
 
         });
         $.getJSON(that.props.routes.GET_EVENTTYPES).then(function (response) {

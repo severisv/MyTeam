@@ -1,4 +1,6 @@
-﻿
+﻿var ReactDOM = window.global.ReactDOM;
+var React = window.global.React;
+
 var element = $('#game-showEvents');
 
 if (element.length) {

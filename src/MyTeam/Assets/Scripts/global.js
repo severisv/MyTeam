@@ -4,6 +4,9 @@ var ajax = require('./ajaxHelpers');
 var ReactDOM = require('react-dom');
 var React = require('react');
 
+global.React = React;
+global.ReactDOM = ReactDOM;
+
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
     applyDatepickers($scope);

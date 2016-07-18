@@ -1,4 +1,5 @@
-var facebook = require('../../facebook.js')
+var facebook = require('../../facebook.js');
+var React = require('react');
 
 module.exports = React.createClass({
 

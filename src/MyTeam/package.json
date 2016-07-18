@@ -12,6 +12,7 @@
     "jquery": "2.2.0",
     "bootbox": "^4.4.0",
     "browserify": "^13.0.0",
+    "loose-envify": "^1.2.0",
     "moment": "^2.13.0",
     "jquery.cloudinary": "1.0.25",
     "gulp": "^3.9.0",

@@ -10,13 +10,16 @@ var gif = require('gulp-if');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
+var envify = require('loose-envify/custom');
 
 var isProduction = args.production;
 
 gulp.task('js', function () {
     var bundle = browserify({
         debug: !isProduction
-    });
+    }).transform(envify({
+        NODE_ENV: isProduction ? 'production' : 'development'
+    }), { global: true });
 
     bundle.add(paths.src.scriptsRoot);
 
