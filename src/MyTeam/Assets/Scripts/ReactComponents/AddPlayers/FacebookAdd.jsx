@@ -1,6 +1,6 @@
 var facebook = require('../../facebook.js')
 
-﻿module.exports = React.createClass({
+module.exports = React.createClass({
 
     getInitialState: function () {
         return ({
@@ -35,8 +35,8 @@ var facebook = require('../../facebook.js')
         }
     },
 
-    addPlayer: function(user){
-                
+    addPlayer: function (user) {
+
         function getImageUrl(url, size) {
             var imageUrl;
             $.ajax({
@@ -54,10 +54,10 @@ var facebook = require('../../facebook.js')
 
             });
             return imageUrl;
-        }                  
+        }
 
         var url = facebook.getUserImageUrl(user.id);
-        
+
         user.imageMedium = getImageUrl(url, 400);
         user.imageLarge = getImageUrl(url, 800);
 
@@ -65,8 +65,7 @@ var facebook = require('../../facebook.js')
     },
 
     renderUsers: function (addPlayer, existingIds) {
-        return this.state.users.map(function(user) {
-
+        return this.state.users.map(function (user) {
             var disabled = false;
             var icon = "";
             var buttonClass = "pull-right btn";

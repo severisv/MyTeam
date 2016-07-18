@@ -11,7 +11,7 @@
                    <select className="form-control" onChange={actions.handleAddPlayerChange}>
                        {actions.getPlayersNotInSquad().map(function (player) {
                            return (
-                                   <option key={player.Id} value={player.Id}>{player.FullName}</option>);
+                                   <option key={player.id} value={player.id}>{player.fullName}</option>);
                        })}
                    </select>
                     </div>

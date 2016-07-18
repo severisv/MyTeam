@@ -3,7 +3,7 @@
     render: function () {
         var model = this.props.model;
         var actions = this.props.actions;
-        var assistPlayers = [{ Id: 'ingen', FullName: "( Ingen )" }].concat(model.squad.filter(function (element) { return element.Id != model.PlayerId }));
+        var assistPlayers = [{ id: 'ingen', fullName: "( Ingen )" }].concat(model.squad.filter(function (element) { return element.id != model.playerId }));
         return (<div>
                    <br />
 
@@ -16,7 +16,7 @@
                     <select className="form-control" onChange={actions.handleEventChange}>
                         {model.eventTypes.map(function (type) {
                             return (
-                    <option key={type.Value} value={type.Value}>{type.Name}</option>);
+                    <option key={type.value} value={type.value}>{type.name}</option>);
                         })}
                     </select>
                     <span className="text-danger"></span>
@@ -26,9 +26,9 @@
             <label className="col-sm-3 control-label">Hvem</label>
             <div className="col-sm-9">
                 <select className="form-control" onChange={actions.handlePlayerChange}>
-                    {actions.getEventPlayers(model.Type).map(function (player) {
+                    {actions.getEventPlayers(model.type).map(function (player) {
                         return (
-                            <option key={player.Id} value={player.Id}>{player.FullName}</option>);
+                            <option key={player.id} value={player.id}>{player.fullName}</option>);
                     })}
                 </select>
                 <span className="text-danger"></span>
@@ -47,14 +47,14 @@
     );
     },
     renderAssistForm: function (model, actions, assistPlayers) {
-        if (model.Type == 0) {
+        if (model.type == 0) {
             return ( <div className="col-sm-12 no-padding form-group">
                  <label className="col-sm-3 control-label">Assist</label>
                 <div className="col-sm-9">
                     <select className="form-control" onChange={actions.handleAssistChange}>
                         {assistPlayers.map(function (player) {
                             return (
-           <option key={player.Id} value={player.Id}>{player.FullName}</option>);
+           <option key={player.id} value={player.id}>{player.fullName}</option>);
                         })}
                     </select>
             <span className="text-danger"></span>

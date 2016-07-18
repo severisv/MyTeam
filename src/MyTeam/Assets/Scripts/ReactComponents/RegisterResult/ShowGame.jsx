@@ -27,7 +27,7 @@
                 players: response
             });
             that.setState({
-                AddPlayerId: that.getPlayersNotInSquad()[0].Id
+                addPlayerId: that.getPlayersNotInSquad()[0].id
             })
 
         });
@@ -35,7 +35,7 @@
 
             that.setState({
                 eventTypes: response,
-                Type: response[0].Value
+                type: response[0].value
             });
         });
 
@@ -48,28 +48,28 @@
     },
 
     handleEventChange: function (event) {
-        var playerId = this.state.PlayerId ?
-            this.state.PlayerId :
-            this.getEventPlayers(parseInt(event.target.value))[0].Id
+        var playerId = this.state.playerId ?
+            this.state.playerId :
+            this.getEventPlayers(parseInt(event.target.value))[0].id
 
         this.setState({
-            Type: parseInt(event.target.value),
-            PlayerId: playerId
+            type: parseInt(event.target.value),
+            playerId: playerId
 
         })
     },
     handlePlayerChange: function (event) {
-        var assistedById = this.state.AssistedById == event.target.value ?
+        var assistedById = this.state.assistedById == event.target.value ?
                   null :
-                  this.state.AssistedById
+                  this.state.assistedById
 
         var playerId = event.target.value == 'ingen' ?
                  null :
                  event.target.value
 
         this.setState({
-            PlayerId: playerId,
-            AssistedById: assistedById
+            playerId: playerId,
+            assistedById: assistedById
         })
     },
     handleAssistChange: function (event) {
@@ -77,7 +77,7 @@
                null :
                event.target.value
 
-        this.setState({ AssistedById: assistedById })
+        this.setState({ assistedById: assistedById })
     },
     handleSubmit: function () {
         var that = this;
@@ -85,7 +85,7 @@
             that.state
         ).then(function (response) {
 
-            if (response.Success != false) {
+            if (response.success != false) {
                 that.setState({
                     events: that.state.events.concat([
                        response
@@ -101,10 +101,10 @@
         $.post(that.props.routes.DELETE_EVENT,
             { eventId: eventId }
         ).then(function (response) {
-            if (response.Success) {
+            if (response.success) {
                 that.setState({
                     events: that.state.events.filter(function (event) {
-                        return event.Id != eventId
+                        return event.id != eventId
                     })
                 })
             }
@@ -112,19 +112,19 @@
     },
 
     handleAddPlayerChange: function (event) {
-        this.setState({ AddPlayerId: event.target.value })
+        this.setState({ addPlayerId: event.target.value })
     },
 
     addPlayer: function () {
         var that = this;
         $.post(that.props.routes.SELECT_PLAYER,
-            { eventId: that.props.gameId, playerId: that.state.AddPlayerId, isSelected: true }
+            { eventId: that.props.gameId, playerId: that.state.addPlayerId, isSelected: true }
         ).then(function (response) {
-            if (response.Success) {
-                var player = that.state.players.filter(function (player) { return player.Id == that.state.AddPlayerId })
-                that.setState({ squad: player.concat(that.state.squad).sort(function (a, b) { return a.FirstName.localeCompare(b.FirstName) }) })
+            if (response.success) {
+                var player = that.state.players.filter(function (player) { return player.id == that.state.addPlayerId })
+                that.setState({ squad: player.concat(that.state.squad).sort(function (a, b) { return a.firstName.localeCompare(b.firstName) }) })
                 that.setState({
-                    AddPlayerId: that.getPlayersNotInSquad()[0].Id
+                    addPlayerId: that.getPlayersNotInSquad()[0].id
                 })
             }
         })
@@ -136,10 +136,10 @@
         $.post(that.props.routes.SELECT_PLAYER,
             { eventId: that.props.gameId, playerId: playerId, isSelected: false }
         ).then(function (response) {
-            if (response.Success) {
+            if (response.success) {
                 that.setState({
                     squad: that.state.squad.filter(function (player) {
-                        return player.Id != playerId
+                        return player.id != playerId
                     })
                 })
             }
@@ -149,22 +149,22 @@
 
     getPlayerName: function (playerId) {
         var squad = this.state.squad.filter(function (player) {
-            return player.Id == playerId
+            return player.id == playerId
         });
-        if (squad.length > 0) return squad[0].FirstName;
+        if (squad.length > 0) return squad[0].firstName;
         else return "Selvmål";
     },
     getPlayerShortName: function (playerId) {
         var squad = this.state.squad.filter(function (player) {
-            return player.Id == playerId
+            return player.id == playerId
         });
-        if (squad.length > 0) return squad[0].FirstName + " " + squad[0].LastName;
+        if (squad.length > 0) return squad[0].firstName + " " + squad[0].lastName;
         else return "Selvmål";
     },
 
     getEventPlayers: function (type) {
         return type == 0 ?
-          [{ Id: 'ingen', FullName: "( Selvmål )" }].concat(this.state.squad) :
+          [{ id: 'ingen', fullName: "( Selvmål )" }].concat(this.state.squad) :
           this.state.squad;
     },
 
@@ -233,7 +233,7 @@
 function isNotInList(list) {
     return function(player) {
         for (var i = 0, len = list.length; i < len; i++) {
-            if (list[i].Id === player.Id) {
+            if (list[i].id === player.id) {
                 return false;
             }
         }
