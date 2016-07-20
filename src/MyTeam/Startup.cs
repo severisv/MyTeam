@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
-using MyTeam.Services.Application;
 using MyTeam.Services.Composition;
 using MyTeam.Settings;
 
@@ -76,29 +75,24 @@ namespace MyTeam
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
-                //if (env.IsDevelopment() || env.IsStaging())
-                //{
+                if (env.IsDevelopment() || env.IsStaging())
+                {
                     app.UseDeveloperExceptionPage();
                     app.UseDatabaseErrorPage();
-                //}
-                //else
-                //{
-                //    app.UseExceptionHandler("/Error/Error");
-                //}
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Error/Error");
+                }
 
-                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                    {
-                        var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                        var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
                         dbContext.Database.Migrate();
-                    }
                 }
                 catch (Exception e)
                 {
-                    //if (env.IsDevelopment() || env.IsStaging())
-                    app.WriteException(e);
+                    if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
                 }
 
 
@@ -120,7 +114,7 @@ namespace MyTeam
                 });
 
 
-                app.LoadTenantData(app.ApplicationServices.GetService<ICacheHelper>());
+                app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(
@@ -143,9 +137,8 @@ namespace MyTeam
             }
             catch (Exception e)
             {
-                app.WriteException(e);
-                //if (env.IsDevelopment() || env.IsStaging() ) app.WriteException(e);
-                //else app.Write("Det oppstod en feil");
+                if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
+                else app.Write("Det oppstod en feil");
             }
         }
     }
