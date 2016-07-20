@@ -39,13 +39,9 @@ namespace MyTeam.Services.Domain
             if (!showAll)
                 queryable = queryable.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp));
 
+                         
 
-            var query = queryable
-                .Include(t => t.EventTeams)
-                .Include(t => t.Attendees);
-             
-
-            var result = query
+            var result = queryable
                 .OrderBy(e => e.DateTime)
                 .Select(e =>
                 new EventViewModel(
