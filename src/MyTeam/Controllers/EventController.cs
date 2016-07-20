@@ -12,7 +12,6 @@ using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
 using MyTeam.ViewModels.Table;
-using System.Threading;
 using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
 using UnauthorizedResult = MyTeam.Extensions.Mvc.UnauthorizedResult;
 
@@ -109,13 +108,8 @@ namespace MyTeam.Controllers
         }
 
         [Route("paameldte")]
-        public IActionResult SignupDetails(Guid eventId)
-        {
-            Thread.Sleep(5000);
-            return PartialView("_SignupDetails", _eventService.GetSignupDetailsViewModel(eventId));
-        }
-
-
+        public IActionResult SignupDetails(Guid eventId) 
+            => PartialView("_SignupDetails", _eventService.GetSignupDetailsViewModel(eventId));
 
         [HttpPost]
         [RequireMember]
