@@ -11,7 +11,6 @@ namespace MyTeam.Services.Domain
     {
         Event Get(Guid id);
         PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false);
-        IList<Event> GetAll(EventType type, Guid clubId);
         PagedList<EventViewModel> GetPrevious(IEnumerable<Guid> teamIds, EventType type, int page);
         AttendeeViewModel SetAttendance(Guid eventId, Guid playerId,  bool isAttending, Guid clubId);
         void Add(Guid clubId, params  Event[] ev);
@@ -23,5 +22,7 @@ namespace MyTeam.Services.Domain
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);
         void SignupMessage(Guid eventId, Guid memberId, string message);
         void UpdateDescription(Guid eventId, string description);
-        void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin);}
+        void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin);
+        SignupDetailsViewModel GetSignupDetailsViewModel(Guid eventId);
+    }
 }

@@ -6,11 +6,13 @@ using MyTeam.Filters;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Models.General;
+using MyTeam.Models.Shared;
 using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
 using MyTeam.ViewModels.Table;
+using System.Threading;
 using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
 using UnauthorizedResult = MyTeam.Extensions.Mvc.UnauthorizedResult;
 
@@ -88,7 +90,7 @@ namespace MyTeam.Controllers
         [Route("pamelding")]
         public IActionResult Signup(Guid eventId, bool isAttending)
         {
-            var ev = _eventService.GetEventViewModel(eventId);
+            var ev = _eventService.GetSignupDetailsViewModel(eventId);
 
             if (isAttending == false && ev.SignoffHasClosed())
             {
@@ -105,6 +107,14 @@ namespace MyTeam.Controllers
             }
             return PartialView("_SignupDetails", ev);
         }
+
+        [Route("paameldte")]
+        public IActionResult SignupDetails(Guid eventId)
+        {
+            Thread.Sleep(5000);
+            return PartialView("_SignupDetails", _eventService.GetSignupDetailsViewModel(eventId));
+        }
+
 
 
         [HttpPost]

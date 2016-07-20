@@ -4,5 +4,8 @@
 @foreach (var ev in Model)
 {
     @Html.Partial("_Show", ev)
-    @Html.Partial("_Signup", ev)
+    @if (ev.SignupHasOpened())
+    {
+        @Html.Partial("_Signup", ev)
+    }
 }

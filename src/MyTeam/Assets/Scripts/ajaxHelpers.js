@@ -27,6 +27,7 @@ ajax.applyLoadListener = function ($scope) {
         element.html('<i class="mt-loader fa fa-spin fa-spinner"></i>');
         $.get(href).then(function (data) {
             element.html((data));
+            window.global.applyScopedJsComponents(element);
         });
     });
 };

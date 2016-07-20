@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Pipeline;
 using MyTeam.Services.Application;
 
@@ -9,10 +10,12 @@ namespace MyTeam
     public static class OwinExtensions
     {
      
-        public static void LoadTenantData(this IApplicationBuilder app, ICacheHelper cacheHelper)
+        public static void LoadTenantData(this IApplicationBuilder app)
         {
             app.Use(async (context, next) =>
             {
+                var cacheHelper = app.ApplicationServices.GetService<ICacheHelper>();
+
                 var clubId = GetSubdomain(context);
                 if (clubId == null || clubId == "breddefotball" || clubId == "bfstaging") clubId = "wamkam";
 

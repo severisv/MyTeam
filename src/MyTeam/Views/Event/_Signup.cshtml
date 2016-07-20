@@ -1,12 +1,11 @@
-﻿@model MyTeam.ViewModels.Events.EventViewModel
+﻿@using System.Linq
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.ViewModels.Events
+@model MyTeam.ViewModels.Events.EventViewModel
 
 
-<div id="event-signup-@Model.Id" class="event-signup event-signup--@Model.Type.ToString().ToLower()">
-  @if (Model.SignupHasOpened()){
-   
-        @Html.Partial("_SignupDetails")
-      
-  }
+<div id="event-signup-@Model.Id" class="ajax-load event-signup event-signup--@Model.Type.ToString().ToLower()"
+     href="@Url.Action("SignupDetails","Event", new { eventId = Model.Id })">
 </div>
 
 <div class="clearfix"></div>
