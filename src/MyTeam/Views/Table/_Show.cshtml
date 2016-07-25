@@ -3,16 +3,16 @@
 
 @model MyTeam.Models.Domain.Table
 
-<table id="leagueTable" class="table  table--striped tablesorter">
+<table id="leagueTable" class="table  table--striped">
     <thead>
     <tr>
-        <th class="hidden-xxs">@Res.Position</th>
-        <th class="table-text">@Res.Name</th>
-        <th class="hidden-xs">@Res.Games</th>
+        <th class="hidden-xxs"></th>
+        <th class="table-text">@Res.Team</th>
+        <th >@Res.Games</th>
         <th class="hidden-sm hidden-xs">@Res.Win</th>
         <th class="hidden-sm hidden-xs">@Res.Draw</th>
         <th class="hidden-sm hidden-xs">@Res.Loss</th>
-        <th>@Res.GoalDifference</th>
+        <th class="hidden-xs ">@Res.GoalDifference</th>
         <th>@Res.Points</th>
     </tr>
     </thead>
@@ -22,11 +22,11 @@
         <tr>
             <td class="hidden-xxs">@line.Position</td>
             <td class="table-text"><strong>@line.Name</strong></td>
-            <td class="hidden-xs">@line.GamesPlayed</td>
+            <td>@line.GamesPlayed</td>
             <td class="hidden-sm hidden-xs">@line.Wins</td>
             <td class="hidden-sm hidden-xs">@line.Draws</td>
             <td class="hidden-sm hidden-xs">@line.Losses</td>
-            <td>@line.GoalDifference</td>
+            <td class="hidden-xs">@line.GoalsFor - @line.GoalsAgainst</td>
             <td>@line.Points</td>
         </tr>
     }
