@@ -192,6 +192,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<SimpleGame> GetGames(DateTime date)
             =>
                 _dbContext.Games.Where(g => g.DateTime <= date && g.DateTime >= date.AddDays(-14))
+                    .OrderByDescending(g => g.DateTime)
                     .Select(g => new SimpleGame(g.Id, g.Team.ShortName, g.Opponent)).ToList();
 
         public ArticleViewModel GetMatchReport(Guid gameId)
