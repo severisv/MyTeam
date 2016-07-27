@@ -4,17 +4,28 @@ namespace MyTeam.ViewModels.News
 {
     public class CommentMemberViewModel
     {
-        public string FullName { get;  }
-        public string ImageSmall { get;  }
-        public Guid? Id { get; }
+        public string FullName { get; set; }
+        public string ImageSmall { get; set; }
+        public Guid? Id { get; set; }
         public string FacebookId { get; set; }
 
-        public CommentMemberViewModel(string fullName, string imageSmall, Guid? memberId, string facebookId)
+        public bool Exists => Id != null;
+
+        public CommentMemberViewModel(Models.Domain.Member member)
         {
-            FullName = fullName;
-            ImageSmall = imageSmall;
-            Id = memberId;
-            FacebookId = facebookId;
+            if (member != null)
+            {
+                FullName = member.Name;
+                ImageSmall = member.Image;
+                Id = member.Id;
+                FacebookId = member.FacebookId;
+            }
+        
+        }
+
+        public CommentMemberViewModel()
+        {
+            
         }
 
     }

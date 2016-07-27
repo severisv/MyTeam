@@ -88,8 +88,12 @@ namespace MyTeam.Models
                .HasForeignKey(c => c.AssistedById)
                .OnDelete(DeleteBehavior.Restrict);
 
-           
 
+            builder.Entity<Comment>()
+                .HasOne(m => m.Member)
+                .WithMany(c => c.Comments)
+                .IsRequired(false);
+            
         }
     }
 }

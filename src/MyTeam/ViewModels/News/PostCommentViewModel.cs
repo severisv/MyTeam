@@ -5,10 +5,15 @@ using MyTeam.Validation.Attributes;
 
 namespace MyTeam.ViewModels.News
 {
-    public class PostCommentViewModel
+    public class PostCommentViewModel 
     {
         [RequiredNO]
         public Guid ArticleId { get; set; }
+
+        public bool IsFacebookUser { get; set; }
+
+        [Display(Name = "Navn")]
+        public string Name { get; set; }
 
         [RequiredNO]
         [Display(Name = "Innhold")]

@@ -14,7 +14,6 @@ namespace MyTeam
         public Guid[] TeamIds { get; }
         public bool ProfileIsConfirmed { get; }
 
-
         public UserMember(PlayerDto player)
         {
             if (player != null)

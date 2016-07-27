@@ -18,24 +18,26 @@ function applyCommentFormSubmitListener() {
         var validationMessage = form.find('#comment-validation-text');
         validationMessage.html('');
 
-        if (textarea.val().length > 3) {
-
-            form.find('.submitLoader').show();
+        if (textarea.val().length < 4) {
+            validationMessage.html('Kommentaren må være minst 4 tegn');
+        }
+        else if (form.find('.comment-nameInput').length > 0 && !form.find('.comment-nameInput').val()) {
+            validationMessage.html('Navn må fylles ut');
+        }
+        else {
             form.find('.submitText').hide();
             button.attr('disabled', 'disabled');
+            form.find('button').addClass('isSubmitting');
 
             $.post(url, form.serialize()).done(function (response) {
                 var commentCount = $('#comments-count').html();
-                $('#comments-count').html(1+parseInt(commentCount));
+                $('#comments-count').html(1 + parseInt(commentCount));
+                form.find('button').removeClass('isSubmitting');
                 form.find('textarea').val('');
-                form.find('.submitLoader').hide();
                 form.find('.submitText').show();
                 button.attr('disabled', false);
                 $('#article-commentForm').prepend(response);
             });
-        }
-        else {
-            validationMessage.html('Kommentaren må være minst 4 tegn');
         }
        
 

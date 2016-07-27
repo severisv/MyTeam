@@ -16,7 +16,7 @@ namespace MyTeam.Services.Domain
         void Delete(Guid articleId);
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);
-        CommentViewModel PostComment(Guid articleId, string content, Guid memberId);
+        CommentViewModel PostComment(Guid articleId, string content, Guid memberId, string facebookId, string name, string userName);
         IEnumerable<SimpleGame> GetGames(DateTime now);
         ArticleViewModel GetMatchReport(Guid gameId);
     }

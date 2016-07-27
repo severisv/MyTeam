@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
@@ -160,33 +161,33 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<CommentViewModel> GetComments(Guid articleId)
         {
-            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
+            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId).Include(c => c.Member).ToList();
             return query.Select(a =>
                 new CommentViewModel(
-                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageFull, a.MemberId, a.Member.FacebookId),
-                    articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
+                    new CommentMemberViewModel(a.Member), 
+                    articleId, a.Date, a.Content, a.AuthorName, a.AuthorFacebookId, a.AuthorUserName))
+                    .ToList().OrderBy(c => c.Date);
         }
 
-        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId)
+        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId, string facebookId, string name, string userName)
         {
-
-
             var comment = new Comment
             {
                 ArticleId = articleId,
                 Content = content,
-                MemberId = memberId,
+                MemberId = memberId != Guid.Empty ? (Guid?)memberId : null,
                 Date = DateTime.Now,
+                AuthorFacebookId = facebookId,
+                AuthorName = name,
+                AuthorUserName = userName,
             };
 
             _dbContext.Comments.Add(comment);
             _dbContext.SaveChanges();
 
-            var member =_dbContext.Members.Where(m => m.Id == memberId)
-                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageFull, m.Id, m.FacebookId))
-                    .Single();
-            
-            return new CommentViewModel(member, articleId, comment.Date, content);
+            var memberEntity =_dbContext.Members.FirstOrDefault(m => m.Id == memberId);
+           var member = new CommentMemberViewModel(memberEntity);
+            return new CommentViewModel(member, articleId, comment.Date, content, name, facebookId, userName);
         }
 
         public IEnumerable<SimpleGame> GetGames(DateTime date)
