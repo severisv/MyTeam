@@ -47,12 +47,23 @@ namespace MyTeam.Controllers
             return RedirectToAction("Show", new {name = article.Name});
         }
 
+        [Route(BaseRoute + "kamprapport/{gameId}")]
+        public IActionResult MatchReport(Guid gameId)
+        {
+            var model = _articleService.GetMatchReport(gameId);
+            ViewBag.IsMatchReport = true;
+            return PartialView("MatchReport", model);
+        }
+
 
         [Route(BaseRoute+"ny")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Create()
         {
-            var model = new EditArticleViewModel();
+            var model = new EditArticleViewModel
+            {
+                Games = _articleService.GetGames(DateTime.Now)
+            };
             return View("Edit", model);
         }
 
@@ -61,7 +72,8 @@ namespace MyTeam.Controllers
         public IActionResult Edit(string navn)
         {
             var article = _articleService.Get(Club.Id, navn);
-            var model = new EditArticleViewModel(article);
+            var games = _articleService.GetGames(article.Published);
+            var model = new EditArticleViewModel(article, games);
             return View(model);
         }
 
@@ -75,6 +87,7 @@ namespace MyTeam.Controllers
                 var name = _articleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
                 return RedirectToAction("Show", new { name = name});
             }
+            model.Games = _articleService.GetGames(model.Published ?? DateTime.Now);
             return View("Edit", model);
 
         }

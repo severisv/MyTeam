@@ -6,6 +6,7 @@ using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
+using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
@@ -44,19 +45,31 @@ namespace MyTeam.Services.Domain
 
         public ArticleViewModel Get(Guid clubId, string name)
         {
-            return _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId).Select(a =>
-                new ArticleViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
-                    AuthorId = a.AuthorId,
-                    Headline = a.Headline,
-                    Content = a.Content,
-                    ImageUrl = a.ImageUrl,
-                    Published = a.Published,
-                    CommentCount = (int)a.Comments.Count()
-        }).Single();
+            var query = _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId);
+                
+            var result = Select(query);
+
+            return result.First();
+        }
+
+        private static IQueryable<ArticleViewModel> Select(IQueryable<Article> query)
+        {
+            var result = query
+                .Select(a =>
+                    new ArticleViewModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Author = new MemberViewModel {Fullname = a.Author.Fullname},
+                        AuthorId = a.AuthorId,
+                        Headline = a.Headline,
+                        Content = a.Content,
+                        ImageUrl = a.ImageUrl,
+                        Published = a.Published,
+                        GameId = a.GameId,
+                        CommentCount = (int) a.Comments.Count()
+                    });
+            return result;
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
@@ -101,8 +114,9 @@ namespace MyTeam.Services.Domain
                     AuthorId = authorId,
                     Content = model.Content,
                     ImageUrl = model.ImageUrl,
-                    Published = DateTime.Now
-                };
+                    Published = DateTime.Now,
+                    GameId = model.IsMatchReport ? model.GameId : null
+            };
                 _dbContext.Add(newArticle);
                 _dbContext.SaveChanges();
 
@@ -114,6 +128,7 @@ namespace MyTeam.Services.Domain
                 article.Content = model.Content;
                 article.ImageUrl = model.ImageUrl;
                 article.Headline = model.Headline;
+                article.GameId = model.IsMatchReport ? model.GameId : null;
                 _dbContext.SaveChanges();
             }
             return article.Name;
@@ -172,6 +187,18 @@ namespace MyTeam.Services.Domain
                     .Single();
             
             return new CommentViewModel(member, articleId, comment.Date, content);
+        }
+
+        public IEnumerable<SimpleGame> GetGames(DateTime date)
+            =>
+                _dbContext.Games.Where(g => g.DateTime <= date && g.DateTime >= date.AddDays(-14))
+                    .Select(g => new SimpleGame(g.Id, g.Team.ShortName, g.Opponent)).ToList();
+
+        public ArticleViewModel GetMatchReport(Guid gameId)
+        {
+            var query = _dbContext.Articles.Where(a => a.GameId == gameId);
+            var result = Select(query);
+            return result.FirstOrDefault();
         }
     }
     

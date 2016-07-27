@@ -1,4 +1,7 @@
-﻿@using System.Threading.Tasks
+﻿@using System
+@using System.Threading.Tasks
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
 @model MyTeam.ViewModels.News.EditArticleViewModel
 
 
@@ -6,6 +9,7 @@
     <form asp-action="edit" method="post">
         <input asp-for="ArticleId" type="hidden"/>
         <input asp-for="Name" type="hidden" />
+        <input asp-for="Published" type="hidden" />
         <input asp-for="ImageUrl" type="hidden"/>
         <div class="cloudinary-preview news-imageWrapper">
             <img src="@Context.Cloudinary().Image(Model.ImageUrl, 900, Context.Cloudinary().DefaultArticle)"/>
@@ -23,11 +27,33 @@
         <div class="clearfix"></div>
         <br/>
         <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group news-matchreportSelect">
+            <label class="col-xs-3 col-sm-2 no-padding control-label">Kamprapport?</label>
+            <div class="col-xs-9 col-sm-10 flex">
+                <div >
+                    <input asp-for="IsMatchReport" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#GameIdWrapper')"/>
+                </div>
 
+                <div class="flex-2">
+                    <span id="GameIdWrapper" @(Model.IsMatchReport ? String.Empty : "hidden")>
+                        <select name="GameId" class="form-control">
+                            <option value="">- Velg kamp -</option>
+                            @foreach (var game in Model.Games)
+                            {
+                                <option selected="@(game.Id == Model.GameId)" value="@game.Id">@game.Name</option>
+                            }
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br />
         <label asp-for="Headline">Overskrift:</label>
         <div class="form-group">
             <input class="form-control" asp-for="Headline" placeholder="Sensasjonell snuoperasjon av Sleivdal"/>
         </div>
+      
         <div class="form-group">
             <textarea asp-for="Content" class="form-control update-table" placeholder="Innhold"></textarea>
         </div>

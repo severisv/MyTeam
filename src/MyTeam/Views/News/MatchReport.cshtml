@@ -1,0 +1,8 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@model MyTeam.ViewModels.News.ArticleViewModel
+
+@if (Model != null)
+{
+    @Html.Partial("_Show", Model)
+}

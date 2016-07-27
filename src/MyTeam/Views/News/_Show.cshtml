@@ -7,7 +7,12 @@
 }
 
 <div class="news-item mt-container">
-    <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short":"")">
+    @if (ViewBag.IsMatchReport == true)
+    {
+        <h2 class="news-matchReport">Kamprapport</h2>
+        <hr />
+    }
+    <div class="news-imageWrapper @(isShortVersion ? "news-imageWrapper--short" : "")">
         @if (isShortVersion)
         {
             <a asp-action="show" asp-route-name="@Model.Name"><img src="@articleImageUrl"/>
@@ -15,26 +20,31 @@
         }
         else
         {
-            <img src="@articleImageUrl" />
-            }
-        </div>
-        @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
-        {
-            <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-navn="@Model.Name"><i class='fa fa-edit'></i></a>
+            <img src="@articleImageUrl"/>
         }
-        <h2>@Model.Headline</h2>
-        <p class="news-author"><a class="underline" asp-controller="player" asp-action="show" asp-route-playerId="@Model.AuthorId">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span></p>
-        <hr class="sm" />
-                @if (isShortVersion)
-                {
-                    <div class="news-content news-content--short">
-                        @Html.Raw(Model.Content.StripHtmlTags().Truncate())
-                    </div>
-                    <hr />
-                    <a class="underline" asp-action="show" asp-route-name="@Model.Name">Les hele og kommentér (@Model.CommentCount)</a>
-                }
-                else
-                {
-                    <div class="news-content news-content--full">@Html.Raw(Model.Content)</div>
-                }
-            </div>
+    </div>
+    @if (Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.NewsWriter))
+    {
+        <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-navn="@Model.Name"><i class='fa fa-edit'></i></a>
+    }
+    <h2>@Model.Headline</h2>
+    <p class="news-author"><a class="underline" asp-controller="player" asp-action="show" asp-route-playerId="@Model.AuthorId">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span>
+     @if (Model.GameId != null && !(ViewBag.IsMatchReport == true))
+     {
+        <a asp-controller="game" asp-action="show" asp-route-gameid="@Model.GameId" class="pull-right u-font-normal"><i class="fa fa-info-circle"></i> Kampdetaljer</a>
+     }
+    </p>
+    <hr class="sm"/>
+    @if (isShortVersion)
+    {
+        <div class="news-content news-content--short">
+            @Html.Raw(Model.Content.StripHtmlTags().Truncate())
+        </div>
+        <hr/>
+        <a class="underline" asp-action="show" asp-route-name="@Model.Name">Les hele og kommentér (@Model.CommentCount)</a>
+    }
+    else
+    {
+        <div class="news-content news-content--full">@Html.Raw(Model.Content)</div>
+    }
+</div>

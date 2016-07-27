@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
+using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
@@ -16,5 +17,7 @@ namespace MyTeam.Services.Domain
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);
         CommentViewModel PostComment(Guid articleId, string content, Guid memberId);
+        IEnumerable<SimpleGame> GetGames(DateTime now);
+        ArticleViewModel GetMatchReport(Guid gameId);
     }
 }
