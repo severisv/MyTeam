@@ -152,7 +152,9 @@ input.form-control, textarea.form-control, select.form-control {
 input {
     &.form-control[type='checkbox'] {
         width: 33px;
+        height: 33px;
         margin: 0;
+        margin-bottom: 2px;
         display: inline;
         vertical-align: top;
     }
@@ -375,3 +377,10 @@ hr {
     }
 });
 
+
+
+@media (max-width: 767px) {
+    .navbar-nav .open .dropdown-menu .dropdown-header, .navbar-nav .open .dropdown-menu>li>a {
+        padding: 0;
+    }
+}
