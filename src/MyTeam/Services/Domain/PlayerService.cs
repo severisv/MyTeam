@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
@@ -54,7 +55,8 @@ namespace MyTeam.Services.Domain
                     LastName = lastName,
                     UserName = emailAddress,
                     ClubId = club.Id,
-                    MiddleName = middleName
+                    MiddleName = middleName,
+                    UrlName = GetUrlName(club.Id, firstName, middleName, lastName)
                 };
 
                 _dbContext.Players.Add(player);
@@ -69,6 +71,28 @@ namespace MyTeam.Services.Domain
             return JsonResponse.ValidationFailed($"{Res.Player} {Res.IsAlready.ToLower()} {Res.Added.ToLower()}");
         }
 
+       private string GetUrlName(Guid clubId, string firstName, string middleName, string lastName)
+        {
+            var middle = !string.IsNullOrWhiteSpace(middleName) ? "-" + middleName.ToLower() : "";
+            var urlName = $"{firstName.ToLower()}{middle}-{lastName.ToLower()}";
+
+            var result = urlName.Replace(" ", "-").ToLower();
+            result = result.Replace("Ø", "O");
+            result = result.Replace("ø", "o");
+            result = result.Replace("æ", "ae");
+            result = result.Replace("Æ", "Ae");
+            result = result.Replace("Å", "Aa");
+            result = result.Replace("å", "aa");
+            result = result.Replace("É", "e");
+            result = result.Replace("é", "e");
+            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+            result = rgx.Replace(result, "");
+            while (_dbContext.Members.Any(m => m.ClubId == clubId && m.UrlName == result))
+            {
+                result += "-1";
+            }
+            return result;
+        }
 
         public IEnumerable<string> GetFacebookIds()
         {
@@ -144,6 +168,7 @@ namespace MyTeam.Services.Domain
                     LastName = p.LastName,
                     Status = p.Status,
                     ImageFull = p.ImageFull,
+                    UrlName = p.UrlName
                 }).ToList().OrderBy(p => p.Name);
 
             var playerIds = players.Select(p => p.Id);
@@ -182,10 +207,10 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public ShowPlayerViewModel GetSingle(Guid playerId)
+        public ShowPlayerViewModel GetSingle(string name)
         {
             var now = DateTime.Now;
-            var player = _dbContext.Players.Where(p => p.Id == playerId)
+            var player = _dbContext.Players.Where(p => p.UrlName == name.ToLower())
                 .Select(p => new ShowPlayerViewModel
                 {
                     Id = p.Id,
@@ -199,11 +224,12 @@ namespace MyTeam.Services.Domain
                     ImageFull = p.ImageFull,
                     PositionsString = p.PositionsString,
                     FacebookId = p.FacebookId,
-                    Status = p.Status
+                    Status = p.Status,
+                    UrlName = p.UrlName
                 }).Single();
 
             var practiceCount =
-                _dbContext.EventAttendances.Count(e => e.MemberId == playerId && e.DidAttend && e.Event.DateTime.Year == now.Year);
+                _dbContext.EventAttendances.Count(e => e.MemberId == player.Id && e.DidAttend && e.Event.DateTime.Year == now.Year);
 
             player.PracticeCount = practiceCount;
 
@@ -222,7 +248,8 @@ namespace MyTeam.Services.Domain
                         MiddleName = p.MiddleName,
                         LastName = p.LastName,
                         FacebookId = p.FacebookId,
-                        Image = p.ImageFull
+                        Image = p.ImageFull,
+                        UrlName = p.UrlName
                     }).ToList();
         }
 

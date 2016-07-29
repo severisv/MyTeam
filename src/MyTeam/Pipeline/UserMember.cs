@@ -9,6 +9,7 @@ namespace MyTeam
         public Guid Id { get; }
         public string FacebookId { get; }
         public string FirstName { get; }
+        public string UrlName { get; }
         public string Image { get; }
         public string[] Roles { get; }
         public Guid[] TeamIds { get; }
@@ -25,6 +26,7 @@ namespace MyTeam
                 FacebookId = player.FacebookId;
                 Image = player.Image;
                 FirstName = player.FirstName;
+                UrlName = player.UrlName;
             }
             else
             {

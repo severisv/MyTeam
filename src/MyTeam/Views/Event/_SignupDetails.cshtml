@@ -54,7 +54,7 @@
                                         @foreach (var player in Model.DidAttend)
                                         {
                                             <li>
-                                                <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                                <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
                                                     <i class="fa fa-user"></i>&nbsp;
                                                     <span>@player.FirstName</span><span>&nbsp;@player.LastName</span>
                                                 </a>
@@ -87,7 +87,7 @@
                                 @foreach (var player in Model.Attending)
                                 {
                                     <li>
-                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span>
                                             <span class="hidden-xs">@player.LastName</span>
@@ -105,7 +105,7 @@
                                 @foreach (var player in Model.NotAttending)
                                 {
                                     <li>
-                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span>
                                             <span class="hidden-xs">@player.LastName</span>
@@ -143,7 +143,7 @@
                             @foreach (var player in Model.Squad)
                             {
                                 <li>
-                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>

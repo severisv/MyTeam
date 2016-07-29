@@ -32,7 +32,7 @@ namespace MyTeam.Services.Domain
                 new ArticleViewModel
                 {
                     Name = a.Name,
-                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
+                    Author = new MemberViewModel { Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
@@ -61,7 +61,7 @@ namespace MyTeam.Services.Domain
                     {
                         Id = a.Id,
                         Name = a.Name,
-                        Author = new MemberViewModel {Fullname = a.Author.Fullname},
+                        Author = new MemberViewModel {Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
                         AuthorId = a.AuthorId,
                         Headline = a.Headline,
                         Content = a.Content,

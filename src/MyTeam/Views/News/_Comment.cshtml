@@ -6,7 +6,7 @@
     <div class="comment-container comment-imageContainer">
         @if (Model.Member.Exists)
         {
-            <a asp-controller="Player" asp-action="Show" asp-route-playerId="@Model.Member.Id" title="@Model.Member.FullName">
+            <a asp-controller="Player" asp-action="Show" asp-route-name="@Model.Member.UrlName" title="@Model.Member.FullName">
                 <img src="@Context.Cloudinary().MemberImage(Model.Member.ImageSmall, Model.Member.FacebookId, 60, 70)" />
             </a>
         }
@@ -24,7 +24,7 @@
     <div class="comment-container comment-contentContainer">
         @if (Model.Member.Exists)
         {
-            <a asp-controller="Player" asp-action="Show" asp-route-playerId="@Model.Member.Id" class="comment-author">@Model.Member.FullName</a>
+            <a asp-controller="Player" asp-action="Show" asp-route-name="@Model.Member.UrlName" class="comment-author">@Model.Member.FullName</a>
         }
         else if (!string.IsNullOrWhiteSpace(Model.AuthorFacebookId))
         {

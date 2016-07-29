@@ -16,6 +16,7 @@ namespace MyTeam.ViewModels.Player
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string UserName { get; set; }
+        public string UrlName { get; set; }
 
         public PlayerStatus Status { get; set; }
 
@@ -41,6 +42,7 @@ namespace MyTeam.ViewModels.Player
         public string PositionsString { get; set; }
         public string Name => $"{FirstName} {LastName}";
         public string FacebookId { get; set; }
+       
     }
 }
 

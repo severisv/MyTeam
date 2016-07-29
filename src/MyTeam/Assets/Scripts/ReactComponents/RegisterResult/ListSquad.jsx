@@ -12,11 +12,11 @@ module.exports = React.createClass({
     <div className="flex flex-justify-center game-squadList">
                 <ul className="list-unstyled">
                     {model.squad.map(function (player) {
-                        var showPlayerUrl = model.showPlayerUrl + '/'+player.id
-                        return(<li key={player.id}>
+                        var showPlayerUrl = model.showPlayerUrl + '/' + player.urlName;
+                        return (<li key={player.id}>
                                     <i className="flaticon-soccer18"></i>&nbsp;<a href={showPlayerUrl} className="underline">{player.fullName}</a>
                                     {that.renderDeleteButton(player, actions, model)}
-                                </li>)
+                                </li>);
 })}
                 </ul>
 

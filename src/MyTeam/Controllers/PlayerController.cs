@@ -33,10 +33,10 @@ namespace MyTeam.Controllers
             return View("List",model);
         }
 
-        [Route("vis/{playerId?}")]
-        public IActionResult Show(Guid playerId)
+        [Route("vis/{name?}")]
+        public IActionResult Show(string name)
         {
-            var selectedPlayer = _playerService.GetSingle(playerId);
+            var selectedPlayer = _playerService.GetSingle(name);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);
@@ -56,14 +56,14 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("endre")]
+        [Route("endre/{name}")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
-        public IActionResult Edit(Guid playerId, bool filterRedirect = false)
+        public IActionResult Edit(string name, bool filterRedirect = false)
         {
             if(filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
-            var selectedPlayer = _playerService.GetSingle(playerId);
+            var selectedPlayer = _playerService.GetSingle(name);
 
             if (Request.IsAjaxRequest())
             {
@@ -86,7 +86,7 @@ namespace MyTeam.Controllers
             {
                 _playerService.EditPlayer(model, Club.ClubId);
                 Alert(AlertType.Success, "Profil lagret");
-                return Show(model.PlayerId);
+                return Show(model.UrlName);
 
             }
             return PartialView("_Edit", model);

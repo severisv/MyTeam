@@ -33,16 +33,16 @@ module.exports = React.createClass({
 
     renderPlayerLink: function (actions, event, model) {
         if (event.playerId) {
-            var showPlayerUrl = model.showPlayerUrl + '/' + event.playerId
-            return (<a className="underline" href={showPlayerUrl}>{actions.getPlayerShortName(event.playerId)}</a>)
+            var showPlayerUrl = model.showPlayerUrl + '/' + actions.getPlayerUrlName(event.playerId);
+            return (<a className="underline" href={showPlayerUrl}>{actions.getPlayerShortName(event.playerId)}</a>);
         } else {
-            return (<span>{actions.getPlayerName(event.playerId)}</span>)
+            return (<span>{actions.getPlayerName(event.playerId)}</span>);
         }
     },
 
     renderAssist: function (event, actions, model) {
         if (event.assistedById) {
-            var showPlayerUrl = model.showPlayerUrl + '/' + event.assistedById
+            var showPlayerUrl = model.showPlayerUrl + '/' + actions.getPlayerUrlName(event.assistedById);
             return (<span className="no-wrap">( <i className="flaticon-football119"></i> <a className="underline" href={showPlayerUrl }>{actions.getPlayerShortName(event.assistedById)}</a> )</span>)
         }
     },

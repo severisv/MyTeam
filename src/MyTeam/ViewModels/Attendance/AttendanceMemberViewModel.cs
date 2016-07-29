@@ -6,7 +6,10 @@ namespace MyTeam.ViewModels.Attendance
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string UrlName { get; set; }
         public string Image { get; set; }
         public string FacebookId { get; set; }
+        
     }
+
 }

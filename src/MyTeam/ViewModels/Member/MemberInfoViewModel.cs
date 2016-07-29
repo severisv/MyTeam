@@ -7,6 +7,7 @@ namespace MyTeam.ViewModels.Member
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string UrlName { get; set; }
         public string Image { get; set; }
         public PlayerStatus Status { get; set; }
         public string Phone { get; set; }
@@ -14,5 +15,6 @@ namespace MyTeam.ViewModels.Member
         public string FacebookId { get; set; }
         public DateTime? BirthDate { get; set; }
         public string BirthYear => BirthDate?.Year.ToString() ?? "";
+       
     }
 }

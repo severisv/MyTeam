@@ -11,6 +11,7 @@ namespace MyTeam.ViewModels.Player
     public class PlayerStatsViewModel
     {
         public Guid PlayerId { get; }
+        public string UrlName { get; }
         public Guid TeamId { get; }
 
          public IEnumerable<GameEventViewModel> GameEvents { get; }

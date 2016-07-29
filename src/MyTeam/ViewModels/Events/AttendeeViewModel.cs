@@ -7,6 +7,7 @@ namespace MyTeam.ViewModels.Events
         public string UserName => Player?.UserName;
         public string FirstName => Player?.FirstName;
         public string LastName => Player?.LastName;
+        public string UrlName => Player?.UrlName;
         public AttendeePlayerViewModel Player { get; set; }
         public bool? IsAttending { get; set; }
         public bool IsSelected { get; }

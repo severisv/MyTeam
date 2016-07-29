@@ -163,6 +163,13 @@ module.exports = React.createClass({
         if (squad.length > 0) return squad[0].firstName + " " + squad[0].lastName;
         else return "Selvmål";
     },
+    getPlayerUrlName: function (playerId) {
+        var squad = this.state.squad.filter(function (player) {
+            return player.id == playerId
+        });
+        if (squad.length > 0) return squad[0].urlName;
+        else return "";
+    },
 
     getEventPlayers: function (type) {
         return type == 0 ?
@@ -182,18 +189,19 @@ module.exports = React.createClass({
             handleSubmit: this.handleSubmit,
             getPlayerName: this.getPlayerName,
             getPlayerShortName: this.getPlayerShortName,
+            getPlayerUrlName: this.getPlayerUrlName,
             deleteEvent: this.deleteEvent,
             getEventPlayers: this.getEventPlayers,
             removePlayerFromSquad: this.removePlayerFromSquad,
             getPlayersNotInSquad: this.getPlayersNotInSquad,
             addPlayer: this.addPlayer,
             handleAddPlayerChange: this.handleAddPlayerChange
-        }
+        };
 
         var eventsClassName = "col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1 u-fade-in";
-        if(this.state.loadingEvents) eventsClassName += " u-fade-in--hidden"
+        if (this.state.loadingEvents) eventsClassName += " u-fade-in--hidden"
         var playersClassName = "col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 u-fade-in";
-        if(this.state.loadingPlayers) playersClassName += " u-fade-in--hidden"
+        if (this.state.loadingPlayers) playersClassName += " u-fade-in--hidden"
         return (
             <div className="game-showEventsWrapper">
                  <div className="row">

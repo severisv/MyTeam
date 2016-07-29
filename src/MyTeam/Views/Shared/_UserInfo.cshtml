@@ -1,7 +1,7 @@
 ﻿@model UserMember
 
 <div class="login-image-wrapper">
-    <a title="@Model.FirstName" asp-controller="player" asp-action="show" asp-route-playerid="@Model.Id">
+    <a title="@Model.FirstName" asp-controller="player" asp-action="show" asp-route-name="@Model.UrlName">
         <img src="@Context.Cloudinary().MemberImage(Model.Image, Model.FacebookId, 40, 40)"/>
     </a>
 </div>

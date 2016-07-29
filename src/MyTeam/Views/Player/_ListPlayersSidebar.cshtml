@@ -17,7 +17,7 @@
                 {
                     <li>
                         <a class="ajax-link" data-ajax-update="#show-players"
-                           asp-controller="player" asp-action="show" asp-route-playerid="@player.Id">@player.Name()</a>
+                           asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">@player.Name()</a>
                     </li>
                 }
             </ul>

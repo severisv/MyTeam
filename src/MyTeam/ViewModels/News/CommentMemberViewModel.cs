@@ -6,6 +6,7 @@ namespace MyTeam.ViewModels.News
     {
         public string FullName { get; set; }
         public string ImageSmall { get; set; }
+        public string UrlName { get; set; }
         public Guid? Id { get; set; }
         public string FacebookId { get; set; }
 
@@ -19,6 +20,7 @@ namespace MyTeam.ViewModels.News
                 ImageSmall = member.Image;
                 Id = member.Id;
                 FacebookId = member.FacebookId;
+                UrlName = member.UrlName;
             }
         
         }

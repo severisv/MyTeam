@@ -14,7 +14,10 @@ namespace MyTeam.ViewModels.Stats
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public string UrlName { get; set; }
         public string Image { get; set; }
         public int Games { get; set; }
+
+      
     }
 }

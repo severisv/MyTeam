@@ -17,7 +17,7 @@ namespace MyTeam.Services.Domain
         void AddEmailToPlayer(string facebookId, string email);
         IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null);
         void TogglePlayerTeam(Guid teamId, Guid guid, string clubName);
-        ShowPlayerViewModel GetSingle(Guid playerId);
+        ShowPlayerViewModel GetSingle(string urlName);
         IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId);
         IEnumerable<PlayerStatsViewModel> GetStats(Guid playerId, IEnumerable<Guid> teamIds);
     }
