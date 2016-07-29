@@ -30,7 +30,6 @@ global.applyJsComponents = function () {
     applySlideDownMenuListeners();
 
     $(window).on("popstate", function (e) {
-        console.log("wadawawd")
         if (e.originalEvent.state !== null) {
             location.reload();
         }
