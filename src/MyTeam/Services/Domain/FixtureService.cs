@@ -9,28 +9,18 @@ using ScrapySharp.Extensions;
 
 namespace MyTeam.Services.Domain
 {
-    class TableService : ITableService
+    class FixtureService : IFixtureService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<TableService> _logger;
 
-        public TableService(ApplicationDbContext dbContext, ILogger<TableService> logger)
+        public FixtureService(ApplicationDbContext dbContext, ILogger<TableService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
-        
-        public void Update(Guid seasonId, string tableString)
-        {
-            var season = _dbContext.Seasons.Single(s => s.Id == seasonId);
-            season.TableString = tableString;
-            season.TableUpdated = DateTime.Now;
-            _dbContext.SaveChanges();
-        }
-
-      
-
-        public void RefreshTables()
+    
+        public void RefreshFixtures()
         {
             var now = DateTime.Now;
             var seasons = _dbContext.Seasons.Where(s => s.StartDate <= now && s.EndDate >= now && s.AutoUpdateTable && !string.IsNullOrWhiteSpace(s.TableSourceUrl)).ToList();
@@ -40,11 +30,10 @@ namespace MyTeam.Services.Domain
                 try
                 {
                     var tableString = ScrapeTable(season);
-                    Update(season.Id, tableString);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
+                    _logger.LogError("Feil ved oppdatering av kamper av tabell. SeasonId: " + season.Id, e);
                 }
             }
         }

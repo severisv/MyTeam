@@ -14,6 +14,7 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IRemedyRateService, RemedyRateService>();
             services.AddTransient<IFineService, FineService>();
+            services.AddTransient<IFixtureService, FixtureService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IGameEventService, GameEventService>();

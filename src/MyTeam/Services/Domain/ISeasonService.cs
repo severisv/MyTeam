@@ -9,6 +9,12 @@ namespace MyTeam.Services.Domain
         IEnumerable<SeasonViewModel> GetForTeam(Guid teamId);
         IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId);
         void Delete(Guid seasonId);
+        void Update(Guid seasonId, string name, bool autoUpdate, string sourceUrl, bool autoUpdateFixtures, string fixturesSourceUrl);
         void Update(Guid seasonId, string name, bool autoUpdate, string sourceUrl);
+
+        void CreateSeason(Guid teamId, int year, string name, bool autoUpdate, string sourceUrl, bool autoUpdateFixtures,
+            string fixturesSourceUrl);
+
+
     }
 }

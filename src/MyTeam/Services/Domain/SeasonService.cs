@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models;
+using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Services.Domain
@@ -52,12 +53,41 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public void Update(Guid seasonId, string name, bool autoupdateTable, string tableSourceUrl = "")
+        public void Update(Guid seasonId, string name, bool autoupdateTable, string tableSourceUrl, bool autoupdateFixtures, string fixturesSourceUrl)
         {
             var season = _dbContext.Seasons.Single(s => s.Id == seasonId);
             season.Name = name;
             season.AutoUpdateTable = autoupdateTable;
             season.TableSourceUrl = tableSourceUrl;
+            season.AutoUpdateFixtures = autoupdateFixtures;
+            season.FixturesSourceUrl = fixturesSourceUrl;
+            _dbContext.SaveChanges();
+        }
+
+        public void Update(Guid seasonId, string name, bool autoupdateTable, string tableSourceUrl)
+        {
+            var season = _dbContext.Seasons.Single(s => s.Id == seasonId);
+            season.Name = name;
+            season.AutoUpdateTable = autoupdateTable;
+            season.TableSourceUrl = tableSourceUrl;
+            _dbContext.SaveChanges();
+        }
+
+
+        public void CreateSeason(Guid teamId, int year, string name, bool autoUpdate, string sourceUrl, bool autoUpdateFixtures, string fixturesSourceUrl)
+        {
+            var season = new Season
+            {
+                TeamId = teamId,
+                Name = name,
+                StartDate = new DateTime(year, 01, 01),
+                EndDate = new DateTime(year, 12, 31, 23, 59, 59),
+                AutoUpdateTable = autoUpdate,
+                TableSourceUrl = sourceUrl,
+                AutoUpdateFixtures = autoUpdateFixtures,
+                FixturesSourceUrl = fixturesSourceUrl
+            };
+            _dbContext.Seasons.Add(season);
             _dbContext.SaveChanges();
         }
     }

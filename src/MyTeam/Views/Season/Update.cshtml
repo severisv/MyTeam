@@ -1,7 +1,7 @@
 ﻿@using System.Threading.Tasks
 @model MyTeam.ViewModels.Table.UpdateSeasonViewModel
 @{
-    ViewBag.Title = $"{Res.Update} {Res.Table.ToLower()}";
+    ViewBag.Title = $"{Res.Update} {Res.Season.ToLower()}";
 }
 
 <div class="mt-main">
@@ -11,16 +11,16 @@
             <h3 class="col-xs-5">&nbsp;<i class="flaticon-football43"></i>&nbsp;&nbsp;@Html.DisplayFor(m => m.Team)</h3>
             <h3 class="col-xs-6">&nbsp;<i class="fa fa-calendar"></i>&nbsp;&nbsp;@Html.DisplayFor(m => m.DisplayNameShort)</h3>
             <a class="btn btn-danger pull-right confirm-dialog"
-               asp-action="delete" asp-controller="season" asp-route-seasonId="@Model.SeasonId" title="@Res.Delete" data-message="@Res.ConfirmDelete"><i class="fa fa-trash"></i></a>
+               asp-action="delete" asp-route-seasonId="@Model.SeasonId" title="@Res.Delete" data-message="@Res.ConfirmDelete"><i class="fa fa-trash"></i></a>
             <div class="col-xs-12">
                 <hr />
-                <form class="update-table-form" asp-action="UpdateSeason"  method="post">
+                <form class="update-table-form" asp-action="UpdateSeason" method="post">
                     <input asp-for="SeasonId" type="hidden" />
                     <input asp-for="Team" type="hidden" />
                     <input asp-for="StartDate" type="hidden" />
-                    <input asp-for="EndDate" type="hidden" />
+                    <input asp-for="EndDate" type="hidden"/>
                     <div class="form-group clearfix col-xs-8 col-sm-4 no-padding">
-                        <input class="form-control" type="text" asp-for="Name" />
+                        <input class="form-control" type="text" asp-for="Name"/>
                     </div>
                     <br />
                     <div class="clearfix">
@@ -29,7 +29,7 @@
                     <div class="form-group clearfix">
                         <label asp-for="AutoUpdate" class="col-xs-4 no-padding control-label">
                             Oppdater tabell autom.&nbsp;&nbsp;
-                            <input asp-for="AutoUpdate" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateTableWrapper')" />
+                            <input asp-for="AutoUpdate" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateTableWrapper')"/>
                         </label>
                         <div class="col-xs-8 no-padding flex">
                             <div class="flex-2">
@@ -41,12 +41,28 @@
                         </div>
 
                     </div>
+                    <div class="form-group clearfix">
+                        <label asp-for="AutoUpdateFixtures" class="col-xs-4 no-padding control-label">
+                            Oppdater terminliste&nbsp;&nbsp;
+                            <input asp-for="AutoUpdateFixtures" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateFixturesWrapper')" />
+                        </label>
+                        <div class="col-xs-8 no-padding flex">
+                            <div class="flex-2">
+                                <span id="AutoUpdateFixturesWrapper" @(Model.AutoUpdateFixtures ? String.Empty : "hidden")>
+                                    <label class="col-xs-6 text-right">URL til terminliste på fotball.no</label>
+                                    <span class="col-xs-6 "><input class="form-control " asp-for="FixturesSourceUrl" type="text" /></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                
                     <br />
                     <div class="clearfix">
                         <br />
                     </div>
 
-                    <div class="form-group col-xs-12">
+                    <div class="form-group">
                         <div class="validation-red" asp-validation-summary="All"></div>
                         <button type="submit" class="btn btn-primary">@Res.Save</button>
                     </div>
@@ -54,31 +70,5 @@
             </div>
         </div>
     }
-
-
-    <div class="mt-container">
-        <div class="col-xs-12">
-            <form class="update-table-form" asp-action="Update" method="post">
-                <input asp-for="SeasonId" type="hidden" />
-                <input asp-for="Team" type="hidden" />
-                <input asp-for="StartDate" type="hidden" />
-                <input asp-for="EndDate" type="hidden" />
-                <input asp-for="Name" type="hidden" />
-                <h3>Manuell oppdatering:</h3>
-                <div class="form-group col-xs-12">
-                    <textarea asp-for="TableString" class="form-control update-table" placeholder="@Res.SubmitTable"></textarea>
-                </div>
-                <div class="form-group col-xs-12">
-                    @if (!string.IsNullOrWhiteSpace(Model.TableString))
-                    {
-                        <div class="validation-red" asp-validation-summary="All"></div>
-
-                    }
-                    <button type="submit" class="btn btn-primary">@Res.Save</button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
+  
 </div>
