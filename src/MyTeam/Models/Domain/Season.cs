@@ -28,5 +28,6 @@ namespace MyTeam.Models.Domain
         public string TableSourceUrl { get; set; }
         public bool AutoUpdateFixtures { get; set; }
         public string FixturesSourceUrl { get; set; }
+        public DateTime? FixturesUpdated { get; set; }
     }
 }

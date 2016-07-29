@@ -6,7 +6,7 @@
 <div class="mt-main">
     <div class="mt-container">
 
-        <form asp-action="CreateSeason" method="post" class="form-horizontal">
+        <form asp-action="Create" method="post" class="form-horizontal">
             @for (int i = 0; i < Model.Teams.Count(); i++)
             {
                 <input type="hidden" asp-for="Teams[i].Id" />
@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="AutoUpdate" class="col-xs-2 control-label"></label>
+                <label class="col-xs-2 control-label">Oppdater tabell automatisk&nbsp;&nbsp;</label>
                 <div class="col-xs-1">
                     <input asp-for="AutoUpdate" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateTableWrapper')" />
                     <span asp-validation-for="AutoUpdate" class="text-danger"></span>
@@ -53,7 +53,7 @@
 
             </div>
             <div class="form-group">
-                <label asp-for="AutoUpdateFixtures" class="col-xs-2 control-label"></label>
+                <label class="col-xs-2 control-label">Oppdater kamper automatisk&nbsp;&nbsp;</label>
                 <div class="col-xs-1">
                     <input asp-for="AutoUpdateFixtures" type="checkbox" class="form-control" onclick="window.checkbox.showHideAssociatedElement(this, '#AutoUpdateFixturesWrapper')" />
                     <span asp-validation-for="AutoUpdateFixtures" class="text-danger"></span>

@@ -92,13 +92,13 @@ namespace MyTeam.Controllers
                 Year = null,
             };
             if (teamId != null) model.TeamId = teamId.Value;
-            return View(model);
+            return View("Create", model);
         }
 
         [HttpPost]
         [Route("opprett")]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult CreateSeason(CreateSeasonViewModel model)
+        public IActionResult Create(CreateSeasonViewModel model)
         {
             if (ModelState.IsValid)
             {
