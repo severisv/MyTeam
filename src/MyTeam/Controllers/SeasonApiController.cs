@@ -19,7 +19,7 @@ namespace MyTeam.Controllers
         public void Refresh(Guid seasonId)
         {
 
-            //_tableService.RefreshTables();
+            _tableService.RefreshTables();
             _fixtureService.RefreshFixtures();
         }
 
