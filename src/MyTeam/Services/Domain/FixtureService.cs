@@ -73,7 +73,8 @@ namespace MyTeam.Services.Domain
             {
                 try
                 {
-                    result.Add(GetGame(tr, season.TeamId, season.Team.ClubId, season.Team.Name));
+                    var parsedGame = GetGame(tr, season.TeamId, season.Team.ClubId, season.Team.Name);
+                    if(parsedGame != null) result.Add(parsedGame);
                 }
                 catch (Exception e)
                 {
@@ -93,6 +94,9 @@ namespace MyTeam.Services.Domain
             var awayTeam = nodes[6];
             var isHomeTeam = teamName.Contains(homeTeam);
             var opponent = isHomeTeam ? awayTeam : homeTeam;
+
+            if(!(teamName.Contains(homeTeam) || teamName.Contains(awayTeam))) return null;
+
             return new Game
             {
                 Id = eventId,
