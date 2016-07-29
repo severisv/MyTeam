@@ -55,7 +55,9 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
+            services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
 
             services.AddLocalization();
             services.AddMvc();

@@ -1,9 +1,10 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam.ViewModels.News
 @model GetCommentsViewModel
-@foreach (var comment in Model.Comments)
-{
-    @Html.Partial("_Comment", comment)
-}
-
+<div id="article-commentswrapper">
+    @foreach (var comment in Model.Comments)
+    {
+        @Html.Partial("_Comment", comment)
+    }
+</div>
 @Html.Partial("_CommentForm")

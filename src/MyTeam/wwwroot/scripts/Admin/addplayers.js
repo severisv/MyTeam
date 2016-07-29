@@ -5,4 +5,4 @@ var addPlayers = React.createElement(window.AddPlayers);
 
 ReactDOM.render(addPlayers, document.getElementById("add-players"));
 
-
+window.mt_fb.login();

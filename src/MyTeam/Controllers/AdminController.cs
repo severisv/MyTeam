@@ -31,12 +31,7 @@ namespace MyTeam.Controllers
         [Route("spillerinvitasjon")]
         public IActionResult AddPlayers()
         {
-
-            var facebookAppId = _configuration["Authentication:Facebook:AppId"];
-
-            var model = new AddPlayersViewModel(facebookAppId);
-
-            return View(model);
+            return View();
         }
 
         [HttpPost]
