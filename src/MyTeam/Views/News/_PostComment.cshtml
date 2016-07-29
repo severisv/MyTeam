@@ -6,10 +6,10 @@
     <form asp-controller="News" asp-action="PostComment">
         <input type="hidden" asp-for="ArticleId"/>
 
-        @if (!Model.IsFacebookUser && !Context.UserIsMember())
+        @if (!Context.UserIsMember())
         {
             <span asp-validation-for="Name" class="text-danger"></span>
-            <input asp-for="Name" type="text" class="form-control comment-nameInput" placeholder="Navn" />
+            <input class="@(Model.IsFacebookUser ? "comment-facebookUserName" : "")"  asp-for="Name" type="@(Model.IsFacebookUser ? "hidden" : "text")" data-facebookid="@Model.FacebookId" placeholder="Navn" />
         }
         <span asp-validation-for="Content" class="text-danger"></span>
         <span id="comment-validation-text" class="text-danger"></span>

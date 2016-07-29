@@ -11,6 +11,7 @@ namespace MyTeam.ViewModels.News
         public Guid ArticleId { get; set; }
 
         public bool IsFacebookUser { get; set; }
+        public string FacebookId { get; set; }
 
         [Display(Name = "Navn")]
         public string Name { get; set; }

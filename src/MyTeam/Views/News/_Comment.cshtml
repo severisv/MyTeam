@@ -28,8 +28,8 @@
         }
         else if (!string.IsNullOrWhiteSpace(Model.AuthorFacebookId))
         {
-            <a class="comment-author comment-facebookauthor" data-facebookid="@Model.AuthorFacebookId"  href="https://www.facebook.com/@Model.AuthorFacebookId">
-                <i class="fa fa-user"></i>
+            <a class="comment-author">
+                @Model.AuthorName
             </a>
         }
         else

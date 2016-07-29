@@ -4,7 +4,7 @@ var commentUrl = commentsContainer.data('getCommentsUrl');
 $.get(commentUrl, function (data) {
     commentsContainer.html(data);
     applyCommentFormSubmitListener();
-    setFacebookNames($('body'));
+    getFacebookName();
 });
 
 function applyCommentFormSubmitListener () {
@@ -37,39 +37,38 @@ function applyCommentFormSubmitListener () {
                 form.find('.submitText').show();
                 button.attr('disabled', false);
                 $('#article-commentswrapper').append(response);
-                setFacebookNames($('.comment-contentContainer:last-of-type'));
-
              });
         }
     });
 }
 
-function setFacebookNames ($scope) {
+function getFacebookName () {
+
+    if (!$('.comment-facebookUserName').length > 0) {
+        return;
+    }
+
     if (!window.mt_fb.isLoaded) {
         setTimeout(function () {
-            setFacebookNames($scope);
+            getFacebookName();
         }, 10);
     } else if (!window.mt_fb.accessToken && !window.mt_fb.userIsUnavailable) {
         window.mt_fb.aquireUserToken();
         setTimeout(function () {
-            setFacebookNames($scope);
+            getFacebookName();
         }, 10);
     } else if (window.mt_fb.userIsUnavailable) {
         return;
     } else {
-        $scope.find('.comment-facebookauthor').each(function (i, element) {
-            var $element = $(element);
-            var url = window.mt_fb.getUserUrl($element.data('facebookid'));
-            if (url) {
-                $.getJSON(url.url, {
-                    access_token: url.accessToken,
-                    fields: 'name'
-                }).then(function (data) {
-                    if (data.name) {
-                        $element.html(data.name);
-                    }
-                });
-            }
-        });
+        var $element = $('.comment-facebookUserName');
+        var url = window.mt_fb.getUserUrl($element.data('facebookid'));
+        if (url) {
+            $.getJSON(url.url, {
+                access_token: url.accessToken,
+                fields: 'name'
+            }).then(function (data) {
+                    $element.val(data.name);
+            });
+        }
     }
 }
