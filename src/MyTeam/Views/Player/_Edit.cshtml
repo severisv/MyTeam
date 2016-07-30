@@ -89,4 +89,6 @@
 @if (Context.Request.IsAjaxRequest())
 {
     @Html.Partial("_Alerts")
+    @await Component.InvokeAsync("CloudinaryScripts")
+
 }
