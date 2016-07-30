@@ -207,35 +207,49 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public ShowPlayerViewModel GetSingle(string name)
+        public ShowPlayerViewModel GetSingle(Guid clubId, string name)
         {
+            var query = _dbContext.Players.Where(p => p.UrlName == name.ToLower() && p.ClubId == clubId);
+            return GetPlayer(query);
+        }
+
+        public ShowPlayerViewModel GetSingle(Guid playerId)
+        {
+            var query = _dbContext.Players.Where(p => p.Id == playerId);
+            return GetPlayer(query);
+        }
+        private ShowPlayerViewModel GetPlayer(IQueryable<Player> query)
+        {
+            var player = query.Select(p => new ShowPlayerViewModel
+            {
+                Id = p.Id,
+                BirthDate = p.BirthDate,
+                FirstName = p.FirstName,
+                MiddleName = p.MiddleName,
+                LastName = p.LastName,
+                UserName = p.UserName,
+                StartDate = p.StartDate,
+                Phone = p.Phone,
+                ImageFull = p.ImageFull,
+                PositionsString = p.PositionsString,
+                FacebookId = p.FacebookId,
+                Status = p.Status,
+                UrlName = p.UrlName
+            }).Single();
+
             var now = DateTime.Now;
-            var player = _dbContext.Players.Where(p => p.UrlName == name.ToLower())
-                .Select(p => new ShowPlayerViewModel
-                {
-                    Id = p.Id,
-                    BirthDate = p.BirthDate,
-                    FirstName = p.FirstName,
-                    MiddleName = p.MiddleName,
-                    LastName = p.LastName,
-                    UserName = p.UserName,
-                    StartDate = p.StartDate,
-                    Phone = p.Phone,
-                    ImageFull = p.ImageFull,
-                    PositionsString = p.PositionsString,
-                    FacebookId = p.FacebookId,
-                    Status = p.Status,
-                    UrlName = p.UrlName
-                }).Single();
 
             var practiceCount =
-                _dbContext.EventAttendances.Count(e => e.MemberId == player.Id && e.DidAttend && e.Event.DateTime.Year == now.Year);
+                _dbContext.EventAttendances.Count(
+                    e => e.MemberId == player.Id && e.DidAttend && e.Event.DateTime.Year == now.Year);
 
             player.PracticeCount = practiceCount;
 
             return player;
         }
-        
+
+
+
         public IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return

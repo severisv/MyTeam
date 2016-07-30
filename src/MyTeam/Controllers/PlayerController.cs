@@ -36,7 +36,7 @@ namespace MyTeam.Controllers
         [Route("vis/{name?}")]
         public IActionResult Show(string name)
         {
-            var selectedPlayer = _playerService.GetSingle(name);
+            var selectedPlayer = _playerService.GetSingle(Club.Id, name);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);
@@ -56,14 +56,14 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("endre/{name}")]
+        [Route("endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
-        public IActionResult Edit(string name, bool filterRedirect = false)
+        public IActionResult Edit(Guid playerId, bool filterRedirect = false)
         {
             if(filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
-            var selectedPlayer = _playerService.GetSingle(name);
+            var selectedPlayer = _playerService.GetSingle(playerId);
 
             if (Request.IsAjaxRequest())
             {
