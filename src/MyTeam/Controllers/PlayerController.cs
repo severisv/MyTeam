@@ -36,6 +36,14 @@ namespace MyTeam.Controllers
         [Route("vis/{name?}")]
         public IActionResult Show(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) return RedirectToAction("NotFoundAction", "Error");
+
+            Guid playerId;
+            if(Guid.TryParse(name, out playerId)) {
+                var player = _playerService.GetSingle(playerId);
+                return RedirectToAction("Show", new {name = player.UrlName});
+            }
+
             var selectedPlayer = _playerService.GetSingle(Club.Id, name);
             if (Request.IsAjaxRequest())
             {
