@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services.Composition;
 using MyTeam.Settings;
+using MyTeam.Filters;
 
 namespace MyTeam
 {
@@ -60,7 +61,7 @@ namespace MyTeam
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
 
             services.AddLocalization();
-            services.AddMvc();
+            services.AddMvc(setup => { setup.ConfigureFilters(); });
 
             services.AddSingleton(Configuration);
             services.RegisterDependencies();
@@ -115,8 +116,6 @@ namespace MyTeam
                     AppSecret = Configuration["Authentication:Facebook:AppSecret"]
                 });
 
-
-                app.LoadTenantData();
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(

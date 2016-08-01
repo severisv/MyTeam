@@ -10,6 +10,5 @@ namespace MyTeam.Pipeline
     {
         public const string MemberKey = "member";
         public const string ClubKey = "club";
-      
     }
 }

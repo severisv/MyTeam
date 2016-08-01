@@ -4,7 +4,6 @@ using MyTeam.Models.Enums;
 
 namespace MyTeam.Controllers
 {
-   [HandleError]
     public class BaseController : Controller
     {
        
