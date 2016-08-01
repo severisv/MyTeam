@@ -41,8 +41,16 @@ namespace MyTeam
         {
             try
             {
-                var dateArray = str.Split('.');
-                return new DateTime(int.Parse(dateArray[2]), int.Parse(dateArray[1]), int.Parse(dateArray[0]));
+                DateTime date;
+                var success = DateTime.TryParse(str, out date);
+
+                if (!success)
+                {
+                    var dateArray = str.Split('.');
+                    date = new DateTime(int.Parse(dateArray[2]), int.Parse(dateArray[1]), int.Parse(dateArray[0]));
+                }
+                return date;
+
             }
             catch (Exception)
             {
