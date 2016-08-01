@@ -14,6 +14,7 @@ namespace MyTeam.Models.Domain
         public string MiddleName { get; set; }
         [Required]
         public string LastName { get; set; }
+        public string UrlName { get; set; }
         [Required]
         public Guid ClubId { get; set; }
 

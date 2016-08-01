@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
+using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
@@ -30,7 +32,7 @@ namespace MyTeam.Services.Domain
                 new ArticleViewModel
                 {
                     Name = a.Name,
-                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
+                    Author = new MemberViewModel { Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
                     AuthorId = a.AuthorId,
                     Headline = a.Headline,
                     Content = a.Content,
@@ -44,19 +46,31 @@ namespace MyTeam.Services.Domain
 
         public ArticleViewModel Get(Guid clubId, string name)
         {
-            return _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId).Select(a =>
-                new ArticleViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Author = new MemberViewModel { Fullname = a.Author.Fullname },
-                    AuthorId = a.AuthorId,
-                    Headline = a.Headline,
-                    Content = a.Content,
-                    ImageUrl = a.ImageUrl,
-                    Published = a.Published,
-                    CommentCount = (int)a.Comments.Count()
-        }).Single();
+            var query = _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId);
+                
+            var result = Select(query);
+
+            return result.First();
+        }
+
+        private static IQueryable<ArticleViewModel> Select(IQueryable<Article> query)
+        {
+            var result = query
+                .Select(a =>
+                    new ArticleViewModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Author = new MemberViewModel {Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
+                        AuthorId = a.AuthorId,
+                        Headline = a.Headline,
+                        Content = a.Content,
+                        ImageUrl = a.ImageUrl,
+                        Published = a.Published,
+                        GameId = a.GameId,
+                        CommentCount = (int) a.Comments.Count()
+                    });
+            return result;
         }
 
         public PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take)
@@ -101,8 +115,9 @@ namespace MyTeam.Services.Domain
                     AuthorId = authorId,
                     Content = model.Content,
                     ImageUrl = model.ImageUrl,
-                    Published = DateTime.Now
-                };
+                    Published = DateTime.Now,
+                    GameId = model.IsMatchReport ? model.GameId : null
+            };
                 _dbContext.Add(newArticle);
                 _dbContext.SaveChanges();
 
@@ -114,6 +129,7 @@ namespace MyTeam.Services.Domain
                 article.Content = model.Content;
                 article.ImageUrl = model.ImageUrl;
                 article.Headline = model.Headline;
+                article.GameId = model.IsMatchReport ? model.GameId : null;
                 _dbContext.SaveChanges();
             }
             return article.Name;
@@ -145,33 +161,46 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<CommentViewModel> GetComments(Guid articleId)
         {
-            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId);
+            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId).Include(c => c.Member).ToList();
             return query.Select(a =>
                 new CommentViewModel(
-                    new CommentMemberViewModel(a.Member.Fullname, a.Member.ImageFull, a.MemberId, a.Member.FacebookId),
-                    articleId, a.Date, a.Content)).ToList().OrderBy(c => c.Date);
+                    new CommentMemberViewModel(a.Member), 
+                    articleId, a.Date, a.Content, a.AuthorName, a.AuthorFacebookId, a.AuthorUserName))
+                    .ToList().OrderBy(c => c.Date);
         }
 
-        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId)
+        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId, string facebookId, string name, string userName)
         {
-
-
             var comment = new Comment
             {
                 ArticleId = articleId,
                 Content = content,
-                MemberId = memberId,
+                MemberId = memberId != Guid.Empty ? (Guid?)memberId : null,
                 Date = DateTime.Now,
+                AuthorFacebookId = facebookId,
+                AuthorName = name,
+                AuthorUserName = userName,
             };
 
             _dbContext.Comments.Add(comment);
             _dbContext.SaveChanges();
 
-            var member =_dbContext.Members.Where(m => m.Id == memberId)
-                    .Select(m => new CommentMemberViewModel(m.Fullname, m.ImageFull, m.Id, m.FacebookId))
-                    .Single();
-            
-            return new CommentViewModel(member, articleId, comment.Date, content);
+            var memberEntity =_dbContext.Members.FirstOrDefault(m => m.Id == memberId);
+           var member = new CommentMemberViewModel(memberEntity);
+            return new CommentViewModel(member, articleId, comment.Date, content, name, facebookId, userName);
+        }
+
+        public IEnumerable<SimpleGame> GetGames(DateTime date)
+            =>
+                _dbContext.Games.Where(g => g.DateTime <= date && g.DateTime >= date.AddDays(-14))
+                    .OrderByDescending(g => g.DateTime)
+                    .Select(g => new SimpleGame(g.Id, g.Team.ShortName, g.Opponent)).ToList();
+
+        public ArticleViewModel GetMatchReport(Guid gameId)
+        {
+            var query = _dbContext.Articles.Where(a => a.GameId == gameId);
+            var result = Select(query);
+            return result.FirstOrDefault();
         }
     }
     

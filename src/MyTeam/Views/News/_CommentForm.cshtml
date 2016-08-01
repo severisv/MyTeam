@@ -1,15 +1,17 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
 @using MyTeam.ViewModels.News
-@model Guid
-@if (Context.UserIsMember())
+@model GetCommentsViewModel
+@if (User.Identity.IsAuthenticated)
 {
     @Html.Partial("_PostComment", new PostCommentViewModel
     {
-        ArticleId = Model
+        ArticleId = Model.ArticleId,
+        FacebookId = Model.FacebookId,
+        IsFacebookUser = !string.IsNullOrWhiteSpace(Model.FacebookId)
     })
 }
 else
 {
-    <p class="text-info"><i class="fa fa-info"></i> Kun medlemmer kan kommentere</p>
+    <p class="text-info"><i class="fa fa-info"></i> Du må <a asp-controller="account" asp-action="login">logge inn</a> for å kommentere</p>
 }

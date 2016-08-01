@@ -23,6 +23,7 @@
             </div>*@
         <input asp-for="PlayerId" type="hidden" />
         <input asp-for="ImageFull" type="hidden" />
+        <input asp-for="UrlName" type="hidden" />
         <div class="preview"></div>
         <div class="form-group">
             <label asp-for="FirstName"></label>
@@ -88,4 +89,6 @@
 @if (Context.Request.IsAjaxRequest())
 {
     @Html.Partial("_Alerts")
+    @await Component.InvokeAsync("CloudinaryScripts")
+
 }

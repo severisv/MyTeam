@@ -1,4 +1,6 @@
-﻿module.exports = React.createClass({
+﻿var React = require('react');
+
+module.exports = React.createClass({
 
     render: function () {
         var model = this.props.model;
@@ -10,8 +12,7 @@
                <div className="col-sm-9">
                    <select className="form-control" onChange={actions.handleAddPlayerChange}>
                        {actions.getPlayersNotInSquad().map(function (player) {
-                           return (
-                                   <option key={player.Id} value={player.Id}>{player.FullName}</option>);
+                           return (<option key={player.id} value={player.id}>{player.fullName}</option>);
                        })}
                    </select>
                     </div>

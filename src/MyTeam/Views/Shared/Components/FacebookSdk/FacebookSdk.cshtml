@@ -1,9 +1,9 @@
-﻿@model string
+﻿@model FacebookOpts
 
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '@Model',
+      appId      : '@Model.AppId',
       xfbml      : true,
       version    : 'v2.5'
     });

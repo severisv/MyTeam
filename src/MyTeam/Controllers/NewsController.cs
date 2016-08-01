@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
@@ -16,11 +18,13 @@ namespace MyTeam.Controllers
      
         private readonly IArticleService _articleService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NewsController(IArticleService articleService, ApplicationDbContext dbContext)
+        public NewsController(IArticleService articleService, ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _articleService = articleService;
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
 
@@ -28,6 +32,7 @@ namespace MyTeam.Controllers
         [Route("nyheter/{skip:int?}/{take:int?}")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
+            var user = User;
             var model = _articleService.Get(HttpContext.GetClub().Id, skip, take);
             ViewBag.MetaDescription = _dbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
             return View("Index", model);
@@ -47,12 +52,23 @@ namespace MyTeam.Controllers
             return RedirectToAction("Show", new {name = article.Name});
         }
 
+        [Route(BaseRoute + "kamprapport/{gameId}")]
+        public IActionResult MatchReport(Guid gameId)
+        {
+            var model = _articleService.GetMatchReport(gameId);
+            ViewBag.IsMatchReport = true;
+            return PartialView("MatchReport", model);
+        }
+
 
         [Route(BaseRoute+"ny")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Create()
         {
-            var model = new EditArticleViewModel();
+            var model = new EditArticleViewModel
+            {
+                Games = _articleService.GetGames(DateTime.Now)
+            };
             return View("Edit", model);
         }
 
@@ -61,7 +77,8 @@ namespace MyTeam.Controllers
         public IActionResult Edit(string navn)
         {
             var article = _articleService.Get(Club.Id, navn);
-            var model = new EditArticleViewModel(article);
+            var games = _articleService.GetGames(article.Published);
+            var model = new EditArticleViewModel(article, games);
             return View(model);
         }
 
@@ -75,6 +92,7 @@ namespace MyTeam.Controllers
                 var name = _articleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
                 return RedirectToAction("Show", new { name = name});
             }
+            model.Games = _articleService.GetGames(model.Published ?? DateTime.Now);
             return View("Edit", model);
 
         }
@@ -93,13 +111,14 @@ namespace MyTeam.Controllers
         }
 
         [Route(BaseRoute + "kommenter")]
-        [RequireMember]
         [HttpPost]
+        [Authorize]
         public IActionResult PostComment(PostCommentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var comment = _articleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id);
+               var facebookId = GetFacebookId();
+                var comment = _articleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id, facebookId, model.Name, User.Identity.Name);
                 return PartialView("_GetComment", comment);
             }
             return Content("");
@@ -108,8 +127,24 @@ namespace MyTeam.Controllers
         public PartialViewResult GetComments(Guid articleId)
         {
             var comments = _articleService.GetComments(articleId);
-            return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId));
+
+            var facebookId = GetFacebookId();
+
+            return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId, facebookId));
         }
 
+        private string GetFacebookId()
+        {
+            string facebookId = null;
+            if (User.Identity.IsAuthenticated && !CurrentMember.Exists)
+            {
+                var user = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+                facebookId =
+                    _dbContext.UserLogins.Where(u => u.LoginProvider == "Facebook" && u.UserId == user.Id)
+                        .Select(u => u.ProviderKey)
+                        .FirstOrDefault();
+            }
+            return facebookId;
+        }
     }
 }

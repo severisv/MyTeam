@@ -1,4 +1,6 @@
-﻿module.exports = React.createClass({
+﻿var React = require('react');
+
+module.exports = React.createClass({
 
     getInitialState: function () {
         return ({
@@ -40,18 +42,18 @@
                 facebookid: user.id,
                 emailAddress: user.email
             }).then(function (data) {
-                if (data.SuccessMessage == "facebookAdd") {
+                if (data.successMessage == "facebookAdd") {
                     var ids = that.state.existingIds;
                     ids.push(user.id);
                     that.setState({
                         existingIds: ids
                     });
-                } else if (data.SuccessMessage) {
+                } else if (data.successMessage) {
                     that.setState({ validationMessage: "" });
-                    mt.alert("success", data.SuccessMessage);
+                    mt.alert("success", data.successMessage);
                     that.clearEmailForm();
-                } else if (data.ValidationMessage) {
-                    that.setState({ validationMessage: data.ValidationMessage });
+                } else if (data.validationMessage) {
+                    that.setState({ validationMessage: data.validationMessage });
                 }
             });
         }

@@ -1,7 +1,7 @@
 ﻿@using System.Linq
 @using System.Threading.Tasks
 @using MyTeam
-@model MyTeam.ViewModels.Events.EventViewModel
+@model MyTeam.ViewModels.Events.SignupDetailsViewModel
 
 <div id="event-signupDetails-@Model.Id">
     @if (!Model.SignupHasClosed())
@@ -39,28 +39,33 @@
         {
             if (Model.Type == EventType.Trening)
             {
-                <div id="signups-@Model.Id" class="signups-training-hasPassed">
-                    <div class="attendee-links">
-                        <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
-                            <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
-                        </a>
-                    </div>
-                    <div class="panel">
-                        <div id="attendees-@Model.Id" class="panel-collapse collapse">
-                            <div class="flex event-attendees">
-                                <ul class="list-unstyled flex-2">
-                                    @foreach (var player in Model.DidAttend)
-                                    {
-                                        <li>
-                                            <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="fa fa-user"></i>&nbsp;
-                                                <span>@player.FirstName</span><span>&nbsp;@player.LastName</span></a>
-                                        </li>
-                                    }
-                                </ul>
+                if (!Model.Voluntary)
+                {
+                    <div id="signups-@Model.Id" class="signups-training-hasPassed">
+                        <div class="attendee-links">
+                            <a class="flex collapsed" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="false" data-parent="#signups-@Model.Id">
+                                <span class="flex-2">Oppmøte (@(Model.DidAttend?.Count() ?? 0))</span>
+                            </a>
+                        </div>
+                        <div class="panel">
+                            <div id="attendees-@Model.Id" class="panel-collapse collapse">
+                                <div class="flex event-attendees">
+                                    <ul class="list-unstyled flex-2">
+                                        @foreach (var player in Model.DidAttend)
+                                        {
+                                            <li>
+                                                <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
+                                                    <i class="fa fa-user"></i>&nbsp;
+                                                    <span>@player.FirstName</span><span>&nbsp;@player.LastName</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
         }
         else
@@ -82,7 +87,7 @@
                                 @foreach (var player in Model.Attending)
                                 {
                                     <li>
-                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span>
                                             <span class="hidden-xs">@player.LastName</span>
@@ -100,7 +105,7 @@
                                 @foreach (var player in Model.NotAttending)
                                 {
                                     <li>
-                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId">
+                                        <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
                                             <i class="fa fa-user"></i>&nbsp;
                                             <span>@player.FirstName</span>
                                             <span class="hidden-xs">@player.LastName</span>
@@ -121,15 +126,16 @@
     }
     else if (Model.IsPublished)
     {
+        var isExpanded = !Model.HasPassed();
         <div id="signups-@Model.Id">
             <div class="attendee-links attendee-links--game">
-                <a class="flex " role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="true" data-parent="#signups-@Model.Id">
+                <a class="flex @(isExpanded ? "" : "collapsed")" role="button" data-toggle="collapse" href="#attendees-@Model.Id" aria-expanded="@isExpanded" data-parent="#signups-@Model.Id">
                     <span class="flex-2">Tropp (@(Model.Squad?.Count() ?? 0))</span>
                     <span class="flex-1 pull-right">&nbsp;</span>
                 </a>
             </div>
             <div class="panel">
-                <div id="attendees-@Model.Id" class="panel-collapse collapse in">
+                <div id="attendees-@Model.Id" class="panel-collapse collapse @(isExpanded ? "in" : "")">
                     <hr class="sm"/>
                     <div class="flex event-attendees game">
 
@@ -137,7 +143,7 @@
                             @foreach (var player in Model.Squad)
                             {
                                 <li>
-                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-playerId="@player.MemberId"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>

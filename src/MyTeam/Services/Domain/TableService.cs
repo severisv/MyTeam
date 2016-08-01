@@ -28,20 +28,7 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public void CreateSeason(Guid teamId, int year, string name, bool autoUpdate, string sourceUrl = "")
-        {
-            var season = new Season
-            {
-                TeamId = teamId,
-                Name = name,
-                StartDate = new DateTime(year, 01, 01),
-                EndDate = new DateTime(year, 12, 31, 23,59,59),
-                AutoUpdateTable = autoUpdate,
-                TableSourceUrl = sourceUrl
-            };
-            _dbContext.Seasons.Add(season);
-            _dbContext.SaveChanges();
-        }
+      
 
         public void RefreshTables()
         {

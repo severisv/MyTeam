@@ -13,7 +13,7 @@ namespace MyTeam.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")
+                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -166,6 +166,7 @@ namespace MyTeam.Migrations
                         .HasName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
+                        .IsUnique()
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
@@ -201,7 +202,8 @@ namespace MyTeam.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("GameId")
+                        .IsUnique();
 
                     b.ToTable("Article");
                 });
@@ -239,7 +241,7 @@ namespace MyTeam.Migrations
 
                     b.Property<Guid>("ArticleId");
 
-                    b.Property<string>("AuthorImage");
+                    b.Property<string>("AuthorFacebookId");
 
                     b.Property<string>("AuthorName");
 
@@ -433,6 +435,8 @@ namespace MyTeam.Migrations
 
                     b.Property<DateTime?>("StartDate");
 
+                    b.Property<string>("UrlName");
+
                     b.Property<string>("UserName");
 
                     b.HasKey("Id");
@@ -501,9 +505,15 @@ namespace MyTeam.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("AutoUpdateFixtures");
+
                     b.Property<bool>("AutoUpdateTable");
 
                     b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("FixturesSourceUrl");
+
+                    b.Property<DateTime?>("FixturesUpdated");
 
                     b.Property<string>("Name");
 
@@ -585,7 +595,7 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
-                        .WithMany()
+                        .WithMany("Claims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -593,7 +603,7 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("MyTeam.Models.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -601,7 +611,7 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("MyTeam.Models.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -609,145 +619,145 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyTeam.Models.ApplicationUser")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Member", "Author")
+                        .WithMany("Articles")
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("MyTeam.Models.Domain.Club")
+                    b.HasOne("MyTeam.Models.Domain.Club", "Club")
                         .WithMany()
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Game")
-                        .WithOne()
+                    b.HasOne("MyTeam.Models.Domain.Game", "Game")
+                        .WithOne("Report")
                         .HasForeignKey("MyTeam.Models.Domain.Article", "GameId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Comment", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Article")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Article", "Article")
+                        .WithMany("Comments")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Member", "Member")
+                        .WithMany("Comments")
                         .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Club")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Club", "Club")
+                        .WithMany("Events")
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Event")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Event", "Event")
+                        .WithMany("Attendees")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Member", "Member")
+                        .WithMany("EventAttendances")
                         .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventTeam", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Event")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Event", "Event")
+                        .WithMany("EventTeams")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Team")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
+                        .WithMany("EventTeams")
                         .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Fine", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Member")
+                    b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.RemedyRate")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.RemedyRate", "Rate")
+                        .WithMany("Fines")
                         .HasForeignKey("RemedyRateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Player")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Player", "AssistedBy")
+                        .WithMany("Assists")
                         .HasForeignKey("AssistedById");
 
-                    b.HasOne("MyTeam.Models.Domain.Game")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Game", "Game")
+                        .WithMany("GameEvents")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Player")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Player", "Player")
+                        .WithMany("GameEvents")
                         .HasForeignKey("PlayerId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
                 {
                     b.HasOne("MyTeam.Models.Domain.Club")
-                        .WithMany()
+                        .WithMany("Members")
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.MemberTeam", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Member")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Member", "Member")
+                        .WithMany("MemberTeams")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyTeam.Models.Domain.Team")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
+                        .WithMany("MemberTeams")
                         .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Team")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
+                        .WithMany("Seasons")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Club")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Club", "Club")
+                        .WithMany("Teams")
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Team")
-                        .WithMany()
+                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
+                        .WithMany("Games")
                         .HasForeignKey("TeamId");
                 });
         }

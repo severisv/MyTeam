@@ -51,7 +51,7 @@ namespace MyTeam.Controllers
             var year = aar ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
             
             var games = _gameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
-            var model = new GamesViewModel(seasons, teams, year, games, team);
+            var model = new GamesViewModel(seasons, teams, year, games, team, teamId);
 
             return View("Index", model);
         }

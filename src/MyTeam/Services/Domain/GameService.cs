@@ -140,20 +140,19 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<PlayerViewModel> GetSquad(Guid gameId)
-        {
-            return _dbContext.EventAttendances.Where(e => e.EventId == gameId && e.IsSelected)
+        public IEnumerable<PlayerViewModel> GetSquad(Guid gameId) =>
+             _dbContext.EventAttendances.Where(e => e.EventId == gameId && e.IsSelected)
                     .Select(g => new PlayerViewModel
                     {
                         Id = g.Member.Id,
                         FirstName = g.Member.FirstName,
                         MiddleName = g.Member.MiddleName,
                         LastName = g.Member.LastName,
-                        FullName = g.Member.Fullname
+                        FullName = g.Member.Fullname,
+                        UrlName = g.Member.UrlName
                     })
                     .ToList()
                     .OrderBy(p => p.FullName);
-        }
 
         public void AddGames(List<ParsedGame> games, Guid clubId)
         {

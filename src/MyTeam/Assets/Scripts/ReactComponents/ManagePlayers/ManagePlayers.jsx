@@ -1,7 +1,7 @@
-﻿"use strict";
+﻿var React = require('react');
 
 module.exports = React.createClass({
-         
+
     getInitialState: function () {
         return ({
             players: [],
@@ -9,15 +9,15 @@ module.exports = React.createClass({
         });
     },
 
-    componentWillMount: function(){
-      this.routes = Routes,
-      this.options = {
-          playerStatus: PlayerStatus,
-          playerRoles: PlayerRoles
-      }
+    componentWillMount: function () {
+        this.routes = Routes,
+        this.options = {
+            playerStatus: PlayerStatus,
+            playerRoles: PlayerRoles
+        };
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         var that = this;
         $.getJSON(that.routes.GET_PLAYERS).then(function (response) {
             that.setState({
@@ -34,16 +34,16 @@ module.exports = React.createClass({
 
     togglePlayerRole: function (player, role) {
         var that = this;
-        $.post(that.routes.TOGGLE_PLAYER_ROLE, { Id: player.Id, Role: role }).then(function (response) {
-            if (response.Success) {
+        $.post(that.routes.TOGGLE_PLAYER_ROLE, { Id: player.id, Role: role }).then(function (response) {
+            if (response.success) {
                 var players = that.state.players;
                 for (var i in that.state.players) {
-                    if (players[i].Id == player.Id) {
-                        var index = players[i].Roles.indexOf(role);
+                    if (players[i].id == player.id) {
+                        var index = players[i].roles.indexOf(role);
                         if (index > -1) {
-                            that.state.players[i].Roles.splice(index, 1);
+                            that.state.players[i].roles.splice(index, 1);
                         } else {
-                            that.state.players[i].Roles.push(role);
+                            that.state.players[i].roles.push(role);
                         }
                     }
                 }
@@ -53,12 +53,12 @@ module.exports = React.createClass({
     },
     setPlayerStatus: function (player, status) {
         var that = this;
-        $.post(that.routes.SET_PLAYER_STATUS, { Id: player.Id, Status: status }).then(function (response) {
-            if (response.Success) {
+        $.post(that.routes.SET_PLAYER_STATUS, { Id: player.id, Status: status }).then(function (response) {
+            if (response.success) {
                 var players = that.state.players;
                 for (var i in that.state.players) {
-                    if (players[i].Id == player.Id) {
-                        that.state.players[i].Status = status;
+                    if (players[i].id == player.id) {
+                        that.state.players[i].status = status;
                     }
                 }
             }
@@ -66,21 +66,19 @@ module.exports = React.createClass({
         });
 
     },
-    
-    toggleTeam: function (teamId, playerId) {
 
+    toggleTeam: function (teamId, playerId) {
         var that = this;
         $.post(that.routes.TOGGLE_PLAYER_TEAM, { PlayerId: playerId, TeamId: teamId }).then(function (response) {
-            if (response.Success) {
+            if (response.success) {
                 var players = that.state.players;
                 for (var i in that.state.players) {
-                    if (players[i].Id == playerId) {
-                        var teamIds = that.state.players[i].TeamIds;
+                    if (players[i].id == playerId) {
+                        var teamIds = that.state.players[i].teamIds;
                         if (teamIds.indexOf(teamId) > -1) {
-                            that.state.players[i].TeamIds = teamIds.filter(function (element) { return element != teamId; });
-                        }
-                        else {
-                            that.state.players[i].TeamIds.push(teamId);
+                            that.state.players[i].teamIds = teamIds.filter(function (element) { return element != teamId; });
+                        } else {
+                            that.state.players[i].teamIds.push(teamId);
                         }
                     }
                 }
@@ -89,13 +87,13 @@ module.exports = React.createClass({
         });
 
     },
-    
+
     renderPlayers: function (playerStatus) {
         if (!this.state.players) return "";
 
-        var players = this.state.players.filter(function(player) {
-            if (player.Status == playerStatus) {
-                return (player)
+        var players = this.state.players.filter(function (player) {
+            if (player.status == playerStatus) {
+                return (player);
             }
         });
 
@@ -105,12 +103,12 @@ module.exports = React.createClass({
         var setPlayerStatus = this.setPlayerStatus;
         var togglePlayerRole = this.togglePlayerRole;
         var toggleTeam = this.toggleTeam;
-        var playerElements = players.map(function(player, i) {
-            return (<ManagePlayer key={player.Id} player={player} setPlayerStatus={setPlayerStatus} togglePlayerRole={togglePlayerRole} options={options} routes={routes} teams={teams} toggleTeam={toggleTeam} />)
+        var playerElements = players.map(function (player, i) {
+            return (<ManagePlayer key={player.id} player={player} setPlayerStatus={setPlayerStatus} togglePlayerRole={togglePlayerRole} options={options} routes={routes} teams={teams} toggleTeam={toggleTeam} />)
         });
 
         var teamElements = teams.map(function (team, i) {
-            return (<div key={team.Id} className="col-sm-1  col-xs-2 no-padding subheadline align-center">{team.ShortName}</div>)
+            return (<div key={team.id} className="col-sm-1  col-xs-2 no-padding subheadline align-center">{team.shortName}</div>);
         });
 
         return (<div className="manage-players">

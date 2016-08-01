@@ -23,7 +23,8 @@ namespace MyTeam.ViewModels.Attendance
                     NoShows = _attendance.Where(a => a.IsAttending == true && !a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
                     TrainingVictories = _attendance.Where(a => a.MemberId == player.Id).Count(a => a.WonTraining),
                     Image =  player.Image,
-                    FacebookId = player.FacebookId
+                    FacebookId = player.FacebookId,
+                    UrlName = player.UrlName
 
                 }).ToList()
                 .Where(p => p.Games > 0 || p.Trainings > 0 || p.NoShows > 0)

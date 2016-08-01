@@ -9,5 +9,6 @@ namespace MyTeam.ViewModels.Game
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public string UrlName { get; set; }
     }
 }

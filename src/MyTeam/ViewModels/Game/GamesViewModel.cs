@@ -11,6 +11,7 @@ namespace MyTeam.ViewModels.Game
         public IEnumerable<SeasonViewModel> Seasons { get; }
         public IList<TeamViewModel> Teams { get; }
         public string TeamName { get;  }
+        public Guid TeamId { get;  }
         private readonly int _year;
 
         public SeasonViewModel SelectedSeason => Seasons.SingleOrDefault(s => s.Year == _year) ?? CurrentSeason;
@@ -22,13 +23,14 @@ namespace MyTeam.ViewModels.Game
 
         public IEnumerable<GameViewModel> Games { get; }
 
-        public GamesViewModel(IEnumerable<SeasonViewModel> seasons, IList<TeamViewModel> teams, int year, IEnumerable<GameViewModel> games, string teamName)
+        public GamesViewModel(IEnumerable<SeasonViewModel> seasons, IList<TeamViewModel> teams, int year, IEnumerable<GameViewModel> games, string teamName, Guid teamId)
         {
             Teams = teams;
             Seasons = seasons;
             _year = year;
             Games = games;
             TeamName = teamName;
+            TeamId = teamId;
         }
 
       

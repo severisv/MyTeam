@@ -33,10 +33,18 @@ namespace MyTeam.Controllers
             return View("List",model);
         }
 
-        [Route("vis/{playerId?}")]
-        public IActionResult Show(Guid playerId)
+        [Route("vis/{name?}")]
+        public IActionResult Show(string name)
         {
-            var selectedPlayer = _playerService.GetSingle(playerId);
+            if (string.IsNullOrWhiteSpace(name)) return RedirectToAction("NotFoundAction", "Error");
+
+            Guid playerId;
+            if(Guid.TryParse(name, out playerId)) {
+                var player = _playerService.GetSingle(playerId);
+                return RedirectToAction("Show", new {name = player.UrlName});
+            }
+
+            var selectedPlayer = _playerService.GetSingle(Club.Id, name);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);
@@ -86,7 +94,7 @@ namespace MyTeam.Controllers
             {
                 _playerService.EditPlayer(model, Club.ClubId);
                 Alert(AlertType.Success, "Profil lagret");
-                return Show(model.PlayerId);
+                return Show(model.UrlName);
 
             }
             return PartialView("_Edit", model);

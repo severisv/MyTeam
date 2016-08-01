@@ -27,6 +27,7 @@ ajax.applyLoadListener = function ($scope) {
         element.html('<i class="mt-loader fa fa-spin fa-spinner"></i>');
         $.get(href).then(function (data) {
             element.html((data));
+            window.global.applyScopedJsComponents(element);
         });
     });
 };
@@ -54,7 +55,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
             target.addClass('ajax-replace--hidden');
 
             setTimeout(function () {
-                $.get(href, function (response) {
+                $.get(href + '?ajax', function (response) {
                     window.scrollTo(0, 0);
                     target.html(response);
                     target.removeClass('ajax-replace--hidden');

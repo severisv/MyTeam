@@ -26,6 +26,8 @@ namespace MyTeam.Models.Domain
         public virtual Team Team { get; set; }
         public bool AutoUpdateTable { get; set; }
         public string TableSourceUrl { get; set; }
-
+        public bool AutoUpdateFixtures { get; set; }
+        public string FixturesSourceUrl { get; set; }
+        public DateTime? FixturesUpdated { get; set; }
     }
 }

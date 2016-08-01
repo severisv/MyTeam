@@ -7,33 +7,33 @@ $('.register-attendance-input').click(function () {
     var value = element.is(":checked");
     element.parent().find('i.fa-spinner').show();
     $.post(Routes.SELECT_PLAYER,
-    {
-        playerId: playerId,
-        eventId: eventId,
-        isSelected: value
-    }).then(function (response) {
-        if (response.Success) {
-            var playerId = element.data('playerId');
+        {
+            playerId: playerId,
+            eventId: eventId,
+            isSelected: value
+        }).then(function (response) {
+            if (response.success) {
+                var playerId = element.data('playerId');
 
-            var squadCount = parseInt($('#squadCount').text());
+                var squadCount = parseInt($('#squadCount').text());
 
-            if (value == true) {
-                var playerName = element.data('playerName');
-                $('#squad').append('<li id="' + playerId + '"><i class="flaticon-soccer18"></i>&nbsp;' + playerName + '</li>');
-                $('#squadCount').html(squadCount + 1);
+                if (value == true) {
+                    var playerName = element.data('playerName');
+                    $('#squad').append('<li id="' + playerId + '"><i class="flaticon-soccer18"></i>&nbsp;' + playerName + '</li>');
+                    $('#squadCount').html(squadCount + 1);
+                } else {
+                    $('#' + playerId).remove();
+                    $('#squadCount').html(squadCount -1);
+                }
+
+
             } else {
-                $('#' + playerId).remove();
-                $('#squadCount').html(squadCount -1);
+                var failLabel = element.parent().find('.label-danger');
+                element.parent().find('i.fa-spinner').hide();
+                failLabel.show();
+                failLabel.fadeOut(3000);
             }
-
-
-        } else {
-            var failLabel = element.parent().find('.label-danger');
-            element.parent().find('i.fa-spinner').hide();
-            failLabel.show();
-            failLabel.fadeOut(3000);
-        }
-    });
+        });
 });
 
 
@@ -44,9 +44,9 @@ $('#publishButton').click(function () {
     element.find('i').show();
     $.post(href)
         .then(function (response) {
-        if (response.Success) {
+        if (response.success) {
             element.parent().html('<div class="disabled btn btn-success btn-lg"><i class="fa fa-check-circle"></i> Publisert</div>');
-            
+
         } else {
             var failLabel = element.parent().find('.label-danger');
             element.find('span').show();
@@ -63,7 +63,7 @@ function postPublishMessage(element, message) {
               {
                   description: message
               }).then(function (response) {
-                  if (response.Success) {
+                  if (response.success) {
                       var successLabel = element.parent().find('.label-success');
                       successLabel.show();
                       successLabel.fadeOut(1500);
@@ -73,7 +73,7 @@ function postPublishMessage(element, message) {
                       failLabel.fadeOut(3000);
                   }
               });
-    
+
 }
 
 var typingTimer;
@@ -95,6 +95,6 @@ $.getJSON(Routes.GET_ATTENDANCE, function (data) {
     var players = data.data;
     for (var i in players) {
         var player = players[i];
-        $('#playerAttendance-' + player.PlayerId).html(player.Attendance+"%");
+        $('#playerAttendance-' + player.playerId).html(player.attendance+"%");
     }
 });

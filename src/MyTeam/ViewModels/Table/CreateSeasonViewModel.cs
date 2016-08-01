@@ -23,5 +23,10 @@ namespace MyTeam.ViewModels.Table
         public bool AutoUpdate { get; set; }
         [Url(ErrorMessage = "Lenken må være en gyldig url")]
         public string SourceUrl { get; set; }
+
+        [Display(Name = "Automatisk oppdatering")]
+        public bool AutoUpdateFixtures { get; set; }
+        [Url(ErrorMessage = "Lenken må være en gyldig url")]
+        public string FixturesSourceUrl { get; set; }
     }
 }

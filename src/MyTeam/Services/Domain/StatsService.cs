@@ -43,7 +43,8 @@ namespace MyTeam.Services.Domain
                     Image = e.Member.ImageFull,
                     Id = e.MemberId,
                     Name = e.Member.Name,
-                    FacebookId = e.Member.FacebookId
+                    FacebookId = e.Member.FacebookId,
+                    UrlName = e.Member.UrlName
                 }
             }).ToList();
         }
@@ -82,7 +83,8 @@ namespace MyTeam.Services.Domain
                     Assists = gameEvents.Count(ge => ge.Type == GameEventType.Goal && ge.AssistedById == p.Id),
                     YellowCards = gameEvents.Count(ge => ge.Type == GameEventType.YellowCard && ge.PlayerId == p.Id),
                     RedCards = gameEvents.Count(ge => ge.Type == GameEventType.RedCard && ge.PlayerId == p.Id),
-                    Games = attendances.Count(a => a == p.Id)
+                    Games = attendances.Count(a => a == p.Id),
+                    UrlName = p.UrlName
                 });
 
             return players.ToList();

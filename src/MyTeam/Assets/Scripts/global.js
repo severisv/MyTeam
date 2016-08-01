@@ -4,6 +4,9 @@ var ajax = require('./ajaxHelpers');
 var ReactDOM = require('react-dom');
 var React = require('react');
 
+global.React = React;
+global.ReactDOM = ReactDOM;
+
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
     applyDatepickers($scope);
@@ -26,10 +29,11 @@ global.applyJsComponents = function () {
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
 
-    window.onpopstate = function () {
-        //location.reload();
-    };
-
+    $(window).on("popstate", function (e) {
+        if (e.originalEvent.state !== null) {
+            location.reload();
+        }
+    });
 
     console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
 };

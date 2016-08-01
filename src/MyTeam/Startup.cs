@@ -55,7 +55,9 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
+            services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
 
             services.AddLocalization();
             services.AddMvc();
@@ -85,14 +87,10 @@ namespace MyTeam
                     app.UseExceptionHandler("/Error/Error");
                 }
 
-                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                    {
-                        var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                        var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
                         dbContext.Database.Migrate();
-                    }
                 }
                 catch (Exception e)
                 {
@@ -116,8 +114,7 @@ namespace MyTeam
                     AppId = Configuration["Authentication:Facebook:AppId"],
                     AppSecret = Configuration["Authentication:Facebook:AppSecret"]
                 });
-                    
-          
+
 
                 app.LoadTenantData();
                 app.UseMvc(routes =>
@@ -142,7 +139,7 @@ namespace MyTeam
             }
             catch (Exception e)
             {
-                if (env.IsDevelopment() || env.IsStaging() ) app.WriteException(e);
+                if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
                 else app.Write("Det oppstod en feil");
             }
         }

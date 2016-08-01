@@ -7,8 +7,18 @@
     text-align: right;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .text-info {
         color: lighten(@blueDarkSubtle,10);
+        a {
+            padding-bottom: 2px;
+            border-bottom: 1px solid;
+            color: lighten(@blueDarkSubtle,10);
+            &:hover { color: @blueDarkSubtle;}
+        }
 }
 
 
@@ -36,4 +46,8 @@
 .u-fade-in--hidden {
     opacity: 0;
     transition: opacity 0.3s ease-out;
+}
+
+.u-font-normal {
+    font-style: normal;
 }

@@ -53,6 +53,7 @@ namespace MyTeam.ViewModels.Player
             Value = ((int)v).ToString()
         }).ToList(), "Value", "Text");
 
+        public string UrlName { get; set; }
 
 
         public EditPlayerViewModel()
@@ -72,6 +73,7 @@ namespace MyTeam.ViewModels.Player
             BirthDate = player.BirthDate.ToNoFull();
             Positions = player.Positions;
             FacebookId = player.FacebookId;
+            UrlName = player.UrlName;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

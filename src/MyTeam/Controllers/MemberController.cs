@@ -37,7 +37,8 @@ namespace MyTeam.Controllers
                     Phone = p.Phone,
                     Email = p.Email,
                     FacebookId = p.FacebookId,
-                    BirthDate = p.BirthDate
+                    BirthDate = p.BirthDate,
+                    UrlName = p.UrlName
                 });
             var model = new MemberListViewModel(players, status);
             return View("ListMembers", model);

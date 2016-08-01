@@ -1,9 +1,9 @@
 ﻿@using System.Threading.Tasks
 @model MyTeam.ViewModels.Shared.CloudinaryConfiguration
-@{
-
+@if (Context.Request.IsAjaxRequest())
+{
+    <script src="~/scripts/bundles/lib.bundle.js"></script>
 }
-
 <script src="~/scripts/Bundles/cloudinary.bundle.js"></script>
 <script>
     
@@ -14,7 +14,7 @@
         timestamp: '@Model.UnixTimestamp',
         signature: '@Model.Signature'
     }
-    
+
     $('.cloudinary-fileupload').each(function () {
         $(this).attr('data-form-data', JSON.stringify(formData));
     });

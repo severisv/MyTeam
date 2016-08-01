@@ -93,13 +93,7 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        [Route("slett")]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult Delete(Guid seasonId)
-        {
-            _seasonService.Delete(seasonId);
-            return RedirectToAction("Index");
-        }
+     
 
         [HttpPost]
         [Route("lagre")]
@@ -114,38 +108,6 @@ namespace MyTeam.Controllers
             }
             return new ErrorResult(HttpContext);
         }
-
-
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("sesong/opprett")]
-        public IActionResult CreateSeason()
-        {
-            var model = new CreateSeasonViewModel
-            {
-                Teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                }).ToList()
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [Route("sesong/opprett")]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult CreateSeason(CreateSeasonViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                _tableService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl);
-
-                Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
-                return Index();
-            }
-            return View(model);
-        }
-
 
     }
 }  

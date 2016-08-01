@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MyTeam.Models.Dto;
 using MyTeam.Models.General;
+using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.News;
 
 namespace MyTeam.Services.Domain
@@ -15,6 +16,8 @@ namespace MyTeam.Services.Domain
         void Delete(Guid articleId);
 
         IEnumerable<CommentViewModel> GetComments(Guid articleId);
-        CommentViewModel PostComment(Guid articleId, string content, Guid memberId);
+        CommentViewModel PostComment(Guid articleId, string content, Guid memberId, string facebookId, string name, string userName);
+        IEnumerable<SimpleGame> GetGames(DateTime now);
+        ArticleViewModel GetMatchReport(Guid gameId);
     }
 }

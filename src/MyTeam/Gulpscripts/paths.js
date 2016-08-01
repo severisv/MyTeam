@@ -27,14 +27,12 @@ module.exports = {
             join("", './Assets/Scripts/ReactComponents/*/*.jsx')
         ],
         scriptsRoot : './Assets/Scripts/app.js',
-        
+
         lib: [
             npm("jquery/dist/jquery.js"),
             bower("tablesorter/jquery.tablesorter.js"),
             bower("bootstrap/dist/js/bootstrap.js"),
-            npm("bootbox/bootbox.js"),
-            npm("react/dist/react.js"),
-            npm("react-dom/dist/react-dom.js")
+            npm("bootbox/bootbox.js")
         ],
         cloudinary: [
             npm("jquery.cloudinary/js/jquery.ui.widget.js"),

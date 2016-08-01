@@ -6,6 +6,7 @@ namespace MyTeam.ViewModels.Attendance
     {
         public Guid PlayerId { get; set; }
         public string Name { get; set; }
+        public string UrlName { get; set; }
         public int Trainings { get; set; }
         public int Games { get; set; }
         public int NoShows { get; set; }

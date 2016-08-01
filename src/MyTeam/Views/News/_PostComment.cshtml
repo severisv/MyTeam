@@ -5,11 +5,17 @@
 <div id="article-commentForm">
     <form asp-controller="News" asp-action="PostComment">
         <input type="hidden" asp-for="ArticleId"/>
+
+        @if (!Context.UserIsMember())
+        {
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <input class="@(Model.IsFacebookUser ? "comment-facebookUserName" : "")"  asp-for="Name" type="@(Model.IsFacebookUser ? "hidden" : "text")" data-facebookid="@Model.FacebookId" placeholder="Navn" />
+        }
         <span asp-validation-for="Content" class="text-danger"></span>
         <span id="comment-validation-text" class="text-danger"></span>
         <textarea asp-for="Content" 
                        class="form-control"
                        placeholder="Skriv din kommentar"></textarea>
-        <button class="btn btn-primary" type="submit"><span class="submitLoader"><i class="fa fa-spinner fa-spin"></i></span><span class="submitText">Kommentér</span></button>
+        <button class="btn btn-primary" type="submit"><span><i class="fa fa-spinner fa-spin"></i></span><span class="submitText">Kommentér</span></button>
     </form>
 </div>
