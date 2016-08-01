@@ -29,13 +29,11 @@ global.applyJsComponents = function () {
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
 
-    var isFirstPageLoad = true;
-    $(window).on("popstate", function () {
-        if (!isFirstPageLoad) {
+    setTimeout(function () {
+        $(window).on("popstate", function () {
             location.reload();
-        }
-    });
-    isFirstPageLoad = false;
+        });
+    }, 500);
 
     console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
 };
