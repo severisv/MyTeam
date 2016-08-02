@@ -28,7 +28,7 @@ namespace MyTeam
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-       
+
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -56,7 +56,7 @@ namespace MyTeam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            
+
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
 
@@ -71,78 +71,67 @@ namespace MyTeam
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.LogStart();
+
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+            if (env.IsDevelopment() || env.IsStaging())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error/Error");
+            }
+
             try
             {
-                app.LogStart();
-
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
-
-                if (env.IsDevelopment() || env.IsStaging())
-                {
-                    app.UseDeveloperExceptionPage();
-                    app.UseDatabaseErrorPage();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Error/Error");
-                }
-
-                try
-                {
-                        var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
-                        dbContext.Database.Migrate();
-                }
-                catch (Exception e)
-                {
-                    app.LogToSlack(e);
-                    if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
-                }
-
-
-                app.UseStaticFiles();
-
-                app.UseIdentity();
-
-                app.UseRequestLocalization(new RequestLocalizationOptions
-                {
-                    DefaultRequestCulture = new RequestCulture("nb-NO"),
-                    SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
-                    SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
-                });
-
-                app.UseFacebookAuthentication(new FacebookOptions
-                {
-                    AppId = Configuration["Authentication:Facebook:AppId"],
-                    AppSecret = Configuration["Authentication:Facebook:AppSecret"]
-                });
-
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=News}/{action=Index}/{id?}");
-                });
-
-
-                if (env.IsProduction())
-                {
-                    app.Run(async context =>
-                    {
-                        context.Response.Redirect("/404");
-                        await context.Response.WriteAsync("");
-                    });
-                }
-
-          
-
+                var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
+                dbContext.Database.Migrate();
             }
             catch (Exception e)
             {
-                app.LogToSlack(e);
                 if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
-                else app.Write("Det oppstod en feil");
             }
+
+
+            app.UseStaticFiles();
+
+            app.UseIdentity();
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("nb-NO"),
+                SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
+                SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
+            });
+
+            app.UseFacebookAuthentication(new FacebookOptions
+            {
+                AppId = Configuration["Authentication:Facebook:AppId"],
+                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=News}/{action=Index}/{id?}");
+            });
+
+
+            if (env.IsProduction())
+            {
+                app.Run(async context =>
+                {
+                    context.Response.Redirect("/404");
+                    await context.Response.WriteAsync("");
+                });
+            }
+
+
         }
     }
 }

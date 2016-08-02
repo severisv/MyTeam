@@ -32,12 +32,6 @@ namespace MyTeam
             });
         }
 
-        public static void LogToSlack(this IApplicationBuilder app, Exception ex)
-        {
-            var slack = app.ApplicationServices.GetService<SlackService>();
-            slack.Log(ex);
-        }
-
       
         public static void Write(this IApplicationBuilder app, string msg)
         {
