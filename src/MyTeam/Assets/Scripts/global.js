@@ -29,11 +29,11 @@ global.applyJsComponents = function () {
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
 
-    $(window).on("popstate", function (e) {
-        if (e.originalEvent.state !== null) {
+    setTimeout(function () {
+        $(window).on("popstate", function () {
             location.reload();
-        }
-    });
+        });
+    }, 500);
 
     console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
 };
