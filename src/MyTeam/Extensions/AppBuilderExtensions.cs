@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using MyTeam.Services.Application;
 
 namespace MyTeam
 {
@@ -30,6 +32,13 @@ namespace MyTeam
             });
         }
 
+        public static void LogToSlack(this IApplicationBuilder app, Exception ex)
+        {
+            var slack = app.ApplicationServices.GetService<SlackService>();
+            slack.Log(ex);
+        }
+
+      
         public static void Write(this IApplicationBuilder app, string msg)
         {
             app.Run(async context =>

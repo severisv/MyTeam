@@ -22,6 +22,7 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IStatsService, StatsService>();
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
+            services.AddTransient<SlackService, SlackService>();
             services.AddTransient<ILogger, Logger>();
             services.AddTransient<ICloudinary, Cloudinary>();
 

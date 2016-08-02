@@ -95,6 +95,7 @@ namespace MyTeam
                 }
                 catch (Exception e)
                 {
+                    app.LogToSlack(e);
                     if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
                 }
 
@@ -138,6 +139,7 @@ namespace MyTeam
             }
             catch (Exception e)
             {
+                app.LogToSlack(e);
                 if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
                 else app.Write("Det oppstod en feil");
             }
