@@ -67,8 +67,7 @@ namespace MyTeam.Services.Application
 
                 const string url = "https://hooks.slack.com/services/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";
                 var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-             
-                    var result = client.PostAsync(url, content).Result;
+                var result = client.PostAsync(url, content).Result;
               
             }
         }
