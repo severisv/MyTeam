@@ -12,7 +12,7 @@ $('.register-attendance-input').click(function () {
         eventId: eventId,
         didAttend: value
     }).then(function (response) {
-        if (response.Success) {
+        if (response.success) {
             var successLabel = element.parent().find('.label-success');
             element.parent().find('i.fa-spinner').hide();
             successLabel.show();
@@ -38,7 +38,7 @@ $('.register-trainingVictory-input').click(function () {
         eventId: eventId,
         didWin: value
     }).then(function (response) {
-        if (response.Success) {
+        if (response.success) {
             var successLabel = element.parent().find('.label-success');
             element.parent().find('i.fa-spinner').hide();
             successLabel.show();

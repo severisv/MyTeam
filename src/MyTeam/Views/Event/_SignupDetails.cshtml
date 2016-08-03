@@ -24,7 +24,7 @@
                     <a class="event-addMessage" title="Beskjed til trenerne"><i class="fa fa-comment "></i></a><br />
                         <textarea class="form-control event-message" data-href="@Url.Action("SignupMessage", "Event", new {eventId = Model.Id})" placeholder="Beskjed til trenerne">@Model.GetSignupMessage(Context.Member().Id)</textarea>
                         <span class="label label-success"><i class="fa fa-check-circle"></i> Lagret</span>
-                        <span class="label label-danger"><i class="fa fa-warning"></i></span>
+                        <span class="label label-danger"><i class="fa fa-exclamation-triangle"></i></span>
                 }
             </div>
         }

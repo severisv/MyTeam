@@ -13,7 +13,7 @@
 @if (Model != null && User.IsDeveloper())
 {
     <p>
-        <a data-toggle="collapse" href="#stacktrace-@guid"><i class="fa fa-warning"></i> Stacktrace</a>
+        <a data-toggle="collapse" href="#stacktrace-@guid"><i class="fa fa-exclamation-triangle"></i> Stacktrace</a>
     </p>
         <div id="stacktrace-@guid" class="panel-collapse collapse">
             @Html.Partial("_ErrorSummary")
