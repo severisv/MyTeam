@@ -19,7 +19,8 @@ namespace MyTeam.Filters
             {
                 var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
                 var slack = context.HttpContext.RequestServices.GetService<SlackService>();
-                slack.Log(context.Exception);
+                var request = context.HttpContext.Request;
+                slack.Log(context.Exception, $"{request.Method}: {request.Path}/{request.QueryString}");
                 var eventId = (DateTime.Now - DateTime.Today).TotalSeconds;
                 logger.LogError((int)eventId, $"Error in {context.HttpContext.Request.Path}", context.Exception);
                 context.Result = new ErrorResult(context.HttpContext, context.Exception);

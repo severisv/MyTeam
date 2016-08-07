@@ -15,7 +15,7 @@ namespace MyTeam.Services.Application
             _env = env;
         }
         
-        public void Log(Exception exception)
+        public void Log(Exception exception, string path)
         {
             if (!_env.IsProduction())
             {
@@ -56,6 +56,12 @@ namespace MyTeam.Services.Application
                                 },
                                 new
                                 {
+                                    title = "Path",
+                                    value = path,
+                                    @short = true
+                                },
+                                new
+                                {
                                     title = "Stacktrace",
                                     value = $"```{message}```",
                                     @short = false
@@ -71,5 +77,6 @@ namespace MyTeam.Services.Application
               
             }
         }
+
     }
 }
