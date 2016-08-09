@@ -30,8 +30,10 @@ global.applyJsComponents = function () {
     applySlideDownMenuListeners();
 
     setTimeout(function () {
-        $(window).on("popstate", function () {
-            location.reload();
+        $(window).on('popstate', function (e) {
+           if (!window.location.hash) {
+                location.reload();
+           }
         });
     }, 500);
 

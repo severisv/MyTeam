@@ -24,7 +24,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <select value={this.state.player.Status} className="form-control" onChange={this.setPlayerStatus}>
+            <select value={this.state.player.status} className="form-control" onChange={this.setPlayerStatus}>
                {statusList}
            </select>
         );

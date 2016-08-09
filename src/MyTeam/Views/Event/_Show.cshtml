@@ -14,8 +14,10 @@
     <div class="show-event-container">
         <div class="event-col-1 event-icon">
             <div>
+                <a href="#event-@Model.Id">
                 <span mt-eventtype="@Model.Type" mt-hidename="true"></span>
-            </div>
+                    </a>
+        </div>
         </div>
         <div class="event-col-2">
             <p>
@@ -42,8 +44,9 @@
             }
             else if (Model.Type == EventType.Kamp)
             {
-                <h3 class="no-margin">@Model.Team(Context.GetClub().Teams).ShortName <span class="event-opponentDivider">vs</span> @Html.DisplayFor(m => m.Opponent)</h3>
-                <p>
+
+                    <h3 class="no-margin">@Model.Team(Context.GetClub().Teams).ShortName <span class="event-opponentDivider">vs</span> @Html.DisplayFor(m => m.Opponent)</h3>
+                    <p>
                     <i class="@Icons.GameType(Model.GameType)"></i>&nbsp;@Model.GameType
                 </p>
 

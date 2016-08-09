@@ -11,11 +11,11 @@
         <div class="game-header">
             <span class="registerResult-teamScore no-wrap">
                 @Model.Game.HomeTeam
-                <input class="registerResult-score ajax-update" data-href="@Url.Action("sethomescore", "gameapi", new {gameId = Model.Game.Id})" value="@Model.Game.HomeScore" />
+                <input type="tel" class="registerResult-score ajax-update" data-href="@Url.Action("sethomescore", "gameapi", new {gameId = Model.Game.Id})" value="@Model.Game.HomeScore" />
             </span>
               <span class="hidden-xs"> - </span>
             <span class="registerResult-teamScore no-wrap">
-                <input class="registerResult-score ajax-update" data-href="@Url.Action("setawayscore", "gameapi", new {gameId = Model.Game.Id})" value="@Model.Game.AwayScore" />@Model.Game.AwayTeam
+                <input type="tel" class="registerResult-score ajax-update" data-href="@Url.Action("setawayscore", "gameapi", new {gameId = Model.Game.Id})" value="@Model.Game.AwayScore" />@Model.Game.AwayTeam
             </span>
         </div>
         <hr/>
