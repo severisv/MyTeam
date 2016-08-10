@@ -126,7 +126,7 @@ namespace MyTeam.Services.Domain
                   IsHomeTeam = e.IsHomeTeam,
                   Location = e.Location,
                   GameType = e.GameType
-              }).ToList().Single();
+              }).ToList().SingleOrDefault();
         }
 
         public void SetHomeScore(Guid gameId, int? value)

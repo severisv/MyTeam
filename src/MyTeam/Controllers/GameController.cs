@@ -104,6 +104,8 @@ namespace MyTeam.Controllers
         {
 
             var game = _gameService.GetGame(gameId);
+            if(game == null) return RedirectToAction("NotFoundAction", "Error");
+
             var model = new ShowGameViewModel(game);
 
             return View("Show", model);

@@ -32,7 +32,6 @@ namespace MyTeam.Controllers
         [Route("nyheter/{skip:int?}/{take:int?}")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
-            var user = User;
             var model = _articleService.Get(HttpContext.GetClub().Id, skip, take);
             ViewBag.MetaDescription = _dbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
             return View("Index", model);
@@ -42,6 +41,8 @@ namespace MyTeam.Controllers
         public IActionResult Show(string name)
         {
             var model = _articleService.Get(Club.Id, name);
+
+            if(model == null) return RedirectToAction("NotFoundAction", "Error");
             return View("Show", model);
         }
 

@@ -50,7 +50,7 @@ namespace MyTeam.Services.Domain
                 
             var result = Select(query);
 
-            return result.First();
+            return result.FirstOrDefault();
         }
 
         private static IQueryable<ArticleViewModel> Select(IQueryable<Article> query)

@@ -45,6 +45,8 @@ namespace MyTeam.Controllers
             }
 
             var selectedPlayer = _playerService.GetSingle(Club.Id, name);
+            if (selectedPlayer == null) return RedirectToAction("NotFoundAction", "Error");
+            
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);

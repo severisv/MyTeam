@@ -235,7 +235,9 @@ namespace MyTeam.Services.Domain
                 FacebookId = p.FacebookId,
                 Status = p.Status,
                 UrlName = p.UrlName
-            }).Single();
+            }).SingleOrDefault();
+
+            if (player == null) return null;
 
             var now = DateTime.Now;
 
