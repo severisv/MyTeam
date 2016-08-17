@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MyTeam.Services.Application
 {
@@ -17,12 +18,12 @@ namespace MyTeam.Services.Application
         
         public void Log(Exception exception, string path)
         {
-            if (!_env.IsProduction())
+            if (_env.IsDevelopment())
             {
                 return;
             }
 
-            var message = exception.StackTrace;
+            var message = GetFullStacktrace(exception) + "\n" + exception.StackTrace;
             var classname = exception.TargetSite.DeclaringType?.Name;
             var method = exception.TargetSite.Name;
             using (var client = new HttpClient())
@@ -77,6 +78,33 @@ namespace MyTeam.Services.Application
               
             }
         }
+
+
+        public string GetFullStacktrace(Exception exception)
+        {
+            var result = "";
+            var exceptions = new List<Exception>();
+            while (exception.InnerException != null)
+            {
+                exceptions.Add(exception);
+                exception = exception.InnerException;
+            }
+            exceptions.Reverse();
+            foreach (var ex in exceptions)
+            {
+                result += ex.GetType() + "\n";
+                result += ex.Message + "\n";
+                result += "------------------------------------------" + "\n";
+
+            }
+
+            return result;
+
+        }
+
+
+
+
 
     }
 }
