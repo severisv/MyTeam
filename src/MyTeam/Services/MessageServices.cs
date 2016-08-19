@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace MyTeam.Services
 {
@@ -16,17 +18,22 @@ namespace MyTeam.Services
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            var myMessage = new SendGrid.SendGridMessage();
-            myMessage.AddTo(email);
-            myMessage.From = new System.Net.Mail.MailAddress("noreply@wamkam.no", "Wam-Kam FK Web");
-            myMessage.Subject = subject;
-            myMessage.Text = message;
-            myMessage.Html = message;
-            var transportWeb = new SendGrid.Web(_apiKey);
-            return transportWeb.DeliverAsync(myMessage);
+            return Send(email, subject, message);
           
         }
 
-       
+        async Task Send(string email, string subject, string message)
+        {
+            dynamic sg = new SendGridAPIClient(_apiKey);
+
+            var from = new Email("noreply@wamkam.no", "Wam-Kam FK Web");
+            var to = new Email(email);
+            var content = new Content("text/html", message);
+            var mail = new Mail(from, subject, to, content);
+
+            await sg.client.mail.send.post(requestBody: mail.Get());
+        }
+
+
     }
 }

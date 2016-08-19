@@ -13,6 +13,7 @@ using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using System;
 
 namespace MyTeam.Controllers
 {
@@ -125,8 +126,15 @@ namespace MyTeam.Controllers
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Bekreft din konto",
+                    try
+                    {
+                        await _emailSender.SendEmailAsync(model.Email, "Bekreft din konto",
                         "Bekreft kontoen din ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError("Klarte ikke sende e-post ved oppretting av konto", e);
+                    }
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(NewsController.Index), "News");

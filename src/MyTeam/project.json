@@ -27,7 +27,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "ScrapySharp": "2.6.1",
-    "Sendgrid": "6.3.4"
+    "Sendgrid": "8.0.3"
   },
 
   "tools": {
