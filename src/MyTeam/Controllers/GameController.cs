@@ -167,7 +167,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("bytteplan")]
         public IActionResult GamePlan()
         {
