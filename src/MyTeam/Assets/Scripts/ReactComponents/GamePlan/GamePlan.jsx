@@ -49,6 +49,14 @@ module.exports = React.createClass({
         });
     },
 
+    removeRow: function (i) {
+        var rows = this.state.rows;
+        rows.splice(i, 1);
+        this.setState({
+            rows: rows
+        });
+    },
+
     render: function () {
         var that = this;
         return (
@@ -60,6 +68,7 @@ module.exports = React.createClass({
                                 <div className='text-center'>
                                     <input className='gp-time' onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
                                 </div>
+                                    <button className='pull-right' onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
                                 <br />
                                 <br />
                                 <div className='gp-row'>
