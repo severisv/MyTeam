@@ -9,6 +9,7 @@ window.ListSquad = require('./ReactComponents/RegisterResult/ListSquad.jsx')
 window.RegisterEvents = require('./ReactComponents/RegisterResult/RegisterEvents.jsx')
 window.AddPlayerToSquad = require('./ReactComponents/RegisterResult/AddPlayerToSquad.jsx')
 window.ShowGame = require('./ReactComponents/RegisterResult/ShowGame.jsx')
+window.GamePlan = require('./ReactComponents/GamePlan/GamePlan.jsx')
 
 require('./ajaxHelpers')
 window.checkbox = require('./checkbox')

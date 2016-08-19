@@ -165,5 +165,13 @@ namespace MyTeam.Controllers
             }
             return View(model);
         }
+
+
+        [RequireMember(Roles.Coach, Roles.Admin)]
+        [Route("bytteplan")]
+        public IActionResult GamePlan()
+        {
+            return View("GamePlan");
+        }
     }
 }
