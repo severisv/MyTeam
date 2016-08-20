@@ -42,6 +42,7 @@ namespace MyTeam.Services.Domain
                         if (existingGame != null)
                         {
                             existingGame.DateTime = game.DateTime;
+                            existingGame.Location = game.Location;
                         }
                         else
                         {
