@@ -58,6 +58,7 @@ module.exports = React.createClass({
     },
 
     render: function () {
+        console.log(this.props)
         var that = this;
         return (
             <div className='gameplan'>

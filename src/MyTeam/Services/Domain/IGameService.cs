@@ -16,5 +16,8 @@ namespace MyTeam.Services.Domain
         void SetAwayScore(Guid gameId, int? value);
         IEnumerable<PlayerViewModel> GetSquad(Guid gameId);
         void AddGames(List<ParsedGame> games, Guid clubId);
+        string GetGamePlan(Guid gameId);
+        void SaveGamePlan(Guid gameId, string gamePlan);
+        void PublishGamePlan(Guid gameId);
     }
 }

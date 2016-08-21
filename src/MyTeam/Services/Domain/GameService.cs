@@ -73,6 +73,25 @@ namespace MyTeam.Services.Domain
             _cacheHelper.ClearNotificationCache(ev.ClubId);
         }
 
+        public void PublishGamePlan(Guid eventId)
+        {
+            var ev = _dbContext.Games.Single(e => e.Id == eventId);
+            ev.GamePlanIsPublished = true;
+            _dbContext.SaveChanges();
+        }
+
+        public string GetGamePlan(Guid eventId)
+            =>
+            _dbContext.Games.Where(e => e.Id == eventId).Select(g => g.GamePlan).Single();
+        
+
+        public void SaveGamePlan(Guid eventId, string gamePlan)
+        {
+            var ev = _dbContext.Games.Single(e => e.Id == eventId);
+            ev.GamePlan = gamePlan;
+            _dbContext.SaveChanges();
+        }
+
         public IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName)
         {
             var startDate = new DateTime(year, 1,1);
@@ -112,8 +131,8 @@ namespace MyTeam.Services.Domain
         }
 
         public GameViewModel GetGame(Guid gameId)
-        {
-            return  _dbContext.Games
+            =>
+              _dbContext.Games
               .Where(e => e.Id == gameId)
               .Select(e => new GameViewModel
               {
@@ -127,7 +146,7 @@ namespace MyTeam.Services.Domain
                   Location = e.Location,
                   GameType = e.GameType
               }).ToList().SingleOrDefault();
-        }
+        
 
         public void SetHomeScore(Guid gameId, int? value)
         {

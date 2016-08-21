@@ -1,6 +1,12 @@
-﻿
-<div id="gameplan">
-    
+﻿@using MyTeam.ViewModels.Game
+@model GamePlanViewModel
+
+<div id="gameplan"
+     data-gameId="@Model?.GameId"
+     data-team="@Model?.Team"
+     data-opponent="@Model?.Opponent"
+     data-gamePlan="@Model?.GamePlan"
+     >
 </div>
 
 

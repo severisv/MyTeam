@@ -50,6 +50,34 @@ namespace MyTeam.Controllers
         }
 
 
+        [HttpPost]
+        [RequireMember(Roles.Coach)]
+        public IActionResult SaveGamePlan(Guid gameId, string gamePlan)
+        {
+            if (ModelState.IsValid)
+            {
+                _gameService.SaveGamePlan(gameId, gamePlan);
+                return new JsonResult(JsonResponse.Success());
+            }
+            return new JsonResult(JsonResponse.Failure);
+        }
+
+        [HttpPost]
+        [RequireMember(Roles.Coach)]
+        public IActionResult PublishGamePlan(Guid gameId)
+        {
+            if (ModelState.IsValid)
+            {
+                _gameService.PublishGamePlan(gameId);
+                return new JsonResult(JsonResponse.Success());
+            }
+            return new JsonResult(JsonResponse.Failure);
+        }
+
+        public IActionResult GetGamePlan(Guid gameId, string gamePlan)
+            => Json(_gameService.GetGamePlan(gameId));
+
+
 
     }
 }

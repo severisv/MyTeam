@@ -170,7 +170,28 @@ namespace MyTeam.Controllers
         [Route("bytteplan")]
         public IActionResult GamePlan()
         {
+            var date = DateTime.Now.AddHours(2);
+            var gameId =
+                ControllerContext.HttpContext.UserIsInRole(Roles.Coach) ?
+                _dbContext.Games.Where(g => g.DateTime >= date).OrderBy(g => g.DateTime).Select(g => g.Id).FirstOrDefault():
+                _dbContext.Games.OrderByDescending(g => g.DateTime).Where(g => g.GamePlanIsPublished == true).Select(g => g.Id).FirstOrDefault();
+
+            if (gameId != null) return RedirectToAction("GamePlanForGame", new { gameId = gameId });
+
             return View("GamePlan");
+        }
+
+        [Route("bytteplan/{gameId}")]
+        public IActionResult GamePlanForGame(Guid gameId)
+        {
+            var model = _dbContext.Games.Where(g => g.Id == gameId)
+                .Select(game => new GamePlanViewModel(gameId, Club.Teams.Single(t => t.Id == game.TeamId).ShortName, game.Opponent, game.GamePlan, game.GamePlanIsPublished))
+                .FirstOrDefault();
+
+            if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
+                return RedirectToAction("NotFoundAction", "Error");
+
+            return View("GamePlan", model);
         }
     }
 }
