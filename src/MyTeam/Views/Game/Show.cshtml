@@ -21,6 +21,10 @@
                 <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
             }
         }
+        @if (Context.UserIsMember() && Model.Game.GamePlanIsPublished == true)
+        {
+            <a asp-action="gameplan" asp-controller="game" asp-route-eventId="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+        }
         <h3 class="game-header hidden-xs">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
         <table class="game-scoreTable visible-xs">
             <tr><td>@Model.Game.HomeTeam</td><td class="game-scoreTable--score">@Model.Game.HomeScore</td></tr>
@@ -71,13 +75,13 @@
             </div>
         }
     </div>
-    
+
     <div class="ajax-load"
             href="@Url.Action("MatchReport", "News", new { gameId = Model.Game.Id })"
             >
-            
+
     </div>
-    
+
 </div>
 <div class="mt-sidebar">
 

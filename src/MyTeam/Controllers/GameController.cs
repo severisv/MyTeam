@@ -168,6 +168,7 @@ namespace MyTeam.Controllers
 
 
         [Route("bytteplan")]
+        [RequireMember]
         public IActionResult GamePlan()
         {
             var date = DateTime.Now.AddHours(2);
@@ -182,6 +183,7 @@ namespace MyTeam.Controllers
         }
 
         [Route("bytteplan/{gameId}")]
+        [RequireMember]
         public IActionResult GamePlanForGame(Guid gameId)
         {
             var model = _dbContext.Games.Where(g => g.Id == gameId)

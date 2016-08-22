@@ -21,7 +21,8 @@
     {
         if (!Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach))
         {
-            <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i><span class="hidden-xs"> @Res.TeamSelection</span></a>
+            <a asp-action="gameplan" asp-controller="game" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i></a>
 
         }
         else if (Context.UserIsInRole(Roles.Coach, Roles.Admin))

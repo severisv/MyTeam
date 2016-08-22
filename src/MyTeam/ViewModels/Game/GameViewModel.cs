@@ -17,6 +17,7 @@ namespace MyTeam.ViewModels.Game
         public Guid Id { get; set; }
         public string Location { get; set; }
         public GameType? GameType { get; set; }
+        public bool? GamePlanIsPublished { get; set; }
 
         public string HomeTeam => IsHomeTeam ? Teams.First() : Opponent;
         public string AwayTeam => IsHomeTeam ?  Opponent : Teams.First();
