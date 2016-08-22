@@ -4,7 +4,7 @@
     <div class="mt-main  register-attendance">
         <div class="mt-container register-attendance">
             <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link  pull-right" title="Rediger kamp"><i class="fa fa-edit"></i></a>
-            <a asp-action="gameplan" asp-controller="game" asp-route-eventId="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameid="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
             <div class="flex">
                 <div class="flex-1 event-icon align-center">
                     <div class="fa-3x">
