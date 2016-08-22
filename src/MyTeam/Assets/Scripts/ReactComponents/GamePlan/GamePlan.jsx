@@ -2,8 +2,8 @@ var React = require('react');
 
 module.exports = React.createClass({
     getInitialState: function () {
+        if (this.props.gameplan) return this.props.gameplan;
         return ({
-
             rows: [
                 {
                     time: 0,
@@ -19,7 +19,8 @@ module.exports = React.createClass({
                     rb: 'RB',
                     gk: 'GK'
                 }
-            ]
+            ],
+            errorMessage: undefined
         });
     },
 
@@ -55,75 +56,115 @@ module.exports = React.createClass({
         this.setState({
             rows: rows
         });
+        this.save();
+    },
+
+    save: function () {
+        var that = this;
+        $.post('/gameapi/savegameplan', {
+            gameId: this.props.gameid,
+            gamePlan: JSON.stringify(that.state)
+        })
+            .done(function () {
+                that.setState({ errorMessage: undefined });
+            })
+            .fail(function () {
+                that.setState({ errorMessage: 'Feil ved lagring' });
+            });
+    },
+
+    publish: function () {
+        var that = this;
+        that.setState({ isPublishing: true });
+        $.post('/gameapi/publishgameplan', {
+            gameId: that.props.gameid
+        })
+            .done(function () {
+                that.setState({ errorMessage: undefined, isPublishing: undefined, isPublished: true });
+            })
+            .fail(function () {
+                that.setState({ errorMessage: 'Feil ved publisering' });
+            });
     },
 
     render: function () {
-        console.log(this.props)
         var that = this;
+        var props = this.props;
         return (
             <div className='gameplan'>
                 <div className='mt-main'>
                     <div className='mt-container'>
-                        {this.state.rows.map(function (lineup, i) {
-                            return (<div key={i}>
-                                <div className='text-center'>
-                                    <input className='gp-time' onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
-                                </div>
-                                    <button className='pull-right' onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
-                                <br />
-                                <br />
-                                <div className='gp-row'>
-                                    {that.renderDiff(i)}
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'lw')} value={lineup.lw} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 's')} value={lineup.s} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'rw')} value={lineup.rw} /></div>
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'lcm')} value={lineup.lcm} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'rcm')} value={lineup.rcm} /></div>
-                                    <div className='gp-square'></div>
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'dm')} value={lineup.dm} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'lb')} value={lineup.lb} /></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'lcb')} value={lineup.lcb} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'rcb')} value={lineup.rcb} /></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'rb')} value={lineup.rb} /></div>
-                                </div>
-                                <div className='gp-row'>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'><input onChange={that.setPlayer.bind(null, i, 'gk')} value={lineup.gk} /></div>
-                                    <div className='gp-square'></div>
-                                    <div className='gp-square'></div>
-                                </div>
-                                <hr />
-                            </div>);
-                        })}
-                        <div className='text-center'>
-                            <button className='btn btn-primary' onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
+                            <h2 className='text-center'>{props.team} vs {props.opponent}</h2>
+                            <div className={this.state.errorMessage ? 'alert alert-danger' : 'hidden'}><i className='fa fa-exclamation-triangle'></i> {this.state.errorMessage}</div>
+                            <br />
+                            <br />
+                            {this.state.rows.map(function (lineup, i) {
+                                return (<div key={i}>
+                                    <div className='text-center'>
+                                        <input className='gp-time' onBlur={that.save} onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
+                                    </div>
+                                        <button className='pull-right' onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
+                                    <br />
+                                    <br />
+                                    <div className='gp-row'>
+                                        {that.renderDiff(i)}
+                                    </div>
+                                                                <div className='gameplan-field'>
+
+                                    <div className='gp-row'>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lw')} value={lineup.lw} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 's')} value={lineup.s} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rw')} value={lineup.rw} /></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcm')} value={lineup.lcm} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcm')} value={lineup.rcm} /></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'dm')} value={lineup.dm} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lb')} value={lineup.lb} /></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcb')} value={lineup.lcb} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcb')} value={lineup.rcb} /></div>
+                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rb')} value={lineup.rb} /></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square gp-gk'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'gk')} value={lineup.gk} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    </div>
+                                    <hr />
+                                </div>);
+                            })}
+                            <div className='text-center'>
+                                <button className='btn btn-primary' onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
+                            </div>
+                            <div className='clearfix'>
+                                <br />&nbsp;
+                            </div>
+                            {this.renderPublishButton()}
                         </div>
-                    </div>
                 </div>
                 <div className='mt-sidebar'>
                         <div className='mt-container'>
@@ -193,23 +234,32 @@ module.exports = React.createClass({
         var total = {};
         for (var k in gameTime) {
             var element = gameTime[k];
-            if (isNaN(element.player)){
+            if (isNaN(element.player)) {
                 if (element.player in total) {
                     total[element.player] += element.minutes;
                 } else {
                     total[element.player] = element.minutes;
                 }
             }
-
         }
 
-        function getPlayerTime (key, value) { return (<div key={key}>{key}: <b> {value}</b></div>); }
+        function getPlayerTime (key, value) { return (<div key={key}>{key}:&nbsp;<b> {value}</b></div>); }
 
         var result = [];
         for (var l in total) {
             result.push(getPlayerTime(l, total[l]));
         }
         return (<div>{result}</div>);
+    },
+    renderPublishButton: function () {
+        if (this.state.isPublished || this.props.ispublished) {
+            return (<div className='text-center'>
+                                <div className='disabled btn btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
+                            </div>);
+        }
+        return (<div className='text-center'><button onClick={this.publish} className='btn btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publisér bytteplan</span>
+                    <i className={this.state.isPublishing ? 'fa fa-spinner fa-spin' : 'hidden'}></i></button></div>
+                );
     }
 });
 

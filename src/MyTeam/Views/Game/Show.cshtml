@@ -23,7 +23,7 @@
         }
         @if (Context.UserIsMember() && Model.Game.GamePlanIsPublished == true)
         {
-            <a asp-action="gameplan" asp-controller="game" asp-route-eventId="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameid="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
         }
         <h3 class="game-header hidden-xs">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
         <table class="game-scoreTable visible-xs">
