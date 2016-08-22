@@ -15,7 +15,7 @@ namespace MyTeam.Controllers
     [Route("kamper")]
     public class GameController : BaseController
     {
-     
+
 
         private readonly IGameService _gameService;
         private readonly IPlayerService _playerService;
@@ -49,7 +49,7 @@ namespace MyTeam.Controllers
                 .ToList();
 
             var year = aar ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
-            
+
             var games = _gameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
             var model = new GamesViewModel(seasons, teams, year, games, team, teamId);
 
@@ -175,7 +175,7 @@ namespace MyTeam.Controllers
             var gameId =
                 ControllerContext.HttpContext.UserIsInRole(Roles.Coach) ?
                 _dbContext.Games.Where(g => g.DateTime >= date).OrderBy(g => g.DateTime).Select(g => g.Id).FirstOrDefault():
-                _dbContext.Games.OrderByDescending(g => g.DateTime).Where(g => g.GamePlanIsPublished == true).Select(g => g.Id).FirstOrDefault();
+                _dbContext.Games.OrderByDescending(g => g.DateTime).Where(g => g.GamePlanIsPublished != null).Select(g => g.Id).FirstOrDefault();
 
             if (gameId != null) return RedirectToAction("GamePlanForGame", new { gameId = gameId });
 

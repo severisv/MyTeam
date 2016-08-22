@@ -61,16 +61,18 @@ module.exports = React.createClass({
 
     save: function () {
         var that = this;
-        $.post('/gameapi/savegameplan', {
-            gameId: this.props.gameid,
-            gamePlan: JSON.stringify(that.state)
-        })
+        if (this.props.iscoach == 'True') {
+            $.post('/gameapi/savegameplan', {
+                gameId: this.props.gameid,
+                gamePlan: JSON.stringify(that.state)
+            })
             .done(function () {
                 that.setState({ errorMessage: undefined });
             })
             .fail(function () {
                 that.setState({ errorMessage: 'Feil ved lagring' });
             });
+        }
     },
 
     publish: function () {
@@ -101,22 +103,22 @@ module.exports = React.createClass({
                             {this.state.rows.map(function (lineup, i) {
                                 return (<div key={i}>
                                     <div className='text-center'>
-                                        <input className='gp-time' onBlur={that.save} onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
+                                        <input readOnly={that.props.iscoach == 'False'} className='gp-time' onBlur={that.save} onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
                                     </div>
-                                        <button className='pull-right' onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
-                                    <br />
+                                        <button className={that.props.iscoach == 'True' ? 'pull-right' : 'hidden'} onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
                                     <br />
                                     <div className='gp-row'>
                                         {that.renderDiff(i)}
                                     </div>
-                                                                <div className='gameplan-field'>
+                                    <br />
+                                    <div className='gameplan-field'>
 
                                     <div className='gp-row'>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lw')} value={lineup.lw} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lw')} value={lineup.lw} /></div>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 's')} value={lineup.s} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 's')} value={lineup.s} /></div>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rw')} value={lineup.rw} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rw')} value={lineup.rw} /></div>
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
@@ -127,29 +129,29 @@ module.exports = React.createClass({
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcm')} value={lineup.lcm} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcm')} value={lineup.lcm} /></div>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcm')} value={lineup.rcm} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcm')} value={lineup.rcm} /></div>
                                         <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'dm')} value={lineup.dm} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lb')} value={lineup.lb} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcb')} value={lineup.lcb} /></div>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcb')} value={lineup.rcb} /></div>
+                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rb')} value={lineup.rb} /></div>
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'dm')} value={lineup.dm} /></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'></div>
-                                    </div>
-                                    <div className='gp-row'>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lb')} value={lineup.lb} /></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcb')} value={lineup.lcb} /></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcb')} value={lineup.rcb} /></div>
-                                        <div className='gp-square'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rb')} value={lineup.rb} /></div>
-                                    </div>
-                                    <div className='gp-row'>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square gp-gk'><input onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'gk')} value={lineup.gk} /></div>
+                                        <div className='gp-square gp-gk'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'gk')} value={lineup.gk} /></div>
                                         <div className='gp-square'></div>
                                         <div className='gp-square'></div>
                                     </div>
@@ -158,7 +160,7 @@ module.exports = React.createClass({
                                 </div>);
                             })}
                             <div className='text-center'>
-                                <button className='btn btn-primary' onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
+                                <button className={that.props.iscoach == 'True' ? 'btn btn-primary' : 'hidden'} onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
                             </div>
                             <div className='clearfix'>
                                 <br />&nbsp;
@@ -252,6 +254,7 @@ module.exports = React.createClass({
         return (<div>{result}</div>);
     },
     renderPublishButton: function () {
+        if (this.props.iscoach == 'False') return '';
         if (this.state.isPublished || this.props.ispublished) {
             return (<div className='text-center'>
                                 <div className='disabled btn btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
