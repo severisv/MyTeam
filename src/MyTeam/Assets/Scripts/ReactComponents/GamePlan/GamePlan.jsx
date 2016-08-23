@@ -255,7 +255,7 @@ module.exports = React.createClass({
     },
     renderPublishButton: function () {
         if (this.props.iscoach == 'False') return '';
-        if (this.state.isPublished || this.props.ispublished) {
+        if (this.state.isPublished || this.props.ispublished == 'True') {
             return (<div className='text-center'>
                                 <div className='disabled btn btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
                             </div>);
