@@ -105,7 +105,7 @@ module.exports = React.createClass({
                                     <div className='text-center'>
                                         <input readOnly={that.props.iscoach == 'False'} className='gp-time' onBlur={that.save} onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
                                     </div>
-                                        <button className={that.props.iscoach == 'True' ? 'pull-right' : 'hidden'} onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
+                                        <button className={that.props.iscoach == 'True' && that.state.rows.length > 1 ? 'pull-right' : 'hidden'} onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
                                     <br />
                                     <div className='gp-row'>
                                         {that.renderDiff(i)}

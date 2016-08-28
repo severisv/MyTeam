@@ -171,7 +171,7 @@ namespace MyTeam.Controllers
         [RequireMember]
         public IActionResult GamePlan()
         {
-            var date = DateTime.Now.AddHours(2);
+            var date = DateTime.Now.AddHours(-3);
             var gameId =
                 ControllerContext.HttpContext.UserIsInRole(Roles.Coach) ?
                 _dbContext.Games.Where(g => g.DateTime >= date).OrderBy(g => g.DateTime).Select(g => g.Id).FirstOrDefault():
