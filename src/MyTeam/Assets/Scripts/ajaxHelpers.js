@@ -68,7 +68,7 @@ ajax.applyAjaxLinkListeners = function ($scope) {
     $scope.find('a.ajax-post').each(function () {
         var element = $(this);
         var target = $(element.data('ajax-update'));
-        var href = element.attr('href');
+        var href = element.data('href');
         var completeFunction = element.data('ajax-complete');
 
         element.click(function (e) {
