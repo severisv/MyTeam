@@ -15,8 +15,7 @@
             <div class="event-signupButtons">
                 <a class="ajax-post btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")"
                    data-href="@Url.Action("Signup", new { eventId = Model.Id, isAttending = true })"
-                   data-ajax="true" data-ajax-update="#event-signup-@Model.Id" data-ajax-complete="window.mt.refreshNotificationButton()"
-                   asp-route-isattending="true">@Res.IsAttending</a>
+                   data-ajax="true" data-ajax-update="#event-signup-@Model.Id" data-ajax-complete="window.mt.refreshNotificationButton()">@Res.IsAttending</a>
                 <a class="ajax-post btn btn-lg btn-@(Model.IsNotAttending(User) ? "danger" : "default")"
                    data-href="@Url.Action("Signup", new { eventId = Model.Id, isAttending = false })"
                    data-ajax="true" data-ajax-update="#event-signup-@Model.Id" data-ajax-complete="window.mt.refreshNotificationButton()"
