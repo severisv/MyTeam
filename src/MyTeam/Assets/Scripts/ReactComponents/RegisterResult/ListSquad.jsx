@@ -15,9 +15,14 @@ module.exports = React.createClass({
                         var showPlayerUrl = model.showPlayerUrl + '/' + player.urlName;
                         return (<li key={player.id}>
                                     <i className="flaticon-soccer18"></i>&nbsp;<a href={showPlayerUrl} className="underline">{player.fullName}</a>
-                                    {that.renderDeleteButton(player, actions, model)}
+                                    {
+                                        model.isRemovingPlayer == player.id ?
+                                        <i className="fa fa-spinner fa-spin removePlayer"></i>:
+                                        that.renderDeleteButton(player, actions, model)
+                                    }
                                 </li>);
 })}
+                    <li key="loader">{model.isAddingPlayer ? <i className="fa fa-spinner fa-spin"></i> : ''}</li>
                 </ul>
 
     </div>

@@ -12,23 +12,25 @@ module.exports = React.createClass({
         var model = this.props.model;
         var actions = this.props.actions;
         var that = this;
-        var iconClassName = this.getIconClassName
+        var iconClassName = this.getIconClassName;
 
 
         return (
             <div className="col-sm-offset-1 gameEvents">
             {model.events.map(function(event, i)
             {
-                return(<div key={i} className="gameEvent">
+                return (<div key={i} className="gameEvent">
                           <span className="no-wrap"><i className={iconClassName(event.type)}></i>&nbsp;&nbsp;
                              {that.renderPlayerLink(actions, event, model)}
                            </span><span>&nbsp; </span>
                            {that.renderAssist(event, actions, model)}
                            {that.renderDeleteButton(event, actions, model)}
-                </div>)
+                            {model.isRemovingEvent == event.id ? <i className="fa fa-spinner fa-spin removeEvent"></i> : ''}
 
-            })}</div>
-            )
+                </div>);
+            })}
+            {model.isAddingEvent ? <i className="fa fa-spinner fa-spin"></i> : ''}
+            </div>);
     },
 
     renderPlayerLink: function (actions, event, model) {

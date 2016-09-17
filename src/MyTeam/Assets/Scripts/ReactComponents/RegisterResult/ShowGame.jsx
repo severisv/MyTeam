@@ -10,8 +10,9 @@ module.exports = React.createClass({
             squad: [],
             showPlayerUrl: this.props.routes.SHOW_PLAYER,
             loadingPlayers: true,
-            loadingEvents: true
-
+            loadingEvents: true,
+            isAddingEvent: false,
+            isRemovingEvent: false
         });
     },
 
@@ -83,6 +84,7 @@ module.exports = React.createClass({
     },
     handleSubmit: function () {
         var that = this;
+        this.setState({isAddingEvent: true});
         $.post(that.props.routes.ADD_EVENT,
             that.state
         ).then(function (response) {
@@ -90,16 +92,16 @@ module.exports = React.createClass({
             if (response.success != false) {
                 that.setState({
                     events: that.state.events.concat([
-                       response
-                    ])
-                })
+                        response
+                    ]),
+                    isAddingEvent: false
+                });
             }
-
-        })
-
+        });
     },
     deleteEvent: function (eventId) {
         var that = this;
+        that.setState({isRemovingEvent: eventId});
         $.post(that.props.routes.DELETE_EVENT,
             { eventId: eventId }
         ).then(function (response) {
@@ -107,10 +109,11 @@ module.exports = React.createClass({
                 that.setState({
                     events: that.state.events.filter(function (event) {
                         return event.id != eventId
-                    })
-                })
+                    }),
+                    isRemovingEvent: undefined
+                });
             }
-        })
+        });
     },
 
     handleAddPlayerChange: function (event) {
@@ -119,6 +122,7 @@ module.exports = React.createClass({
 
     addPlayer: function () {
         var that = this;
+        that.setState({isAddingPlayer: true});
         $.post(that.props.routes.SELECT_PLAYER,
             { eventId: that.props.gameId, playerId: that.state.addPlayerId, isSelected: true }
         ).then(function (response) {
@@ -126,15 +130,17 @@ module.exports = React.createClass({
                 var player = that.state.players.filter(function (player) { return player.id == that.state.addPlayerId })
                 that.setState({ squad: player.concat(that.state.squad).sort(function (a, b) { return a.firstName.localeCompare(b.firstName) }) })
                 that.setState({
-                    addPlayerId: that.getPlayersNotInSquad()[0].id
-                })
+                    addPlayerId: that.getPlayersNotInSquad()[0].id,
+                    isAddingPlayer: false
+                });
             }
-        })
+        });
     },
 
 
     removePlayerFromSquad: function (playerId) {
         var that = this;
+        that.setState({isRemovingPlayer: playerId});
         $.post(that.props.routes.SELECT_PLAYER,
             { eventId: that.props.gameId, playerId: playerId, isSelected: false }
         ).then(function (response) {
@@ -142,10 +148,11 @@ module.exports = React.createClass({
                 that.setState({
                     squad: that.state.squad.filter(function (player) {
                         return player.id != playerId
-                    })
-                })
+                    }),
+                    isRemovingPlayer: undefined
+                });
             }
-        })
+        });
     },
 
 

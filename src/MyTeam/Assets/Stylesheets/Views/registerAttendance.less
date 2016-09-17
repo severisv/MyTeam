@@ -6,15 +6,19 @@
 
     .ra-info-elements {
         position: absolute;
-        right: -7em;
+        right: -2.5em;
         top: 0.8em;
-        width: 6em;
+        width: 2em;
 
-        &> span, i {
+        &> span, i.fa-spinner {
             display:none;
             position:absolute;
         }
-     
+        &> i.fa-spinner {
+            top: 0.5em;
+            left: 0.5em;
+        }
+
     }
 }
 
@@ -36,5 +40,5 @@ input.register-trainingVictory-input:checked {
           background: #eaeaea;
           border: 1px solid #BCBCBC;
           border-radius: 2px;
-    }   
+    }
 }
