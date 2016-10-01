@@ -17,7 +17,7 @@ namespace MyTeam.Controllers
         }
         
         [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach)]
+        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult SetHomeScore(Guid gameId, int? value)
         {
             if (ModelState.IsValid)
@@ -29,7 +29,7 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach)]
+        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult SetAwayScore(Guid gameId, int? value)
         {
             if (ModelState.IsValid)
