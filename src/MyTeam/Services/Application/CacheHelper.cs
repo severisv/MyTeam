@@ -137,7 +137,7 @@ namespace MyTeam.Services.Application
             var unansweredEventIds = ids.Where(i => !answeredEvents.Contains(i)).Distinct();
 
 
-            var fineDate = DateTime.Now.AddDays(-7);
+            var fineDate = DateTime.Now.AddDays(-90);
             var hasDueFines = _dbContext.Fines.Any(f => f.Issued <= fineDate && f.Paid == null && f.MemberId == memberId);
             var due = 0;
             if (hasDueFines)
