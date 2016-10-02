@@ -42,3 +42,9 @@ body {
     }
 }
 
+::selection {
+  background: fade(@team-primary, 40); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: fade(@team-primary, 40); /* Gecko Browsers */
+}
