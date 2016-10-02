@@ -30,7 +30,7 @@ namespace MyTeam.ViewModels.Events
         public string Time { get; set; }
         [Display(Name = Res.Time)]
         
-        public DateTime DateTime => (Date.AsDate() ?? DateTime.MinValue) + (Time.AsTime()?? TimeSpan.MinValue);
+        public DateTime DateTime => (Date.AsDate() ?? DateTime.MinValue) + (Time.AsTime()?? TimeSpan.Zero);
         [Display(Name = Res.Location)]
         [RequiredNO]
         public string Location { get; set; }
@@ -154,6 +154,10 @@ namespace MyTeam.ViewModels.Events
                 result.Add(new ValidationResult(Res.FieldRequired, new[] { nameof(TeamIds) }));
             }
 
+            if (Time.AsTime() == null)
+            {
+                result.Add(new ValidationResult("Skriv inn et gyldig tidspunkt på formatet tt:mm", new[] { nameof(Time) }));
+            }
             return result;
         }
 

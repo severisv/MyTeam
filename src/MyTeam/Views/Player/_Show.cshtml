@@ -11,7 +11,7 @@
         <a class="edit-link edit-player-link " asp-controller="player" asp-action="edit" asp-route-playerId="@Model.Id"><i class="fa fa-pencil-square-o"></i></a>
     }
     <table class="table">
-        <tr><td><label asp-for="Positions"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.PositionsString)</td></tr>
+        <tr><td><label asp-for="Positions"></label></td><td class="playerStats--value">@string.Join(", ", Model.Positions)</td></tr>
         <tr><td><label asp-for="StartDate">@Res.StartDate</label> </td><td class="playerStats--value">@Html.DisplayFor(m => m.StartYear)</td></tr>
         <tr><td><label asp-for="BirthDate"></label></td><td class="playerStats--value">@Html.DisplayFor(m => m.BirthDate)</td></tr>
         @if (Context.Member().Exists)

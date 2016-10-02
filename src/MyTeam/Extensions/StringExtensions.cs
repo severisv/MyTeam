@@ -64,7 +64,9 @@ namespace MyTeam
          try
             {
                 var dateArray = str.Split(':');
-                return new TimeSpan(int.Parse(dateArray[0]), int.Parse(dateArray[1]), 0);
+                var hour = int.Parse(dateArray[0]);
+                var minute = dateArray.Length > 1 ? int.Parse(dateArray[1]) : 0;
+                return new TimeSpan(hour, minute, 0);
             }
             catch (Exception)
             {

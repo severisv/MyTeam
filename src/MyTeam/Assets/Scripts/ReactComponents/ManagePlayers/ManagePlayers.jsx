@@ -108,7 +108,7 @@ module.exports = React.createClass({
         });
 
         var teamElements = teams.map(function (team, i) {
-            return (<div key={team.id} className="col-sm-1  col-xs-2 no-padding subheadline align-center">{team.shortName}</div>);
+            return (<div key={team.id} className="col-sm-1  col-xs-2 no-padding-left no-padding-right subheadline align-center">{team.shortName}</div>);
         });
 
         return (<div className="manage-players">
