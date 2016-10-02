@@ -15,7 +15,7 @@ namespace MyTeam.ViewComponents.News
 
         public IViewComponentResult Invoke(Guid clubId)
         {
-            var articles = _articleService.GetSimple(clubId, 30);
+            var articles = _articleService.GetSimple(clubId, 8);
             return View("_ArticleNav", articles);
         }
 
