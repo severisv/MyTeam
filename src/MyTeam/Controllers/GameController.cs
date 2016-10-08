@@ -97,12 +97,10 @@ namespace MyTeam.Controllers
 
             return new JsonResult(JsonResponse.Success());
         }
-
-
-        [Route("vis")]
+        
+        [Route("vis/{gameId}")]
         public IActionResult Show(Guid gameId)
         {
-
             var game = _gameService.GetGame(gameId);
             if(game == null) return RedirectToAction("NotFoundAction", "Error");
 
@@ -110,6 +108,9 @@ namespace MyTeam.Controllers
 
             return View("Show", model);
         }
+
+        [Route("vis")]
+        public IActionResult ShowOld(Guid gameId) => RedirectToAction("Show", new { gameId });
 
         [Route("registrerresultat")]
         public IActionResult RegisterResult(Guid gameId)
