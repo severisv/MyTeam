@@ -10,6 +10,10 @@
         @await Component.InvokeAsync("ArticleNav", new {clubId = Context.GetClub().Id})
 
     </div>
+    <div class="mt-container">
+        <h4><i class="fa fa-twitter"></i> Siste Tweets</h4>
+        <a class="twitter-timeline" href="https://twitter.com/WamKam" data-widget-id="672159319203430401" data-tweet-limit="6" data-chrome="nofooter transparent noheader noborders noscrollbar">Tweets by WamKam</a>
+    </div>
 </div>
 
 <div class="mt-main">
@@ -27,5 +31,7 @@
 @section Scripts
 {
     @await Component.InvokeAsync("FacebookSdk")
+    @Html.Partial("Scripts/_TwitterFeed")
     <script src="~/scripts/News/show.js"></script>
+
 }
