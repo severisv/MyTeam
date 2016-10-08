@@ -49,7 +49,8 @@ namespace MyTeam.Controllers
         [Route(BaseRoute + "vis")]
         public IActionResult ShowFallback(Guid articleId)
         {
-            var article = _dbContext.Articles.Single(a => a.Id == articleId);
+            var article = _dbContext.Articles.SingleOrDefault(a => a.Id == articleId);
+            if (article == null) return RedirectToAction("NotFoundAction", "Error");
             return RedirectToAction("Show", new {name = article.Name});
         }
 
