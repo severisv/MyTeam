@@ -19,15 +19,6 @@
                         </a>
                     </li>
                 }
-                @if (Model.DueAmount > 0)
-                {
-                    <li>
-                        <a asp-controller="fine" asp-action="index">
-                            <i class="fa fa-money"></i>&nbsp;
-                             Du skylder <span class="red">@Model.DueAmount,-</span>
-                        </a>
-                    </li>
-                }
             </ul>
         </li>
 }

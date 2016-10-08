@@ -5,7 +5,9 @@
 {
     <tr class="@Model.Id">
         <td>
-            <span class="no-wrap hidden-xs">@Model.FirstName @Model.LastName</span>
+            <a asp-controller="fine" asp-action="list" asp-route-aar="@ViewData["selectedYear"]" asp-route-memberid="@Model.MemberId">
+                <span class="no-wrap hidden-xs">@Model.FirstName @Model.LastName</span>
+            </a>
             <span class="no-wrap visible-xs">@Model.FirstName @Model.LastName.Substring(0, 1).</span>
         </td>
         <td>@Model.Description&nbsp;
@@ -21,14 +23,6 @@
 
         @if (Context.UserIsInRole(Roles.Finemaster))
         {
-            <td class="text-center no-padding">
-                <input type="checkbox"
-                       class="ajax-checkbox"
-                       data-ajax-complete="window.mt.refreshNotificationButton()"
-                       checked="@Model.IsPaid"
-                       data-ajax-href="@Url.Action("SetPaid", "Fine", new { fineId = Model.Id })"
-                       />
-            </td>
             <td class="text-center">
                 <a class="confirm-dialog"
                    asp-controller="fine"

@@ -73,7 +73,6 @@ namespace MyTeam.Services.Domain
                 Description = f.RateName,
                 Name = f.Member.Name,
                 Issued = f.Issued,
-                PaidDate = f.Paid,
                 Rate = f.Amount,
                 Comment = f.Comment,
                 FirstName = f.Member.FirstName,
@@ -84,14 +83,7 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public void SetPaid(Guid clubId, Guid fineId, bool value)
-        {
-            var fine = _dbContext.Fines.Single(f => f.Id == fineId);
-            fine.Paid = value ? (DateTime?) DateTime.Now : null;
-            _dbContext.SaveChanges();
-            _cacheHelper.ClearNotificationCacheByMemberId(clubId, fine.MemberId);
-        }
-
+ 
         public IEnumerable<int> GetYears(Guid clubId)
         {
             return
@@ -125,8 +117,9 @@ namespace MyTeam.Services.Domain
         }
 
         public int GetDueAmount(Guid memberId)
-        {
-            return _dbContext.Fines.Where(f => f.Paid == null && f.MemberId == memberId).Sum(f => f.Amount);
-        }
+            =>
+                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount) -
+                 _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
+        
     }
 }

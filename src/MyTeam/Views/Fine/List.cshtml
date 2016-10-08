@@ -1,4 +1,5 @@
 ﻿@using System.Security.Policy
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
 @using MyTeam.ViewModels.Fine
@@ -46,7 +47,6 @@
                 <th><i class="fa fa-question"></i> Hva</th>
                 <th><i class="fa fa-money"></i><span class="hidden-xs"> Beløp</span></th>
                 <th class="hidden-xs"><i class="fa fa-calendar"></i> @Res.Date</th>
-                <th class="text-center nosort"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> Betalt</span></th>
                 @if (Context.UserIsInRole(Roles.Finemaster))
                 {
                     <th class="nosort"></th>
@@ -56,7 +56,7 @@
             <tbody id="fine-rates-tbody">
             @foreach (var fine in Model.Fines)
             {
-                @Html.Partial("_Show", fine)
+                @Html.Partial("_Show", fine, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear} })
             }
             </tbody>
         </table>

@@ -81,14 +81,7 @@ namespace MyTeam.Controllers
             return PartialView("_Show", null);
         }
 
-        [Route("betalt")]
-        [HttpPost]
-        [RequireMember(Roles.Finemaster)]
-        public void SetPaid(Guid fineId, bool value)
-        {
-            _fineService.SetPaid(Club.Id, fineId, value);
-        }
-
+      
         [Route("betalingsinformasjon")]
         [HttpPost]
         [RequireMember(Roles.Finemaster)]

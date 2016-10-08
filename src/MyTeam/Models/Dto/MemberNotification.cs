@@ -7,9 +7,7 @@ namespace MyTeam.Models.Dto
     {
         public int UnansweredEvents { get; set; }
         public IEnumerable<Guid> UnansweredEventIds { get; set; }
-
-        public int DueAmount { get; set; }
-        public bool Any => UnansweredEvents > 0 || DueAmount > 0;
+        public bool Any => UnansweredEvents > 0;
 
     }
 }
