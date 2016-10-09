@@ -169,5 +169,16 @@ namespace MyTeam.Services.Application
             }
             Cache.Set(key, notifications);
         }
+
+        public void ClearMemberCache(Guid memberId)
+        {
+            var member = _dbContext.Members.Where(m => m.Id == memberId).Select(m => new
+            {
+                m.ClubId,
+                Name = m.Email
+            }).ToList().Single();
+            var key = member.Name + member.ClubId;
+            Cache.Set(key, (PlayerDto)null);
+        }
     }
 }

@@ -69,10 +69,20 @@
     }
 </div>
 
+<div class="mt-sidebar">
 
-@if (Model.Years.Count() > 1)
-{
-    <div class="mt-sidebar">
+    @if (Context.UserIsInRole(Roles.Finemaster))
+    {
+            <div class="mt-container">
+                <div class="fine-paymentinfo">
+                    <h4>Betalingsinformasjon</h4>
+                    <textarea class="form-control ajax-update" data-href="@Url.Action("SetPaymentInfo", "Fine")" type="text" placeholder="Bøter kan betales med Vipps til .....">@Model.PaymentInfo</textarea>
+                </div>
+            </div>
+    }
+
+    @if (Model.Years.Count() > 1)
+    {
         <div class="mt-container">
             <ul class="nav nav-list">
                 <li class="nav-header">@Res.Season.Pluralize()</li>
@@ -83,5 +93,6 @@
             </ul>
 
         </div>
-    </div>
-}
+    }
+
+</div>

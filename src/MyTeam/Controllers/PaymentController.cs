@@ -16,12 +16,14 @@ namespace MyTeam.Controllers
 
         private readonly IPaymentService _paymentService;
         private readonly IPlayerService _playerService;
+        private readonly IFineService _fineService;
 
 
-        public PaymentController(IPaymentService paymentService, IPlayerService playerService)
+        public PaymentController(IPaymentService paymentService, IPlayerService playerService, IFineService fineService)
         {
             _paymentService = paymentService;
             _playerService = playerService;
+            _fineService = fineService;
         }
         
         [Route("{aar:int?}/{memberId?}")]
@@ -32,8 +34,9 @@ namespace MyTeam.Controllers
             var players = _playerService.GetDto(Club.Id, PlayerStatus.Aktiv).ToList();
             var years = _paymentService.GetYears(Club.Id);
             var selectedPlayer = players.FirstOrDefault(p => p.Id == memberId);
+            var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
 
-            var model = new ListPaymentViewModel(payments, players, years, year, selectedPlayer);
+            var model = new ListPaymentViewModel(payments, players, years, year, selectedPlayer, paymentInfo);
             return View(model);
 
         }

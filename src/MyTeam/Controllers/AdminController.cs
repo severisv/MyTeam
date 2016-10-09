@@ -13,12 +13,10 @@ namespace MyTeam.Controllers
     [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
-        private readonly IConfigurationRoot _configuration;
         private readonly IPlayerService _playerService;
 
-        public AdminController(IConfigurationRoot configuration, IPlayerService playerService)
+        public AdminController(IPlayerService playerService)
         {
-            _configuration = configuration;
             _playerService = playerService;
         }
 

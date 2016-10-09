@@ -13,15 +13,17 @@ namespace MyTeam.ViewModels.Fine
         public IEnumerable<SimplePlayerDto> Players { get; }
         public SimplePlayerDto SelectedPlayer { get; }
         public int SelectedYear { get; }
+        public string PaymentInfo { get; }
         public IEnumerable<int> Years { get; }
 
-        public ListPaymentViewModel(IEnumerable<PaymentViewModel> payments, IEnumerable<SimplePlayerDto> players, IEnumerable<int> years, int selectedYear, SimplePlayerDto selectedPlayer)
+        public ListPaymentViewModel(IEnumerable<PaymentViewModel> payments, IEnumerable<SimplePlayerDto> players, IEnumerable<int> years, int selectedYear, SimplePlayerDto selectedPlayer, string paymentInfo)
         {
             Payments = payments;
             Players = players;
             SelectedYear = selectedYear;
             Years = years;
             SelectedPlayer = selectedPlayer;
+            PaymentInfo = paymentInfo;
         }
 
 

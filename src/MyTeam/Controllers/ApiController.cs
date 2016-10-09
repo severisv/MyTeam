@@ -8,6 +8,7 @@ using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
+using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 
 
@@ -20,12 +21,14 @@ namespace MyTeam.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly IEventService _eventService;
         private readonly IPlayerService _playerService;
+        private readonly ICacheHelper _cacheHelper;
 
-        public ApiController(ApplicationDbContext dbContext, IEventService eventService, IPlayerService playerService)
+        public ApiController(ApplicationDbContext dbContext, IEventService eventService, IPlayerService playerService, ICacheHelper cacheHelper)
         {
             _playerService = playerService;
             _eventService = eventService;
             _dbContext = dbContext;
+            _cacheHelper = cacheHelper;
         }
 
 
@@ -96,6 +99,7 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 _playerService.TogglePlayerRole(id, role, Club.ClubId);
+                _cacheHelper.ClearMemberCache(id);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
