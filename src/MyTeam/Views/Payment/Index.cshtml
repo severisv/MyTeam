@@ -1,8 +1,10 @@
 ﻿@using System.Security.Policy
+@using System.Threading.Tasks
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
 @using MyTeam.ViewModels.Fine
+@using MyTeam.ViewModels.Payment
 @model ListPaymentViewModel
 
 @{ 
@@ -56,14 +58,14 @@
             <tbody id="fine-rates-tbody">
             @foreach (var payment in Model.Payments)
             {
-                @Html.Partial("_Show", payment, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear} })
+                @Html.Partial("_Show", payment, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear}, { "selectedMemberId", Model.SelectedPlayer?.Id } })
             }
             </tbody>
         </table>
     </div>
     @if (Context.UserIsInRole(Roles.Finemaster))
     {
-       @Html.Partial("_Add", new AddFineViewModel(Model.Players))
+       @Html.Partial("_Add", new AddPaymentViewModel(Model.Players))
     }
 </div>
 
@@ -76,7 +78,7 @@
                 <li class="nav-header">@Res.Season.Pluralize()</li>
                 @foreach (var year in Model.Years)
                 {
-                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="fine" asp-action="list" asp-route-memberId="@Model.SelectedPlayer?.Id" asp-route-aar="@year">@year</a></li>
+                    <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="payment" asp-action="index" asp-route-memberId="@Model.SelectedPlayer?.Id" asp-route-aar="@year">@year</a></li>
                 }
             </ul>
 

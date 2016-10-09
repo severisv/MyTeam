@@ -12,7 +12,7 @@
             <li class="active"><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
             <li class=""><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
             <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
-            @if (User.IsInRole(Roles.Finemaster))
+            @if (Context.UserIsInRole(Roles.Finemaster))
             {
                 <li><a asp-action="index" asp-controller="payment"><i class="@Icons.Payment"></i>&nbsp;Innbetalinger</a></li>
             }
@@ -24,7 +24,7 @@
                 <div class="pull-left">
                     <img src="@Context.Cloudinary().MemberImage(Model.PaymentInfo.Image, Model.PaymentInfo.FacebookId, 100, 100)" />
                 </div>
-                <div ><h3 class="text-left "><span class="no-wrap" >Du skylder: <span class="red">@Model.PaymentInfo.Due,-</span></span></h3>
+                <div ><h3 class="text-left "><span class="no-wrap" >Du skylder: <span class="red">@Model.PaymentInfo.Due<span class="u-currency-postfix">,-</span></span></span></h3>
                     <h5 class="text-left">Betalingsinformasjon:</h5> @Model.PaymentInfo.PaymentInfo
                 </div>
             </div>
@@ -65,8 +65,8 @@
                                 @player.Name
                             </a>
                         </td>
-                        <td class="text-center red">
-                            @if (player.Due > 0){<span>@player.Due,-</span>}
+                        <td class="text-center @(player.Due > 0 ? "red":"green")">
+                            <span>@(player.Due < 0 ? $"- {player.Due.ToString().Substring(1)}" : player.Due.ToString() )<span class="u-currency-postfix">,-</span></span>
                         </td>
                         <td class="text-right">
                             @player.Total,-

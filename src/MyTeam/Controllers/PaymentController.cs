@@ -9,8 +9,8 @@ using MyTeam.ViewModels.Payment;
 
 namespace MyTeam.Controllers
 {
-    [RequireMember]
-    [Route("intern/boter")]
+    [RequireMember(Roles.Finemaster)]
+    [Route("intern/innbetalinger")]
     public class PaymentController : BaseController
     {
 
@@ -28,7 +28,7 @@ namespace MyTeam.Controllers
         public IActionResult Index(int? aar = null, Guid? memberId = null)
         {
             var year = aar ?? DateTime.Now.Year;
-            var payments = _paymentService.Get(Club.Id, year, memberId);
+            var payments = _paymentService.GetPayments(Club.Id, year, memberId);
             var players = _playerService.GetDto(Club.Id, PlayerStatus.Aktiv).ToList();
             var years = _paymentService.GetYears(Club.Id);
             var selectedPlayer = players.FirstOrDefault(p => p.Id == memberId);
@@ -39,12 +39,11 @@ namespace MyTeam.Controllers
         }
         
         [Route("slett/{paymentId}")]
-        [RequireMember(Roles.Finemaster)]
-        public IActionResult Delete(Guid rateId)
+        public IActionResult Delete(Guid paymentId, int? aar = null, Guid? memberId = null)
         {
-            _paymentService.Delete(rateId);
+            _paymentService.Delete(paymentId);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { aar, memberId });
         }
 
         [Route("leggtil")]
@@ -54,9 +53,9 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                var fineId = _paymentService.Add(model, Club.Id);
-                var fine = _paymentService.Get(fineId);
-                return PartialView("_Show", fine);
+                var paymentId = _paymentService.Add(model, Club.Id);
+                var payment = _paymentService.Get(paymentId);
+                return PartialView("_Show", payment);
             }
 
             return PartialView("_Show", null);

@@ -16,6 +16,7 @@ namespace MyTeam.ViewModels.Payment
         public DateTime? Date { get; set; }
 
         [Display(Name = "Beløp")]
+        [RequiredNO]
         public int? Amount { get; set; }
 
         [Display(Name = "Kommentar")]

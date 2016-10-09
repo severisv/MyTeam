@@ -1,11 +1,15 @@
 ﻿@using MyTeam.Resources
 @using MyTeam.ViewModels.Fine
 @model FineViewModel
+@{
+    var selectedYear = ViewData["selectedYear"];
+    var selectedMemberId = ViewData["selectedMemberId"];
+}
 @if (Model != null)
 {
     <tr class="@Model.Id">
         <td>
-            <a asp-controller="fine" asp-action="list" asp-route-aar="@ViewData["selectedYear"]" asp-route-memberid="@Model.MemberId">
+            <a asp-controller="fine" asp-action="list" asp-route-aar="@selectedYear" asp-route-memberid="@Model.MemberId">
                 <span class="no-wrap hidden-xs">@Model.FirstName @Model.LastName</span>
             </a>
             <span class="no-wrap visible-xs">@Model.FirstName @Model.LastName.Substring(0, 1).</span>
@@ -28,6 +32,8 @@
                    asp-controller="fine"
                    asp-action="delete"
                    asp-route-rateId="@Model.Id"
+                   asp-route-memberId="@selectedMemberId"
+                   asp-route-aar="@selectedYear"
                    title="@Res.Delete" data-message="Er du sikker på at du vil slette @Model.Name?"><i class="fa fa-trash"></i></a>
             </td>
         }

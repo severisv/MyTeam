@@ -11,7 +11,10 @@ namespace MyTeam.ViewModels.Fine
         private readonly IEnumerable<PaymentViewModel> _payments;
         public int SelectedYear { get; }
         public IEnumerable<int> Years { get; }
-        public IEnumerable<FineSummary> FineSummaries => _fines.GroupBy(f => f.MemberId).Select(g => new FineSummary(g, _payments.Where(p => p.MemberId == g.Key))).OrderByDescending(f => f.Total);
+        public IEnumerable<FineSummary> FineSummaries => 
+            _fines.GroupBy(f => f.MemberId).Select(g => new FineSummary(g, _payments.Where(p => p.MemberId == g.Key), SelectedYear))
+            .Where(g => g.Total > 0)
+            .OrderByDescending(f => f.Total);
 
         public PaymentInfoViewModel PaymentInfo { get; }
 

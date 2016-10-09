@@ -18,7 +18,7 @@ namespace MyTeam.Models
         public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
         public DbSet<Fine> Fines { get; set; }
-        //public DbSet<Payment> Payments { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberTeam> MemberTeams { get; set; }
         public DbSet<Player> Players { get; set; }
@@ -60,11 +60,11 @@ namespace MyTeam.Models
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-        //builder.Entity<Member>()
-        //        .HasMany(e => e.Payments)
-        //        .WithOne(c => c.Member)
-        //        .HasForeignKey(c => c.MemberId)
-        //        .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Member>()
+                    .HasMany(e => e.Payments)
+                    .WithOne(c => c.Member)
+                    .HasForeignKey(c => c.MemberId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Team>()
                 .HasMany(e => e.MemberTeams)

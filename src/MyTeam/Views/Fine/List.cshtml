@@ -15,7 +15,7 @@
             <li class=""><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
             <li class="active"><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
             <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
-            @if (User.IsInRole(Roles.Finemaster))
+            @if (Context.UserIsInRole(Roles.Finemaster))
             {
                 <li><a asp-action="index" asp-controller="payment"><i class="@Icons.Payment"></i>&nbsp;Innbetalinger</a></li>
             }
@@ -61,13 +61,13 @@
             <tbody id="fine-rates-tbody">
             @foreach (var fine in Model.Fines)
             {
-                @Html.Partial("_Show", fine, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear} })
+                @Html.Partial("_Show", fine, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear}, { "selectedMemberId", Model.SelectedPlayer?.Id} })
             }
             </tbody>
         </table>
     </div>
 
-     @Html.Partial("_Add", new AddPaymentViewModel(Model.Players))
+     @Html.Partial("_Add", new AddFineViewModel(Model.Rates, Model.Players))
     
 </div>
 

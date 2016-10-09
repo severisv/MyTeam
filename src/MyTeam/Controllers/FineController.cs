@@ -32,8 +32,8 @@ namespace MyTeam.Controllers
         {
             var year = aar ?? DateTime.Now.Year;
             var years = _fineService.GetYears(Club.Id);
-            var fines = _fineService.Get(Club.Id, year);
-            var payments = _paymentService.Get(Club.Id, year);
+            var fines = _fineService.GetFines(Club.Id);
+            var payments = _paymentService.GetPayments(Club.Id);
             var currentUserDue = _fineService.GetDueAmount(CurrentMember.Id);
             var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
             var paymentInfoModel = new PaymentInfoViewModel(CurrentMember.Image, CurrentMember.FacebookId, paymentInfo, currentUserDue);
@@ -47,7 +47,7 @@ namespace MyTeam.Controllers
         public IActionResult List(int? aar = null, Guid? memberId = null)
         {
             var year = aar ?? DateTime.Now.Year;
-            var fines = _fineService.Get(Club.Id, year, memberId);
+            var fines = _fineService.GetFines(Club.Id, year, memberId);
             var rates = _rateService.GetRates(Club.Id);
             var players = _playerService.GetDto(Club.Id, PlayerStatus.Aktiv).ToList();
             var years = _fineService.GetYears(Club.Id);
@@ -61,11 +61,11 @@ namespace MyTeam.Controllers
 
         [Route("slett/{rateId}")]
         [RequireMember(Roles.Finemaster)]
-        public IActionResult Delete(Guid rateId)
+        public IActionResult Delete(Guid rateId, int? aar = null, Guid? memberId = null)
         {
             _fineService.Delete(rateId);
 
-            return RedirectToAction("List");
+            return RedirectToAction("List", new { aar, memberId } );
         }
 
         [Route("leggtil")]

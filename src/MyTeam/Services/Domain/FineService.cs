@@ -13,7 +13,7 @@ namespace MyTeam.Services.Domain
 
         private readonly ApplicationDbContext _dbContext;
 
-        public FineService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
+        public FineService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -51,9 +51,12 @@ namespace MyTeam.Services.Domain
             return Select(query).Single();
         }
 
-        public IEnumerable<FineViewModel> Get(Guid clubId, int year, Guid? memberId)
+        public IEnumerable<FineViewModel> GetFines(Guid clubId, int? year = null, Guid? memberId = null)
         {
-            var query = _dbContext.Fines.Where(f => f.Rate.ClubId == clubId && f.Issued.Year == year);
+            var query = _dbContext.Fines.Where(f => f.Rate.ClubId == clubId);
+
+            if (year != null)
+                query = query.Where(f => f.Issued.Year == year);
 
             if (memberId != null) query = query.Where(f => f.MemberId == memberId);
 
@@ -115,9 +118,8 @@ namespace MyTeam.Services.Domain
 
         public int GetDueAmount(Guid memberId)
             =>
-                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
-        //-
-        //         _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
+                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount) -
+                 _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
         
     }
 }
