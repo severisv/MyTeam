@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace MyTeam.ViewModels.Fine
 {
     public class PaymentInfoViewModel

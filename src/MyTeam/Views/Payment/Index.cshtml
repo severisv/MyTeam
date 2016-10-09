@@ -3,22 +3,18 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using MyTeam.Resources
 @using MyTeam.ViewModels.Fine
-@using MyTeam.ViewModels.Payment
-@model ListFineViewModel
+@model ListPaymentViewModel
 
 @{ 
-    ViewBag.Title = "Bøter";
+    ViewBag.Title = "Innbetalinger";
 }
 <div class="mt-main fine">
     <div class="mt-container">
         <ul class="nav nav-pills mt-justified">
             <li class=""><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
-            <li class="active"><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
+            <li><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
             <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
-            @if (User.IsInRole(Roles.Finemaster))
-            {
-                <li><a asp-action="index" asp-controller="payment"><i class="@Icons.Payment"></i>&nbsp;Innbetalinger</a></li>
-            }
+            <li class="active"><a asp-action="index" asp-controller="payment"><i class="@Icons.Payment"></i>&nbsp;Innbetalinger</a></li>
         </ul>
     </div>
     <div class="mt-container">
@@ -26,10 +22,10 @@
             {
             <div class="pull-right">
                 <select class="linkSelect form-control pull-right">
-                    <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear})">- Alle spillere -</option>
+                    <option value="@Url.Action("index", "payment", new {aar = Model.SelectedYear})">- Alle spillere -</option>
                     @foreach (var player in Model.Players)
                     {
-                        <option value="@Url.Action("List", "Fine", new {aar = Model.SelectedYear, memberId = player.Id})" selected="@(Model.SelectedPlayer?.Id == player.Id)">@player.ShortName</option>
+                        <option value="@Url.Action("index", "payment", new {aar = Model.SelectedYear, memberId = player.Id})" selected="@(Model.SelectedPlayer?.Id == player.Id)">@player.ShortName</option>
                     }
                 </select>
             </div>
@@ -40,7 +36,7 @@
                 <select class="linkSelect form-control pull-right hidden-md hidden-lg">
                     @foreach (var year in Model.Years)
                 {
-                        <option value="@Url.Action("List", "Fine", new {aar = year, memberId = Model.SelectedPlayer?.Id })" selected="@(Model.SelectedYear == year)">@year</option>
+                        <option value="@Url.Action("index", "payment", new {aar = year, memberId = Model.SelectedPlayer?.Id })" selected="@(Model.SelectedYear == year)">@year</option>
                     }
                 </select>
             </div>
@@ -49,7 +45,6 @@
             <thead>
             <tr>
                 <th><i class="fa fa-user"></i> Hvem</th>
-                <th><i class="fa fa-question"></i> Hva</th>
                 <th><i class="fa fa-money"></i><span class="hidden-xs"> Beløp</span></th>
                 <th class="hidden-xs"><i class="fa fa-calendar"></i> @Res.Date</th>
                 @if (Context.UserIsInRole(Roles.Finemaster))
@@ -59,16 +54,17 @@
             </tr>
             </thead>
             <tbody id="fine-rates-tbody">
-            @foreach (var fine in Model.Fines)
+            @foreach (var payment in Model.Payments)
             {
-                @Html.Partial("_Show", fine, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear} })
+                @Html.Partial("_Show", payment, new ViewDataDictionary(ViewData) { { "selectedYear", Model.SelectedYear} })
             }
             </tbody>
         </table>
     </div>
-
-     @Html.Partial("_Add", new AddPaymentViewModel(Model.Players))
-    
+    @if (Context.UserIsInRole(Roles.Finemaster))
+    {
+       @Html.Partial("_Add", new AddFineViewModel(Model.Players))
+    }
 </div>
 
 

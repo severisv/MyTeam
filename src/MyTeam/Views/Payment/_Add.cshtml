@@ -1,0 +1,58 @@
+﻿@using System.Security.Policy
+@using System.Threading.Tasks
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using MyTeam.Resources
+@using MyTeam.ViewModels.Fine
+@using MyTeam.ViewModels.Payment
+@model AddPaymentViewModel
+<div class="mt-container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <h2>Registrer innbetaling</h2>
+        <form asp-action="Add" asp-controller="Payment" method="post"
+              class="form-horizontal @(ViewBag.DisableAjax == true ? "" : "ajax-form")"
+              data-ajax-prepend="#fine-rates-tbody"
+              role="form">
+            <div class="form-group">
+                <label class="control-label col-xs-3">Hvem</label>
+                <div class="col-xs-9">
+                    <select asp-for="MemberId" type="text" class="form-control">
+                        @foreach(var member in Model.Players)
+                        {
+                            <option value="@member.Id">@member.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <span class="datepicker" data-value="@DateTime.Now.ToNoFull()" id="Date">
+                        <input asp-for="Date" type="text" class="form-control" />
+                    </span>
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Amount" type="text" placeholder="Beløp" class="form-control" data-ajax-update-clear />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label col-xs-3"></label>
+                <div class="col-xs-9">
+                    <input asp-for="Comment" type="text" placeholder="Eventuell kommentar" class="form-control" data-ajax-update-clear />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-9">
+                    <button
+                        type="submit" class="btn btn-primary"><span class="form-submitText">@Res.Add</span><i class="fa fa-spinner fa-spin"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -16,13 +16,15 @@ namespace MyTeam.Controllers
         private readonly IFineService _fineService;
         private readonly IPlayerService _playerService;
         private readonly IRemedyRateService _rateService;
+        private readonly IPaymentService _paymentService;
 
 
-        public FineController(IFineService fineService, IRemedyRateService rateService, IPlayerService playerService)
+        public FineController(IFineService fineService, IRemedyRateService rateService, IPlayerService playerService, IPaymentService paymentService)
         {
             _fineService = fineService;
             _playerService = playerService;
             _rateService = rateService;
+            _paymentService = paymentService;
         }
 
         [Route("{aar:int?}")]
@@ -31,11 +33,11 @@ namespace MyTeam.Controllers
             var year = aar ?? DateTime.Now.Year;
             var years = _fineService.GetYears(Club.Id);
             var fines = _fineService.Get(Club.Id, year);
+            var payments = _paymentService.Get(Club.Id, year);
             var currentUserDue = _fineService.GetDueAmount(CurrentMember.Id);
             var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
             var paymentInfoModel = new PaymentInfoViewModel(CurrentMember.Image, CurrentMember.FacebookId, paymentInfo, currentUserDue);
-            
-            var model = new IndexViewModel(years, year, fines, paymentInfoModel);
+            var model = new IndexViewModel(years, year, fines, payments, paymentInfoModel);
             return View(model);
 
         }
@@ -61,7 +63,7 @@ namespace MyTeam.Controllers
         [RequireMember(Roles.Finemaster)]
         public IActionResult Delete(Guid rateId)
         {
-            _fineService.Delete(Club.Id, rateId);
+            _fineService.Delete(rateId);
 
             return RedirectToAction("List");
         }

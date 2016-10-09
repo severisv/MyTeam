@@ -12,6 +12,10 @@
             <li class="active"><a asp-action="index" asp-controller="fine" asp-route-status=""><i class="fa fa-bar-chart"></i>&nbsp;Oversikt</a></li>
             <li class=""><a asp-action="list" asp-controller="fine"><i class="@Icons.Fine"></i>&nbsp;Alle bøter</a></li>
             <li class=""><a asp-action="index" asp-controller="remedyrate"><i class="fa fa-usd"></i>&nbsp;Bøtesatser</a></li>
+            @if (User.IsInRole(Roles.Finemaster))
+            {
+                <li><a asp-action="index" asp-controller="payment"><i class="@Icons.Payment"></i>&nbsp;Innbetalinger</a></li>
+            }
         </ul>
     </div>
     <div class="mt-container">

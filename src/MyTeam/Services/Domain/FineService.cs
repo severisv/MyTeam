@@ -12,20 +12,17 @@ namespace MyTeam.Services.Domain
     {
 
         private readonly ApplicationDbContext _dbContext;
-        private readonly ICacheHelper _cacheHelper;
 
         public FineService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
         {
             _dbContext = dbContext;
-            _cacheHelper = cacheHelper;
         }
 
-        public void Delete(Guid clubId, Guid fineId)
+        public void Delete(Guid fineId)
         {
             var fine = _dbContext.Fines.Single(r => r.Id == fineId);
             _dbContext.Fines.Remove(fine);
             _dbContext.SaveChanges();
-            _cacheHelper.ClearNotificationCacheByMemberId(clubId, fine.MemberId);
         }
 
         public Guid Add(AddFineViewModel model)
@@ -118,8 +115,9 @@ namespace MyTeam.Services.Domain
 
         public int GetDueAmount(Guid memberId)
             =>
-                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount) -
-                 _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
+                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
+        //-
+        //         _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
         
     }
 }

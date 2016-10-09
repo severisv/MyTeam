@@ -12,6 +12,7 @@ namespace MyTeam.Settings
         public const string Upcoming = "fa fa-calendar-o";
         public const string SquadList = "fa fa-users";
         public const string Fine = "fa fa-money";
+        public static string Payment = "fa fa-list";
 
         public static string GameType(GameType? gameType)
         {
