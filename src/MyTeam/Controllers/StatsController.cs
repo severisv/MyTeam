@@ -23,7 +23,10 @@ namespace MyTeam.Controllers
             var selectedYear = aar ?? DateTime.Now.Year;
             var teamName = lag ?? Club.Teams.First().ShortName;
             var teamId = Club.Teams.First(t => t.ShortName == teamName).Id;
-            var stats = _statsService.GetStats(teamId, selectedYear);
+            var stats = 
+                aar == 0 ?
+                _statsService.GetStats(teamId):
+                _statsService.GetStats(teamId, selectedYear);
             var years = _statsService.GetStatsYears(teamId);
 
             var model = new StatsViewModel(Club.Teams, teamName, selectedYear, years, stats);

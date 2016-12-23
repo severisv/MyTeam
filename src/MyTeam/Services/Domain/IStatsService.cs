@@ -11,7 +11,7 @@ namespace MyTeam.Services.Domain
         IEnumerable<int> GetAttendanceYears(Guid clubId);
 
 
-        IEnumerable<PlayerStats> GetStats(Guid teamId, int selectedYear);
+        IEnumerable<PlayerStats> GetStats(Guid teamId, int? selectedYear = null);
         IEnumerable<int> GetStatsYears(Guid teamId);
     }
 }

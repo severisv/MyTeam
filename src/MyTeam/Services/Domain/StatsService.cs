@@ -60,10 +60,14 @@ namespace MyTeam.Services.Domain
              .OrderByDescending(y => y);
         }
 
-        public IEnumerable<PlayerStats> GetStats(Guid teamId, int selectedYear)
+        public IEnumerable<PlayerStats> GetStats(Guid teamId, int? selectedYear = null)
         {
-            var games = _dbContext.Games.Where(g => g.TeamId == teamId && g.DateTime.Year == selectedYear && g.GameType != GameType.Treningskamp)
-                .Select(g => g.Id).ToList();
+
+            var query = selectedYear != null ?
+                _dbContext.Games.Where(g => g.TeamId == teamId && g.DateTime.Year == selectedYear && g.GameType != GameType.Treningskamp):
+                _dbContext.Games.Where(g => g.TeamId == teamId && g.GameType != GameType.Treningskamp);
+
+            var games = query.Select(g => g.Id).ToList();
 
             var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId)).ToList();
             var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected).Select(ea => ea.MemberId).ToList();

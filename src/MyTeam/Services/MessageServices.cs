@@ -22,7 +22,7 @@ namespace MyTeam.Services
           
         }
 
-        async Task Send(string email, string subject, string message)
+        Task Send(string email, string subject, string message)
         {
             dynamic sg = new SendGridAPIClient(_apiKey);
 
@@ -31,7 +31,7 @@ namespace MyTeam.Services
             var content = new Content("text/html", message);
             var mail = new Mail(from, subject, to, content);
 
-            await sg.client.mail.send.post(requestBody: mail.Get());
+            return sg.client.mail.send.post(requestBody: mail.Get());
         }
 
 

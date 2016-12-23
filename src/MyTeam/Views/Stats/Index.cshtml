@@ -200,6 +200,8 @@
                 {
                     <li><a class="@(Model.SelectedYear == year ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="@year">@year</a></li>
                 }
+                <li><hr /></li>
+                <li><a class="@(Model.SelectedYear == 0 ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="0" >Total</a></li>
             </ul>
 
         </div>
