@@ -69,8 +69,10 @@
                             <a class="@(Model.Year == year ? "active" : "" )" asp-controller="attendance" asp-action="attendance" asp-route-year="@year">
                                 @year
                             </a>
-                        </li>
+                          </li>
                     }
+                    <li><hr /></li>
+                    <li><a class="@(Model.Year == 0 ? "active" : "")" asp-controller="attendance" asp-action="attendance" asp-route-year="0" >Total</a></li>
                 </ul>
             </div>
         </div>

@@ -7,7 +7,7 @@ namespace MyTeam.Services.Domain
 {
     public interface IStatsService
     {
-        IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year);
+        IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int? year = null);
         IEnumerable<int> GetAttendanceYears(Guid clubId);
 
 

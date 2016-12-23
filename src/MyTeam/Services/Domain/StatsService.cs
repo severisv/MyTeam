@@ -18,15 +18,19 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int year)
+        public IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int? year = null)
         {
             var now = DateTime.Now;
-            var eventIds = _dbContext.Events
+            var query = _dbContext.Events
                 .Where(e => e.ClubId == clubId &&
                             e.DateTime < now.AddHours(1) &&
-                            e.DateTime.Year == year &&
                             e.Voluntary == false &&
-                            (e.Type == EventType.Trening || e.Type == EventType.Kamp)).Select(e => e.Id).ToList();
+                            (e.Type == EventType.Trening || e.Type == EventType.Kamp));
+
+            if (year != null) query = query.Where(e => e.DateTime.Year == year);
+
+
+            var eventIds = query.Select(e => e.Id).ToList();
 
             var attendances = _dbContext.EventAttendances.Where(a => eventIds.Contains(a.EventId));
 
@@ -63,9 +67,12 @@ namespace MyTeam.Services.Domain
         public IEnumerable<PlayerStats> GetStats(Guid teamId, int? selectedYear = null)
         {
 
-            var query = selectedYear != null ?
-                _dbContext.Games.Where(g => g.TeamId == teamId && g.DateTime.Year == selectedYear && g.GameType != GameType.Treningskamp):
-                _dbContext.Games.Where(g => g.TeamId == teamId && g.GameType != GameType.Treningskamp);
+            var query = _dbContext.Games.Where(g => g.TeamId == teamId && g.GameType != GameType.Treningskamp);
+
+            if (selectedYear != null)
+            {
+                query = query.Where(g => g.DateTime.Year == selectedYear);
+            }
 
             var games = query.Select(g => g.Id).ToList();
 
