@@ -20,14 +20,18 @@ namespace MyTeam.Controllers
         [Route("{lag?}/{aar:int?}")]
         public IActionResult Index(string lag = null, int? aar = null)
         {
-            var selectedYear = aar ?? DateTime.Now.Year;
             var teamName = lag ?? Club.Teams.First().ShortName;
             var teamId = Club.Teams.First(t => t.ShortName == teamName).Id;
+            var years = _statsService.GetStatsYears(teamId).ToList();
+
+
+            var selectedYear = aar ?? years.FirstOrDefault();
+
             var stats = 
                 aar == 0 ?
                 _statsService.GetStats(teamId):
                 _statsService.GetStats(teamId, selectedYear);
-            var years = _statsService.GetStatsYears(teamId);
+
 
             var model = new StatsViewModel(Club.Teams, teamName, selectedYear, years, stats);
 
