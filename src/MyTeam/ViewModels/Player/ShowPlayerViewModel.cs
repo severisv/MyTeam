@@ -38,7 +38,7 @@ namespace MyTeam.ViewModels.Player
         public int PracticeCount { get; set; }
 
         [Display(Name = Res.Positions)]
-        public string[] Positions => PositionsString?.Split(',');
+        public string[] Positions => PositionsString?.Split(',') ?? new string[0];
         public string PositionsString { get; set; }
         public string Name => $"{FirstName} {LastName}";
         public string FacebookId { get; set; }
