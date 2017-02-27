@@ -16,24 +16,19 @@ namespace MyTeam.Services
             _apiKey = configuration["Integration:SendGrid:Key"];
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
-            return Send(email, subject, message);
-          
-        }
+            var sg = new SendGridAPIClient(_apiKey);
 
-        Task Send(string email, string subject, string message)
-        {
-            dynamic sg = new SendGridAPIClient(_apiKey);
-
-            var from = new Email("noreply@wamkam.no", "Wam-Kam FK Web");
+            var from = new Email("noreply@wamkam.no", "Wam-Kam FK");
             var to = new Email(email);
             var content = new Content("text/html", message);
             var mail = new Mail(from, subject, to, content);
 
-            return sg.client.mail.send.post(requestBody: mail.Get());
+            await sg.client.mail.send.post(requestBody: mail.Get());
         }
 
+     
 
     }
 }
