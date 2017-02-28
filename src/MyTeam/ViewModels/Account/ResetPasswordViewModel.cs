@@ -12,7 +12,7 @@ namespace MyTeam.ViewModels.Account
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Passordet {0} må inneholde minst {2} tegn.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0} må inneholde minst {2} tegn.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Passord")]
         public string Password { get; set; }
