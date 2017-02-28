@@ -65,7 +65,7 @@ namespace MyTeam.Logging.Slack
         public bool IsEnabled(LogLevel logLevel)
         {
             return 
-                //!_environment.IsDevelopment() &&
+                !_environment.IsDevelopment() &&
                 _enabledLogLevels.Contains(logLevel);
         }
 

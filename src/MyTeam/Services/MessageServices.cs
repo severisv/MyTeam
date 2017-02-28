@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SendGrid;
@@ -33,7 +32,7 @@ namespace MyTeam.Services
 
             var response = await client.SendEmailAsync(msg);
 
-            _logger.LogWarning(response.StatusCode.ToString());
+            _logger.LogWarning($"Sender e-post til {email}. Status: {response.StatusCode}");
 
         }
 
