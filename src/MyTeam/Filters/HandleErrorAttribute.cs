@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyTeam.Services.Application;
 
 namespace MyTeam.Filters
 {
@@ -17,15 +16,13 @@ namespace MyTeam.Filters
 
             if (!env.IsDevelopment())
             {
-                var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
-                var slack = context.HttpContext.RequestServices.GetService<SlackService>();
                 var request = context.HttpContext.Request;
-                slack.Log(context.Exception, $"{request.Method}: {request.Path}{request.QueryString}");
+                var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
                 var eventId = (DateTime.Now - DateTime.Today).TotalSeconds;
-                logger.LogError((int)eventId, $"Error in {context.HttpContext.Request.Path}", context.Exception);
+                logger.LogError((int)eventId, $"Error in {request.Method}: {request.Path}{request.QueryString}", context.Exception);
                 context.Result = new ErrorResult(context.HttpContext, context.Exception);
             }
         }
     }
-    
+
 }

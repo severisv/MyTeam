@@ -14,6 +14,8 @@ using MyTeam.Models;
 using MyTeam.Services.Composition;
 using MyTeam.Settings;
 using MyTeam.Filters;
+using MyTeam.Logging;
+using MyTeam.Logging.Slack;
 
 namespace MyTeam
 {
@@ -75,6 +77,7 @@ namespace MyTeam
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            loggerFactory.AddSlack(new SlackSettings("MyTeam", "https://hooks.slack.com/services/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", "#myteam"), LogLevel.Warning, env);
 
             if (env.IsDevelopment() || env.IsStaging())
             {

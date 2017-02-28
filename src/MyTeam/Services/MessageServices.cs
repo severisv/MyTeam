@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
-using MyTeam.Services.Application;
+using Microsoft.Extensions.Logging;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -14,12 +13,12 @@ namespace MyTeam.Services
     {
 
         private readonly string _apiKey;
-        private readonly IHostingEnvironment _env;
+        private readonly ILogger _logger;
 
-        public AuthMessageSender(IConfigurationRoot configuration, IHostingEnvironment env)
+        public AuthMessageSender(IConfigurationRoot configuration, ILogger<AuthMessageSender> logger)
         {
             _apiKey = configuration["Integration:SendGrid:Key"];
-            _env = env;
+            _logger = logger;
 
         }
 
@@ -29,13 +28,13 @@ namespace MyTeam.Services
             var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("noreply@wamkam.no", "Wam-Kam FK");
             var to = new EmailAddress(email);
-
+            
             var msg = MailHelper.CreateSingleEmail(from, to, subject, string.Empty, htmlContent: message);
 
             var response = await client.SendEmailAsync(msg);
 
-            var slackService = new SlackService(_env);
-            slackService.Log(new Exception(response.StatusCode.ToString()), "empty path");
+            _logger.LogWarning(response.StatusCode.ToString());
+
         }
 
      
