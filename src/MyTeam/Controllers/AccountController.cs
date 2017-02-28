@@ -301,7 +301,7 @@ namespace MyTeam.Controllers
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = user.Email }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Nullstill passord",
-                   "Du kan nullstille passordet dit ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
+                   "Du kan nullstille passordet ditt ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
                 return View("ForgotPasswordConfirmation");
             }
 

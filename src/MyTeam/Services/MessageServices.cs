@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Configuration;
+using MyTeam.Services.Application;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -10,22 +14,28 @@ namespace MyTeam.Services
     {
 
         private readonly string _apiKey;
+        private readonly IHostingEnvironment _env;
 
-        public AuthMessageSender(IConfigurationRoot configuration)
+        public AuthMessageSender(IConfigurationRoot configuration, IHostingEnvironment env)
         {
             _apiKey = configuration["Integration:SendGrid:Key"];
+            _env = env;
+
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            var sg = new SendGridAPIClient(_apiKey);
 
-            var from = new Email("noreply@wamkam.no", "Wam-Kam FK");
-            var to = new Email(email);
-            var content = new Content("text/html", message);
-            var mail = new Mail(from, subject, to, content);
+            var client = new SendGridClient(_apiKey);
+            var from = new EmailAddress("noreply@wamkam.no", "Wam-Kam FK");
+            var to = new EmailAddress(email);
 
-            await sg.client.mail.send.post(requestBody: mail.Get());
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, string.Empty, htmlContent: message);
+
+            var response = await client.SendEmailAsync(msg);
+
+            var slackService = new SlackService(_env);
+            slackService.Log(new Exception(response.StatusCode.ToString()), "empty path");
         }
 
      
