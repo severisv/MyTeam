@@ -16,11 +16,11 @@ namespace MyTeam.Controllers
         }
 
 
-        public void Refresh(Guid seasonId)
+        public IActionResult Refresh()
         {
-
             _tableService.RefreshTables();
             _fixtureService.RefreshFixtures();
+            return Ok("200 OK");
         }
 
 

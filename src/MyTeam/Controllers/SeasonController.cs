@@ -15,12 +15,16 @@ namespace MyTeam.Controllers
     {
 
         private readonly ISeasonService _seasonService;
+        private readonly IFixtureService _fixtureService;
+        private readonly ITableService _tableService;
         private readonly ApplicationDbContext _dbContext;
 
-        public SeasonController(ISeasonService seasonService, ITableService tableService, ApplicationDbContext dbContext)
+        public SeasonController(ISeasonService seasonService, ITableService tableService, IFixtureService fixtureService, ApplicationDbContext dbContext)
         {
             _seasonService = seasonService;
             _dbContext = dbContext;
+            _fixtureService = fixtureService;
+            _tableService = tableService;
         }
 
 
@@ -62,6 +66,9 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 _seasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl, model.AutoUpdateFixtures, model.FixturesSourceUrl);
+                _fixtureService.RefreshFixtures();
+                _tableService.RefreshTables();
+                
                 Alert(AlertType.Success, "Instillinger lagret");
             }
             return View("Update", model);
@@ -103,6 +110,8 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 _seasonService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl, model.AutoUpdateFixtures, model.FixturesSourceUrl);
+                _fixtureService.RefreshFixtures();
+                _tableService.RefreshTables();
 
                 Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
                 return RedirectToAction("Index", "Table", new { teamId = model.TeamId });

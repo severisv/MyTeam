@@ -65,34 +65,33 @@ namespace MyTeam.Services.Domain
             var web = new HtmlWeb();
             var doc = web.Load(season.FixturesSourceUrl);
 
-            var table = doc.DocumentNode.CssSelect("#matches table tr");
+            var table = doc.DocumentNode.CssSelect("#matches table tr").ToList();
+            if (!table.Any()) table = doc.DocumentNode.CssSelect("#matches-placeholder table tr").ToList();
+
+            var header = table.Select(t => t.CssSelect("th")).First(h => h.Any());
+            var indices = new FixtureTableIndex(header);
 
             var matches = table.Select(t => t.CssSelect("td"));
 
             var result = new List<Game>();
-            foreach (var tr in matches.Where(tr => tr.Count() > 7))
+            foreach (var tr in matches.Where(tr => tr.Any()))
             {
-                try
-                {
-                    var parsedGame = GetGame(tr, season.TeamId, season.Team.ClubId, season.Team.Name);
-                    if(parsedGame != null) result.Add(parsedGame);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError("Feil ved parsing av node: " + tr, e);
-                }
+               
+                var parsedGame = GetGame(tr, season.TeamId, season.Team.ClubId, season.Team.Name, indices);
+                if (parsedGame != null) result.Add(parsedGame);
+            
             }
             return result;
         }
 
-        private Game GetGame(IEnumerable<HtmlNode> htmlNodes, Guid teamId, Guid clubId, string teamName)
+        private Game GetGame(IEnumerable<HtmlNode> htmlNodes, Guid teamId, Guid clubId, string teamName, FixtureTableIndex indices)
         {
             var nodes = htmlNodes.Select(n => Decode(n.InnerText)).ToArray();
             var eventId = Guid.NewGuid();
-            var dateTime = nodes[0].AsDate() + nodes[2].AsTime();
-            var location = nodes[7];
-            var homeTeam = nodes[4];
-            var awayTeam = nodes[6];
+            var dateTime = nodes[indices.Date].AsDate() + nodes[indices.Time].AsTime();
+            var location = nodes[indices.Location];
+            var homeTeam = nodes[indices.HomeTeam];
+            var awayTeam = nodes[indices.AwayTeam];
             var isHomeTeam = teamName.Contains(homeTeam);
             var opponent = isHomeTeam ? awayTeam : homeTeam;
 
@@ -126,5 +125,24 @@ namespace MyTeam.Services.Domain
         {
             return HtmlEntity.DeEntitize(str).Trim();
         }
+    }
+
+    internal class FixtureTableIndex
+    {
+
+        public int Time => _headers.FindIndex(h => h.InnerText?.ToLower()?.Contains("tid") == true);
+        public int Date => _headers.FindIndex(h => h.InnerText?.ToLower()?.Contains("dato") == true);
+        public int Location => _headers.FindIndex(h => h.InnerText?.ToLower()?.Contains("bane") == true);
+        public int HomeTeam => _headers.FindIndex(h => h.InnerText?.ToLower()?.Contains("hjemmelag") == true);
+        public int AwayTeam => _headers.FindIndex(h => h.InnerText?.ToLower()?.Contains("bortelag") == true);
+
+        private readonly List<HtmlNode> _headers;
+
+        public FixtureTableIndex(IEnumerable<HtmlNode> headers)
+        {
+            _headers = headers.ToList();
+        }
+
+     
     }
 }

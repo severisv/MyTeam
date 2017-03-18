@@ -1,6 +1,4 @@
-fs = require("fs"),
 
-eval("var project = " + fs.readFileSync("./project.json"));
 var join = require('path').resolve;
 var root = "./wwwroot";
 var bowerFolder = "./wwwroot/lib/";
