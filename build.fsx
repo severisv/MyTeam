@@ -71,7 +71,7 @@ module Helpers =
         match command with
             | Restore -> (dotnet "restore" target)
             | Build -> (dotnet "build --configuration Release" target)
-            | Publish -> (dotnet "publish --configuration Release -o .deploy src/MyTeam " target)
+            | Publish -> (dotnet "publish --configuration Release -o ../../.deploy" target)
             | Test -> (dotnet "test" target)
 
 
@@ -119,7 +119,7 @@ module Targets =
   )
 
   Target "Publish" (fun _ ->
-     Dotnet Publish "" |> ignore
+     Dotnet Publish "src/MyTeam" |> ignore
   )
 
   Target "Deploy" (fun _ ->
