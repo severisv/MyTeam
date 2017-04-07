@@ -37,15 +37,14 @@ namespace MyTeam.Services.Domain
 
             foreach (var season in seasons)
             {
-                try
-                {
+           
                     var tableString = ScrapeTable(season);
                     Update(season.Id, tableString);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
+                //}
             }
         }
 
@@ -54,20 +53,42 @@ namespace MyTeam.Services.Domain
             var web = new HtmlWeb();
             var doc = web.Load(season.TableSourceUrl);
 
-            var table = doc.DocumentNode.CssSelect("table tr");
+            var table = doc.DocumentNode.CssSelect("table").First();
+            var rows =  table.CssSelect("tr");
 
-            var tableTeams = table.Select(t => t.CssSelect("td"));
+            var tableTeams = rows.Select(t => t.CssSelect("td"));
 
-            var tableStrings = tableTeams.Where(t => t.Any()).Select(GetTableTeamString);
+            var tableStrings = tableTeams.Where(IsValidRow).Select(GetTableTeamString);
             var tableString = string.Join("|", tableStrings);
             return tableString;
         }
 
+        private bool IsValidRow(IEnumerable<HtmlNode> arg)
+        {
+            if (!arg?.Any() == true)
+            {
+                return false;
+            }
+            
+            var nodes = arg.ToArray();
+
+            // Sjekk at plasseringen er en int
+            int pos;
+            if (!int.TryParse(nodes[0].InnerText, out pos))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private string GetTableTeamString(IEnumerable<HtmlNode> htmlNodes)
         {
-            var nodes = htmlNodes.ToArray();
+           var nodes = htmlNodes.ToArray();
 
-           var maalforskjell =  nodes[14].InnerText.Split('-').Select(s => s.Trim()).ToArray();
+       
+
+            var maalforskjell =  nodes[14].InnerText.Split('-').Select(s => s.Trim()).ToArray();
             
             return string.Join(";", new []
             {
