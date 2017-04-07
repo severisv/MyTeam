@@ -37,15 +37,16 @@ namespace MyTeam.Services.Domain
 
             foreach (var season in seasons)
             {
-           
+                try
+                {
                     var tableString = ScrapeTable(season);
                     Update(season.Id, tableString);
-                //}
-                //catch (Exception e)
-                //{
-                //    _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
-                //}
+                }
+                catch (Exception e)
+            {
+                _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
             }
+        }
         }
 
         private string ScrapeTable(Season season)
