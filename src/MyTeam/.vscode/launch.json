@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/<path-to-program>",
+            "program": "${workspaceRoot}/bin/Debug/net461/MyTeam.exe",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false
@@ -16,7 +16,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/<path-to-program>",
+            "program": "${workspaceRoot}/bin/Debug/net461/MyTeam.exe",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
@@ -34,12 +34,6 @@
                     "command": "xdg-open"
                 }
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processName": "<example>"
         }
     ]
 }
