@@ -8,6 +8,7 @@ using MyTeam.ViewModels.Events;
 using Microsoft.EntityFrameworkCore;
 using MyTeam.Models.General;
 using MyTeam.Services.Application;
+using System.Diagnostics;
 
 namespace MyTeam.Services.Domain
 {
@@ -31,18 +32,17 @@ namespace MyTeam.Services.Domain
         public PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false)
         {
             var now = DateTime.Now;
-            var queryable = _dbContext.Events
+            var query = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
                 .Where(t => type == EventType.Alle || t.Type == type)
-                .Where(t => t.DateTime >= now);
+                .Where(t => t.DateTime >= now)
+                .Include(t => t.EventTeams)
+                .ToList();
 
             if (!showAll)
-                queryable = queryable.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp));
+                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp)).ToList();
 
-
-            var query = queryable
-                .Include(t => t.EventTeams).ToList();
-
+           
             var result = query
                 .OrderBy(e => e.DateTime)
                 .Select(e =>
