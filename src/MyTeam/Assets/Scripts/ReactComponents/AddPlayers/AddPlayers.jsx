@@ -33,8 +33,9 @@ module.exports = React.createClass({
         var validationMessage = this.validateUser(user);
         if (validationMessage) this.setState({ validationMessage: validationMessage });
 
-        else {
+        else if (!this.state.isSubmitting) {
             var that = this;
+            that.setState( { isSubmitting: true } );
             $.post(that.routes.ADD_PLAYER, {
                 firstname: user.first_name,
                 middlename: user.middle_name,
@@ -46,14 +47,15 @@ module.exports = React.createClass({
                     var ids = that.state.existingIds;
                     ids.push(user.id);
                     that.setState({
-                        existingIds: ids
+                        existingIds: ids,
+                        isSubmitting: false
                     });
                 } else if (data.successMessage) {
-                    that.setState({ validationMessage: "" });
+                    that.setState({ validationMessage: "", isSubmitting: false });
                     mt.alert("success", data.successMessage);
                     that.clearEmailForm();
                 } else if (data.validationMessage) {
-                    that.setState({ validationMessage: data.validationMessage });
+                    that.setState({ validationMessage: data.validationMessage, isSubmitting: false });
                 }
             });
         }
