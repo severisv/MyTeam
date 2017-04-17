@@ -1,6 +1,5 @@
 using System;
 using MyTeam.Models.Dto;
-using MyTeam.ViewModels.Events;
 
 namespace MyTeam.ViewModels.Game
 {

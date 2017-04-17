@@ -97,6 +97,8 @@ module.exports = React.createClass({
             }
         });
 
+        if (players.length <= 0 ) return "";
+
         var options = this.options;
         var routes = this.routes;
         var teams = this.state.teams;
@@ -104,7 +106,15 @@ module.exports = React.createClass({
         var togglePlayerRole = this.togglePlayerRole;
         var toggleTeam = this.toggleTeam;
         var playerElements = players.map(function (player, i) {
-            return (<ManagePlayer key={player.id} player={player} setPlayerStatus={setPlayerStatus} togglePlayerRole={togglePlayerRole} options={options} routes={routes} teams={teams} toggleTeam={toggleTeam} />)
+            return (<ManagePlayer 
+                        key={player.id} 
+                        player={player} 
+                        setPlayerStatus={setPlayerStatus} 
+                        togglePlayerRole={togglePlayerRole} 
+                        options={options} 
+                        routes={routes} 
+                        teams={teams} 
+                        toggleTeam={toggleTeam} />)
         });
 
         var teamElements = teams.map(function (team, i) {
@@ -129,6 +139,7 @@ module.exports = React.createClass({
             {this.renderPlayers(this.options.playerStatus.Active)}
             {this.renderPlayers(this.options.playerStatus.Veteran)}
             {this.renderPlayers(this.options.playerStatus.Inactive)}
+            {this.renderPlayers(this.options.playerStatus.Trener)}
         </div>);
     }
 
