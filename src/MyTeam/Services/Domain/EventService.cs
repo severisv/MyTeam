@@ -8,7 +8,6 @@ using MyTeam.ViewModels.Events;
 using Microsoft.EntityFrameworkCore;
 using MyTeam.Models.General;
 using MyTeam.Services.Application;
-using System.Diagnostics;
 
 namespace MyTeam.Services.Domain
 {

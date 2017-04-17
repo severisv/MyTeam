@@ -66,7 +66,6 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<PlayerStats> GetStats(Guid teamId, int? selectedYear = null)
         {
-
             var query = _dbContext.Games.Where(g => g.TeamId == teamId && g.GameType != GameType.Treningskamp);
 
             if (selectedYear != null)
@@ -76,27 +75,29 @@ namespace MyTeam.Services.Domain
 
             var games = query.Select(g => g.Id).ToList();
 
-            var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId)).ToList();
-            var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected).Select(ea => ea.MemberId).ToList();
+            var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId))
+                                                    .ToList();
+           
+            var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected)
+                                                        .Select(ea => ea.MemberId)
+                                                        .ToList();
             
-            var playerIds = attendances.Select(p => p).Distinct();
+            var playerIds = attendances.Select(p => p)
+                                       .Distinct();
 
             var players = _dbContext.Members.Where(p => playerIds.Contains(p.Id))
                 .Select(p => new PlayerStats
-                {
-                    Id = p.Id,
-                    FacebookId = p.FacebookId,
-                    FirstName = p.FirstName,
-                    MiddleName = p.MiddleName,
-                    LastName = p.LastName,
-                    Image = p.ImageFull,
-                    Goals = gameEvents.Count(ge => ge.Type == GameEventType.Goal && ge.PlayerId == p.Id),
-                    Assists = gameEvents.Count(ge => ge.Type == GameEventType.Goal && ge.AssistedById == p.Id),
-                    YellowCards = gameEvents.Count(ge => ge.Type == GameEventType.YellowCard && ge.PlayerId == p.Id),
-                    RedCards = gameEvents.Count(ge => ge.Type == GameEventType.RedCard && ge.PlayerId == p.Id),
-                    Games = attendances.Count(a => a == p.Id),
-                    UrlName = p.UrlName
-                });
+                (
+                    p.Id,
+                    p.FacebookId,
+                    p.FirstName,
+                    p.MiddleName,
+                    p.LastName,
+                    p.ImageFull,      
+                    p.UrlName,
+                    gameEvents,
+                    attendances
+                ));
 
             return players.ToList();
         }
