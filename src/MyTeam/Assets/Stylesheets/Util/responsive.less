@@ -6,6 +6,7 @@
 @md-min:                                 (@sm-max+1);
 @md-max:                                 1200px;
 @lg-min:                                 (@md-max+1);
+@lg-max:                                 1440px;
 
 
 .r-xxs(@rules) {
@@ -73,7 +74,9 @@
 	@media (min-width: @lg-min) { @rules(); }
 }
 
-
+.r-above-lg(@rules) {
+	@media (min-width: @lg-max) { @rules(); }
+}
 
 
 .hidden-xxs {
