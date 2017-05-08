@@ -8,7 +8,7 @@
 <div class="mt-container">
 
     <div class="col-xs-12">
-        @Html.Partial("_Show", new Table(Model.SeasonId, Model.ConvertTableString()))
+        @Html.Partial("_Show", new Table(Model.ConvertTableString()))
         <form asp-action="Save" method="post">
             <div class="form-group">
                 <input asp-for="TableString" type="hidden" />
