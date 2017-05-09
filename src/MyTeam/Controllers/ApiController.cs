@@ -17,7 +17,7 @@ namespace MyTeam.Controllers
     [RequireMember]
     public class ApiController : BaseController
     {
-     
+
         private readonly ApplicationDbContext _dbContext;
         private readonly IEventService _eventService;
         private readonly IPlayerService _playerService;
@@ -35,6 +35,7 @@ namespace MyTeam.Controllers
         public JsonResult GetPlayers()
         {
             var players = _dbContext.Players.Where(p => p.ClubId == Club.Id)
+                .OrderBy(p => p.FirstName)
                 .Select(p =>
               new
               {
@@ -45,7 +46,7 @@ namespace MyTeam.Controllers
                   LastName = p.LastName,
                   Status = p.Status.ToString(),
                   Roles = p.Roles,
-              }).OrderBy(p => p.FullName).ToList();
+              }).ToList();
 
             var playerIds = players.Select(p => p.Id);
             var memberTeams = _dbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
@@ -64,7 +65,7 @@ namespace MyTeam.Controllers
                     p.Roles,
                     TeamIds = memberTeams.Where(mt => mt.MemberId == p.Id).Select(mt => mt.TeamId).ToList()
             });
-                    
+
             }
 
             return new JsonResult(result);
@@ -161,13 +162,13 @@ namespace MyTeam.Controllers
                 });
         }
 
-    
+
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult TestException()
         {
             throw new Exception("Boom");
         }
-        
-     
+
+
     }
 }
