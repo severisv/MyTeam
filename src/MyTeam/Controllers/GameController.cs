@@ -97,7 +97,7 @@ namespace MyTeam.Controllers
 
             return new JsonResult(JsonResponse.Success());
         }
-        
+
         [Route("vis/{gameId}")]
         public IActionResult Show(Guid gameId)
         {
@@ -187,8 +187,13 @@ namespace MyTeam.Controllers
         [RequireMember]
         public IActionResult GamePlanForGame(Guid gameId)
         {
-            var model = _dbContext.Games.Where(g => g.Id == gameId)
-                .Select(game => new GamePlanViewModel(gameId, Club.Teams.Single(t => t.Id == game.TeamId).ShortName, game.Opponent, game.GamePlan, game.GamePlanIsPublished))
+            var games = _dbContext.Games.Where(g => g.Id == gameId)
+                .Select(g => new { TeamId = g.TeamId, Opponent = g.Opponent, GamePlan = g.GamePlan, GamePlanIsPublished = g.GamePlanIsPublished })
+                .ToList();
+
+
+            var model = games.Select(game => new GamePlanViewModel(gameId,
+                Club.Teams.Single(t => t.Id == game.TeamId).ShortName, game.Opponent, game.GamePlan, game.GamePlanIsPublished))
                 .FirstOrDefault();
 
             if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
