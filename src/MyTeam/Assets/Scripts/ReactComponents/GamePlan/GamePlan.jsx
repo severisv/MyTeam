@@ -92,6 +92,7 @@ module.exports = React.createClass({
     render: function () {
         var that = this;
         var props = this.props;
+        console.log(props)
         return (
             <div className='gameplan'>
                 <div className='mt-main'>
@@ -245,11 +246,15 @@ module.exports = React.createClass({
             }
         }
 
-        function getPlayerTime (key, value) { return (<div key={key}>{key}:&nbsp;<b> {value}</b></div>); }
-
+        function getPlayerTime (player, value) { 
+            return (<div key={player.Id}>
+                {player.Name}:&nbsp;<b>{value || 0}</b></div>
+                ); 
+            }
+      
         var result = [];
-        for (var l in total) {
-            result.push(getPlayerTime(l, total[l]));
+        for (var player of this.props.players) {
+            result.push(getPlayerTime(player, total[player.Name]));
         }
         return (<div>{result}</div>);
     },
@@ -257,10 +262,10 @@ module.exports = React.createClass({
         if (this.props.iscoach == 'False') return '';
         if (this.state.isPublished || this.props.ispublished == 'True') {
             return (<div className='text-center'>
-                                <div className='disabled btn btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
+                                <div className='disabled btn btn-lg btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
                             </div>);
         }
-        return (<div className='text-center'><button onClick={this.publish} className='btn btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publiser bytteplan</span>
+        return (<div className='text-center'><button onClick={this.publish} className='btn btn-lg btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publiser bytteplan</span>
                     <i className={this.state.isPublishing ? 'fa fa-spinner fa-spin' : 'hidden'}></i></button></div>
                 );
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
+using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
@@ -32,7 +33,7 @@ namespace MyTeam.Controllers
 
 
         [Route("{lag?}/{aar:int?}")]
-        public IActionResult Index(string lag = null, int ? aar = null)
+        public IActionResult Index(string lag = null, int? aar = null)
         {
             var team = lag ?? Club.Teams.First().ShortName;
             var teamId = Club.Teams.First(t => t.ShortName == team).Id;
@@ -48,7 +49,7 @@ namespace MyTeam.Controllers
                 })
                 .ToList();
 
-            var year = aar ?? seasons?.FirstOrDefault()?.Year ??  DateTime.Now.Year;
+            var year = aar ?? seasons?.FirstOrDefault()?.Year ?? DateTime.Now.Year;
 
             var games = _gameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
             var model = new GamesViewModel(seasons, teams, year, games, team, teamId);
@@ -102,7 +103,7 @@ namespace MyTeam.Controllers
         public IActionResult Show(Guid gameId)
         {
             var game = _gameService.GetGame(gameId);
-            if(game == null) return RedirectToAction("NotFoundAction", "Error");
+            if (game == null) return RedirectToAction("NotFoundAction", "Error");
 
             var model = new ShowGameViewModel(game);
 
@@ -134,11 +135,11 @@ namespace MyTeam.Controllers
                 ShortName = t.ShortName
             }).ToList();
 
-           var model =  new AddGamesViewModel
+            var model = new AddGamesViewModel
             {
-               Teams  = teams,
-               TeamId = Guid.Empty
-           };
+                Teams = teams,
+                TeamId = Guid.Empty
+            };
             return View(model);
         }
 
@@ -149,7 +150,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                return View("AddGamesConfirm",  model);
+                return View("AddGamesConfirm", model);
             }
             return View(model);
         }
@@ -162,7 +163,7 @@ namespace MyTeam.Controllers
             if (ModelState.IsValid)
             {
                 _gameService.AddGames(model.Games.Games, Club.Id);
-                return RedirectToAction("Index", "Game", new {year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, lag = model.ShortTeamName });
+                return RedirectToAction("Index", "Game", new { year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, lag = model.ShortTeamName });
             }
             return View(model);
         }
@@ -175,7 +176,7 @@ namespace MyTeam.Controllers
             var date = DateTime.Now.AddHours(-3);
             var gameId =
                 ControllerContext.HttpContext.UserIsInRole(Roles.Coach) ?
-                _dbContext.Games.Where(g => g.DateTime >= date).OrderBy(g => g.DateTime).Select(g => g.Id).FirstOrDefault():
+                _dbContext.Games.Where(g => g.DateTime >= date).OrderBy(g => g.DateTime).Select(g => g.Id).FirstOrDefault() :
                 _dbContext.Games.OrderByDescending(g => g.DateTime).Where(g => g.GamePlanIsPublished != null).Select(g => g.Id).FirstOrDefault();
 
             if (gameId != null) return RedirectToAction("GamePlanForGame", new { gameId = gameId });
@@ -187,14 +188,34 @@ namespace MyTeam.Controllers
         [RequireMember]
         public IActionResult GamePlanForGame(Guid gameId)
         {
-            var games = _dbContext.Games.Where(g => g.Id == gameId)
-                .Select(g => new { TeamId = g.TeamId, Opponent = g.Opponent, GamePlan = g.GamePlan, GamePlanIsPublished = g.GamePlanIsPublished })
-                .ToList();
+            var game = _dbContext.Games.Where(g => g.Id == gameId)
+                .Select(g => 
+                    new { 
+                        TeamId = g.TeamId, 
+                        Opponent = g.Opponent, 
+                        GamePlan = g.GamePlan, 
+                        GamePlanIsPublished = g.GamePlanIsPublished,
+                        Players = g.Attendees.Where(p => p.IsSelected).Select(p => 
+                            new SquadMember(
+                                p.MemberId,
+                                p.Member.FirstName,
+                                p.Member.LastName,
+                                p.Member.Image,
+                                p.Member.FacebookId
+                               ))
+                        })
+                .ToList()
+                .Single();
 
 
-            var model = games.Select(game => new GamePlanViewModel(gameId,
-                Club.Teams.Single(t => t.Id == game.TeamId).ShortName, game.Opponent, game.GamePlan, game.GamePlanIsPublished))
-                .FirstOrDefault();
+            var model = new GamePlanViewModel(
+                gameId,
+                Club.Teams.Single(t => t.Id == game.TeamId).ShortName,
+                game.Opponent,
+                game.GamePlan,
+                game.GamePlanIsPublished,
+                game.Players
+                );
 
             if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
                 return RedirectToAction("NotFoundAction", "Error");

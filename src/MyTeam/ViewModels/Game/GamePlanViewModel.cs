@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using MyTeam.Models.Dto;
+using Newtonsoft.Json;
 
 namespace MyTeam.ViewModels.Game
 {
@@ -10,13 +14,22 @@ namespace MyTeam.ViewModels.Game
         public string Opponent { get; }
         public bool IsPublished { get; }
 
-        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished)
+        public string Players { get; }
+
+        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished, IEnumerable<SquadMember> players)
         {
             GameId = gameId;
             GamePlan = gamePlan;
             Team = team;
             Opponent = opponent;
             IsPublished = isPublished ?? false;
+            Players = JsonConvert.SerializeObject(
+                players.OrderBy(p => p.FirstName)
+                    .Select(p => new {
+                        Id = p.Id,
+                        Name = p.GetName(players.Count(ip => ip.FirstName == p.FirstName) > 1)                        
+                    })
+                );
         }
     }
 }
