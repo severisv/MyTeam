@@ -260,7 +260,7 @@ module.exports = React.createClass({
                                 <div className='disabled btn btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
                             </div>);
         }
-        return (<div className='text-center'><button onClick={this.publish} className='btn btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publisér bytteplan</span>
+        return (<div className='text-center'><button onClick={this.publish} className='btn btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publiser bytteplan</span>
                     <i className={this.state.isPublishing ? 'fa fa-spinner fa-spin' : 'hidden'}></i></button></div>
                 );
     }

@@ -8,7 +8,7 @@
     {
         if (Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach, Roles.Admin, Roles.AttendanceTaker))
         {
-            <a asp-action="registerattendance" asp-controller="event" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="fa fa-check-square-o"></i><span class="hidden-xs"> @Res.Register @Res.Attendance.ToLower()</span></a>
+            <a title="@Res.Register @Res.Attendance.ToLower()" asp-action="registerattendance" asp-controller="event" asp-route-eventId="@Model.Id" class="edit-link pull-right" title="@Res.Register @Res.Attendance.ToLower()"><i class="edit-link fa fa-check-square-o"></i></a>
 
         }
         else if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
@@ -21,8 +21,8 @@
     {
         if (!Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach))
         {
-            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="btn btn-default pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
-            <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="btn btn-default pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i></a>
+            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="edit-link pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i></a>
 
         }
         else if (Context.UserIsInRole(Roles.Coach, Roles.Admin))

@@ -123,14 +123,14 @@ i.fa {
 .alert {
     border-radius: 0px;
     text-align: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     margin-bottom: 10px;
 }
 
 .alert-info {
     color: lighten(@blueDarkSubtle,10);
-    border-color: @blueLightSubtle;
+    border-color: lighten(@blueLightSubtle,10);
     background-color: lighten(@blueLightSubtle,25);
 }
 
@@ -270,30 +270,35 @@ a {
 }
 
 
+.btn-lg {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    padding: 1em 2em;
+    font-weight: bold;
+}
+
 .btn {
-    transition: background-color 0.2s ease-out;
-    transition: border-color 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    border: none;
+    border-radius: 2px;
+
 }
 
 .btn-primary {
     color: @white;
     background-color: @blueLight;
-    border-color: darken(@blueLight, 0);
 
     &:hover {
         background-color: darken(@blueLight, 10);
-        border-color: darken(@blueLight, 10);
     }
 }
 
 .btn-success {
     color: @white;
     background-color: @greenLight;
-    border-color: darken(@greenLight, 5);
 
     &:hover {
         background-color: darken(@greenLight, 5);
-        border-color: darken(@greenLight, 7);
     }
 
 }
@@ -306,34 +311,29 @@ a {
 
 .btn-success.disabled.focus, .btn-success.disabled:focus, .btn-success.disabled:hover, .btn-success[disabled].focus, .btn-success[disabled]:focus, .btn-success[disabled]:hover, fieldset[disabled] .btn-success.focus, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success:hover {
       background-color: @greenLight;
-    border-color: darken(@greenLight, 5);
 }
 
 .btn-danger {
     color: @white;
     background-color: @redLight;
-    border-color: darken(@redLight, 5);
 
     &:hover {
         background-color: darken(@redLight, 5);
-        border-color: darken(@redLight, 7);
     }
 }
 
 .btn-warning {
     color: @white;
     background-color: @orangeLight;
-    border-color: darken(@orangeLight, 5);
 
     &:hover, &:focus {
         background-color: darken(@orangeLight, 5);
-        border-color: darken(@orangeLight, 7);
     }
 }
 
 .btn-default {
     color: @blueDark;
-    border-color: fade(@blueDark, 25);
+    border: 1px solid fade(@blueDark, 25);
 
     &:hover, &:focus {
         border-color: fade(@blueDark, 50);
@@ -342,7 +342,6 @@ a {
 
 .btn-warning.active.focus, .btn-warning.active:focus, .btn-warning.active:hover, .btn-warning:active.focus, .btn-warning:active:focus, .btn-warning:active:hover, .open > .dropdown-toggle.btn-warning.focus, .open > .dropdown-toggle.btn-warning:focus, .open > .dropdown-toggle.btn-warning:hover {
     background-color: darken(@orangeLight, 5);
-    border-color: darken(@orangeLight, 7);
 }
 
 
