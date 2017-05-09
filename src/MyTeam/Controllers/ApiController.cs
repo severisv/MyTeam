@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using MyTeam.Filters;
 using MyTeam.Models;
-using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Application;
