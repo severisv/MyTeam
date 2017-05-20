@@ -29,7 +29,7 @@ namespace MyTeam.ViewModels.Game
                     .Select(p => new {
                         Id = p.Id,
                         Name = p.GetName(players.Count(ip => ip.FirstName == p.FirstName) > 1),
-                        ImageUrl = cloudinary.MemberImage(p.Image, p.FacebookId, 40)
+                        ImageUrl = cloudinary.MemberImage(p.Image, p.FacebookId, 40, 40)
                     })
                 );
         }
