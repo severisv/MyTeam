@@ -102,7 +102,7 @@ module.exports = React.createClass({
                             '' 
                         }
                         {
-                            this.props.iscoach == 'True '?      
+                            this.props.iscoach == 'True' ?      
                             <PlayerInput 
                                 onBlur={this.save} 
                                 onChange={this.setPlayer.bind(null, i, position)} 
@@ -188,7 +188,7 @@ module.exports = React.createClass({
                                 </div>);
                             })}
                             <div className='text-center'>
-                                <button className={that.props.iscoach == 'True' ? 'btn btn-primary' : 'hidden'} onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
+                                <button className={that.props.iscoach == 'True' ? 'btn btn-primary hidden-print' : 'hidden'} onClick={this.duplicateRow}><i className='fa fa-plus'></i></button>
                             </div>
                             <div className='clearfix'>
                                 <br />&nbsp;
