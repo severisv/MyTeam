@@ -22,7 +22,7 @@
     "jquery.cloudinary": "1.0.25",
     "loose-envify": "^1.2.0",
     "moment": "^2.13.0",
-    "react": "^15.2.1",
+    "react": "15.2.1",
     "react-autosuggest": "^9.0.1",
     "react-datepicker": "^0.27.0",
     "react-dom": "^15.2.1",
