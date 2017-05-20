@@ -321,7 +321,8 @@ module.exports = React.createClass({
             }
       
         var result = [];
-        for (var player of this.props.players) {
+        for (var i in this.props.players) {
+            var player = this.props.players[i];
             result.push(getPlayerTime(player, total[player.Name]));
         }
         return (<div>{result}</div>);
