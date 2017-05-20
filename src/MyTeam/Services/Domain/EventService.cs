@@ -47,7 +47,7 @@ namespace MyTeam.Services.Domain
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             result = result.Where(r => r.TeamIds.ContainsAny(teamIds) || r.GameType == GameType.Treningskamp).ToList();
@@ -72,7 +72,7 @@ namespace MyTeam.Services.Domain
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             return new PagedList<EventViewModel>(resultViewModels, skip, pageSize, totalCount);
@@ -202,7 +202,7 @@ namespace MyTeam.Services.Domain
              _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam
+                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                         )).First();
         
 

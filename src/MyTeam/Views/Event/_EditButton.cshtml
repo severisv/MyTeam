@@ -19,16 +19,23 @@
     }
     else if (Model.Type == EventType.Kamp)
     {
+        if (Context.UserIsInRole(Roles.Admin) && !Context.UserIsInRole(Roles.Coach))
+        {
+            <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+        }
         if (!Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach))
         {
             <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
             <a asp-action="registerSquad" asp-controller="game" asp-route-eventId="@Model.Id" class="edit-link pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i></a>
 
         }
-        else if (Context.UserIsInRole(Roles.Coach, Roles.Admin))
+        else if (Model.GamePlanIsPublished == true) {
+            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+        }
+        else if (Context.UserIsInRole(Roles.Coach))
         {
             <a asp-action="edit" asp-route-eventId="@Model.Id" class="edit-link  pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
-        }
+        }    
     }
     else if (Model.Type == EventType.Diverse && Context.UserIsInRole(Roles.Coach, Roles.Admin))
     {

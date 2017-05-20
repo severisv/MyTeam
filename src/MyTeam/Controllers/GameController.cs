@@ -214,9 +214,11 @@ namespace MyTeam.Controllers
                 game.Opponent,
                 game.GamePlan,
                 game.GamePlanIsPublished,
-                game.Players
+                game.Players,
+                this.HttpContext.Cloudinary()
                 );
 
+            
             if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
                 return RedirectToAction("NotFoundAction", "Error");
 

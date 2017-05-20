@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Dto;
+using MyTeam.Settings;
 using Newtonsoft.Json;
 
 namespace MyTeam.ViewModels.Game
@@ -16,7 +17,7 @@ namespace MyTeam.ViewModels.Game
 
         public string Players { get; }
 
-        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished, IEnumerable<SquadMember> players)
+        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished, IEnumerable<SquadMember> players, ICloudinary cloudinary)
         {
             GameId = gameId;
             GamePlan = gamePlan;
@@ -27,7 +28,8 @@ namespace MyTeam.ViewModels.Game
                 players.OrderBy(p => p.FirstName)
                     .Select(p => new {
                         Id = p.Id,
-                        Name = p.GetName(players.Count(ip => ip.FirstName == p.FirstName) > 1)                        
+                        Name = p.GetName(players.Count(ip => ip.FirstName == p.FirstName) > 1),
+                        ImageUrl = cloudinary.MemberImage(p.Image, p.FacebookId, 40)
                     })
                 );
         }

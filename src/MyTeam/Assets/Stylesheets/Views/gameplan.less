@@ -1,6 +1,17 @@
 ﻿
 .gameplan {
 
+    input::selection {
+        background-color: fade(@white, 50);
+    }
+
+    input {
+        border-color: transparent;
+    }
+
+    .mt-container {
+        overflow: visible;
+    }
 
     .gp-square {
         display: inline-block;
@@ -10,7 +21,6 @@
     input {
         text-align: center;
         background: transparent;
-        border: 0;
         width: 100%;
         font-weight: bold;
     }
@@ -18,6 +28,7 @@
     .gp-time {
         font-size: 1.5em;
         width: 2em;
+        border: 0;
     }
     .gp-subs {
         font-size: 1.25em;
@@ -38,4 +49,24 @@
         padding-top: 0.25em;
     }
 
+
+}
+
+.gameplan-sub-in {
+    color: @greenDark;
+}
+
+.gameplan-sub-out {
+    color: @redDark;
+}
+
+.gameplan-sub-positionChange {
+    color: @yellowDark;
+}
+
+.gameplan-playerImage {
+    max-width: 40px;
+    margin: 0 auto;
+    display: block;
+    border-radius: 4px;
 }

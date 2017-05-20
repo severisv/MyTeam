@@ -1,4 +1,5 @@
 var React = require('react');
+var PlayerInput = require('./PlayerInput.jsx')
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -24,9 +25,12 @@ module.exports = React.createClass({
         });
     },
 
-    setPlayer: function (i, key, input) {
+    setPlayer: function (i, key, event, input ) {
+
+        var value = input ? input.newValue : event.target.value;
+
         var rows = this.state.rows;
-        rows[i][key] = input.target.value;
+        rows[i][key] = value;
         this.setState({
             rows: rows
         });
@@ -89,14 +93,37 @@ module.exports = React.createClass({
             });
     },
 
+    renderPlayerInput(lineup, i, position) {
+        var player = this.props.players.filter(function(p){ return p.Name == lineup[position]})[0];
+            return(
+                <div className='gp-square'>
+                        {(player && player.ImageUrl) ? 
+                            <img className="gameplan-playerImage" src={player.ImageUrl} /> : 
+                            '' 
+                        }
+                        {
+                            this.props.iscoach == 'True '?      
+                            <PlayerInput 
+                                onBlur={this.save} 
+                                onChange={this.setPlayer.bind(null, i, position)} 
+                                value={lineup[position]} 
+                                lineup={lineup} 
+                                players={this.props.players} />
+                            : <input readOnly value={lineup[position]} />
+                        }
+                       
+                </div>
+            );
+    },
+
     render: function () {
         var that = this;
         var props = this.props;
-        console.log(props)
+
         return (
             <div className='gameplan'>
                 <div className='mt-main'>
-                    <div className='mt-container'>
+                    <div className='mt-container clearfix'>
                             <h2 className='text-center'>{props.team} vs {props.opponent}</h2>
                             <div className={this.state.errorMessage ? 'alert alert-danger' : 'hidden'}><i className='fa fa-exclamation-triangle'></i> {this.state.errorMessage}</div>
                             <br />
@@ -106,7 +133,7 @@ module.exports = React.createClass({
                                     <div className='text-center'>
                                         <input readOnly={that.props.iscoach == 'False'} className='gp-time' onBlur={that.save} onChange={that.setTime.bind(null, i)} placeholder='tid' value={lineup.time} />min
                                     </div>
-                                        <button className={that.props.iscoach == 'True' && that.state.rows.length > 1 ? 'pull-right' : 'hidden'} onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
+                                        <button className={that.props.iscoach == 'True' && that.state.rows.length > 1 ? 'pull-right hidden-print' : 'hidden'} onBlur={that.save} onClick={that.removeRow.bind(null, i)}><i className='fa fa-times'></i></button>
                                     <br />
                                     <div className='gp-row'>
                                         {that.renderDiff(i)}
@@ -115,11 +142,11 @@ module.exports = React.createClass({
                                     <div className='gameplan-field'>
 
                                     <div className='gp-row'>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lw')} value={lineup.lw} /></div>
+                                        {that.renderPlayerInput(lineup, i, 'lw')}
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 's')} value={lineup.s} /></div>
+                                        {that.renderPlayerInput(lineup, i, 's')}
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rw')} value={lineup.rw} /></div>
+                                        {that.renderPlayerInput(lineup, i, 'rw')}
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
@@ -130,29 +157,29 @@ module.exports = React.createClass({
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcm')} value={lineup.lcm} /></div>
+                                        {that.renderPlayerInput(lineup, i, 'lcm')}
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcm')} value={lineup.rcm} /></div>
+                                        {that.renderPlayerInput(lineup, i, 'rcm')}
                                         <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                        {that.renderPlayerInput(lineup, i, 'dm')}
+                                        <div className='gp-square'></div>
+                                        <div className='gp-square'></div>
+                                    </div>
+                                    <div className='gp-row'>
+                                        {that.renderPlayerInput(lineup, i, 'lb')}
+                                        {that.renderPlayerInput(lineup, i, 'lcb')}
+                                        <div className='gp-square'></div>
+                                        {that.renderPlayerInput(lineup, i, 'rcb')}
+                                        {that.renderPlayerInput(lineup, i, 'rb')}
                                     </div>
                                     <div className='gp-row'>
                                         <div className='gp-square'></div>
                                         <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'dm')} value={lineup.dm} /></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'></div>
-                                    </div>
-                                    <div className='gp-row'>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lb')} value={lineup.lb} /></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'lcb')} value={lineup.lcb} /></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rcb')} value={lineup.rcb} /></div>
-                                        <div className='gp-square'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'rb')} value={lineup.rb} /></div>
-                                    </div>
-                                    <div className='gp-row'>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square'></div>
-                                        <div className='gp-square gp-gk'><input readOnly={that.props.iscoach == 'False'} onBlur={that.save} onChange={that.setPlayer.bind(null, i, 'gk')} value={lineup.gk} /></div>
+                                        {that.renderPlayerInput(lineup, i, 'gk')}
                                         <div className='gp-square'></div>
                                         <div className='gp-square'></div>
                                     </div>
@@ -185,26 +212,67 @@ module.exports = React.createClass({
         var previous = this.state.rows[i - 1];
         var current = this.state.rows[i];
 
-        function getSub (key) {
-            if (previous[key] != current[key]) return (<div className='text-center gp-subs' key={i + key}>{current[key]} {'=>'} {previous[key]} </div>);
-            else return (<span key={i + key}></span>);
+
+        function getPlayers(row){
+            var result = [];
+            for (var key in row) {
+               if (key != 'time'){
+                    result.push(row[key]);
+                }
+            }
+            return result;
         }
 
-        var subs = [];
-        subs.push(getSub('lw'));
-        subs.push(getSub('s'));
-        subs.push(getSub('rw'));
-        subs.push(getSub('lcm'));
-        subs.push(getSub('rcm'));
-        subs.push(getSub('dm'));
-        subs.push(getSub('lb'));
-        subs.push(getSub('lcb'));
-        subs.push(getSub('rcb'));
-        subs.push(getSub('rb'));
-        subs.push(getSub('gk'));
+        function isInLineup(lineup, player) {
+                    var ln = [];
+                    for(var key in lineup){
+                            ln.push(lineup[key]);
+                    }
+                    return ln.indexOf(player) != -1;
+        }
+
+
+        function getSubs() {
+            var result = [];
+            for (var key in current) {
+               if (key != 'time'){
+                    if (previous[key] != current[key]) {                    
+                        result.push({ 
+                            in: !isInLineup(previous, current[key]) ? current[key] : undefined, 
+                            out: !isInLineup(current, previous[key]) ? previous[key] : undefined 
+                        });
+                    }
+               }
+            }
+            return result;
+            
+        }
+        
+        var subs = getSubs();
+
+        var subsIn = subs.filter(function(sub) { return !sub.out });
+        var subsOut = subs.filter(function(sub) { return !sub.in });
+        var pairs = subs.filter(function(sub) { return sub.in && sub.out });
+
+        var result = pairs.concat(
+            subsIn.map(function(sub, index){
+                var subOut = subsOut[index];
+                return { in: sub.in, out: subOut ? subOut.out : undefined, positionChange: true };
+            })
+        );
 
         return (<div>
-            {subs}
+            {result.map(function(sub){
+                return (
+                    <div className='text-center gp-subs' key={sub.in + sub.out}>
+                        <span className="gameplan-sub-in">{sub.in}</span> 
+                        &nbsp;=&gt;&nbsp; 
+                        <span className="gameplan-sub-out">{sub.out}</span>
+                        {sub.positionChange? '*' : ''}
+                    </div>
+                )
+            })}
+         
         </div>);
     },
 
@@ -265,7 +333,7 @@ module.exports = React.createClass({
                                 <div className='disabled btn btn-lg btn-success'><i className='fa fa-check-circle'></i> Publisert</div>
                             </div>);
         }
-        return (<div className='text-center'><button onClick={this.publish} className='btn btn-lg btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publiser bytteplan</span>
+        return (<div className='text-center hidden-print'><button onClick={this.publish} className='btn btn-lg btn-success'><span className={this.state.isPublishing ? 'hidden' : ''}>Publiser bytteplan</span>
                     <i className={this.state.isPublishing ? 'fa fa-spinner fa-spin' : 'hidden'}></i></button></div>
                 );
     }

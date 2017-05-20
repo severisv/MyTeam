@@ -27,6 +27,8 @@ namespace MyTeam.Models.Domain
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
 
+        public bool? GamePlanIsPublished { get; set; }
+
         public virtual Club Club { get; set; }
         
         public virtual ICollection<EventTeam> EventTeams { get; set; }
