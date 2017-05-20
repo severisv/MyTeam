@@ -237,10 +237,13 @@ module.exports = React.createClass({
             for (var key in current) {
                if (key != 'time'){
                     if (previous[key] != current[key]) {                    
-                        result.push({ 
+                        var substitution = { 
                             in: !isInLineup(previous, current[key]) ? current[key] : undefined, 
                             out: !isInLineup(current, previous[key]) ? previous[key] : undefined 
-                        });
+                        };
+                        if(substitution.in || substitution.out) {
+                            result.push(substitution);
+                        }
                     }
                }
             }
@@ -253,6 +256,9 @@ module.exports = React.createClass({
         var subsIn = subs.filter(function(sub) { return !sub.out });
         var subsOut = subs.filter(function(sub) { return !sub.in });
         var pairs = subs.filter(function(sub) { return sub.in && sub.out });
+
+        console.log(subsIn)
+        console.log(subsOut)
 
         var result = pairs.concat(
             subsIn.map(function(sub, index){
