@@ -79,6 +79,7 @@ namespace MyTeam
             loggerFactory.AddSlack(new SlackLoggerOptions("MyTeam") {
                     WebhookUrl = "https://hooks.slack.com/services/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",
                     EnvironmentName = env.EnvironmentName,
+                    LogLevel = LogLevel.Information,
                     Channel = "#myteam"
             },
             loggingConfiguration: Configuration.GetSection("Logging"));

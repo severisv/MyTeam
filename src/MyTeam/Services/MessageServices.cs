@@ -32,7 +32,7 @@ namespace MyTeam.Services
 
             var response = await client.SendEmailAsync(msg);
 
-            _logger.LogWarning($"Sender e-post til {email}. Status: {response.StatusCode}");
+            _logger.LogInformation($"Sender e-post til {email}. Status: {response.StatusCode}");
 
         }
 
