@@ -43,7 +43,9 @@ global.applyJsComponents = function () {
 };
 
 
-global.applyJsComponents();
+$(document).ready(function(){
+    global.applyJsComponents();
+});
 
 
 
