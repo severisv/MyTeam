@@ -37,6 +37,8 @@ global.applyJsComponents = function () {
         });
     }, 500);
 
+    applyBrowserCheck();
+
     console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
 };
 
@@ -131,6 +133,35 @@ function applyDatepickers ($scope) {
         var datepickerElement = React.createElement(Datepicker, { value: $el.data('value'), name: $el.attr('id') })
         ReactDOM.render(datepickerElement, element);
     });
+}
+
+
+function applyBrowserCheck(){
+    if (isIEorEdge()) {
+        $('html').addClass('ie');
+    }
+}
+
+function isIEorEdge(){
+    var ua = window.navigator.userAgent;
+
+    var msie = ua.indexOf('MSIE ');
+    if (msie > 0) {
+        return true;
+    }
+
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+        var rv = ua.indexOf('rv:');
+        return true;
+    }
+
+    var edge = ua.indexOf('Edge/');
+    if (edge > 0) {
+        return true;
+    }
+
+    return false;
 }
 
 module.exports = global;
