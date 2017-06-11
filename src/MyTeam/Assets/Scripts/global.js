@@ -53,7 +53,6 @@ $(document).ready(function(){
 function applySlideDownMenuListeners () {
     var element = $('.slide-down-parent');
     var subMenu = $(element.data('submenu'));
-
     element.click(function () {
 
         if (element.data('isFocused') == true) {
@@ -61,12 +60,8 @@ function applySlideDownMenuListeners () {
             element.blur();
         } else {
             element.data('isFocused', true);
+            subMenu.slideDown(ANIMATION_DURATON);
         }
-    });
-
-    element.focusin(function () {
-        subMenu.slideDown(ANIMATION_DURATON);
-
     });
 
     element.focusout(function () {
@@ -75,7 +70,6 @@ function applySlideDownMenuListeners () {
         setTimeout(function () {
 
         }, ANIMATION_DURATON);
-
 
     });
 }
