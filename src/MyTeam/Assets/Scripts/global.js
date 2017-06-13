@@ -29,21 +29,18 @@ global.applyJsComponents = function () {
     this.applyScopedJsComponents($(document));
     applySlideDownMenuListeners();
 
-    setTimeout(function () {
-        $(window).on('popstate', function (e) {
-           if (!window.location.hash) {
-                location.reload();
-           }
-        });
-    }, 500);
+    $(window).on('popstate', function (e) {
+        if (e.originalEvent.state == 'ajax-action') {
+           location.reload();
+        }
+    });
 
     applyBrowserCheck();
 
     console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
 };
 
-
-$(document).ready(function(){
+$(document).ready(function () {
     global.applyJsComponents();
 });
 
@@ -131,14 +128,13 @@ function applyDatepickers ($scope) {
     });
 }
 
-
-function applyBrowserCheck(){
-    if (isIEorEdge()) {
+function applyBrowserCheck () {
+    if (isIEOrEdge()) {
         $('html').addClass('ie');
     }
 }
 
-function isIEorEdge(){
+function isIEOrEdge () {
     var ua = window.navigator.userAgent;
 
     var msie = ua.indexOf('MSIE ');
@@ -148,7 +144,6 @@ function isIEorEdge(){
 
     var trident = ua.indexOf('Trident/');
     if (trident > 0) {
-        var rv = ua.indexOf('rv:');
         return true;
     }
 
