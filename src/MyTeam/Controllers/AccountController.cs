@@ -75,7 +75,7 @@ namespace MyTeam.Controllers
                 if (result.Succeeded)
                 {
                     _cacheHelper.ClearCache(HttpContext.GetClub()?.ClubId, model.Email);
-                    _logger.LogInformation(1, "User logged in.");
+                    _logger.LogDebug(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -154,7 +154,7 @@ namespace MyTeam.Controllers
         public async Task<IActionResult> LogOff()
         {
            await _signInManager.SignOutAsync();
-            _logger.LogInformation(4, "User logged out.");
+            _logger.LogDebug(4, "User logged out.");
             _cacheHelper.ClearCache(HttpContext.GetClub()?.ClubId, HttpContext.User.Identity.Name);
             return RedirectToAction(nameof(NewsController.Index), "News", new { club = HttpContext.GetClub()?.ClubId});
         }
@@ -190,7 +190,7 @@ namespace MyTeam.Controllers
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
             if (result.Succeeded)
             {
-                _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
+                _logger.LogDebug(5, "User logged in with {Name} provider.", info.LoginProvider);
                 return RedirectToLocal(returnUrl);
             }
             if (result.RequiresTwoFactor)
@@ -221,7 +221,7 @@ namespace MyTeam.Controllers
         [Route("innlogging/ekstern/bekreftelse")]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-         
+
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
@@ -481,7 +481,7 @@ namespace MyTeam.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-        
+
 
         private IActionResult RedirectToLocal(string returnUrl)
         {
