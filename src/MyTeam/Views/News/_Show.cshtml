@@ -27,7 +27,16 @@
     {
         <a class="pull-right edit-link" asp-controller="news" asp-action="edit" asp-route-navn="@Model.Name"><i class='fa fa-edit'></i></a>
     }
-    <h2>@Model.Headline</h2>
+    @if (isShortVersion) {
+        <h2>
+            <a class="news-headline" asp-action="show" asp-route-name="@Model.Name" >
+                @Model.Headline
+            </a>
+        </h2>
+    }
+    else {
+        <h2>@Model.Headline</h2>
+    }
     <p class="news-author"><a class="underline" asp-controller="player" asp-action="show" asp-route-name="@Model.Author.UrlName">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span>
      @if (Model.GameId != null && !(ViewBag.IsMatchReport == true))
      {

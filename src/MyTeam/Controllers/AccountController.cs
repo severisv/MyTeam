@@ -146,8 +146,7 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("utlogging")]
@@ -159,8 +158,6 @@ namespace MyTeam.Controllers
             return RedirectToAction(nameof(NewsController.Index), "News", new { club = HttpContext.GetClub()?.ClubId});
         }
 
-        //
-        // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -173,8 +170,7 @@ namespace MyTeam.Controllers
             return new ChallengeResult(provider, properties);
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
+
         [HttpGet]
         [AllowAnonymous]
         [Route("innlogging/ekstern/callback")]
@@ -213,8 +209,7 @@ namespace MyTeam.Controllers
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -251,7 +246,6 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
         [Route("epost/bekreft")]
@@ -270,8 +264,7 @@ namespace MyTeam.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
-        // GET: /Account/ForgotPassword
+
         [HttpGet]
         [AllowAnonymous]
         [Route("passord/glemt")]
@@ -280,8 +273,7 @@ namespace MyTeam.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -309,8 +301,6 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         [Route("passord/bekreft")]
@@ -319,8 +309,7 @@ namespace MyTeam.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
+
         [HttpGet]
         [AllowAnonymous]
         [Route("passord/nullstill")]
@@ -334,8 +323,7 @@ namespace MyTeam.Controllers
             return code == null ? View("Error") : View(model);
         }
 
-        //
-        // POST: /Account/ResetPassword
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -361,8 +349,7 @@ namespace MyTeam.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
+
         [HttpGet]
         [AllowAnonymous]
         [Route("passord/nullstill/bekreft")]
@@ -371,8 +358,7 @@ namespace MyTeam.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/SendCode
+
         [HttpGet]
         [AllowAnonymous]
         [Route("kode/send")]
@@ -388,8 +374,7 @@ namespace MyTeam.Controllers
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
-        // POST: /Account/SendCode
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -423,8 +408,7 @@ namespace MyTeam.Controllers
             return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
-        //
-        // GET: /Account/VerifyCode
+
         [HttpGet]
         [AllowAnonymous]
         [Route("kode/verifiser")]
@@ -439,8 +423,7 @@ namespace MyTeam.Controllers
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
-        // POST: /Account/VerifyCode
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
