@@ -21,7 +21,6 @@ namespace MyTeam.ViewModels.Attendance
                     Trainings = _attendance.Where(a => a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
                     Games = _attendance.Count(a => a.MemberId == player.Id && a.EventType == EventType.Kamp && a.IsSelected),
                     NoShows = _attendance.Where(a => a.IsAttending == true && !a.DidAttend && a.MemberId == player.Id).Count(a => a.EventType == EventType.Trening),
-                    TrainingVictories = _attendance.Where(a => a.MemberId == player.Id).Count(a => a.WonTraining),
                     Image =  player.Image,
                     FacebookId = player.FacebookId,
                     UrlName = player.UrlName
@@ -29,7 +28,6 @@ namespace MyTeam.ViewModels.Attendance
                 }).ToList()
                 .Where(p => p.Games > 0 || p.Trainings > 0 || p.NoShows > 0)
                 .OrderByDescending(p => p.Trainings)
-                .ThenByDescending(p => p.TrainingVictories)
                 .ThenByDescending(p => p.Games)
                 .ThenByDescending(p => p.NoShows);
             }

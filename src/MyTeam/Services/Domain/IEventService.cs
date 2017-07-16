@@ -22,7 +22,6 @@ namespace MyTeam.Services.Domain
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);
         void SignupMessage(Guid eventId, Guid memberId, string message);
         void UpdateDescription(Guid eventId, string description);
-        void ConfirmTrainingVictory(Guid eventId, Guid playerId, bool didWin);
         SignupDetailsViewModel GetSignupDetailsViewModel(Guid eventId);
     }
 }
