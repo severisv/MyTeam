@@ -3,9 +3,12 @@
 
 @foreach (var ev in Model)
 {
-    @Html.Partial("_Show", ev)
-    @if (ev.SignupHasOpened())
-    {
-        @Html.Partial("_Signup", ev)
+    if (Context.Member().BelongsToTeam(ev.TeamIds.ToArray()) || ev.GameType == GameType.Treningskamp)
+    {  
+        @Html.Partial("_Show", ev)
+        @if (ev.SignupHasOpened())
+        {
+            @Html.Partial("_Signup", ev)
+        }
     }
 }

@@ -82,7 +82,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _playerService.SetPlayerStatus(id, status, Club.ClubId);
+                _playerService.SetPlayerStatus(id, status, Club.Id);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
             }
@@ -97,7 +97,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _playerService.TogglePlayerRole(id, role, Club.ClubId);
+                _playerService.TogglePlayerRole(id, role, Club.Id);
                 _cacheHelper.ClearMemberCache(id);
                 var reponse = new {Success = true};
                 return new JsonResult(reponse);
@@ -125,7 +125,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _playerService.TogglePlayerTeam(teamId, playerId, Club.ClubId);
+                _playerService.TogglePlayerTeam(teamId, playerId, Club.Id);
                 var reponse = new { Success = true };
                 return new JsonResult(reponse);
             }

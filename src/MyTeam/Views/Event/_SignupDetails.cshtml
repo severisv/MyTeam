@@ -6,11 +6,7 @@
 <div id="event-signupDetails-@Model.Id">
     @if (!Model.SignupHasClosed())
     {
-        if (!Context.Member().BelongsToTeam(Model.TeamIds.ToArray()) && Model.GameType != GameType.Treningskamp)
-        {
-            <div mt-alert="Info">Du er ikke registrert som medlem av noen av lagene dette arrangementet gjelder</div>
-        }
-        else if(!Model.IsPublished)
+        if(!Model.IsPublished)
         {
             <div class="event-signupButtons">
                 <a class="ajax-post btn btn-lg btn-@(Model.IsAttending(User) ? "success" : "default")"

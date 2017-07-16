@@ -9,7 +9,7 @@ namespace MyTeam.Services.Application
     {
         PlayerDto GetPlayerFromUser(string name, Guid clubId);
         ClubDto GetCurrentClub(string clubId);
-        void ClearCache(string clubId, string email);
+        void ClearCache(Guid? clubId, string email);
         MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds);
         void ClearNotificationCache(Guid clubId);
         void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId);

@@ -9,14 +9,14 @@ namespace MyTeam.Services.Domain
 {
     public interface IPlayerService
     {
-        JsonResponseMessage Add(string clubId, string facebookId, string firstName,string middleName, string lastName, string emailAddress);
+        JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress);
         IEnumerable<string> GetFacebookIds();
-        void SetPlayerStatus(Guid id, PlayerStatus status, string clubName);
-        void TogglePlayerRole(Guid id, string role, string clubName);
-        void EditPlayer(EditPlayerViewModel model, string clubId);
+        void SetPlayerStatus(Guid id, PlayerStatus status, Guid clubId);
+        void TogglePlayerRole(Guid id, string role, Guid clubId);
+        void EditPlayer(EditPlayerViewModel model, Guid clubId);
         void AddEmailToPlayer(string facebookId, string email);
         IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null);
-        void TogglePlayerTeam(Guid teamId, Guid guid, string clubName);
+        void TogglePlayerTeam(Guid teamId, Guid guid, Guid clubId);
         ShowPlayerViewModel GetSingle(Guid clubId, string urlName);
         ShowPlayerViewModel GetSingle(Guid playerId);
         IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId);

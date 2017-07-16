@@ -74,7 +74,7 @@ namespace MyTeam.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _cacheHelper.ClearCache(HttpContext.GetClub()?.ClubId, model.Email);
+                    _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, model.Email);
                     _logger.LogDebug(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -154,7 +154,7 @@ namespace MyTeam.Controllers
         {
            await _signInManager.SignOutAsync();
             _logger.LogDebug(4, "User logged out.");
-            _cacheHelper.ClearCache(HttpContext.GetClub()?.ClubId, HttpContext.User.Identity.Name);
+            _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, HttpContext.User.Identity.Name);
             return RedirectToAction(nameof(NewsController.Index), "News", new { club = HttpContext.GetClub()?.ClubId});
         }
 

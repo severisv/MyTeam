@@ -23,11 +23,11 @@ namespace MyTeam.Services.Application
             _dbContext = dbContext;
         }
 
-        public PlayerDto GetPlayerFromUser(string name, Guid clubId)
+        public PlayerDto GetPlayerFromUser(string username, Guid clubId)
         {
-            if (string.IsNullOrWhiteSpace(name)) return null;
+            if (string.IsNullOrWhiteSpace(username)) return null;
 
-            var key = name + clubId;
+            var key = username + clubId;
 
             object cachedValue;
             Cache.TryGetValue(key, out cachedValue);
@@ -39,9 +39,11 @@ namespace MyTeam.Services.Application
             {
                 return member;
             }
+
+            Console.WriteLine("loading player from db");
             
             member = _dbContext.Players
-                .Where(p => clubId == p.ClubId && p.UserName == name)
+                .Where(p => clubId == p.ClubId && p.UserName == username)
                 .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName,  p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
@@ -92,11 +94,13 @@ namespace MyTeam.Services.Application
 
         }
 
-        public void ClearCache(string clubId, string email)
+        public void ClearCache(Guid? clubId, string username)
         {
+            // Sleep litt så man ikke cacher gammel data på nytt (race condition)
             Thread.Sleep(20);
-            if (string.IsNullOrEmpty(clubId) || string.IsNullOrEmpty(email)) return;
-            var key = email+clubId;
+            if (clubId == null || string.IsNullOrEmpty(username)) return;
+            var key = username+clubId;
+
             Cache.Remove(key);
         }
 

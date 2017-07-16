@@ -99,15 +99,15 @@ namespace MyTeam.Services.Domain
             return _dbContext.Players.Select(p => p.FacebookId);
         }
 
-        public void SetPlayerStatus(Guid id, PlayerStatus status, string clubName)
+        public void SetPlayerStatus(Guid id, PlayerStatus status, Guid clubId)
         {
             var player = _dbContext.Players.Single(p => p.Id == id);
             player.Status = status;
             _dbContext.SaveChanges();
-            _cacheHelper.ClearCache(clubName, player.UserName);
+            _cacheHelper.ClearCache(clubId, player.UserName);
         }
 
-        public void TogglePlayerRole(Guid id, string role, string clubName)
+        public void TogglePlayerRole(Guid id, string role, Guid clubId)
         {
             var player = _dbContext.Players.Single(p => p.Id == id);
             var roles = player.Roles.ToList();
@@ -121,10 +121,10 @@ namespace MyTeam.Services.Domain
             }
             player.RolesString = string.Join(",", roles);
             _dbContext.SaveChanges();
-            _cacheHelper.ClearCache(clubName, player.UserName);
+            _cacheHelper.ClearCache(clubId, player.UserName);
         }
 
-        public void EditPlayer(EditPlayerViewModel model, string clubId)
+        public void EditPlayer(EditPlayerViewModel model, Guid clubId)
         {
             var player = _dbContext.Players.Single(p => p.Id == model.PlayerId);
             player.FirstName = model.FirstName;
@@ -181,7 +181,7 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public void TogglePlayerTeam(Guid teamId, Guid playerId, string clubName)
+        public void TogglePlayerTeam(Guid teamId, Guid playerId, Guid clubId)
         {
 
             var existingTeam = _dbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
@@ -203,8 +203,7 @@ namespace MyTeam.Services.Domain
             var userName = _dbContext.Members.Where(m => m.Id == playerId).Select(p => p.UserName).Single();
 
             _dbContext.SaveChanges();
-            _cacheHelper.ClearCache(clubName, userName);
-
+            _cacheHelper.ClearCache(clubId, userName);
         }
 
         public ShowPlayerViewModel GetSingle(Guid clubId, string name)

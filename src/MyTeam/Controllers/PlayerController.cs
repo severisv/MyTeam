@@ -94,7 +94,7 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _playerService.EditPlayer(model, Club.ClubId);
+                _playerService.EditPlayer(model, Club.Id);
                 Alert(AlertType.Success, "Profil lagret");
                 return Show(model.UrlName);
 
