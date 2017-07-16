@@ -46,7 +46,7 @@ namespace MyTeam.Resources
         public const string Games = "Kamper";
         public const string GameCount = "Kamper";
         public const string GoalCount = "Mål";
-        public const string Home = "Nyheter";
+        public const string About = "Om klubben";
         public const string HomeGround = "Hjemme";
         public const string Internal = "Intern";
         public const string IsAttending = "Stiller";

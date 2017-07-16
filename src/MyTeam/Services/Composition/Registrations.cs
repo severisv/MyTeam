@@ -9,6 +9,7 @@ namespace MyTeam.Services.Composition
     {
         public static void RegisterDependencies(this IServiceCollection services)
         {
+            services.AddTransient<IAboutService, AboutService>();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IRemedyRateService, RemedyRateService>();
