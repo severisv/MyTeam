@@ -1,5 +1,6 @@
-﻿@using System.Threading.Tasks
-@model MyTeam.ViewModels.Account.LoginViewModel
+﻿@using System.Linq
+@using System.Threading.Tasks
+@model LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
@@ -19,14 +20,14 @@
         <div id="facebook-login" class="col-md-12 no-padding" style="@(ViewBag.Local == true ?  "display: none;" : "")">
             <section>
                 @{
-                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
                     <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                         <div>
                             <div class="col-xs-12 login--providerLogin">
                                 @foreach (var provider in loginProviders)
                                 {
-                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.AuthenticationScheme" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
+                                    <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.Name" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
                                 }
                             </div>
 
@@ -83,5 +84,5 @@
 </div>
 
     @section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial", new {}, ViewData); }
     }

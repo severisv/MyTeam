@@ -4,7 +4,6 @@ using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +14,8 @@ using MyTeam.Services.Composition;
 using MyTeam.Settings;
 using MyTeam.Filters;
 using SlackLogger;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MyTeam
 {
@@ -43,20 +44,32 @@ namespace MyTeam
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>((options =>
-            {
 
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(16);
-                options.Cookies.ApplicationCookie.SlidingExpiration = true;
-                options.Cookies.ApplicationCookie.CookieName = "_myt";
-                options.Password.RequireDigit = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 7;
-            }))
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            {
+                o.Password.RequireDigit = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 7;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                    {
+                        o.Cookie.Expiration = TimeSpan.FromDays(16);
+                        o.Cookie.Name = "_myt";
+                        o.SlidingExpiration = true;
+                    }
+
+                )
+                .AddFacebook(o =>
+                {
+                    o.AppId = Configuration["Authentication:Facebook:AppId"];
+                    o.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                });
+            
 
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
@@ -76,11 +89,12 @@ namespace MyTeam
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            loggerFactory.AddSlack(new SlackLoggerOptions("MyTeam") {
-                    WebhookUrl = "https://hooks.slack.com/services/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",
-                    EnvironmentName = env.EnvironmentName,
-                    LogLevel = LogLevel.Information,
-                    Channel = "#myteam"
+            loggerFactory.AddSlack(new SlackLoggerOptions("MyTeam")
+            {
+                WebhookUrl = "https://hooks.slack.com/services/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",
+                EnvironmentName = env.EnvironmentName,
+                LogLevel = LogLevel.Information,
+                Channel = "#myteam"
             },
             loggingConfiguration: Configuration.GetSection("Logging"));
 
@@ -109,7 +123,7 @@ namespace MyTeam
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
@@ -118,11 +132,7 @@ namespace MyTeam
                 SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
             });
 
-            app.UseFacebookAuthentication(new FacebookOptions
-            {
-                AppId = Configuration["Authentication:Facebook:AppId"],
-                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
-            });
+          
 
             app.UseMvc(routes =>
             {
