@@ -8,3 +8,4 @@ branches:
 build_script:
   build.cmd
 test: off
+image: Visual Studio 2017
