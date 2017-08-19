@@ -130,18 +130,21 @@ module Targets =
      msdeploy args "" |> ignore
   )
 
-  Target "Default" (fun _ ->
-    ()
-  )
+  Target "Default" (ignore)
 
 "Clean"
 ==> "NpmRestore"
 ==> "BowerRestore"
 ==> "GulpCompile"
+==> "Publish"
+
+"Clean"
 ==> "RestorePackages"
 ==> "Build"
 ==> "Test"
 ==> "Publish"
+
+"Publish"
 ==> "Deploy"
 ==> "Default"
 
