@@ -8,12 +8,10 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Services.Composition;
 using MyTeam.Settings;
 using MyTeam.Filters;
-using SlackLogger;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -21,21 +19,12 @@ namespace MyTeam
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; set; }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,7 +32,6 @@ namespace MyTeam
 
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
             {
@@ -77,29 +65,15 @@ namespace MyTeam
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });
 
-            services.AddSingleton(Configuration);
             services.RegisterDependencies();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.LogStart();
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddSlack(new SlackLoggerOptions("MyTeam")
-            {
-                WebhookUrl = "https://hooks.slack.com/services/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",
-                EnvironmentName = env.EnvironmentName,
-                LogLevel = LogLevel.Information,
-                Channel = "#myteam"
-            },
-            loggingConfiguration: Configuration.GetSection("Logging"));
-
-
-
+            
             if (env.IsDevelopment() || env.IsStaging())
             {
                 app.UseDeveloperExceptionPage();

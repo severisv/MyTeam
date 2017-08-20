@@ -14,7 +14,7 @@ namespace MyTeam.Services
         private readonly string _apiKey;
         private readonly ILogger _logger;
 
-        public AuthMessageSender(IConfigurationRoot configuration, ILogger<AuthMessageSender> logger)
+        public AuthMessageSender(IConfiguration configuration, ILogger<AuthMessageSender> logger)
         {
             _apiKey = configuration["Integration:SendGrid:Key"];
             _logger = logger;
