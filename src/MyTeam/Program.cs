@@ -21,9 +21,7 @@ namespace MyTeam
                         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                         .AddJsonFile("appsettings.json")
                         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true)
-                        .AddEnvironmentVariables();
-                    
-                    config.AddEnvironmentVariables();
+                        .AddEnvironmentVariables();                    
                 })
 
                 .ConfigureLogging((hostingContext, logging) =>
