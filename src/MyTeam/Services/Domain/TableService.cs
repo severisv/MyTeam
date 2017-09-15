@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using HtmlAgilityPack;
+using HtmlAgilityPack.CssSelectors.NetCore;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
-using ScrapySharp.Extensions;
+
 
 namespace MyTeam.Services.Domain
 {
@@ -44,20 +46,22 @@ namespace MyTeam.Services.Domain
                 }
                 catch (Exception e)
             {
-                _logger.LogError("Feil ved scraping av tabell. SeasonId: " + season.Id, e);
+                _logger.LogError(e, "Feil ved scraping av tabell. SeasonId: " + season.Id);
             }
         }
         }
 
         private string ScrapeTable(Season season)
         {
-            var web = new HtmlWeb();
-            var doc = web.Load(season.TableSourceUrl);
+            var httpClient = new HttpClient();
+            var htmlString = httpClient.GetAsync(season.TableSourceUrl).Result.Content.ReadAsStringAsync().Result;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlString);
 
-            var table = doc.DocumentNode.CssSelect("table").First();
-            var rows =  table.CssSelect("tr");
+            var table = doc.DocumentNode.QuerySelectorAll("table").First();
+            var rows =  table.QuerySelectorAll("tr");
 
-            var tableTeams = rows.Select(t => t.CssSelect("td"));
+            var tableTeams = rows.Select(t => t.QuerySelectorAll("td"));
 
             var tableStrings = tableTeams.Where(IsValidRow).Select(GetTableTeamString);
             var tableString = string.Join("|", tableStrings);
