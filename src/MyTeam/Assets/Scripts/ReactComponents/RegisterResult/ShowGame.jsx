@@ -79,7 +79,6 @@ module.exports = React.createClass({
   handleSubmit: function() {
     var that = this;
     var state = that.state; 
-    console.log(that.state);
     var form = {
         Type: state.type,
         PlayerId: state.playerId,
@@ -89,7 +88,6 @@ module.exports = React.createClass({
         AssistedByName: state.assistedByName,
         Id: state.Id
       };
-      console.log(form)
     this.setState({ isAddingEvent: true });
     $.post(that.props.routes.ADD_EVENT, 
         form).then(function(response) {
