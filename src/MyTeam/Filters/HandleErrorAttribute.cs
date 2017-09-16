@@ -18,8 +18,7 @@ namespace MyTeam.Filters
             {
                 var request = context.HttpContext.Request;
                 var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
-                var eventId = (DateTime.Now - DateTime.Today).TotalSeconds;
-                logger.LogError((int)eventId, $"Error in {request.Method}: {request.Path}{request.QueryString}", context.Exception);
+                logger.LogError(context.Exception, $"Error in {request.Method}: {request.Path}{request.QueryString}");
                 context.Result = new ErrorResult(context.HttpContext, context.Exception);
             }
         }
