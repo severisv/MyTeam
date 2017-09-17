@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Dto;
@@ -285,36 +286,52 @@ namespace MyTeam.Services.Domain
             var games = _dbContext.Games.Where(
                           g => teamIds.Contains(g.TeamId) &&
                           g.GameType != GameType.Treningskamp &&
-                          g.DateTime < now)
+                          g.DateTime < now
+                          && g.Attendees.Any(a => a.MemberId == playerId && a.IsSelected)
+                          )
                 .Select(g => new GameAttendanceViewModel
                 {
-                    Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
                     TeamId = g.TeamId,
                     DateTime = g.DateTime
                 }).ToList();
 
 
 
+            var years = games
+                .Select(g => new Key {TeamId = g.TeamId, Year = g.DateTime.Year})
+                .Distinct()
+                .Concat(teamIds.Select(tid => new Key {TeamId = tid, Year = 0}));
 
-            var grouped = events
+            
+            var byTeamAndYear = events
                             .GroupBy(e => new { TeamId = e.Game.TeamId, Year = e.Game.DateTime.Year })
                             .Concat(
                                     events.GroupBy(e => new { TeamId = e.Game.TeamId, Year = 0 }))
-                            .ToList();
+            
+                                    .ToList();
 
-    
+
+ 
+            var grouped = years.Select(key =>
+                new EventList
+                {
+                    Key = key,
+                    Items = byTeamAndYear.Where(k => k.Key.TeamId == key.TeamId && k.Key.Year == key.Year).SelectMany(g => g.ToList()).ToList()
+                }
+            );
+      
             return grouped.Select(group =>
                     new PlayerStatsViewModel(
                         playerId,
                         group.Key.TeamId,
-                        group.Select(ge => new GameEventViewModel
+                        group.Items.Select(ge => new GameEventViewModel
                             {
                                 AssistedById = ge.AssistedById,
                                 PlayerId = ge.PlayerId,
                                 GameId = ge.Game.Id,
                                 Type = ge.Type
                             }),
-                            games.Where(g => g.TeamId == group.Key.TeamId && (g.DateTime.Year == group.Key.Year || group.Key.Year == 0)).Sum(g => g.Attendances),
+                            games.Count(g => g.TeamId == group.Key.TeamId && (g.DateTime.Year == group.Key.Year || group.Key.Year == 0)),
                             group.Key.Year
                         ))
                         .ToList()
@@ -326,5 +343,17 @@ namespace MyTeam.Services.Domain
 
 
         }
+    }
+
+    struct Key 
+    {
+        public Guid TeamId { get; set; }
+        public int Year { get; set; }
+    }
+
+    struct EventList
+    {
+        public Key Key { get; set; }
+        public List<GameEvent> Items { get; set; }
     }
 }
