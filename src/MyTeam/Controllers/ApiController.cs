@@ -42,6 +42,7 @@ namespace MyTeam.Controllers
                   FirstName = p.FirstName,
                   MiddleName = p.MiddleName,
                   LastName = p.LastName,
+                  UrlName = p.UrlName,
                   Status = p.Status.ToString(),
                   Roles = p.Roles,
               }).ToList();
@@ -61,6 +62,7 @@ namespace MyTeam.Controllers
                     p.LastName,
                     p.Status,
                     p.Roles,
+                    p.UrlName,
                     TeamIds = memberTeams.Where(mt => mt.MemberId == p.Id).Select(mt => mt.TeamId).ToList()
             });
 

@@ -23,7 +23,7 @@ module.exports = React.createClass({
         events: response,
         loadingEvents: false
       });
-    });
+    });   
     $.getJSON(that.props.routes.GET_PLAYERS).then(function(response) {
       that.setState({
         players: response
@@ -165,23 +165,24 @@ module.exports = React.createClass({
   },
 
   getPlayerName: function(playerId) {
-    var squad = this.state.squad.filter(function(player) {
+    var squad = this.state.players.filter(function(player) {
       return player.id == playerId;
     });
     if (squad.length > 0) return squad[0].firstName;
     else return "Selvmål";
   },
   getPlayerShortName: function(playerId) {
-    var squad = this.state.squad.filter(function(player) {
+    var squad = this.state.players.filter(function(player) {
       return player.id == playerId;
     });
     if (squad.length > 0) return squad[0].firstName + " " + squad[0].lastName;
     else return "Selvmål";
   },
   getPlayerUrlName: function(playerId) {
-    var squad = this.state.squad.filter(function(player) {
+    var squad = this.state.players.filter(function(player) {
       return player.id == playerId;
     });
+    
     if (squad.length > 0) return squad[0].urlName;
     else return "";
   },
