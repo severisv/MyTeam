@@ -71,7 +71,7 @@ namespace MyTeam.Services.Domain
             return JsonResponse.ValidationFailed($"{Res.Player} {Res.IsAlready.ToLower()} {Res.Added.ToLower()}");
         }
 
-       private string GetUrlName(Guid clubId, string firstName, string middleName, string lastName)
+        private string GetUrlName(Guid clubId, string firstName, string middleName, string lastName)
         {
             var middle = !string.IsNullOrWhiteSpace(middleName) ? "-" + middleName.ToLower() : "";
             var urlName = $"{firstName.ToLower()}{middle}-{lastName.ToLower()}";
@@ -159,7 +159,7 @@ namespace MyTeam.Services.Domain
             var query =
                 _dbContext.Players.Where(p => p.ClubId == clubId)
                     .Where(p => p.Status != PlayerStatus.Sluttet);
-                
+
             if (includeCoaches != true) query = query.Where(p => p.Status != PlayerStatus.Trener);
 
             if (status != null) query = query.Where(p => p.Status == status);
@@ -283,31 +283,45 @@ namespace MyTeam.Services.Domain
 
             var now = DateTime.Now;
             var games = _dbContext.Games.Where(
-                          g => teamIds.Contains(g.TeamId) && 
+                          g => teamIds.Contains(g.TeamId) &&
                           g.GameType != GameType.Treningskamp &&
                           g.DateTime < now)
                 .Select(g => new GameAttendanceViewModel
                 {
                     Attendances = g.Attendees.Count(a => a.MemberId == playerId && a.IsSelected),
-                    TeamId = g.TeamId
+                    TeamId = g.TeamId,
+                    DateTime = g.DateTime
                 }).ToList();
 
-            var grouped = events.GroupBy(e => e.Game.TeamId);
 
-            return teamIds.Select(teamId =>
-                new PlayerStatsViewModel(
-                        playerId, teamId,
-                            grouped.SingleOrDefault(g => g.Key == teamId)?.Select(ge => new GameEventViewModel
+
+
+            var grouped = events
+                            .GroupBy(e => new { TeamId = e.Game.TeamId, Year = e.Game.DateTime.Year })
+                            .Concat(
+                                    events.GroupBy(e => new { TeamId = e.Game.TeamId, Year = 0 }))
+                            .ToList();
+
+    
+            return grouped.Select(group =>
+                    new PlayerStatsViewModel(
+                        playerId,
+                        group.Key.TeamId,
+                        group.Select(ge => new GameEventViewModel
                             {
                                 AssistedById = ge.AssistedById,
                                 PlayerId = ge.PlayerId,
                                 GameId = ge.Game.Id,
                                 Type = ge.Type
                             }),
-                             games.Where(g => g.TeamId == teamId).Sum(g => g.Attendances)
-                    ))
-                    .ToList()
-                    .OrderByDescending(p => p.GameCount);
+                            games.Where(g => g.TeamId == group.Key.TeamId && (g.DateTime.Year == group.Key.Year || group.Key.Year == 0)).Sum(g => g.Attendances),
+                            group.Key.Year
+                        ))
+                        .ToList()
+                        .OrderByDescending(p => p.Year).ThenByDescending(p => p.GameCount);
+
+
+
 
 
         }

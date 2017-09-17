@@ -1,32 +1,54 @@
 ﻿@using System.Threading.Tasks
 @model IEnumerable<MyTeam.ViewModels.Player.PlayerStatsViewModel>
-
-@foreach (var item in Model)
-{
-    if (item.GameCount > 0)
+@{ var isFirst = true; }
+<div id="stats">
+    @foreach (var group in Model.GroupBy(m => m.Year))
     {
-        <h4 class="no-padding"><i class="flaticon-football43"></i> @Context.GetClub().GetTeamName(item.TeamId)</h4>
-        <table class="table playerStats">
-            <tr><td><label>@Res.GameCount</label></td><td class="playerStats--value">@Html.DisplayFor(m => item.GameCount)</td></tr>
-            <tr><td><label>@Res.GoalCount </label></td><td class="playerStats--value"><i class="fa fa-soccer-ball-o"></i> @Html.DisplayFor(m => item.GoalCount)</td></tr>
-            <tr><td><label>@Res.AssistCount </label></td><td class="playerStats--value"><i class="flaticon-football119"></i> @Html.DisplayFor(m => item.AssistCount)</td></tr>
-            @if (item.YellowCards > 0 || item.RedCards > 0)
-            {
-                <tr>
-                    <td><label>Kort</label></td>
-                    <td class="playerStats--value">
-                        @if (item.YellowCards > 0)
-                        {
-                            <i class="icon icon-card-yellow"></i> @Html.DisplayFor(m => item.YellowCards)
-                        }
-                        @if (item.RedCards > 0)
-                        {
-                            <i class="icon icon-card-red"></i> @Html.DisplayFor(m => item.RedCards)
-                        }
-                    </td>
-                </tr>
-            }
+        var year = group.Key;
+        <div class="panel">
+            <div class="playerStats-year">
+                <a data-toggle="collapse" data-parent="#stats" href="#@year">
+                    @(year == 0 ? "Totalt" : year.ToString())
+                </a>
+            </div>
+            <div id="@year" class="collapse @(isFirst ? "in" : "")">
+                <hr/>
+                @foreach (var item in group)
+                {
+                    if (item.GameCount > 0)
+                    {
+                        <h5 class="no-padding"><i class="flaticon-football43"></i> @Context.GetClub().GetTeamName(item.TeamId)</h5>
+                        <table class="table playerStats">
+                            <tr><td><label>@Res.GameCount</label></td><td class="playerStats--value">@Html.DisplayFor(m => item.GameCount)</td></tr>
+                            <tr><td><label>@Res.GoalCount </label></td><td class="playerStats--value"><i class="fa fa-soccer-ball-o"></i> @Html.DisplayFor(m => item.GoalCount)</td></tr>
+                            <tr><td><label>@Res.AssistCount </label></td><td class="playerStats--value"><i class="flaticon-football119"></i> @Html.DisplayFor(m => item.AssistCount)</td></tr>
+                            @if (item.YellowCards > 0 || item.RedCards > 0)
+                            {
+                                <tr>
+                                    <td><label>Kort</label></td>
+                                    <td class="playerStats--value">
+                                        @if (item.YellowCards > 0)
+                                        {
+                                            <i class="icon icon-card-yellow"></i>
+                                            @Html.DisplayFor(m => item.YellowCards)
+                                        }
+                                        @if (item.RedCards > 0)
+                                        {
+                                            <i class="icon icon-card-red"></i>
+                                            @Html.DisplayFor(m => item.RedCards)
+                                        }
+                                    </td>
+                                </tr>
+                            }
 
-        </table>
+                        </table>
+                    }
+
+                }
+            </div>
+        </div>
+        isFirst = false;
     }
-}
+</div>
+
+   
