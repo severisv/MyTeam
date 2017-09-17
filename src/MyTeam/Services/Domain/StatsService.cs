@@ -48,9 +48,12 @@ namespace MyTeam.Services.Domain
                     Id = e.MemberId,
                     Name = e.Member.Name,
                     FacebookId = e.Member.FacebookId,
-                    UrlName = e.Member.UrlName
+                    UrlName = e.Member.UrlName,
+                    Status = e.Member.Status
                 }
-            }).ToList();
+            })
+            .ToList()
+            .Where(p => p.Member.Status != PlayerStatus.Trener);
         }
 
         public IEnumerable<int> GetAttendanceYears(Guid clubId)

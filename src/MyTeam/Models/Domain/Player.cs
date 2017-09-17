@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
     
@@ -16,17 +15,13 @@ namespace MyTeam.Models.Domain
         [Display(Name = Res.AssistCount)]
         public virtual int AssistCount { get; set; }
 
-        [Required]
-        public PlayerStatus Status { get; set; }
 
         [Display(Name = Res.Positions)]
         [NotMapped]
         public string[] Positions => PositionsString?.Split(',');
         public virtual string PositionsString { get; set; }
 
-        //public virtual IEnumerable<GameEvent> Goals => GameEvents.Where(g => g.Type == Type.Goal);
         public virtual ICollection<GameEvent> Assists { get; set; }
-        //public virtual IEnumerable<GameEvent> Cards => GameEvents.Where(g => g.Type == Type.YellowCard || g.Type == Type.RedCard);
         public virtual ICollection<GameEvent> GameEvents { get; set; }
 
         public Player()

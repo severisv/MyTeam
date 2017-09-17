@@ -158,7 +158,8 @@ namespace MyTeam.Services.Domain
         {
             var query = 
                 _dbContext.Players.Where(p => p.ClubId == clubId)
-                .Where(p => p.Status != PlayerStatus.Sluttet);
+                .Where(p => p.Status != PlayerStatus.Sluttet)
+                .Where(p => p.Status != PlayerStatus.Trener);
 
             if (status != null) query = query.Where(p => p.Status == status);
 

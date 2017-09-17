@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MyTeam.Models.Enums;
 using MyTeam.Models.Shared;
 using MyTeam.Resources;
 
@@ -22,6 +23,10 @@ namespace MyTeam.Models.Domain
         public string FacebookId { get; set; }
 
         public string RolesString { get; set; }
+
+
+        [Required]
+        public PlayerStatus Status { get; set; }
 
         [NotMapped]
         public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
