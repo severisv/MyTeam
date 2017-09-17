@@ -113,6 +113,10 @@ td.playerStats--value {
                 }
              }
 
+.playerStats {
+    .r-under-md({font-size:0.9em;});
+}
+
 .playerStats td {
     font-size: 1.25em;
 
@@ -122,11 +126,38 @@ td.playerStats--value {
 
 }
 
+.playerStats table.table tr td {
+    border-top: none;
+}
+
 .playerStats-year {
     font-size: 1.25em;
     margin-left: 0.5em;
 }
 
+.playerStats .table {
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0,0,0,.05);
+    margin-top: 0.25em;
+
+    td {
+        width: 20%;
+        white-space: nowrap;
+        text-align: left;
+        padding-right: 0;
+    }
+    td.kort {
+        width: 10%;
+    }
+}
+
 #show-players {
     min-height: 22em;
 }
+
+.playerStats {
+    a:after {
+        font-size: 0.75em;
+    }
+}
+

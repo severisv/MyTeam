@@ -318,7 +318,8 @@ namespace MyTeam.Services.Domain
                             group.Key.Year
                         ))
                         .ToList()
-                        .OrderByDescending(p => p.Year).ThenByDescending(p => p.GameCount);
+                        .OrderByDescending(p => p.Year)
+                        .ThenByDescending(p => p.TeamId);
 
 
 
