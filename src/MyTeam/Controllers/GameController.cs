@@ -64,11 +64,11 @@ namespace MyTeam.Controllers
         {
             var ev = _gameService.GetRegisterSquadEventViewModel(eventId);
 
-            var players = _playerService.GetDto(Club.Id);
+            var players = _playerService.GetDto(Club.Id, includeCoaches: true);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
-            var model = new RegisterSquadViewModel(ev, players);
+            var model = new RegisterSquadViewModel(ev, players.ToList());
 
             ViewBag.Title = "Laguttak";
 

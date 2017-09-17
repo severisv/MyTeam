@@ -154,12 +154,13 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null)
+        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null, bool includeCoaches = false)
         {
-            var query = 
+            var query =
                 _dbContext.Players.Where(p => p.ClubId == clubId)
-                .Where(p => p.Status != PlayerStatus.Sluttet)
-                .Where(p => p.Status != PlayerStatus.Trener);
+                    .Where(p => p.Status != PlayerStatus.Sluttet);
+                
+            if (includeCoaches != true) query = query.Where(p => p.Status != PlayerStatus.Trener);
 
             if (status != null) query = query.Where(p => p.Status == status);
 
