@@ -156,8 +156,12 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null)
         {
-            var query = _dbContext.Players.Where(p => p.ClubId == clubId);
+            var query = 
+                _dbContext.Players.Where(p => p.ClubId == clubId)
+                .Where(p => p.Status != PlayerStatus.Sluttet);
+
             if (status != null) query = query.Where(p => p.Status == status);
+
             var players = query
                 .Select(p => new SimplePlayerDto
                 {
