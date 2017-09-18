@@ -4,8 +4,8 @@ namespace MyTeam.Models.Enums
     {
         Aktiv,
         Inaktiv,
-        Sluttet,
         Veteran,
-        Trener
+        Trener,
+        Sluttet
     }
 }
