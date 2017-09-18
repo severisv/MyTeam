@@ -140,6 +140,7 @@ module.exports = React.createClass({
             {this.renderPlayers(this.options.playerStatus.Veteran)}
             {this.renderPlayers(this.options.playerStatus.Inactive)}
             {this.renderPlayers(this.options.playerStatus.Trener)}
+            {this.renderPlayers(this.options.playerStatus.Quit)}
         </div>);
     }
 
