@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
+using Newtonsoft.Json;
 
 namespace MyTeam.Models
 {
@@ -28,7 +31,7 @@ namespace MyTeam.Models
         public DbSet<Team> Teams { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+            : base(options)
         {
         }
 
@@ -53,7 +56,7 @@ namespace MyTeam.Models
             builder.Entity<Team>().ToTable("Team");
 
 
-        builder.Entity<Member>()
+            builder.Entity<Member>()
                 .HasMany(e => e.EventAttendances)
                 .WithOne(c => c.Member)
                 .HasForeignKey(c => c.MemberId)
@@ -61,10 +64,10 @@ namespace MyTeam.Models
 
 
             builder.Entity<Member>()
-                    .HasMany(e => e.Payments)
-                    .WithOne(c => c.Member)
-                    .HasForeignKey(c => c.MemberId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(e => e.Payments)
+                .WithOne(c => c.Member)
+                .HasForeignKey(c => c.MemberId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Team>()
                 .HasMany(e => e.MemberTeams)
@@ -83,25 +86,67 @@ namespace MyTeam.Models
                 .WithOne(c => c.Team)
                 .HasForeignKey(c => c.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
-            builder.Entity<GameEvent>()
-               .HasOne(e => e.Player)
-               .WithMany(c => c.GameEvents)
-               .HasForeignKey(c => c.PlayerId)
-               .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<GameEvent>()
-               .HasOne(e => e.AssistedBy)
-               .WithMany(c => c.Assists)
-               .HasForeignKey(c => c.AssistedById)
-               .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(e => e.Player)
+                .WithMany(c => c.GameEvents)
+                .HasForeignKey(c => c.PlayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<GameEvent>()
+                .HasOne(e => e.AssistedBy)
+                .WithMany(c => c.Assists)
+                .HasForeignKey(c => c.AssistedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             builder.Entity<Comment>()
                 .HasOne(m => m.Member)
                 .WithMany(c => c.Comments)
                 .IsRequired(false);
-            
+
         }
     }
+
+
+
+
+    public class MainDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    {
+        public ApplicationDbContext CreateDbContext(string[] args)
+        {
+            var connectionString = ReadConnectionStringFromAppsettings();
+
+            var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            builder.UseSqlServer(connectionString);
+
+            return new ApplicationDbContext(builder.Options);
+        }
+
+        private static string ReadConnectionStringFromAppsettings()
+        {
+            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json";
+
+            using (var r = new StreamReader(appsettingsPath))
+            {
+                var json = r.ReadToEnd();
+                var appsettings = JsonConvert.DeserializeObject<Appsettings>(json);
+                return appsettings.ConnectionStrings.DefaultConnection;
+            }
+        }
+
+
+    }
+    class Appsettings
+    {
+        public ConnectionStrings ConnectionStrings { get; set; }
+    }
+
+    class ConnectionStrings
+    {
+        public string DefaultConnection { get; set; }
+    }
+
+
 }

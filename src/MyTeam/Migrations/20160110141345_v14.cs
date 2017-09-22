@@ -27,7 +27,7 @@ namespace MyTeam.Migrations
                 name: "GameType",
                 table: "Event",
                 nullable: false,
-                defaultValue: GameType.Treningskamp);
+                defaultValue: (int)GameType.Treningskamp);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
