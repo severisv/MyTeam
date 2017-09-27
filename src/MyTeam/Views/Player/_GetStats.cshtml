@@ -7,12 +7,12 @@
     {
         var year = group.Key;
         <div class="panel">
-            <div class="playerStats-year">
-                <a data-toggle="collapse" class="@(isFirst ? "" : "collapsed")" data-parent="#stats" href="#@year">
+            <div class="playerStats-year playerStats-year--@year">
+                <a data-toggle="collapse" class="@((isFirst || year == 0) ? "" : "collapsed")" data-parent="#stats" href="#@year">
                     @(year == 0 ? "Totalt" : year.ToString())
                 </a>
             </div>
-            <div id="@year" class="collapse @(isFirst ? "in" : "")">
+            <div id="@year" class="collapse @((isFirst || year == 0) ? "in" : "")">
                 <table class="table playerStats">
 
                     @foreach (var item in group)
