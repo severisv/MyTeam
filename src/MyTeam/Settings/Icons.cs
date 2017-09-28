@@ -13,6 +13,11 @@ namespace MyTeam.Settings
         public const string SquadList = "fa fa-users";
         public const string Fine = "fa fa-money";
         public static string Payment = "fa fa-list";
+        public static string Assist = "flaticon-football119";
+        public static string Goal = "fa fa-soccer-ball-o";
+        public static string Player = "flaticon-soccer18";
+        public static string YellowCard = "icon icon-card-yellow";
+        public static string RedCard = "icon icon-card-red";
 
         public static string GameType(GameType? gameType)
         {

@@ -21,23 +21,28 @@ namespace MyTeam.Controllers
         public IActionResult Index(string lag = null, int? aar = null)
         {
             var teamName = lag ?? Club.Teams.First().ShortName;
-            var teamId = Club.Teams.First(t => t.ShortName == teamName).Id;
-            var years = _statsService.GetStatsYears(teamId).ToList();
+
+            var teamIds = (teamName == "total" ?
+                Club.Teams.Select(t => t.Id) :
+                Club.Teams.Where(t => t.ShortName == teamName).Select(t => t.Id)
+                ).ToList();
+
+            var years = _statsService.GetStatsYears(teamIds).ToList();
 
 
             var selectedYear = aar ?? years.FirstOrDefault();
 
-            var stats = 
+            var stats =
                 aar == 0 ?
-                _statsService.GetStats(teamId):
-                _statsService.GetStats(teamId, selectedYear);
+                _statsService.GetStats(teamIds) :
+                _statsService.GetStats(teamIds, selectedYear);
 
 
             var model = new StatsViewModel(Club.Teams, teamName, selectedYear, years, stats);
 
             return View(model);
         }
-        
+
 
     }
 }

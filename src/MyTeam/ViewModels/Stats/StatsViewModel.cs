@@ -10,11 +10,14 @@ namespace MyTeam.ViewModels.Stats
         public string Team  {get;}
         public IEnumerable<int> Years  {get;}
 
-        public IEnumerable<PlayerStats> Goals => _players.Where(p => p.Goals > 0).OrderByDescending(p => p.Goals);
-        public IEnumerable<PlayerStats> Assists => _players.Where(p => p.Assists > 0).OrderByDescending(p => p.Assists);
-        public IEnumerable<PlayerStats> Cards => _players.Where(p => p.YellowCards > 0 || p.RedCards > 0).OrderByDescending(p => p.RedCards).ThenByDescending(p => p.YellowCards);
-        public IEnumerable<PlayerStats> Games => _players.Where(p => p.Games > 0).OrderByDescending(p => p.Games);
-        private readonly IEnumerable<PlayerStats> _players;
+        private IEnumerable<PlayerStats> _players;
+
+        public IEnumerable<PlayerStats> Players => _players
+            .OrderByDescending(p => p.Games)
+            .ThenByDescending(p => p.Goals + p.Assists)
+            .ThenByDescending(p => p.YellowCards)
+            .ThenByDescending(p => p.RedCards);
+
 
         public StatsViewModel(IEnumerable<CurrentTeam> teams, string selectedTeamName, int selectedYear, IEnumerable<int> years, IEnumerable<PlayerStats> players)
         {
