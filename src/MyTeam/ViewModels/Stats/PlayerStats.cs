@@ -38,7 +38,8 @@ namespace MyTeam.ViewModels.Stats
         public int YellowCards => _gameEvents.Count(ge => ge.Type == GameEventType.YellowCard && ge.PlayerId == Id);
         public int RedCards => _gameEvents.Count(ge => ge.Type == GameEventType.RedCard && ge.PlayerId == Id);
 
-                     
-      
+        public string Name => $"{FirstName} {LastName}";
+
+
     }
 }
