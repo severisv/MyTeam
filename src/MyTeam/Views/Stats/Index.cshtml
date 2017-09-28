@@ -30,6 +30,7 @@
                             {
                                 <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = year})" selected="@(Model.SelectedYear == year)">@year</option>
                             }
+                            <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = 0})" selected="@(Model.SelectedYear == 0)" >Total</option>
                         </select>
                     </div>
             }
