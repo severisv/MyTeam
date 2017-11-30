@@ -111,7 +111,7 @@ namespace MyTeam.Services.Domain
 
             return _dbContext.Players.Where(p => p.Id == memberId)
                     .Select(p => new AttendeeViewModel(memberId, eventId, attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected,
-                                new AttendeePlayerViewModel(memberId, p.FirstName, p.LastName, p.UserName, p.UrlName))).First();
+                                new AttendeePlayerViewModel(memberId, p.FirstName, p.LastName, p.UserName, p.UrlName, p.Status))).First();
         }
 
         public void Add(Guid clubId, params Event[] events)
@@ -279,7 +279,7 @@ namespace MyTeam.Services.Domain
                     new SignupDetailsViewModel(
                         e.EventTeams.Select(et => et.TeamId).ToList(),
                         e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected,
-                        new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.Member.UrlName))).ToList(),
+                        new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.Member.UrlName, a.Member.Status))).ToList(),
                         e.Id, e.Type, e.GameType, e.DateTime, e.Voluntary, e.IsPublished)).First();
                
     }

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
-using ScrapySharp.Extensions;
+using HtmlAgilityPack.CssSelectors.NetCore;
 
 namespace MyTeam.Services.Domain
 {
@@ -52,26 +53,29 @@ namespace MyTeam.Services.Domain
                     season.FixturesUpdated = DateTime.Now;
                     _dbContext.SaveChanges();
 
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError("Feil ved oppdatering av kamper av kamper. SeasonId: " + season.Id, e);
-                }
             }
+                catch (Exception e)
+            {
+                _logger.LogError(0, e, "Feil ved oppdatering av kamper av kamper. SeasonId: " + season.Id);
+            }
+        }
         }
 
         private IEnumerable<Game> ScrapeGames(Season season)
         {
-            var web = new HtmlWeb();
-            var doc = web.Load(season.FixturesSourceUrl);
+            var httpClient = new HttpClient();
+            var htmlString = httpClient.GetAsync(season.FixturesSourceUrl).Result.Content.ReadAsStringAsync().Result;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlString);
 
-            var table = doc.DocumentNode.CssSelect("#matches table tr").ToList();
-            if (!table.Any()) table = doc.DocumentNode.CssSelect("#matches-placeholder table tr").ToList();
 
-            var header = table.Select(t => t.CssSelect("th")).First(h => h.Any());
+            var table = doc.DocumentNode.QuerySelectorAll("#matches table tr").ToList();
+            if (!table.Any()) table = doc.DocumentNode.QuerySelectorAll("#matches-placeholder table tr").ToList();
+
+            var header = table.Select(t => t.QuerySelectorAll("th")).First(h => h.Any());
             var indices = new FixtureTableIndex(header);
 
-            var matches = table.Select(t => t.CssSelect("td"));
+            var matches = table.Select(t => t.QuerySelectorAll("td"));
 
             var result = new List<Game>();
             foreach (var tr in matches.Where(tr => tr.Any()))

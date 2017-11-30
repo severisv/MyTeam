@@ -79,7 +79,7 @@ namespace MyTeam.Services.Application
             club = _dbContext.Clubs.Where(c => c.ClubIdentifier == clubId).Select(
                 c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder)
                 .Select(t => new TeamDto(t.Id, t.ShortName, t.Name)).ToList())
-            ).First();
+            ).FirstOrDefault();
             
 
             if (club != null)

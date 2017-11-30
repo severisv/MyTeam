@@ -76,6 +76,19 @@
                             }
                         </ul>
                     </div>
+                    @if(Model.Coaches.Any()){
+                        <div>
+                            <ul class="list-unstyled squad-list">
+                                @foreach (var coach in Model.Coaches)
+                                {
+                                    <li id="@coach.Id">
+                                        <i title="Trener" class="@Icons.Coach"></i>&nbsp;@coach.Name
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
                     <hr />
                     <div class="registerSquad-publish" id="registerSquad-publish">
                         <div class="relative registerSquad-messageWrapper">

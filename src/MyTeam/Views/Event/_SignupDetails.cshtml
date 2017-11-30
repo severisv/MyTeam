@@ -52,7 +52,7 @@
                                         {
                                             <li>
                                                 <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                                    <i class="fa fa-user"></i>&nbsp;
+                                                    <i class="@(player.Status == PlayerStatus.Trener ? Icons.Coach : "fa fa-user")"></i>&nbsp;
                                                     <span>@player.FirstName</span><span>&nbsp;@player.LastName</span>
                                                 </a>
                                             </li>
@@ -85,7 +85,7 @@
                                 {
                                     <li>
                                         <a class="attendee underline" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                            <i class="fa fa-user"></i>&nbsp;
+                                            <i class="@(player.Status == PlayerStatus.Trener ? Icons.Coach : "fa fa-user")"></i>&nbsp;
                                             <span>@player.FirstName</span>
                                             <span class="hidden-xs">@player.LastName</span>
                                             <span class="hidden-sm hidden-md hidden-lg">@player.LastInitials</span>
@@ -141,6 +141,19 @@
                             {
                                 <li>
                                     <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName"><i class="flaticon-soccer18"></i>&nbsp;@player.Name</a>
+                                    @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
+                                    {
+                                        <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                    }
+                                </li>
+                            }
+                            @if(Model.Coaches.Any()){
+                                <li style="padding: 0.2em;"></li>
+                            }
+                            @foreach (var player in Model.Coaches)
+                            {
+                                <li>
+                                    <a class="attendee underline @Context.Member().HighlightSelfClass(player.MemberId)" asp-controller="player" asp-action="show" asp-route-name="@player.UrlName"><i class="@Icons.Coach"></i>&nbsp;@player.Name</a>
                                     @if (!string.IsNullOrWhiteSpace(player.SignupMessage) && Context.UserIsInRole(Roles.Coach))
                                     {
                                         <text>&nbsp;&nbsp;&nbsp;</text><a class="mt-popover event-signupMessageIcon" data-container="body" data-content="@player.SignupMessage" data-placement="top" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>

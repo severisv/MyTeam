@@ -5,6 +5,7 @@ namespace MyTeam.Models.Enums
         Aktiv,
         Inaktiv,
         Veteran,
-        Trener
+        Trener,
+        Sluttet
     }
 }

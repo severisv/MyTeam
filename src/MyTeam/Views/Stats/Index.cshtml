@@ -5,189 +5,76 @@
     ViewBag.Title = Res.Stats;
 }
 
+
 <div class="mt-main">
     <div class="mt-container">
         <div class="row">
             @if (Model.Teams?.Count() > 1)
             {
-                <div class="col-sm-6 col-xs-7 ">
+                <div class="stats-teamNav">
                     <ul class="nav nav-pills mt-justified">
                         @foreach (var team in Model.Teams)
                         {
-                            <li class="@(Model.Team == team.ShortName ? "active" : "")"><a asp-controller="stats" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedYear"><i class="flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
+                            <li class="@(Model.Team == team.ShortName ? "active" : "")"><a asp-controller="stats" asp-action="index" asp-route-lag="@team.ShortName" asp-route-aar="@Model.SelectedYear"><i class="hidden-xs flaticon-football43"></i> <span class="hidden-xs">@team.Name</span><span class="visible-xs">@team.ShortName</span></a></li>
                         }
+                        <li class="@(Model.Team == "total" ? "active" : "")"><a asp-controller="stats" asp-action="index" asp-route-lag="total" asp-route-aar="@Model.SelectedYear">Samlet</a></li>
                     </ul>
                 </div>
             }
             @if (Model.Years.Any())
             {
-                <div class="col-sm-3 col-xs-5 pull-right">
-                    <select class="linkSelect form-control pull-right hidden-md hidden-lg">
-                        @foreach (var year in Model.Years)
-                        {
-                            <option value="@Url.Action("Index", "Stats", new {team = Model.Team, year = year})" selected="@(Model.SelectedYear == year)">@year</option>
-                        }
-                    </select>
-                </div>
+                <div class="stats-yearNav--mobile">
+
+                        <select class="linkSelect form-control pull-right hidden-md hidden-lg">
+                            @foreach (var year in Model.Years)
+                            {
+                                <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = year})" selected="@(Model.SelectedYear == year)">@year</option>
+                            }
+                            <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = 0})" selected="@(Model.SelectedYear == 0)" >Total</option>
+                        </select>
+                    </div>
             }
         </div>
     </div>
-    <div class="mt-wrapper--left">
-        @if (Model.Goals.Any())
-        {
-            <div class="mt-container stats">
-                <h3>Mål</h3>
-                <table class="listMembers table col-xs-12">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th class="text-right"><i class="fa fa-soccer-ball-o"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var player in Model.Goals)
-                {
-                            <tr>
-                                <td class="image">
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)" />
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        @player.Name()
-                                    </a>
-                                </td>
-                                <td class="text-right">
-                                    @player.Goals
-                                </td>
-                            </tr>
 
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-    </div>
-    <div class="mt-wrapper--right">
-
-        @if (Model.Assists.Any())
-        {
-            <div class="mt-container  stats">
-                <h3>Assists</h3>
-                <table class="listMembers table col-xs-12">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th class="text-right"><i class="flaticon-football119"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var player in Model.Assists)
-                {
-                            <tr>
-                                <td class="image">
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)" />
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        @player.Name()
-                                    </a>
-                                </td>
-                                <td class="text-right">
-                                    @player.Assists
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-        @if (Model.Cards.Any())
-        {
-            <div class="mt-container stats">
-                <h3>Kort</h3>
-                <table class="listMembers table col-xs-12">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th class="u-relative text-right stats-yellowCard"><i class="icon icon-card-yellow"></i></th>
-                            <th class="u-relative text-right stats-redCard"><i class="icon icon-card-red"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var player in Model.Cards)
-                {
-                            <tr>
-                                <td class="image">
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)" />
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        @player.Name()
-                                    </a>
-                                </td>
-                                <td class="text-right">
-                                    @player.YellowCards
-                                </td>
-                                <td class="text-right">
-                                    @player.RedCards
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-    </div>
-    <div class="mt-wrapper--left">
-        @if (Model.Games.Any())
-        {
-            <div class="mt-container stats">
-                <h3>Kamper</h3>
-                <table class="listMembers table col-xs-12">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th class="text-right">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var player in Model.Games)
-                {
-                            <tr>
-                                <td class="image">
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)" />
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
-                                        @player.Name()
-                                    </a>
-                                </td>
-                                <td class="text-right">
-                                    @player.Games
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+    <div class="mt-container">
+        <table class="table tablesorter stats-table attendance-table">
+            <thead>
+            <tr>
+                <th>@Res.Player</th>
+                <th class="score"><i title="Kamper" class="@Icons.Player"></i></th>
+                <th class="score"><i title="Mål" class="@Icons.Goal"></i></th>
+                <th class="score"><i title="Assists" class="@Icons.Assist"></i></th>
+                <th class="score"><span><i title="Gule kort" class="@Icons.YellowCard"></i></span></th>
+                <th class="score"><span><i title="Røde kort" class="@Icons.RedCard"></i></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var player in Model.Players)
+            {
+                <tr>
+                    <td class="attendance-player-image">
+                        <span class="attendance-playerImageContainer">
+                            <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)"/>&nbsp;
+                        </span>
+                        <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName">
+                            @player.Name
+                        </a>
+                    </td>
+                    <td class="score">@player.Games</td>
+                    <td class="score">@player.Goals</td>
+                    <td class="score">@player.Assists</td>
+                    <td class="score">@player.YellowCards</td>
+                    <td class="score">@player.RedCards</td>
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
 </div>
+
+
+
 
 
 @if (Model.Years?.Any() == true)

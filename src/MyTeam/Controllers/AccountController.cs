@@ -133,7 +133,7 @@ namespace MyTeam.Controllers
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError("Klarte ikke sende e-post ved oppretting av konto", e);
+                        _logger.LogError(e,"Klarte ikke sende e-post ved oppretting av konto");
                     }
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");

@@ -19,9 +19,6 @@ namespace MyTeam.ViewModels.Game
         public Guid? AssistedById { get; set; }
         public string AssistedByName { get; set; }
         public Guid Id { get; set; }
-
-
-     
-      
+        public DateTime DateTime { get; set; }
     }
 }

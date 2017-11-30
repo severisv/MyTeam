@@ -14,16 +14,32 @@ namespace MyTeam.ViewModels.Game
 
         public IEnumerable<RegisterSquadPlayerViewModel> Declinees => _players.Where(p => Game.Attendees.Any(a => a.MemberId == p.Id && a.IsAttending == false));
 
-        public IEnumerable<RegisterSquadPlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv && p.TeamIds.ContainsAny(Game.TeamIds)).Where(p => Game.Attendees.All(a => a.IsAttending == null || a.MemberId != p.Id));
+        public IEnumerable<RegisterSquadPlayerViewModel> OtherActivePlayers => _players.Where(p => p.Status == PlayerStatus.Aktiv)
+                                                                                        .Where(p => p.TeamIds.ContainsAny(Game.TeamIds))
+                                                                                        .Where(p => p.Attendance?.IsAttending == null);
 
-        public IEnumerable<RegisterSquadPlayerViewModel> OtherInactivePlayers => _players.Where(p => Game.Attendees.All(a => a.MemberId != p.Id)).Where(p => OtherActivePlayers.All(a => a.Id != p.Id));
+        public IEnumerable<RegisterSquadPlayerViewModel> OtherInactivePlayers
+            =>
+                _players.Where(p => !Attendees.Any(pl => pl.Id == p.Id))
+                    .Where(p => !Declinees.Any(pl => pl.Id == p.Id))
+                    .Where(p => !OtherActivePlayers.Any(pl => pl.Id == p.Id));
 
         public IEnumerable<RegisterSquadPlayerViewModel> Squad => _players.Where(p => p.Attendance?.IsSelected == true);
 
-        public RegisterSquadViewModel(RegisterSquadEventViewModel game, IEnumerable<SimplePlayerDto> players)
+        public IEnumerable<RegisterSquadPlayerViewModel> Coaches { get; }
+
+        public RegisterSquadViewModel(RegisterSquadEventViewModel game, IList<SimplePlayerDto> players)
         {
             Game = game;
-            _players = players.Select(p => new RegisterSquadPlayerViewModel(p, Game.Id,
+            Coaches = players
+                .Where(p => p.Status == PlayerStatus.Trener)
+                .Where(p=> game.Attendees.Any(a => a.MemberId == p.Id))
+                .Select(p => new RegisterSquadPlayerViewModel(p, Game.Id, game.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
+            ));
+
+            _players = players
+                .Where(p => p.Status != PlayerStatus.Trener)
+                .Select(p => new RegisterSquadPlayerViewModel(p, Game.Id,
                     game.Attendees.FirstOrDefault(a => a.MemberId == p.Id)
                 ));
         }

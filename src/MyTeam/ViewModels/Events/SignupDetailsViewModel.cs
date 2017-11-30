@@ -37,6 +37,7 @@ namespace MyTeam.ViewModels.Events
         public IEnumerable<AttendeeViewModel> NotAttending => Attendees?.Where(a => a.IsAttending == false);
         public IEnumerable<AttendeeViewModel> DidAttend => Attendees?.Where(a => a.DidAttend);
         public IEnumerable<AttendeeViewModel> Squad => Attendees?.Where(a => a.IsSelected);
+        public IEnumerable<AttendeeViewModel> Coaches => Attendees?.Where(a => a.IsAttending == true && a.Player.Status == PlayerStatus.Trener);
 
         public bool IsGame => Type == EventType.Kamp;
         public bool IsTraining => Type == EventType.Trening;

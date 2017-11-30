@@ -10,6 +10,7 @@ global.ReactDOM = ReactDOM;
 global.applyScopedJsComponents = function (selector) {
     var $scope = $(selector);
     applyDatepickers($scope);
+    $.tablesorter.defaults.sortInitialOrder = 'desc';
     $scope.find('table.tablesorter').tablesorter();
     $scope.find('a.mt-popover').popover({ trigger: 'hover' });
     applyConfirmDialogListeners($scope);

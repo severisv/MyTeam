@@ -48,9 +48,12 @@ namespace MyTeam.Services.Domain
                     Id = e.MemberId,
                     Name = e.Member.Name,
                     FacebookId = e.Member.FacebookId,
-                    UrlName = e.Member.UrlName
+                    UrlName = e.Member.UrlName,
+                    Status = e.Member.Status
                 }
-            }).ToList();
+            })
+            .ToList()
+            .Where(p => p.Member.Status != PlayerStatus.Trener);
         }
 
         public IEnumerable<int> GetAttendanceYears(Guid clubId)
@@ -64,9 +67,9 @@ namespace MyTeam.Services.Domain
              .OrderByDescending(y => y);
         }
 
-        public IEnumerable<PlayerStats> GetStats(Guid teamId, int? selectedYear = null)
+        public IEnumerable<PlayerStats> GetStats(IEnumerable<Guid> teamIds, int? selectedYear = null)
         {
-            var query = _dbContext.Games.Where(g => g.TeamId == teamId && g.GameType != GameType.Treningskamp);
+            var query = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp);
 
             if (selectedYear != null)
             {
@@ -103,10 +106,10 @@ namespace MyTeam.Services.Domain
         }
 
 
-        public IEnumerable<int> GetStatsYears(Guid teamId)
+        public IEnumerable<int> GetStatsYears(IEnumerable<Guid> teamIds)
         {
             return _dbContext.GameEvents
-                 .Where(e => e.Game.TeamId == teamId && e.Game.GameType != GameType.Treningskamp)
+                 .Where(e => teamIds.Contains(e.Game.TeamId) && e.Game.GameType != GameType.Treningskamp)
                  .Select(ea => ea.Game.DateTime.Year)
                  .ToList()
                  .Distinct()

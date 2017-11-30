@@ -32,10 +32,10 @@ namespace MyTeam.Controllers
 
 
 
-        [Route("{lag?}/{aar:int?}")]
-        public IActionResult Index(string lag = null, int? aar = null)
+        [Route("{lagnavn?}/{aar:int?}")]
+        public IActionResult Index(string lagnavn = null, int? aar = null)
         {
-            var team = lag ?? Club.Teams.First().ShortName;
+            var team = lagnavn ?? Club.Teams.First().ShortName;
             var teamId = Club.Teams.First(t => t.ShortName == team).Id;
 
             var seasons = _gameService.GetSeasons(teamId);
@@ -64,11 +64,11 @@ namespace MyTeam.Controllers
         {
             var ev = _gameService.GetRegisterSquadEventViewModel(eventId);
 
-            var players = _playerService.GetDto(Club.Id);
+            var players = _playerService.GetDto(Club.Id, includeCoaches: true);
 
             if (ev == null) return new NotFoundResult(HttpContext);
 
-            var model = new RegisterSquadViewModel(ev, players);
+            var model = new RegisterSquadViewModel(ev, players.ToList());
 
             ViewBag.Title = "Laguttak";
 

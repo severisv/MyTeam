@@ -3,29 +3,36 @@
 
 table.tablesorter thead tr .header {
     
+    position: relative;
+
     &:after {
         font-family: FontAwesome;
         content: "\f0dc";
         float:right;
-        color: @link-color;
-    }
+        color: @lightGray;
+        bottom: 0;
+        position: absolute;
+        right: 0.75em;
+        bottom: 0.75em;
+        .r-under-xs({right: 0.25em;});
+        }
     cursor: pointer;
 }
 
 table.tablesorter thead tr .headerSortUp {
      &:after {
-        content: "\f0de";      
+        content: "\f0dd";      
     }
 }
 
 table.tablesorter thead tr .headerSortDown {
      &:after {
-        content: "\f0dd";  
+        content: "\f0de";  
     }
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-    background-color: fade(@team-primary, 25%)
+    background-color: fade(@team-primary, 15%)
 }
 
 table.tablesorter .nosort {
