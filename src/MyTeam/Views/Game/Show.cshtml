@@ -11,7 +11,7 @@
     <div class="mt-container">
         @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.NewsWriter))
         {
-          
+
             if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
             {
                 <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
@@ -92,5 +92,5 @@
 </div>
 
 @section Scripts {
-    <script src="~/scripts/Game/show.js"></script>
+    <script src="~/compiled/Game/show.js"></script>
 }

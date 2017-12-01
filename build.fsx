@@ -1,3 +1,4 @@
+open Fake.ProcessHelper
 // include Fake lib
 #r @"packages/FAKE/tools/FakeLib.dll"
 open Fake
@@ -88,7 +89,7 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir]
+    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled"]
   )
 
   Target "NpmRestore" (fun _ ->
@@ -101,6 +102,10 @@ module Targets =
 
   Target "GulpCompile" (fun _ ->
      gulp "--production" webDir
+  )
+
+  Target "WebpackCompile" (fun _ ->
+     npm "run build" webDir
   )
 
   Target "RestorePackages" (fun _ ->
@@ -136,6 +141,7 @@ module Targets =
 ==> "NpmRestore"
 ==> "BowerRestore"
 ==> "GulpCompile"
+==> "WebpackCompile"
 ==> "Publish"
 
 "Clean"
