@@ -1,9 +1,9 @@
 environment:
   version: 1.0.0
   matrix:
-    node: "8"
+    - node: "8"
 install:
-  ps: Install-Product node $env:node
+  - ps: Install-Product node $env:node
 assembly_info:
   patch: false
 branches:
