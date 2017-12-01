@@ -12,4 +12,6 @@ set PATH=%APPDATA%\npm;%PATH%
 
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 
+node -v
+
 "packages\FAKE\tools\Fake.exe" build.fsx %*

@@ -1,5 +1,5 @@
 const path = require('path')
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
+const CheckerPlugin = require('awesome-typescript-loader')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Wildcards = require('wildcards-entry-webpack-plugin')
 
@@ -9,7 +9,7 @@ module.exports = {
   }),
 
   output: {
-    path: path.resolve('./wwwroot/compiled'),
+    path: path.resolve('./wwwroot/compiled/scripts'),
     filename: '[name].js',
   },
   resolve: {
