@@ -2,13 +2,8 @@ const gulp = require('gulp')
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
 
-const bowerFolder = './wwwroot/lib/'
 const npmFolder = './node_modules/'
 const wwwroot = './wwwroot'
-
-function bower(item) {
-  return bowerFolder + item
-}
 
 function npm(item) {
   return npmFolder + item
@@ -18,8 +13,7 @@ const paths = {
   src: {
     lib: [
       npm('jquery/dist/jquery.js'),
-      bower('tablesorter/jquery.tablesorter.js'),
-      bower('bootstrap/dist/js/bootstrap.js'),
+      npm('bootstrap/dist/js/bootstrap.js'),
       npm('bootbox/bootbox.js'),
     ],
     cloudinary: [

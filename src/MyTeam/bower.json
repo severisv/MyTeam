@@ -5,7 +5,6 @@
     "bootstrap": "^3.3.6",
     "Font-Awesome": "^4.6.3",
     "hammer.js": "*",
-    "tablesorter": "*",
     "tinymce": "^4.4.0"
   }
 }

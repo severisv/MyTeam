@@ -1,4 +1,5 @@
-﻿import '../stylesheets/style.less'
+﻿import './lib/jquery.tablesorter.min'
+import '../stylesheets/style.less'
 
 window.AddPlayers = require('./reactComponents/AddPlayers/AddPlayers.jsx')
 window.EmailAdd = require('./reactComponents/AddPlayers/EmailAdd.jsx')
