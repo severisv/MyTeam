@@ -1,6 +1,9 @@
 environment:
   version: 1.0.0
-  nodejs_version: "8"
+  matrix:
+    - node: "8"
+install:
+  - ps: Install-Product node $env:node
 assembly_info:
   patch: false
 branches:
