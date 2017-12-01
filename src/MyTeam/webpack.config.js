@@ -1,15 +1,14 @@
 const path = require('path')
-const CheckerPlugin = require('awesome-typescript-loader')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Wildcards = require('wildcards-entry-webpack-plugin')
 
 module.exports = {
-  entry: Wildcards.entry('./client/scripts/views/*/*.js', {
+  entry: Wildcards.entry('./client/scripts/views/**/*.js', {
     app: ['babel-polyfill', 'whatwg-fetch', './client/scripts/app.js'],
   }),
 
   output: {
-    path: path.resolve('./wwwroot/compiled/scripts'),
+    path: path.resolve('./wwwroot/compiled'),
     filename: '[name].js',
   },
   resolve: {
@@ -78,7 +77,6 @@ module.exports = {
 
   plugins: [
     new Wildcards(),
-    new CheckerPlugin(),
     new ExtractTextPlugin({
       filename: 'site.bundle.css',
       allChunks: false,
