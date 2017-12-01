@@ -1,28 +1,49 @@
 const gulp = require('gulp')
-const notify = require('gulp-notify')
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
-const _ = require('./gulpscripts/utils')
-const paths = require('./gulpscripts/paths')
 
+const bowerFolder = './wwwroot/lib/'
+const npmFolder = './node_modules/'
+const wwwroot = './wwwroot'
 
-gulp.task('js-lib', () => gulp
-  .src(paths.src.lib)
-  .pipe(concat('lib.bundle.js'))
-  .pipe(uglify())
-  .pipe(gulp.dest(paths.dest.scripts))
-  .on('error', _.plumb.errorHandler)
-  .pipe(notify('Compiled javascript libraries')))
+function bower(item) {
+  return bowerFolder + item
+}
 
-gulp.task('js-cloudinary', () => gulp
-  .src(paths.src.cloudinary)
-  .pipe(concat('cloudinary.bundle.js'))
-  .pipe(uglify())
-  .pipe(gulp.dest(paths.dest.scripts))
-  .on('error', _.plumb.errorHandler)
-  .pipe(notify('Compiled Cloudinary javascript')))
+function npm(item) {
+  return npmFolder + item
+}
 
+const paths = {
+  src: {
+    lib: [
+      npm('jquery/dist/jquery.js'),
+      bower('tablesorter/jquery.tablesorter.js'),
+      bower('bootstrap/dist/js/bootstrap.js'),
+      npm('bootbox/bootbox.js'),
+    ],
+    cloudinary: [
+      npm('jquery.cloudinary/js/jquery.ui.widget.js'),
+      npm('jquery.cloudinary/js/jquery.iframe-transport.js'),
+      npm('jquery.cloudinary/js/jquery.fileupload.js'),
+      npm('jquery.cloudinary/js/jquery.cloudinary.js'),
+    ],
+  },
+  dest: `${wwwroot}/compiled/lib/`,
+}
 
+gulp.task('js-lib', () =>
+  gulp
+    .src(paths.src.lib)
+    .pipe(concat('lib.bundle.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dest)))
+
+gulp.task('js-cloudinary', () =>
+  gulp
+    .src(paths.src.cloudinary)
+    .pipe(concat('cloudinary.bundle.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dest)))
 
 gulp.task('default', ['js-lib', 'js-cloudinary'])
-gulp.task('watch', ['default', 'watch-js', 'watch-js-lib', 'watch-less'])

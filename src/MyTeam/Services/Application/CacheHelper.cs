@@ -11,7 +11,7 @@ namespace MyTeam.Services.Application
 {
     public class CacheHelper : ICacheHelper
     {
-        private readonly MemoryCacheEntryOptions _cacheOptions = 
+        private readonly MemoryCacheEntryOptions _cacheOptions =
             new MemoryCacheEntryOptions {SlidingExpiration = new TimeSpan(0, 0, 15, 0) };
 
         public IMemoryCache Cache { get; set; }
@@ -40,8 +40,6 @@ namespace MyTeam.Services.Application
                 return member;
             }
 
-            Console.WriteLine("loading player from db");
-            
             member = _dbContext.Players
                 .Where(p => clubId == p.ClubId && p.UserName == username)
                 .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName,  p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
@@ -57,7 +55,7 @@ namespace MyTeam.Services.Application
             return member;
         }
 
-    
+
         public ClubDto GetCurrentClub(string clubId)
         {
             if (string.IsNullOrWhiteSpace(clubId)) return null;
@@ -80,7 +78,7 @@ namespace MyTeam.Services.Application
                 c => new ClubDto(c.Id, c.ClubIdentifier, c.Name, c.ShortName, c.Logo, c.Favicon, c.Teams.OrderBy(t => t.SortOrder)
                 .Select(t => new TeamDto(t.Id, t.ShortName, t.Name)).ToList())
             ).FirstOrDefault();
-            
+
 
             if (club != null)
             {
@@ -125,8 +123,8 @@ namespace MyTeam.Services.Application
             var now = DateTime.Now;
             var inFourDays = now.AddDays(4);
             var events = _dbContext.Events.Where(
-                    e => e.ClubId == clubId && 
-                    e.DateTime  < inFourDays && 
+                    e => e.ClubId == clubId &&
+                    e.DateTime  < inFourDays &&
                     (e.DateTime > now) &&
                     !e.IsPublished
                     )
@@ -150,7 +148,7 @@ namespace MyTeam.Services.Application
             notifications[memberId] = memberNotification;
 
             Cache.Set(key, notifications, _cacheOptions);
-           
+
             return memberNotification;
         }
 
