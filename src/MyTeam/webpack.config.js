@@ -1,6 +1,7 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Wildcards = require('wildcards-entry-webpack-plugin')
+const { CheckerPlugin } = require('awesome-typescript-loader')
 
 module.exports = {
   entry: Wildcards.entry('./client/scripts/views/**/*.js', {
@@ -77,6 +78,7 @@ module.exports = {
 
   plugins: [
     new Wildcards(),
+    new CheckerPlugin(),
     new ExtractTextPlugin({
       filename: 'site.bundle.css',
       allChunks: false,
