@@ -21,7 +21,7 @@ namespace MyTeam
                         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                         .AddJsonFile("appsettings.json")
                         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true)
-                        .AddEnvironmentVariables();                    
+                        .AddEnvironmentVariables();
                 })
 
                 .ConfigureLogging((hostingContext, logging) =>
@@ -33,7 +33,7 @@ namespace MyTeam
                     {
                         options.WebhookUrl =
                             "https://hooks.slack.com/services/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";
-                        options.LogLevel = LogLevel.Information;
+                        options.LogLevel = hostingContext.HostingEnvironment.IsDevelopment() ? LogLevel.None : LogLevel.Information;
                         options.Channel = "#myteam";
                     });
                 })

@@ -1,15 +1,14 @@
 {
-    "extends": "standard",
-    "plugins": [
-        "standard"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 5,
-        "sourceType": "script"
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
     },
-    "rules":{
-        "indent": ["error", 4],
-        "semi": ["error", "always"]
+    "extends": "airbnb",
+    "rules": {
+        "linebreak-style": "off",
+        "indent": "2",
+        "no-use-before-define": "warn"
     }
-
 }
