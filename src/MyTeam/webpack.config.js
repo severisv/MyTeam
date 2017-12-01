@@ -1,5 +1,5 @@
 const path = require('path')
-const { CheckerPlugin } = require('awesome-typescript-loader')
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Wildcards = require('wildcards-entry-webpack-plugin')
 
