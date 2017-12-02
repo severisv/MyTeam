@@ -1,7 +1,0 @@
-{
-  "name": "MyTeam",
-  "private": true,
-  "dependencies": {
-    "tinymce": "^4.4.0"
-  }
-}

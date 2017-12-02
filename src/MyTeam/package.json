@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack -p",
-    "watch": "webpack -w"
+    "watch": "webpack -w",
+    "copy-libs": "gulp"
   },
   "devDependencies": {
     "eslint": "^4.12.1",
@@ -29,7 +30,6 @@
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
-    "gulp-notify": "^2.2.0",
     "gulp-uglify": "^1.5.1",
     "jquery": "2.2.0",
     "jquery.cloudinary": "1.0.25",
@@ -43,6 +43,7 @@
     "react-datepicker": "^0.27.0",
     "react-dom": "15.2.1",
     "typescript": "^2.6.2",
+    "tinymce": "4.4.0",
     "webpack": "^3.9.1",
     "whatwg-fetch": "^2.0.3",
     "wildcards-entry-webpack-plugin": "^2.1.0"

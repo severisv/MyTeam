@@ -26,18 +26,22 @@ const paths = {
   dest: `${wwwroot}/compiled/lib/`,
 }
 
-gulp.task('js-lib', () =>
+gulp.task('libs', () =>
   gulp
     .src(paths.src.lib)
     .pipe(concat('lib.bundle.js'))
     .pipe(uglify())
     .pipe(gulp.dest(paths.dest)))
 
-gulp.task('js-cloudinary', () =>
+gulp.task('cloudinary', () =>
   gulp
     .src(paths.src.cloudinary)
     .pipe(concat('cloudinary.bundle.js'))
     .pipe(uglify())
     .pipe(gulp.dest(paths.dest)))
 
-gulp.task('default', ['js-lib', 'js-cloudinary'])
+gulp.task('tinymce', () => {
+  gulp.src('./node_modules/tinymce/**/*.*').pipe(gulp.dest(`${paths.dest}/tinymce`))
+})
+
+gulp.task('default', ['libs', 'cloudinary', 'tinymce'])
