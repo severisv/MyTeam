@@ -89,7 +89,7 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled"]
+    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled"; "./src/MyTeam/wwwroot/lib" ]
   )
 
   Target "NpmRestore" (fun _ ->

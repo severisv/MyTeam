@@ -4,11 +4,8 @@ if not EXIST "packages\FAKE\tools\Fake.exe" NuGet.exe "Install" "FAKE" "-OutputD
 
 
 
-call npm install bower -g
-call npm install gulp -g
-call npm install npm@latest -g
-
-set PATH=%APPDATA%\npm;%PATH%
+if not defined bower call npm install bower -g
+if not defined gulp call npm install gulp -g
 
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 
