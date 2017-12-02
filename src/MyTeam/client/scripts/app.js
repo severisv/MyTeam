@@ -1,4 +1,5 @@
-﻿import './lib/jquery.tablesorter.min'
+﻿import 'font-awesome/css/font-awesome.css';
+import './lib/jquery.tablesorter.min'
 import '../stylesheets/style.less'
 
 window.AddPlayers = require('./reactComponents/AddPlayers/AddPlayers.jsx')
