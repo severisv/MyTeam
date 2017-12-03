@@ -24,8 +24,6 @@ module Helpers =
 
     let npm args workingDir =
         let executable = findOnPath "npm.cmd"
-        printf "running npm command with node version: "
-        shellExec executable "--v" workingDir
         shellExec executable args workingDir
 
 
@@ -78,7 +76,7 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled"; "./src/MyTeam/wwwroot/lib" ]
+    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled" ]
   )
 
   Target "NpmRestore" (fun _ ->
