@@ -1,84 +1,83 @@
-﻿var React = require("react");
+﻿const React = require('react')
 
 module.exports = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       players: [],
       teams: [],
-      collapsedSections: ['Sluttet']
-    };
+      collapsedSections: ['Sluttet'],
+    }
   },
 
-  componentWillMount: function() {
+  componentWillMount() {
     (this.routes = Routes),
-      (this.options = {
-        playerStatus: PlayerStatus,
-        playerRoles: PlayerRoles
-      });
+    (this.options = {
+      playerStatus: PlayerStatus,
+      playerRoles: PlayerRoles,
+    })
   },
 
-  componentDidMount: function() {
-    var that = this;
-    $.getJSON(that.routes.GET_PLAYERS).then(function(response) {
+  componentDidMount() {
+    const that = this
+    $.getJSON(that.routes.GET_PLAYERS).then((response) => {
       that.setState({
-        players: response
-      });
-    });
+        players: response,
+      })
+    })
 
-    $.getJSON(that.routes.GET_TEAMS).then(function(response) {
+    $.getJSON(that.routes.GET_TEAMS).then((response) => {
       that.setState({
-        teams: response.data
-      });
-    });
+        teams: response.data,
+      })
+    })
   },
 
-  togglePlayerRole: function(player, role) {
-    var that = this;
+  togglePlayerRole(player, role) {
+    const that = this
     $.post(that.routes.TOGGLE_PLAYER_ROLE, {
       Id: player.id,
-      Role: role
-    }).then(function(response) {
+      Role: role,
+    }).then((response) => {
       if (response.success) {
-        var players = that.state.players;
-        for (var i in that.state.players) {
+        const players = that.state.players
+        for (const i in that.state.players) {
           if (players[i].id == player.id) {
-            var index = players[i].roles.indexOf(role);
+            const index = players[i].roles.indexOf(role)
             if (index > -1) {
-              that.state.players[i].roles.splice(index, 1);
+              that.state.players[i].roles.splice(index, 1)
             } else {
-              that.state.players[i].roles.push(role);
+              that.state.players[i].roles.push(role)
             }
           }
         }
       }
-      that.forceUpdate();
-    });
+      that.forceUpdate()
+    })
   },
-  setPlayerStatus: function(player, status) {
-    var that = this;
+  setPlayerStatus(player, status) {
+    const that = this
     $.post(that.routes.SET_PLAYER_STATUS, {
       Id: player.id,
-      Status: status
-    }).then(function(response) {
+      Status: status,
+    }).then((response) => {
       if (response.success) {
-        var players = that.state.players;
-        for (var i in that.state.players) {
+        const players = that.state.players
+        for (const i in that.state.players) {
           if (players[i].id == player.id) {
-            that.state.players[i].status = status;
+            that.state.players[i].status = status
           }
         }
       }
-      that.forceUpdate();
-    });
+      that.forceUpdate()
+    })
   },
 
   toggleSection(section) {
-      
-    var collapsedSections = this.state.collapsedSections;
+    const collapsedSections = this.state.collapsedSections
     collapsedSections.splice(this.state.collapsedSections.indexOf(section), 1)
 
     this.setState({
-        collapsedSections: collapsedSections
+      collapsedSections,
     })
   },
 
@@ -86,73 +85,67 @@ module.exports = React.createClass({
     return this.state.collapsedSections.indexOf(section) > -1
   },
 
-  toggleTeam: function(teamId, playerId) {
-    var that = this;
+  toggleTeam(teamId, playerId) {
+    const that = this
     $.post(that.routes.TOGGLE_PLAYER_TEAM, {
       PlayerId: playerId,
-      TeamId: teamId
-    }).then(function(response) {
+      TeamId: teamId,
+    }).then((response) => {
       if (response.success) {
-        var players = that.state.players;
-        for (var i in that.state.players) {
+        const players = that.state.players
+        for (const i in that.state.players) {
           if (players[i].id == playerId) {
-            var teamIds = that.state.players[i].teamIds;
+            const teamIds = that.state.players[i].teamIds
             if (teamIds.indexOf(teamId) > -1) {
-              that.state.players[i].teamIds = teamIds.filter(function(element) {
-                return element != teamId;
-              });
+              that.state.players[i].teamIds = teamIds.filter(element => element != teamId)
             } else {
-              that.state.players[i].teamIds.push(teamId);
+              that.state.players[i].teamIds.push(teamId)
             }
           }
         }
       }
-      that.forceUpdate();
-    });
+      that.forceUpdate()
+    })
   },
 
-  renderPlayers: function(playerStatus, isCollapsed) {
-    if (!this.state.players) return "";
+  renderPlayers(playerStatus, isCollapsed) {
+    if (!this.state.players) return ''
 
-    var players = this.state.players.filter(function(player) {
+    const players = this.state.players.filter((player) => {
       if (player.status == playerStatus) {
-        return player;
+        return player
       }
-    });
+    })
 
-    if (players.length <= 0) return "";
+    if (players.length <= 0) return ''
 
-    var options = this.options;
-    var routes = this.routes;
-    var teams = this.state.teams;
-    var setPlayerStatus = this.setPlayerStatus;
-    var togglePlayerRole = this.togglePlayerRole;
-    var toggleTeam = this.toggleTeam;
-    var playerElements = players.map(function(player, i) {
-      return (
-        <ManagePlayer
-          key={player.id}
-          player={player}
-          setPlayerStatus={setPlayerStatus}
-          togglePlayerRole={togglePlayerRole}
-          options={options}
-          routes={routes}
-          teams={teams}
-          toggleTeam={toggleTeam}
-        />
-      );
-    });
+    const options = this.options
+    const routes = this.routes
+    const teams = this.state.teams
+    const setPlayerStatus = this.setPlayerStatus
+    const togglePlayerRole = this.togglePlayerRole
+    const toggleTeam = this.toggleTeam
+    const playerElements = players.map((player, i) => (
+      <ManagePlayer
+        key={player.id}
+        player={player}
+        setPlayerStatus={setPlayerStatus}
+        togglePlayerRole={togglePlayerRole}
+        options={options}
+        routes={routes}
+        teams={teams}
+        toggleTeam={toggleTeam}
+      />
+    ))
 
-    var teamElements = teams.map(function(team, i) {
-      return (
-        <div
-          key={team.id}
-          className="col-sm-1  col-xs-2 no-padding-left no-padding-right subheadline align-center"
-        >
-          {team.shortName}
-        </div>
-      );
-    });
+    const teamElements = teams.map((team, i) => (
+      <div
+        key={team.id}
+        className="col-sm-1  col-xs-2 no-padding-left no-padding-right subheadline align-center"
+      >
+        {team.shortName}
+      </div>
+    ))
 
     return (
       <div className="manage-players">
@@ -160,11 +153,14 @@ module.exports = React.createClass({
           <div className="col-sm-3 col-xs-7 headline">
             <strong>{playerStatus}</strong>
             {this.sectionIsCollapsed(playerStatus) ? (
-                <span className="subheadline smaller">&nbsp;({playerElements.length})&nbsp;
-              <a onClick={this.toggleSection.bind(this, playerStatus)} className="anchor">Vis</a>
-                </span>
+              <span className="subheadline smaller">
+                &nbsp;({playerElements.length})&nbsp;
+                <a onClick={this.toggleSection.bind(this, playerStatus)} className="anchor">
+                  Vis
+                </a>
+              </span>
             ) : (
-              ""
+              ''
             )}
           </div>
           <div className="col-xs-2 subheadline hidden-xs">
@@ -175,18 +171,14 @@ module.exports = React.createClass({
             <strong>Roller</strong>
           </div>
         </div>
-        {!this.sectionIsCollapsed(playerStatus) ? (
-            <div>{playerElements}</div>
-        ) : (
-            ""
-          )}
+        {!this.sectionIsCollapsed(playerStatus) ? <div>{playerElements}</div> : ''}
       </div>
-    );
+    )
   },
 
-  render: function() {
+  render() {
     console.log(this.state)
-    
+
     return (
       <div>
         {this.renderPlayers(this.options.playerStatus.Active)}
@@ -195,6 +187,6 @@ module.exports = React.createClass({
         {this.renderPlayers(this.options.playerStatus.Trener)}
         {this.renderPlayers(this.options.playerStatus.Quit)}
       </div>
-    );
-  }
-});
+    )
+  },
+})

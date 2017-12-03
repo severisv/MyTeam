@@ -123,7 +123,9 @@ module.exports = React.createClass({
       if (response.success) {
         const player = that.state.players.filter(player => player.id == that.state.addPlayerId)
         that.setState({
-          squad: player.concat(that.state.squad).sort((a, b) => a.firstName.localeCompare(b.firstName)),
+          squad: player
+            .concat(that.state.squad)
+            .sort((a, b) => a.firstName.localeCompare(b.firstName)),
         })
         that.setState({
           addPlayerId: that.getPlayersNotInSquad()[0].id,
