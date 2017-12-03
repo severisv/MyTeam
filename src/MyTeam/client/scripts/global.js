@@ -1,159 +1,158 @@
-﻿var ANIMATION_DURATON = 300;
-var global = global || {};
-var ajax = require('./ajaxHelpers');
-var ReactDOM = require('react-dom');
-var React = require('react');
+﻿const ANIMATION_DURATON = 300
+let global = global || {}
+const ajax = require('./ajaxHelpers')
+const ReactDOM = require('react-dom')
+const React = require('react')
 
-global.React = React;
-global.ReactDOM = ReactDOM;
+global.React = React
+global.ReactDOM = ReactDOM
 
 global.applyScopedJsComponents = function (selector) {
-    var $scope = $(selector);
-    applyDatepickers($scope);
-    $.tablesorter.defaults.sortInitialOrder = 'desc';
-    $scope.find('table.tablesorter').tablesorter();
-    $scope.find('a.mt-popover').popover({ trigger: 'hover' });
-    applyConfirmDialogListeners($scope);
-    applyActiveLinkSwapper($scope);
-    applyAjaxLinkActions($scope);
-    applySelectLinkListeners($scope);
-    applyMtAnchorListeners($scope);
-    ajax.applyFormUpdateListener($scope);
-    ajax.applyLoadListener($scope);
-    ajax.applyAjaxLinkListeners($scope);
-};
+  const $scope = $(selector)
+  applyDatepickers($scope)
+  $.tablesorter.defaults.sortInitialOrder = 'desc'
+  $scope.find('table.tablesorter').tablesorter()
+  $scope.find('a.mt-popover').popover({ trigger: 'hover' })
+  applyConfirmDialogListeners($scope)
+  applyActiveLinkSwapper($scope)
+  applyAjaxLinkActions($scope)
+  applySelectLinkListeners($scope)
+  applyMtAnchorListeners($scope)
+  ajax.applyFormUpdateListener($scope)
+  ajax.applyLoadListener($scope)
+  ajax.applyAjaxLinkListeners($scope)
+}
 
 global.applyJsComponents = function () {
-    var timestamp = new Date();
-    var start = timestamp.getMilliseconds();
+  const timestamp = new Date()
+  const start = timestamp.getMilliseconds()
 
-    this.applyScopedJsComponents($(document));
-    applySlideDownMenuListeners();
+  this.applyScopedJsComponents($(document))
+  applySlideDownMenuListeners()
 
-    $(window).on('popstate', function (e) {
-        if (e.originalEvent.state == 'ajax-action') {
-           location.reload();
-        }
-    });
+  $(window).on('popstate', (e) => {
+    if (e.originalEvent.state == 'ajax-action') {
+      location.reload()
+    }
+  })
 
-    applyBrowserCheck();
+  applyBrowserCheck()
 
-    console.log('global.js: ' + (new Date().getMilliseconds() - start) + 'ms');
-};
+  console.log(`global.js: ${new Date().getMilliseconds() - start}ms`)
+}
 
-$(document).ready(function () {
-    global.applyJsComponents();
-});
-
-
+$(document).ready(() => {
+  global.applyJsComponents()
+})
 
 // Slide down
-function applySlideDownMenuListeners () {
-    var element = $('.slide-down-parent');
-    var subMenu = $(element.data('submenu'));
-    element.click(function () {
+function applySlideDownMenuListeners() {
+  const element = $('.slide-down-parent')
+  const subMenu = $(element.data('submenu'))
+  element.click(() => {
+    if (element.data('isFocused') == true) {
+      element.data('isFocused', false)
+      element.blur()
+    } else {
+      element.data('isFocused', true)
+      subMenu.slideDown(ANIMATION_DURATON)
+    }
+  })
 
-        if (element.data('isFocused') == true) {
-            element.data('isFocused', false);
-            element.blur();
-        } else {
-            element.data('isFocused', true);
-            subMenu.slideDown(ANIMATION_DURATON);
-        }
-    });
-
-    element.focusout(function () {
-        subMenu.slideUp(ANIMATION_DURATON);
-        element.data('isFocused', false);
-        setTimeout(function () {
-
-        }, ANIMATION_DURATON);
-
-    });
+  element.focusout(() => {
+    subMenu.slideUp(ANIMATION_DURATON)
+    element.data('isFocused', false)
+    setTimeout(() => {}, ANIMATION_DURATON)
+  })
 }
 
 // Confirm dialog
-function applyConfirmDialogListeners ($scope) {
-    $scope.find('a.confirm-dialog').click(function (e) {
-        e.preventDefault();
-        var element = $(this);
-        var message = element.attr('data-message');
+function applyConfirmDialogListeners($scope) {
+  $scope.find('a.confirm-dialog').click(function (e) {
+    e.preventDefault()
+    const element = $(this)
+    const message = element.attr('data-message')
 
-        bootbox.confirm(message, function (result) {
-            if (result === true) {
-                window.location = element.attr('href');
-            }
-        });
-    });
+    bootbox.confirm(message, (result) => {
+      if (result === true) {
+        window.location = element.attr('href')
+      }
+    })
+  })
 }
 
 // Active links
-function applyActiveLinkSwapper ($scope) {
-    $scope.find('ul.nav li').on('click', function () {
-        $(this).siblings().removeClass('active');
-        $(this).addClass('active');
-    });
-
+function applyActiveLinkSwapper($scope) {
+  $scope.find('ul.nav li').on('click', function () {
+    $(this)
+      .siblings()
+      .removeClass('active')
+    $(this).addClass('active')
+  })
 }
 
 // Active links
-function applyAjaxLinkActions ($scope) {
-    $scope.find('a[mt-pushstate]').on('click', function () {
-        var $el = $(this);
-        if ($el.attr('mt-pushstate')) {
-            layout.pushState($el.attr('href'), $el.attr('mt-pushstate'));
-        }
-    });
-}
-
-function applySelectLinkListeners ($scope) {
-    $scope.find('.linkSelect').on('change', function () {
-        var url = $(this).val();
-        window.location = url;
-    });
-}
-
-function applyMtAnchorListeners ($scope) {
-    $scope.find('.mt-anchor').on('click', function () {
-        var url = $(this).data('href');
-        window.location = url;
-    });
-}
-
-function applyDatepickers ($scope) {
-    $scope.find('.datepicker').each(function (i, element) {
-        var $el = $(element);
-        var Datepicker = require('./ReactComponents/Shared/Datepicker.jsx');
-        var datepickerElement = React.createElement(Datepicker, { value: $el.data('value'), name: $el.attr('id') })
-        ReactDOM.render(datepickerElement, element);
-    });
-}
-
-function applyBrowserCheck () {
-    if (isIEOrEdge()) {
-        $('html').addClass('ie');
+function applyAjaxLinkActions($scope) {
+  $scope.find('a[mt-pushstate]').on('click', function () {
+    const $el = $(this)
+    if ($el.attr('mt-pushstate')) {
+      layout.pushState($el.attr('href'), $el.attr('mt-pushstate'))
     }
+  })
 }
 
-function isIEOrEdge () {
-    var ua = window.navigator.userAgent;
-
-    var msie = ua.indexOf('MSIE ');
-    if (msie > 0) {
-        return true;
-    }
-
-    var trident = ua.indexOf('Trident/');
-    if (trident > 0) {
-        return true;
-    }
-
-    var edge = ua.indexOf('Edge/');
-    if (edge > 0) {
-        return true;
-    }
-
-    return false;
+function applySelectLinkListeners($scope) {
+  $scope.find('.linkSelect').on('change', function () {
+    const url = $(this).val()
+    window.location = url
+  })
 }
 
-module.exports = global;
+function applyMtAnchorListeners($scope) {
+  $scope.find('.mt-anchor').on('click', function () {
+    const url = $(this).data('href')
+    window.location = url
+  })
+}
+
+const Datepicker = require('./reactComponents/Shared/Datepicker.jsx')
+
+function applyDatepickers($scope) {
+  $scope.find('.datepicker').each((i, element) => {
+    const $el = $(element)
+    const datepickerElement = React.createElement(Datepicker, {
+      value: $el.data('value'),
+      name: $el.attr('id'),
+    })
+    ReactDOM.render(datepickerElement, element)
+  })
+}
+
+function applyBrowserCheck() {
+  if (isIEOrEdge()) {
+    $('html').addClass('ie')
+  }
+}
+
+function isIEOrEdge() {
+  const ua = window.navigator.userAgent
+
+  const msie = ua.indexOf('MSIE ')
+  if (msie > 0) {
+    return true
+  }
+
+  const trident = ua.indexOf('Trident/')
+  if (trident > 0) {
+    return true
+  }
+
+  const edge = ua.indexOf('Edge/')
+  if (edge > 0) {
+    return true
+  }
+
+  return false
+}
+
+module.exports = global

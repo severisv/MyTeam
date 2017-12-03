@@ -57,7 +57,6 @@ function getFacebookName() {
       getFacebookName()
     }, 10)
   } else if (window.mt_fb.userIsUnavailable) {
-
   } else {
     const $element = $('.comment-facebookUserName')
     const url = window.mt_fb.getUserUrl($element.data('facebookid'))

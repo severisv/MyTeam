@@ -1,19 +1,16 @@
-﻿var checkbox = checkbox || {};
+﻿let checkbox = checkbox || {}
 
 checkbox.showHideAssociatedElement = function (element, associatedSelector, reverse) {
-    var show = element.checked;
-    if (reverse) {
-        show = !element.checked;
-    }
+  let show = element.checked
+  if (reverse) {
+    show = !element.checked
+  }
 
-    if (show) {
-        $(associatedSelector).show();
-    } else {
-        $(associatedSelector).hide();
-    }
-};
+  if (show) {
+    $(associatedSelector).show()
+  } else {
+    $(associatedSelector).hide()
+  }
+}
 
-module.exports = checkbox;
-
-
-
+module.exports = checkbox
