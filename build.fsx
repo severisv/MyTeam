@@ -1,9 +1,7 @@
+open Fake.ProcessHelper
 // include Fake lib
 #r @"packages/FAKE/tools/FakeLib.dll"
 open Fake
-open Fake.AppVeyor
-open Fake.FileSystemHelper
-open Fake.EnvironmentHelper
 open System.IO
 
 [<AutoOpen>]
@@ -26,18 +24,8 @@ module Helpers =
 
     let npm args workingDir =
         let executable = findOnPath "npm.cmd"
-        printf "running npm command with node version: "
-        shellExec executable "--v" workingDir
         shellExec executable args workingDir
 
-
-    let bower args workingDir =
-        let executable = findOnPath "bower.cmd"
-        shellExec executable args workingDir
-
-    let gulp args workingDir =
-        let executable = findOnPath "gulp.cmd"
-        shellExec executable args workingDir
 
     let dotnet args workingDir =
         let executable = findOnPath "dotnet.exe"
@@ -88,19 +76,19 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir]
+    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled" ]
   )
 
   Target "NpmRestore" (fun _ ->
      npm "install" webDir
   )
 
-  Target "BowerRestore" (fun _ ->
-        bower "install" webDir
-        )
+  Target "CopyClientLibs" (fun _ ->
+     npm "run copy-libs" webDir
+  )
 
-  Target "GulpCompile" (fun _ ->
-     gulp "--production" webDir
+  Target "WebpackCompile" (fun _ ->
+     npm "run build" webDir
   )
 
   Target "RestorePackages" (fun _ ->
@@ -134,8 +122,8 @@ module Targets =
 
 "Clean"
 ==> "NpmRestore"
-==> "BowerRestore"
-==> "GulpCompile"
+==> "CopyClientLibs"
+==> "WebpackCompile"
 ==> "Publish"
 
 "Clean"

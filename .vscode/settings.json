@@ -1,0 +1,7 @@
+{
+
+    "editor.trimAutoWhitespace": true,
+    "prettier.tabWidth": 2,
+    "prettier.eslintIntegration": true
+
+}

@@ -1,21 +1,47 @@
-/// <binding />
-var gulp = require("gulp");
-var rimraf = require("rimraf");
+const gulp = require('gulp')
+const uglify = require('gulp-uglify')
+const concat = require('gulp-concat')
 
-require('./Gulpscripts/js');
-require('./Gulpscripts/less');
-var paths = require('./Gulpscripts/paths');
+const npmFolder = './node_modules/'
+const wwwroot = './wwwroot'
 
+function npm(item) {
+  return npmFolder + item
+}
 
-gulp.task('default', ['less', 'js', 'js-lib', 'js-cloudinary']);
-gulp.task('watch', ['default', 'watch-js', 'watch-js-lib', 'watch-less']);
+const paths = {
+  src: {
+    lib: [
+      npm('jquery/dist/jquery.js'),
+      npm('bootstrap/dist/js/bootstrap.js'),
+      npm('bootbox/bootbox.js'),
+    ],
+    cloudinary: [
+      npm('jquery.cloudinary/js/jquery.ui.widget.js'),
+      npm('jquery.cloudinary/js/jquery.iframe-transport.js'),
+      npm('jquery.cloudinary/js/jquery.fileupload.js'),
+      npm('jquery.cloudinary/js/jquery.cloudinary.js'),
+    ],
+  },
+  dest: `${wwwroot}/compiled/lib/`,
+}
 
+gulp.task('libs', () =>
+  gulp
+    .src(paths.src.lib)
+    .pipe(concat('lib.bundle.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dest)))
 
-gulp.task("clean", function (cb) {
-    rimraf(paths.dest.scripts, function () { });
-    rimraf(paths.dest.stylesheets, function () { });
-});
+gulp.task('cloudinary', () =>
+  gulp
+    .src(paths.src.cloudinary)
+    .pipe(concat('cloudinary.bundle.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dest)))
 
+gulp.task('tinymce', () => {
+  gulp.src('./node_modules/tinymce/**/*.*').pipe(gulp.dest(`${paths.dest}/tinymce`))
+})
 
-
-
+gulp.task('default', ['libs', 'cloudinary', 'tinymce'])
