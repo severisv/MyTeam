@@ -14,6 +14,7 @@ using MyTeam.Settings;
 using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MyTeam.Services;
 
 namespace MyTeam
 {
@@ -57,7 +58,7 @@ namespace MyTeam
                     o.AppId = Configuration["Authentication:Facebook:AppId"];
                     o.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
-            
+
 
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
@@ -73,7 +74,7 @@ namespace MyTeam
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.LogStart();
-            
+
             if (env.IsDevelopment() || env.IsStaging())
             {
                 app.UseDeveloperExceptionPage();
@@ -106,7 +107,7 @@ namespace MyTeam
                 SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
             });
 
-          
+            App.useGiraffe(app);
 
             app.UseMvc(routes =>
             {
