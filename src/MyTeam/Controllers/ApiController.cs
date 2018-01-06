@@ -30,6 +30,8 @@ namespace MyTeam.Controllers
         }
 
 
+        public Guid ClubId() => Club.Id;
+
         public JsonResult GetPlayers()
         {
             var players = _dbContext.Players.Where(p => p.ClubId == Club.Id)

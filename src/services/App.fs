@@ -5,12 +5,11 @@ open Microsoft.AspNetCore.Builder
 open Services
 
 module App =
-    
+
     let webApp =
         choose [
-            route "/api/giraffe/getplayers"   >=> json Players.Queries.getPlayers
+            GET >=> routeCif "/api/players/%s" (fun id -> System.Guid(id) |> Players.Api.players)
                ]
-
 
     let useGiraffe (app : IApplicationBuilder)  =
             app.UseGiraffe webApp
