@@ -1,5 +1,6 @@
 namespace Services.Players
 
+open Services
 open Services.Domain
 
-type GetPlayers = ClubId -> Player list
+type GetPlayers = ConnectionString -> ClubId -> Player list

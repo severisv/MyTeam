@@ -1,20 +1,16 @@
 namespace Services.Players
 
-open FSharp.Data.Sql
-open System
+open Services
 
 module Queries =
 
 
-    type Sql  = SqlDataProvider<
-                    Common.DatabaseProviderTypes.MSSQLSERVER,
-                    "Server=BEKK-SEVERINS\\SQLEXPRESS;Database=breddefotball;Trusted_Connection=True;MultipleActiveResultSets=true">
-    let ctx = Sql.GetDataContext()
-
     let getPlayers : GetPlayers =
-        fun clubId ->
+        fun connectionString clubId ->
 
-            ctx.Dbo.Member
+            let database = Database.get connectionString
+   
+            database.Dbo.Member
             |> Seq.filter (fun p -> p.ClubId = clubId)
             |> Seq.filter (fun p -> p.Discriminator = "Player")
             |> Seq.sortBy (fun p -> p.FirstName)

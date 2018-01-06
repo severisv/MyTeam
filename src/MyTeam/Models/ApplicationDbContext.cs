@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
 using Newtonsoft.Json;
+using Services;
 
 namespace MyTeam.Models
 {
@@ -142,11 +143,5 @@ namespace MyTeam.Models
     {
         public ConnectionStrings ConnectionStrings { get; set; }
     }
-
-    class ConnectionStrings
-    {
-        public string DefaultConnection { get; set; }
-    }
-
 
 }

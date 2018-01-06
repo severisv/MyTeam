@@ -1,10 +1,11 @@
-namespace Services.Players
+namespace Services
 
-open Giraffe
+open Services.Players
 open Queries
+open Giraffe 
 
-module Api =
+module PlayerApi =
 
-    let players teamId =
-        getPlayers teamId
+    let list connectionString clubId =
+        getPlayers connectionString clubId
         |> json

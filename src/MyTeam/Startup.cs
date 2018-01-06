@@ -15,6 +15,7 @@ using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MyTeam.Services;
+using Services;
 
 namespace MyTeam
 {
@@ -62,6 +63,7 @@ namespace MyTeam
 
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });
