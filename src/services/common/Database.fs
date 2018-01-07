@@ -1,4 +1,4 @@
-namespace Services
+namespace MyTeam
 
 open FSharp.Data.Sql
 

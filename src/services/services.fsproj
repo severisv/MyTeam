@@ -14,7 +14,7 @@
     <Compile Include="common/*.fs" />
     <Compile Include="domain/Types.fs" />
     <Compile Include="features/*/definitions/Types.fs" />
-    <Compile Include="features/*/definitions/Actions.fs" />
+    <Compile Include="features/*/definitions/Functions.fs" />
     <Compile Include="features/*/functions/*.fs" />
     <Compile Include="features/*/*.fs" />
     <Compile Include="App.fs" />

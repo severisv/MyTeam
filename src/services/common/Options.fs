@@ -1,4 +1,4 @@
-namespace Services
+namespace MyTeam
 
 open Microsoft.Extensions.DependencyInjection;
 open Microsoft.Extensions.Options

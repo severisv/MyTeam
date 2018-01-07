@@ -1,6 +1,6 @@
-namespace Services.Players
+namespace MyTeam.Players
 
-open Services
+open MyTeam
 
 module Queries =
 

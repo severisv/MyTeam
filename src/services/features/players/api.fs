@@ -1,6 +1,6 @@
-namespace Services
+namespace MyTeam
 
-open Services.Players
+open MyTeam.Players
 open Queries
 open Giraffe 
 

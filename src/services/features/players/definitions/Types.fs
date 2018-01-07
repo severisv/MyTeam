@@ -1,4 +1,4 @@
-namespace Services.Players
+namespace MyTeam.Players
 
 open System
 

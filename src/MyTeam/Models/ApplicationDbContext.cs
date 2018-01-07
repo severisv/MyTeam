@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using MyTeam.ViewModels.Table;
 using Newtonsoft.Json;
-using Services;
+using MyTeam;
 
 namespace MyTeam.Models
 {

@@ -1,7 +1,6 @@
-namespace Services
+namespace MyTeam
 
 open System
-
 
 [<AutoOpen>]
 module Parsing = 

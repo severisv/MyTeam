@@ -14,8 +14,6 @@ using MyTeam.Settings;
 using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MyTeam.Services;
-using Services;
 
 namespace MyTeam
 {
