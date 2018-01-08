@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
-using MyTeam.ViewModels.Table;
 using Newtonsoft.Json;
 using MyTeam;
 
@@ -127,7 +126,7 @@ namespace MyTeam.Models
 
         private static string ReadConnectionStringFromAppsettings()
         {
-            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json";
+            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database","server");
 
             using (var r = new StreamReader(appsettingsPath))
             {
@@ -143,5 +142,11 @@ namespace MyTeam.Models
     {
         public ConnectionStrings ConnectionStrings { get; set; }
     }
+
+    class ConnectionStrings
+    {
+        public string DefaultConnection { get; set; }
+    }
+
 
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.Models.Domain
 {
@@ -31,3 +30,4 @@ namespace MyTeam.Models.Domain
         public DateTime? FixturesUpdated { get; set; }
     }
 }
+

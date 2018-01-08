@@ -66,7 +66,7 @@ module Helpers =
 [<AutoOpen>]
 module Settings =
   let deployDir = "./.deploy/"
-  let webDir = "src/MyTeam/"
+  let webDir = "src/server/"
   let projectFiles = !! "src/*/project.json" ++ "test/*/project.json"
   let projects = projectFiles |> Seq.map(fun p -> Directory.GetParent(p).FullName)
   let testProjectFiles = !! "test/*/project.json"
@@ -76,7 +76,7 @@ module Settings =
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled" ]
+    CleanDirs [deployDir; "./src/server/wwwroot/compiled" ]
   )
 
   Target "NpmRestore" (fun _ ->
@@ -107,7 +107,7 @@ module Targets =
   )
 
   Target "Publish" (fun _ ->
-     Dotnet Publish "src/MyTeam" |> ignore
+     Dotnet Publish "src/server" |> ignore
   )
 
   Target "Deploy" (fun _ ->

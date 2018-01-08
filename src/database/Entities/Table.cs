@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,4 +34,5 @@ namespace MyTeam.Models.Domain
             return table.Select(line => new TableTeam(line)).Where(tableTeam => tableTeam.Position > -1).ToList();
         }
     }
+
 }

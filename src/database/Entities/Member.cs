@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MyTeam.Models.Enums;
-using MyTeam.Models.Shared;
 using MyTeam.Resources;
+using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
 {
@@ -66,4 +66,6 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<Comment> Comments { get; set; }
   
     }
+
 }
+

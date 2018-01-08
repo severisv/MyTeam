@@ -190,23 +190,23 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 #Assets
-src/MyTeam/wwwroot/css
-src/MyTeam/wwwroot/lib
-src/MyTeam/config.json
-src/MyTeam/wwwroot/_references.js
-src/MyTeam/wwwroot/scripts/site.bundle.js
-src/MyTeam/wwwroot/scripts/lib.bundle.js
-src/MyTeam/project.lock.json
-src/MyTeam/appsettings.local.json
+src/server/wwwroot/css
+src/server/wwwroot/lib
+src/server/config.json
+src/server/wwwroot/_references.js
+src/server/wwwroot/scripts/site.bundle.js
+src/server/wwwroot/scripts/lib.bundle.js
+src/server/project.lock.json
+src/server/appsettings.local.json
 test/MyTeam.Test/project.lock.json
 *.stackdump
 
 .vs/config/applicationhost.config
 .fake/
-src/MyTeam/wwwroot/compiled
+src/server/wwwroot/compiled
 
 .deploy/
 setdeploycredentials.cmd
-src/MyTeam/appsettings.Development.json
-src/MyTeam/appsettings.Production.json
+src/server/appsettings.Development.json
+src/server/appsettings.Production.json
 .vs/
