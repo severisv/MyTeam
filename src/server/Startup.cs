@@ -107,7 +107,6 @@ namespace MyTeam
                 SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
             });
 
-            App.useGiraffe(app);
 
             app.UseMvc(routes =>
             {
@@ -116,6 +115,7 @@ namespace MyTeam
                     template: "{controller=News}/{action=Index}/{id?}");
             });
 
+            App.useGiraffe(app);
 
             if (env.IsProduction())
             {

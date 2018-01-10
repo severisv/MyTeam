@@ -14,13 +14,21 @@ module App =
     let webApp =
         fun next ctx ->
             let connectionString = getConnectionString ctx
-            let clubId = System.Guid("6790dd24-cf7f-442d-bec7-1a8e7f792a33")
+            let club = Tenant.getClub ctx
 
-            choose [
-                    GET >=> route "/api/players" >=> PlayerApi.list connectionString clubId                                
-                    GET >=> route "/api/nils" >-> getNils                                
-                                    
-                   ] next ctx
+            match club with
+                | Some club ->
+                      choose [
+                        GET >=> route "/api/players" >=> PlayerApi.list connectionString club.Id                                
+                        GET >=> route "/api/nils" >-> getNils                                
+                                        
+                       ] next ctx
+                | None ->        
+                    choose [
+                        GET >=> route "/api/players" >=> text "No club"                             
+       
+                       ] next ctx           
+              
 
     let useGiraffe (app : IApplicationBuilder)  =
             app.UseGiraffe webApp

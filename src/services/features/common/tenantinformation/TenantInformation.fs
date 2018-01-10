@@ -1,4 +1,0 @@
-namespace MyTeam
-
-open System
-

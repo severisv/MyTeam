@@ -6,11 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
     <PackageReference Include="Giraffe" Version="0.1.0-beta-600" />
     <PackageReference Include="SQLProvider " Version="1.1.23" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="utils/common/*.fs" />
     <Compile Include="utils/*.fs" />
     <Compile Include="common/*.fs" />
     <Compile Include="features/common/*.fs" />
@@ -23,5 +25,5 @@
     <Compile Include="App.fs" />
   </ItemGroup>
 
-<Import Project="fsc.props" />
+  <Import Project="fsc.props" />
 </Project>

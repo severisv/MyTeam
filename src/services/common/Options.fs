@@ -11,9 +11,9 @@ type ConnectionStrings = {
 
 [<AutoOpen>]
 module Options =
-    // let getOptions<'TOptions> (ctx : HttpContext) : 'T =
-    //         let connectionOptions = ctx.RequestServices.GetService<IOptions<'T>>()
-    //         connectionOptions.Value
-
+ 
     let getConnectionString (ctx: HttpContext) = 
             ctx.RequestServices.GetService<IOptions<ConnectionStrings>>().Value.DefaultConnection
+
+    let getService<'T> (ctx: HttpContext) =             
+        ctx.RequestServices.GetService<'T>()
