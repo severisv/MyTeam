@@ -2,27 +2,13 @@ namespace MyTeam
 
 open System
 open Microsoft.AspNetCore.Http
+open MyTeam
+open MyTeam.Common
 
 module Tenant =
+    type ClubId = Guid
 
-    type Team = {
-        Id: Guid
-        ShortName: string
-        Name: string
-    }
-
-    type Club = {
-             Id: Guid    
-             ClubId: string    
-             ShortName: string    
-             Name: string    
-             Teams: Team list
-             Favicon: string    
-             Logo: string    
-    }
-
-    type GetClub = HttpContext -> Option<Club>
-
+    type Get = HttpContext -> Option<Club> * Option<User>
 
     let getClubId (ctx: HttpContext) =
         // let hostNameArray = ctx.Request.Host.Value.Split('.')
@@ -36,47 +22,22 @@ module Tenant =
             None                
 
 
-    let getClub : GetClub =
+
+    let get : Get =
         fun ctx ->
-            getClubId ctx 
-            |> Option.bind (fun clubId -> 
-                                printf "%s" clubId
-                                let clubQuery () = 
-                                    let connectionString = getConnectionString ctx
-                                    let database = Database.get connectionString
-
-                                    let clubs =
-                                            query {
-                                                for club in database.Dbo.Club do
-                                                where (club.ClubIdentifier = clubId)
-                                                join team in database.Dbo.Team on (club.Id = team.ClubId)
-                                                select (club, team)
-                                            }
-                                            |> Seq.toList
-                                            
-                                    let teams = clubs 
-                                                |> Seq.map(fun (__, team) -> 
-                                                            {
-                                                              Id = team.Id
-                                                              ShortName = team.ShortName
-                                                              Name = team.Name
-                                                            })
-                                                |> Seq.toList                                                    
-
-                                    clubs 
-                                    |> Seq.map(fun (club, __) -> 
-                                        {
-                                            Id = club.Id
-                                            ClubId = club.ClubIdentifier
-                                            ShortName = club.ShortName
-                                            Name = club.Name
-                                            Teams = teams
-                                            Favicon = club.Name
-                                            Logo = club.Logo
-                                        }) 
-                                    |> Seq.tryHead                                  
-                                                                                                         
+            let club = 
+                getClubId ctx 
+                |> Option.bind (fun clubId -> 
+                                    let clubQuery () = Clubs.get ctx clubId
                                     
-                                Cache.get ctx ("club-" + clubId) clubQuery
-                           )
-                            
+                                    Cache.get ctx ("club-" + clubId) clubQuery
+                               )
+            let user =      
+                club |> Option.bind(fun club -> 
+                                    let userId = ctx.User.Identity.Name
+                                    let userQuery () = Users.get ctx club.Id userId
+
+                                    Cache.get ctx ("user-" + club.Id.ToString() + userId) userQuery
+                    )
+
+            (club, user)                    

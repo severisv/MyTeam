@@ -4,6 +4,7 @@ open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open MyTeam
+open MyTeam.Common
 
 module App =
 
@@ -14,8 +15,8 @@ module App =
     let webApp =
         fun next ctx ->
             let connectionString = getConnectionString ctx
-            let club = Tenant.getClub ctx
-
+            let (club, userMember) = Tenant.get ctx
+            
             match club with
                 | Some club ->
                       choose [

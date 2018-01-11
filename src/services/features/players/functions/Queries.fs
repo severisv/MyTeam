@@ -4,7 +4,6 @@ open MyTeam
 
 module Queries =
 
-
     let getPlayers : GetPlayers =
         fun connectionString clubId ->
 

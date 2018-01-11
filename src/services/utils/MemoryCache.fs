@@ -17,12 +17,12 @@ module Cache =
     let getMemoryCache ctx = getService<IMemoryCache> ctx
 
     let get<'T> : Get<'T> =
-        fun ctx key f ->
+        fun ctx key query ->
             let cache = getMemoryCache ctx
             let (success, result : 'T) = cache.TryGetValue(key)
 
             if not success then 
-                let result = f()
+                let result = query()
                 cache.Set(key, result) |> ignore
                 result
 
