@@ -29,50 +29,7 @@ namespace MyTeam.Controllers
             _cacheHelper = cacheHelper;
         }
 
-
-        public Guid ClubId() => Club.Id;
-
-        public JsonResult GetPlayers()
-        {
-            var players = _dbContext.Players.Where(p => p.ClubId == Club.Id)
-                .OrderBy(p => p.FirstName)
-                .Select(p =>
-              new
-              {
-                  Id = p.Id,
-                  FullName = p.Name,
-                  FirstName = p.FirstName,
-                  MiddleName = p.MiddleName,
-                  LastName = p.LastName,
-                  UrlName = p.UrlName,
-                  Status = p.Status.ToString(),
-                  Roles = p.Roles,
-              }).ToList();
-
-            var playerIds = players.Select(p => p.Id);
-            var memberTeams = _dbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
-
-            var result = new List<Object>();
-            foreach (var p in players)
-            {
-                result.Add(new
-                {
-                    p.Id,
-                    p.FullName,
-                    p.FirstName,
-                    p.MiddleName,
-                    p.LastName,
-                    p.Status,
-                    p.Roles,
-                    p.UrlName,
-                    TeamIds = memberTeams.Where(mt => mt.MemberId == p.Id).Select(mt => mt.TeamId).ToList()
-            });
-
-            }
-
-            return new JsonResult(result);
-        }
-
+      
         [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult GetFacebookIds()
         {

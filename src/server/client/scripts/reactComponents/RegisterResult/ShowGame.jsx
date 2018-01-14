@@ -24,9 +24,9 @@ module.exports = React.createClass({
         loadingEvents: false,
       })
     })
-    $.getJSON(that.props.routes.GET_PLAYERS).then((response) => {
+    $.getJSON(that.props.routes.GET_PLAYERS).then((players) => {
       that.setState({
-        players: response,
+        players,
       })
       that.setState({
         addPlayerId: that.getPlayersNotInSquad()[0].id,

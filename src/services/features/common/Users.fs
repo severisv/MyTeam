@@ -6,6 +6,7 @@ open MyTeam
 
 type UserId = string
 type Role = string
+type MemberId = Guid
 
 type User = {
      Id: Guid
@@ -17,6 +18,14 @@ type User = {
      TeamIds: Guid list
      ProfileIsConfirmed: bool
 }
+
+
+module Members = 
+    let toRoleArray (roleString : string) =
+        if roleString.Length > 0 then
+            roleString.Split [|','|] |> Seq.toList
+        else []
+
 
 module Users =
 
@@ -36,7 +45,7 @@ module Users =
                                          FirstName = m.FirstName
                                          UrlName = m.UrlName
                                          Image = m.ImageFull
-                                         Roles = m.RolesString.Split [|','|] |> Seq.toList
+                                         Roles = m.RolesString |> Members.toRoleArray
                                          TeamIds = []
                                          ProfileIsConfirmed = m.ProfileIsConfirmed
                                         })

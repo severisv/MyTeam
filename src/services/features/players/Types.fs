@@ -1,6 +1,7 @@
 namespace MyTeam.Players
 
 open System
+open MyTeam
 
 type Status =
         | Aktiv = 0
@@ -17,5 +18,8 @@ type Player = {
     UrlName: string
     Status: Status
     Roles: string list
+    TeamIds: TeamId list
 } with
     member x.FullName = sprintf "%s %s" x.FirstName x.LastName 
+
+type GetPlayers = ConnectionString -> ClubId -> Player list

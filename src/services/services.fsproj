@@ -17,9 +17,8 @@
     <Compile Include="common/*.fs" />
     <Compile Include="features/common/*.fs" />
     <Compile Include="features/common/*/*.fs" />
-    <Compile Include="features/*/definitions/Types.fs" />
-    <Compile Include="features/*/definitions/Functions.fs" />
-    <Compile Include="features/*/functions/*.fs" />
+    <Compile Include="features/*/Types.fs" />
+    <Compile Include="features/*/Queries.fs" />
     <Compile Include="features/*/Api.fs" />
     <Compile Include="features/*/Views.fs" />
     <Compile Include="App.fs" />

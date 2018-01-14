@@ -12,7 +12,14 @@ module Tenant =
 
     let getClubId (ctx: HttpContext) =
         // let hostNameArray = ctx.Request.Host.Value.Split('.')
-        let hostNameArray = ["www";"wamkam";".no"]
+
+        let hostName = ctx.Request.Host.Value
+
+        let hostNameArray = if hostName.Contains("localhost") then 
+                                ["www";"wamkam";".no"]
+                            else 
+                                hostName.Split('.') |> Seq.toList
+
         if hostNameArray.Length > 2 then
             if "www".EqualsIc(hostNameArray.[0]) then
                 Some(hostNameArray.[1])

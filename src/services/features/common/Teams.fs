@@ -2,4 +2,4 @@ namespace MyTeam
 
 open System
 
-type PlayerId = Guid
+type TeamId = Guid

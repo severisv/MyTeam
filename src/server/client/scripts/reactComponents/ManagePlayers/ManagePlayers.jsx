@@ -177,8 +177,6 @@ module.exports = React.createClass({
   },
 
   render() {
-    console.log(this.state)
-
     return (
       <div>
         {this.renderPlayers(this.options.playerStatus.Active)}
