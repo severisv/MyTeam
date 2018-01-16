@@ -4,6 +4,7 @@ open System
 open Microsoft.AspNetCore.Http
 open MyTeam
 open MyTeam.Common
+open MyTeam.Domain
 
 module Tenant =
     type ClubId = Guid
@@ -11,8 +12,6 @@ module Tenant =
     type Get = HttpContext -> Option<Club> * Option<User>
 
     let getClubId (ctx: HttpContext) =
-        // let hostNameArray = ctx.Request.Host.Value.Split('.')
-
         let hostName = ctx.Request.Host.Value
 
         let hostNameArray = if hostName.Contains("localhost") then 

@@ -14,6 +14,7 @@
   <ItemGroup>
     <Compile Include="utils/common/*.fs" />
     <Compile Include="utils/*.fs" />
+    <Compile Include="domain/*.fs" />
     <Compile Include="common/*.fs" />
     <Compile Include="features/common/*.fs" />
     <Compile Include="features/common/*/*.fs" />

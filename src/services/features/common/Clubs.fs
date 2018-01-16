@@ -3,25 +3,7 @@ namespace MyTeam.Common
 open System
 open Microsoft.AspNetCore.Http
 open MyTeam
-
-type Team = {
-        Id: Guid
-        ShortName: string
-        Name: string
-}
-
-type ClubIdentifier = string
-
-type Club = {
-         Id: ClubId    
-         ClubId: string    
-         ShortName: string    
-         Name: string    
-         Teams: Team list
-         Favicon: string    
-         Logo: string    
-}
-
+open MyTeam.Domain
 
 module Clubs = 
     type Get = HttpContext -> ClubIdentifier -> Option<Club>

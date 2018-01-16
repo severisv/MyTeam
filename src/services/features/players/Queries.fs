@@ -1,7 +1,7 @@
 namespace MyTeam.Players
 
 open MyTeam
-open Members
+open MyTeam.Domain.Members
 
 module Queries =
 

@@ -3,6 +3,7 @@ namespace MyTeam
 open System
 open Microsoft.AspNetCore.Http
 open MyTeam
+open MyTeam.Domain
 
 type UserId = string
 type Role = string
@@ -20,13 +21,6 @@ type User = {
 }
 
 
-module Members = 
-    let toRoleArray (roleString : string) =
-        if roleString.Length > 0 then
-            roleString.Split [|','|] |> Seq.toList
-        else []
-
-
 module Users =
 
     type Get = HttpContext -> ClubId -> UserId -> Option<User>
@@ -35,10 +29,21 @@ module Users =
             let connectionString = getConnectionString ctx
             let database = Database.get connectionString
 
+            let members = 
+                    query {
+                        for p in database.Dbo.Member do
+                        where (p.ClubId = clubId && p.UserName = userId)
+                        join team in database.Dbo.MemberTeam on (p.Id = team.MemberId)
+                        select (p, team)
+                    }
+                    |> Seq.toList
+
+            let teams = members
+                        |> Seq.map(fun (__, team) -> team)
+
                     
-            let user = database.Dbo.Member 
-                        |> Seq.filter(fun m -> m.ClubId = clubId && m.UserName = userId)
-                        |> Seq.map(fun m -> 
+            let user = members
+                        |> Seq.map(fun (m, __) -> 
                                         {
                                          Id = m.Id
                                          FacebookId = m.FacebookId
@@ -46,7 +51,9 @@ module Users =
                                          UrlName = m.UrlName
                                          Image = m.ImageFull
                                          Roles = m.RolesString |> Members.toRoleArray
-                                         TeamIds = []
+                                         TeamIds = teams |> Seq.filter(fun team -> team.MemberId = m.Id) 
+                                            |> Seq.map(fun team -> team.TeamId)
+                                            |> Seq.toList
                                          ProfileIsConfirmed = m.ProfileIsConfirmed
                                         })
                         |> Seq.tryHead                        
