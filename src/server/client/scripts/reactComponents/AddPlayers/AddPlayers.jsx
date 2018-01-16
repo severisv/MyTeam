@@ -13,13 +13,13 @@ module.exports = React.createClass({
 
   componentWillMount() {
     this.routes = {
-      ADD_PLAYER: Routes.ADD_PLAYER
+      ADD_PLAYER: Routes.ADD_PLAYER,
     }
   },
 
   componentDidMount() {
     const that = this
-    $.getJSON('api/players/facebookids').then((response) => {
+    $.getJSON('/api/players/facebookids').then((response) => {
       that.setState({
         existingIds: response,
       })
