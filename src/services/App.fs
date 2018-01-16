@@ -8,20 +8,15 @@ open MyTeam.Common
 
 module App =
 
-    let getNils =
-        fun (ctx: HttpContext) ->
-            json ["Nils"], ctx
-
     let webApp =
         fun next ctx ->
-            let connectionString = getConnectionString ctx
             let (club, userMember) = Tenant.get ctx
             
             match club with
                 | Some club ->
                       choose [
-                        GET >=> route "/api/players" >=> PlayerApi.list connectionString club.Id                                
-                        GET >=> route "/api/nils" >-> getNils                                
+                        GET >=> route "/api/players" >-> PlayerApi.list club                                
+                        GET >=> route "/api/players/facebookids" >-> PlayerApi.getFacebookIds club                                
                                         
                        ] next ctx
                 | None ->        

@@ -10,7 +10,6 @@ namespace MyTeam.Services.Domain
     public interface IPlayerService
     {
         JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress);
-        IEnumerable<string> GetFacebookIds();
         void SetPlayerStatus(Guid id, PlayerStatus status, Guid clubId);
         void TogglePlayerRole(Guid id, string role, Guid clubId);
         void EditPlayer(EditPlayerViewModel model, Guid clubId);

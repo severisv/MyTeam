@@ -78,14 +78,14 @@ namespace MyTeam.Services.Domain
             var urlName = $"{firstName.ToLower()}{middle}-{lastName.ToLower()}";
 
             var result = urlName.Replace(" ", "-").ToLower();
-            result = result.Replace("Ø", "O");
-            result = result.Replace("ø", "o");
-            result = result.Replace("æ", "ae");
-            result = result.Replace("Æ", "Ae");
-            result = result.Replace("Å", "Aa");
-            result = result.Replace("å", "aa");
-            result = result.Replace("É", "e");
-            result = result.Replace("é", "e");
+            result = result.Replace("ï¿½", "O");
+            result = result.Replace("ï¿½", "o");
+            result = result.Replace("ï¿½", "ae");
+            result = result.Replace("ï¿½", "Ae");
+            result = result.Replace("ï¿½", "Aa");
+            result = result.Replace("ï¿½", "aa");
+            result = result.Replace("ï¿½", "e");
+            result = result.Replace("ï¿½", "e");
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             result = rgx.Replace(result, "");
             while (_dbContext.Members.Any(m => m.ClubId == clubId && m.UrlName == result))
@@ -93,11 +93,6 @@ namespace MyTeam.Services.Domain
                 result += "-1";
             }
             return result;
-        }
-
-        public IEnumerable<string> GetFacebookIds()
-        {
-            return _dbContext.Players.Select(p => p.FacebookId);
         }
 
         public void SetPlayerStatus(Guid id, PlayerStatus status, Guid clubId)

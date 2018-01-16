@@ -1,11 +1,15 @@
 namespace MyTeam
 
 open MyTeam.Players
-open Queries
 open Giraffe 
+open MyTeam.Domain
 
 module PlayerApi =
 
-    let list connectionString clubId =
-        getPlayers connectionString clubId
-        |> json
+    let list (club : Club) (ctx: HttpContext) =
+        Queries.getPlayers ctx.ConnectionString club.Id
+        |> json, ctx
+
+    let getFacebookIds (club : Club) (ctx: HttpContext) =
+        Queries.getFacebookIds ctx.ConnectionString club.Id
+        |> json, ctx

@@ -39,3 +39,14 @@ module Queries =
                             }
                     )
             |> Seq.toList
+
+    let getFacebookIds : GetFacebookIds =
+        fun connectionString clubId ->
+            let database = Database.get connectionString
+            
+            database.Dbo.Member 
+            |> Seq.filter (fun m -> m.ClubId = clubId)
+            |> Seq.map (fun m -> m.FacebookId)
+            |> Seq.toList
+
+

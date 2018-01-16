@@ -30,13 +30,6 @@ namespace MyTeam.Controllers
         }
 
       
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public JsonResult GetFacebookIds()
-        {
-            var ids = _playerService.GetFacebookIds();
-            return new JsonResult(new { data = ids });
-        }
-
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult SetPlayerStatus(Guid id, PlayerStatus status)

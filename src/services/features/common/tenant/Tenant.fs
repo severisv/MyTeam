@@ -6,6 +6,7 @@ open MyTeam
 open MyTeam.Common
 open MyTeam.Domain
 
+
 module Tenant =
     type ClubId = Guid
 
@@ -47,3 +48,4 @@ module Tenant =
                     )
 
             (club, user)                    
+

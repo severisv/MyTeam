@@ -117,6 +117,7 @@ module.exports = React.createClass({
       }
     })
 
+
     if (players.length <= 0) return ''
 
     const options = this.options

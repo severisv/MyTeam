@@ -2,13 +2,10 @@ namespace MyTeam.Players
 
 open System
 open MyTeam
+open MyTeam.Domain
+open MyTeam.Domain.Members
 
-type Status =
-        | Aktiv = 0
-        | Inaktiv = 1
-        | Veteran = 2
-        | Trener = 3
-        | Sluttet = 4 
+
 
 type Player = {
     Id:         Guid
@@ -23,3 +20,5 @@ type Player = {
     member x.FullName = sprintf "%s %s" x.FirstName x.LastName 
 
 type GetPlayers = ConnectionString -> ClubId -> Player list
+
+type GetFacebookIds = ConnectionString -> ClubId -> string list

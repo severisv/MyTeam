@@ -1,10 +1,12 @@
 namespace MyTeam
 
 open Giraffe
-open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore
 
 [<AutoOpen>]
 module Framework =
+
+    type HttpContext = Http.HttpContext
 
     type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) * HttpContext 
 
