@@ -8,15 +8,22 @@ open MyTeam.Common
 
 module App =
 
+    let mustBeMember (user: Option<User>) = 
+        requiresAuthPolicy (fun __ -> 
+                                user.IsSome
+                            ) 
+                            (setStatusCode 401 >> text "Ingen tilgang")
+ 
     let webApp =
         fun next ctx ->
-            let (club, userMember) = Tenant.get ctx
+            let (club, user) = Tenant.get ctx
             
             match club with
                 | Some club ->
                       choose [
                         GET >=> route "/api/players" >-> PlayerApi.list club                                
                         GET >=> route "/api/players/facebookids" >-> PlayerApi.getFacebookIds club                                
+                        GET >=> route "/api/players/status"  >=> mustBeMember user >=> text "hi"                                
                                         
                        ] next ctx
                 | None ->        
