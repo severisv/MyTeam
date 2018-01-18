@@ -16,8 +16,10 @@
     <Compile Include="utils/common/*.fs" />
     <Compile Include="utils/*.fs" />
     <Compile Include="domain/*.fs" />
-    <Compile Include="features/common/*.fs" />
-    <Compile Include="features/common/*/*.fs" />
+    <Compile Include="features/common/Clubs.fs" />
+    <Compile Include="features/common/Users.fs" />
+    <Compile Include="features/common/Tenant.fs" />
+    <Compile Include="features/common/Authorization.fs" />
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/Queries.fs" />
     <Compile Include="features/*/Api.fs" />
