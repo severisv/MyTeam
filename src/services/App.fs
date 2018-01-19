@@ -2,9 +2,7 @@ namespace MyTeam
 
 open Giraffe
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Http
 open MyTeam
-open MyTeam.Common
 open MyTeam.Authorization
 
 module App =
@@ -16,9 +14,9 @@ module App =
             match club with
                 | Some club ->
                       choose [
-                        GET >=> route "/api/players" >-> PlayerApi.list club
-                        GET >=> route "/api/players/facebookids" >-> PlayerApi.getFacebookIds club
-                        GET >=> mustBeMember user >=> routef "/api/players/%s/status" (fun id -> text <| sprintf "hi %O" id)
+                        GET >=> route "/api/players" >-> PlayerApi.list club.Id
+                        GET >=> route "/api/players/facebookids" >-> PlayerApi.getFacebookIds club.Id
+                        PUT >=> mustBeMember user >=> routef "/api/players/%s/status" (parseGuid >> PlayerApi.setStatus)
 
                        ] next ctx
                 | None ->

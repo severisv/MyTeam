@@ -56,9 +56,13 @@ module.exports = React.createClass({
   },
   setPlayerStatus(player, status) {
     const that = this
-    $.post(that.routes.SET_PLAYER_STATUS, {
-      Id: player.id,
-      Status: status,
+    $.ajax({
+      url: `/api/players/${player.id}/status`,
+      type: 'PUT',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        Status: status,
+      }),
     }).then((response) => {
       if (response.success) {
         const players = that.state.players
@@ -116,7 +120,6 @@ module.exports = React.createClass({
         return player
       }
     })
-
 
     if (players.length <= 0) return ''
 

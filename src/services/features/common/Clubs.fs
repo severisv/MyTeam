@@ -1,13 +1,10 @@
-namespace MyTeam.Common
+namespace MyTeam
 
-open System
-open Microsoft.AspNetCore.Http
 open MyTeam
 open MyTeam.Domain
 
 module Clubs = 
     type Get = HttpContext -> ClubIdentifier -> Option<Club>
-
     let get : Get =
         fun ctx clubId -> 
             let connectionString = getConnectionString ctx

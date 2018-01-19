@@ -1,7 +1,6 @@
 namespace MyTeam
 
 open System
-open Microsoft.AspNetCore.Http
 open MyTeam
 open MyTeam.Domain
 
