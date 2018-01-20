@@ -12,7 +12,6 @@ if (element.length) {
       GET_EVENTS: element.data('get-gameevents-url'),
       DELETE_EVENT: element.data('delete-event-url'),
       SHOW_PLAYER: element.data('show-player-url'),
-      GET_PLAYERS: '/api/players',
     },
     editMode: false,
     gameId: element.data('gameid'),

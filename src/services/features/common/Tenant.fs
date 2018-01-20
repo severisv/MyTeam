@@ -3,6 +3,7 @@ namespace MyTeam
 open System
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Users
 
 
 module Tenant =

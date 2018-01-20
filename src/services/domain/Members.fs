@@ -1,7 +1,10 @@
 namespace MyTeam.Domain
 
+open System
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+
+type MemberId = Guid
 
 module Members = 
 

@@ -1,14 +1,14 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es6": true,
-        "node": true
-    },
-    "extends": "airbnb",
-    "rules": {
-        "linebreak-style": "off",
-        "no-use-before-define": "warn",
-        "semi": ["error", "never"]
-        }
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": "airbnb",
+  "rules": {
+    "linebreak-style": "off",
+    "no-use-before-define": "warn",
+    "semi": ["error", "never"]
+  }
 }

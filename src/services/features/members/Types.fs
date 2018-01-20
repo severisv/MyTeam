@@ -1,14 +1,11 @@
-namespace MyTeam.Players
+namespace MyTeam.Members
 
-open System
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 
-type PlayerId = Guid
-
-type Player = {
-    Id:         PlayerId
+type Member = {
+    Id: MemberId
     FirstName: string
     MiddleName: string
     LastName: string
@@ -19,4 +16,6 @@ type Player = {
 } with
     member x.FullName = sprintf "%s %s" x.FirstName x.LastName 
 
-type GetPlayers = ConnectionString -> ClubId -> Player list
+type ListMembers = ConnectionString -> ClubId -> Member list
+type GetFacebookIds = ConnectionString -> ClubId -> string list
+type SetStatus = ConnectionString -> ClubId -> MemberId -> Status -> unit

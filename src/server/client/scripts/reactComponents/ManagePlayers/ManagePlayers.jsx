@@ -19,7 +19,7 @@ module.exports = React.createClass({
 
   componentDidMount() {
     const that = this
-    $.getJSON(that.routes.GET_PLAYERS).then((response) => {
+    $.getJSON('/api/members').then((response) => {
       that.setState({
         players: response,
       })
@@ -57,19 +57,17 @@ module.exports = React.createClass({
   setPlayerStatus(player, status) {
     const that = this
     $.ajax({
-      url: `/api/players/${player.id}/status`,
+      url: `/api/members/${player.id}/status`,
       type: 'PUT',
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({
         Status: status,
       }),
     }).then((response) => {
-      if (response.success) {
-        const players = that.state.players
-        for (const i in that.state.players) {
-          if (players[i].id == player.id) {
-            that.state.players[i].status = status
-          }
+      const players = that.state.players
+      for (const i in that.state.players) {
+        if (players[i].id == player.id) {
+          that.state.players[i].status = status
         }
       }
       that.forceUpdate()

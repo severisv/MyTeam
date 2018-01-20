@@ -24,7 +24,7 @@ module.exports = React.createClass({
         loadingEvents: false,
       })
     })
-    $.getJSON(that.props.routes.GET_PLAYERS).then((players) => {
+    $.getJSON('/api/players').then((players) => {
       that.setState({
         players,
       })

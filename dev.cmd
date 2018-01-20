@@ -1,5 +1,6 @@
+cd src
 call code .
-cd src/server
+cd server
 call npm install
 call dotnet restore
 call npm run watch

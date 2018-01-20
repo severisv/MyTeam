@@ -1,22 +1,22 @@
-namespace MyTeam.Players
+namespace MyTeam.Members
 
 open MyTeam
+open MyTeam.Domain
 open MyTeam.Domain.Members
 
 module Queries =
 
-    let players connectionString clubId = 
+    let members connectionString clubId = 
         let db = Database.get connectionString 
         db.Dbo.Member
-        |> Seq.filter(fun p -> p.ClubId = clubId)        
-        |> Seq.filter(fun p -> p.Discriminator = "Player"), db
+        |> Seq.filter(fun p -> p.ClubId = clubId), db
 
-    let getPlayers : GetPlayers =
+    let list : ListMembers =
         fun connectionString clubId ->
 
             let database = Database.get connectionString
    
-            let players = 
+            let members = 
                     query {
                         for p in database.Dbo.Member do
                         where (p.ClubId = clubId && p.Discriminator = "Player")
@@ -25,10 +25,10 @@ module Queries =
                     }
                     |> Seq.toList
 
-            let teams = players
+            let teams = members
                         |> Seq.map(fun (__, team) -> team)
 
-            players 
+            members 
             |> Seq.distinctBy(fun (p, __) -> p.Id)
             |> Seq.map(fun (p, __) -> 
                             {
@@ -45,3 +45,12 @@ module Queries =
                             }
                     )
             |> Seq.toList
+
+    let getFacebookIds : GetFacebookIds =
+        fun connectionString clubId ->            
+            let (members, __) = members connectionString clubId 
+            members
+            |> Seq.map (fun m -> m.FacebookId)
+            |> Seq.toList
+
+

@@ -4,23 +4,22 @@ open System
 open MyTeam
 open MyTeam.Domain
 
-type UserId = string
-type Role = string
-type MemberId = Guid
-
-type User = {
-     Id: Guid
-     FacebookId: string
-     FirstName: string
-     UrlName: string
-     Image: string
-     Roles: Role list
-     TeamIds: Guid list
-     ProfileIsConfirmed: bool
-}
-
 
 module Users =
+
+    type UserId = string
+    type Role = string
+
+    type User = {
+         Id: Guid
+         FacebookId: string
+         FirstName: string
+         UrlName: string
+         Image: string
+         Roles: Role list
+         TeamIds: Guid list
+         ProfileIsConfirmed: bool
+    }
 
     type Get = HttpContext -> ClubId -> UserId -> Option<User>
     let get : Get =
