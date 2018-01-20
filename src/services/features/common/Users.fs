@@ -3,15 +3,14 @@ namespace MyTeam
 open System
 open MyTeam
 open MyTeam.Domain
-
+open MyTeam.Domain.Members
 
 module Users =
-
+     
     type UserId = string
-    type Role = string
 
     type User = {
-         Id: Guid
+         Id: MemberId
          FacebookId: string
          FirstName: string
          UrlName: string
@@ -30,36 +29,37 @@ module Users =
                 let connectionString = getConnectionString ctx
                 let database = Database.get connectionString
 
+                let (ClubId clubId) = clubId
                 let members = 
                         query {
                             for p in database.Dbo.Member do
-                            where (p.ClubId = clubId && p.UserName = userId)
+                            where (p.ClubId = clubId)
+                            where (p.UserName = userId)
                             join team in database.Dbo.MemberTeam on (p.Id = team.MemberId)
                             select (p, team)
                         }
-                        |> Seq.toList
 
                 let teams = members
                             |> Seq.map(fun (__, team) -> team)
 
-                        
-                let user = members
-                            |> Seq.map(fun (m, __) -> 
-                                            {
-                                             Id = m.Id
-                                             FacebookId = m.FacebookId
-                                             FirstName = m.FirstName
-                                             UrlName = m.UrlName
-                                             Image = m.ImageFull
-                                             Roles = m.RolesString |> Members.toRoleArray
-                                             TeamIds = teams |> Seq.filter(fun team -> team.MemberId = m.Id) 
-                                                |> Seq.map(fun team -> team.TeamId)
-                                                |> Seq.toList
-                                             ProfileIsConfirmed = m.ProfileIsConfirmed
-                                            })
-                            |> Seq.tryHead                        
 
-                user            
+                        
+                members
+                |> Seq.map(fun (m, __) -> 
+                                {
+                                 Id = m.Id
+                                 FacebookId = m.FacebookId
+                                 FirstName = m.FirstName
+                                 UrlName = m.UrlName
+                                 Image = m.ImageFull
+                                 Roles = m.RolesString |> Members.toRoleArray
+                                 TeamIds = teams |> Seq.filter(fun team -> team.MemberId = m.Id) 
+                                                 |> Seq.map(fun team -> team.TeamId)
+                                                 |> Seq.toList
+                                 ProfileIsConfirmed = m.ProfileIsConfirmed
+                                })
+                |> Seq.tryHead                            
+                                                    
                                                 
 
       

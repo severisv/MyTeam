@@ -15,7 +15,7 @@ module Queries =
         fun connectionString clubId ->
 
             let database = Database.get connectionString
-   
+            let (ClubId clubId) = clubId
             let members = 
                     query {
                         for p in database.Dbo.Member do
@@ -47,7 +47,8 @@ module Queries =
             |> Seq.toList
 
     let getFacebookIds : GetFacebookIds =
-        fun connectionString clubId ->            
+        fun connectionString clubId ->         
+            let (ClubId clubId) = clubId 
             let (members, __) = members connectionString clubId 
             members
             |> Seq.map (fun m -> m.FacebookId)

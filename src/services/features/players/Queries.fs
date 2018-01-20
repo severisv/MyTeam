@@ -1,18 +1,21 @@
 namespace MyTeam.Players
 
 open MyTeam
+open MyTeam.Domain
 open MyTeam.Domain.Members
 
 module Queries =
 
     let players connectionString clubId = 
+        let (ClubId clubId) = clubId
         let db = Database.get connectionString 
         db.Dbo.Member
         |> Seq.filter(fun p -> p.ClubId = clubId)        
         |> Seq.filter(fun p -> p.Discriminator = "Player"), db
 
-    let getPlayers : GetPlayers =
+    let list : ListPlayers =
         fun connectionString clubId ->
+            let (ClubId clubId) = clubId
 
             let database = Database.get connectionString
    

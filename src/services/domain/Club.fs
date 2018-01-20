@@ -11,7 +11,7 @@ type Team = {
 }
 
 type ClubIdentifier = string
-type ClubId = Guid
+type ClubId = ClubId of Guid
 
 type Club = {
          Id: ClubId    

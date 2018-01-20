@@ -1,7 +1,6 @@
 namespace MyTeam
 
 open MyTeam.Members
-open MyTeam.Domain
 open MyTeam.Domain.Members
 open Giraffe 
 
@@ -22,9 +21,9 @@ module MemberApi =
     type SetStatus = {
         Status: Status
     }
-    let setStatus club id next (ctx: HttpContext) =
+    let setStatus clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<SetStatus>()
-            Persistence.setStatus ctx.ConnectionString club.Id id model.Status 
+            Persistence.setStatus ctx.ConnectionString clubId id model.Status 
             next ctx
         
         

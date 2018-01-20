@@ -9,6 +9,7 @@
   "rules": {
     "linebreak-style": "off",
     "no-use-before-define": "warn",
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "indent": ["error", 2]
   }
 }

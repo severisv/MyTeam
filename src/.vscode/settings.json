@@ -1,6 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "editor.tabSize": 2,
   "prettier.eslintIntegration": true,
   "files.exclude": {
     "**/.git": true,

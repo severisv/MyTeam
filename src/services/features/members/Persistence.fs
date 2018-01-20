@@ -1,10 +1,12 @@
 namespace MyTeam.Members
 
 open MyTeam
+open MyTeam.Domain
 
 module Persistence =
     let setStatus : SetStatus =
         fun connectionString clubId memberId status -> 
+            let (ClubId clubId) = clubId
             let (members, db) = Queries.members connectionString clubId
             members
             |> Seq.filter(fun p -> p.Id = memberId)

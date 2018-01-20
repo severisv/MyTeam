@@ -31,7 +31,7 @@ module Clubs =
             clubs 
             |> Seq.map(fun (club, __) -> 
                         {
-                            Id = club.Id
+                            Id = ClubId club.Id
                             ClubId = club.ClubIdentifier
                             ShortName = club.ShortName
                             Name = club.Name
