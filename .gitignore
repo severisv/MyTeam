@@ -209,4 +209,6 @@ src/server/wwwroot/compiled
 setdeploycredentials.cmd
 src/server/appsettings.Development.json
 src/server/appsettings.Production.json
+
+src/MyTeam
 .vs/
