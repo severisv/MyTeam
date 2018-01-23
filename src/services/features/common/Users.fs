@@ -52,7 +52,7 @@ module Users =
                                  FirstName = m.FirstName
                                  UrlName = m.UrlName
                                  Image = m.ImageFull
-                                 Roles = m.RolesString |> Members.toRoleArray
+                                 Roles = m.RolesString |> Members.toRoleList
                                  TeamIds = teams |> Seq.filter(fun team -> team.MemberId = m.Id) 
                                                  |> Seq.map(fun team -> team.TeamId)
                                                  |> Seq.toList

@@ -1,5 +1,17 @@
 ﻿const React = require('react')
 
+function put(url, payload) {
+  return fetch(url, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+}
+
 module.exports = React.createClass({
   getInitialState() {
     return {
@@ -34,20 +46,17 @@ module.exports = React.createClass({
 
   togglePlayerRole(player, role) {
     const that = this
-    $.post(that.routes.TOGGLE_PLAYER_ROLE, {
-      Id: player.id,
+    put(`/api/members/${player.id}/togglerole`, {
       Role: role,
     }).then((response) => {
-      if (response.success) {
-        const players = that.state.players
-        for (const i in that.state.players) {
-          if (players[i].id == player.id) {
-            const index = players[i].roles.indexOf(role)
-            if (index > -1) {
-              that.state.players[i].roles.splice(index, 1)
-            } else {
-              that.state.players[i].roles.push(role)
-            }
+      const players = that.state.players
+      for (const i in that.state.players) {
+        if (players[i].id == player.id) {
+          const index = players[i].roles.indexOf(role)
+          if (index > -1) {
+            that.state.players[i].roles.splice(index, 1)
+          } else {
+            that.state.players[i].roles.push(role)
           }
         }
       }
@@ -56,13 +65,8 @@ module.exports = React.createClass({
   },
   setPlayerStatus(player, status) {
     const that = this
-    $.ajax({
-      url: `/api/members/${player.id}/status`,
-      type: 'PUT',
-      contentType: 'application/json; charset=utf-8',
-      data: JSON.stringify({
-        Status: status,
-      }),
+    put(`/api/members/${player.id}/status`, {
+      Status: status,
     }).then((response) => {
       const players = that.state.players
       for (const i in that.state.players) {

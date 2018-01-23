@@ -41,7 +41,7 @@ module Queries =
                                 MiddleName = p.MiddleName
                                 UrlName = p.UrlName
                                 Status = p.Status |> enum<Status> 
-                                Roles = p.RolesString |> toRoleArray
+                                Roles = p.RolesString |> toRoleList
                                 TeamIds = teams |> Seq.filter(fun team -> team.MemberId = p.Id) 
                                                 |> Seq.map(fun team -> team.TeamId)
                                                 |> Seq.toList

@@ -27,9 +27,11 @@ module Members =
             | Sluttet = 4 
             
 
-    let toRoleArray (roleString : string) =
+    let toRoleList (roleString : string) =
         if roleString.Length > 0 then
             roleString.Split [|','|] 
             |> Seq.map(parse<Role>)
             |> Seq.toList
         else []
+
+    let fromRoleList (roles: Role list) = System.String.Join(",", roles)

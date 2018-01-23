@@ -1,6 +1,7 @@
 namespace MyTeam
 
 open MyTeam.Members
+open MyTeam.Domain
 open MyTeam.Domain.Members
 open Giraffe 
 
@@ -26,4 +27,12 @@ module MemberApi =
             Persistence.setStatus ctx.ConnectionString clubId id model.Status 
             next ctx
         
-        
+    
+    [<CLIMutable>]
+    type ToggleRole = {
+        Role: Role
+    }
+    let toggleRole clubId id next (ctx: HttpContext) =
+            let model = ctx.BindJson<ToggleRole>()
+            Persistence.toggleRole ctx.ConnectionString clubId id model.Role
+            next ctx    
