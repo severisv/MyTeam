@@ -18,5 +18,5 @@ type Member = {
 
 type ListMembers = ConnectionString -> ClubId -> Member list
 type GetFacebookIds = ConnectionString -> ClubId -> string list
-type SetStatus = ConnectionString -> ClubId -> MemberId -> Status -> unit
-type ToggleRole = ConnectionString -> ClubId -> MemberId -> Role -> unit
+type SetStatus = ConnectionString -> ClubId -> MemberId -> Status -> UserId
+type ToggleRole = ConnectionString -> ClubId -> MemberId -> Role -> UserId

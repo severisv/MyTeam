@@ -12,7 +12,7 @@ namespace MyTeam.Services.Application
     public class CacheHelper : ICacheHelper
     {
         private readonly MemoryCacheEntryOptions _cacheOptions =
-            new MemoryCacheEntryOptions {SlidingExpiration = new TimeSpan(0, 0, 15, 0) };
+            new MemoryCacheEntryOptions { SlidingExpiration = new TimeSpan(0, 0, 15, 0) };
 
         public IMemoryCache Cache { get; set; }
         private readonly ApplicationDbContext _dbContext;
@@ -23,11 +23,14 @@ namespace MyTeam.Services.Application
             _dbContext = dbContext;
         }
 
+        private string GetMemberKey(Guid? clubId, string userName) => "old-user-" + clubId?.ToString() + userName;
+        private string GetClubKey(string clubIdentifier) => "old-club-" + clubIdentifier;
+
         public PlayerDto GetPlayerFromUser(string username, Guid clubId)
         {
             if (string.IsNullOrWhiteSpace(username)) return null;
 
-            var key = username + clubId;
+            var key = GetMemberKey(clubId, username);
 
             object cachedValue;
             Cache.TryGetValue(key, out cachedValue);
@@ -42,7 +45,7 @@ namespace MyTeam.Services.Application
 
             member = _dbContext.Players
                 .Where(p => clubId == p.ClubId && p.UserName == username)
-                .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName,  p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
+                .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName, p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
             {
@@ -60,7 +63,7 @@ namespace MyTeam.Services.Application
         {
             if (string.IsNullOrWhiteSpace(clubId)) return null;
 
-            var key = clubId;
+            var key = GetClubKey(clubId);
 
             object cachedValue;
             Cache.TryGetValue(key, out cachedValue);
@@ -97,8 +100,7 @@ namespace MyTeam.Services.Application
             // Sleep litt så man ikke cacher gammel data på nytt (race condition)
             Thread.Sleep(20);
             if (clubId == null || string.IsNullOrEmpty(username)) return;
-            var key = username+clubId;
-
+            var key = GetMemberKey(clubId, username);
             Cache.Remove(key);
         }
 
@@ -124,7 +126,7 @@ namespace MyTeam.Services.Application
             var inFourDays = now.AddDays(4);
             var events = _dbContext.Events.Where(
                     e => e.ClubId == clubId &&
-                    e.DateTime  < inFourDays &&
+                    e.DateTime < inFourDays &&
                     (e.DateTime > now) &&
                     !e.IsPublished
                     )
@@ -179,8 +181,8 @@ namespace MyTeam.Services.Application
                 m.ClubId,
                 Name = m.Email
             }).ToList().Single();
-            var key = member.Name + member.ClubId;
-            Cache.Set(key, (PlayerDto)null);
+            var key = GetMemberKey(member.ClubId, member.Name);
+            Cache.Remove(key);
         }
     }
 }

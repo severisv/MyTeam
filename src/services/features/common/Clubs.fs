@@ -7,6 +7,7 @@ module Clubs =
     type Get = HttpContext -> ClubIdentifier -> Option<Club>
     let get : Get =
         fun ctx clubId -> 
+            let (ClubIdentifier clubId) = clubId
             let connectionString = getConnectionString ctx
             let database = Database.get connectionString
 

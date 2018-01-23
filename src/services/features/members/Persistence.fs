@@ -8,12 +8,13 @@ module Persistence =
         fun connectionString clubId memberId status -> 
             let (ClubId clubId) = clubId
             let (members, db) = Queries.members connectionString clubId
-            members
-            |> Seq.filter(fun p -> p.Id = memberId)
-            |> Seq.iter(fun p ->
-                p.Status <- int status
-            )
+            let memb = members
+                    |> Seq.filter(fun p -> p.Id = memberId)
+                    |> Seq.head
+
+            memb.Status <- int status
             db.SubmitUpdates()
+            UserId memb.UserName
 
 
     let toggleRole : ToggleRole =
@@ -21,19 +22,22 @@ module Persistence =
 
             let toggleRoleInList role roleList =
                 if roleList |> List.contains role then
-                    roleList |> List.filter (fun r -> r = role)
+                    roleList |> List.filter (fun r -> r <> role)
                 else 
                     roleList |> List.append [role]      
 
             let (ClubId clubId) = clubId
             let (members, db) = Queries.members connectionString clubId
-            members
-            |> Seq.filter(fun p -> p.Id = memberId)
-            |> Seq.iter(fun p ->
-                p.RolesString <- p.RolesString 
+            
+            let memb = members
+                    |> Seq.filter(fun p -> p.Id = memberId)
+                    |> Seq.head
+
+            memb.RolesString <- memb.RolesString 
                                 |> Members.toRoleList
                                 |> toggleRoleInList role
                                 |> Members.fromRoleList
-                       )
+                       
             db.SubmitUpdates()        
+            UserId memb.UserName
 

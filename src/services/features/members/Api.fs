@@ -25,6 +25,7 @@ module MemberApi =
     let setStatus clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<SetStatus>()
             Persistence.setStatus ctx.ConnectionString clubId id model.Status 
+            |> Tenant.clearUserCache ctx clubId
             next ctx
         
     
@@ -35,4 +36,5 @@ module MemberApi =
     let toggleRole clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<ToggleRole>()
             Persistence.toggleRole ctx.ConnectionString clubId id model.Role
+            |> Tenant.clearUserCache ctx clubId
             next ctx    

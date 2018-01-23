@@ -10,7 +10,7 @@ type Team = {
         Name: string
 }
 
-type ClubIdentifier = string
+type ClubIdentifier = ClubIdentifier of string
 type ClubId = ClubId of Guid
 
 type Club = {

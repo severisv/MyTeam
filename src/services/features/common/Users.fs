@@ -3,12 +3,9 @@ namespace MyTeam
 open System
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Domain.Members
 
 module Users =
      
-    type UserId = string
-
     type User = {
          Id: MemberId
          FacebookId: string
@@ -23,6 +20,7 @@ module Users =
     type Get = HttpContext -> ClubId -> UserId -> Option<User>
     let get : Get =
         fun ctx clubId userId -> 
+            let (UserId userId) = userId
             if String.IsNullOrEmpty(userId) then
                 None
             else            

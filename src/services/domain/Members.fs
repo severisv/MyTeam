@@ -6,6 +6,7 @@ open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 
 type MemberId = Guid
+type UserId = UserId of string
 
 [<JsonConverter(typedefof<StringEnumConverter>)>]
 type Role =
@@ -20,11 +21,11 @@ module Members =
 
     [<JsonConverter(typedefof<StringEnumConverter>)>]
     type Status =
-            | Aktiv = 0
-            | Inaktiv = 1
-            | Veteran = 2
-            | Trener = 3
-            | Sluttet = 4 
+        | Aktiv = 0
+        | Inaktiv = 1
+        | Veteran = 2
+        | Trener = 3
+        | Sluttet = 4 
             
 
     let toRoleList (roleString : string) =
