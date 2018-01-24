@@ -6,7 +6,7 @@ type ConnectionString = string
 
 type DatabaseContext = SqlDataProvider<
                                 Common.DatabaseProviderTypes.MSSQLSERVER,
-                                "Server=(localdb)\\mssqllocaldb;Database=breddefotball;Trusted_Connection=True;MultipleActiveResultSets=true">
+                                "Server=(local)\\SQLExpress;Database=breddefotball;Trusted_Connection=True;MultipleActiveResultSets=true">
 
 module Database = 
     let get (connectionString : ConnectionString) = DatabaseContext.GetDataContext(connectionString)

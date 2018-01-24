@@ -16,6 +16,7 @@ module App =
             match club with
                 | Some club ->
                       choose [
+                        GET >=> route "/api/teams" >-> TeamApi.list club.Id
                         GET >=> route "/api/players" >-> PlayerApi.list club.Id
                         GET >=> route "/api/members" >-> MemberApi.list club.Id
                         GET >=> route "/api/members/facebookids" >-> MemberApi.getFacebookIds club.Id

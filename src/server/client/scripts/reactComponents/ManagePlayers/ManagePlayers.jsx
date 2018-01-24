@@ -37,9 +37,9 @@ module.exports = React.createClass({
       })
     })
 
-    $.getJSON(that.routes.GET_TEAMS).then((response) => {
+    $.getJSON('/api/teams').then((teams) => {
       that.setState({
-        teams: response.data,
+        teams,
       })
     })
   },

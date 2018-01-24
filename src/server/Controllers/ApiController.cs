@@ -30,20 +30,6 @@ namespace MyTeam.Controllers
         }
 
 
-
-        public JsonResult GetTeams()
-        {
-            var teams = _dbContext.Teams
-                .OrderBy(c => c.SortOrder)
-                .Where(c => c.ClubId == Club.Id).Select(t => new
-                {
-                    Id = t.Id,
-                    ShortName = t.ShortName
-                }
-                );
-            return new JsonResult(new { data = teams });
-        }
-
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult TogglePlayerTeam(Guid teamId, Guid playerId)
