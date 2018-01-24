@@ -24,6 +24,7 @@ module App =
                             choose [ 
                                 routef "/api/members/%s/status" (parseGuid >> MemberApi.setStatus club.Id)
                                 routef "/api/members/%s/togglerole" (parseGuid >> MemberApi.toggleRole club.Id)
+                                routef "/api/members/%s/toggleteam" (parseGuid >> MemberApi.toggleTeam club.Id)
                             ]
                        ] next ctx
                 | None ->

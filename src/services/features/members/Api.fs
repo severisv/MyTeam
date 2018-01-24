@@ -38,3 +38,12 @@ module MemberApi =
             Persistence.toggleRole ctx.ConnectionString clubId id model.Role
             |> Tenant.clearUserCache ctx clubId
             next ctx    
+
+    [<CLIMutable>]
+    type ToggleTeam = {
+        TeamId: TeamId
+    }
+    let toggleTeam clubId id next (ctx: HttpContext) =
+            let model = ctx.BindJson<ToggleTeam>()
+            Persistence.toggleTeam ctx.ConnectionString clubId id model.TeamId
+            next ctx            

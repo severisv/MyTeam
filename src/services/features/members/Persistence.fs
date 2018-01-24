@@ -1,5 +1,6 @@
 namespace MyTeam.Members
 
+open System
 open MyTeam
 open MyTeam.Domain
 
@@ -41,3 +42,28 @@ module Persistence =
             db.SubmitUpdates()        
             UserId memb.UserName
 
+
+    let toggleTeam : ToggleTeam =
+        fun connectionString clubId memberId teamId -> 
+            let (ClubId clubId) = clubId
+            let db = Database.get connectionString
+
+            let memb = db.Dbo.Member
+                            |> Seq.filter(fun m -> m.Id = memberId)
+                            |> Seq.head
+
+            if memb.ClubId <> clubId then failwith "Prøver å redigere spiller fra annen klubb - ingen tilgang"
+
+            let memberTeam = db.Dbo.MemberTeam
+                                |> Seq.filter (fun mt -> mt.MemberId = memberId)
+                                |> Seq.filter (fun mt -> mt.TeamId = teamId)
+                                |> Seq.tryHead
+
+            match memberTeam with 
+                | Some m ->
+                    m.Delete()
+                | None ->
+                    let memberTeam = db.Dbo.MemberTeam.Create(memberId, teamId)
+                    memberTeam.Id <- Guid.NewGuid()
+            
+            db.SubmitUpdates()             

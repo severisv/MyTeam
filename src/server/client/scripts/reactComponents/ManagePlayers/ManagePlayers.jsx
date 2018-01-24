@@ -93,20 +93,17 @@ module.exports = React.createClass({
 
   toggleTeam(teamId, playerId) {
     const that = this
-    $.post(that.routes.TOGGLE_PLAYER_TEAM, {
-      PlayerId: playerId,
+    put(`/api/members/${playerId}/toggleteam`, {
       TeamId: teamId,
-    }).then((response) => {
-      if (response.success) {
-        const players = that.state.players
-        for (const i in that.state.players) {
-          if (players[i].id == playerId) {
-            const teamIds = that.state.players[i].teamIds
-            if (teamIds.indexOf(teamId) > -1) {
-              that.state.players[i].teamIds = teamIds.filter(element => element != teamId)
-            } else {
-              that.state.players[i].teamIds.push(teamId)
-            }
+    }).then(() => {
+      const players = that.state.players
+      for (const i in that.state.players) {
+        if (players[i].id == playerId) {
+          const teamIds = that.state.players[i].teamIds
+          if (teamIds.indexOf(teamId) > -1) {
+            that.state.players[i].teamIds = teamIds.filter(element => element != teamId)
+          } else {
+            that.state.players[i].teamIds.push(teamId)
           }
         }
       }
