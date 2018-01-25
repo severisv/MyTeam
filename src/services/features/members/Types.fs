@@ -3,6 +3,7 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Database
 
 type Member = {
     Id: MemberId
@@ -16,7 +17,7 @@ type Member = {
 } with
     member x.FullName = sprintf "%s %s" x.FirstName x.LastName 
 
-type ListMembers = ConnectionString -> ClubId -> Member list
+type ListMembers = Database -> ClubId -> Member list
 type GetFacebookIds = ConnectionString -> ClubId -> string list
 type SetStatus = ConnectionString -> ClubId -> MemberId -> Status -> UserId
 type ToggleRole = ConnectionString -> ClubId -> MemberId -> Role -> UserId

@@ -3,6 +3,7 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open Microsoft.EntityFrameworkCore
 
 module Queries =
 
@@ -12,39 +13,26 @@ module Queries =
         |> Seq.filter(fun p -> p.ClubId = clubId), db
 
     let list : ListMembers =
-        fun connectionString clubId ->
-
-            let database = Database.get connectionString
+        fun db clubId ->
             let (ClubId clubId) = clubId
-            let members = 
-                    query {
-                        for p in database.Dbo.Member do
-                        where (p.ClubId = clubId && p.Discriminator = "Player")
-                        join team in database.Dbo.MemberTeam on (p.Id = team.MemberId)
-                        select (p, team)
-                    }
-                    |> Seq.toList
-
-            let teams = members
-                        |> Seq.map(fun (__, team) -> team)
-
-            members 
-            |> Seq.distinctBy(fun (p, __) -> p.Id)
-            |> Seq.map(fun (p, __) -> 
+           
+            db.Members.Include(fun p -> p.MemberTeams) 
+            |> Seq.filter(fun p -> p.ClubId = clubId)
+            |> Seq.toList
+            |> List.map(fun p -> 
                             {
                                 Id = p.Id
                                 FirstName = p.FirstName
                                 LastName = p.LastName
                                 MiddleName = p.MiddleName
                                 UrlName = p.UrlName
-                                Status = p.Status |> enum<Status> 
+                                Status = int p.Status |> enum<Status> 
                                 Roles = p.RolesString |> toRoleList
-                                TeamIds = teams |> Seq.filter(fun team -> team.MemberId = p.Id) 
+                                TeamIds = p.MemberTeams 
                                                 |> Seq.map(fun team -> team.TeamId)
                                                 |> Seq.toList
                             }
                     )
-            |> Seq.toList
 
     let getFacebookIds : GetFacebookIds =
         fun connectionString clubId ->         

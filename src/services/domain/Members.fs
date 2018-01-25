@@ -29,7 +29,7 @@ module Members =
             
 
     let toRoleList (roleString : string) =
-        if roleString.Length > 0 then
+        if not <| isNull roleString && roleString.Length > 0 then
             roleString.Split [|','|] 
             |> Seq.map(parse<Role>)
             |> Seq.toList

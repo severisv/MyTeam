@@ -29,4 +29,7 @@
   </ItemGroup>
 
   <Import Project="fsc.props" />
+   <ItemGroup>
+    <ProjectReference Include="..\database\Migrations.csproj" />
+  </ItemGroup>
 </Project>
