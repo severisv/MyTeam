@@ -14,7 +14,7 @@ module MemberApi =
 
 
     let getFacebookIds clubId (ctx: HttpContext) =
-        Queries.getFacebookIds ctx.ConnectionString clubId
+        Queries.getFacebookIds ctx.Database clubId
         |> json, ctx
 
 
@@ -24,7 +24,7 @@ module MemberApi =
     }
     let setStatus clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<SetStatus>()
-            Persistence.setStatus ctx.ConnectionString clubId id model.Status 
+            Persistence.setStatus ctx.Database clubId id model.Status 
             |> Tenant.clearUserCache ctx clubId
             next ctx
         
@@ -35,7 +35,7 @@ module MemberApi =
     }
     let toggleRole clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<ToggleRole>()
-            Persistence.toggleRole ctx.ConnectionString clubId id model.Role
+            Persistence.toggleRole ctx.Database clubId id model.Role
             |> Tenant.clearUserCache ctx clubId
             next ctx    
 
@@ -45,5 +45,5 @@ module MemberApi =
     }
     let toggleTeam clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<ToggleTeam>()
-            Persistence.toggleTeam ctx.ConnectionString clubId id model.TeamId
+            Persistence.toggleTeam ctx.Database clubId id model.TeamId
             next ctx            

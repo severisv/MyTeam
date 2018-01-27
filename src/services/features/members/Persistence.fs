@@ -1,25 +1,26 @@
 namespace MyTeam.Members
 
-open System
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Models
+open MyTeam.Models.Domain
+open Microsoft.EntityFrameworkCore
 
 module Persistence =
     let setStatus : SetStatus =
-        fun connectionString clubId memberId status -> 
-            let (ClubId clubId) = clubId
-            let (members, db) = Queries.members connectionString clubId
+        fun db clubId memberId status -> 
+            let members = Queries.members db clubId
             let memb = members
                     |> Seq.filter(fun p -> p.Id = memberId)
                     |> Seq.head
 
-            memb.Status <- int status
-            db.SubmitUpdates()
+            memb.Status <- enum<Enums.PlayerStatus>(int status)
+            db.SaveChanges() |> ignore
             UserId memb.UserName
 
 
     let toggleRole : ToggleRole =
-        fun connectionString clubId memberId role ->
+        fun db clubId memberId role ->
 
             let toggleRoleInList role roleList =
                 if roleList |> List.contains role then
@@ -27,8 +28,7 @@ module Persistence =
                 else 
                     roleList |> List.append [role]      
 
-            let (ClubId clubId) = clubId
-            let (members, db) = Queries.members connectionString clubId
+            let members = Queries.members db clubId
             
             let memb = members
                     |> Seq.filter(fun p -> p.Id = memberId)
@@ -39,31 +39,32 @@ module Persistence =
                                 |> toggleRoleInList role
                                 |> Members.fromRoleList
                        
-            db.SubmitUpdates()        
+            db.SaveChanges() |> ignore        
             UserId memb.UserName
 
 
     let toggleTeam : ToggleTeam =
-        fun connectionString clubId memberId teamId -> 
+        fun db clubId memberId teamId -> 
+            
             let (ClubId clubId) = clubId
-            let db = Database.get connectionString
 
-            let memb = db.Dbo.Member
-                            |> Seq.filter(fun m -> m.Id = memberId)
-                            |> Seq.head
+            let memb = db.Members.Include(fun m -> m.MemberTeams)
+                    |> Seq.filter(fun m -> m.Id = memberId)
+                    |> Seq.head
 
             if memb.ClubId <> clubId then failwith "Prøver å redigere spiller fra annen klubb - ingen tilgang"
 
-            let memberTeam = db.Dbo.MemberTeam
-                                |> Seq.filter (fun mt -> mt.MemberId = memberId)
+            let memberTeam = memb.MemberTeams
                                 |> Seq.filter (fun mt -> mt.TeamId = teamId)
                                 |> Seq.tryHead
 
             match memberTeam with 
                 | Some m ->
-                    m.Delete()
+                    db.Remove(m) |> ignore
                 | None ->
-                    let memberTeam = db.Dbo.MemberTeam.Create(memberId, teamId)
-                    memberTeam.Id <- Guid.NewGuid()
+                    let memberTeam = MemberTeam()
+                    memberTeam.TeamId <- teamId
+                    memb.MemberTeams.Add(memberTeam)
             
-            db.SubmitUpdates()             
+            db.SaveChanges() |> ignore         
+            

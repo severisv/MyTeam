@@ -18,7 +18,7 @@ type Member = {
     member x.FullName = sprintf "%s %s" x.FirstName x.LastName 
 
 type ListMembers = Database -> ClubId -> Member list
-type GetFacebookIds = ConnectionString -> ClubId -> string list
-type SetStatus = ConnectionString -> ClubId -> MemberId -> Status -> UserId
-type ToggleRole = ConnectionString -> ClubId -> MemberId -> Role -> UserId
-type ToggleTeam = ConnectionString -> ClubId -> MemberId -> TeamId -> unit
+type GetFacebookIds = Database -> ClubId -> string list
+type SetStatus = Database -> ClubId -> MemberId -> Status -> UserId
+type ToggleRole = Database -> ClubId -> MemberId -> Role -> UserId
+type ToggleTeam = Database -> ClubId -> MemberId -> TeamId -> unit

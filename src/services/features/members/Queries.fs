@@ -4,13 +4,13 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open Microsoft.EntityFrameworkCore
+open MyTeam.Database
 
 module Queries =
 
-    let members connectionString clubId = 
-        let db = Database.get connectionString 
-        db.Dbo.Member
-        |> Seq.filter(fun p -> p.ClubId = clubId), db
+    let members (db : Database) clubId = 
+        let (ClubId clubId) = clubId
+        db.Members |> Seq.filter(fun p -> p.ClubId = clubId)
 
     let list : ListMembers =
         fun db clubId ->
@@ -35,10 +35,8 @@ module Queries =
                     )
 
     let getFacebookIds : GetFacebookIds =
-        fun connectionString clubId ->         
-            let (ClubId clubId) = clubId 
-            let (members, __) = members connectionString clubId 
-            members
+        fun db clubId ->         
+            members db clubId
             |> Seq.map (fun m -> m.FacebookId)
             |> Seq.toList
 
