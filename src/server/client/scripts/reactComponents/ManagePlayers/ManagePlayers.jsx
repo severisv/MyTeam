@@ -1,18 +1,8 @@
 ﻿const React = require('react')
 
-function put(url, payload) {
-  return fetch(url, {
-    method: 'PUT',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(payload),
-  })
-}
+import { put } from '../../api'
 
-module.exports = React.createClass({
+export default React.createClass({
   getInitialState() {
     return {
       players: [],

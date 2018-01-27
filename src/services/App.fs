@@ -20,7 +20,7 @@ module App =
                         GET >=> route "/api/players" >-> PlayerApi.list club.Id                      
                         PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                             choose [ 
-                                routef "/api/events/%s/description" (parseGuid >> MemberApi.setStatus club.Id)
+                                routef "/api/events/%s/description" (parseGuid >> EventApi.setDescription club.Id)
                             ]
                         GET >=> 
                             choose [ 

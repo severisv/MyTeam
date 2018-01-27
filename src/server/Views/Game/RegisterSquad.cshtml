@@ -92,7 +92,7 @@
                     <hr />
                     <div class="registerSquad-publish" id="registerSquad-publish">
                         <div class="relative registerSquad-messageWrapper">
-                            <textarea id="publishMessage" class="form-control" data-href="@Url.Action("UpdateEventDescription", "Api", new {eventId = Model.Game.Id})" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
+                            <textarea id="publishMessage" class="form-control" data-href="/api/events/@Model.Game.Id/description" placeholder="Beskjed til spillerne">@Model.Game.Description</textarea>
                             <span class="label-feedback label label-danger"><i class="fa fa-exclamation-triangle"></i></span>
                             <span class="label-feedback label label-success"><i class="fa fa-check"></i></span>
                         </div>

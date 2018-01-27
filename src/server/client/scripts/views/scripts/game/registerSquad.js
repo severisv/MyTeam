@@ -1,4 +1,6 @@
-﻿$('.register-attendance-input').click(function f() {
+﻿import { put } from '../../../api'
+
+$('.register-attendance-input').click(function f() {
   const element = $(this)
   const eventId = element.data('eventId')
   const playerId = element.data('playerId')
@@ -19,11 +21,7 @@
 
       if (value == true) {
         const playerName = element.data('playerName')
-        $('#squad').append(`<li id="${
-          playerId
-        }"><i class="flaticon-soccer18"></i>&nbsp;${
-          playerName
-        }</li>`)
+        $('#squad').append(`<li id="${playerId}"><i class="flaticon-soccer18"></i>&nbsp;${playerName}</li>`)
         $('#squadCount').html(squadCount + 1)
       } else {
         $(`#${playerId}`).remove()
@@ -62,19 +60,19 @@ $('#publishButton').click(function f() {
 })
 
 function postPublishMessage(element, message) {
-  $.post(element.data('href'), {
+  put(element.data('href'), {
     description: message,
-  }).then((response) => {
-    if (response.success) {
+  })
+    .then((response) => {
       const successLabel = element.parent().find('.label-success')
       successLabel.show()
       successLabel.fadeOut(1500)
-    } else {
+    })
+    .catch(() => {
       const failLabel = element.parent().find('.label-danger')
       failLabel.show()
-      failLabel.fadeOut(3000)
-    }
-  })
+      failLabel.fadeOut(5000)
+    })
 }
 
 let typingTimer

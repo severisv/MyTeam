@@ -9,9 +9,9 @@ module EventApi =
     
     [<CLIMutable>]
     type Description = {
-        Description: string
+        description: string
     }
     let setDescription clubId eventId next (ctx: HttpContext) =
             let model = ctx.BindJson<Description>()
-            Persistence.setDescription ctx.Database clubId eventId model.Description
+            Persistence.setDescription ctx.Database clubId eventId model.description
             next ctx            

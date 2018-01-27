@@ -12,8 +12,8 @@ namespace MyTeam.Services.Domain
         Event Get(Guid id);
         PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false);
         PagedList<EventViewModel> GetPrevious(IEnumerable<Guid> teamIds, EventType type, int page);
-        AttendeeViewModel SetAttendance(Guid eventId, Guid playerId,  bool isAttending, Guid clubId);
-        void Add(Guid clubId, params  Event[] ev);
+        AttendeeViewModel SetAttendance(Guid eventId, Guid playerId, bool isAttending, Guid clubId);
+        void Add(Guid clubId, params Event[] ev);
         void Delete(Guid clubId, Guid eventId);
         void Update(CreateEventViewModel ev, Guid clubId);
         void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend);
@@ -21,7 +21,6 @@ namespace MyTeam.Services.Domain
         RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid? eventId);
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);
         void SignupMessage(Guid eventId, Guid memberId, string message);
-        void UpdateDescription(Guid eventId, string description);
         SignupDetailsViewModel GetSignupDetailsViewModel(Guid eventId);
     }
 }

@@ -30,21 +30,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public JsonResult UpdateEventDescription(Guid eventId, string description)
-        {
-            if (ModelState.IsValid)
-            {
-                _eventService.UpdateDescription(eventId, description);
-                var reponse = new { Success = true };
-                return new JsonResult(reponse);
-            }
-
-            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
-        }
-
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult Now()
         {
