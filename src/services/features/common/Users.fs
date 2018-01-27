@@ -25,7 +25,7 @@ module Users =
                 None
             else            
                 let connectionString = getConnectionString ctx
-                let database = Database.get connectionString
+                let database = Db.get connectionString
 
                 let (ClubId clubId) = clubId
                 let members = 

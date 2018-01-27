@@ -9,7 +9,7 @@ module Clubs =
         fun ctx clubId -> 
             let (ClubIdentifier clubId) = clubId
             let connectionString = getConnectionString ctx
-            let database = Database.get connectionString
+            let database = Db.get connectionString
 
             let clubs =
                     query {

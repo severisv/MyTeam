@@ -3,7 +3,6 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Database
 
 type Member = {
     Id: MemberId

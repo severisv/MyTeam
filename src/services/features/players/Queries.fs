@@ -8,7 +8,7 @@ module Queries =
 
     let players connectionString clubId = 
         let (ClubId clubId) = clubId
-        let db = Database.get connectionString 
+        let db = Db.get connectionString 
         db.Dbo.Member
         |> Seq.filter(fun p -> p.ClubId = clubId)        
         |> Seq.filter(fun p -> p.Discriminator = "Player"), db
@@ -17,7 +17,7 @@ module Queries =
         fun connectionString clubId ->
             let (ClubId clubId) = clubId
 
-            let database = Database.get connectionString
+            let database = Db.get connectionString
    
             let players = 
                     query {

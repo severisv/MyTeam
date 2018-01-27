@@ -4,20 +4,17 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open Microsoft.EntityFrameworkCore
-open MyTeam.Database
+open System.Linq
 
 module Queries =
 
     let members (db : Database) clubId = 
         let (ClubId clubId) = clubId
-        db.Members |> Seq.filter(fun p -> p.ClubId = clubId)
+        db.Members.Where(fun p -> p.ClubId = clubId)
 
     let list : ListMembers =
-        fun db clubId ->
-            let (ClubId clubId) = clubId
-           
-            db.Members.Include(fun p -> p.MemberTeams) 
-            |> Seq.filter(fun p -> p.ClubId = clubId)
+        fun db clubId ->         
+            (members db clubId).Include(fun p -> p.MemberTeams) 
             |> Seq.toList
             |> List.map(fun p -> 
                             {

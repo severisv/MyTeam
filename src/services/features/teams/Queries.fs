@@ -7,7 +7,7 @@ module Queries =
 
     let teams connectionString clubId = 
         let (ClubId clubId) = clubId
-        let db = Database.get connectionString 
+        let db = Db.get connectionString 
         db.Dbo.Team
         |> Seq.filter(fun t -> t.ClubId = clubId), db
 
