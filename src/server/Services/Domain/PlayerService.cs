@@ -158,30 +158,6 @@ namespace MyTeam.Services.Domain
 
         }
 
-        public void TogglePlayerTeam(Guid teamId, Guid playerId, Guid clubId)
-        {
-
-            var existingTeam = _dbContext.MemberTeams.FirstOrDefault(p => p.TeamId == teamId && p.MemberId == playerId);
-            if (existingTeam != null)
-            {
-                _dbContext.Remove(existingTeam);
-            }
-            else
-            {
-                var memberTeam = new MemberTeam
-                {
-                    Id = Guid.NewGuid(),
-                    MemberId = playerId,
-                    TeamId = teamId
-                };
-                _dbContext.Add(memberTeam);
-            }
-
-            var userName = _dbContext.Members.Where(m => m.Id == playerId).Select(p => p.UserName).Single();
-
-            _dbContext.SaveChanges();
-            _cacheHelper.ClearCache(clubId, userName);
-        }
 
         public ShowPlayerViewModel GetSingle(Guid clubId, string name)
         {

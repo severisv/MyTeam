@@ -32,21 +32,6 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public JsonResult TogglePlayerTeam(Guid teamId, Guid playerId)
-        {
-            if (ModelState.IsValid)
-            {
-                _playerService.TogglePlayerTeam(teamId, playerId, Club.Id);
-                var reponse = new { Success = true };
-                return new JsonResult(reponse);
-            }
-
-            var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
-        }
-
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
         public JsonResult UpdateEventDescription(Guid eventId, string description)
         {
             if (ModelState.IsValid)
