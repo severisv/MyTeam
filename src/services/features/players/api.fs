@@ -8,4 +8,4 @@ module PlayerApi =
 
     let list clubId (ctx: HttpContext) =
         Queries.list ctx.ConnectionString clubId
-        |> json, ctx
+        |> json

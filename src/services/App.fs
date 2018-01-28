@@ -27,12 +27,17 @@ module App =
                                 route "/api/members" >-> MemberApi.list club.Id
                                 route "/api/members/facebookids" >-> MemberApi.getFacebookIds club.Id
                             ]
-                        PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
-                            choose [ 
-                                routef "/api/members/%s/status" (parseGuid >> MemberApi.setStatus club.Id)
-                                routef "/api/members/%s/togglerole" (parseGuid >> MemberApi.toggleRole club.Id)
-                                routef "/api/members/%s/toggleteam" (parseGuid >> MemberApi.toggleTeam club.Id)
-                            ]
+                        mustBeInRole [Role.Admin; Role.Trener] >=> 
+                            PUT >=> 
+                                choose [ 
+                                    routef "/api/members/%s/status" (parseGuid >> MemberApi.setStatus club.Id)
+                                    routef "/api/members/%s/togglerole" (parseGuid >> MemberApi.toggleRole club.Id)
+                                    routef "/api/members/%s/toggleteam" (parseGuid >> MemberApi.toggleTeam club.Id)
+                                ]       
+                            POST >=>  
+                                choose [ 
+                                    route "/api/members" >-> MemberApi.add club.Id
+                                ]                                             
                        ] next ctx
                 | None ->
                     choose [

@@ -7,15 +7,14 @@ open Giraffe
 
 module MemberApi =
 
-    
     let list clubId (ctx: HttpContext) =
         Queries.list ctx.Database clubId
-        |> json, ctx
+        |> json
 
 
     let getFacebookIds clubId (ctx: HttpContext) =
         Queries.getFacebookIds ctx.Database clubId
-        |> json, ctx
+        |> json
 
 
     [<CLIMutable>]
@@ -47,3 +46,10 @@ module MemberApi =
             let model = ctx.BindJson<ToggleTeam>()
             Persistence.toggleTeam ctx.Database clubId id model.TeamId
             next ctx            
+
+
+
+    let add clubId (ctx: HttpContext) =
+            ctx.BindJson<AddMemberForm>() 
+            |> Persistence.add ctx.Database clubId
+            |> json                

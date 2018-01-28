@@ -68,3 +68,7 @@ module Persistence =
             
             db.SaveChanges() |> ignore         
             
+
+    let add : Add =
+        fun db clubId form ->
+        Ok ()       

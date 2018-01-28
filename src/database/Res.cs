@@ -7,7 +7,6 @@ namespace MyTeam.Resources
     public class Res
     {
 
-        public const string Admin = "Admin";
         public const string Actions = "Handlinger";
         public const string Attending = "Kommer";
         public const string Attendance = "Oppmøte";
@@ -98,15 +97,9 @@ namespace MyTeam.Resources
         public const string Signup = "Påmelding";
 
         public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
-        public static string SignupNotAllowed = $"Man kan ikke melde seg på arrangementer lengre enn {Settings.Config.AllowedSignupDays} dager frem i tid";
-        public const string Submenu = "Undermeny";
         public const string Upcoming = "Kommende";
-        public const string Password = "Passord";
         public const string Previous = "Tidligere";
-        public const string Pluralise = "er";
         public const string Players = "Spillere";
-        public const string Position = "Pos";
-        public const string Save = "Lagre";
         public const string SquadList = "Lagliste";
         public const string SubmitTable = "Lim inn tabell på formatet \n" +
                                           "Plass   Lag       Kamper   [  Hjemme  ]    [  Borte  ]     [   Total    ]  Diff  Poeng    \neks:\n\n" +
@@ -136,19 +129,12 @@ namespace MyTeam.Resources
 "02.06.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t0 : 7	\tAsker 2	\tJordal kunstgress\n" +
 "09.06.2015	\ttirsdag	\t20:15\t	Oslojuvelene	\t4 : 0	\tWam-Kam \tBjølsen kunstgress\n" +
 "16.06.2015	\ttirsdag	\t20:15\t	Wam-Kam	\t3 : 5	\tVollen \tJordal kunstgress \n" +
-"04.08.2015	\ttirsdag	\t20:15\t	Høybr/Stovn	\t3 : 2	\tWam-Kam \tHøybråten kunstgress";                                          
-                                                                                                                                           
+"04.08.2015	\ttirsdag	\t20:15\t	Høybr/Stovn	\t3 : 2	\tWam-Kam \tHøybråten kunstgress";
 
-       public const string Time = "Klokkeslett";
-       public const string Training = "Trening";
-       public const string Trainings = "Treninger";
-       public const string ToDate = "Til dato";
-       public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
-       public const string Unauthorized = "Ingen tilgang";
-       public const string Update = "Oppdater";
-        public const string User = "Bruker";
-        public const string Voluntary = "Frivillig";
-        public const string Win = "Seier";
+
+        public const string Time = "Klokkeslett";
+        public const string ToDate = "Til dato";
+        public const string TrainingCreationTooFarAheadInTime = "Kan ikke opprette treninger så langt frem i tid";
         public const string YellowCard = "Gult kort";
 
 
