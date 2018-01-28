@@ -3,11 +3,16 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './lib/jquery.tablesorter.min'
 import '../stylesheets/style.less'
 
-window.AddPlayers = require('./reactComponents/AddPlayers/AddPlayers.jsx')
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers.jsx'
+import AddPlayers from './reactComponents/AddPlayers/AddPlayers.jsx'
+
 window.EmailAdd = require('./reactComponents/AddPlayers/EmailAdd.jsx')
 window.FacebookAdd = require('./reactComponents/AddPlayers/FacebookAdd.jsx')
 window.ManagePlayer = require('./reactComponents/ManagePlayers/ManagePlayer.jsx')
-window.ManagePlayers = require('./reactComponents/ManagePlayers/ManagePlayers.jsx')
+
 window.AddPlayerToSquad = require('./reactComponents/RegisterResult/AddPlayerToSquad.jsx')
 window.ListEvents = require('./reactComponents/RegisterResult/ListEvents.jsx')
 window.ListSquad = require('./reactComponents/RegisterResult/ListSquad.jsx')
@@ -22,3 +27,13 @@ window.mt_fb = require('./facebook')
 window.global = require('./global')
 window.layout = require('./layout')
 window.mt = require('./myteam')
+
+const render = (Component, target) => {
+  const element = document.getElementById(target)
+  if (element) {
+    ReactDOM.render(<Component />, element)
+  }
+}
+
+render(ManagePlayers, 'manage-players')
+render(AddPlayers, 'add-players')

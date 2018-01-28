@@ -34,17 +34,17 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [Route("spillerinvitasjon")]
-        public JsonResult AddPlayer(AddPlayerViewModel model)
+        public JsonResult AddPlayer([FromBody]AddPlayerViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var response = _playerService.Add(Club.ClubId, model.FacebookId, model.FirstName, model.MiddleName, model.LastName, model.EmailAddress);
                 return new JsonResult(response);
-           }
+            }
 
             var validationMessage = string.Join(" ,", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return new JsonResult(JsonResponse.ValidationFailed(validationMessage));
         }
-        
+
     }
-}  
+}

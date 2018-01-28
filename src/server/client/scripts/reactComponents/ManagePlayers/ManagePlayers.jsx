@@ -1,87 +1,88 @@
-﻿const React = require('react')
+﻿import React from 'react'
 
 import { put } from '../../api'
 
-export default React.createClass({
-  getInitialState() {
-    return {
+export default class ManagePlayers extends React.Component {
+  constructor() {
+    super()
+    this.state = {
       players: [],
       teams: [],
       collapsedSections: ['Sluttet'],
     }
-  },
+  }
 
   componentWillMount() {
-    (this.routes = Routes),
-    (this.options = {
-      playerStatus: PlayerStatus,
-      playerRoles: PlayerRoles,
-    })
-  },
+    ;(this.routes = Routes),
+      (this.options = {
+        playerStatus: PlayerStatus,
+        playerRoles: PlayerRoles,
+      })
+  }
 
   componentDidMount() {
     const that = this
-    $.getJSON('/api/members').then((response) => {
+    $.getJSON('/api/members').then(response => {
       that.setState({
         players: response,
       })
     })
 
-    $.getJSON('/api/teams').then((teams) => {
+    $.getJSON('/api/teams').then(teams => {
       that.setState({
         teams,
       })
     })
-  },
+  }
 
-  togglePlayerRole(player, role) {
-    const that = this
+  togglePlayerRole = (player, role) => {
+    const state = this.state
     put(`/api/members/${player.id}/togglerole`, {
       Role: role,
-    }).then((response) => {
-      const players = that.state.players
-      for (const i in that.state.players) {
+    }).then(response => {
+      const players = state.players
+      for (const i in state.players) {
         if (players[i].id == player.id) {
           const index = players[i].roles.indexOf(role)
           if (index > -1) {
-            that.state.players[i].roles.splice(index, 1)
+            state.players[i].roles.splice(index, 1)
           } else {
-            that.state.players[i].roles.push(role)
+            state.players[i].roles.push(role)
           }
         }
       }
-      that.forceUpdate()
+      this.forceUpdate()
     })
-  },
-  setPlayerStatus(player, status) {
-    const that = this
+  }
+  setPlayerStatus = (player, status) => {
+    const state = this.state
     put(`/api/members/${player.id}/status`, {
       Status: status,
-    }).then((response) => {
-      const players = that.state.players
-      for (const i in that.state.players) {
+    }).then(response => {
+      const players = state.players
+      for (const i in state.players) {
         if (players[i].id == player.id) {
-          that.state.players[i].status = status
+          state.players[i].status = status
         }
       }
-      that.forceUpdate()
+      this.forceUpdate()
     })
-  },
+  }
 
-  toggleSection(section) {
+  toggleSection = section => {
     const collapsedSections = this.state.collapsedSections
     collapsedSections.splice(this.state.collapsedSections.indexOf(section), 1)
 
     this.setState({
       collapsedSections,
     })
-  },
+  }
 
-  sectionIsCollapsed(section) {
+  sectionIsCollapsed = section => {
     return this.state.collapsedSections.indexOf(section) > -1
-  },
+  }
 
-  toggleTeam(teamId, playerId) {
+  toggleTeam = (teamId, playerId) => {
     const that = this
     put(`/api/members/${playerId}/toggleteam`, {
       TeamId: teamId,
@@ -99,12 +100,12 @@ export default React.createClass({
       }
       that.forceUpdate()
     })
-  },
+  }
 
-  renderPlayers(playerStatus, isCollapsed) {
+  renderPlayers = (playerStatus, isCollapsed) => {
     if (!this.state.players) return ''
 
-    const players = this.state.players.filter((player) => {
+    const players = this.state.players.filter(player => {
       if (player.status == playerStatus) {
         return player
       }
@@ -167,7 +168,7 @@ export default React.createClass({
         {!this.sectionIsCollapsed(playerStatus) ? <div>{playerElements}</div> : ''}
       </div>
     )
-  },
+  }
 
   render() {
     return (
@@ -179,5 +180,5 @@ export default React.createClass({
         {this.renderPlayers(this.options.playerStatus.Quit)}
       </div>
     )
-  },
-})
+  }
+}
