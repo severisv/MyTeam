@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 
 namespace MyTeam.ViewModels.Player
 {
@@ -58,7 +58,7 @@ namespace MyTeam.ViewModels.Player
 
         public EditPlayerViewModel()
         {
-            
+
         }
 
         public EditPlayerViewModel(ShowPlayerViewModel player)
@@ -85,17 +85,17 @@ namespace MyTeam.ViewModels.Player
             }
             if (StartDate.AsDate() == null)
             {
-                result.Add(new ValidationResult("Startdato må være på formatet dd.mm.åååå",  new[] { nameof(StartDate) }));
+                result.Add(new ValidationResult("Startdato må være på formatet dd.mm.åååå", new[] { nameof(StartDate) }));
             }
             if (BirthDate.AsDate() == null)
             {
-                result.Add(new ValidationResult("Fødselsdato må være på formatet dd.mm.åååå",  new[] { nameof(BirthDate) }));
+                result.Add(new ValidationResult("Fødselsdato må være på formatet dd.mm.åååå", new[] { nameof(BirthDate) }));
             }
-            if (StartDate.AsDate() < new DateTime(2007,01,01))
+            if (StartDate.AsDate() < new DateTime(2007, 01, 01))
             {
-                result.Add(new ValidationResult("Første mulige startdato er i 2007",  new[] { nameof(StartDate) }));
+                result.Add(new ValidationResult("Første mulige startdato er i 2007", new[] { nameof(StartDate) }));
             }
-            if (BirthDate.AsDate() < new DateTime(1945,01,01))
+            if (BirthDate.AsDate() < new DateTime(1945, 01, 01))
             {
                 result.Add(new ValidationResult("Fødselsdatoen må være en troverdig dato", new[] { nameof(BirthDate) }));
             }

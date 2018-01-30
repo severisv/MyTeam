@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 
 namespace MyTeam.ViewModels.Payment
 {
@@ -18,8 +18,8 @@ namespace MyTeam.ViewModels.Payment
         public Guid MemberId { get; set; }
         public DateTime TimeStamp { get; set; }
         [RequiredNO]
-        [Display(Name = "Beløp")]
-        [Range(1, 1000000, ErrorMessage = "Innbetalingen må være på mer enn 0")]
+        [Display(Name = "Belï¿½p")]
+        [Range(1, 1000000, ErrorMessage = "Innbetalingen mï¿½ vï¿½re pï¿½ mer enn 0")]
 
         public int Amount { get; set; }
         public string Comment { get; set; }

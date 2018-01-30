@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MyTeam.Resources;
 
-namespace MyTeam.Validation.Attributes
+namespace MyTeam
 {
     public class RequiredNO : RequiredAttribute
     {
-        public RequiredNO(): base()
+        public RequiredNO() : base()
         {
             ErrorMessage = "{0} " + Res.IsRequired.ToLower();
         }

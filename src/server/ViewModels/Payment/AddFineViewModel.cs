@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Models.Dto;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 using MyTeam.ViewModels.RemedyRate;
 
 namespace MyTeam.ViewModels.Payment
@@ -15,7 +15,7 @@ namespace MyTeam.ViewModels.Payment
         [Display(Name = "Dato")]
         public DateTime? Date { get; set; }
 
-        [Display(Name = "Beløp")]
+        [Display(Name = "Belï¿½p")]
         [RequiredNO]
         public int? Amount { get; set; }
 

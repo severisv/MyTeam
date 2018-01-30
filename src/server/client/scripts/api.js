@@ -9,7 +9,12 @@ function call(method, url, payload) {
       Accept: 'application/json',
     },
     body: JSON.stringify(payload),
-  }).then(result => result.json())
+  }).then((result) => {
+    if (result.status >= 200 && result.status < 300) {
+      return result.json()
+    }
+    return result.json().then(payload => Promise.reject({ status: result.status, payload }))
+  })
 }
 
 export const post = (url, payload) => call('POST', url, payload)

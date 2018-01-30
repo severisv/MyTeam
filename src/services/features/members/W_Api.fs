@@ -3,6 +3,7 @@ namespace MyTeam
 open MyTeam.Members
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam
 open Giraffe 
 
 module MemberApi =
@@ -48,8 +49,8 @@ module MemberApi =
             next ctx            
 
 
-
-    let add clubId (ctx: HttpContext) =
+           
+    let add clubId next (ctx: HttpContext) =
             ctx.BindJson<AddMemberForm>() 
-            |> Persistence.add ctx.Database clubId
-            |> json                
+            |> Persistence.add ctx.Database clubId            
+            |> fromResult next ctx

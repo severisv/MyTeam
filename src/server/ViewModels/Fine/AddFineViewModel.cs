@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 using System.Collections.Generic;
 using MyTeam.ViewModels.RemedyRate;
 using MyTeam.Models.Dto;

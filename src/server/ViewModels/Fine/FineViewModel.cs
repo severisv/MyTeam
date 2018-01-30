@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 
 namespace MyTeam.ViewModels.Fine
 {
@@ -19,7 +19,7 @@ namespace MyTeam.ViewModels.Fine
         public DateTime Issued { get; set; }
         [RequiredNO]
         [Display(Name = "Sats")]
-        [Range(1, 1000000, ErrorMessage = "Boten må være på mer enn 0")]
+        [Range(1, 1000000, ErrorMessage = "Boten mï¿½ vï¿½re pï¿½ mer enn 0")]
 
         public int Rate { get; set; }
         public string Comment { get; set; }

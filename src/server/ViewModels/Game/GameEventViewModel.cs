@@ -1,7 +1,7 @@
 using System;
 using MyTeam.Extensions;
 using MyTeam.Models.Enums;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 
 namespace MyTeam.ViewModels.Game
 {

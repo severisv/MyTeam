@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Filters;
 using MyTeam.Models.Domain;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 using MyTeam.ViewModels.Game;
 
 namespace MyTeam.ViewModels.News

@@ -29,29 +29,35 @@ export default class AddPlayers extends React.Component {
     if (validationMessage) this.setState({ validationMessage })
     else if (!state.isSubmitting) {
       this.setState({ isSubmitting: true })
-      post('/admin/spillerinvitasjon', {
+      post('/api/members', {
         FirstName: user.first_name,
         MiddleName: user.middle_name,
         LastName: user.last_name,
         FacebookId: user.id,
         EmailAddress: user.email,
-      }).then(data => {
-        if (data.validationMessage) {
-          this.setState({
-            validationMessage: data.validationMessage,
-            isSubmitting: false,
-          })
-        } else if (user.id) {
-          this.setState({
-            existingIds: state.existingIds.concat([user.id]),
-            isSubmitting: false,
-          })
-        } else {
-          this.setState({ validationMessage: '', isSubmitting: false })
-          mt.alert('success', data.successMessage)
-          this.clearEmailForm()
-        }
       })
+        .then(() => {
+          if (user.id) {
+            this.setState({
+              existingIds: state.existingIds.concat([user.id]),
+              isSubmitting: false,
+            })
+          } else {
+            this.setState({ validationMessage: '', isSubmitting: false })
+            mt.alert('success', 'Brukeren ble lagt til')
+            this.clearEmailForm()
+          }
+        })
+        .catch(error => {
+          if (error.status === 400) {
+            this.setState({
+              validationMessage: error.payload.map(validationError =>
+                validationError.errors.join(','),
+              ),
+              isSubmitting: false,
+            })
+          }
+        })
     }
   }
 

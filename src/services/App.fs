@@ -36,7 +36,7 @@ module App =
                                 ]       
                             POST >=>  
                                 choose [ 
-                                    route "/api/members" >-> MemberApi.add club.Id
+                                    route "/api/members" >=> MemberApi.add club.Id
                                 ]                                             
                        ] next ctx
                 | None ->

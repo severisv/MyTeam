@@ -8,7 +8,7 @@ using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Settings;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Events
@@ -29,8 +29,8 @@ namespace MyTeam.ViewModels.Events
         [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
         public string Time { get; set; }
         [Display(Name = Res.Time)]
-        
-        public DateTime DateTime => (Date.AsDate() ?? DateTime.MinValue) + (Time.AsTime()?? TimeSpan.Zero);
+
+        public DateTime DateTime => (Date.AsDate() ?? DateTime.MinValue) + (Time.AsTime() ?? TimeSpan.Zero);
         [Display(Name = Res.Location)]
         [RequiredNO]
         public string Location { get; set; }
@@ -65,10 +65,10 @@ namespace MyTeam.ViewModels.Events
         public GameType[] GameTypes => Enum.GetValues(typeof(GameType)).Cast<GameType>().ToArray();
 
         public bool IsEditMode => EventId.HasValue;
-        
+
         public bool HasOccured => IsEditMode && DateTime < DateTime.Now;
 
-        public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof (EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
+        public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof(EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
         public Guid? EventId { get; set; }
         public Guid ClubId { get; set; }
 
@@ -78,7 +78,7 @@ namespace MyTeam.ViewModels.Events
 
         public CreateEventViewModel()
         {
-            Time = new TimeSpan(19,30,0).ToString();
+            Time = new TimeSpan(19, 30, 0).ToString();
             Date = DateTime.Now.Date.AddDays(4).ToNoFull();
             Mandatory = true;
             IsHomeTeam = true;
@@ -167,7 +167,7 @@ namespace MyTeam.ViewModels.Events
             {
                 CreateEvent(Date)
             };
-            
+
             if (Recurring && ToDate.AsDate().HasValue)
             {
                 for (var date = Date.AsDate().Value.AddDays(7); date < ToDate.AsDate().Value.Date.AddDays(1); date = date.AddDays(7))
@@ -182,7 +182,7 @@ namespace MyTeam.ViewModels.Events
 
         private Event CreateEvent(string dateTime)
         {
-            var date = (DateTime) dateTime.AsDate();
+            var date = (DateTime)dateTime.AsDate();
             var eventId = EventId ?? Guid.NewGuid();
             var eventTeams = new List<EventTeam>();
             foreach (var id in TeamIds)
@@ -213,9 +213,9 @@ namespace MyTeam.ViewModels.Events
             ev.GameType = GameType;
             ev.IsHomeTeam = IsHomeTeam;
 
-          
+
             return ev;
         }
-        
+
     }
 }

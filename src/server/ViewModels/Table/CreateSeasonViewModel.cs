@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Resources;
-using MyTeam.Validation.Attributes;
+using MyTeam;
 
 namespace MyTeam.ViewModels.Table
 {

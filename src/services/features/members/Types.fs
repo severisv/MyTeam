@@ -19,7 +19,6 @@ type Member = {
 
 [<CLIMutable>]
 type AddMemberForm = {
-    TeamId: TeamId
     FacebookId: string 
     EmailAddress: string 
     FirstName: string

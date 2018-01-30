@@ -9,7 +9,6 @@ namespace MyTeam.Services.Domain
 {
     public interface IPlayerService
     {
-        JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress);
         void EditPlayer(EditPlayerViewModel model, Guid clubId);
         void AddEmailToPlayer(string facebookId, string email);
         IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null, bool includeCoaches = false);
