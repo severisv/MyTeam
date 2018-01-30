@@ -87,43 +87,46 @@ module Persistence =
                 ) 
                 |> Option.fold (fun _ v -> v.Email) ""
                                          
-            let members = Queries.members db clubId
-            let existingMember = 
-                        if form.FacebookId.HasValue then
-                            members |> Seq.tryFind(fun m -> m.FacebookId = form.FacebookId)
-                        else
-                            members |> Seq.tryFind(fun m -> m.UserName = form.EmailAddress)
-
-            match existingMember with
-            | Some _ -> Error (ValidationErrors [validationError "" "Brukeren er lagt til fra før"])
-            | None ->            
-
-                let form = if form.FacebookId.HasValue then
-                                { form with EmailAddress = getEmailFromFacebookId form.FacebookId }
-                           else 
-                              form                        
-
+            let memberDoesNotExist db (_, form) = 
+                let members = Queries.members db clubId
+                if form.FacebookId.HasValue then
+                    members |> Seq.tryFind(fun m -> m.FacebookId = form.FacebookId)
+                else
+                    members |> Seq.tryFind(fun m -> m.UserName = form.EmailAddress)
+                |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
+                |> Option.fold (fun _ v -> v) (Ok())                            
+           
+            let facebookIdOrEmailIsPresent (_, form) =
                 match form with
-                | { EmailAddress = ""; FacebookId = "" } -> Error (ValidationErrors [validationError "" "E-postadresse eller FacebookId må sendes inn"])
-                | __ ->
-                        form ==>
-                        [
-                           <@ form.EmailAddress @> >- [isValidEmail]
-                           <@ form.FirstName @> >- [isRequired]
-                           <@ form.LastName @> >- [isRequired]
-                        ] 
-                        => fun form -> 
-                               let (ClubId clubId) = clubId
-                               let memb = Player()
+                  | { EmailAddress = ""; FacebookId = "" } -> Error "E-postadresse eller FacebookId må sendes inn"
+                  | __ -> Ok()
 
-                               memb.ClubId <- clubId
-                               memb.FirstName <- form.FirstName
-                               memb.MiddleName <- form.MiddleName
-                               memb.LastName <- form.LastName
-                               memb.FacebookId <- form.FacebookId
-                               memb.UserName <- form.EmailAddress
-                               db.Players.Add(memb) |> ignore
-                               db.SaveChanges() |> ignore
-                               Ok ()
-                        
+
+            let form = if form.FacebookId.HasValue then
+                            { form with EmailAddress = getEmailFromFacebookId form.FacebookId }
+                       else 
+                          form                        
+          
+            form ==>
+            [
+               <@ form @> >- [facebookIdOrEmailIsPresent]
+               <@ form @> >- [memberDoesNotExist db]
+               <@ form.EmailAddress @> >- [isValidEmail]
+               <@ form.FirstName @> >- [isRequired]
+               <@ form.LastName @> >- [isRequired]
+            ] 
+            => fun form -> 
+                   let (ClubId clubId) = clubId
+                   let memb = Player()
+
+                   memb.ClubId <- clubId
+                   memb.FirstName <- form.FirstName
+                   memb.MiddleName <- form.MiddleName
+                   memb.LastName <- form.LastName
+                   memb.FacebookId <- form.FacebookId
+                   memb.UserName <- form.EmailAddress
+                   db.Players.Add(memb) |> ignore
+                   db.SaveChanges() |> ignore
+                   Ok ()
+                    
 
