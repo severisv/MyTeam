@@ -13,11 +13,10 @@ export default class ManagePlayers extends React.Component {
   }
 
   componentWillMount() {
-    ;(this.routes = Routes),
-      (this.options = {
-        playerStatus: PlayerStatus,
-        playerRoles: PlayerRoles,
-      })
+    this.options = {
+      playerStatus: PlayerStatus,
+      playerRoles: PlayerRoles,
+    }
   }
 
   componentDidMount() {
