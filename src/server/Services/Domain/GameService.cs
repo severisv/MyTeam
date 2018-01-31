@@ -73,25 +73,6 @@ namespace MyTeam.Services.Domain
             _cacheHelper.ClearNotificationCache(ev.ClubId);
         }
 
-        public void PublishGamePlan(Guid eventId)
-        {
-            var ev = _dbContext.Games.Single(e => e.Id == eventId);
-            ev.GamePlanIsPublished = true;
-            _dbContext.SaveChanges();
-        }
-
-        public string GetGamePlan(Guid eventId)
-            =>
-            _dbContext.Games.Where(e => e.Id == eventId).Select(g => g.GamePlan).Single();
-
-
-        public void SaveGamePlan(Guid eventId, string gamePlan)
-        {
-            var ev = _dbContext.Games.Single(e => e.Id == eventId);
-            ev.GamePlan = gamePlan;
-            _dbContext.SaveChanges();
-        }
-
         public IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName)
         {
             var startDate = new DateTime(year, 1, 1);
@@ -149,20 +130,6 @@ namespace MyTeam.Services.Domain
                   GameType = e.GameType
               }).ToList().SingleOrDefault();
 
-
-        public IEnumerable<PlayerViewModel> GetSquad(Guid gameId) =>
-             _dbContext.EventAttendances.Where(e => e.EventId == gameId && e.IsSelected)
-                    .Select(g => new PlayerViewModel
-                    {
-                        Id = g.Member.Id,
-                        FirstName = g.Member.FirstName,
-                        MiddleName = g.Member.MiddleName,
-                        LastName = g.Member.LastName,
-                        FullName = g.Member.Fullname,
-                        UrlName = g.Member.UrlName
-                    })
-                    .ToList()
-                    .OrderBy(p => p.FullName);
 
         public void AddGames(List<ParsedGame> games, Guid clubId)
         {

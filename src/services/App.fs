@@ -38,12 +38,22 @@ module App =
                                 choose [ 
                                     route "/api/members" >=> MemberApi.add club.Id
                                 ]
+                        GET >=> 
+                            choose [
+                                routef "/api/games/%s/squad" (parseGuid >> GameApi.getSquad club.Id)
+                            ]                             
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                             POST >=> 
                                 choose [ 
                                     routef "/api/games/%s/score/home" (parseGuid >> GameApi.setHomeScore club.Id)
-                                    routef "/api/games/%s/score/away" (parseGuid >> GameApi.setAwayScore club.Id)
-                                ]                                                                                                                                    
+                                    routef "/api/games/%s/score/away" (parseGuid >> GameApi.setAwayScore club.Id)                                   
+                                ]     
+                        mustBeInRole [Role.Trener] >=> 
+                            POST >=> 
+                                choose [                                
+                                    routef "/api/games/%s/gameplan" (parseGuid >> GameApi.setGamePlan club.Id)
+                                    routef "/api/games/%s/gameplan/publish" (parseGuid >> GameApi.publishGamePlan club.Id)
+                                ]                                                                                                                                                                               
                        ] next ctx
                 | None ->
                     choose [

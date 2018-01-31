@@ -6,7 +6,6 @@ const element = $('#game-showEvents')
 if (element.length) {
   const registerEvents = React.createElement(window.ShowGame, {
     routes: {
-      GET_SQUAD: element.data('get-squad-url'),
       GET_EVENTTYPES: element.data('get-gameeventtypes-url'),
       ADD_EVENT: element.data('add-gameevent-url'),
       GET_EVENTS: element.data('get-gameevents-url'),

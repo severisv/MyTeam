@@ -18,6 +18,7 @@ module.exports = React.createClass({
 
   componentDidMount() {
     const that = this
+    const { props, state } = this
     $.getJSON(that.props.routes.GET_EVENTS).then((response) => {
       that.setState({
         events: response,
@@ -39,7 +40,7 @@ module.exports = React.createClass({
       })
     })
 
-    $.getJSON(that.props.routes.GET_SQUAD).then((response) => {
+    $.getJSON(`/api/games/${props.gameId}/squad`).then((response) => {
       that.setState({
         squad: response,
         loadingPlayers: false,

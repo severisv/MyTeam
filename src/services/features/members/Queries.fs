@@ -15,8 +15,7 @@ module Queries =
     let list : ListMembers =
         fun db clubId ->         
             (members db clubId).Include(fun p -> p.MemberTeams) 
-            |> Seq.toList
-            |> List.map(fun p -> 
+            |> Seq.map(fun p -> 
                             {
                                 Id = p.Id
                                 FirstName = p.FirstName
@@ -30,6 +29,7 @@ module Queries =
                                                 |> Seq.toList
                             }
                     )
+            |> Seq.toList                
 
     let getFacebookIds : GetFacebookIds =
         fun db clubId ->         

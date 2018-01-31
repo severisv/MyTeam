@@ -41,7 +41,6 @@
         </div>
         <div id="registerResult-addEvent"
                      data-gameid="@Model.Game.Id"
-                     data-get-squad-url="@Url.Action("GetSquad", "GameApi", new {gameId = Model.Game.Id})"
                      data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
                      data-add-gameevent-url="@Url.Action("Add", "GameEventApi", new {gameId = Model.Game.Id})"
                      data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"

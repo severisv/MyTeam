@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom'
 
 import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers.jsx'
 import AddPlayers from './reactComponents/AddPlayers/AddPlayers.jsx'
+import GamePlan from './reactComponents/GamePlan/GamePlan.jsx'
 
 import ajax from './ajaxHelpers'
 import global from './global'
@@ -24,7 +25,6 @@ window.ListSquad = require('./reactComponents/RegisterResult/ListSquad.jsx')
 window.RegisterEvents = require('./reactComponents/RegisterResult/RegisterEvents.jsx')
 window.AddPlayerToSquad = require('./reactComponents/RegisterResult/AddPlayerToSquad.jsx')
 window.ShowGame = require('./reactComponents/RegisterResult/ShowGame.jsx')
-window.GamePlan = require('./reactComponents/GamePlan/GamePlan.jsx')
 
 window.checkbox = require('./checkbox')
 window.mt_fb = require('./facebook')
@@ -36,9 +36,10 @@ window.mt = require('./myteam')
 const render = (Component, target) => {
   const element = document.getElementById(target)
   if (element) {
-    ReactDOM.render(<Component />, element)
+    ReactDOM.render(<Component {...$(element).data()} />, element)
   }
 }
 
 render(ManagePlayers, 'manage-players')
 render(AddPlayers, 'add-players')
+render(GamePlan, 'gameplan')

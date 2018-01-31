@@ -33,3 +33,28 @@ module GameApi =
             db.SaveChanges() |> ignore
             next ctx
 
+
+
+    let getSquad clubId gameId next (ctx: HttpContext) =
+        (Queries.getSquad ctx.Database clubId gameId
+         |> json) next ctx
+
+
+    [<CLIMutable>]
+    type GamePlanModel = { GamePlan: string }
+    let setGamePlan clubId gameId next (ctx: HttpContext) =
+        let model = ctx.BindJson<GamePlanModel>()
+        let game = Queries.games ctx.Database clubId
+                  |> Seq.find(fun g -> g.Id = gameId)
+        game.GamePlan <- model.GamePlan
+        ctx.Database.SaveChanges() |> ignore
+        next ctx
+
+    let publishGamePlan clubId gameId next (ctx: HttpContext) =
+        let db = ctx.Database
+        let game = Queries.games ctx.Database clubId
+                  |> Seq.find(fun g -> g.Id = gameId)
+
+        game.GamePlanIsPublished <- Nullable true
+        db.SaveChanges() |> ignore
+        next ctx

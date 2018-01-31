@@ -18,8 +18,7 @@ module Framework =
                                     let! result = ctx.BindJsonAsync<'T>()
                                     return result
                                 }
-                        task.ConfigureAwait(false).GetAwaiter().GetResult()              
-
+                        task.ConfigureAwait(false).GetAwaiter().GetResult()      
 
 
     type ValidationError = {

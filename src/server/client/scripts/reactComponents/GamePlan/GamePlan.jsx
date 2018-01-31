@@ -1,10 +1,13 @@
-const React = require('react')
-const PlayerInput = require('./PlayerInput.jsx')
+import React from 'react'
 
-module.exports = React.createClass({
-  getInitialState() {
-    if (this.props.gameplan) return this.props.gameplan
-    return {
+import { get, post } from '../../api'
+
+import PlayerInput from './PlayerInput.jsx'
+
+export default class GamePlan extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = props.gameplan || {
       rows: [
         {
           time: 0,
@@ -23,9 +26,9 @@ module.exports = React.createClass({
       ],
       errorMessage: undefined,
     }
-  },
+  }
 
-  setPlayer(i, key, event, input) {
+  setPlayer = (i, key, event, input) => {
     const value = input ? input.newValue : event.target.value
 
     const rows = this.state.rows
@@ -33,9 +36,9 @@ module.exports = React.createClass({
     this.setState({
       rows,
     })
-  },
+  }
 
-  setTime(i, input) {
+  setTime = (i, input) => {
     const rows = this.state.rows
     const value = parseInt(input.target.value)
     if (isNaN(value)) rows[i].time = ''
@@ -43,56 +46,53 @@ module.exports = React.createClass({
     this.setState({
       rows,
     })
-  },
+  }
 
-  duplicateRow() {
+  duplicateRow = () => {
     const rows = this.state.rows
     rows.push(JSON.parse(JSON.stringify(rows[rows.length - 1])))
     this.setState({
       rows,
     })
-  },
+  }
 
-  removeRow(i) {
+  removeRow = i => {
     const rows = this.state.rows
     rows.splice(i, 1)
     this.setState({
       rows,
     })
     this.save()
-  },
+  }
 
-  save() {
+  save = () => {
     const that = this
     if (this.props.iscoach == 'True') {
-      $.post('/gameapi/savegameplan', {
-        gameId: this.props.gameid,
+      post(`/api/games/${that.props.gameid}/gameplan`, {
         gamePlan: JSON.stringify(that.state),
       })
-        .done(() => {
+        .then(response => {
           that.setState({ errorMessage: undefined })
         })
-        .fail(() => {
+        .catch(() => {
           that.setState({ errorMessage: 'Feil ved lagring' })
         })
     }
-  },
+  }
 
-  publish() {
+  publish = () => {
     const that = this
     that.setState({ isPublishing: true })
-    $.post('/gameapi/publishgameplan', {
-      gameId: that.props.gameid,
-    })
-      .done(() => {
+    post(`/api/games/${that.props.gameid}/gameplan/publish`)
+      .then(() => {
         that.setState({ errorMessage: undefined, isPublishing: undefined, isPublished: true })
       })
-      .fail(() => {
+      .catch(() => {
         that.setState({ errorMessage: 'Feil ved publisering' })
       })
-  },
+  }
 
-  renderPlayerInput(lineup, i, position) {
+  renderPlayerInput = (lineup, i, position) => {
     const player = this.props.players.filter(p => p.Name == lineup[position])[0]
     return (
       <div className="gp-square">
@@ -114,7 +114,7 @@ module.exports = React.createClass({
         )}
       </div>
     )
-  },
+  }
 
   render() {
     const that = this
@@ -146,10 +146,10 @@ module.exports = React.createClass({
                 </div>
                 <button
                   className={
-                      that.props.iscoach == 'True' && that.state.rows.length > 1
-                        ? 'pull-right hidden-print'
-                        : 'hidden'
-                    }
+                    that.props.iscoach == 'True' && that.state.rows.length > 1
+                      ? 'pull-right hidden-print'
+                      : 'hidden'
+                  }
                   onBlur={that.save}
                   onClick={that.removeRow.bind(null, i)}
                 >
@@ -204,7 +204,7 @@ module.exports = React.createClass({
                 </div>
                 <hr />
               </div>
-              ))}
+            ))}
             <div className="text-center">
               <button
                 className={that.props.iscoach == 'True' ? 'btn btn-primary hidden-print' : 'hidden'}
@@ -224,9 +224,9 @@ module.exports = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
-  renderDiff(i) {
+  renderDiff = i => {
     if (i < 1) return <div />
     const previous = this.state.rows[i - 1]
     const current = this.state.rows[i]
@@ -273,29 +273,28 @@ module.exports = React.createClass({
     const subsOut = subs.filter(sub => !sub.in)
     const pairs = subs.filter(sub => sub.in && sub.out)
 
-    console.log(subsIn)
-    console.log(subsOut)
-
-    const result = pairs.concat(subsIn.map((sub, index) => {
-      const subOut = subsOut[index]
-      return { in: sub.in, out: subOut ? subOut.out : undefined, positionChange: true }
-    }))
+    const result = pairs.concat(
+      subsIn.map((sub, index) => {
+        const subOut = subsOut[index]
+        return { in: sub.in, out: subOut ? subOut.out : undefined, positionChange: true }
+      }),
+    )
 
     return (
       <div>
         {result.map(sub => (
           <div className="text-center gp-subs" key={sub.in + sub.out}>
             <span className="gameplan-sub-in">{sub.in}</span>
-              &nbsp;=&gt;&nbsp;
+            &nbsp;=&gt;&nbsp;
             <span className="gameplan-sub-out">{sub.out}</span>
             {sub.positionChange ? '*' : ''}
           </div>
-          ))}
+        ))}
       </div>
     )
-  },
+  }
 
-  renderGameTime() {
+  renderGameTime = () => {
     const gameTime = []
     const rows = this.state.rows
     for (const index in rows) {
@@ -343,8 +342,8 @@ module.exports = React.createClass({
       result.push(getPlayerTime(player, total[player.Name]))
     }
     return <div>{result}</div>
-  },
-  renderPublishButton() {
+  }
+  renderPublishButton = () => {
     if (this.props.iscoach == 'False') return ''
     if (this.state.isPublished || this.props.ispublished == 'True') {
       return (
@@ -363,5 +362,5 @@ module.exports = React.createClass({
         </button>
       </div>
     )
-  },
-})
+  }
+}
