@@ -65,7 +65,7 @@ namespace MyTeam.Controllers
         {
             _fineService.Delete(rateId);
 
-            return RedirectToAction("List", new { aar, memberId } );
+            return RedirectToAction("List", new { aar, memberId });
         }
 
         [Route("leggtil")]
@@ -83,11 +83,16 @@ namespace MyTeam.Controllers
             return PartialView("_Show", null);
         }
 
-      
+
+        public class SetPaymentInfoModel
+        {
+            public string value;
+        }
+
         [Route("betalingsinformasjon")]
         [HttpPost]
         [RequireMember(Roles.Finemaster)]
-        public void SetPaymentInfo(string value) => _fineService.UpdatePaymentInformation(Club.Id, value);        
+        public void SetPaymentInfo([FromBody] SetPaymentInfoModel value) => _fineService.UpdatePaymentInformation(Club.Id, value.value);
 
     }
 }

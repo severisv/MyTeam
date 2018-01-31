@@ -9,6 +9,11 @@ import ReactDOM from 'react-dom'
 import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers.jsx'
 import AddPlayers from './reactComponents/AddPlayers/AddPlayers.jsx'
 
+import ajax from './ajaxHelpers'
+import global from './global'
+
+window.ajax = ajax
+
 window.EmailAdd = require('./reactComponents/AddPlayers/EmailAdd.jsx')
 window.FacebookAdd = require('./reactComponents/AddPlayers/FacebookAdd.jsx')
 window.ManagePlayer = require('./reactComponents/ManagePlayers/ManagePlayer.jsx')
@@ -21,10 +26,10 @@ window.AddPlayerToSquad = require('./reactComponents/RegisterResult/AddPlayerToS
 window.ShowGame = require('./reactComponents/RegisterResult/ShowGame.jsx')
 window.GamePlan = require('./reactComponents/GamePlan/GamePlan.jsx')
 
-require('./ajaxHelpers')
 window.checkbox = require('./checkbox')
 window.mt_fb = require('./facebook')
-window.global = require('./global')
+
+window.global = global
 window.layout = require('./layout')
 window.mt = require('./myteam')
 

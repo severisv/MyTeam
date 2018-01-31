@@ -1,8 +1,10 @@
-﻿const ANIMATION_DURATON = 300
-let global = global || {}
-const ajax = require('./ajaxHelpers')
-const ReactDOM = require('react-dom')
-const React = require('react')
+﻿import ajax from './ajaxHelpers'
+
+import ReactDOM from 'react-dom'
+import React from 'react'
+
+const ANIMATION_DURATON = 300
+const global = global || {}
 
 global.React = React
 global.ReactDOM = ReactDOM
@@ -155,4 +157,4 @@ function isIEOrEdge() {
   return false
 }
 
-module.exports = global
+export default global

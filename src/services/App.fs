@@ -37,7 +37,13 @@ module App =
                             POST >=>  
                                 choose [ 
                                     route "/api/members" >=> MemberApi.add club.Id
-                                ]                                             
+                                ]
+                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
+                            POST >=> 
+                                choose [ 
+                                    routef "/api/games/%s/score/home" (parseGuid >> GameApi.setHomeScore club.Id)
+                                    routef "/api/games/%s/score/away" (parseGuid >> GameApi.setAwayScore club.Id)
+                                ]                                                                                                                                    
                        ] next ctx
                 | None ->
                     choose [

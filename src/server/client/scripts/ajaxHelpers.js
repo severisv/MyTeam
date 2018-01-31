@@ -1,4 +1,6 @@
-﻿var ajax = ajax || {}
+﻿import { post } from './api'
+
+var ajax = ajax || {}
 
 ajax.applyFormUpdateListener = function ($scope) {
   let typingTimer
@@ -8,14 +10,14 @@ ajax.applyFormUpdateListener = function ($scope) {
     const value = element.val()
     clearTimeout(typingTimer)
     typingTimer = setTimeout(() => {
-      $.post(element.data('href'), { value })
+      post(element.data('href'), { value })
     }, 500)
   })
   updateElements.on('blur', function () {
     const element = $(this)
     const value = element.val()
     clearTimeout(typingTimer)
-    $.post(element.data('href'), { value })
+    post(element.data('href'), { value })
   })
 }
 
@@ -141,4 +143,4 @@ ajax.applyAjaxLinkListeners = function ($scope) {
   })
 }
 
-module.exports = ajax
+export default ajax
