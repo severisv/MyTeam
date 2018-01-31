@@ -1,6 +1,7 @@
 namespace MyTeam
 
 open Giraffe
+open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore.Builder
 open MyTeam
 open MyTeam.Domain
@@ -53,7 +54,8 @@ module App =
                                 choose [                                
                                     routef "/api/games/%s/gameplan" (parseGuid >> GameApi.setGamePlan club.Id)
                                     routef "/api/games/%s/gameplan/publish" (parseGuid >> GameApi.publishGamePlan club.Id)
-                                ]                                                                                                                                                                               
+                                ]
+                        GET >=> route "/about" >=> (renderHtml AboutPages.index)                                                                                                                                                                                                           
                        ] next ctx
                 | None ->
                     choose [

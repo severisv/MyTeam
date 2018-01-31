@@ -10,23 +10,15 @@ namespace MyTeam.Controllers
     public class AboutController : BaseController
     {
 
-        private readonly IAboutService _aboutService;
-
-        public AboutController(IAboutService aboutService)
-        {
-            _aboutService = aboutService;
-        }
-
-
         [Route("")]
         public IActionResult Index()
         {
-         
+
             return View("Index");
         }
-        
+
 
     }
 
-    
+
 }

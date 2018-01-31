@@ -21,13 +21,14 @@
     <Compile Include="features/common/Users.fs" />
     <Compile Include="features/common/Tenant.fs" />
     <Compile Include="features/common/Authorization.fs" />
+    <Compile Include="features/common/views/*.fs" />
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/Queries.fs" />
     <Compile Include="features/*/Persistence.fs" />
     <Compile Include="features/*/W_Persistence.fs" />
     <Compile Include="features/*/Api.fs" />
     <Compile Include="features/*/W_Api.fs" />
-    <Compile Include="features/*/Views.fs" />
+    <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
 
