@@ -41,7 +41,7 @@ namespace MyTeam.Services.Domain
             }
             _dbContext.SaveChanges();
         }
-        
+
 
         public RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId)
         {
@@ -83,7 +83,7 @@ namespace MyTeam.Services.Domain
         public string GetGamePlan(Guid eventId)
             =>
             _dbContext.Games.Where(e => e.Id == eventId).Select(g => g.GamePlan).Single();
-        
+
 
         public void SaveGamePlan(Guid eventId, string gamePlan)
         {
@@ -94,8 +94,8 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName)
         {
-            var startDate = new DateTime(year, 1,1);
-            var endDate = new DateTime(year, 12,31);
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year, 12, 31);
 
             var games = _dbContext.Games
                 .Where(e => e.TeamId == teamId)
@@ -104,7 +104,7 @@ namespace MyTeam.Services.Domain
                 {
                     DateTime = e.DateTime,
                     Opponent = e.Opponent,
-                    Teams = new List<string> {teamName},
+                    Teams = new List<string> { teamName },
                     Id = e.Id,
                     GamePlanIsPublished = e.GamePlanIsPublished,
                     HomeScore = e.HomeScore,
@@ -124,7 +124,7 @@ namespace MyTeam.Services.Domain
             var years = _dbContext.Games
                 .Where(e => e.TeamId == teamId)
                 .Select(e => e.DateTime.Year).ToList().Distinct();
-            
+
             return years.Select(y => new SeasonViewModel
             {
                 Year = y
@@ -148,18 +148,7 @@ namespace MyTeam.Services.Domain
                   Location = e.Location,
                   GameType = e.GameType
               }).ToList().SingleOrDefault();
-        
 
-        public void SetHomeScore(Guid gameId, int? value)
-        {
-            _dbContext.Games.Single(g => g.Id == gameId).HomeScore = value;
-            _dbContext.SaveChanges();
-        }
-        public void SetAwayScore(Guid gameId, int? value)
-        {
-            _dbContext.Games.Single(g => g.Id == gameId).AwayScore = value;
-            _dbContext.SaveChanges();
-        }
 
         public IEnumerable<PlayerViewModel> GetSquad(Guid gameId) =>
              _dbContext.EventAttendances.Where(e => e.EventId == gameId && e.IsSelected)
@@ -198,7 +187,7 @@ namespace MyTeam.Services.Domain
                     TeamId = game.TeamId,
                     EventId = game.Id
                 }}
-        }).ToList();
+            }).ToList();
             _dbContext.Games.AddRange(gameEntities);
             _dbContext.SaveChanges();
         }

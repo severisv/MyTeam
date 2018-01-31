@@ -9,11 +9,15 @@ function call(method, url, payload) {
       Accept: 'application/json',
     },
     body: JSON.stringify(payload),
-  }).then((result) => {
-    if (result.status >= 200 && result.status < 300) {
-      return result.json()
+  }).then((response) => {
+    const contentType = response.headers.get('content-type')
+    if (response.status >= 200 && response.status < 300) {
+      if (contentType && contentType.indexOf('application/json') !== -1) {
+        return response.json()
+      }
+      return response.text()
     }
-    return result.json().then(payload => Promise.reject({ status: result.status, payload }))
+    return response.json().then(payload => Promise.reject({ status: response.status, payload }))
   })
 }
 

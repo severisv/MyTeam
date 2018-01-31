@@ -15,32 +15,6 @@ namespace MyTeam.Controllers
         {
             _gameService = gameService;
         }
-        
-        [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
-        public IActionResult SetHomeScore(Guid gameId, int? value)
-        {
-            if (ModelState.IsValid)
-            {
-                _gameService.SetHomeScore(gameId, value);
-                return new JsonResult(JsonResponse.Success());
-            }
-            return new JsonResult(JsonResponse.Failure);
-        }
-
-        [HttpPost]
-        [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
-        public IActionResult SetAwayScore(Guid gameId, int? value)
-        {
-            if (ModelState.IsValid)
-            {
-                _gameService.SetAwayScore(gameId, value);
-                return new JsonResult(JsonResponse.Success());
-            }
-            return new JsonResult(JsonResponse.Failure);
-        }
-
-
 
         public IActionResult GetSquad(Guid gameId)
         {
