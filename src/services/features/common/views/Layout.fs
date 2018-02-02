@@ -28,6 +28,9 @@ module Images =
         sprintf "http://res.cloudinary.com/dvtgbryrv/image/upload/c_scale,w_%i,q_100/v1462117763/wamkam_med_vfkizt.png" number
 
 
+    let getMember url facebookId width height =
+        "url"
+
 [<AutoOpen>]
 module SharedStuffs =
 
@@ -72,12 +75,16 @@ module Pages =
         ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] []
            
     
-    let userInfo = emptyText
+
 
     let loginPartial user =
-        user |> Option.fold (fun _ user ->
+        user |> Option.fold (fun _ (user: Users.User) ->
                                         span [] [
-                                            userInfo
+                                            div [_class "login-image-wrapper"] [
+                                                a [_title user.Name; _href <| "/spillere/vis/" + user.UrlName ] [
+                                                    img [_src <| Images.getMember user.Image user.FacebookId 40 40 ]
+                                                ]
+                                            ]
                                             notificationButton    
                                         ]                                      
                             ) emptyText
@@ -204,7 +211,6 @@ module Pages =
 
                     script [_src "/compiled/lib/lib.bundle.js?v1"] []
                     script [_src "/compiled/app.js?v15" ] []
-                    script [] [rawText <| sprintf "console.log('Server side: %ims');" 15 ]
             ] |> List.append o.Scripts)                
         ]          
     

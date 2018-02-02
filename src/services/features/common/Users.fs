@@ -10,12 +10,14 @@ module Users =
          Id: MemberId
          FacebookId: string
          FirstName: string
+         LastName: string
          UrlName: string
          Image: string
          Roles: Role list
          TeamIds: Guid list
          ProfileIsConfirmed: bool
     } with 
+        member user.Name = sprintf "%s %s" user.FirstName user.LastName
         member user.IsInRole roles = user.Roles |> List.exists(fun role -> roles |> List.contains(role))
 
     type Get = HttpContext -> ClubId -> UserId -> Option<User>
@@ -49,6 +51,7 @@ module Users =
                                  Id = m.Id
                                  FacebookId = m.FacebookId
                                  FirstName = m.FirstName
+                                 LastName = m.LastName
                                  UrlName = m.UrlName
                                  Image = m.ImageFull
                                  Roles = m.RolesString |> Members.toRoleList
