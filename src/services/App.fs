@@ -55,7 +55,7 @@ module App =
                                     routef "/api/games/%s/gameplan" (parseGuid >> GameApi.setGamePlan club.Id)
                                     routef "/api/games/%s/gameplan/publish" (parseGuid >> GameApi.publishGamePlan club.Id)
                                 ]
-                        GET >=> route "/about" >=> (renderHtml AboutPages.index)                                                                                                                                                                                                           
+                        GET >=> route "/about" >=> (renderHtml <| AboutPages.index club user)                                                                                                                                                                                                           
                        ] next ctx
                 | None ->
                     choose [
