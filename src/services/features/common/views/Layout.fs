@@ -5,6 +5,8 @@ open Giraffe.GiraffeViewEngine
 open Giraffe.GiraffeViewEngine.Attributes
 open MyTeam
 open MyTeam.Domain
+open ExpressionOptimizer
+open System
 
 module Analytics = 
 
@@ -20,20 +22,67 @@ module Analytics =
 
 module Images =
     let get string = 
-        "url"
+        "http://res.cloudinary.com/dvtgbryrv/image/upload/c_scale,w_100,q_100/v1462117763/wamkam_med_vfkizt.png"
 
     let getRz string number = 
-        "url"    
+        sprintf "http://res.cloudinary.com/dvtgbryrv/image/upload/c_scale,w_%i,q_100/v1462117763/wamkam_med_vfkizt.png" number
 
 
 [<AutoOpen>]
 module SharedStuffs =
+
+    let fa name = 
+        sprintf "fa fa-%s" name
+
     let icon name =
-        i [_class <| sprintf "fa fa-%s" name ] []
+        i [_class name ] []
+
+
+module Icon = 
+    let attendance = icon <| fa "check-square-o"
+    let coach = icon <| "flaticon-football50"
+    let signup = icon <| fa "calendar"
+    let previous = icon <| fa "history"
+    let upcoming = icon <| fa "calendar-o"
+    let squadList = icon <| fa "users"
+    let fine = icon <| fa "money"
+    let news = icon <| fa "newspaper"
+    let payment = icon <| fa "list"
+    let assist = icon <| "flaticon-football119"
+    let goal = icon <| fa "soccer-ball-o"
+    let player = icon <| "flaticon-soccer18"
+    let training = icon <| "flaticon-couple40"
+    let user = icon <| fa "user"
+    let yellowCard = icon <| "icon icon-card-yellow"
+    let redCard = icon <| "icon icon-card-red"
         
 
 [<AutoOpen>]
 module Pages =   
+
+    let coachMenuItems = 
+            [
+                li [_href "/intern/arrangement/ny"] [Icon.training; encodedText "Opprett arrangement"]
+                li [_href "/intern/admin"] [Icon.user; encodedText "Administrer spillere"]
+                li [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus"; encodedText "Legg til spiller"]
+                li [_href "/intern/nyheter/ny"] [Icon.news; encodedText "Skriv artikkel"]
+            ]
+
+    let notificationButton =
+        ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] []
+           
+    
+    let userInfo = emptyText
+
+    let loginPartial user =
+        user |> Option.fold (fun _ user ->
+                                        span [] [
+                                            userInfo
+                                            notificationButton    
+                                        ]                                      
+                            ) emptyText
+
+    let alerts = emptyText                    
 
     let (=??) (first: string) (second: string) =
         if first.HasValue then first else second           
@@ -45,13 +94,17 @@ module Pages =
 
     type ViewOptions = {
         Title: string
+        PageName: string
         MetaDescription: string
+        Scripts: XmlNode list
     }
  
     let layout club (user: Option<Users.User>) getOptions (content: XmlNode list) =  
         let o = getOptions ({
                                 Title = ""
+                                PageName = ""
                                 MetaDescription = ""
+                                Scripts = []
                             })
 
         html [_lang "nb-no"] [
@@ -65,102 +118,95 @@ module Pages =
                 link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v16" ]
                 script [] [ rawText Analytics.script ]
             ]
-            body [] [
-                    div [_class "navbar navbar-inverse navbar-fixed-top"] []
-                    div [_class "container" ] [
-                        div [_class "navbar-header"] [
-                            button [_type "button";_class "navbar-toggle"; attr "data-toggle" "collapse"; attr "data-target" ".navbar-collapse"] [
-                                span [_class "icon-bar" ] []
-                                span [_class "icon-bar" ] []
-                                span [_class "icon-bar" ] []
+            body []([
+                    div [_class "navbar navbar-inverse navbar-fixed-top"] [
+                        div [_class "container" ] [
+                            div [_class "navbar-header"] [
+                                button [_type "button";_class "navbar-toggle"; attr "data-toggle" "collapse"; attr "data-target" ".navbar-collapse"] [
+                                    span [_class "icon-bar" ] []
+                                    span [_class "icon-bar" ] []
+                                    span [_class "icon-bar" ] []
+                                ]
+                                a [_class "navbar-brand" ] [ img [_src <| Images.getRz club.Logo 100; _alt club.ShortName ] ]
                             ]
-                            a [_class "navbar-brand" ] [ img [_src <| Images.getRz club.Logo 100; _alt club.ShortName ] ]
-                        ]
-                        div [_class "navbar-collapse collapse" ] [
-                            ul [_class "nav navbar-nav"] [
-                                li [] [a [_href "/spillere" ] [ encodedText "Spillere"] ]
-                                li [] [a [_href "/kamper" ] [ encodedText "Kamper"] ]
-                                li [] [a [_href "/tabell" ] [ encodedText "Tabell"] ]
-                                li [] [a [_href "/statistikk" ] [ encodedText "statistikk"] ]
-                                li [] [a [_href "/om" ] [ encodedText "Om klubben"] ]
-                                user |> Option.fold(fun _ _ -> 
-                                                        li [] [
-                                                            a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [
-                                                                encodedText "Intern "
-                                                                icon "angle-down"
-                                                            ] 
-                                                        ]
-                                                                                            
-                                                    ) (emptyText)
+                            div [_class "navbar-collapse collapse" ] [
+                                ul [_class "nav navbar-nav"] [
+                                    li [] [a [_href "/spillere" ] [ encodedText "Spillere"] ]
+                                    li [] [a [_href "/kamper" ] [ encodedText "Kamper"] ]
+                                    li [] [a [_href "/tabell" ] [ encodedText "Tabell"] ]
+                                    li [] [a [_href "/statistikk" ] [ encodedText "Statistikk"] ]
+                                    li [] [a [_href "/om" ] [ encodedText "Om klubben"] ]
+                                    user |> Option.fold(fun _ _ -> 
+                                                            li [] [
+                                                                a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [
+                                                                    encodedText "Intern "
+                                                                    icon <| fa "angle-down"
+                                                                ] 
+                                                            ]
+                                                                                                
+                                                        ) (emptyText)
+                     
 
-                      
+                          
+                                ]
+                                user |> Option.fold (fun _ user ->
+                                            div [] [
+                                                hr [_class "visible-xs submenu-divider" ]
+                                                ul [_class "nav navbar-nav submenu visible-xs"] [
+                                                    li [] [a [_href "/intern" ] [Icon.signup; encodedText " Intern"]]
+                                                    li [] [a [_href "/intern/oppmote" ] [Icon.attendance; encodedText " Oppmøte"]]
+                                                    li [] [a [_href "/intern/boter" ] [Icon.fine; encodedText " Bøter"]]
+                                                    li [] [a [_href "/intern/lagliste" ] [Icon.squadList; encodedText " Lagliste"]]                       
+                                                ]                                        
+                                                user.IsInRole [Role.Admin;Role.Trener] =?
+                                                    (div [] [
+                                                        hr [_class "visible-xs submenu-divider"]
+                                                        ul [_class "nav navbar-nav submenu visible-xs adminMenu"] 
+                                                            coachMenuItems
+                                                        ], emptyText)
+                                            ]
+
+                                ) emptyText
+                        
                             ]
-                        ]
+                            div [_class "navbar-topRight"] [
+                                loginPartial user
+                            ]
+                            user |> Option.fold (fun _ user ->
+                                                    ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] [
+                                                            li [] [a [_href "/intern" ] [Icon.signup; encodedText " Intern"]]
+                                                            li [] [a [_href "/intern/oppmote" ] [Icon.attendance; encodedText " Oppmøte"]]
+                                                            li [] [a [_href "/intern/boter" ] [Icon.fine; encodedText " Bøter"]]
+                                                            li [] [a [_href "/intern/lagliste" ] [Icon.squadList; encodedText " Lagliste"]]                       
+                                                            user.IsInRole [Role.Admin;Role.Trener] =?
+                                                                (li [] [a [_href "/intern/admin" ] [Icon.coach; encodedText " Admin"]]                       
+                                                                , emptyText)
+                                                                ]
 
+                                ) emptyText                               
+                        ]
                     ]
-            ]
-                
-        ]            
-    
-    
-                
-         
-   
-            //         @if (Context.UserIsMember())
-            //         {
-            //             hr class "visible-xs submenu-divider" /[]
-            //             ul class "nav navbar-nav submenu visible-xs"[]
-            //                 li[]a asp-controller "event" asp-action "index"[]i class "@Icons.Signup"[]/i[] @Res.Signup/a[]/li[]
-            //                 li[]a asp-controller "attendance" asp-action "attendance"[]i class "@Icons.Attendance"[]/i[] @Res.Attendance/a[]/li[]
-            //                 li[]a asp-controller "fine" asp-action "index"[]i class "@Icons.Fine"[]/i[] Bøter/a[]/li[]
-            //                 li[]a asp-controller "member" asp-action "index"[]i class "@Icons.SquadList"[]/i[] @Res.SquadList/a[]/li[]
-            //             /ul[]
-            //             if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
-            //                 {
-            //                 hr class "visible-xs submenu-divider" /[]
-            //                 ul class "nav navbar-nav submenu visible-xs adminMenu"[]
-            //                     @Html.Partial("_CoachMenuItems")
-            //                 /ul[]
-            //                 }
-            //         }
-            //         /div[]
-            //         div class "navbar-topRight"[]
-            //             @await Html.PartialAsync("_LoginPartial")
-            //             @if (Context.UserIsMember())
-            //             {
-            //                 @Html.Partial("_UserInfo", Context.Member())
-            //                 ul id "notification-button" class "notification-button nav navbar-nav navbar-right navbar-topRight--item"[]
-            //                     @await Component.InvokeAsync("NotificationButton")
-            //               /ul[]
-            //                     }
-            // /div[]
+                    div [_class "mt-page-header"] [
+                        div [_class "container"] [
+                            h1 [] [
+                                encodedText (o.Title =?? o.PageName)
+                            ]                           
+                        ]
+                    ]
+                    div [_id "main-container";_class "container"] 
+                        (List.append [ 
+                            div [_id "alerts";_class "col-lg-9 col-md-9"][
+                                alerts
+                            ]
+                            div [_class "clearfix" ] []
+                        ] 
+                        content)
 
-            //         @if (Context.UserIsMember())
-            //         {
-            //             ul id "submenu-internal" class "nav navbar-nav submenu slide-down-child  hidden-xs collapse"[]
-            //                 li[]a asp-controller "event" asp-action "index"[]i class "@Icons.Signup"[]/i[] @Res.Signup/a[]/li[]
-            //                 li[]a asp-controller "attendance" asp-action "attendance"[]i class "@Icons.Attendance"[]/i[] @Res.Attendance/a[]/li[]
-            //                 li[]a asp-controller "fine" asp-action "index"[]i class "@Icons.Fine"[]/i[] Bøter/a[]/li[]
-            //                 li[]a asp-controller "member" asp-action "index"[]i class "@Icons.SquadList"[]/i[] @Res.SquadList/a[]/li[]
-            //                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
-            //                 {
-            //                     li[]a asp-controller "admin" asp-action "index"[]i class "@Icons.Coach"[]/i[] @Res.AdminPage/a[]/li[]
-            //                 }
-            //             /ul[]
-            //         }
-            //     /div[]
-            // /div[]
-            // @await Component.InvokeAsync("PageHeader", new { headline   ViewBag.PageName ?? ViewBag.Title ?? "", content   ViewBag.Subtext ?? "" })
-            // div id "main-container" class "container"[]
-            //     div id "alerts" class "col-lg-9 col-md-9"[]
-            //         @Html.Partial("_Alerts")
-            //     /div[]
-            //     div class "clearfix"[]/div[]
-            //     @RenderBody()
-            //     footer[]/footer[]
-            // /div[]
-            // script src "~/compiled/lib/lib.bundle.js?v1"[]/script[]
-            // script src "~/compiled/app.js?v15"[]/script[]
-            // @RenderSection("scripts", required: false)
-            // script[]console.log('Server side: @Context.Elapsed()ms');/script[]
-            // /body[]
+                    script [_src "/compiled/lib/lib.bundle.js?v1"] []
+                    script [_src "/compiled/app.js?v15" ] []
+                    script [] [rawText <| sprintf "console.log('Server side: %ims');" 15 ]
+            ] |> List.append o.Scripts)                
+        ]          
+    
+         
+  

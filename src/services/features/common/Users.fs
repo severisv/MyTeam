@@ -15,7 +15,8 @@ module Users =
          Roles: Role list
          TeamIds: Guid list
          ProfileIsConfirmed: bool
-    }
+    } with 
+        member user.IsInRole roles = user.Roles |> List.exists(fun role -> roles |> List.contains(role))
 
     type Get = HttpContext -> ClubId -> UserId -> Option<User>
     let get : Get =

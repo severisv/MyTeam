@@ -17,5 +17,5 @@ module AboutPages =
                     p [] [encodedText "Klubben har ingen egen hjemmebane, og spiller derfor sine hjemmekamper litt rundt omkring i Oslo."]
                 ]
             div [] []
-        ] |> layout club user id
+        ] |> layout club user (fun o -> { o with Title = "Om klubben"})
  

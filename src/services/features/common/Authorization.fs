@@ -15,6 +15,6 @@ module Authorization =
     let mustBeInRole (user: Option<User>) (roles: Role list) =
         requiresAuthPolicy (fun __ ->
                                 match user with 
-                                    | Some u -> u.Roles |> List.exists(fun role -> roles |> List.contains(role))                                   
+                                    | Some u -> u.IsInRole roles                                   
                                     | None -> false
                             ) accessDenied
