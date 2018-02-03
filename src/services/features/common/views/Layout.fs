@@ -10,14 +10,14 @@ open System
 
 module Analytics = 
 
-    let id = "UA-69971219-1"
+    let trackingId = "UA-69971219-1"
     let script = sprintf "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
           ga('create', '%s', 'auto');
-          ga('send', 'pageview');" id
+          ga('send', 'pageview');" trackingId
           
 
 module Images =
@@ -40,6 +40,7 @@ module SharedStuffs =
     let icon name =
         i [_class name ] []
 
+    let whitespace = rawText "&nbsp;"
 
 module Icon = 
     let attendance = icon <| fa "check-square-o"
@@ -63,6 +64,13 @@ module Icon =
 [<AutoOpen>]
 module Pages =   
 
+    let (=??) (first: string) (second: string) =
+        if first.HasValue then first else second           
+
+
+    let (=?) (condition: bool) (first, second) =
+        if condition then first else second   
+
     let coachMenuItems = 
             [
                 li [_href "/intern/arrangement/ny"] [Icon.training; encodedText "Opprett arrangement"]
@@ -71,8 +79,40 @@ module Pages =
                 li [_href "/intern/nyheter/ny"] [Icon.news; encodedText "Skriv artikkel"]
             ]
 
+
+    type NotificationButtonModel = {
+        UnansweredEvents: int
+        UnansweredEventIds: Guid list
+    }
+
     let notificationButton =
-        ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] []
+        let model = {
+            UnansweredEvents = 1
+            UnansweredEventIds = [ Guid.NewGuid() ]
+        }
+
+        ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] [
+            li [_class "dropdown" ] [ 
+                button [_class "dropdown-toggle btn btn-warning"; attr "data-toggle" "dropdown" ] [
+                    icon <| fa "bell-o"
+                ]
+                ul [_class "dropdown-menu" ] [
+                    model.UnansweredEvents > 0 =?
+                        (li [] [
+                            a [_href <| sprintf "/intern#event-%O" (model.UnansweredEventIds |> Seq.head) ] [
+                                Icon.signup
+                                whitespace
+                                whitespace
+                                span [_class "hidden-xxs" ] [ 
+                                    encodedText "Du har "
+                                ]
+                                encodedText <| sprintf "%i %s" model.UnansweredEvents (model.UnansweredEvents > 1 =? (" ubesvarte arrangementer", " ubesvart arrangement"))
+                            ]
+                        ], emptyText)
+                    
+                ]
+            ]
+        ]
            
     
 
@@ -91,12 +131,7 @@ module Pages =
 
     let alerts = emptyText                    
 
-    let (=??) (first: string) (second: string) =
-        if first.HasValue then first else second           
 
-
-    let (=?) (condition: bool) (first, second) =
-        if condition then first else second   
 
 
     type ViewOptions = {

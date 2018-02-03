@@ -12,3 +12,4 @@ module StringExtensions =
             member s.HasValue = not <| String.IsNullOrWhiteSpace(s)
 
 
+        let str a = a.ToString()
