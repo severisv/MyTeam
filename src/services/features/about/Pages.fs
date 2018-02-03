@@ -5,7 +5,7 @@ open Giraffe
 
 module AboutPages = 
 
-    let index club user =        
+    let index club user (ctx: HttpContext) =        
         [
             div [_class "mt-container"] [
                     img [_style "max-width: 100%"; _src "/images/wk2.jpg"]
@@ -17,5 +17,7 @@ module AboutPages =
                     p [] [encodedText "Klubben har ingen egen hjemmebane, og spiller derfor sine hjemmekamper litt rundt omkring i Oslo."]
                 ]
             div [] []
-        ] |> layout club user (fun o -> { o with Title = "Om klubben"})
+        ] 
+        |> layout club user (fun o -> { o with Title = "Om klubben"}) ctx
+        |> renderHtml
  

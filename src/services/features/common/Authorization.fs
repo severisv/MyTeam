@@ -5,7 +5,7 @@ open MyTeam.Users
 open MyTeam.Domain
 
 module Authorization =
-    let accessDenied = setStatusCode 401 >=> text "Ingen tilgang"
+    let accessDenied = setStatusCode 403 >=> text "Ingen tilgang"
 
     let mustBeMember (user: Option<User>) =
         requiresAuthPolicy (fun __ ->

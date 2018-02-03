@@ -7,6 +7,7 @@ open MyTeam
 open MyTeam.Domain
 open ExpressionOptimizer
 open System
+open System.Linq
 
 module Analytics = 
 
@@ -81,24 +82,84 @@ module Pages =
 
 
     type NotificationButtonModel = {
-        UnansweredEvents: int
         UnansweredEventIds: Guid list
-    }
+    } with 
+        member m.UnansweredEvents = m.UnansweredEventIds.Length
 
-    let notificationButton =
+
+    let notifications (ctx: HttpContext) club (user: Users.User) =
+        let (ClubId clubId) = club.Id
+        let db = ctx.Database
+        let now = DateTime.Now
+        let inFourDays = now.AddDays(4.0)
+          
+        let getEventsAndAttendances () =
+                
+            let events = query  
+                                { 
+                                    for e in db.Events do
+                                    where (e.ClubId = clubId 
+                                                && e.DateTime < inFourDays 
+                                                && (e.DateTime > now) 
+                                                && not e.IsPublished) 
+                                    join eventTeam in db.EventTeams on (e.Id = eventTeam.EventId)                  
+                                    select (e.Id, eventTeam.TeamId)
+                                } |> Seq.toList
+                                  |> List.distinct                       
+
+
+            let eventIds =
+                let eventIds = events |> List.map(fun (id, _) -> id) |> List.distinct
+                query {
+                    for e in eventIds do
+                    select e
+                }
+
+            let attendances = 
+                query {
+                    for attendance in db.EventAttendances do
+                    where (eventIds.Contains(attendance.EventId))
+                    select (attendance.EventId, attendance.MemberId)
+                }
+                |> Seq.toList
+
+            (events, attendances)
+        
+        
+        let (events, attendances) =         
+            let key = sprintf "notifications-%O" clubId
+            Cache.get ctx key getEventsAndAttendances
+
+
+        let userEvents = events
+                          |> List.filter (fun (_, teamId) -> user.TeamIds |> List.contains teamId)
+                          |> List.map (fun (eventId, _) -> eventId)
+                          |> List.distinct                       
+
+
+        let userAttendances =
+            attendances 
+            |> List.filter (fun (_, memberId) -> memberId = user.Id)
+            |> List.map (fun (eventId, _) -> eventId)
+
+        let unansweredEventIds = 
+            userEvents
+            |> List.filter (fun (eventId) -> not (userAttendances |> List.contains eventId))
+            |> List.distinct            
+      
+
         let model = {
-            UnansweredEvents = 1
-            UnansweredEventIds = [ Guid.NewGuid() ]
+            UnansweredEventIds = unansweredEventIds
         }
 
         ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] [
-            li [_class "dropdown" ] [ 
-                button [_class "dropdown-toggle btn btn-warning"; attr "data-toggle" "dropdown" ] [
-                    icon <| fa "bell-o"
-                ]
-                ul [_class "dropdown-menu" ] [
-                    model.UnansweredEvents > 0 =?
-                        (li [] [
+            (if model.UnansweredEvents > 0 then            
+                li [_class "dropdown" ] [ 
+                    button [_class "dropdown-toggle btn btn-warning"; attr "data-toggle" "dropdown" ] [
+                        icon <| fa "bell-o"
+                    ]
+                    ul [_class "dropdown-menu" ] [
+                        li [] [
                             a [_href <| sprintf "/intern#event-%O" (model.UnansweredEventIds |> Seq.head) ] [
                                 Icon.signup
                                 whitespace
@@ -108,16 +169,17 @@ module Pages =
                                 ]
                                 encodedText <| sprintf "%i %s" model.UnansweredEvents (model.UnansweredEvents > 1 =? (" ubesvarte arrangementer", " ubesvart arrangement"))
                             ]
-                        ], emptyText)
-                    
+                        ]                    
+                    ]
                 ]
-            ]
+             else emptyText)
         ]
            
     
 
 
-    let loginPartial user =
+    let loginPartial ctx club user  =
+        let notifications = notifications ctx
         user |> Option.fold (fun _ (user: Users.User) ->
                                         span [] [
                                             div [_class "login-image-wrapper"] [
@@ -125,7 +187,7 @@ module Pages =
                                                     img [_src <| Images.getMember user.Image user.FacebookId 40 40 ]
                                                 ]
                                             ]
-                                            notificationButton    
+                                            notifications club user 
                                         ]                                      
                             ) emptyText
 
@@ -134,20 +196,22 @@ module Pages =
 
 
 
-    type ViewOptions = {
+    type LayoutModel = {
         Title: string
         PageName: string
         MetaDescription: string
         Scripts: XmlNode list
     }
  
-    let layout club (user: Option<Users.User>) getOptions (content: XmlNode list) =  
+    let layout club (user: Option<Users.User>) getOptions (ctx: HttpContext) content =  
         let o = getOptions ({
                                 Title = ""
                                 PageName = ""
                                 MetaDescription = ""
                                 Scripts = []
                             })
+
+        let loginPartial = loginPartial ctx club                       
 
         html [_lang "nb-no"] [
             head [] [
