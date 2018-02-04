@@ -11,7 +11,7 @@ type ConnectionStrings = {
 }
 
 [<CLIMutable>]
-type CloudinaryOptions = {
+type CloudinarySettings = {
     ApiKey: string
     ApiSecret: string
     CloudName: string

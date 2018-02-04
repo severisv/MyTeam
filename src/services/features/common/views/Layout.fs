@@ -34,7 +34,7 @@ module Pages =
                             })
 
         let notifications = notifications ctx club
-        let loginPartial = loginPartial ctx notifications        
+        let loginPartial = userPartial ctx notifications        
         let getImage = Images.get ctx                
 
         html [_lang "nb-no"] [
@@ -97,9 +97,7 @@ module Pages =
                                 ) emptyText
                         
                             ]
-                            div [_class "navbar-topRight"] [
-                                loginPartial user
-                            ]
+                            loginPartial user                            
                             user |> Option.fold (fun _ user ->
                                                     ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] [
                                                             li [] [a [_href "/intern" ] [Icons.signup; encodedText " Intern"]]

@@ -77,7 +77,7 @@ open ImagesInternal
 module Images =
   
     let get (ctx: HttpContext) url getProps =
-        let options = (getService<IOptions<CloudinaryOptions>> ctx).Value
+        let options = (getService<IOptions<CloudinarySettings>> ctx).Value
         let baseUrl = baseUrl options.CloudName
 
         createImageUrl baseUrl url getProps

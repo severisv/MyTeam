@@ -44,13 +44,15 @@ module Tenant =
                                     
                                     Cache.get ctx (clubKey clubId) clubQuery
                                )
-            let user =      
-                club |> Option.bind(fun club -> 
-                                    let userId = (UserId ctx.User.Identity.Name)
-                                    let userQuery () = Users.get ctx club.Id userId
+            let user =
+                if ctx.User.Identity.IsAuthenticated then      
+                    club |> Option.bind(fun club -> 
+                                        let userId = (UserId ctx.User.Identity.Name )
+                                        let userQuery () = Users.get ctx club.Id userId
 
-                                    Cache.get ctx (memberKey club.Id userId) userQuery
-                    )
+                                        Cache.get ctx (memberKey club.Id userId) userQuery
+                        )
+                else None                    
 
             (club, user)                    
 
