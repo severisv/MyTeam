@@ -1,5 +1,6 @@
 namespace MyTeam
 open System
+open Microsoft.FSharp.Reflection
 
 module Enums =    
     let getValues<'T>() = 
@@ -30,3 +31,8 @@ module Enums =
         | Some x when Enum.IsDefined (typeof<'T>, x) -> 
              Nullable(LanguagePrimitives.EnumToValue(x))
         | _ -> Nullable ()
+
+
+    let toString (x:'a) = 
+        match FSharpValue.GetUnionFields(x, typeof<'a>) with
+        | case, _ -> case.Name    

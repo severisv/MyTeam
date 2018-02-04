@@ -3,6 +3,7 @@ namespace MyTeam
 open Giraffe
 open Microsoft.AspNetCore
 open Microsoft.Extensions.DependencyInjection;
+open System
 
 [<AutoOpen>]
 module Framework =
@@ -45,3 +46,11 @@ module Framework =
 
     let (>->) (handler: HttpHandler) (action: Action) =
         handler >=> invoke action     
+
+
+    let (=??) (first: string) (second: string) =
+        if not <| String.IsNullOrWhiteSpace(first) then first else second          
+
+
+    let (=?) (condition: bool) (first, second) =
+        if condition then first else second       
