@@ -17,7 +17,7 @@ module App =
             match club with
                 | Some club ->
                       choose [
-                        GET >=> route "/about" >-> (AboutPages.index club user)          
+                        GET >=> route "/om" >-> (AboutPages.index club user)          
                         GET >=> route "/api/teams" >-> TeamApi.list club.Id
                         GET >=> route "/api/players" >-> PlayerApi.list club.Id                      
                         PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 

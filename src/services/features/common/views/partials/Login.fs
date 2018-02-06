@@ -9,28 +9,24 @@ module Login =
 
     let loginPartial (ctx: HttpContext) =
         if ctx.User.Identity.IsAuthenticated then
-            form [] []
-            // <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-topRight--item navbar-right signout-form">
-            //     <ul class="nav navbar-nav navbar-right">
-            //         @*<li>
-            //             <a asp-controller="Manage" asp-action="Index" title="@Res.User"><i class="fa fa-user"></i></a>
-            //         </li>*@
-            //         <li>
-            //             <a href="javascript:document.getElementById('logoutForm').submit()" title="@Res.Logout"><i class="fa fa-sign-out"></i></a>
-            //         </li>
-            //     </ul>
-            // </form>
-
+            form [_action <| sprintf "/konto/utlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString);_method "POST";_id "logoutForm";_class "navbar-topRight--item navbar-right signout-form"] [
+                antiforgeryToken ctx
+                ul [_class "nav navbar-nav navbar-right"] [
+                    li [] [
+                        a [_href "javascript:document.getElementById('logoutForm').submit()";_title "Logg ut"] [
+                            icon <| fa "sign-out"
+                    ]
+                    ]
+                ]
+            ]
         else
             ul [_id "login-wrapper"; _class "nav navbar-nav navbar-right navbar-topRight--item" ] [
-
                 li [] [
-                    a [_href <| sprintf "account/login?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
+                    a [_href <| sprintf "/konto/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
                         icon <| fa "sign-in"
                     ]
                 ]
             ]
-
 
 
 
