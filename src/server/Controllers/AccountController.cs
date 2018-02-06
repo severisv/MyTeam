@@ -133,7 +133,7 @@ namespace MyTeam.Controllers
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e,"Klarte ikke sende e-post ved oppretting av konto");
+                        _logger.LogError(e, "Klarte ikke sende e-post ved oppretting av konto");
                     }
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");
@@ -146,16 +146,16 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
- 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("utlogging")]
-        public async Task<IActionResult> LogOff()
+        public async Task<IActionResult> LogOff(string returnUrl = null)
         {
-           await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             _logger.LogDebug(4, "User logged out.");
             _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, HttpContext.User.Identity.Name);
-            return RedirectToAction(nameof(NewsController.Index), "News", new { club = HttpContext.GetClub()?.ClubId});
+            return RedirectToLocal(returnUrl);
         }
 
         [HttpPost]

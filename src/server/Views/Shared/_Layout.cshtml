@@ -45,7 +45,7 @@
                 <li><a asp-controller="game" asp-action="index" asp-route-aar="">@Res.Games</a></li>
                 <li><a asp-controller="table" asp-action="index" asp-route-aar="">@Res.Table</a></li>
                 <li><a asp-controller="stats" asp-action="index" asp-route-aar="">@Res.Stats</a></li>
-                <li><a asp-controller="about" asp-action="index" >@Res.About</a></li>
+                <li><a href="/om" >@Res.About</a></li>
                 @if (Context.UserIsMember())
                 {
                     <li><a class="slide-down-parent hidden-xs" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
