@@ -36,21 +36,22 @@
     }
     else {
         <h2>@Model.Headline</h2>
-    }
-    <p class="news-author"><a class="underline" asp-controller="player" asp-action="show" asp-route-name="@Model.Author.UrlName">@Model.Author?.Fullname</a> <span class="datetime">@Model.Published.ToNo()</span>
-     @if (Model.GameId != null && !(ViewBag.IsMatchReport == true))
-     {
-        <a asp-controller="game" asp-action="show" asp-route-gameid="@Model.GameId" class="pull-right u-font-normal"><i class="fa fa-info-circle"></i> Kampdetaljer</a>
-     }
+            <p class="news-author">
+            <a class="underline" asp-controller="player" asp-action="show" asp-route-name="@Model.Author.UrlName">
+                @Model.Author?.Fullname
+            </a> 
+            <span class="datetime">@Model.Published.ToNo()</span>
+            @if (Model.GameId != null && !(ViewBag.IsMatchReport == true))
+            {
+                <a asp-controller="game" asp-action="show" asp-route-gameid="@Model.GameId" class="pull-right u-font-normal"><i class="fa fa-info-circle"></i> Kampdetaljer</a>
+            }
     </p>
+    }
+
     <hr class="sm"/>
     @if (isShortVersion)
     {
-        <div class="news-content news-content--short">
-            @Html.Raw(Model.Content.StripHtmlTags().Truncate())
-        </div>
-        <hr/>
-        <a class="underline" asp-action="show" asp-route-name="@Model.Name">Les hele og kommentér (@Model.CommentCount)</a>
+        <a class="underline" asp-action="show" asp-route-name="@Model.Name">Les hele og kommenter (@Model.CommentCount)</a>
     }
     else
     {
