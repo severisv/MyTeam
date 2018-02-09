@@ -126,13 +126,16 @@ namespace MyTeam.Models
 
         private static string ReadConnectionStringFromAppsettings()
         {
-            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.json".Replace("database","server");
+            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database","server");
 
             using (var r = new StreamReader(appsettingsPath))
             {
                 var json = r.ReadToEnd();
-                var appsettings = JsonConvert.DeserializeObject<Appsettings>(json);
-                return appsettings.ConnectionStrings.DefaultConnection;
+                if (!string.IsNullOrEmpty(json)){
+                    var appsettings = JsonConvert.DeserializeObject<Appsettings>(json);
+                    return appsettings.ConnectionStrings.DefaultConnection;
+                }
+                return "Server=(local)\\SQL2017;Database=master;User ID=sa;Password=Password12!";
             }
         }
 
