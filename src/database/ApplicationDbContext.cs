@@ -126,7 +126,7 @@ namespace MyTeam.Models
 
         private static string ReadConnectionStringFromAppsettings()
         {
-            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database","server");
+            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.json".Replace("database","server");
 
             using (var r = new StreamReader(appsettingsPath))
             {
