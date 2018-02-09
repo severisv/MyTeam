@@ -6,9 +6,6 @@ install:
   - ps: Install-Product node $env:node
 assembly_info:
   patch: false
-branches:
-  only:
-  - master
 build_script:
   build.cmd publish
 test: off
