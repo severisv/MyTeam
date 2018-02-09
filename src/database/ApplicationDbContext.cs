@@ -128,13 +128,15 @@ namespace MyTeam.Models
         {
             var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database","server");
 
-            using (var r = new StreamReader(appsettingsPath))
-            {
-                var json = r.ReadToEnd();
-                if (!string.IsNullOrEmpty(json)){
-                    var appsettings = JsonConvert.DeserializeObject<Appsettings>(json);
-                    return appsettings.ConnectionStrings.DefaultConnection;
+            if (File.Exists(appsettingsPath)) {            
+                using (var r = new StreamReader(appsettingsPath))
+                {
+                    var appsettingsString = r.ReadToEnd();
+                    var appsettings = JsonConvert.DeserializeObject<Appsettings>(appsettingsString);
+                    return appsettings.ConnectionStrings.DefaultConnection;                
                 }
+            }
+            else {
                 return "Server=(local)\\SQL2017;Database=master;User ID=sa;Password=Password12!";
             }
         }
