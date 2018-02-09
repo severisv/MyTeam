@@ -10,6 +10,6 @@ branches:
   only:
   - master
 build_script:
-  build.cmd
+  build.cmd publish
 test: off
 image: Visual Studio 2017
