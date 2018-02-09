@@ -9,6 +9,8 @@ assembly_info:
 branches:
   except:
   - master
+services:
+  - mssql2017
 
 build_script:
   build.cmd publish
