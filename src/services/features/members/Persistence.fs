@@ -42,7 +42,7 @@ module Persistence =
                                 |> Members.fromRoleList
                        
             db.SaveChanges() |> ignore        
-            UserId memb.UserName
+            UserId (memb.UserName =?? "")
 
 
     let toggleTeam : ToggleTeam =
