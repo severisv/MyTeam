@@ -137,7 +137,8 @@ namespace MyTeam.Models
                 }
             }
             else {
-                return "Server=(local)\\SQL2017;Database=master;User ID=sa;Password=Password12!";
+                System.Console.WriteLine(System.Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection"));
+                return System.Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
             }
         }
 
