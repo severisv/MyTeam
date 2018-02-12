@@ -210,7 +210,7 @@ namespace MyTeam.ViewModels.Events
             ev.Opponent = Opponent;
             ev.EventTeams = eventTeams;
             ev.Voluntary = !Mandatory;
-            ev.GameType = GameType;
+            ev.GameTypeValue = GameType;
             ev.IsHomeTeam = IsHomeTeam;
 
 

@@ -22,7 +22,7 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
             _logger = logger;
         }
-    
+
         public void RefreshFixtures()
         {
             var now = DateTime.Now;
@@ -35,7 +35,9 @@ namespace MyTeam.Services.Domain
                 try
                 {
                     var games = ScrapeGames(season).Where(g => g.DateTime > DateTime.Now);
-                    var existingGames = _dbContext.Games.Where(g => g.TeamId == season.TeamId && g.DateTime > DateTime.Now && g.DateTime < season.EndDate && g.GameType == GameType.Seriekamp);
+                    var existingGames =
+                        _dbContext.Games.Where(g => g.TeamId == season.TeamId && g.DateTime > DateTime.Now && g.DateTime < season.EndDate && g.GameTypeValue == GameType.Seriekamp)
+                        .ToList();
 
                     foreach (var game in games)
                     {
@@ -53,12 +55,12 @@ namespace MyTeam.Services.Domain
                     season.FixturesUpdated = DateTime.Now;
                     _dbContext.SaveChanges();
 
-            }
+                }
                 catch (Exception e)
-            {
-                _logger.LogError(0, e, "Feil ved oppdatering av kamper av kamper. SeasonId: " + season.Id);
+                {
+                    _logger.LogError(0, e, "Feil ved oppdatering av kamper av kamper. SeasonId: " + season.Id);
+                }
             }
-        }
         }
 
         private IEnumerable<Game> ScrapeGames(Season season)
@@ -80,10 +82,10 @@ namespace MyTeam.Services.Domain
             var result = new List<Game>();
             foreach (var tr in matches.Where(tr => tr.Any()))
             {
-               
+
                 var parsedGame = GetGame(tr, season.TeamId, season.Team.ClubId, season.Team.Name, indices);
                 if (parsedGame != null) result.Add(parsedGame);
-            
+
             }
             return result;
         }
@@ -99,7 +101,7 @@ namespace MyTeam.Services.Domain
             var isHomeTeam = teamName.Contains(homeTeam);
             var opponent = isHomeTeam ? awayTeam : homeTeam;
 
-            if(!(teamName.Contains(homeTeam) || teamName.Contains(awayTeam))) return null;
+            if (!(teamName.Contains(homeTeam) || teamName.Contains(awayTeam))) return null;
 
             return new Game
             {
@@ -109,7 +111,7 @@ namespace MyTeam.Services.Domain
                 Location = location,
                 Opponent = opponent,
                 TeamId = teamId,
-                GameType = GameType.Seriekamp,
+                GameType = (int?)GameType.Seriekamp,
                 Type = EventType.Kamp,
                 ClubId = clubId,
                 EventTeams = new List<EventTeam>
@@ -147,6 +149,6 @@ namespace MyTeam.Services.Domain
             _headers = headers.ToList();
         }
 
-     
+
     }
 }

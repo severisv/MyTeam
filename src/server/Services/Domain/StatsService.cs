@@ -69,7 +69,7 @@ namespace MyTeam.Services.Domain
 
         public IEnumerable<PlayerStats> GetStats(IEnumerable<Guid> teamIds, int? selectedYear = null)
         {
-            var query = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameType != GameType.Treningskamp);
+            var query = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameTypeValue != GameType.Treningskamp);
 
             if (selectedYear != null)
             {
@@ -80,11 +80,11 @@ namespace MyTeam.Services.Domain
 
             var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId))
                                                     .ToList();
-           
+
             var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected)
                                                         .Select(ea => ea.MemberId)
                                                         .ToList();
-            
+
             var playerIds = attendances.Select(p => p)
                                        .Distinct();
 
@@ -96,7 +96,7 @@ namespace MyTeam.Services.Domain
                     p.FirstName,
                     p.MiddleName,
                     p.LastName,
-                    p.ImageFull,      
+                    p.ImageFull,
                     p.UrlName,
                     gameEvents,
                     attendances
@@ -109,7 +109,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<int> GetStatsYears(IEnumerable<Guid> teamIds)
         {
             return _dbContext.GameEvents
-                 .Where(e => teamIds.Contains(e.Game.TeamId) && e.Game.GameType != GameType.Treningskamp)
+                 .Where(e => teamIds.Contains(e.Game.TeamId) && e.Game.GameTypeValue != GameType.Treningskamp)
                  .Select(ea => ea.Game.DateTime.Year)
                  .ToList()
                  .Distinct()

@@ -92,7 +92,7 @@ namespace MyTeam.Services.Domain
                     AwayScore = e.AwayScore,
                     IsHomeTeam = e.IsHomeTeam,
                     Location = e.Location,
-                    GameType = e.GameType
+                    GameType = e.GameTypeValue
                 }).ToList();
 
             return games.OrderBy(g => g.DateTime);
@@ -127,7 +127,7 @@ namespace MyTeam.Services.Domain
                   AwayScore = e.AwayScore,
                   IsHomeTeam = e.IsHomeTeam,
                   Location = e.Location,
-                  GameType = e.GameType
+                  GameType = e.GameTypeValue
               }).ToList().SingleOrDefault();
 
 
@@ -143,7 +143,7 @@ namespace MyTeam.Services.Domain
                 Location = game.Location,
                 Opponent = game.Opponent,
                 TeamId = game.TeamId,
-                GameType = game.GameType,
+                GameTypeValue = game.GameType,
                 Type = EventType.Kamp,
                 ClubId = clubId,
                 EventTeams = new List<EventTeam>

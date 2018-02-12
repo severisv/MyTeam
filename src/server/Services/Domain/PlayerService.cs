@@ -225,13 +225,13 @@ namespace MyTeam.Services.Domain
         {
             var events = _dbContext.GameEvents
                 .Include(ge => ge.Game)
-                .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameType != GameType.Treningskamp)
+                .Where(e => (e.PlayerId == playerId || e.AssistedById == playerId) && e.Game.GameTypeValue != GameType.Treningskamp)
                 .ToList();
 
             var now = DateTime.Now;
             var games = _dbContext.Games.Where(
                           g => teamIds.Contains(g.TeamId) &&
-                          g.GameType != GameType.Treningskamp &&
+                          g.GameTypeValue != GameType.Treningskamp &&
                           g.DateTime < now
                           && g.Attendees.Any(a => a.MemberId == playerId && a.IsSelected)
                           )

@@ -39,7 +39,7 @@ namespace MyTeam.Services.Domain
                 .ToList();
 
             if (!showAll)
-                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameType == GameType.Treningskamp)).ToList();
+                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp && t.GameTypeValue == GameType.Treningskamp)).ToList();
 
 
             var result = query
@@ -47,7 +47,7 @@ namespace MyTeam.Services.Domain
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             result = result.Where(r => r.TeamIds.ContainsAny(teamIds) || r.GameType == GameType.Treningskamp).ToList();
@@ -72,7 +72,7 @@ namespace MyTeam.Services.Domain
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             return new PagedList<EventViewModel>(resultViewModels, skip, pageSize, totalCount);
@@ -143,7 +143,7 @@ namespace MyTeam.Services.Domain
             ev.Opponent = model.Opponent;
             ev.DateTime = model.DateTime;
             ev.Voluntary = !model.Mandatory;
-            ev.GameType = model.GameType;
+            ev.GameTypeValue = model.GameType;
             ev.IsHomeTeam = model.IsHomeTeam;
 
             if (ev.Type == EventType.Kamp)
@@ -202,7 +202,7 @@ namespace MyTeam.Services.Domain
              _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.Type, e.GameType, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                         )).First();
 
 
@@ -273,7 +273,7 @@ namespace MyTeam.Services.Domain
                         e.EventTeams.Select(et => et.TeamId).ToList(),
                         e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected,
                         new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.Member.UrlName, a.Member.Status))).ToList(),
-                        e.Id, e.Type, e.GameType, e.DateTime, e.Voluntary, e.IsPublished)).First();
+                        e.Id, e.Type, e.GameTypeValue, e.DateTime, e.Voluntary, e.IsPublished)).First();
 
     }
 }

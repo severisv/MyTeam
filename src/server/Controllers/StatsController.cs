@@ -6,7 +6,7 @@ using MyTeam.ViewModels.Stats;
 
 namespace MyTeam.Controllers
 {
-    [Route("statistikk")]
+    [Route("stats")]
     public class StatsController : BaseController
     {
 

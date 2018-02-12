@@ -8,6 +8,11 @@ open System
 [<AutoOpen>]
 module Framework =
 
+    let route = routeCi
+
+    let routef = routeCif
+
+
     type HttpContext = Http.HttpContext
     let getService<'T> (ctx: HttpContext) =             
         ctx.RequestServices.GetService<'T>()

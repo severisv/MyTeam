@@ -15,7 +15,13 @@ namespace MyTeam.Models.Domain
         public Guid ClubId { get; set; }
         [Required]
         public EventType Type { get; set; }
-        public GameType? GameType { get; set; }
+        public int? GameType { get; set; }
+        [NotMapped]
+        public GameType? GameTypeValue
+        {
+            get { return (GameType?)GameType; }
+            set { GameType = (int?)value; }
+        }
 
         [Required]
         public DateTime DateTime { get; set; }
@@ -30,7 +36,7 @@ namespace MyTeam.Models.Domain
         public bool? GamePlanIsPublished { get; set; }
 
         public virtual Club Club { get; set; }
-        
+
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<EventAttendance> Attendees { get; set; }
         [NotMapped]
@@ -49,7 +55,7 @@ namespace MyTeam.Models.Domain
         public bool IsHomeTeam { get; set; }
 
         public bool IsAttending(ClaimsPrincipal user) => Attending?.Any(a => a.UserName == user.Identity.Name) == true;
-   
+
         public bool IsNotAttending(ClaimsPrincipal user) => NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
 
         public bool SignupHasOpened()
