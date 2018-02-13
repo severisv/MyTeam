@@ -8,8 +8,8 @@ module IconFunctions =
     let fa name = 
         sprintf "fa fa-%s" name
 
-    let icon name =
-        i [_class name ] []
+    let icon name title =
+        i [_class name;_title title ] []
 
 
 module Icons = 

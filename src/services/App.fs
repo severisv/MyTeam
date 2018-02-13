@@ -8,6 +8,7 @@ open MyTeam.Domain
 open MyTeam.Authorization
 open System.Linq
 open MyTeam.Models.Enums
+open MyTeam.Views
 open Microsoft.EntityFrameworkCore
 open System
 
@@ -120,7 +121,12 @@ module StatsPages =
                  thenBy (p.Goals + p.Assists)
                  thenBy p.YellowCards
                  thenBy p.RedCards
-             } |> Seq.toList        
+             } |> Seq.toList    
+
+        let statsUrl team year = 
+            sprintf "/statistikk/%s/%i" team year       
+
+        let getImage = Images.getMember ctx
 
         [
             div [_class "mt-main"] [
@@ -129,99 +135,107 @@ module StatsPages =
                         club.Teams.Length > 1 =?                        
                             (div [_class "stats-teamNav"] [
                                 ul [_class "nav nav-pills mt-justified"] 
-                                    (club.Teams |> List.map (fun t -> 
-                                                            li [_class (currentTeam = t.ShortName =? ("active", ""))] [
-                                                                a [_href <| sprintf "/statistikk/%s/%i" t.ShortName selectedYear ] [
-                                                                    i [_class "hidden-xs flaticon-football43"] [] 
-                                                                    span [_class "hidden-xs"] [encodedText t.Name] 
-                                                                    span [_class "visible-xs"] [encodedText t.ShortName]
-                                                                ]
-                                                            ]                                    
-                                                            ) 
-                                    |> List.append [ 
-                                                    li [_class (currentTeam = "total" =? ("active", ""))] [
-                                                        a [_href <| sprintf "/statistikk/total/%i" selectedYear ] [encodedText "Samlet"]
-                                                    ]])    
+                                    ((club.Teams 
+                                        |> List.map (fun t -> 
+                                                        li [_class (currentTeam = t.ShortName =? ("active", ""))] [
+                                                            a [_href <| sprintf "/statistikk/%s/%i" t.ShortName selectedYear ] [
+                                                                i [_class "hidden-xs flaticon-football43"] [] 
+                                                                whitespace
+                                                                span [_class "hidden-xs"] [encodedText t.Name] 
+                                                                span [_class "visible-xs"] [encodedText t.ShortName]
+                                                            ]
+                                                        ]                                    
+                                    )) @ [ 
+                                            li [_class (currentTeam = "total" =? ("active", ""))] [
+                                                a [_href <| statsUrl "total" selectedYear ] [encodedText "Samlet" ]
+                                            ]
+                                        ]
+                                    )
                                 ]                                                                                                           
                             , emptyText)
+
+                        (years.Length > 0 =?
+                            (
+                            div [_class "stats-yearNav--mobile"] [
+                                select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
+                                    (List.append 
+                                    (years |> List.map (fun y  ->
+                                                        option [_value <| statsUrl currentTeam y; selectedYear = y =? (_selected, _empty) ] [
+                                                            encodedText <| str y
+                                                        ] 
+                                                       ))
+                                    [ 
+                                        option [_value <| statsUrl currentTeam 0; selectedYear = 0 =? (_selected, _empty)] [
+                                            encodedText "Total"
+                                        ]
+                                    ]      
+                                    )                                        
+                                
                             ]
+                            , emptyText))
+                    ]
+                ]     
+                div [_class "mt-container"] [
+                    table [_class "table tablesorter stats-table attendance-table"] [
+                        thead [] [
+                            tr [] [
+                                    th [] [encodedText "Spiller"]
+                                    th [_class "score"] [Icons.player "Kamper"] 
+                                    th [_class "score"] [Icons.goal "Mål"]
+                                    th [_class "score"] [Icons.assist "Assists"]
+                                    th [_class "score"] [Icons.yellowCard "Gule Kort"]
+                                    th [_class "score"] [Icons.redCard "Røde kort" ]
+                            ]
+                        ]
+                        tbody [] 
+                                (stats |> List.map(fun player ->
+                                                    tr [] [
+                                                            td [_class "attendance-player-image"] [
+                                                                span [_class "attendance-playerImageContainer"] [
+                                                                    img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
+                                                                    whitespace                                                        
+                                                                ] 
+                                                                a [_href <| sprintf "/spillere/vis/%s" player.UrlName] [
+                                                                    encodedText player.Name
+                                                                ]
+                                                            ]                                                
+                                                            td [_class "score"] [encodedText <| str player.Games]
+                                                            td [_class "score"] [encodedText <| str player.Goals]
+                                                            td [_class "score"] [encodedText <| str player.Assists]
+                                                            td [_class "score"] [encodedText <| str player.YellowCards]
+                                                            td [_class "score"] [encodedText <| str player.RedCards]
+                                                        ]
+                                        )
+                                )
                     ]
                 ]
-                        
-            //             @if (Model.Years.Any())
-            //             {
-            //                 div [_class "stats-yearNav--mobile"] [
-
-            //                         <select class "linkSelect form-control pull-right hidden-md hidden-lg"] [
-            //                             @foreach (var year in Model.Years)
-            //                             {
-            //                                 <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = year})" selected="@(Model.SelectedYear == year)"] [@year</option] [
-            //                             }
-            //                             <option value="@Url.Action("Index", "Stats", new {lag = Model.Team, aar = 0})" selected="@(Model.SelectedYear == 0)" ] [Total</option] [
-            //                         </select] [
-            //                     ]
-            //             }
-            //         ]
-            //     ]
-
-            //     div [_class "mt-container"] [
-            //         <table class "table tablesorter stats-table attendance-table"] [
-            //             <thead] [
-            //             <tr] [
-            //                 <th] [@Res.Player</th] [
-            //                 th [_class "score"] [<i title="Kamper" class "@Icons.Player"] [</th] [
-            //                 th [_class "score"] [<i title="Mål" class "@Icons.Goal"] [</th] [
-            //                 th [_class "score"] [<i title="Assists" class "@Icons.Assist"] [</th] [
-            //                 th [_class "score"] [<span] [<i title="Gule kort" class "@Icons.YellowCard"] [</span] [</th] [
-            //                 th [_class "score"] [<span] [<i title="Røde kort" class "@Icons.RedCard"] [</span] [</th] [
-            //             </tr] [
-            //             </thead] [
-            //             <tbody] [
-            //             @foreach (var player in Model.Players)
-            //             {
-            //                 <tr] [
-            //                     <td class "attendance-player-image"] [
-            //                         <span class "attendance-playerImageContainer"] [
-            //                             <img src="@Context.Cloudinary().MemberImage(player.Image, player.FacebookId, 50, 50)"/] [&nbsp;
-            //                         </span] [
-            //                         <a asp-controller="player" asp-action="show" asp-route-name="@player.UrlName"] [
-            //                             @player.Name
-            //                         ]
-            //                     ]
-            //                     <td class "score"] [@player.Games]
-            //                     <td class "score"] [@player.Goals]
-            //                     <td class "score"] [@player.Assists]
-            //                     <td class "score"] [@player.YellowCards]
-            //                     <td class "score"] [@player.RedCards]
-            //                 </tr] [
-            //             }
-            //             </tbody] [
-            //         </table] [
-            //     ]
-            // ]
-
-
-
-
-
-            // @if (Model.Years?.Any() == true)
-            // {
-            //     div [_class "mt-sidebar"] [
-            //         div [_class "mt-container"] [
-            //             ul [_class "nav nav-list"] [
-            //                 li [_class "nav-header"] [@Res.Season.Pluralize()]
-            //                 @foreach (var year in Model.Years)
-            //                 {
-            //                     <li] [<a class "@(Model.SelectedYear == year ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="@year"] [@year]]
-            //                 }
-            //                 <li] [<hr /] []
-            //                 <li] [<a class "@(Model.SelectedYear == 0 ? "active" : "")" asp-controller="stats" asp-action="index" asp-route-lag="@Model.Team" asp-route-aar="0" ] [Total]]
-            //             ]
-
-            //         ]
-            //         ]
-            //         }
-
+            ]
+            (years.Length > 0 =?
+                            (
+                            div [_class "mt-sidebar"] [
+                                div [_class "mt-container"] [
+                                    ul [_class "nav nav-list"]
+                                        (
+                                        [ li [_class "nav-header"] [encodedText "Sesonger"] ] @   
+                                        (years |> List.map (fun year  ->
+                                                            li [] [
+                                                                a [_href <| statsUrl currentTeam year; selectedYear = year =? (_selected, _empty) ] [
+                                                                    encodedText <| str year
+                                                                ]
+                                                            ] 
+                                                           )) @
+                                        [ 
+                                            li [] [hr [] ]
+                                            li [] [a [_href <| statsUrl currentTeam 0;_class (selectedYear = 0 =? ("active", ""))] [
+                                                         encodedText "Total"
+                                                  ]
+                                            ]
+                                        ]      
+                                        )  
+                                                                         
+                                ]
+                            ]
+                            , emptyText))        
         ] 
         |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
         |> renderHtml

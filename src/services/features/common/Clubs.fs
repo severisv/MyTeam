@@ -27,7 +27,8 @@ module Clubs =
                                       ShortName = team.ShortName
                                       Name = team.Name
                                     })
-                        |> Seq.toList                                                    
+                        |> Seq.toList
+                        |> List.sortBy (fun t -> t.Name)                                                    
 
             clubs 
             |> Seq.map(fun (club, __) -> 

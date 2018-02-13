@@ -14,7 +14,7 @@ module Login =
                 ul [_class "nav navbar-nav navbar-right"] [
                     li [] [
                         a [_href "javascript:document.getElementById('logoutForm').submit()";_title "Logg ut"] [
-                            icon <| fa "sign-out"
+                            icon <| fa "sign-out" <| "Logg ut"
                     ]
                     ]
                 ]
@@ -23,7 +23,7 @@ module Login =
             ul [_id "login-wrapper"; _class "nav navbar-nav navbar-right navbar-topRight--item" ] [
                 li [] [
                     a [_href <| sprintf "/konto/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
-                        icon <| fa "sign-in"
+                        icon <| fa "sign-in" <| "Logg inn"
                     ]
                 ]
             ]

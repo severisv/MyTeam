@@ -11,10 +11,10 @@ module Pages =
 
     let coachMenuItems = 
             [
-                li [_href "/intern/arrangement/ny"] [Icons.training; encodedText "Opprett arrangement"]
-                li [_href "/intern/admin"] [Icons.user; encodedText "Administrer spillere"]
-                li [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus"; encodedText "Legg til spiller"]
-                li [_href "/intern/nyheter/ny"] [Icons.news; encodedText "Skriv artikkel"]
+                li [_href "/intern/arrangement/ny"] [Icons.training ""; encodedText "Opprett arrangement"]
+                li [_href "/intern/admin"] [Icons.user ""; encodedText "Administrer spillere"]
+                li [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]
+                li [_href "/intern/nyheter/ny"] [Icons.news ""; encodedText "Skriv artikkel"]
             ]
 
  
@@ -70,7 +70,7 @@ module Pages =
                                                             li [] [
                                                                 a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [
                                                                     encodedText "Intern "
-                                                                    icon <| fa "angle-down"
+                                                                    icon <| fa "angle-down" <| ""
                                                                 ] 
                                                             ]
                                                                                                 
@@ -81,10 +81,10 @@ module Pages =
                                             div [] [
                                                 hr [_class "visible-xs submenu-divider" ]
                                                 ul [_class "nav navbar-nav submenu visible-xs"] [
-                                                    li [] [a [_href "/intern" ] [Icons.signup; encodedText " Intern"]]
-                                                    li [] [a [_href "/intern/oppmote" ] [Icons.attendance; encodedText " Oppmøte"]]
-                                                    li [] [a [_href "/intern/boter" ] [Icons.fine; encodedText " Bøter"]]
-                                                    li [] [a [_href "/intern/lagliste" ] [Icons.squadList; encodedText " Lagliste"]]                       
+                                                    li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
+                                                    li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
+                                                    li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
+                                                    li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
                                                 ]                                        
                                                 user.IsInRole [Role.Admin;Role.Trener] =?
                                                     (div [] [
@@ -100,12 +100,12 @@ module Pages =
                             loginPartial user                            
                             user |> Option.fold (fun _ user ->
                                                     ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] [
-                                                            li [] [a [_href "/intern" ] [Icons.signup; encodedText " Intern"]]
-                                                            li [] [a [_href "/intern/oppmote" ] [Icons.attendance; encodedText " Oppmøte"]]
-                                                            li [] [a [_href "/intern/boter" ] [Icons.fine; encodedText " Bøter"]]
-                                                            li [] [a [_href "/intern/lagliste" ] [Icons.squadList; encodedText " Lagliste"]]                       
+                                                            li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
+                                                            li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
+                                                            li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
+                                                            li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
                                                             user.IsInRole [Role.Admin;Role.Trener] =?
-                                                                (li [] [a [_href "/intern/admin" ] [Icons.coach; encodedText " Admin"]]                       
+                                                                (li [] [a [_href "/intern/admin" ] [Icons.coach ""; encodedText " Admin"]]                       
                                                                 , emptyText)
                                                                 ]
 

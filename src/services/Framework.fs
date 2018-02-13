@@ -12,7 +12,6 @@ module Framework =
 
     let routef = routeCif
 
-
     type HttpContext = Http.HttpContext
     let getService<'T> (ctx: HttpContext) =             
         ctx.RequestServices.GetService<'T>()

@@ -87,12 +87,12 @@ module Notifications =
             (if model.UnansweredEvents > 0 then            
                 li [_class "dropdown" ] [ 
                     button [_class "dropdown-toggle btn btn-warning"; attr "data-toggle" "dropdown" ] [
-                        icon <| fa "bell-o"
+                        icon <| fa "bell-o" <| ""
                     ]
                     ul [_class "dropdown-menu" ] [
                         li [] [
                             a [_href <| sprintf "/intern#event-%O" (model.UnansweredEventIds |> Seq.head) ] [
-                                Icons.signup
+                                Icons.signup ""
                                 whitespace
                                 whitespace
                                 span [_class "hidden-xxs" ] [ 

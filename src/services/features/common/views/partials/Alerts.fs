@@ -24,11 +24,11 @@ module Alerts =
 
     let alertIcon alertType =     
         match alertType with
-        | Success -> icon <| fa "check"
-        | Info -> icon <| fa "info"
-        | InfoSubtle -> icon <| fa "info"
-        | Danger -> icon <| fa "warning"
-        | Warning -> icon <| fa "warning"
+        | Success -> icon <| fa "check" <| ""
+        | Info -> icon <| fa "info" <| ""
+        | InfoSubtle -> icon <| fa "info"<| ""
+        | Danger -> icon <| fa "warning" <| ""
+        | Warning -> icon <| fa "warning" <| ""
 
     let alert alertType text = 
         div [_class <| alertClass alertType; _id <| alertId alertType] [

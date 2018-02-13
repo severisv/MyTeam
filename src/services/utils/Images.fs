@@ -90,7 +90,7 @@ module Images =
 
     let getMember ctx url facebookId (getProps: GetProps) =
         
-        let isComplete (url: string) = url.StartsWith("http")
+        let isComplete (url: string) = url |> hasValue && url.StartsWith("http")
 
         match (url, facebookId) with
         | (url, _) when url |> isComplete -> url
