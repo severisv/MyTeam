@@ -1,8 +1,6 @@
 namespace MyTeam
 
 open MyTeam.Events
-open MyTeam.Domain
-open Giraffe 
 
 module EventApi =
 
