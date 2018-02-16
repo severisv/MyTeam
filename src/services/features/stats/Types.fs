@@ -13,7 +13,7 @@ type SelectedTeam =
     | Team of Team
 
 
-type PlayerStatses = {
+type PlayerStats = {
         Id: Guid
         FacebookId: string
         FirstName: string
@@ -30,5 +30,5 @@ type PlayerStatses = {
     with member p.Name = sprintf "%s %s" p.FirstName p.LastName    
 
 
-type GetStats = Database -> SelectedTeam -> SelectedYear -> PlayerStatses list
+type GetStats = Database -> SelectedTeam -> SelectedYear -> PlayerStats list
 

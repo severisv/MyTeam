@@ -5,7 +5,6 @@ using System.Linq;
 using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.ViewModels.Attendance;
-using MyTeam.ViewModels.Stats;
 
 namespace MyTeam.Services.Domain
 {
