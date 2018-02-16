@@ -19,5 +19,5 @@ module AboutPages =
             div [] []
         ] 
         |> layout club user (fun o -> { o with Title = "Om klubben"}) ctx
-        |> renderHtml
+        |> htmlView
  

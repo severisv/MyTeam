@@ -178,4 +178,4 @@ module StatsPages =
                             , emptyText))        
         ] 
         |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
-        |> renderHtml) next ctx
+        |> htmlView) next ctx
