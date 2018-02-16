@@ -66,54 +66,5 @@ namespace MyTeam.Services.Domain
              .Distinct()
              .OrderByDescending(y => y);
         }
-
-        public IEnumerable<PlayerStats> GetStats(IEnumerable<Guid> teamIds, int? selectedYear = null)
-        {
-            var query = _dbContext.Games.Where(g => teamIds.Contains(g.TeamId) && g.GameTypeValue != GameType.Treningskamp);
-
-            if (selectedYear != null)
-            {
-                query = query.Where(g => g.DateTime.Year == selectedYear);
-            }
-
-            var games = query.Select(g => g.Id).ToList();
-
-            var gameEvents = _dbContext.GameEvents.Where(ge => games.Contains(ge.GameId))
-                                                    .ToList();
-
-            var attendances = _dbContext.EventAttendances.Where(ea => games.Contains(ea.EventId) && ea.IsSelected)
-                                                        .Select(ea => ea.MemberId)
-                                                        .ToList();
-
-            var playerIds = attendances.Select(p => p)
-                                       .Distinct();
-
-            var players = _dbContext.Members.Where(p => playerIds.Contains(p.Id))
-                .Select(p => new PlayerStats
-                (
-                    p.Id,
-                    p.FacebookId,
-                    p.FirstName,
-                    p.MiddleName,
-                    p.LastName,
-                    p.ImageFull,
-                    p.UrlName,
-                    gameEvents,
-                    attendances
-                ));
-
-            return players.ToList();
-        }
-
-
-        public IEnumerable<int> GetStatsYears(IEnumerable<Guid> teamIds)
-        {
-            return _dbContext.GameEvents
-                 .Where(e => teamIds.Contains(e.Game.TeamId) && e.Game.GameTypeValue != GameType.Treningskamp)
-                 .Select(ea => ea.Game.DateTime.Year)
-                 .ToList()
-                 .Distinct()
-                 .OrderByDescending(y => y);
-        }
     }
 }

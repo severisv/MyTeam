@@ -9,9 +9,5 @@ namespace MyTeam.Services.Domain
     {
         IEnumerable<EventAttendanceViewModel> GetAttendance(Guid clubId, int? year = null);
         IEnumerable<int> GetAttendanceYears(Guid clubId);
-
-
-        IEnumerable<PlayerStats> GetStats(IEnumerable<Guid> teamIds, int? selectedYear = null);
-        IEnumerable<int> GetStatsYears(IEnumerable<Guid> teamIds);
     }
 }

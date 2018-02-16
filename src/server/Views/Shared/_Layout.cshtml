@@ -44,7 +44,7 @@
                 <li><a asp-controller="player" asp-action="list">@Res.Players</a></li>
                 <li><a asp-controller="game" asp-action="index" asp-route-aar="">@Res.Games</a></li>
                 <li><a asp-controller="table" asp-action="index" asp-route-aar="">@Res.Table</a></li>
-                <li><a asp-controller="stats" asp-action="index" asp-route-aar="">@Res.Stats</a></li>
+                <li><a href="/statistikk">@Res.Stats</a></li>
                 <li><a href="/om" >@Res.About</a></li>
                 @if (Context.UserIsMember())
                 {
