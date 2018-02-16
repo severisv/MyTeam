@@ -1,7 +1,5 @@
 namespace MyTeam.Stats
 
-open MyTeam
-open MyTeam.Domain
 open System.Linq
 open MyTeam.Models.Enums
 open System
@@ -22,46 +20,58 @@ module StatsQueries =
             
             let treningskamp = Nullable <| int GameType.Treningskamp
 
-            let gameIds =
+            let attendances =
                 match selectedYear with
                 | AllYears _ ->                 
-                        query {
+                        query { 
                             for game in db.Games do
-                            where (teamIds.Contains(game.TeamId) 
-                                    && game.GameType <> treningskamp)
-                            select(game.Id)    
-                            distinct                 
-                        }
-                | Year year ->     
-                     query {
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp)
+                            leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
+                            for ea in result do 
+                            where ea.IsSelected 
+                            select ea.MemberId
+                        }     
+                | Year year ->  
+                        query { 
                             for game in db.Games do
-                            where (teamIds.Contains(game.TeamId) 
-                                    && game.GameType <> treningskamp
-                                    && year = game.DateTime.Year)
-                            select(game.Id)    
-                            distinct                 
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp && year = game.DateTime.Year)
+                            leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
+                            for ea in result do
+                            where ea.IsSelected 
+                            select ea.MemberId
                         }
-                |> Seq.toList         
+                |> Seq.toList      
                
-            let attendances =
-                query {
-                    for a in db.EventAttendances do
-                    where (gameIds.Contains(a.EventId) && a.IsSelected)
-                    select(a.MemberId)    
-                }        
-                |> Seq.toList
 
-            let gameEvents = 
-                query { 
-                    for ge in db.GameEvents do
-                    where (gameIds.Contains(ge.GameId))
-                    select (ge)
-                }                    
-                |> Seq.toList
+            let gameEvents =
+                match selectedYear with
+                | AllYears _ ->                 
+                        query { 
+                            for game in db.Games do
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp)
+                            leftOuterJoin ge in db.GameEvents on (game.Id = ge.GameId) into result
+                            for ge in result do 
+                            select ge
+                        }     
+                | Year year ->  
+                        query { 
+                            for game in db.Games do
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp && year = game.DateTime.Year)
+                            leftOuterJoin ge in db.GameEvents on (game.Id = ge.GameId) into result
+                            for ge in result do
+                            select ge
+                        }
+                |> Seq.toList             
+                |> List.filter (fun ge -> not (isNull ge))  
+   
+
+            let playerIds = attendances 
+                            |> Seq.distinct
+
 
             let result = query {
                                 for p in db.Players do
-                                where (attendances.Contains(p.Id))
+                                where (playerIds.Contains(p.Id))
                                 select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.ImageFull, p.UrlName)
                             } |> Seq.toList
                               |> List.map (fun (id, facebookId, firstName, middleName, lastName, imageFull, urlName) ->
@@ -72,11 +82,11 @@ module StatsQueries =
                                             MiddleName = middleName
                                             LastName = lastName
                                             UrlName = urlName                                  
-                                            Games = attendances |> List.filter (fun a -> a = id) |> Seq.length
-                                            Goals = gameEvents |> List.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> List.length
-                                            Assists = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> List.length
-                                            YellowCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> List.length
-                                            RedCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> List.length
+                                            Games = attendances |> Seq.filter (fun a -> a = id) |> Seq.length
+                                            Goals = gameEvents |> Seq.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> Seq.length
+                                            Assists = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
+                                            YellowCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
+                                            RedCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
                                             Image = imageFull
                                         }
                                )
