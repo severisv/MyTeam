@@ -16,13 +16,11 @@ type SelectedYear =
     | Year of int
 
 type SelectedTeam =
-    | All
+    | All of Team list
     | Team of Team
 
 
-module StatsPages = 
-
-    type PlayerStats = {
+type PlayerStatses = {
         Id: Guid
         FacebookId: string
         FirstName: string
@@ -39,97 +37,56 @@ module StatsPages =
     with member p.Name = sprintf "%s %s" p.FirstName p.LastName    
 
 
-    type StatsViewModel = {
-        SelectedYear: int 
-        Teams: Team list  
-        Team: string  
-        Years: int list  
-        Players: PlayerStats
-    }
+type GetStats = Database -> SelectedTeam -> SelectedYear -> PlayerStatses list
 
+module StatsQueries =
 
+    let get : GetStats =
+        fun db selectedTeam selectedYear ->
+                                 
 
-    let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
+            let teamIds = 
+                let teams = match selectedTeam with
+                            | Team t -> [t]
+                            | All teams -> teams
 
-        printf "--------------------------------\n %O \n-----------------------\n" club.Teams
-        printf "--------------------------------\n %O \n-----------------------\n" selectedTeamShortName
-
-        let db = ctx.Database
-        let selectedTeam = 
-                match selectedTeamShortName with
-                | None -> Team  (club.Teams |> List.head)
-                | Some s when (s |> toLower) = "total" -> All
-                | Some s -> Team (club.Teams |> List.find (fun t -> t.ShortName |> toLower = (s |> toLower)))
-
-                      
-
-        let teams = 
-             match selectedTeam with
-                | Team t -> [t]
-                | All -> club.Teams
-
-        let selectedTeamShortName = (teams |> List.head).ShortName            
+                teams |> Seq.map (fun t -> t.Id)                  
+                                
             
+            let treningskamp = Nullable <| int GameType.Treningskamp
 
-        let teamIds = 
-                    query {
-                        for e in teams |> List.map (fun t -> t.Id) do
-                        select e
-                    }
-        
-        let treningskamp = Nullable <| int GameType.Treningskamp
-      
-        let allYears =
-            query {
-                for gameEvent in db.GameEvents do
-                where (teamIds.Contains(gameEvent.Game.TeamId) || gameEvent.Game.GameType <> treningskamp)
-                select (gameEvent.Game.DateTime.Year)
-                distinct
-            }
-            |> Seq.toList
-            |> List.sortDescending
+            printf "\n ----------------- GAMEIDS START -----------------"           
 
+            let gameIds =
+                match selectedYear with
+                | AllYears _ ->                 
+                        query {
+                            for game in db.Games do
+                            where (teamIds.Contains(game.TeamId) 
+                                    && game.GameType <> treningskamp)
+                            select(game.Id)    
+                            distinct                 
+                        }
+                | Year year ->     
+                     query {
+                            for game in db.Games do
+                            where (teamIds.Contains(game.TeamId) 
+                                    && game.GameType <> treningskamp
+                                    && year = game.DateTime.Year)
+                            select(game.Id)    
+                            distinct                 
+                        }
+                |> Seq.toList         
 
-        let selectedYear = 
-            match selectedYear with
-            | None -> Year (allYears |> List.head)
-            | Some y when y = 0 -> AllYears
-            | Some y -> Year y
+            printf "\n ----------------- GAMEIDS END -----------------"           
 
-        
-        let years = 
-            match selectedYear with
-                | Year y -> query {
-                                for y in [y] do
-                                select y
-                            }                 
-                | AllYears -> query {
-                                for y in allYears do
-                                select y
-                              }                      
-               
-
-        let selectedYear = years |> Seq.head           
-              
-
-        let stats =
-            let gameIds = 
-                    query {
-                        for game in db.Games do
-                        where (teamIds.Contains(game.TeamId) 
-                                 && game.GameType <> treningskamp
-                                && years.Contains(game.DateTime.Year))
-                        select(game.Id)    
-                        distinct                 
-                    }
-                    |> Seq.toList
+            printf "\n ----------------- ATTENDANCES START -----------------"           
 
             let attendances =
                 query {
                     for a in db.EventAttendances do
                     where (gameIds.Contains(a.EventId) && a.IsSelected)
                     select(a.MemberId)    
-                    distinct                 
                 }        
                 |> Seq.toList
 
@@ -141,41 +98,115 @@ module StatsPages =
                 }                    
                 |> Seq.toList
 
-            let stats = query {
-                            for p in db.Players do
-                            where (attendances.Contains(p.Id))
-                            select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.ImageFull, p.UrlName)
-                        } |> Seq.toList
-                          |> List.map (fun (id, facebookId, firstName, middleName, lastName, imageFull, urlName) ->
-                                    {
-                                        Id = id
-                                        FacebookId = facebookId
-                                        FirstName = firstName
-                                        MiddleName = middleName
-                                        LastName = lastName
-                                        UrlName = urlName                                  
-                                        Games = attendances |> List.filter (fun a -> a = id) |> Seq.length
-                                        Goals = gameEvents |> List.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> List.length
-                                        Assists = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> List.length
-                                        YellowCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> List.length
-                                        RedCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> List.length
-                                        Image = imageFull
-                                    }
-                           )
+            printf "\n ----------------- ATTENDANCES END -----------------"           
+
+            printf "\n ----------------- PLAYERS START -----------------"           
+
+
+            let result = query {
+                                for p in db.Players do
+                                where (attendances.Contains(p.Id))
+                                select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.ImageFull, p.UrlName)
+                            } |> Seq.toList
+                              |> List.map (fun (id, facebookId, firstName, middleName, lastName, imageFull, urlName) ->
+                                        {
+                                            Id = id
+                                            FacebookId = facebookId
+                                            FirstName = firstName
+                                            MiddleName = middleName
+                                            LastName = lastName
+                                            UrlName = urlName                                  
+                                            Games = attendances |> List.filter (fun a -> a = id) |> Seq.length
+                                            Goals = gameEvents |> List.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> List.length
+                                            Assists = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> List.length
+                                            YellowCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> List.length
+                                            RedCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> List.length
+                                            Image = imageFull
+                                        }
+                               )
+                       
             query {
-                 for p in stats do
-                 sortBy p.Games
-                 thenBy (p.Goals + p.Assists)
-                 thenBy p.YellowCards
-                 thenBy p.RedCards
+                 for p in result do
+                 sortByDescending p.Games
+                 thenByDescending (p.Goals + p.Assists)
+                 thenByDescending p.YellowCards
+                 thenByDescending p.RedCards
              } |> Seq.toList    
 
+    
+
+
+
+module StatsPages =  
+
+
+
+    let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
+
+        let db = ctx.Database
+
+        let selectedTeam = 
+                match selectedTeamShortName with
+                | None -> Team  (club.Teams |> List.head)
+                | Some s when (s |> toLower) = "samlet" -> All club.Teams
+                | Some s -> Team (club.Teams |> List.find (fun t -> t.ShortName |> toLower = (s |> toLower)))
+
+        
+        let teamIds = 
+            match selectedTeam with
+            | Team t -> [t.Id]
+            | All teams -> teams |> List.map (fun t -> t.Id)                    
+        
+        
+        printf "\n ----------------- YEAARS START -----------------"           
+
+
+        let treningskamp = (Nullable <| int GameType.Treningskamp)
+        let years =
+            query {
+                for gameEvent in db.GameEvents do
+                where (teamIds.Contains(gameEvent.Game.TeamId) 
+                      && gameEvent.Game.GameType <> treningskamp)
+                select (gameEvent.Game.DateTime.Year)
+                distinct
+            }
+            |> Seq.toList
+            |> List.sortDescending
+
+        printf "\n ----------------- YEARS END -----------------"           
+    
+
+        let selectedYear = 
+            match selectedYear with
+            | None -> Year (years |> List.head)
+            | Some y when y = "total" -> AllYears
+            | Some y when y |> isNumber -> Year <| Number.parse y
+            | Some y -> failwithf "Valgt år kan ikke være %s" y
+
+
+
+        let stats = StatsQueries.get db selectedTeam selectedYear 
+        printf "\n ----------------- PLAYERS end -----------------"           
+
+            
         let statsUrl team year = 
-            sprintf "/statistikk/%s/%i" team year       
+            let team = match team with 
+                       | All _ -> "samlet"
+                       | Team t -> t.ShortName 
+            let year = match year with
+                       | AllYears _ -> "total"
+                       | Year y -> str y           
+            
+            sprintf "/statistikk/%s/%s" team year       
 
         let getImage = Images.getMember ctx
 
-        let years = years |> Seq.toList
+
+        let isSelectedTeam team = 
+            selectedTeam = team
+
+        let isSelectedYear year = 
+            selectedYear = year        
 
         ([
             div [_class "mt-main"] [
@@ -186,17 +217,16 @@ module StatsPages =
                                 ul [_class "nav nav-pills mt-justified"] 
                                     ((club.Teams 
                                         |> List.map (fun t -> 
-                                                        li [_class (selectedTeamShortName = t.ShortName =? ("active", ""))] [
-                                                            a [_href <| sprintf "/statistikk/%s/%i" t.ShortName selectedYear ] [
+                                                        li [_class (isSelectedTeam <| Team t =? ("active", ""))] [
+                                                            a [_href <| statsUrl (Team t) selectedYear] [
                                                                 i [_class "hidden-xs flaticon-football43"] [] 
-                                                                whitespace
-                                                                span [_class "hidden-xs"] [encodedText t.Name] 
+                                                                span [_class "hidden-xs"] [whitespace;encodedText t.Name] 
                                                                 span [_class "visible-xs"] [encodedText t.ShortName]
                                                             ]
                                                         ]                                    
                                     )) @ [ 
-                                            li [_class (selectedTeamShortName = "total" =? ("active", ""))] [
-                                                a [_href <| statsUrl "total" selectedYear ] [encodedText "Samlet" ]
+                                            li [_class (isSelectedTeam <| All club.Teams =? ("active", ""))] [
+                                                a [_href <| statsUrl (All club.Teams) selectedYear ] [encodedText "Samlet" ]
                                             ]
                                         ]
                                     )
@@ -209,12 +239,12 @@ module StatsPages =
                                 select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
                                     (List.append 
                                     (years |> List.map (fun y  ->
-                                                        option [_value <| statsUrl selectedTeamShortName y; selectedYear = y =? (_selected, _empty) ] [
+                                                        option [_value <| statsUrl selectedTeam (Year y); isSelectedYear <| Year y =? (_selected, _empty) ] [
                                                             encodedText <| str y
                                                         ] 
                                                        ))
                                     [ 
-                                        option [_value <| statsUrl selectedTeamShortName 0; selectedYear = 0 =? (_selected, _empty)] [
+                                        option [_value <| statsUrl selectedTeam AllYears; isSelectedYear <| AllYears =? (_selected, _empty)] [
                                             encodedText "Total"
                                         ]
                                     ]      
@@ -268,14 +298,14 @@ module StatsPages =
                                         [ li [_class "nav-header"] [encodedText "Sesonger"] ] @   
                                         (years |> List.map (fun year  ->
                                                             li [] [
-                                                                a [_href <| statsUrl selectedTeamShortName year; selectedYear = year =? (_selected, _empty) ] [
+                                                                a [_href <| statsUrl selectedTeam (Year year);_class (isSelectedYear <| Year year =? ("active", "")) ] [
                                                                     encodedText <| str year
                                                                 ]
                                                             ] 
                                                            )) @
                                         [ 
                                             li [] [hr [] ]
-                                            li [] [a [_href <| statsUrl selectedTeamShortName 0;_class (selectedYear = 0 =? ("active", ""))] [
+                                            li [] [a [_href <| statsUrl selectedTeam AllYears;_class (isSelectedYear AllYears =? ("active", ""))] [
                                                          encodedText "Total"
                                                   ]
                                             ]
@@ -302,7 +332,7 @@ module App =
                       choose [
                         route "/om" >-> (AboutPages.index club user)          
                         route "/statistikk" >=> StatsPages.index club user None None      
-                        routef "/statistikk/%s/%i" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year))          
+                        routef "/statistikk/%s/%s" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year))          
                         routef "/statistikk/%s" (fun teamName -> StatsPages.index club user (Some teamName) None)      
                         route "/api/teams" >-> TeamApi.list club.Id
                         route "/api/players" >-> PlayerApi.list club.Id
