@@ -25,6 +25,7 @@ module Icons =
     let assist = icon <| "flaticon-football119"
     let goal = icon <| fa "soccer-ball-o"
     let player = icon <| "flaticon-soccer18"
+    let team = icon <| "flaticon-football43"
     let training = icon <| "flaticon-couple40"
     let user = icon <| fa "user"
     let yellowCard = icon <| "icon icon-card-yellow"

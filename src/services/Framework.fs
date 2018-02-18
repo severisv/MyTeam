@@ -4,6 +4,7 @@ open Giraffe
 open Microsoft.AspNetCore
 open Microsoft.Extensions.DependencyInjection;
 open System
+open System.Net.Mail
 
 [<AutoOpen>]
 module Framework =
@@ -58,3 +59,8 @@ module Framework =
 
     let (=?) (condition: bool) (first, second) =
         if condition then first else second       
+
+    let (|??) option alternative =
+        match option with
+        | Some value -> value
+        | None -> alternative       

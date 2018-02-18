@@ -12,64 +12,6 @@ open MyTeam.Stats
 
 module StatsPages =  
 
-    let sidebar attributes children = div ([_class "mt-sidebar"] @ attributes) children 
-    let block attributes children = div ([_class "mt-container"] @ attributes) children 
-
-
-    type NavItem = {
-        Text: string
-        Url: string
-    }
-
-    type NavList = {
-        Header: string
-        Items: NavItem list
-        Footer: NavItem option
-        IsSelected: (string -> bool)
-    }
-
-    let navList model =
-        ul [_class "nav nav-list"]
-            (
-            [ li [_class "nav-header"] [encodedText model.Header] ] @   
-            (model.Items |> List.map (fun item  ->
-                                li [] [
-                                    a [_href <| item.Url;_class (model.IsSelected <| item.Url =? ("active", "")) ] [
-                                        encodedText item.Text
-                                    ]
-                                ] 
-                               )) @
-            match model.Footer with 
-            | Some footer ->   
-                [ 
-                li [] [hr [] ]
-                li [] [a [_href footer.Url;_class (model.IsSelected footer.Url =? ("active", ""))] [
-                             encodedText footer.Text
-                      ]
-                    ]
-                ]      
-            | None -> [] 
-            )  
-    
-    let navListMobile model =
-        div [_class "nav-list--mobile"] [
-                select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
-                    (
-                    (model.Items |> List.map (fun item ->
-                                        option [_value item.Url; model.IsSelected item.Url =? (_selected, _empty) ] [
-                                            encodedText item.Text
-                                        ] 
-                                       )) @
-                    match model.Footer with
-                    | Some footer ->                    
-                        [ 
-                            option [_value footer.Url; model.IsSelected footer.Url =? (_selected, _empty)] [
-                                encodedText footer.Text
-                            ]
-                        ]     
-                    | None -> [])     
-            ]
-
     let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
 
         let db = ctx.Database
@@ -118,10 +60,7 @@ module StatsPages =
             sprintf "/statistikk/%s/%s" team year       
 
 
-        let isSelectedTeam team = 
-            selectedTeam = team
-
-        let isSelectedYear url = 
+        let isSelected url = 
             statsUrl selectedTeam selectedYear = url      
 
         let getImage = Images.getMember ctx
@@ -131,40 +70,36 @@ module StatsPages =
             div [_class "mt-main"] [
                 div [_class "mt-container"] [
                     div [_class "row"] [
-                        club.Teams.Length > 1 =?                        
-                            (div [_class "stats-teamNav"] [
-                                ul [_class "nav nav-pills mt-justified"] 
-                                    ((club.Teams 
-                                        |> List.map (fun t -> 
-                                                        li [_class (isSelectedTeam <| Team t =? ("active", ""))] [
-                                                            a [_href <| statsUrl (Team t) selectedYear] [
-                                                                i [_class "hidden-xs flaticon-football43"] [] 
-                                                                span [_class "hidden-xs"] [whitespace;encodedText t.Name] 
-                                                                span [_class "visible-xs"] [encodedText t.ShortName]
-                                                            ]
-                                                        ]                                    
-                                    )) @ [ 
-                                            li [_class (isSelectedTeam <| All club.Teams =? ("active", ""))] [
-                                                a [_href <| statsUrl (All club.Teams) selectedYear ] [encodedText "Samlet" ]
-                                            ]
-                                        ]
-                                    )
-                                ]                                                                                                           
-                            , emptyText)
-
-                        (years.Length > 0 =?
-                            (
-                            navListMobile
-                                ({ 
-                                    Header = "Sesonger"
-                                    Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
-                                    Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
-                                    IsSelected = isSelectedYear                                                               
-                               })
-                            , emptyText))
+                        tabs({ 
+                                Items = (club.Teams 
+                                        |> List.map (fun team  -> 
+                                                            { 
+                                                                Text = team.Name
+                                                                ShortText = team.ShortName
+                                                                Icon = Some <| Icons.team ""
+                                                                Url = statsUrl (Team team) selectedYear 
+                                                            }
+                                                    )) @ [
+                                                            {                                                              
+                                                                Text = "Samlet"
+                                                                ShortText = "Samlet"
+                                                                Icon = None
+                                                                Url = statsUrl (All club.Teams) selectedYear
+                                                            }
+                                                        ]                           
+                                IsSelected = isSelected
+                           })                        
+                   
+                        navListMobile
+                            ({ 
+                                Header = "Sesonger"
+                                Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                                IsSelected = isSelected                                                               
+                           })
                     ]
                 ]     
-                div [_class "mt-container"] [
+                block [] [
                     table [_class "table tablesorter stats-table attendance-table"] [
                         thead [] [
                             tr [] [
@@ -207,7 +142,7 @@ module StatsPages =
                                     Header = "Sesonger"
                                     Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
                                     Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
-                                    IsSelected = isSelectedYear                                                               
+                                    IsSelected = isSelected                                                               
                                })
                     ]
                 ]                                   

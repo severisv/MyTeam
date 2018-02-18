@@ -94,7 +94,7 @@ module Persistence =
                 else
                     members |> Seq.tryFind(fun m -> m.UserName = form.EmailAddress)
                 |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
-                |> Option.fold (fun _ v -> v) (Ok())                            
+                |?? Ok ()                            
            
             let facebookIdOrEmailIsPresent (_, form) =
                 match form with

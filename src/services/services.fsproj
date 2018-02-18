@@ -18,13 +18,13 @@
     <Compile Include="Framework.fs" />
     <Compile Include="utils/common/*.fs" />
     <Compile Include="utils/*.fs" />
+    <Compile Include="components/common/*.fs" />
+    <Compile Include="components/*.fs" />
     <Compile Include="domain/*.fs" />
     <Compile Include="features/common/Clubs.fs" />
     <Compile Include="features/common/Users.fs" />
     <Compile Include="features/common/Tenant.fs" />
     <Compile Include="features/common/Authorization.fs" />
-    <Compile Include="features/common/components/common/*.fs" />
-    <Compile Include="features/common/components/*.fs" />
     <Compile Include="features/common/views/partials/*.fs" />
     <Compile Include="features/common/views/*.fs" />
     <Compile Include="features/*/Types.fs" />
