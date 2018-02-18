@@ -34,6 +34,7 @@
     <Compile Include="features/*/W_Persistence.fs" />
     <Compile Include="features/*/Api.fs" />
     <Compile Include="features/*/W_Api.fs" />
+    <Compile Include="features/*/W_Pages.fs" />
     <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

@@ -4,7 +4,6 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Authorization
 open System.Linq
 open MyTeam.Models.Enums
 open MyTeam.Views
@@ -13,6 +12,63 @@ open MyTeam.Stats
 
 module StatsPages =  
 
+    let sidebar attributes children = div ([_class "mt-sidebar"] @ attributes) children 
+    let block attributes children = div ([_class "mt-container"] @ attributes) children 
+
+
+    type NavItem = {
+        Text: string
+        Url: string
+    }
+
+    type NavList = {
+        Header: string
+        Items: NavItem list
+        Footer: NavItem option
+        IsSelected: (string -> bool)
+    }
+
+    let navList model =
+        ul [_class "nav nav-list"]
+            (
+            [ li [_class "nav-header"] [encodedText model.Header] ] @   
+            (model.Items |> List.map (fun item  ->
+                                li [] [
+                                    a [_href <| item.Url;_class (model.IsSelected <| item.Url =? ("active", "")) ] [
+                                        encodedText item.Text
+                                    ]
+                                ] 
+                               )) @
+            match model.Footer with 
+            | Some footer ->   
+                [ 
+                li [] [hr [] ]
+                li [] [a [_href footer.Url;_class (model.IsSelected footer.Url =? ("active", ""))] [
+                             encodedText footer.Text
+                      ]
+                    ]
+                ]      
+            | None -> [] 
+            )  
+    
+    let navListMobile model =
+        div [_class "nav-list--mobile"] [
+                select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
+                    (
+                    (model.Items |> List.map (fun item ->
+                                        option [_value item.Url; model.IsSelected item.Url =? (_selected, _empty) ] [
+                                            encodedText item.Text
+                                        ] 
+                                       )) @
+                    match model.Footer with
+                    | Some footer ->                    
+                        [ 
+                            option [_value footer.Url; model.IsSelected footer.Url =? (_selected, _empty)] [
+                                encodedText footer.Text
+                            ]
+                        ]     
+                    | None -> [])     
+            ]
 
     let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
 
@@ -61,14 +117,16 @@ module StatsPages =
             
             sprintf "/statistikk/%s/%s" team year       
 
-        let getImage = Images.getMember ctx
 
         let isSelectedTeam team = 
             selectedTeam = team
 
-        let isSelectedYear year = 
-            selectedYear = year        
+        let isSelectedYear url = 
+            statsUrl selectedTeam selectedYear = url      
 
+        let getImage = Images.getMember ctx
+
+      
         ([
             div [_class "mt-main"] [
                 div [_class "mt-container"] [
@@ -96,22 +154,13 @@ module StatsPages =
 
                         (years.Length > 0 =?
                             (
-                            div [_class "stats-yearNav--mobile"] [
-                                select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
-                                    (List.append 
-                                    (years |> List.map (fun y  ->
-                                                        option [_value <| statsUrl selectedTeam (Year y); isSelectedYear <| Year y =? (_selected, _empty) ] [
-                                                            encodedText <| str y
-                                                        ] 
-                                                       ))
-                                    [ 
-                                        option [_value <| statsUrl selectedTeam AllYears; isSelectedYear <| AllYears =? (_selected, _empty)] [
-                                            encodedText "Total"
-                                        ]
-                                    ]      
-                                    )                                        
-                                
-                            ]
+                            navListMobile
+                                ({ 
+                                    Header = "Sesonger"
+                                    Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                    Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                                    IsSelected = isSelectedYear                                                               
+                               })
                             , emptyText))
                     ]
                 ]     
@@ -151,31 +200,18 @@ module StatsPages =
                 ]
             ]
             (years.Length > 0 =?
-                            (
-                            div [_class "mt-sidebar"] [
-                                div [_class "mt-container"] [
-                                    ul [_class "nav nav-list"]
-                                        (
-                                        [ li [_class "nav-header"] [encodedText "Sesonger"] ] @   
-                                        (years |> List.map (fun year  ->
-                                                            li [] [
-                                                                a [_href <| statsUrl selectedTeam (Year year);_class (isSelectedYear <| Year year =? ("active", "")) ] [
-                                                                    encodedText <| str year
-                                                                ]
-                                                            ] 
-                                                           )) @
-                                        [ 
-                                            li [] [hr [] ]
-                                            li [] [a [_href <| statsUrl selectedTeam AllYears;_class (isSelectedYear AllYears =? ("active", ""))] [
-                                                         encodedText "Total"
-                                                  ]
-                                            ]
-                                        ]      
-                                        )  
-                                                                         
-                                ]
-                            ]
-                            , emptyText))        
+                (
+                sidebar [] [
+                    block [] [
+                        navList ({ 
+                                    Header = "Sesonger"
+                                    Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                    Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                                    IsSelected = isSelectedYear                                                               
+                               })
+                    ]
+                ]                                   
+                , emptyText))        
         ] 
         |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
         |> htmlView) next ctx
