@@ -12,6 +12,7 @@ open MyTeam.Stats
 
 module StatsPages =  
 
+ 
     let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
 
         let db = ctx.Database
@@ -67,9 +68,9 @@ module StatsPages =
 
       
         ([
-            div [_class "mt-main"] [
-                div [_class "mt-container"] [
-                    div [_class "row"] [
+            main [] [
+                block [] [
+                    row [] [
                         tabs({ 
                                 Items = (club.Teams 
                                         |> List.map (fun team  -> 
@@ -100,38 +101,41 @@ module StatsPages =
                     ]
                 ]     
                 block [] [
-                    table [_class "table tablesorter stats-table attendance-table"] [
-                        thead [] [
-                            tr [] [
-                                    th [] [encodedText "Spiller"]
-                                    th [_class "score"] [Icons.player "Kamper"] 
-                                    th [_class "score"] [Icons.goal "Mål"]
-                                    th [_class "score"] [Icons.assist "Assists"]
-                                    th [_class "score"] [Icons.yellowCard "Gule Kort"]
-                                    th [_class "score"] [Icons.redCard "Røde kort" ]
-                            ]
-                        ]
-                        tbody [] 
-                                (stats |> List.map(fun player ->
-                                                    tr [] [
-                                                            td [_class "attendance-player-image"] [
-                                                                span [_class "attendance-playerImageContainer"] [
+                    table [_class "stats-table"] (
+                        {
+                            Type = Image
+                            Columns = 
+                                [
+                                    { Value = Str "Spiller"; Align = Left }
+                                    { Value = XmlNode <| Icons.player "Kamper"; Align = Center }
+                                    { Value = XmlNode <| Icons.goal "Mål"; Align = Center }
+                                    { Value = XmlNode <| Icons.assist "Assists"; Align = Center }
+                                    { Value = XmlNode <| Icons.yellowCard "Gule Kort"; Align = Center }
+                                    { Value = XmlNode <| Icons.redCard "Røde kort" ; Align = Center }
+                                ]
+                            Rows = 
+                                (stats |> List.map (fun player ->
+                                                    [
+                                                        XmlNode(span [] [
                                                                     img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
-                                                                    whitespace                                                        
+                                                                    whitespace 
+                                                                    a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
+                                                                        [
+                                                                            encodedText player.Name
+                                                                        ]                                                       
                                                                 ] 
-                                                                a [_href <| sprintf "/spillere/vis/%s" player.UrlName] [
-                                                                    encodedText player.Name
-                                                                ]
-                                                            ]                                                
-                                                            td [_class "score"] [encodedText <| str player.Games]
-                                                            td [_class "score"] [encodedText <| str player.Goals]
-                                                            td [_class "score"] [encodedText <| str player.Assists]
-                                                            td [_class "score"] [encodedText <| str player.YellowCards]
-                                                            td [_class "score"] [encodedText <| str player.RedCards]
-                                                        ]
-                                        )
+                                                                )                                    
+                                                                                                                            
+                                                        Number player.Games
+                                                        Number player.Goals
+                                                        Number player.Assists
+                                                        Number player.YellowCards
+                                                        Number player.RedCards
+                                                    ]
+                                                    )
                                 )
-                    ]
+                        }
+                    ) 
                 ]
             ]
             (years.Length > 0 =?
