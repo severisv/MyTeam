@@ -72,14 +72,12 @@ module StatsQueries =
             let result = query {
                                 for p in db.Players do
                                 where (playerIds.Contains(p.Id))
-                                select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.ImageFull, p.UrlName)
+                                select (p.Id, p.FacebookId, p.FirstName, p.LastName, p.ImageFull, p.UrlName)
                             } |> Seq.toList
-                              |> List.map (fun (id, facebookId, firstName, middleName, lastName, imageFull, urlName) ->
+                              |> List.map (fun (id, facebookId, firstName, lastName, imageFull, urlName) ->
                                         {
-                                            Id = id
                                             FacebookId = facebookId
                                             FirstName = firstName
-                                            MiddleName = middleName
                                             LastName = lastName
                                             UrlName = urlName                                  
                                             Games = attendances |> Seq.filter (fun a -> a = id) |> Seq.length

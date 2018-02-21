@@ -13,7 +13,7 @@ module TableModule =
 
 
     type TableColumn = {
-        Value: HtmlValue
+        Value: HtmlValue list
         Align: TableAlignment
     }
 
@@ -34,7 +34,7 @@ module TableModule =
                         thead [] [
                             tr [] (model.Columns 
                                   |> List.map(fun col ->                                       
-                                    th [_class <| alignmentClass col.Align] [col.Value |> toXmlNode]        
+                                    th [_class <| alignmentClass col.Align] (col.Value |> List.map toXmlNode)       
                                   ))                           
                             
                         ]

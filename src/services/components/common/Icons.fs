@@ -23,6 +23,7 @@ module Icons =
     let news = icon <| fa "newspaper"
     let payment = icon <| fa "list"
     let assist = icon <| "flaticon-football119"
+    let game = icon <| fa "trophy"
     let goal = icon <| fa "soccer-ball-o"
     let player = icon <| "flaticon-soccer18"
     let team = icon <| "flaticon-football43"

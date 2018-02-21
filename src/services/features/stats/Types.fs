@@ -14,10 +14,8 @@ type SelectedTeam =
 
 
 type PlayerStats = {
-        Id: Guid
         FacebookId: string
         FirstName: string
-        MiddleName: string
         LastName: string
         UrlName: string
         Games: int

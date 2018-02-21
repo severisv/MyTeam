@@ -39,7 +39,7 @@ namespace MyTeam.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("{type?}")]
+        [Route("")]
         public IActionResult Index(EventType type = EventType.Alle, bool showAll = false)
         {
             var teamIds = CurrentMember.Roles.ContainsAny(Roles.Admin, Roles.Coach)
@@ -66,7 +66,7 @@ namespace MyTeam.Controllers
                 : CurrentMember.TeamIds;
 
             var events = _eventService.GetPrevious(teamIds, type, page);
-            
+
             var model = new UpcomingEventsViewModel(events, type, previous: true);
             return View("Index", model);
         }
@@ -108,7 +108,7 @@ namespace MyTeam.Controllers
         }
 
         [Route("paameldte")]
-        public IActionResult SignupDetails(Guid eventId) 
+        public IActionResult SignupDetails(Guid eventId)
             => PartialView("_SignupDetails", _eventService.GetSignupDetailsViewModel(eventId));
 
         [HttpPost]
@@ -137,8 +137,8 @@ namespace MyTeam.Controllers
                 Type = type,
                 Teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
                 {
-                  Id = t.Id,
-                  Name = t.Name  
+                    Id = t.Id,
+                    Name = t.Name
                 }).ToList(),
                 TeamIds = new List<Guid>()
             };
@@ -154,7 +154,7 @@ namespace MyTeam.Controllers
         public IActionResult Create(CreateEventViewModel model)
         {
             ViewBag.Title = Res.CreateEvent;
-            
+
             if (ModelState.IsValid)
             {
                 var result = new List<EventViewModel>();
@@ -218,7 +218,7 @@ namespace MyTeam.Controllers
 
         [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
         [Route("oppmote/bekreft")]
-        public IActionResult RegisterAttendance(Guid? eventId  = null)
+        public IActionResult RegisterAttendance(Guid? eventId = null)
         {
             var ev = _eventService.GetRegisterAttendanceEventViewModel(eventId);
             var players = _playerService.GetDto(Club.Id);
@@ -245,6 +245,6 @@ namespace MyTeam.Controllers
             return new JsonResult(JsonResponse.Success());
         }
 
-       
+
     }
 }

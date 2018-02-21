@@ -1,17 +1,18 @@
 namespace MyTeam
 
 open Giraffe
+open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore
 open Microsoft.Extensions.DependencyInjection;
 open System
-open System.Net.Mail
+open System.Threading.Tasks
 
 [<AutoOpen>]
 module Framework =
 
     let route = routeCi
-
     let routef = routeCif
+    let subRoute = subRouteCi
 
     type HttpContext = Http.HttpContext
     let getService<'T> (ctx: HttpContext) =             
@@ -52,6 +53,9 @@ module Framework =
     let (>->) (handler: HttpHandler) (action: Action) =
         handler >=> invoke action     
 
+    let empty : HttpHandler =
+        fun (next : HttpFunc) (ctx : HttpContext) ->     
+        Task.FromResult None
 
     let (=??) (first: string) (second: string) =
         if not <| String.IsNullOrWhiteSpace(first) then first else second          
@@ -64,3 +68,17 @@ module Framework =
         match option with
         | Some value -> value
         | None -> alternative       
+
+
+
+    let mergeAttributes (a: XmlAttribute list) (b: XmlAttribute list) =
+        a @ b |> List.groupBy (function
+                                | KeyValue (key, _) -> key
+                                | Boolean key -> key)
+              |> List.map (fun (key, values) ->
+                            let values = values |> List.map(function
+                                                    | KeyValue (_, value) -> value
+                                                    | Boolean key -> key)
+                                                |> String.concat " "
+                            KeyValue (key, values)                                            
+                          )                  

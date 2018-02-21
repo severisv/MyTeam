@@ -106,17 +106,17 @@ module StatsPages =
                             Type = Image
                             Columns = 
                                 [
-                                    { Value = Str "Spiller"; Align = Left }
-                                    { Value = XmlNode <| Icons.player "Kamper"; Align = Center }
-                                    { Value = XmlNode <| Icons.goal "Mål"; Align = Center }
-                                    { Value = XmlNode <| Icons.assist "Assists"; Align = Center }
-                                    { Value = XmlNode <| Icons.yellowCard "Gule Kort"; Align = Center }
-                                    { Value = XmlNode <| Icons.redCard "Røde kort" ; Align = Center }
+                                    { Value = [Str "Spiller"]; Align = Left }
+                                    { Value = [Node <| Icons.player "Kamper"]; Align = Center }
+                                    { Value = [Node <| Icons.goal "Mål"]; Align = Center }
+                                    { Value = [Node <| Icons.assist "Assists"]; Align = Center }
+                                    { Value = [Node <| Icons.yellowCard "Gule Kort"]; Align = Center }
+                                    { Value = [Node <| Icons.redCard "Røde kort"]; Align = Center }
                                 ]
                             Rows = 
                                 (stats |> List.map (fun player ->
                                                     [
-                                                        XmlNode(span [] [
+                                                        Node(span [] [
                                                                     img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
                                                                     whitespace 
                                                                     a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 

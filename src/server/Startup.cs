@@ -66,6 +66,7 @@ namespace MyTeam
 
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });
+            App.addGiraffe(services);
 
             services.RegisterDependencies();
 

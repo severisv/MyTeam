@@ -16,11 +16,11 @@ module BaseComponents =
 
     
     type HtmlValue = 
-        | XmlNode of XmlNode 
+        | Node of XmlNode 
         | Str of string
         | Number of int
 
     let toXmlNode = function
-        | XmlNode n -> n
+        | Node n -> n
         | Str s -> encodedText s
         | Number i -> encodedText <| str i    
