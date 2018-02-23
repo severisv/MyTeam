@@ -29,12 +29,8 @@
     <Compile Include="features/common/views/*.fs" />
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/Queries.fs" />
-    <Compile Include="features/*/W_Queries.fs" />
     <Compile Include="features/*/Persistence.fs" />
-    <Compile Include="features/*/W_Persistence.fs" />
     <Compile Include="features/*/Api.fs" />
-    <Compile Include="features/*/W_Api.fs" />
-    <Compile Include="features/*/W_Pages.fs" />
     <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

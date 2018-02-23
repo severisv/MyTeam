@@ -43,7 +43,7 @@ div.mt-main {
     min-height: 24em;
 }
 
-.container-narrow .mt-main {
+.mt-main.narrow {
     .r-above(@md-min+1, {
         width: 68%;
     }
@@ -66,14 +66,6 @@ div.mt-sidebar {
 
     );
 }
-
-
-.container-narrow div.mt-sidebar {
-    width: 29%;
-}
-
-
-
 
 
 .mt-page-header {
@@ -108,8 +100,8 @@ div.mt-sidebar {
     &.mt-container--light{
        background: linear-gradient(to bottom, fade(lighten(@blue,60), 90) 0, fade(lighten(@blue  ,60), 92) 100%);
     }
-    padding: 2em;
-    .r-above-lg({ padding: 3em; });
+    padding: 2.5em;
+    .r-above-lg({ padding: 2em; });
     .r-under-xxs({padding: 1em;});
     line-height: 1.6;
     color: rgba(0, 0, 0, 0.9);
@@ -131,11 +123,6 @@ div.mt-sidebar {
     float:right; width: 49%; margin-bottom: 10em;
 }
 });
-
-.container-narrow {
-    max-width: 800px;
-    margin: 0 0;
-}
 
 
 .edit-link {

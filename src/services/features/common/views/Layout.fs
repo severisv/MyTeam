@@ -57,7 +57,7 @@ module Pages =
                                     span [_class "icon-bar" ] []
                                     span [_class "icon-bar" ] []
                                 ]
-                                a [_class "navbar-brand" ] [ img [_src <| getImage club.Logo (fun o -> { o with Width = Some 100 }); _alt club.ShortName ] ]
+                                a [_href "/";_class "navbar-brand" ] [ img [_src <| getImage club.Logo (fun o -> { o with Width = Some 100 }); _alt club.ShortName ] ]
                             ]
                             div [_class "navbar-collapse collapse" ] [
                                 ul [_class "nav navbar-nav"] [

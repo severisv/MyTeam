@@ -9,9 +9,144 @@ open MyTeam.Domain
 open MyTeam.Authorization
 open MyTeam.Views
 open MyTeam.Models.Enums
-open System.Linq
 open System
 
+
+module Asdf = 
+
+    type Training = {
+        Id: Guid
+        Date: DateTime       
+        Location: string
+    }
+
+
+    type PlayerAttendance = {
+        Id: Guid
+        FacebookId: string
+        FirstName: string
+        LastName: string
+        UrlName: string
+        Image: string       
+        DidAttend: bool       
+    } with 
+        member p.Name = sprintf "%s %s" p.FirstName p.LastName        
+
+    let index club user trainingId next (ctx: HttpContext) =
+
+
+        let db = ctx.Database
+        
+        let getImage = Images.getMember ctx
+
+        let selectedTraining = 
+            {
+                Id = Guid.NewGuid()
+                Date = DateTime.Now
+                Location = "Kringsjå"
+            }
+    
+
+        let registerAttendanceUrl trainingId = 
+            sprintf "/intern/oppmote/registrer/%s" (str trainingId)     
+
+        let isSelected url = 
+            registerAttendanceUrl selectedTraining.Id = url      
+
+        let previousTrainings = 
+            [selectedTraining]        
+
+
+
+        let editEventLink eventId =
+            editLink <| sprintf "/intern/arrangement/endre/%s" (str eventId)          
+            
+
+        let attendees = 
+            [
+                {
+                    Id = (Guid.NewGuid())
+                    FirstName = "Severin"
+                    LastName = "Sverdvik"
+                    FacebookId = ""
+                    Image = ""
+                    UrlName = "severin_sverdvik"
+                    DidAttend = true
+                }
+            ]        
+   
+        
+             
+
+        let registerAttendancePlayerList header (players: PlayerAttendance list) =
+            collapsible 
+                false 
+                [encodedText <| sprintf "%s (%i)" header players.Length]
+                [
+                    ul [ _class "list-users col-xs-11 col-md-10" ] 
+                        (players |> List.map (fun p ->
+                            li [ _class "register-attendance-item" ] [ 
+                                img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
+                                encodedText p.Name
+                                input [ 
+                                    _class "pull-right form-control register-attendance-input"
+                                    attr "data-player-id" (str p.Id)
+                                    attr "data-event-id" (str selectedTraining.Id)
+                                    _type "checkbox" 
+                                    (p.DidAttend =? (_checked, _empty))
+                                    ]
+                                ajaxSuccessIndicator
+                            ]
+                        ))             
+                ]                                    
+
+        ([
+            main [_class "register-attendance"] [
+                block [] [                  
+                    editEventLink selectedTraining.Id
+                    div [_class "attendance-event" ] [
+                        eventIcon EventType.Trening ExtraLarge        
+                        div [ _class "faded" ] [ 
+                            p [] [
+                                icon (fa "calendar") "" 
+                                whitespace
+                                encodedText <| (selectedTraining.Date.ToString("ddd d MMMM"))                     
+                            ]                     
+                            p [] [ 
+                                    icon (fa "map-marker") ""
+                                    encodedText selectedTraining.Location
+                     
+                                ]
+                     
+                           ] 
+                    ]                    
+                    registerAttendancePlayerList "Påmeldte spillere" attendees
+                ]  
+                     
+            ]          
+            sidebar [_class "register-attendance"] [               
+                (previousTrainings.Length > 0 =?
+                    (block [] [
+                        navList ({ 
+                                    Header = "Siste treninger"
+                                    Items = previousTrainings |> List.map (fun training  -> { Text = [icon (fa "calendar") "";whitespace;encodedText <| (training.Date.ToString("ddd d MMMM"))]; Url = registerAttendanceUrl training.Id })  
+                                    Footer = None                                                               
+                                    IsSelected = isSelected                                                              
+                               })
+                    ]
+                   , emptyText)) 
+            ]                                   
+                    
+        ] 
+        |> layout 
+            club 
+            (Some user) 
+            (fun o -> 
+                { o with 
+                    Title = "Registrer oppmøte"
+                    Scripts = [script [_src "/compiled/scripts/event/registerAttendance.js"] []]}
+            ) ctx
+        |> htmlView) next ctx
 
 
 module App =
@@ -33,6 +168,7 @@ module App =
                                         (fun _ user ->
                                                 (choose [ 
                                                     GET >=> choose [ 
+                                                        route "/oppmote/registrer" >=> Asdf.index club user None
                                                         route "/oppmote" >=> AttendancePages.index club user None
                                                         routef "/oppmote/%s" (fun year -> AttendancePages.index club user (Some <| toLower year))
                                                     ]                                

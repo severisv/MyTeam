@@ -57,7 +57,7 @@
             <hr class="visible-xs submenu-divider" />
             <ul class="nav navbar-nav submenu visible-xs">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
             </ul>
@@ -85,7 +85,7 @@
         {
             <ul id="submenu-internal" class="nav navbar-nav submenu slide-down-child  hidden-xs collapse">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a href="intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))

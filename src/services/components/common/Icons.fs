@@ -1,9 +1,17 @@
 namespace MyTeam.Views
 
+open MyTeam.Models.Enums
 open Giraffe.GiraffeViewEngine
 
+
+
 [<AutoOpen>]
-module IconFunctions =
+module IconComponents =
+
+    type IconSize = 
+        | Normal
+        | Large
+        | ExtraLarge
 
     let fa name = 
         sprintf "fa fa-%s" name
@@ -11,10 +19,26 @@ module IconFunctions =
     let icon name title =
         i [_class name;_title title ] []
 
+    let eventIcon eventType size =
+            let className =
+                sprintf "%s %s"
+                    (match eventType with
+                     | EventType.Kamp -> fa "trophy"
+                     | EventType.Trening -> "flaticon-couple40"
+                     | EventType.Diverse -> fa "beer"
+                     | _ -> fa "calendar")
+                    (match size with
+                     | Large -> "fa-2x"
+                     | ExtraLarge -> "fa-3x"
+                     | _ -> "")                
+                
+            icon className (eventType.ToString())            
+
 
 module Icons = 
     let attendance = icon <| fa "check-square-o"
     let coach = icon <| "flaticon-football50"
+    let edit = icon <| fa "edit"
     let signup = icon <| fa "calendar"
     let previous = icon <| fa "history"
     let upcoming = icon <| fa "calendar-o"
