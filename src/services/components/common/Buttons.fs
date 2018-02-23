@@ -6,8 +6,6 @@ open Giraffe.GiraffeViewEngine
 [<AutoOpen>]
 module Buttons =  
         
-    let str e = Enums.toString e |> toLower
-
     type ButtonType = 
         | Primary
 
@@ -15,8 +13,13 @@ module Buttons =
         | Sm
 
 
-    let buttonLink href buttonType size attributes children  =
+    let buttonLink href (buttonType: ButtonType) (size: ButtonSize) attributes children  =
         a 
-            ([_href href;_class <| sprintf "btn btn-%s btn-%s" (str buttonType) (str size)] |> mergeAttributes attributes) 
+            ([_href href;
+              _class <| sprintf "btn btn-%s btn-%s" 
+                                        (Enums.toLowerString buttonType) 
+                                        (Enums.toLowerString size)
+             ] 
+             |> mergeAttributes attributes) 
             children
                                

@@ -20,7 +20,7 @@ namespace MyTeam.Services.Repositories
         public static void Initialize(ApplicationDbContext context)
         {
 
-     
+
             var club = new Club()
             {
                 Id = new Guid("6790dd24-cf7f-442d-bec7-1a8e7f792a33"),
@@ -30,16 +30,16 @@ namespace MyTeam.Services.Repositories
                 Logo = "image/upload/v1450865103/wamkam/wamkam_sm.png",
                 Favicon = "image/upload/v1448650991/wamkam/favicon.png",
                 Description = "Waldemarskameratene FK er en norsk breddefotballklubb stiftet 21.08.2007. Klubben har to lag, Wam-Kam 1 og Wam-Kam 2, som deltar hhv. i 4. og 8. divisjon i seriesystemet til Oslo Fotballkrets."
-        };
+            };
 
 
             if (!context.Clubs.Any())
-                {
+            {
 
-                    context.Clubs.Add(club);
+                context.Clubs.Add(club);
 
-                    context.SaveChanges();
-               }
+                context.SaveChanges();
+            }
 
             if (!context.Teams.Any())
             {
@@ -63,9 +63,9 @@ namespace MyTeam.Services.Repositories
                         SortOrder = 1
                     }
                 };
-                    context.Teams.AddRange(teams);
-                    context.SaveChanges();
-               }
+                context.Teams.AddRange(teams);
+                context.SaveChanges();
+            }
 
             if (!context.Players.Any())
             {
@@ -74,7 +74,7 @@ namespace MyTeam.Services.Repositories
                     ClubId = club.Id,
                     FirstName = "Severin",
                     LastName = "Sverdvik",
-                    Status = PlayerStatus.Aktiv,
+                    PlayerStatus = PlayerStatus.Aktiv,
                     UserName = "severin@sverdvik.no",
                     PositionsString = $"{Position.Back}",
                     RolesString = Roles.Admin,

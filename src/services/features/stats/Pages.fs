@@ -144,8 +144,8 @@ module StatsPages =
                     block [] [
                         navList ({ 
                                     Header = "Sesonger"
-                                    Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
-                                    Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                                    Items = years |> List.map (fun year  -> { Text = [encodedText <| str year]; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                    Footer = Some <| { Text = [encodedText "Total"]; Url = statsUrl selectedTeam AllYears }                                                               
                                     IsSelected = isSelected                                                               
                                })
                     ]

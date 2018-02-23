@@ -211,7 +211,7 @@ namespace MyTeam.Controllers
 
             _eventService.Delete(Club.Id, eventId);
 
-            Alert(AlertType.Success, $"{ev.Type} {Res.Deleted.ToLower()}");
+            Alert(AlertType.Success, $"{ev.EventType} {Res.Deleted.ToLower()}");
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
             return RedirectToAction("Index");
         }

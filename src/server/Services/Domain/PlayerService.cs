@@ -129,11 +129,11 @@ namespace MyTeam.Services.Domain
         {
             var query =
                 _dbContext.Players.Where(p => p.ClubId == clubId)
-                    .Where(p => p.Status != PlayerStatus.Sluttet);
+                    .Where(p => p.PlayerStatus != PlayerStatus.Sluttet);
 
-            if (includeCoaches != true) query = query.Where(p => p.Status != PlayerStatus.Trener);
+            if (includeCoaches != true) query = query.Where(p => p.PlayerStatus != PlayerStatus.Trener);
 
-            if (status != null) query = query.Where(p => p.Status == status);
+            if (status != null) query = query.Where(p => p.PlayerStatus == status);
 
             var players = query
                 .Select(p => new SimplePlayerDto
@@ -143,7 +143,7 @@ namespace MyTeam.Services.Domain
                     FirstName = p.FirstName,
                     MiddleName = p.MiddleName,
                     LastName = p.LastName,
-                    Status = p.Status,
+                    Status = p.PlayerStatus,
                     ImageFull = p.ImageFull,
                     UrlName = p.UrlName
                 }).ToList().OrderBy(p => p.Name);
@@ -185,7 +185,7 @@ namespace MyTeam.Services.Domain
                 ImageFull = p.ImageFull,
                 PositionsString = p.PositionsString,
                 FacebookId = p.FacebookId,
-                Status = p.Status,
+                Status = p.PlayerStatus,
                 UrlName = p.UrlName
             }).SingleOrDefault();
 
@@ -207,7 +207,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return
-                _dbContext.Players.Where(p => p.Status == status && p.ClubId == clubId)
+                _dbContext.Players.Where(p => p.PlayerStatus == status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
                     .Select(p => new ListPlayerViewModel
                     {

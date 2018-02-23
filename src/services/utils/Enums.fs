@@ -35,4 +35,7 @@ module Enums =
 
     let toString (x:'a) = 
         match FSharpValue.GetUnionFields(x, typeof<'a>) with
-        | case, _ -> case.Name    
+        | case, _ -> case.Name
+
+    let toLowerString (x:'a) = 
+        x |> toString |> toLower

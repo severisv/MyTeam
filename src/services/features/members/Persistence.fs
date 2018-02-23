@@ -16,7 +16,7 @@ module Persistence =
                     |> Seq.filter(fun p -> p.Id = memberId)
                     |> Seq.head
 
-            memb.Status <- enum<Enums.PlayerStatus>(int status)
+            memb.Status <- (int status)
             db.SaveChanges() |> ignore
             UserId memb.UserName
 

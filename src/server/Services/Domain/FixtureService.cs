@@ -112,7 +112,7 @@ namespace MyTeam.Services.Domain
                 Opponent = opponent,
                 TeamId = teamId,
                 GameType = (int?)GameType.Seriekamp,
-                Type = EventType.Kamp,
+                EventType = EventType.Kamp,
                 ClubId = clubId,
                 EventTeams = new List<EventTeam>
                 {

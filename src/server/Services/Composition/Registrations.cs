@@ -19,7 +19,6 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IGameEventService, GameEventService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ISeasonService, SeasonService>();
-            services.AddTransient<IStatsService, StatsService>();
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<ICloudinary, Cloudinary>();

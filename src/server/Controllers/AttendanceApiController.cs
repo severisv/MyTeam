@@ -20,11 +20,11 @@ namespace MyTeam.Controllers
             var now = DateTime.Now;
             var events =
                 _dbContext.Events
-                .Where(e => e.Type == EventType.Trening
+                .Where(e => e.EventType == EventType.Trening
                         && e.DateTime <= now
                         && e.DateTime >= now.AddDays(-56)
                         && e.Voluntary == false)
-                .Select(e => new { EventId = e.Id, TeamIds = e.EventTeams.Select(et => et.TeamId).ToList()})
+                .Select(e => new { EventId = e.Id, TeamIds = e.EventTeams.Select(et => et.TeamId).ToList() })
                 .ToList();
 
             var eventIds = events.Where(e => e.TeamIds.Contains(teamId)).Select(e => e.EventId);
@@ -52,7 +52,7 @@ namespace MyTeam.Controllers
 
         private int GetAttendance(int count, int eventCount)
         {
-            return (count*100)/eventCount;
+            return (count * 100) / eventCount;
         }
     }
 }

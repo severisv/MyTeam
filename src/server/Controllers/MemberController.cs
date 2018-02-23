@@ -27,12 +27,13 @@ namespace MyTeam.Controllers
 
             var players = _dbContext.Players
                 .Where(p => p.ClubId == HttpContext.GetClub().Id)
-                .Where(p => p.Status == status)
+                .Where(p => p.PlayerStatus == status)
                 .OrderBy(p => p.FirstName)
-                .Select(p => new MemberInfoViewModel{
+                .Select(p => new MemberInfoViewModel
+                {
                     Id = p.Id,
                     Name = p.Name,
-                    Status = p.Status,
+                    Status = p.PlayerStatus,
                     Image = p.ImageFull,
                     Phone = p.Phone,
                     Email = p.Email,
@@ -44,6 +45,6 @@ namespace MyTeam.Controllers
             return View("ListMembers", model);
         }
 
-    
+
     }
 }
