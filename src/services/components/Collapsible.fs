@@ -7,7 +7,11 @@ open System
 
 [<AutoOpen>]
 module Collapsible =  
-    let collapsible isCollapsed header children =
+    type CollapseState =
+        | Open
+        | Collapsed
+    let collapsible collapseState header children =
+        let isCollapsed = collapseState = Collapsed
         let id = Guid.NewGuid().ToString()
 
         div [] [
@@ -21,9 +25,7 @@ module Collapsible =
                   ] 
                   header                           
             ]
-            div [_id id;_class <| sprintf "collapse %s" (isCollapsed =? ("","in")) ] [ 
-                    div [ _class "row" ] children
-                ]
+            div [_id id;_class <| sprintf "collapse %s" (isCollapsed =? ("","in")) ] children                
         ]       
 
    

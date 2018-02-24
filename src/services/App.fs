@@ -12,116 +12,228 @@ open MyTeam.Models.Enums
 open System
 
 
-module Asdf = 
+module AsdfQueries = 
+    type EventId = Guid
 
     type Training = {
-        Id: Guid
+        Id: EventId
         Date: DateTime       
         Location: string
     }
 
-
-    type PlayerAttendance = {
+    type Player = {
         Id: Guid
         FacebookId: string
         FirstName: string
         LastName: string
-        UrlName: string
         Image: string       
-        DidAttend: bool       
+        DidAttend: bool    
+        Status: PlayerStatus   
     } with 
         member p.Name = sprintf "%s %s" p.FirstName p.LastName        
 
-    let index club user trainingId next (ctx: HttpContext) =
 
+
+    type Players = {
+        Attending: Player list
+        OthersActive: Player list
+        OthersInactive: Player list
+    }    
+
+    type Model = {
+        Training: Training
+        Players: Players
+    }
+
+    type GetPreviousTrainings = Database -> ClubId -> Training list
+    type GetTraining = Database -> EventId -> Training
+    type GetPlayers = Database -> ClubId -> EventId -> Players
+
+    let getPreviousTrainings: GetPreviousTrainings =
+        fun db clubId ->
+            let (ClubId clubId) = clubId
+            let now = DateTime.Now
+            let trening = int EventType.Trening
+            query {
+                for event in db.Events do
+                where (event.ClubId = clubId && event.DateTime < now && event.Type = trening)
+                sortByDescending event.DateTime
+                take 15
+                select 
+                    ({
+                        Id = event.Id
+                        Date = event.DateTime
+                        Location = event.Location                    
+                    })
+            }
+            |> Seq.toList         
+
+
+    let getTraining: GetTraining =
+        fun db eventId ->
+            query {
+                for event in db.Events do
+                where (event.Id = eventId)
+                select 
+                    ({
+                        Id = eventId
+                        Date = event.DateTime
+                        Location = event.Location                    
+                    })
+            }
+            |> Seq.head
+                 
+    let getPlayers: GetPlayers =
+        fun db clubId eventId ->
+            let (ClubId clubId) = clubId
+            let players =
+                let sluttet = int PlayerStatus.Sluttet
+                let trener = int PlayerStatus.Trener
+                query {
+                    for p in db.Players do
+                    where (p.ClubId = clubId && p.Status <> sluttet && p.Status <> trener)
+                    select (p.Id, p.FirstName, p.LastName, p.FacebookId, p.ImageFull, p.Status)
+                } 
+                |> Seq.toList
+
+            let attendees = 
+                query {
+                    for a in db.EventAttendances do
+                    where (a.EventId = eventId)
+                    select (a.MemberId, a.DidAttend, a.IsAttending)
+                } |> Seq.toList
+                
+            let players = 
+                players
+                |> List.map (fun (id, firstName, lastName, facebookId, image, status) ->
+                    {
+                        Id = id
+                        FirstName = firstName
+                        LastName = lastName
+                        FacebookId = facebookId
+                        Image = image
+                        DidAttend = attendees |> List.exists (fun (playerId, didAttend, _) -> id = playerId && didAttend)
+                        Status = enum<PlayerStatus> status
+                    }
+                 )     
+                |> List.sortBy (fun p -> p.Name)
+       
+
+            let playerIsAttending p =
+                attendees |> List.exists (fun (id, _, isAttending) -> p.Id = id && (isAttending = Nullable true))
+
+            let playerIsActive p =
+                p.Status = PlayerStatus.Aktiv    
+
+            let attendingPlayers = players |> List.filter (playerIsAttending)
+            let othersActive = players |> List.filter playerIsActive |> List.except attendingPlayers
+            let othersInactive = players |> List.except attendingPlayers |> List.except othersActive
+
+            {
+                Attending = attendingPlayers
+                OthersActive = othersActive
+                OthersInactive = othersInactive
+            }
+
+open AsdfQueries
+
+module Asdf = 
+
+    let index (club: Club) user trainingId next (ctx: HttpContext) =
 
         let db = ctx.Database
         
-        let getImage = Images.getMember ctx
+        let previousTrainings = 
+            getPreviousTrainings db club.Id
+                       
+        let getTraining = 
+            AsdfQueries.getTraining db
+                    
+        let model = 
+            let getModel (training: Training) = 
+                let players = AsdfQueries.getPlayers db club.Id training.Id
+                {
+                    Training = training
+                    Players = players
+                }
+            match trainingId with
+            | Some trainingId -> getTraining trainingId |> getModel |> Some               
+            | None -> previousTrainings 
+                      |> List.tryHead
+                      |> Option.map getModel
 
-        let selectedTraining = 
-            {
-                Id = Guid.NewGuid()
-                Date = DateTime.Now
-                Location = "Kringsjå"
-            }
-    
-
-        let registerAttendanceUrl trainingId = 
-            sprintf "/intern/oppmote/registrer/%s" (str trainingId)     
+                     
+        let registerAttendanceUrl (training: Training option) =
+            match training with
+            | Some training -> sprintf "/intern/oppmote/registrer/%s" (str training.Id) 
+            | None -> "/intern/oppmote/registrer"   
 
         let isSelected url = 
-            registerAttendanceUrl selectedTraining.Id = url      
-
-        let previousTrainings = 
-            [selectedTraining]        
-
-
+            registerAttendanceUrl (model |> Option.map (fun t -> t.Training)) = url      
+ 
+        let getImage = Images.getMember ctx
 
         let editEventLink eventId =
             editLink <| sprintf "/intern/arrangement/endre/%s" (str eventId)          
             
 
-        let attendees = 
-            [
-                {
-                    Id = (Guid.NewGuid())
-                    FirstName = "Severin"
-                    LastName = "Sverdvik"
-                    FacebookId = ""
-                    Image = ""
-                    UrlName = "severin_sverdvik"
-                    DidAttend = true
-                }
-            ]        
-   
-        
-             
-
-        let registerAttendancePlayerList header (players: PlayerAttendance list) =
+        let registerAttendancePlayerList header (players: Player list) (selectedEvent: Training) isCollapsed =
             collapsible 
-                false 
+                isCollapsed 
                 [encodedText <| sprintf "%s (%i)" header players.Length]
                 [
-                    ul [ _class "list-users col-xs-11 col-md-10" ] 
-                        (players |> List.map (fun p ->
-                            li [ _class "register-attendance-item" ] [ 
-                                img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
-                                encodedText p.Name
-                                input [ 
-                                    _class "pull-right form-control register-attendance-input"
-                                    attr "data-player-id" (str p.Id)
-                                    attr "data-event-id" (str selectedTraining.Id)
-                                    _type "checkbox" 
-                                    (p.DidAttend =? (_checked, _empty))
-                                    ]
-                                ajaxSuccessIndicator
-                            ]
-                        ))             
+                    div [_class "row"] [
+                        ul [ _class "list-users col-xs-11 col-md-10" ] 
+                            (players |> List.map (fun p ->
+                                li [ _class "register-attendance-item" ] [ 
+                                    img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
+                                    encodedText p.Name
+                                    input [ 
+                                        _class "pull-right form-control register-attendance-input"
+                                        attr "data-player-id" (str p.Id)
+                                        attr "data-event-id" (str selectedEvent.Id)
+                                        _type "checkbox" 
+                                        (p.DidAttend =? (_checked, _empty))
+                                        ]
+                                    ajaxSuccessIndicator
+                                ]
+                            ))  
+                        ]                       
                 ]                                    
+
 
         ([
             main [_class "register-attendance"] [
-                block [] [                  
-                    editEventLink selectedTraining.Id
-                    div [_class "attendance-event" ] [
-                        eventIcon EventType.Trening ExtraLarge        
-                        div [ _class "faded" ] [ 
-                            p [] [
-                                icon (fa "calendar") "" 
-                                whitespace
-                                encodedText <| (selectedTraining.Date.ToString("ddd d MMMM"))                     
-                            ]                     
-                            p [] [ 
-                                    icon (fa "map-marker") ""
-                                    encodedText selectedTraining.Location
-                     
-                                ]
-                     
-                           ] 
-                    ]                    
-                    registerAttendancePlayerList "Påmeldte spillere" attendees
-                ]  
+                block [] 
+                        (model
+                        |> Option.fold (fun _ model ->                  
+                            [
+                                editEventLink model.Training.Id
+                                div [_class "attendance-event" ] [
+                                    eventIcon EventType.Trening ExtraLarge        
+                                    div [ _class "faded" ] [ 
+                                        p [] [
+                                            icon (fa "calendar") "" 
+                                            whitespace
+                                            encodedText <| (model.Training.Date.ToString("ddd d MMMM"))                     
+                                        ]                     
+                                        p [] [ 
+                                                icon (fa "map-marker") ""
+                                                encodedText model.Training.Location
+                                 
+                                            ]
+                                 
+                                       ] 
+                                ]                    
+                                registerAttendancePlayerList "Påmeldte spillere" model.Players.Attending model.Training Open
+                                br []
+                                registerAttendancePlayerList "Øvrige aktive" model.Players.OthersActive model.Training Collapsed
+                                br []
+                                registerAttendancePlayerList "Øvrige inaktive" model.Players.OthersInactive model.Training Collapsed
+                            ]) 
+                            [emptyText]
+                            )
+                
                      
             ]          
             sidebar [_class "register-attendance"] [               
@@ -129,7 +241,13 @@ module Asdf =
                     (block [] [
                         navList ({ 
                                     Header = "Siste treninger"
-                                    Items = previousTrainings |> List.map (fun training  -> { Text = [icon (fa "calendar") "";whitespace;encodedText <| (training.Date.ToString("ddd d MMMM"))]; Url = registerAttendanceUrl training.Id })  
+                                    Items = previousTrainings 
+                                            |> List.map (fun training  -> 
+                                                            { 
+                                                                Text = [icon (fa "calendar") "";whitespace;encodedText <| (training.Date.ToString("ddd d MMMM"))];
+                                                                Url = registerAttendanceUrl (Some training) 
+                                                            }
+                                                        )  
                                     Footer = None                                                               
                                     IsSelected = isSelected                                                              
                                })
