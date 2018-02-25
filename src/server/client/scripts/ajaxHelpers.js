@@ -143,8 +143,6 @@ ajax.applyAjaxLinkListeners = function ($scope) {
 
       post(href, { value })
         .then((data) => {
-          console.log('yes')
-
           eval(completeFunction)
           const successLabel = element.parent().find('.label-success')
           element
@@ -155,7 +153,6 @@ ajax.applyAjaxLinkListeners = function ($scope) {
           successLabel.fadeOut(1500)
         })
         .catch(() => {
-          console.log('asd')
           const failLabel = element.parent().find('.label-danger')
           element
             .parent()
