@@ -8,31 +8,6 @@ open System
 
 module Queries =
 
-    type PlayerAttendance = {
-        FacebookId: string
-        FirstName: string
-        LastName: string
-        UrlName: string
-        Image: string
-        Games: int
-        Trainings: int
-        NoShows: int
-    }   
-    with member p.Name = sprintf "%s %s" p.FirstName p.LastName    
-
-    type SelectedYear = 
-    | AllYears
-    | Year of int
-
-    type Model = {
-        SelectedYear: SelectedYear
-        Attendance: PlayerAttendance list
-        Years: int list
-    }
-
-    type GetAttendance = Database -> ClubId -> string option -> Model
-
-
     let get : GetAttendance = 
         fun db clubId year ->
             let (ClubId clubId) = clubId
@@ -130,3 +105,89 @@ module Queries =
                 Years = years
             }
 
+
+    let getPreviousTrainings: GetPreviousTrainings =
+        fun db clubId ->
+            let (ClubId clubId) = clubId
+            let now = DateTime.Now
+            let trening = int EventType.Trening
+            query {
+                for event in db.Events do
+                where (event.ClubId = clubId && event.DateTime < now && event.Type = trening)
+                sortByDescending event.DateTime
+                take 15
+                select 
+                    ({
+                        Id = event.Id
+                        Date = event.DateTime
+                        Location = event.Location                    
+                    })
+            }
+            |> Seq.toList         
+
+
+    let getTraining: GetTraining =
+        fun db eventId ->
+            query {
+                for event in db.Events do
+                where (event.Id = eventId)
+                select 
+                    ({
+                        Id = eventId
+                        Date = event.DateTime
+                        Location = event.Location                    
+                    })
+            }
+            |> Seq.head
+                 
+    let getPlayers: GetPlayers =
+        fun db clubId eventId ->
+            let (ClubId clubId) = clubId
+            let players =
+                let sluttet = int PlayerStatus.Sluttet
+                let trener = int PlayerStatus.Trener
+                query {
+                    for p in db.Players do
+                    where (p.ClubId = clubId && p.Status <> sluttet && p.Status <> trener)
+                    select (p.Id, p.FirstName, p.LastName, p.FacebookId, p.ImageFull, p.Status)
+                } 
+                |> Seq.toList
+
+            let attendees = 
+                query {
+                    for a in db.EventAttendances do
+                    where (a.EventId = eventId)
+                    select (a.MemberId, a.DidAttend, a.IsAttending)
+                } |> Seq.toList
+                
+            let players = 
+                players
+                |> List.map (fun (id, firstName, lastName, facebookId, image, status) ->
+                    {
+                        Id = id
+                        FirstName = firstName
+                        LastName = lastName
+                        FacebookId = facebookId
+                        Image = image
+                        DidAttend = attendees |> List.exists (fun (playerId, didAttend, _) -> id = playerId && didAttend)
+                        Status = enum<PlayerStatus> status
+                    }
+                 )     
+                |> List.sortBy (fun p -> p.Name)
+       
+
+            let playerIsAttending (p: Player) =
+                attendees |> List.exists (fun (id, _, isAttending) -> p.Id = id && (isAttending = Nullable true))
+
+            let playerIsActive p =
+                p.Status = PlayerStatus.Aktiv    
+
+            let attendingPlayers = players |> List.filter (playerIsAttending)
+            let othersActive = players |> List.filter playerIsActive |> List.except attendingPlayers
+            let othersInactive = players |> List.except attendingPlayers |> List.except othersActive
+
+            {
+                Attending = attendingPlayers
+                OthersActive = othersActive
+                OthersInactive = othersInactive
+            }

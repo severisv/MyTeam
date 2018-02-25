@@ -1,20 +1,16 @@
-namespace MyTeam
+namespace MyTeam.AttendancePages
 
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
-open System.Linq
-open MyTeam.Models.Enums
 open MyTeam.Views
-open System
 open Attendance.Queries
+open MyTeam.Attendance
 
-module AttendancePages = 
+module Show =
 
-
-
-    let index (club: Club) (user: Users.User) year next (ctx: HttpContext) =
+    let view (club: Club) (user: Users.User) year next (ctx: HttpContext) =
 
         let db = ctx.Database
 

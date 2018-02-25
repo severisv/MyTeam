@@ -175,29 +175,7 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCache(clubId);
         }
-
-        public void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
-        {
-            var attendance = _dbContext.EventAttendances.FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
-            if (attendance != null)
-            {
-                attendance.DidAttend = didAttend;
-            }
-            else
-            {
-                attendance = new EventAttendance
-                {
-                    Id = Guid.NewGuid(),
-                    EventId = eventId,
-                    DidAttend = didAttend,
-                    IsAttending = false,
-                    MemberId = playerId
-                };
-                _dbContext.EventAttendances.Add(attendance);
-            }
-            _dbContext.SaveChanges();
-        }
-
+       
         public EventViewModel GetEventViewModel(Guid eventId) =>
              _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(

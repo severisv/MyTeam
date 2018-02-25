@@ -215,36 +215,6 @@ namespace MyTeam.Controllers
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
             return RedirectToAction("Index");
         }
-
-        [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
-        [Route("oppmote/bekreft")]
-        public IActionResult RegisterAttendance(Guid? eventId = null)
-        {
-            var ev = _eventService.GetRegisterAttendanceEventViewModel(eventId);
-            var players = _playerService.GetDto(Club.Id);
-            var previousEvents = _eventService.GetPreviousSimpleEvents(EventType.Trening, Club.Id, 15).ToList();
-
-            if (ev == null) return new NotFoundResult(HttpContext);
-
-            var model = new RegisterAttendanceViewModel(ev, players, previousEvents);
-
-            ViewBag.Title = $"{Res.Register} {Res.Attendance.ToLower()}";
-
-            return View("RegisterAttendance", model);
-        }
-
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin, Roles.AttendanceTaker)]
-        [Route("oppmote/bekreft")]
-        public JsonResult ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend)
-        {
-            if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
-
-            _eventService.ConfirmAttendance(eventId, playerId, didAttend);
-
-            return new JsonResult(JsonResponse.Success());
-        }
-
-
+        
     }
 }

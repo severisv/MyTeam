@@ -35,6 +35,7 @@ module Framework =
 
     type Error = 
         | ValidationErrors of list<ValidationError>            
+        | AuthorizationError            
 
     let fromResult next ctx (result: Result<'T, Error>) =
         match result with
@@ -42,8 +43,13 @@ module Framework =
                 match r with
                     | _ -> json r next ctx
             | Error e -> 
-                let (ValidationErrors validationErrors) = e
-                (setStatusCode 400 >=> json validationErrors) next ctx    
+                match e with
+                | ValidationErrors validationErrors ->
+                    (setStatusCode 400 >=> json validationErrors) next ctx    
+                | AuthorizationError ->
+                    (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx    
+        
+                
 
     type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) 
 
