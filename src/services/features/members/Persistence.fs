@@ -16,7 +16,7 @@ module Persistence =
                     |> Seq.filter(fun p -> p.Id = memberId)
                     |> Seq.head
 
-            memb.Status <- enum<Enums.PlayerStatus>(int status)
+            memb.Status <- (int status)
             db.SaveChanges() |> ignore
             UserId memb.UserName
 
@@ -42,7 +42,7 @@ module Persistence =
                                 |> Members.fromRoleList
                        
             db.SaveChanges() |> ignore        
-            UserId memb.UserName
+            UserId (memb.UserName =?? "")
 
 
     let toggleTeam : ToggleTeam =
@@ -94,7 +94,7 @@ module Persistence =
                 else
                     members |> Seq.tryFind(fun m -> m.UserName = form.EmailAddress)
                 |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
-                |> Option.fold (fun _ v -> v) (Ok())                            
+                |?? Ok ()                            
            
             let facebookIdOrEmailIsPresent (_, form) =
                 match form with

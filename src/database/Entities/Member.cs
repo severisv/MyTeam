@@ -26,7 +26,13 @@ namespace MyTeam.Models.Domain
 
 
         [Required]
-        public PlayerStatus Status { get; set; }
+        public int Status { get; set; }
+        [NotMapped]
+        public PlayerStatus PlayerStatus
+        {
+            get => (PlayerStatus)Status;
+            set { Status = (int)value; }
+        }
 
         [NotMapped]
         public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
@@ -37,7 +43,7 @@ namespace MyTeam.Models.Domain
         [DataType(DataType.Date)]
         [Display(Name = Res.StartDate)]
         public DateTime? StartDate { get; set; }
-        
+
         [DataType(DataType.PhoneNumber)]
         [Display(Name = Res.Phone)]
         public string Phone { get; set; }
@@ -64,7 +70,7 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
-  
+
     }
 
 }

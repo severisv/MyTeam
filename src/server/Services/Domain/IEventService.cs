@@ -16,7 +16,6 @@ namespace MyTeam.Services.Domain
         void Add(Guid clubId, params Event[] ev);
         void Delete(Guid clubId, Guid eventId);
         void Update(CreateEventViewModel ev, Guid clubId);
-        void ConfirmAttendance(Guid eventId, Guid playerId, bool didAttend);
         EventViewModel GetEventViewModel(Guid eventId);
         RegisterAttendanceEventViewModel GetRegisterAttendanceEventViewModel(Guid? eventId);
         IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType trening, Guid id, int i);

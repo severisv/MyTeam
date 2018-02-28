@@ -6,28 +6,32 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Quotations.Evaluator" Version="1.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Giraffe" Version="0.1.0-beta-700" />
+    <PackageReference Include="Giraffe" Version="1.1.*" />
     <PackageReference Include="SQLProvider " Version="1.1.23" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="settings/*.fs" />
     <Compile Include="Framework.fs" />
+    <Compile Include="utils/common/*.fs" />
     <Compile Include="utils/*.fs" />
+    <Compile Include="components/common/*.fs" />
+    <Compile Include="components/*.fs" />
     <Compile Include="domain/*.fs" />
     <Compile Include="features/common/Clubs.fs" />
     <Compile Include="features/common/Users.fs" />
     <Compile Include="features/common/Tenant.fs" />
     <Compile Include="features/common/Authorization.fs" />
+    <Compile Include="features/common/views/partials/*.fs" />
     <Compile Include="features/common/views/*.fs" />
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/Queries.fs" />
     <Compile Include="features/*/Persistence.fs" />
-    <Compile Include="features/*/W_Persistence.fs" />
     <Compile Include="features/*/Api.fs" />
-    <Compile Include="features/*/W_Api.fs" />
+    <Compile Include="features/*/pages/*.fs" />
     <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

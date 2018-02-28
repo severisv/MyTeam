@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
+     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>MyTeam</AssemblyName>
     <OutputType>Exe</OutputType>

@@ -16,7 +16,7 @@
     }
     <title>@club?.Name@(ViewBag.Title != null ? " - " : "")@ViewBag.Title</title>
     <link rel="icon" type="image/png" href="@Context.Cloudinary().Image(club?.Favicon ?? club?.Logo)">
-    <link rel="stylesheet" href="~/compiled/site.bundle.css?v16" />
+    <link rel="stylesheet" href="~/compiled/site.bundle.css" />
     <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -29,7 +29,6 @@
     </script>
 </head>
 <body>
-<div id="bg-placeholder"></div>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -45,8 +44,8 @@
                 <li><a asp-controller="player" asp-action="list">@Res.Players</a></li>
                 <li><a asp-controller="game" asp-action="index" asp-route-aar="">@Res.Games</a></li>
                 <li><a asp-controller="table" asp-action="index" asp-route-aar="">@Res.Table</a></li>
-                <li><a asp-controller="stats" asp-action="index" asp-route-aar="">@Res.Stats</a></li>
-                <li><a asp-controller="about" asp-action="index" >@Res.About</a></li>
+                <li><a href="/statistikk">@Res.Stats</a></li>
+                <li><a href="/om" >@Res.About</a></li>
                 @if (Context.UserIsMember())
                 {
                     <li><a class="slide-down-parent hidden-xs" data-submenu="#submenu-internal" href="javascript:void(0)">@Res.Internal <i class="fa fa-angle-down"></i></a></li>
@@ -58,7 +57,7 @@
             <hr class="visible-xs submenu-divider" />
             <ul class="nav navbar-nav submenu visible-xs">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
             </ul>
@@ -86,7 +85,7 @@
         {
             <ul id="submenu-internal" class="nav navbar-nav submenu slide-down-child  hidden-xs collapse">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                <li><a asp-controller="attendance" asp-action="attendance"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a href="intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a asp-controller="member" asp-action="index"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))

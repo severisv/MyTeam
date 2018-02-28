@@ -44,7 +44,6 @@ h2 {
 
 .list-users li {
     height: 50px;
-
     img {
         margin-right: 1em;
         height: 100%;
@@ -53,6 +52,7 @@ h2 {
     input.form-control[type=checkbox] {
         margin-top: 0.65em;
         margin-right: 0.65em;
+        float: right;
     }
 
     button {
@@ -73,27 +73,6 @@ h2 {
     color: @black-faded;
 }
 
-.collapselink-parent {
-    position: relative;
-}
-.collapse-link {
-
-    &:before {
-        content: "\f078";
-        font-family: FontAwesome;
-        position: absolute;
-        left: 0;
-
-    }
-
-    &.collapsed:before {
-        content: "\f054";
-    }
-
-    &:hover {
-            text-decoration: none;
-    }
-}
 
 hr.sm {
     margin-top: 0.3em;

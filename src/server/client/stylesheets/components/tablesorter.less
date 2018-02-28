@@ -1,43 +1,42 @@
-﻿
-/* Tablesorter */
+﻿/* Tablesorter */
 
 table.tablesorter thead tr .header {
-    
-    position: relative;
+  position: relative;
 
-    &:after {
-        font-family: FontAwesome;
-        content: "\f0dc";
-        float:right;
-        color: @lightGray;
-        bottom: 0;
-        position: absolute;
-        right: 0.75em;
-        bottom: 0.75em;
-        .r-under-xs({right: 0.25em;});
-        }
-    cursor: pointer;
+  &:after {
+    font-family: FontAwesome;
+    content: "\f0dc";
+    float: right;
+    color: @lightGray;
+    bottom: 0;
+    position: absolute;
+    right: 0.75em;
+    bottom: 0.75em;
+    .r-under-xs({right: 0.2em;});
+  }
+  cursor: pointer;
 }
 
 table.tablesorter thead tr .headerSortUp {
-     &:after {
-        content: "\f0dd";      
-    }
+  &:after {
+    content: "\f0dd";
+  }
 }
 
 table.tablesorter thead tr .headerSortDown {
-     &:after {
-        content: "\f0de";  
-    }
+  &:after {
+    content: "\f0de";
+  }
 }
 
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-    background-color: fade(@team-primary, 15%)
+table.tablesorter thead tr .headerSortDown,
+table.tablesorter thead tr .headerSortUp {
+  background-color: fade(@team-primary, 15%);
 }
 
 table.tablesorter .nosort {
-    pointer-events: none;
+  pointer-events: none;
 }
 table.tablesorter .nosort:after {
-    opacity: 0;
+  opacity: 0;
 }

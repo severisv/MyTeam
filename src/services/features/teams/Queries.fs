@@ -25,3 +25,4 @@ module Queries =
                             }
                     )
             |> Seq.toList
+            |> List.sortBy(fun t -> t.ShortName)

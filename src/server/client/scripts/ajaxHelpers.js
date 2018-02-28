@@ -136,9 +136,31 @@ ajax.applyAjaxLinkListeners = function ($scope) {
 
     element.change((e) => {
       const value = e.target.checked
-      $.post(href, { value }).done((data) => {
-        eval(completeFunction)
-      })
+      element
+        .parent()
+        .find('i.fa-spinner')
+        .show()
+
+      post(href, { value })
+        .then((data) => {
+          eval(completeFunction)
+          const successLabel = element.parent().find('.label-success')
+          element
+            .parent()
+            .find('i.fa-spinner')
+            .hide()
+          successLabel.show()
+          successLabel.fadeOut(1500)
+        })
+        .catch(() => {
+          const failLabel = element.parent().find('.label-danger')
+          element
+            .parent()
+            .find('i.fa-spinner')
+            .hide()
+          failLabel.show()
+          failLabel.fadeOut(3000)
+        })
     })
   })
 }

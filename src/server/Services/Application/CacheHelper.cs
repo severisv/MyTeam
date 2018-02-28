@@ -157,6 +157,7 @@ namespace MyTeam.Services.Application
         public void ClearNotificationCache(Guid clubId)
         {
             Cache.Set<Dictionary<Guid, MemberNotification>>(clubId.ToString(), null);
+            Cache.Remove("notifications-" + clubId.ToString());
         }
 
         public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)
@@ -172,6 +173,7 @@ namespace MyTeam.Services.Application
                 notifications[memberId] = null;
             }
             Cache.Set(key, notifications);
+            Cache.Remove("notifications-" + clubId.ToString());
         }
 
         public void ClearMemberCache(Guid memberId)

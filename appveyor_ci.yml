@@ -7,9 +7,12 @@ install:
 assembly_info:
   patch: false
 branches:
-  only:
+  except:
   - master
+services:
+  - mssql2017
+
 build_script:
-  build.cmd
+  build.cmd publish
 test: off
 image: Visual Studio 2017

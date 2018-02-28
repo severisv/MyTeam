@@ -1,0 +1,25 @@
+.collapselink-parent {
+    position: relative;
+}
+.collapse-link {
+    font-size: 1.5em;
+    text-align: center;
+    font-family: KelsonBold;
+    display:block;
+    margin-bottom: 0.5em;
+    &:before {
+        content: "\f078";
+        font-family: FontAwesome;
+        position: absolute;
+        left: 0;
+
+    }
+
+    &.collapsed:before {
+        content: "\f054";
+    }
+
+    &:hover {
+            text-decoration: none;
+    }
+}

@@ -9,13 +9,28 @@ using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
 {
+
+
+
     public class Event : Entity, IEvent
     {
         [Required]
         public Guid ClubId { get; set; }
         [Required]
-        public EventType Type { get; set; }
-        public GameType? GameType { get; set; }
+        public int Type { get; set; }
+        [NotMapped]
+        public EventType EventType
+        {
+            get => (EventType)Type;
+            set { Type = (int)value; }
+        }
+        public int? GameType { get; set; }
+        [NotMapped]
+        public GameType? GameTypeValue
+        {
+            get { return (GameType?)GameType; }
+            set { GameType = (int?)value; }
+        }
 
         [Required]
         public DateTime DateTime { get; set; }
@@ -30,7 +45,7 @@ namespace MyTeam.Models.Domain
         public bool? GamePlanIsPublished { get; set; }
 
         public virtual Club Club { get; set; }
-        
+
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<EventAttendance> Attendees { get; set; }
         [NotMapped]
@@ -39,22 +54,22 @@ namespace MyTeam.Models.Domain
         public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => a.IsAttending == false).Select(a => a.Member);
 
         [NotMapped]
-        public bool IsGame => Type == EventType.Kamp;
+        public bool IsGame => EventType == EventType.Kamp;
         [NotMapped]
-        public bool IsTraining => Type == EventType.Trening;
+        public bool IsTraining => EventType == EventType.Trening;
         [NotMapped]
-        public bool IsCustom => Type == EventType.Diverse;
+        public bool IsCustom => EventType == EventType.Diverse;
 
         public bool IsPublished { get; set; }
         public bool IsHomeTeam { get; set; }
 
         public bool IsAttending(ClaimsPrincipal user) => Attending?.Any(a => a.UserName == user.Identity.Name) == true;
-   
+
         public bool IsNotAttending(ClaimsPrincipal user) => NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
 
         public bool SignupHasOpened()
         {
-            if (Type == EventType.Diverse) return true;
+            if (EventType == EventType.Diverse) return true;
             return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
         }
     }

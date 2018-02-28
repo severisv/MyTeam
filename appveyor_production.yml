@@ -8,7 +8,9 @@ assembly_info:
   patch: false
 branches:
   only:
-  - production
+  - master
+services:
+  - mssql2017
 build_script:
   build.cmd
 test: off

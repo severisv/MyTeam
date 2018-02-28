@@ -1,64 +1,69 @@
-﻿
-form {
-    textarea.update-table {
-        height: 30em;
-    }
+﻿form {
+  textarea.update-table {
+    height: 30em;
+  }
 }
-
-
 
 /* Table */
 table.table {
-    tr {
-        th {
-            font-size: 0.9em;
-            color: @black-faded;
-            text-transform: uppercase;
-        }
-
-        td {
-            border-top: 1px solid fade(black, 5);
-        }
-
-        &.br {
-            height: 2em;
-
-            td {
-                border-top: 1px solid transparent;
-            }
-        }
+  tr {
+    th {
+      font-size: 0.9em;
+      color: @black-faded;
+      text-transform: uppercase;
     }
+
+    td {
+      border-top: 1px solid fade(black, 5);
+      vertical-align: middle;
+    }
+
+    &.br {
+      height: 2em;
+
+      td {
+        border-top: 1px solid transparent;
+      }
+    }
+  }
 }
 
+table.table > tbody > tr > td.table-td-image {
+  height: 3em;
+  padding: 0;
+}
 
+.table-td-image img {
+  height: 3em;
+  margin-right: 0.4em;
+}
+.table-td-image img {
+  .r-under-xxs({ display: none;});
+}
+.table-align--center {
+  text-align: center;
+}
 .table--striped tbody tr:nth-child(odd) {
-    background-color: fade(@link-color,5);
+  background-color: fade(@link-color, 5);
 }
-
 .table--striped tbody tr td {
-    border-top: 0;
+  border-top: 0;
 }
-
 table .team-primary {
-    background: fade(@team-primary, 40) !important;
+  background: fade(@team-primary, 40) !important;
 }
-
 #leagueTable tr th,
 #leagueTable tr td {
-    text-align: center;
-
-    &.table-text {
-        text-align: left;
-    }
+  text-align: center;
+  &.table-text {
+    text-align: left;
+  }
 }
-
-
 .update-table-form label {
-    line-height: 2.2em;
+  line-height: 2.2em;
 }
-
 .update-table-form #AutoUpdateTableWrapper {
-    label {     
-        text-align: right;
-    } 
+  label {
+    text-align: right;
+  }
 }

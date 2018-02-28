@@ -7,13 +7,20 @@ open Microsoft.AspNetCore.Http
 [<CLIMutable>]
 type ConnectionStrings = {
     DefaultConnection: string
+
 }
+
+[<CLIMutable>]
+type CloudinarySettings = {
+    ApiKey: string
+    ApiSecret: string
+    CloudName: string
+    DefaultMember: string
+    DefaultArticle: string
+}    
 
 [<AutoOpen>]
 module Options =
  
     let getConnectionString (ctx: HttpContext) = 
             ctx.RequestServices.GetService<IOptions<ConnectionStrings>>().Value.DefaultConnection
-
-    let getService<'T> (ctx: HttpContext) =             
-        ctx.RequestServices.GetService<'T>()

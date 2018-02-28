@@ -1,86 +1,82 @@
-﻿
-
-.news-imageWrapper {
-    min-height: 8em;
-    overflow: hidden;
+﻿.news-imageWrapper {
+  min-height: 8em;
+  overflow: hidden;
 }
 
 .news-imageWrapper--short {
-    max-height: 15em;
+  max-height: 30em;
 }
 
 a.news-headline {
-    color: @black-faded;
+  color: @black-faded;
 
-    &:hover {
-        color: @black;
-    }
+  &:hover {
+    color: @black;
+  }
 }
 
-.news-imageWrapper img{
-    width: 100%;
+.news-imageWrapper img {
+  width: 100%;
 }
 
-.news-item h2{
-    text-align: left;
-    margin-bottom: 0.25em;
-    font-size: 2.5em;
-    .r-under-sm({font-size:2em;});
-    .r-under-xs({font-size:1.75em;});
-    .r-under-xxs({font-size:1.5em;});
+.news-item h2 {
+  margin-bottom: 0.25em;
+  font-size: 2.5em;
+  .r-under-sm({font-size:2em;});
+  .r-under-xs({font-size:1.75em;});
+  .r-under-xxs({font-size:1.5em;});
 }
 
 p.news-author {
-    font-size: 1em;
-    font-style: italic;
-    margin: 0;
-    color: @text-subtle;
+  font-size: 1em;
+  font-style: italic;
+  margin: 0;
+  color: @text-subtle;
 }
 
 .cloudinary-preview {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-.news-item .edit-link{
-    margin-top: 1.3em;
+.news-item .edit-link {
+  margin-top: 1.3em;
 }
 
 .news-pager ul.pager {
-          margin: 0;
-      }
+  margin: 0;
+}
 
 .mt-container .news-content,
 .mt-container .news-content p {
-    font-family: 'Helvetica Neue', Arial, freesans, sans-serif;
-    color:black;
-    font-size: 1.6rem;
-    line-height: 2.8rem;
-    &.news-content--short {
-        font-weight:bold;
-    }
+  font-family: "Helvetica Neue", Arial, freesans, sans-serif;
+  color: black;
+  font-size: 1.6rem;
+  line-height: 2.8rem;
+  &.news-content--short {
+    font-weight: bold;
+  }
 }
 
 .news-item img {
-               max-width: 100% !important;
-               height: auto !important;
-               }
-
+  max-width: 100% !important;
+  height: auto !important;
+}
 
 .news-matchreportSelect {
-    label {
-        line-height: 33px;
-    }
-    select {
-        max-width: 20em;
-        margin-left: 1em;
-    }
+  label {
+    line-height: 33px;
+  }
+  select {
+    max-width: 20em;
+    margin-left: 1em;
+  }
 }
 
 .news-item h2.news-matchReport {
-    text-align:center;
+  text-align: center;
 }
 
 .articleNav li.nav-header,
 .articleNav li a {
-        padding-left: 0.3em;
+  padding-left: 0.3em;
 }

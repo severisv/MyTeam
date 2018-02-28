@@ -1,22 +1,3 @@
 ﻿@using System.Threading.Tasks
 @model IEnumerable<MyTeam.ViewModels.Events.RegisterAttendancePlayerViewModel>
-<div class="row">
-    <ul class="list-users col-xs-11 col-md-10">
-        @foreach (var player in Model)
-        {
-            <li class="register-attendance-item">
-                <img src="@Context.Cloudinary().MemberImage(player.ImageFull, player.FacebookId, 50, 50)"/>@player.ShortName              
-                <input class="pull-right form-control register-attendance-input"
-                       data-player-id="@player.Id"
-                       data-event-id="@player.EventId"
-                       type="checkbox"
-                       @(player.Attendance?.DidAttend == true ? "checked" : "")/>
-                <div class="ra-info-elements">
-                    <span class="label label-success"><i class="fa fa-check"></i></span>
-                    <span class="label label-danger"><i class="fa fa-exclamation-triangle"></i></span>
-                    <i class="loader fa fa-spin fa-spinner"></i>
-                </div>
-            </li>
-        }
-    </ul>
-</div>
+

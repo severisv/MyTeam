@@ -11,7 +11,7 @@ namespace MyTeam.ViewModels.Attendance
         public string Image { get; set; }
         public string FacebookId { get; set; }
         public PlayerStatus Status { get; set; }
-        
+
     }
 
 }
