@@ -4,6 +4,7 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Events
 open MyTeam.Models.Enums
 open MyTeam.Views
 open MyTeam.Attendance.Queries

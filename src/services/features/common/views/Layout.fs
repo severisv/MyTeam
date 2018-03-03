@@ -2,7 +2,7 @@ namespace MyTeam
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
+open MyTeam.Domain.Members
 open MyTeam.Views
 
 

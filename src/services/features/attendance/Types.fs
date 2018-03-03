@@ -3,26 +3,23 @@ namespace MyTeam.Attendance
 open MyTeam
 open System
 open MyTeam.Domain.Members
+open MyTeam.Domain.Events
 open MyTeam.Domain
 
-type Training = {
-    Id: EventId
-    Date: DateTime       
-    Location: string
-} 
+
             
 type PlayerDidAttend = bool            
 type PlayerAttendance = Member * PlayerDidAttend
 
-type Players = {
+type Playerlist = {
     Attending: PlayerAttendance list
     OthersActive: PlayerAttendance list
     OthersInactive: PlayerAttendance list
 }    
 
-type Model = {
+type RegisterAttendanceModel = {
     Training: Training
-    Players: Players
+    Players: Playerlist
 }
 
 type AttendanceSummary = {
@@ -47,5 +44,5 @@ type Year = string option
 type GetAttendance = Database -> ClubId -> Year -> ShowAttendanceModel
 type GetPreviousTrainings = Database -> ClubId -> Training list
 type GetTraining = Database -> EventId -> Training
-type GetPlayers = Database -> ClubId -> EventId -> Players
+type GetPlayers = Database -> ClubId -> EventId -> Playerlist
 type ConfirmAttendance = Database -> ClubId -> EventId -> MemberId -> bool -> Result<unit, Error>

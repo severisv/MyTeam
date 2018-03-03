@@ -2,6 +2,7 @@ namespace MyTeam.Members
 
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Members
 open MyTeam.Models
 open MyTeam.Models.Domain
 open MyTeam.Validation
@@ -87,7 +88,7 @@ module Persistence =
                 ) 
                 |> Option.fold (fun _ v -> v.Email) ""
                                          
-            let memberDoesNotExist db (_, form) = 
+            let memberDoesNotExist db ((_, form): string * AddMemberForm) = 
                 let members = Queries.members db clubId
                 if form.FacebookId.HasValue then
                     members |> Seq.tryFind(fun m -> m.FacebookId = form.FacebookId)

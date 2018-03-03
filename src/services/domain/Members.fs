@@ -1,4 +1,4 @@
-namespace MyTeam.Domain
+module MyTeam.Domain.Members
 
 open System
 open MyTeam
@@ -18,31 +18,28 @@ type Role =
     | Oppmøte = 3
     | Botsjef = 4 
 
+type Status = PlayerStatus
+        
+type Member = {
+    Id: MemberId
+    FacebookId: string
+    FirstName: string
+    MiddleName: string
+    LastName: string
+    UrlName: string
+    Image: string    
+    Status: Status      
+} with
+    member p.Name = sprintf "%s %s" p.FirstName p.LastName   
 
-module Members = 
+    member m.FullName = 
+        sprintf "%s %s%s%s" m.FirstName m.MiddleName (if m.MiddleName.HasValue then " " else "") m.LastName
 
-    type Status = PlayerStatus
-            
-    type Member = {
-        Id: MemberId
-        FacebookId: string
-        FirstName: string
-        MiddleName: string
-        LastName: string
-        UrlName: string
-        Image: string    
-        Status: Status      
-    } with
-        member p.Name = sprintf "%s %s" p.FirstName p.LastName   
+let toRoleList (roleString : string) =
+    if not <| isNull roleString && roleString.Length > 0 then
+        roleString.Split [|','|] 
+        |> Seq.map(parse<Role>)
+        |> Seq.toList
+    else []
 
-        member m.FullName = 
-            sprintf "%s %s%s%s" m.FirstName m.MiddleName (if m.MiddleName.HasValue then " " else "") m.LastName
-    
-    let toRoleList (roleString : string) =
-        if not <| isNull roleString && roleString.Length > 0 then
-            roleString.Split [|','|] 
-            |> Seq.map(parse<Role>)
-            |> Seq.toList
-        else []
-
-    let fromRoleList (roles: Role list) = System.String.Join(",", roles)
+let fromRoleList (roles: Role list) = System.String.Join(",", roles)

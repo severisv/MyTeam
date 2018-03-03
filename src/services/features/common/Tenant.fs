@@ -1,6 +1,7 @@
 namespace MyTeam
 
 open MyTeam
+open MyTeam.Domain.Members
 open MyTeam.Domain
 open MyTeam.Users
 

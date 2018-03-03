@@ -5,7 +5,7 @@ open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
 open MyTeam
-open MyTeam.Domain
+open MyTeam.Domain.Members
 open MyTeam.Authorization
 open MyTeam.Views
 open MyTeam.Models.Enums

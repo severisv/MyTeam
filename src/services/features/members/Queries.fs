@@ -16,18 +16,19 @@ module Queries =
         fun db clubId ->         
             (members db clubId).Include(fun p -> p.MemberTeams) 
             |> Seq.map(fun p -> 
-                            {
+                            ({
                                 Id = p.Id
+                                FacebookId = p.FacebookId
                                 FirstName = p.FirstName
-                                LastName = p.LastName
                                 MiddleName = p.MiddleName
+                                LastName = p.LastName
+                                Image = p.ImageFull
                                 UrlName = p.UrlName
                                 Status = int p.Status |> enum<Status> 
-                                Roles = p.RolesString |> toRoleList
-                                TeamIds = p.MemberTeams 
+                             }, p.MemberTeams 
                                                 |> Seq.map(fun team -> team.TeamId)
-                                                |> Seq.toList
-                            }
+                                                |> Seq.toList,
+                             p.RolesString |> toRoleList)
                     )
             |> Seq.toList                
 

@@ -2,7 +2,7 @@ namespace MyTeam
 
 open Giraffe
 open MyTeam.Users
-open MyTeam.Domain
+open MyTeam.Domain.Members
 
 module Authorization =
     let accessDenied = setStatusCode 403 >=> text "Ingen tilgang"

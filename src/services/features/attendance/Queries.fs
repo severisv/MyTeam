@@ -4,6 +4,7 @@ open System.Linq
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Domain.Events
 open MyTeam.Models.Enums
 open System
 
