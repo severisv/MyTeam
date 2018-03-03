@@ -38,7 +38,9 @@ module Queries =
 
             let attendance = 
                 let inOneHour = DateTime.Now.AddHours(1.0)
-                let attendanceQuery =
+                    
+
+                let attendances =
                     match selectedYear with
                     | Year y ->                     
                         query {
@@ -49,20 +51,19 @@ module Queries =
                         query {
                             for a in db.EventAttendances do
                             select a                          
-                        }    
-
-                let attendances = 
-                    query {
-                        for a in attendanceQuery do
-                        where (
-                                a.Event.ClubId = clubId &&
-                                a.Event.DateTime < inOneHour &&
-                                (a.Event.Type = (int EventType.Trening) || a.Event.Type = (int EventType.Kamp)) &&
-                                a.Event.Voluntary <> true
-                            )
-                        select (a, a.Event.Type)
-                    } 
-                    |> Seq.toList
+                        }
+                    |> fun attendances ->
+                        query {
+                            for a in attendances do
+                            where (
+                                    a.Event.ClubId = clubId &&
+                                    a.Event.DateTime < inOneHour &&
+                                    (a.Event.Type = (int EventType.Trening) || a.Event.Type = (int EventType.Kamp)) &&
+                                    a.Event.Voluntary <> true
+                                )
+                            select (a, a.Event.Type)
+                        } 
+                        |> Seq.toList
 
 
                 let playerIds = (attendances |> Seq.map (fun (a,_) -> a.MemberId) |> Seq.distinct)
