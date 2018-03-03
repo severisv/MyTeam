@@ -5,8 +5,6 @@ open System
 open MyTeam.Domain.Members
 open MyTeam.Domain.Events
 open MyTeam.Domain
-
-
             
 type PlayerDidAttend = bool            
 type PlayerAttendance = Member * PlayerDidAttend

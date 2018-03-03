@@ -112,28 +112,14 @@ module Queries =
                 where (event.ClubId = clubId && event.DateTime < now && event.Type = trening)
                 sortByDescending event.DateTime
                 take 15
-                select 
-                    ({
-                        Id = event.Id
-                        Date = event.DateTime
-                        Location = event.Location                    
-                    })
             }
+            |> selectEvents
             |> Seq.toList         
-
-
+            
     let getTraining: GetTraining =
         fun db eventId ->
-            query {
-                for event in db.Events do
-                where (event.Id = eventId)
-                select 
-                    ({
-                        Id = eventId
-                        Date = event.DateTime
-                        Location = event.Location                    
-                    })
-            }
+            db.Events.Where(fun e -> e.Id = eventId)
+            |> selectEvents
             |> Seq.head
                  
     let getPlayers: GetPlayers =
