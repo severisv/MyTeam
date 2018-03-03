@@ -79,10 +79,10 @@ module App =
                                         ]
                             ])
 
-                        subRoute "api/games"
+                        subRoute "/api/games"
                             (choose [
                                 GET >=> 
-                                    routef "/%s/squad" (parseGuid >> GameApi.getSquad club.Id)
+                                    routef "/%O/squad" (GameApi.getSquad club.Id)
                                                            
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 

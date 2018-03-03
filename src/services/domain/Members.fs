@@ -1,6 +1,5 @@
 module MyTeam.Domain.Members
 
-open System
 open MyTeam
 open MyTeam.Enums
 open MyTeam.Models.Enums
@@ -50,6 +49,7 @@ let selectMembers =
                     fun (players: IQueryable<Models.Domain.Member>) ->
                             query {
                                 for p in players do
+                                sortBy p.FirstName
                                 select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.UrlName, p.ImageFull, p.Status)
                             }
                             |> Seq.map 
