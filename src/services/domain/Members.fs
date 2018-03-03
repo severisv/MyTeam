@@ -6,6 +6,7 @@ open MyTeam.Enums
 open MyTeam.Models.Enums
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+open System.Linq
 
 type MemberId = Guid
 type UserId = UserId of string
@@ -43,3 +44,23 @@ let toRoleList (roleString : string) =
     else []
 
 let fromRoleList (roles: Role list) = System.String.Join(",", roles)
+
+
+let selectMembers =
+                    fun (players: IQueryable<Models.Domain.Member>) ->
+                            query {
+                                for p in players do
+                                select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.UrlName, p.ImageFull, p.Status)
+                            }
+                            |> Seq.map 
+                                (fun (id, facebookId, firstName, middleName, lastName, urlName, imageFull, status) ->
+                                    {
+                                        Id = id
+                                        FacebookId = facebookId
+                                        FirstName = firstName
+                                        MiddleName = middleName
+                                        LastName = lastName
+                                        UrlName = urlName
+                                        Image = imageFull
+                                        Status = enum<PlayerStatus> status
+                                     })

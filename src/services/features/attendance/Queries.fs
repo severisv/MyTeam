@@ -64,27 +64,18 @@ module Queries =
                     } 
                     |> Seq.toList
 
+
                 let playerIds = (attendances |> Seq.map (fun (a,_) -> a.MemberId) |> Seq.distinct)
                 let players = 
                     query {
                         for p in db.Members do
                         where (playerIds.Contains(p.Id) && p.Status <> (int PlayerStatus.Trener))
-                        select (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, p.UrlName, p.ImageFull, p.Status)
                     } 
-                    |> Seq.toList              
-                    |> List.map 
-                        (fun (id, facebookId, firstName, middleName, lastName, urlName, imageFull, status) ->
-                            let attendances = attendances |> List.filter (fun (a, _) -> a.MemberId = id)
-                            ({
-                                Id = id
-                                FacebookId = facebookId
-                                FirstName = firstName
-                                MiddleName = middleName
-                                LastName = lastName
-                                UrlName = urlName
-                                Image = imageFull
-                                Status = enum<PlayerStatus> status
-                             },
+                    |> selectMembers
+                    |> Seq.map 
+                        (fun p ->
+                            let attendances = attendances |> List.filter (fun (a, _) -> a.MemberId = p.Id)
+                            (p,
                              {
                                 Games = attendances 
                                         |> List.filter (fun (a, eventType) -> eventType = (int EventType.Kamp) && a.IsSelected) 
