@@ -13,14 +13,8 @@ module Show =
 
     let view (club: Club) (user: Users.User) year next (ctx: HttpContext) =
 
-        let db = ctx.Database
-
-        let { 
-                SelectedYear = selectedYear
-                Years = years
-                Attendance = attendance
-            } = 
-                get ctx.Database club.Id year
+        let (selectedYear, years, attendance) =
+            getAttendance ctx.Database club.Id year
        
         let getImage = Images.getMember ctx
 

@@ -10,7 +10,7 @@ open System
 
 module Queries =
 
-    let get : GetAttendance = 
+    let getAttendance : GetAttendance = 
         fun db clubId year ->
             let (ClubId clubId) = clubId
 
@@ -106,11 +106,9 @@ module Queries =
                     thenByDescending a.NoShows
                 } |> Seq.toList
         
-            {
-                SelectedYear = selectedYear
-                Attendance = attendance
-                Years = years
-            }
+            
+            selectedYear, years, attendance
+            
 
 
     let getPreviousTrainings: GetPreviousTrainings =

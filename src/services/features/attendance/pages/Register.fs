@@ -24,10 +24,8 @@ module Register =
         let model = 
             let getModel (training: Training) = 
                 let players = getPlayers db club.Id training.Id
-                {
-                    Training = training
-                    Players = players
-                }
+                (training, players)                
+
             match trainingId with
             | Some trainingId -> getTraining trainingId |> getModel |> Some               
             | None -> previousTrainings 
@@ -41,7 +39,7 @@ module Register =
             | None -> "/intern/oppmote/registrer"   
 
         let isSelected url = 
-            registerAttendanceUrl (model |> Option.map (fun t -> t.Training)) = url      
+            registerAttendanceUrl (model |> Option.map (fun (training, _) -> training)) = url      
  
         let getImage = Images.getMember ctx
 
@@ -70,30 +68,30 @@ module Register =
             main [_class "register-attendance"] [
                 block [] 
                         (model
-                        |> Option.fold (fun _ model ->                  
+                        |> Option.fold (fun _ (training, players) ->                  
                             [
-                                editEventLink model.Training.Id
+                                editEventLink training.Id
                                 div [_class "attendance-event" ] [
                                     eventIcon EventType.Trening ExtraLarge        
                                     div [ _class "faded" ] [ 
                                         p [] [
                                             icon (fa "calendar") "" 
                                             whitespace
-                                            encodedText <| (model.Training.Date.ToString("ddd d MMMM"))                     
+                                            encodedText <| (training.Date.ToString("ddd d MMMM"))                     
                                         ]                     
                                         p [] [ 
                                                 icon (fa "map-marker") ""
-                                                encodedText model.Training.Location
+                                                encodedText training.Location
                                  
                                             ]
                                  
                                        ] 
                                 ]                    
-                                registerAttendancePlayerList "Påmeldte spillere" model.Players.Attending model.Training Open
+                                registerAttendancePlayerList "Påmeldte spillere" players.Attending training Open
                                 br []
-                                registerAttendancePlayerList "Øvrige aktive" model.Players.OthersActive model.Training Collapsed
+                                registerAttendancePlayerList "Øvrige aktive" players.OthersActive training Collapsed
                                 br []
-                                registerAttendancePlayerList "Øvrige inaktive" model.Players.OthersInactive model.Training Collapsed
+                                registerAttendancePlayerList "Øvrige inaktive" players.OthersInactive training Collapsed
                             ]) 
                             [emptyText]
                             )

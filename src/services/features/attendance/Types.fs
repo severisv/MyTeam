@@ -17,11 +17,6 @@ type Playerlist = {
     OthersInactive: PlayerAttendance list
 }    
 
-type RegisterAttendanceModel = {
-    Training: Training
-    Players: Playerlist
-}
-
 type AttendanceSummary = {
     Games: int
     Trainings: int
@@ -34,14 +29,10 @@ type SelectedYear =
 | AllYears
 | Year of int
 
-type ShowAttendanceModel = {
-    SelectedYear: SelectedYear
-    Attendance: PlayerAttendanceSummary list
-    Years: int list
-}
-
+type Years = int list
 type Year = string option
-type GetAttendance = Database -> ClubId -> Year -> ShowAttendanceModel
+
+type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * PlayerAttendanceSummary list
 type GetPreviousTrainings = Database -> ClubId -> Training list
 type GetTraining = Database -> EventId -> Training
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
