@@ -31,14 +31,14 @@ module App =
                             (user |> Option.fold 
                                         (fun _ user ->
                                                 (choose [ 
-                                                    GET >=> choose [                                                        
-                                                        route "/oppmote" >=> AttendancePages.Show.view club user None
-                                                        routef "/oppmote/%s" (fun year -> AttendancePages.Show.view club user (Some <| toLower year))
-                                                    ]                                
                                                     GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=>  choose [ 
                                                         route "/oppmote/registrer" >=> AttendancePages.Register.view club user None
                                                         routef "/oppmote/registrer/%O" (fun eventId -> AttendancePages.Register.view club user (Some eventId))                                                       
-                                                    ]                                
+                                                    ]
+                                                    GET >=> choose [                                                        
+                                                        route "/oppmote" >=> AttendancePages.Show.view club user None
+                                                        routef "/oppmote/%s" (fun year -> AttendancePages.Show.view club user (Some <| toLower year))
+                                                    ]                                    
                                                 ])
                                         )                        
                                         empty

@@ -102,7 +102,6 @@ module Queries =
             selectedYear, years, attendance
             
 
-
     let getPreviousTrainings: GetPreviousTrainings =
         fun db clubId ->
             let (ClubId clubId) = clubId
@@ -144,17 +143,10 @@ module Queries =
                 let sluttet = int PlayerStatus.Sluttet
                 let trener = int PlayerStatus.Trener
                 query {
-                    for p in db.Players do
+                    for p in db.Members do
                     where (p.ClubId = clubId && p.Status <> sluttet && p.Status <> trener)
-                    select (p.Id, 
-                            p.FirstName, 
-                            p.MiddleName, 
-                            p.LastName, 
-                            p.FacebookId, 
-                            p.ImageFull, 
-                            p.Status, 
-                            p.UrlName)
                 } 
+                |> selectMembers
                 |> Seq.toList
 
             let attendees = 
@@ -166,24 +158,12 @@ module Queries =
                 
             let players = 
                 players
-                |> List.map (fun (id, firstName, middleName, lastName, facebookId, image, status, urlName) ->
+                |> List.map (fun p ->
                     let playerDidAttend = 
                         attendees 
-                        |> List.exists (fun (playerId, didAttend, _) -> id = playerId && didAttend)
+                        |> List.exists (fun (playerId, didAttend, _) -> p.Id = playerId && didAttend)
 
-               
-
-                    {
-                        Id = id
-                        FacebookId = facebookId
-                        FirstName = firstName
-                        MiddleName = middleName
-                        LastName = lastName
-                        UrlName = urlName
-                        Image = image
-                        Status = enum<PlayerStatus> status
-                    }, playerDidAttend
-
+                    p, playerDidAttend
                  )     
                 |> List.sortBy (fun (p,_) -> p.Name)
           
