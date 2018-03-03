@@ -11,7 +11,8 @@ type Training = {
     Location: string
 } 
             
-type PlayerAttendance = Member * bool
+type PlayerDidAttend = bool            
+type PlayerAttendance = Member * PlayerDidAttend
 
 type Players = {
     Attending: PlayerAttendance list
@@ -24,17 +25,13 @@ type Model = {
     Players: Players
 }
 
-type PlayerAttendanceSummary = {
-    FacebookId: string
-    FirstName: string
-    LastName: string
-    UrlName: string
-    Image: string
+type AttendanceSummary = {
     Games: int
     Trainings: int
     NoShows: int
 }   
-with member p.Name = sprintf "%s %s" p.FirstName p.LastName    
+
+type PlayerAttendanceSummary = Member * AttendanceSummary
 
 type SelectedYear = 
 | AllYears

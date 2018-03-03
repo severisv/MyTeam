@@ -57,7 +57,7 @@ module Show =
                                     { Value = [ Node <| icon (fa "warning") ""; Node whitespace; Str "Ikke møtt" ]; Align = Center }
                                 ]
                             Rows = 
-                                (attendance |> List.map (fun player ->
+                                (attendance |> List.map (fun (player, attendance) ->
                                                     [
                                                         Node(span [] [
                                                                     img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
@@ -69,9 +69,9 @@ module Show =
                                                                 ] 
                                                                 )                                    
                                                                                                                             
-                                                        Number player.Trainings
-                                                        Number player.Games
-                                                        Number player.NoShows
+                                                        Number attendance.Trainings
+                                                        Number attendance.Games
+                                                        Number attendance.NoShows
                                                     ]
                                                     )
                                 )
