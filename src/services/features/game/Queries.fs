@@ -24,6 +24,9 @@ module Queries =
                             MiddleName = g.Member.MiddleName
                             LastName = g.Member.LastName
                             UrlName = g.Member.UrlName                                        
+                            FacebookId = g.Member.FacebookId
+                            Image = g.Member.ImageFull
+                            Status = enum<Status> g.Member.Status
                         }
                 )
             |> Seq.toList            

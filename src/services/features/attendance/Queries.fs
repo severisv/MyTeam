@@ -3,6 +3,7 @@ namespace MyTeam.Attendance
 open System.Linq
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Members
 open MyTeam.Models.Enums
 open System
 
@@ -149,7 +150,14 @@ module Queries =
                 query {
                     for p in db.Players do
                     where (p.ClubId = clubId && p.Status <> sluttet && p.Status <> trener)
-                    select (p.Id, p.FirstName, p.LastName, p.FacebookId, p.ImageFull, p.Status)
+                    select (p.Id, 
+                            p.FirstName, 
+                            p.MiddleName, 
+                            p.LastName, 
+                            p.FacebookId, 
+                            p.ImageFull, 
+                            p.Status, 
+                            p.UrlName)
                 } 
                 |> Seq.toList
 
@@ -162,24 +170,32 @@ module Queries =
                 
             let players = 
                 players
-                |> List.map (fun (id, firstName, lastName, facebookId, image, status) ->
+                |> List.map (fun (id, firstName, middleName, lastName, facebookId, image, status, urlName) ->
+                    let playerDidAttend = 
+                        attendees 
+                        |> List.exists (fun (playerId, didAttend, _) -> id = playerId && didAttend)
+
+               
+
                     {
                         Id = id
-                        FirstName = firstName
-                        LastName = lastName
                         FacebookId = facebookId
+                        FirstName = firstName
+                        MiddleName = middleName
+                        LastName = lastName
+                        UrlName = urlName
                         Image = image
-                        DidAttend = attendees |> List.exists (fun (playerId, didAttend, _) -> id = playerId && didAttend)
                         Status = enum<PlayerStatus> status
-                    }
-                 )     
-                |> List.sortBy (fun p -> p.Name)
-       
+                    }, playerDidAttend
 
-            let playerIsAttending (p: Player) =
+                 )     
+                |> List.sortBy (fun (p,_) -> p.Name)
+          
+
+            let playerIsAttending ((p, _): PlayerAttendance) =
                 attendees |> List.exists (fun (id, _, isAttending) -> p.Id = id && (isAttending = Nullable true))
 
-            let playerIsActive p =
+            let playerIsActive (p, _) =
                 p.Status = PlayerStatus.Aktiv    
 
             let attendingPlayers = players |> List.filter (playerIsAttending)

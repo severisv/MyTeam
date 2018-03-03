@@ -48,18 +48,18 @@ module Register =
             editLink <| sprintf "/intern/arrangement/endre/%s" (str eventId)          
             
 
-        let registerAttendancePlayerList header (players: Player list) (selectedEvent: Training) isCollapsed =
+        let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Training) isCollapsed =
             collapsible 
                 isCollapsed 
                 [encodedText <| sprintf "%s (%i)" header players.Length]
                 [
                     div [_class "row"] [
                         ul [ _class "list-users col-xs-11 col-md-10" ] 
-                            (players |> List.map (fun p ->
+                            (players |> List.map (fun (p, didAttend) ->
                                 li [ _class "register-attendance-item" ] [ 
                                     img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
                                     encodedText p.Name
-                                    ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O" selectedEvent.Id p.Id) p.DidAttend
+                                    ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O" selectedEvent.Id p.Id) didAttend
                                     ajaxSuccessIndicator
                                 ]
                             ))  

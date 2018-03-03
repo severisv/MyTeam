@@ -1,33 +1,22 @@
 namespace MyTeam.Attendance
 
 open MyTeam
-open MyTeam.Models.Enums
 open System
+open MyTeam.Domain.Members
 open MyTeam.Domain
-
-type EventId = Guid
 
 type Training = {
     Id: EventId
     Date: DateTime       
     Location: string
-}
-
-type Player = {
-    Id: Guid
-    FacebookId: string
-    FirstName: string
-    LastName: string
-    Image: string       
-    DidAttend: bool    
-    Status: PlayerStatus   
-} with 
-    member p.Name = sprintf "%s %s" p.FirstName p.LastName        
+} 
+            
+type PlayerAttendance = Member * bool
 
 type Players = {
-    Attending: Player list
-    OthersActive: Player list
-    OthersInactive: Player list
+    Attending: PlayerAttendance list
+    OthersActive: PlayerAttendance list
+    OthersInactive: PlayerAttendance list
 }    
 
 type Model = {
@@ -35,7 +24,7 @@ type Model = {
     Players: Players
 }
 
-type PlayerAttendance = {
+type PlayerAttendanceSummary = {
     FacebookId: string
     FirstName: string
     LastName: string
@@ -53,11 +42,12 @@ type SelectedYear =
 
 type ShowAttendanceModel = {
     SelectedYear: SelectedYear
-    Attendance: PlayerAttendance list
+    Attendance: PlayerAttendanceSummary list
     Years: int list
 }
 
-type GetAttendance = Database -> ClubId -> string option -> ShowAttendanceModel
+type Year = string option
+type GetAttendance = Database -> ClubId -> Year -> ShowAttendanceModel
 type GetPreviousTrainings = Database -> ClubId -> Training list
 type GetTraining = Database -> EventId -> Training
 type GetPlayers = Database -> ClubId -> EventId -> Players

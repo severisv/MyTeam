@@ -3,6 +3,7 @@ namespace MyTeam.Domain
 open System
 open MyTeam
 open MyTeam.Enums
+open MyTeam.Models.Enums
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 
@@ -20,21 +21,20 @@ type Role =
 
 module Members = 
 
-    [<JsonConverter(typedefof<StringEnumConverter>)>]
-    type Status =
-        | Aktiv = 0
-        | Inaktiv = 1
-        | Veteran = 2
-        | Trener = 3
-        | Sluttet = 4 
+    type Status = PlayerStatus
             
     type Member = {
         Id: MemberId
+        FacebookId: string
         FirstName: string
         MiddleName: string
         LastName: string
         UrlName: string
+        Image: string    
+        Status: Status      
     } with
+        member p.Name = sprintf "%s %s" p.FirstName p.LastName   
+
         member m.FullName = 
             sprintf "%s %s%s%s" m.FirstName m.MiddleName (if m.MiddleName.HasValue then " " else "") m.LastName
     
