@@ -1,13 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>MyTeam</AssemblyName>
-    <OutputType>Exe</OutputType>
     <PackageId>MyTeam</PackageId>
-    <UserSecretsId>aspnet-MyTeam-d599adea-524e-4323-a74c-75f0b0925264</UserSecretsId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
   </PropertyGroup>
   <ItemGroup>
@@ -16,28 +11,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.*" />
     <PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.0.0" />
     <PackageReference Include="Sendgrid" Version="9.0.12" />
     <PackageReference Include="SlackLogger" Version="2.0.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
