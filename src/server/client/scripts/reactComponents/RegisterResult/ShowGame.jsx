@@ -25,7 +25,7 @@ module.exports = React.createClass({
         loadingEvents: false,
       })
     })
-    $.getJSON('/api/players').then((players) => {
+    $.getJSON('/api/members').then((players) => {
       that.setState({
         players,
       })
@@ -172,7 +172,7 @@ module.exports = React.createClass({
 
   getEventPlayers(type) {
     return type == 0
-      ? [{ id: 'ingen', fullName: '( Selvmål )' }].concat(this.state.squad)
+      ? [{ id: 'ingen', name: '( Selvmål )' }].concat(this.state.squad)
       : this.state.squad
   },
 

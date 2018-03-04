@@ -7,5 +7,5 @@ open Giraffe
 module TeamApi =
 
     let list clubId (ctx: HttpContext) =
-        Queries.list ctx.ConnectionString clubId
+        Queries.list ctx.Database clubId
         |> json

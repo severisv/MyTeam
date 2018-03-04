@@ -4,7 +4,7 @@ module.exports = React.createClass({
   render() {
     const model = this.props.model
     const actions = this.props.actions
-    const assistPlayers = [{ id: 'ingen', fullName: '( Ingen )' }].concat(model.squad.filter(element => element.id != model.playerId))
+    const assistPlayers = [{ id: 'ingen', name: '( Ingen )' }].concat(model.squad.filter(element => element.id != model.playerId))
     return (
       <div>
         <br />
@@ -31,7 +31,7 @@ module.exports = React.createClass({
                   <select className="form-control" onChange={actions.handlePlayerChange}>
                     {actions.getEventPlayers(model.type).map(player => (
                       <option key={player.id} value={player.id}>
-                        {player.fullName}
+                        {player.name}
                       </option>
                       ))}
                   </select>
@@ -61,7 +61,7 @@ module.exports = React.createClass({
             <select className="form-control" onChange={actions.handleAssistChange}>
               {assistPlayers.map(player => (
                 <option key={player.id} value={player.id}>
-                  {player.fullName}
+                  {player.name}
                 </option>
                 ))}
             </select>

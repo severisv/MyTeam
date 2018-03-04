@@ -19,7 +19,7 @@ module.exports = React.createClass({
                     href={showPlayerUrl}
                     className="underline"
                   >
-                    {player.fullName}
+                    {player.name}
                   </a>
                   {model.isRemovingPlayer == player.id ? (
                     <i className="fa fa-spinner fa-spin removePlayer" />

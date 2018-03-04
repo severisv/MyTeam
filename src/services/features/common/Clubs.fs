@@ -8,14 +8,13 @@ module Clubs =
     let get : Get =
         fun ctx clubId -> 
             let (ClubIdentifier clubId) = clubId
-            let connectionString = getConnectionString ctx
-            let database = Db.get connectionString
+            let db = ctx.Database
 
             let clubs =
                     query {
-                        for club in database.Dbo.Club do
+                        for club in db.Clubs do
                         where (club.ClubIdentifier = clubId)
-                        join team in database.Dbo.Team on (club.Id = team.ClubId)
+                        join team in db.Teams on (club.Id = team.ClubId)
                         select (club, team)
                     }
                     |> Seq.toList

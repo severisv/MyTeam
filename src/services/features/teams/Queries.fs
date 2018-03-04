@@ -5,18 +5,15 @@ open MyTeam.Domain
 
 module Queries =
 
-    let teams connectionString clubId = 
+    let teams (db: Database) clubId = 
         let (ClubId clubId) = clubId
-        let db = Db.get connectionString 
-        db.Dbo.Team
-        |> Seq.filter(fun t -> t.ClubId = clubId), db
+        db.Teams
+        |> Seq.filter(fun t -> t.ClubId = clubId)
 
     let list : ListTeams =
-        fun connectionString clubId ->
+        fun db clubId ->
 
-            let (teams, db) = teams connectionString clubId 
-
-            teams
+            teams db clubId
             |> Seq.map(fun t -> 
                             {
                                 Id = t.Id

@@ -5,4 +5,4 @@ open MyTeam
 open MyTeam.Domain
 
 
-type ListTeams = ConnectionString -> ClubId -> Team list
+type ListTeams = Database -> ClubId -> Team list

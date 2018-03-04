@@ -54,7 +54,6 @@ module App =
                                                                                                           
                         
                         route "/api/teams" >-> TeamApi.list club.Id
-                        route "/api/players" >-> PlayerApi.list club.Id
                         route "/api/events" >=>                      
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                                 routef "/api/events/%s/description" (parseGuid >> EventApi.setDescription club.Id)

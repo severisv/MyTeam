@@ -12,7 +12,7 @@ module.exports = React.createClass({
             <select className="form-control" onChange={actions.handleAddPlayerChange}>
               {actions.getPlayersNotInSquad().map(player => (
                 <option key={player.id} value={player.id}>
-                  {player.fullName}
+                  {player.name}
                 </option>
                 ))}
             </select>
