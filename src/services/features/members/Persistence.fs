@@ -3,11 +3,9 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Models
 open MyTeam.Models.Domain
 open MyTeam.Validation
 open Microsoft.EntityFrameworkCore
-open ExpressionOptimizer
 
 module Persistence =
     let setStatus : SetStatus =

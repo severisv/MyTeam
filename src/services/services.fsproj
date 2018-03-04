@@ -10,7 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
     <PackageReference Include="Giraffe" Version="1.1.*" />
-    <PackageReference Include="SQLProvider " Version="1.1.23" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,8 +34,6 @@
     <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
-
-  <Import Project="fsc.props" />
    <ItemGroup>
     <ProjectReference Include="..\database\Migrations.csproj" />
   </ItemGroup>
