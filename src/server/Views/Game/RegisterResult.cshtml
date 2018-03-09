@@ -40,7 +40,7 @@
             </div>
         </div>
         <div id="registerResult-addEvent"
-                     data-gameid="@Model.Game.Id"
+                     data-game-id="@Model.Game.Id"
                      data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
                      data-add-gameevent-url="@Url.Action("Add", "GameEventApi", new {gameId = Model.Game.Id})"
                      data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"
@@ -54,8 +54,3 @@
 
 
 </div>
-
-@section Scripts
-{
-    <script src="~/compiled/scripts/Game/registerResult.js"></script>
-}

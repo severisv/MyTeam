@@ -68,10 +68,11 @@
         @if (Model.Game.HasScore)
         {
             <div id="game-showEvents"
-                 data-gameid="@Model.Game.Id"
+                 data-game-id="@Model.Game.Id"
                  data-get-gameeventtypes-url="@Url.Action("GetTypes", "GameEventApi")"
                  data-get-gameevents-url="@Url.Action("Get", "GameEventApi", new {gameId = Model.Game.Id})"
                  data-show-player-url="@Url.Action("Show", "Player")"
+                 data-edit-mode="false"
                  >
             </div>
         }
@@ -88,7 +89,3 @@
 
 
 </div>
-
-@section Scripts {
-    <script src="~/compiled/scripts/Game/show.js"></script>
-}

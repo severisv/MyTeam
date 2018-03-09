@@ -4,8 +4,11 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 
-type MemberWithTeamsAndRoles = Member * TeamId list * Role list
-
+type MemberWithTeamsAndRoles = {
+    Details: Member
+    Teams: TeamId list 
+    Roles: Role list
+}
 
 [<CLIMutable>]
 type AddMemberForm = {

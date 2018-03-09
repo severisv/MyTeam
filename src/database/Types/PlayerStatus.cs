@@ -1,6 +1,10 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace MyTeam.Models.Enums
 {
-    public enum PlayerStatus
+   [JsonConverter(typeof(StringEnumConverter))] 
+   public enum PlayerStatus
     {
         Aktiv,
         Inaktiv,

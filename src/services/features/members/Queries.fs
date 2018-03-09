@@ -15,20 +15,23 @@ module Queries =
     let list : ListMembers =
         fun db clubId ->         
             (members db clubId).Include(fun p -> p.MemberTeams) 
-            |> Seq.map(fun p -> 
-                            ({
-                                Id = p.Id
-                                FacebookId = p.FacebookId
-                                FirstName = p.FirstName
-                                MiddleName = p.MiddleName
-                                LastName = p.LastName
-                                Image = p.ImageFull
-                                UrlName = p.UrlName
-                                Status = int p.Status |> enum<Status> 
-                             }, p.MemberTeams 
-                                                |> Seq.map(fun team -> team.TeamId)
-                                                |> Seq.toList,
-                             p.RolesString |> toRoleList)
+            |> Seq.map(fun p ->                            
+                            {
+                                Details =  ({
+                                                Id = p.Id
+                                                FacebookId = p.FacebookId
+                                                FirstName = p.FirstName
+                                                MiddleName = p.MiddleName
+                                                LastName = p.LastName
+                                                Image = p.ImageFull
+                                                UrlName = p.UrlName
+                                                Status = int p.Status |> enum<Status> 
+                                           })
+                                Teams = p.MemberTeams 
+                                           |> Seq.map(fun team -> team.TeamId)
+                                           |> Seq.toList
+                                Roles = p.RolesString |> toRoleList
+                            }
                     )
             |> Seq.toList                
 

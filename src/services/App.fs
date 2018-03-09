@@ -1,6 +1,7 @@
 namespace MyTeam
 
 open Giraffe
+open Giraffe.Serialization
 open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
@@ -10,8 +11,14 @@ open MyTeam.Authorization
 open MyTeam.Views
 open MyTeam.Models.Enums
 open System
+open Newtonsoft.Json
+open Newtonsoft.Json.Converters
 
     
+type Asd = {
+    Option: string option
+    Tuple: int*string
+}
 
 module App =
     let webApp =
@@ -46,7 +53,7 @@ module App =
                         subRoute "/api/attendance"                            
                             (choose [ 
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
-                                    routef "/%s/registrer/%s" (fun (eventId, playerId) -> 
+                                    routef "/%s/registrer/%s" (fun (eventId, playerId) ->  // TODO: Fix bug
                                         AttendanceApi.confirmAttendance club (parseGuid eventId) (parseGuid playerId))                                   
                                                                
                             ])
@@ -56,7 +63,7 @@ module App =
                         route "/api/teams" >-> TeamApi.list club.Id
                         route "/api/events" >=>                      
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
-                                routef "/api/events/%s/description" (parseGuid >> EventApi.setDescription club.Id)
+                                routef "/api/events/%O/description" (EventApi.setDescription club.Id)
                         
                         subRoute "/api/members" 
                             (choose [ 
@@ -67,9 +74,9 @@ module App =
                                 PUT >=> 
                                     mustBeInRole [Role.Admin; Role.Trener] >=> 
                                         choose [ 
-                                            routef "/%s/status" (parseGuid >> MemberApi.setStatus club.Id)
-                                            routef "/%s/togglerole" (parseGuid >> MemberApi.toggleRole club.Id)
-                                            routef "/%s/toggleteam" (parseGuid >> MemberApi.toggleTeam club.Id)
+                                            routef "/%O/status" (MemberApi.setStatus club.Id)
+                                            routef "/%O/togglerole" (MemberApi.toggleRole club.Id)
+                                            routef "/%O/toggleteam" (MemberApi.toggleTeam club.Id)
                                         ]       
                                 POST >=>  
                                     mustBeInRole [Role.Admin; Role.Trener] >=> 
@@ -85,12 +92,12 @@ module App =
                                                            
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
-                                        routef "/%s/score/home" (parseGuid >> GameApi.setHomeScore club.Id)
-                                        routef "/%s/score/away" (parseGuid >> GameApi.setAwayScore club.Id)                                   
+                                        routef "/%O/score/home" (GameApi.setHomeScore club.Id)
+                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id)                                   
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
-                                        routef "/%s/gameplan" (parseGuid >> GameApi.setGamePlan club.Id)
-                                        routef "/%s/gameplan/publish" (parseGuid >> GameApi.publishGamePlan club.Id)
+                                        routef "/%O/gameplan" (GameApi.setGamePlan club.Id)
+                                        routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id)
                                     ]
                             ])                                                                                                                                                                                                                       
                        ] next ctx
@@ -103,5 +110,12 @@ module App =
 
     let addGiraffe (services : IServiceCollection)  =
         services.AddGiraffe() |> ignore
+
+    let registerJsonSerializers (services : IServiceCollection)  =
+        let settings = JsonSerializerSettings ()
+        settings.ContractResolver <- Serialization.CamelCasePropertyNamesContractResolver()   
+        settings.Converters.Add(OptionConverter())
+        settings.Converters.Add(IdiomaticDuConverter())
+        services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(settings)) |> ignore
 
 

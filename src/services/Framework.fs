@@ -76,6 +76,8 @@ module Framework =
         | None -> alternative       
 
 
+    let (>>=) result fn =
+        result |> Result.bind(fn)    
 
     let mergeAttributes (a: XmlAttribute list) (b: XmlAttribute list) =
         a @ b |> List.groupBy (function

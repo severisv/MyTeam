@@ -1,6 +1,6 @@
 ﻿import React from 'react'
 
-import { put } from '../../api'
+import { get, put } from '../../api'
 
 export default class ManagePlayers extends React.Component {
   constructor() {
@@ -20,15 +20,18 @@ export default class ManagePlayers extends React.Component {
   }
 
   componentDidMount() {
-    const that = this
-    $.getJSON('/api/members').then(response => {
-      that.setState({
-        players: response,
+    get('/api/members').then(response => {
+      this.setState({
+        players: response.map(player => ({
+            ...player.details,
+            teamIds: player.teams,
+            roles: player.roles
+        })),
       })
     })
 
-    $.getJSON('/api/teams').then(teams => {
-      that.setState({
+    get('/api/teams').then(teams => {
+      this.setState({
         teams,
       })
     })
@@ -102,6 +105,7 @@ export default class ManagePlayers extends React.Component {
   }
 
   renderPlayers = (playerStatus, isCollapsed) => {
+    
     if (!this.state.players) return ''
 
     const players = this.state.players.filter(player => {

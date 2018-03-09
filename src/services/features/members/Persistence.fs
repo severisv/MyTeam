@@ -71,9 +71,6 @@ module Persistence =
             
 
                                                 
-    let (=>) result fn =
-        result |> Result.bind(fn)    
-
     let add : Add =
         fun db clubId form ->  
 
@@ -114,7 +111,7 @@ module Persistence =
                <@ form.FirstName @> >- [isRequired]
                <@ form.LastName @> >- [isRequired]
             ] 
-            => fun form -> 
+            >>= fun form -> 
                    let (ClubId clubId) = clubId
                    let memb = Player()
 

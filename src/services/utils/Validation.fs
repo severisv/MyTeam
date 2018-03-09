@@ -21,7 +21,7 @@ module ValidationHelpers =
                         )
         }  
 
-    let createResult form errors =
+    let bindResult form errors =
                         let errors = errors 
                                     |> List.filter (fun e -> not (e.Errors |> List.isEmpty))                               
                         
@@ -50,6 +50,6 @@ module Framework =
         getNameAndValue expr |> combine validationFns
 
     let (==>) validationResult form =
-       form |> createResult validationResult    
+       form |> bindResult validationResult    
 
 

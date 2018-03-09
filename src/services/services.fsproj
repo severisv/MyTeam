@@ -15,7 +15,7 @@
   <ItemGroup>
     <Compile Include="settings/*.fs" />
     <Compile Include="Framework.fs" />
-    <Compile Include="utils/common/*.fs" />
+    <Compile Include="utils/*/*.fs" />
     <Compile Include="utils/*.fs" />
     <Compile Include="components/common/*.fs" />
     <Compile Include="components/*.fs" />

@@ -14,6 +14,8 @@ using MyTeam.Settings;
 using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MyTeam
 {
@@ -67,7 +69,8 @@ namespace MyTeam
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });
             App.addGiraffe(services);
-
+            App.registerJsonSerializers(services);
+            
             services.RegisterDependencies();
 
         }

@@ -18,6 +18,7 @@ type Role =
     | Oppmøte = 3
     | Botsjef = 4 
 
+[<JsonConverter(typedefof<StringEnumConverter>)>]
 type Status = PlayerStatus
         
 type Member = {

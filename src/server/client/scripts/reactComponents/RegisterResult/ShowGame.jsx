@@ -1,54 +1,58 @@
-﻿const React = require('react')
+﻿import React from 'react'
 
-module.exports = React.createClass({
-  getInitialState() {
-    return {
-      players: [],
-      eventTypes: [],
-      events: [],
-      editMode: this.props.editMode,
-      squad: [],
-      showPlayerUrl: this.props.routes.SHOW_PLAYER,
-      loadingPlayers: true,
-      loadingEvents: true,
-      isAddingEvent: false,
-      isRemovingEvent: false,
-    }
-  },
+import { get } from '../../api'
+
+export default class ShowGame extends React.Component {
+  state = {
+    players: [],
+    eventTypes: [],
+    events: [],
+    editMode: this.props.editMode,
+    squad: [],
+    loadingPlayers: true,
+    loadingEvents: true,
+    isAddingEvent: false,
+    isRemovingEvent: false,
+    showPlayerUrl: "/spillere/vis"
+  }
 
   componentDidMount() {
-    const that = this
     const { props, state } = this
-    $.getJSON(that.props.routes.GET_EVENTS).then((response) => {
-      that.setState({
+    get(this.props.getGameeventsUrl).then(response => {
+      this.setState({
         events: response,
         loadingEvents: false,
       })
     })
-    $.getJSON('/api/members').then((players) => {
-      that.setState({
-        players,
+    get('/api/members').then(players => {
+      this.setState({
+        players: players.map(player => ({
+          ...player.details,
+          teamIds: player.teams,
+          roles: player.roles,
+        })),
       })
-      that.setState({
-        addPlayerId: that.getPlayersNotInSquad()[0].id,
+      this.setState({
+        addPlayerId: this.getPlayersNotInSquad()[0].id,
       })
     })
-    $.getJSON(that.props.routes.GET_EVENTTYPES).then((response) => {
-      that.setState({
+
+    get(this.props.getGameeventtypesUrl).then(response => {
+      this.setState({
         eventTypes: response,
         type: response[0].value,
       })
     })
 
-    $.getJSON(`/api/games/${props.gameId}/squad`).then((response) => {
-      that.setState({
+    get(`/api/games/${props.gameId}/squad`).then(response => {
+      this.setState({
         squad: response,
         loadingPlayers: false,
       })
     })
-  },
+  }
 
-  handleEventChange(event) {
+  handleEventChange = event => {
     const playerId = this.state.playerId
       ? this.state.playerId
       : this.getEventPlayers(parseInt(event.target.value))[0].id
@@ -57,8 +61,8 @@ module.exports = React.createClass({
       type: parseInt(event.target.value),
       playerId,
     })
-  },
-  handlePlayerChange(event) {
+  }
+  handlePlayerChange = event => {
     const assistedById =
       this.state.assistedById == event.target.value ? null : this.state.assistedById
 
@@ -68,13 +72,14 @@ module.exports = React.createClass({
       playerId,
       assistedById,
     })
-  },
-  handleAssistChange(event) {
+  }
+  handleAssistChange = event => {
     const assistedById = event.target.value == 'ingen' ? null : event.target.value
 
     this.setState({ assistedById })
-  },
-  handleSubmit() {
+  }
+
+  handleSubmit = () => {
     const that = this
     const state = that.state
     const form = {
@@ -86,8 +91,9 @@ module.exports = React.createClass({
       AssistedByName: state.assistedByName,
       Id: state.Id,
     }
+
     this.setState({ isAddingEvent: true })
-    $.post(that.props.routes.ADD_EVENT, form).then((response) => {
+    $.post(that.props.addGameeventUrl, form).then(response => {
       if (response.success != false) {
         that.setState({
           events: that.state.events.concat([response]),
@@ -95,11 +101,12 @@ module.exports = React.createClass({
         })
       }
     })
-  },
-  deleteEvent(eventId) {
+  }
+
+  deleteEvent = eventId => {
     const that = this
     that.setState({ isRemovingEvent: eventId })
-    $.post(that.props.routes.DELETE_EVENT, { eventId }).then((response) => {
+    $.post(that.props.deleteEventUrl, { eventId }).then(response => {
       if (response.success) {
         that.setState({
           events: that.state.events.filter(event => event.id != eventId),
@@ -107,20 +114,20 @@ module.exports = React.createClass({
         })
       }
     })
-  },
+  }
 
-  handleAddPlayerChange(event) {
+  handleAddPlayerChange = event => {
     this.setState({ addPlayerId: event.target.value })
-  },
+  }
 
-  addPlayer() {
+  addPlayer = () => {
     const that = this
     that.setState({ isAddingPlayer: true })
-    $.post(that.props.routes.SELECT_PLAYER, {
+    $.post(that.props.selectPlayerUrl, {
       eventId: that.props.gameId,
       playerId: that.state.addPlayerId,
       isSelected: true,
-    }).then((response) => {
+    }).then(response => {
       if (response.success) {
         const player = that.state.players.filter(player => player.id == that.state.addPlayerId)
         that.setState({
@@ -134,16 +141,16 @@ module.exports = React.createClass({
         })
       }
     })
-  },
+  }
 
-  removePlayerFromSquad(playerId) {
+  removePlayerFromSquad = playerId => {
     const that = this
     that.setState({ isRemovingPlayer: playerId })
-    $.post(that.props.routes.SELECT_PLAYER, {
+    $.post(that.props.selectPlayerUrl, {
       eventId: that.props.gameId,
       playerId,
       isSelected: false,
-    }).then((response) => {
+    }).then(response => {
       if (response.success) {
         that.setState({
           squad: that.state.squad.filter(player => player.id != playerId),
@@ -151,34 +158,34 @@ module.exports = React.createClass({
         })
       }
     })
-  },
+  }
 
-  getPlayerName(playerId) {
+  getPlayerName = playerId => {
     const squad = this.state.players.filter(player => player.id == playerId)
     if (squad.length > 0) return squad[0].firstName
     return 'Selvmål'
-  },
-  getPlayerShortName(playerId) {
+  }
+  getPlayerShortName = playerId => {
     const squad = this.state.players.filter(player => player.id == playerId)
     if (squad.length > 0) return `${squad[0].firstName} ${squad[0].lastName}`
     return 'Selvmål'
-  },
-  getPlayerUrlName(playerId) {
+  }
+  getPlayerUrlName = playerId => {
     const squad = this.state.players.filter(player => player.id == playerId)
 
     if (squad.length > 0) return squad[0].urlName
     return ''
-  },
+  }
 
-  getEventPlayers(type) {
+  getEventPlayers = type => {
     return type == 0
       ? [{ id: 'ingen', name: '( Selvmål )' }].concat(this.state.squad)
       : this.state.squad
-  },
+  }
 
-  getPlayersNotInSquad() {
+  getPlayersNotInSquad = () => {
     return this.state.players.filter(isNotInList(this.state.squad))
-  },
+  }
 
   render() {
     const actions = {
@@ -223,23 +230,23 @@ module.exports = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   renderEditView(actions) {
     if (this.props.editMode != false) {
       return <RegisterEvents model={this.state} actions={actions} />
     }
-  },
+  }
 
   renderAddView(actions) {
     if (this.props.editMode != false) {
       return <AddPlayerToSquad model={this.state} actions={actions} />
     }
-  },
-})
+  }
+}
 
 function isNotInList(list) {
-  return function (player) {
+  return function(player) {
     for (let i = 0, len = list.length; i < len; i++) {
       if (list[i].id === player.id) {
         return false

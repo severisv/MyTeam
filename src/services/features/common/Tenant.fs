@@ -12,12 +12,12 @@ module Tenant =
    
     let clubKey club =
         let (ClubIdentifier club) = club 
-        "club-" + club.ToString()
+        "club-" + string club
 
     let memberKey clubId userId =
         let (ClubId clubId) = clubId
         let (UserId userId) = userId
-        "user-" + clubId.ToString() + userId.ToString()   
+        "user-" + string clubId + string userId 
 
 
     let get : Get =
