@@ -12,12 +12,18 @@ module Pages =
     let coachMenuItems = 
             [
                 li [][a [_href "/intern/arrangement/ny"] [Icons.training ""; encodedText "Opprett arrangement"]]
-                li [][a [_href "/intern/admin"] [Icons.user ""; encodedText "Administrer spillere"]]
-                li [][a [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]]
+                li [][a [_href "/admin"] [Icons.user ""; encodedText "Administrer spillere"]]
+                li [][a [_href "/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]]
                 li [][a [_href "/nyheter/ny"] [Icons.news ""; encodedText "Skriv artikkel"]]
             ]
 
- 
+    let internalMenuItems =
+        [ 
+            li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
+            li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
+            li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
+            li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]
+        ]
     type LayoutModel = {
         Title: string
         PageName: string
@@ -80,12 +86,9 @@ module Pages =
                             ] @ (user |> Option.fold (fun _ user ->
                                             ([
                                                     hr [_class "visible-xs submenu-divider" ]
-                                                    ul [_class "nav navbar-nav submenu visible-xs"] [
-                                                        li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
-                                                        li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
-                                                        li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
-                                                        li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
-                                                    ]
+                                                    ul [_class "nav navbar-nav submenu visible-xs"] 
+                                                        internalMenuItems                       
+                                                    
                                             ] @ (user.IsInRole [Role.Admin;Role.Trener] =?
                                                     ([
                                                         hr [_class "visible-xs submenu-divider"]
@@ -98,15 +101,13 @@ module Pages =
                             ))
                             loginPartial user                            
                             user |> Option.fold (fun _ user ->
-                                                    ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] [
-                                                            li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
-                                                            li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
-                                                            li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
-                                                            li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
+                                                    ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] 
+                                                        (internalMenuItems @
+                                                         [                                                                             
                                                             user.IsInRole [Role.Admin;Role.Trener] =?
                                                                 (li [] [a [_href "/intern/admin" ] [Icons.coach ""; encodedText " Admin"]]                       
                                                                 , emptyText)
-                                                                ]
+                                                         ])
 
                                 ) emptyText                               
                         ]
