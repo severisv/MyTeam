@@ -11,10 +11,10 @@ module Pages =
 
     let coachMenuItems = 
             [
-                li [_href "/intern/arrangement/ny"] [Icons.training ""; encodedText "Opprett arrangement"]
-                li [_href "/intern/admin"] [Icons.user ""; encodedText "Administrer spillere"]
-                li [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]
-                li [_href "/intern/nyheter/ny"] [Icons.news ""; encodedText "Skriv artikkel"]
+                li [][a [_href "/intern/arrangement/ny"] [Icons.training ""; encodedText "Opprett arrangement"]]
+                li [][a [_href "/intern/admin"] [Icons.user ""; encodedText "Administrer spillere"]]
+                li [][a [_href "/intern/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]]
+                li [][a [_href "/nyheter/ny"] [Icons.news ""; encodedText "Skriv artikkel"]]
             ]
 
  
@@ -59,7 +59,7 @@ module Pages =
                                 ]
                                 a [_href "/";_class "navbar-brand" ] [ img [_src <| getImage club.Logo (fun o -> { o with Width = Some 100 }); _alt club.ShortName ] ]
                             ]
-                            div [_class "navbar-collapse collapse" ] [
+                            div [_class "navbar-collapse collapse" ] ([
                                 ul [_class "nav navbar-nav"] [
                                     li [] [a [_href "/spillere" ] [ encodedText "Spillere"] ]
                                     li [] [a [_href "/kamper" ] [ encodedText "Kamper"] ]
@@ -77,26 +77,25 @@ module Pages =
                                                         ) (emptyText)                     
                           
                                 ]
-                                user |> Option.fold (fun _ user ->
-                                            div [] [
-                                                hr [_class "visible-xs submenu-divider" ]
-                                                ul [_class "nav navbar-nav submenu visible-xs"] [
-                                                    li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
-                                                    li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
-                                                    li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
-                                                    li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
-                                                ]                                        
-                                                user.IsInRole [Role.Admin;Role.Trener] =?
-                                                    (div [] [
+                            ] @ (user |> Option.fold (fun _ user ->
+                                            ([
+                                                    hr [_class "visible-xs submenu-divider" ]
+                                                    ul [_class "nav navbar-nav submenu visible-xs"] [
+                                                        li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Intern"]]
+                                                        li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
+                                                        li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
+                                                        li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]                       
+                                                    ]
+                                            ] @ (user.IsInRole [Role.Admin;Role.Trener] =?
+                                                    ([
                                                         hr [_class "visible-xs submenu-divider"]
                                                         ul [_class "nav navbar-nav submenu visible-xs adminMenu"] 
                                                             coachMenuItems
-                                                        ], emptyText)
-                                            ]
+                                                        ], [])))
 
-                                ) emptyText
-                        
-                            ]
+                                ) []
+
+                            ))
                             loginPartial user                            
                             user |> Option.fold (fun _ user ->
                                                     ul [_id "submenu-internal";_class "nav navbar-nav submenu slide-down-child hidden-xs collapse" ] [
