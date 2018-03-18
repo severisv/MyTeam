@@ -11,32 +11,28 @@ module Persistence =
         fun clubId eventId playerId isSelected db ->
             let (ClubId clubId) = clubId
 
-            let event = 
-                query {
-                    for e in db.Events do
-                    where (e.ClubId = clubId && e.Id = eventId)
-                    select (e.Id)
-                }
-                |> Seq.tryHead
-
-            match event with
-            | None -> Error AuthorizationError
-            | Some e ->
-                let attendance =
+            query {
+                for e in db.Events do
+                where (e.ClubId = clubId && e.Id = eventId)
+                select (e.Id)
+            }
+            |> Seq.tryHead
+            |> function
+                | None -> Error AuthorizationError
+                | Some e ->
                     db.EventAttendances 
-                    |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)            
-   
-                match attendance with
-                | Some a ->
-                    a.IsSelected <- isSelected
-                    db.EventAttendances.Attach(a) |> ignore
-                | None ->
-                    let a = EventAttendance()                         
-                    a.Id <- Guid.NewGuid()
-                    a.EventId <- eventId
-                    a.MemberId <- playerId                        
-                    a.IsSelected <- isSelected                        
-                    db.EventAttendances.Add(a) |> ignore
+                    |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)           
+                    |> function
+                        | Some a ->
+                            a.IsSelected <- isSelected
+                            db.EventAttendances.Attach(a) |> ignore
+                        | None ->
+                            let a = EventAttendance()                         
+                            a.Id <- Guid.NewGuid()
+                            a.EventId <- eventId
+                            a.MemberId <- playerId                        
+                            a.IsSelected <- isSelected                        
+                            db.EventAttendances.Add(a) |> ignore
 
-                db.SaveChanges() |> ignore
-                Ok ()
+                    db.SaveChanges() |> ignore
+                    Ok ()
