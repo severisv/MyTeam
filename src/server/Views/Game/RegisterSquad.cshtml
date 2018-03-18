@@ -116,10 +116,8 @@
         </div>
         @Html.Partial("_CoachMenu")
         <script>
-            var Routes = Routes || {}
             var registerSquad = registerSquad || {}
             registerSquad.teamId = '@Model.Game.TeamIds.First()'
-            Routes.SELECT_PLAYER = '@Html.Raw(Url.Action("SelectPlayer", "Game"))';
         </script>
         @section Scripts
 {

@@ -1,15 +1,14 @@
-namespace MyTeam.Attendance
+namespace MyTeam.Games
 
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Models.Domain
 open System
-open MyTeam.Attendance
 
 module Persistence =
 
-    let confirmAttendance: ConfirmAttendance = 
-        fun clubId eventId playerId didAttend db ->
+    let selectPlayer: SelectPlayer = 
+        fun clubId eventId playerId isSelected db ->
             let (ClubId clubId) = clubId
 
             let event = 
@@ -29,15 +28,14 @@ module Persistence =
    
                 match attendance with
                 | Some a ->
-                    a.DidAttend <- didAttend
+                    a.IsSelected <- isSelected
                     db.EventAttendances.Attach(a) |> ignore
                 | None ->
                     let a = EventAttendance()                         
                     a.Id <- Guid.NewGuid()
                     a.EventId <- eventId
-                    a.DidAttend <- didAttend
-                    a.IsAttending <- Nullable false
                     a.MemberId <- playerId                        
+                    a.IsSelected <- isSelected                        
                     db.EventAttendances.Add(a) |> ignore
 
                 db.SaveChanges() |> ignore

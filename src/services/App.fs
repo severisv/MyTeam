@@ -55,7 +55,7 @@ module App =
                                 GET >=> routef "/%O/recent" (fun teamId -> AttendanceApi.getRecentAttendance club teamId)
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (fun (eventId, playerId) ->
-                                        AttendanceApi.confirmAttendance club eventId playerId)                                   
+                                        Ajax.Api.checkbox <| AttendanceApi.confirmAttendance club.Id eventId playerId)                                   
                                                                
                             ])                                      
                                                                                                           
@@ -96,6 +96,9 @@ module App =
                                         routef "/%O/score/away" (GameApi.setAwayScore club.Id)                                   
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
+                                        routef "/%O/squad/select/%O" (fun (gameId, playerId) ->
+                                            Ajax.Api.checkbox <| GameApi.selectPlayer club.Id gameId playerId)                                   
+
                                         routef "/%O/gameplan" (GameApi.setGamePlan club.Id)
                                         routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id)
                                     ]

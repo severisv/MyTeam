@@ -8,3 +8,4 @@ type GameId = Guid
 
 
 type GetSquad = Database -> ClubId -> GameId -> Member list
+type SelectPlayer = ClubId -> GameId -> MemberId -> bool -> Database -> Result<unit,Error>

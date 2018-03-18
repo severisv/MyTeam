@@ -41,6 +41,6 @@ type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * Player
 type GetPreviousTrainings = Database -> ClubId -> Training list
 type GetTraining = Database -> EventId -> Training
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
-type ConfirmAttendance = Database -> ClubId -> EventId -> MemberId -> bool -> Result<unit, Error>
+type ConfirmAttendance = ClubId -> EventId -> MemberId -> bool -> Database -> Result<unit, Error>
 type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> Result<TeamAttendance list, Error>
 

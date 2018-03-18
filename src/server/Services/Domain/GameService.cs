@@ -21,28 +21,6 @@ namespace MyTeam.Services.Domain
             _cacheHelper = cacheHelper;
         }
 
-        public void SelectPlayer(Guid eventId, Guid playerId, bool isSelected)
-        {
-            var attendance = _dbContext.EventAttendances.FirstOrDefault(a => a.EventId == eventId && a.MemberId == playerId);
-            if (attendance != null)
-            {
-                attendance.IsSelected = isSelected;
-            }
-            else
-            {
-                attendance = new EventAttendance
-                {
-                    Id = Guid.NewGuid(),
-                    EventId = eventId,
-                    IsSelected = isSelected,
-                    MemberId = playerId
-                };
-                _dbContext.EventAttendances.Add(attendance);
-            }
-            _dbContext.SaveChanges();
-        }
-
-
         public RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId)
         {
             return _dbContext.Events.Where(e => e.Id == eventId)

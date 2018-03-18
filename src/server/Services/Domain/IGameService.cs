@@ -6,7 +6,6 @@ namespace MyTeam.Services.Domain
 {
     public interface IGameService
     {
-        void SelectPlayer(Guid eventId, Guid playerId, bool isSelected);
         RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId);
         void PublishSquad(Guid eventId);
         IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName);

@@ -1,4 +1,4 @@
-﻿import { put, get } from '../../../api'
+﻿import { put, get, post } from '../../../api'
 
 $('.register-attendance-input').click(function f() {
   const element = $(this)
@@ -9,12 +9,9 @@ $('.register-attendance-input').click(function f() {
     .parent()
     .find('i.fa-spinner')
     .show()
-  $.post(Routes.SELECT_PLAYER, {
-    playerId,
-    eventId,
-    isSelected: value,
+  post(`/api/games/${eventId}/squad/select/${playerId}`, {
+    value,
   }).then((response) => {
-    if (response.success) {
       const playerId = element.data('playerId')
 
       const squadCount = parseInt($('#squadCount').text())
@@ -27,15 +24,14 @@ $('.register-attendance-input').click(function f() {
         $(`#${playerId}`).remove()
         $('#squadCount').html(squadCount - 1)
       }
-    } else {
-      const failLabel = element.parent().find('.label-danger')
-      element
-        .parent()
-        .find('i.fa-spinner')
-        .hide()
-      failLabel.show()
-      failLabel.fadeOut(3000)
-    }
+  }).catch(e => {
+    const failLabel = element.parent().find('.label-danger')
+    element
+      .parent()
+      .find('i.fa-spinner')
+      .hide()
+    failLabel.show()
+    failLabel.fadeOut(3000)
   })
 })
 

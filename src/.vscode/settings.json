@@ -14,6 +14,8 @@
     "**/bin": true,
     "**/node_modules": true,
     "client/public": true,
-    "**/bundle.*": true
+    "**/bundle.*": true,
+    "**/wwwroot/compiled/*": true,
+    "**/*.map": true,
   }
 }

@@ -75,18 +75,7 @@ namespace MyTeam.Controllers
             return View("RegisterSquad", model);
         }
 
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
-        [Route("laguttak/velg")]
-        public JsonResult SelectPlayer(Guid eventId, Guid playerId, bool isSelected)
-        {
-            if (eventId == Guid.Empty || playerId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId eller PlayerId er null"));
-
-            _gameService.SelectPlayer(eventId, playerId, isSelected);
-
-            return new JsonResult(JsonResponse.Success());
-        }
-
+       
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("laguttak/publiser")]

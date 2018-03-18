@@ -58,3 +58,6 @@ module GameApi =
         game.GamePlanIsPublished <- Nullable true
         db.SaveChanges() |> ignore
         next ctx
+
+
+    let selectPlayer = Persistence.selectPlayer        
