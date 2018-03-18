@@ -17,8 +17,8 @@ module.exports = React.createClass({
                 <div className="col-sm-9">
                   <select className="form-control" onChange={actions.handleEventChange}>
                     {model.eventTypes.map(type => (
-                      <option key={type.value} value={type.value}>
-                        {type.name}
+                      <option key={type} value={type}>
+                        {type}
                       </option>
                       ))}
                   </select>

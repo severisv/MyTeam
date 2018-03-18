@@ -10,8 +10,6 @@ namespace MyTeam.ViewModels.Game
         [RequiredNO]
         public GameEventType Type { get; set; }
 
-        public string TypeName => Type.DisplayName();
-        public string TypeValueName => Type.ToString();
         public Guid? PlayerId { get; set; }
         public string PlayerName { get; set; }
         [RequiredNO]

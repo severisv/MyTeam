@@ -6,7 +6,7 @@ open MyTeam
 
 type EventId = Guid
 
-type Training = {
+type Event = {
     Id: EventId
     Date: DateTime       
     Location: string

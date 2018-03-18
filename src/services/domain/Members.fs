@@ -3,14 +3,11 @@ module MyTeam.Domain.Members
 open MyTeam
 open MyTeam.Enums
 open MyTeam.Models.Enums
-open Newtonsoft.Json
-open Newtonsoft.Json.Converters
 open System.Linq
 
 type MemberId = Guid
 type UserId = UserId of string
 
-[<JsonConverter(typedefof<StringEnumConverter>)>]
 type Role =
     | Admin = 0
     | Trener = 1
@@ -18,7 +15,6 @@ type Role =
     | Oppmøte = 3
     | Botsjef = 4 
 
-[<JsonConverter(typedefof<StringEnumConverter>)>]
 type Status = PlayerStatus
         
 type Member = {

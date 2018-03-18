@@ -1,6 +1,8 @@
 ﻿import React from 'react'
 
-import { get } from '../../api'
+import { get, post } from '../../api'
+
+const parseType = (type, types) => types.indexOf(type);
 
 export default class ShowGame extends React.Component {
   state = {
@@ -13,7 +15,7 @@ export default class ShowGame extends React.Component {
     loadingEvents: true,
     isAddingEvent: false,
     isRemovingEvent: false,
-    showPlayerUrl: "/spillere/vis"
+    showPlayerUrl: '/spillere/vis',
   }
 
   componentDidMount() {
@@ -37,10 +39,10 @@ export default class ShowGame extends React.Component {
       })
     })
 
-    get(this.props.getGameeventtypesUrl).then(response => {
+    get('/api/games/events/types').then(response => {
       this.setState({
         eventTypes: response,
-        type: response[0].value,
+        type: parseType(response[0], response),
       })
     })
 
@@ -53,15 +55,17 @@ export default class ShowGame extends React.Component {
   }
 
   handleEventChange = event => {
+    const eventType = parseType(event.target.value, this.state.eventTypes);
     const playerId = this.state.playerId
       ? this.state.playerId
-      : this.getEventPlayers(parseInt(event.target.value))[0].id
+      : this.getEventPlayers(eventType)[0].id
 
     this.setState({
-      type: parseInt(event.target.value),
+      type: eventType,
       playerId,
     })
   }
+
   handlePlayerChange = event => {
     const assistedById =
       this.state.assistedById == event.target.value ? null : this.state.assistedById
@@ -73,6 +77,7 @@ export default class ShowGame extends React.Component {
       assistedById,
     })
   }
+
   handleAssistChange = event => {
     const assistedById = event.target.value == 'ingen' ? null : event.target.value
 
@@ -82,6 +87,7 @@ export default class ShowGame extends React.Component {
   handleSubmit = () => {
     const that = this
     const state = that.state
+
     const form = {
       Type: state.type,
       PlayerId: state.playerId,
@@ -121,42 +127,32 @@ export default class ShowGame extends React.Component {
   }
 
   addPlayer = () => {
-    const that = this
-    that.setState({ isAddingPlayer: true })
-    $.post(that.props.selectPlayerUrl, {
-      eventId: that.props.gameId,
-      playerId: that.state.addPlayerId,
-      isSelected: true,
+    this.setState({ isAddingPlayer: true })
+    post(`/api/games/${this.props.gameId}/squad/select/${this.state.addPlayerId}`, {
+      value: true,
     }).then(response => {
-      if (response.success) {
-        const player = that.state.players.filter(player => player.id == that.state.addPlayerId)
-        that.setState({
-          squad: player
-            .concat(that.state.squad)
-            .sort((a, b) => a.firstName.localeCompare(b.firstName)),
-        })
-        that.setState({
-          addPlayerId: that.getPlayersNotInSquad()[0].id,
-          isAddingPlayer: false,
-        })
-      }
+      const player = this.state.players.filter(player => player.id == this.state.addPlayerId)
+      this.setState({
+        squad: player
+          .concat(this.state.squad)
+          .sort((a, b) => a.firstName.localeCompare(b.firstName)),
+      })
+      this.setState({
+        addPlayerId: this.getPlayersNotInSquad()[0].id,
+        isAddingPlayer: false,
+      })
     })
   }
 
   removePlayerFromSquad = playerId => {
-    const that = this
-    that.setState({ isRemovingPlayer: playerId })
-    $.post(that.props.selectPlayerUrl, {
-      eventId: that.props.gameId,
-      playerId,
-      isSelected: false,
+    this.setState({ isRemovingPlayer: playerId })
+    post(`/api/games/${this.props.gameId}/squad/select/${playerId}`, {
+      value: false,
     }).then(response => {
-      if (response.success) {
-        that.setState({
-          squad: that.state.squad.filter(player => player.id != playerId),
-          isRemovingPlayer: undefined,
-        })
-      }
+      this.setState({
+        squad: this.state.squad.filter(player => player.id != playerId),
+        isRemovingPlayer: undefined,
+      })
     })
   }
 

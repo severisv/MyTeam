@@ -38,8 +38,8 @@ type TeamAttendance = {
 type PeriodStart = DateTime
 
 type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * PlayerAttendanceSummary list
-type GetPreviousTrainings = Database -> ClubId -> Training list
-type GetTraining = Database -> EventId -> Training
+type GetPreviousTrainings = Database -> ClubId -> Event list
+type GetTraining = Database -> EventId -> Event
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
 type ConfirmAttendance = ClubId -> EventId -> MemberId -> bool -> Database -> Result<unit, Error>
 type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> Result<TeamAttendance list, Error>

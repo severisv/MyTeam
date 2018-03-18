@@ -20,20 +20,6 @@ namespace MyTeam.Controllers
             _gameEventService = gameEventService;
         }
 
-        public IActionResult GetTypes()
-        {
-            var gameEventTypes = Enum.GetValues(typeof (GameEventType)).Cast<GameEventType>()
-                .Select(e =>
-                    new
-                    {
-                        Name = e.DisplayName(),
-                        Value = e,
-                        ValueName = e.ToString()
-                    });
-
-            return new JsonResult(gameEventTypes);
-        }
-
         [HttpPost]
         [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult Add(GameEventViewModel model)

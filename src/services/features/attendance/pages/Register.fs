@@ -22,7 +22,7 @@ module Register =
             getTraining db
                     
         let model = 
-            let getModel (training: Training) = 
+            let getModel (training: Event) = 
                 let players = getPlayers db club.Id training.Id
                 (training, players)                
 
@@ -33,7 +33,7 @@ module Register =
                       |> Option.map getModel
 
                      
-        let registerAttendanceUrl (training: Training option) =
+        let registerAttendanceUrl (training: Event option) =
             match training with
             | Some training -> sprintf "/intern/oppmote/registrer/%s" (str training.Id) 
             | None -> "/intern/oppmote/registrer"   
@@ -47,7 +47,7 @@ module Register =
             editLink <| sprintf "/intern/arrangement/endre/%s" (str eventId)          
             
 
-        let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Training) isCollapsed =
+        let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Event) isCollapsed =
             collapsible 
                 isCollapsed 
                 [encodedText <| sprintf "%s (%i)" header players.Length]

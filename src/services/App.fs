@@ -89,6 +89,7 @@ module App =
                             (choose [
                                 GET >=> 
                                     routef "/%O/squad" (GameApi.getSquad club.Id)
+                                    route "/events/types" >-> GameEventApi.getTypes
                                                            
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
@@ -119,6 +120,7 @@ module App =
         settings.ContractResolver <- Serialization.CamelCasePropertyNamesContractResolver()   
         settings.Converters.Add(OptionConverter())
         settings.Converters.Add(IdiomaticDuConverter())
+        settings.Converters.Add(StringEnumConverter())
         services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(settings)) |> ignore
 
 
