@@ -1,4 +1,4 @@
-﻿import { put } from '../../../api'
+﻿import { put, get } from '../../../api'
 
 $('.register-attendance-input').click(function f() {
   const element = $(this)
@@ -86,10 +86,8 @@ $('#publishMessage').on('input', function f() {
   }, 750)
 })
 
-$.getJSON(Routes.GET_ATTENDANCE, (data) => {
-  const players = data.data
-  for (const i in players) {
-    const player = players[i]
-    $(`#playerAttendance-${player.playerId}`).html(`${player.attendance}%`)
-  }
+$.get(`/api/attendance/${registerSquad.teamId}/recent`).then(players => {
+  players.forEach(
+      player => $(`#playerAttendance-${player.memberId}`).html(`${player.attendancePercentage}%`)
+    )
 })

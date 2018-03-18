@@ -30,8 +30,17 @@ type SelectedYear =
 type Years = int list
 type Year = string option
 
+type TeamAttendance = {
+    MemberId: MemberId
+    AttendancePercentage: int
+}
+
+type PeriodStart = DateTime
+
 type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * PlayerAttendanceSummary list
 type GetPreviousTrainings = Database -> ClubId -> Training list
 type GetTraining = Database -> EventId -> Training
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
 type ConfirmAttendance = Database -> ClubId -> EventId -> MemberId -> bool -> Result<unit, Error>
+type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> Result<TeamAttendance list, Error>
+

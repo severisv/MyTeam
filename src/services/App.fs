@@ -52,12 +52,12 @@ module App =
                             )
                         subRoute "/api/attendance"                            
                             (choose [ 
+                                GET >=> routef "/%O/recent" (fun teamId -> AttendanceApi.getRecentAttendance club teamId)
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
-                                    routef "/%s/registrer/%s" (fun (eventId, playerId) ->  // TODO: Fix bug
-                                        AttendanceApi.confirmAttendance club (parseGuid eventId) (parseGuid playerId))                                   
+                                    routef "/%O/registrer/%O" (fun (eventId, playerId) ->
+                                        AttendanceApi.confirmAttendance club eventId playerId)                                   
                                                                
-                            ])
-                                       
+                            ])                                      
                                                                                                           
                         
                         route "/api/teams" >-> TeamApi.list club.Id

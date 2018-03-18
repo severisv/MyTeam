@@ -8,7 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Giraffe" Version="1.1.*" />
+    <PackageReference Include="Giraffe" Version="1.2.0-preview-1" />
     <PackageReference Include="FSharp.Quotations.Evaluator" Version="1.0.7" />
   </ItemGroup>
 

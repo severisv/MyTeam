@@ -20,12 +20,9 @@ module Framework =
 
         
     type Http.HttpContext with 
-        member  ctx.BindJson<'T> () =
-                        let task = task {
-                                    let! result = ctx.BindJsonAsync<'T>()
-                                    return result
-                                }
-                        task.ConfigureAwait(false).GetAwaiter().GetResult()      
+        member ctx.BindJson<'T> () =
+                    let task = ctx.BindJsonAsync<'T>()
+                    task.ConfigureAwait(false).GetAwaiter().GetResult()      
 
 
     type ValidationError = {

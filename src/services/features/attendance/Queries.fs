@@ -169,3 +169,47 @@ module Queries =
                 OthersActive = othersActive
                 OthersInactive = othersInactive
             }
+
+
+
+    let getRecentAttendance : GetRecentAttendance = 
+        fun db club teamId periodStart ->
+
+            match club.Teams |> List.exists (fun team -> team.Id = teamId) with
+            | false -> Error AuthorizationError
+            | true -> 
+                let now = DateTime.Now
+
+                let eventIds = 
+                    query {
+                        for et in db.EventTeams do
+                        where (
+                            et.TeamId = teamId &&
+                            et.Event.Type = (int EventType.Trening) &&
+                            et.Event.DateTime <= now &&
+                            et.Event.DateTime >= periodStart &&
+                            et.Event.Voluntary = false
+                        )                 
+                        select(et.EventId)
+                    } |> Seq.toList
+
+                let eventAttendences = 
+                    query {
+                        for ea in db.EventAttendances do
+                        where (eventIds.Contains(ea.EventId) && ea.DidAttend)
+                        select (ea.EventId, ea.MemberId)
+                    } |> Seq.toList
+
+                let eventCount = eventIds |> Seq.length
+
+                eventAttendences 
+                |> Seq.groupBy (fun (_, memberId) -> memberId) 
+                |> Seq.map (fun (memberId, values) -> 
+                    {
+                        MemberId = memberId
+                        AttendancePercentage = (Seq.length values) * 100 / eventCount
+                    }
+                )
+                |> Seq.toList
+                |> Ok             
+        
