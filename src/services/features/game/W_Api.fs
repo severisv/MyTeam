@@ -14,24 +14,27 @@ module GameApi =
         value: Nullable<int>
     }
 
-    let setHomeScore clubId gameId next (ctx: HttpContext) =
-            let db = ctx.Database
-            let game = Queries.games db clubId 
-                       |> Seq.find(fun game -> game.Id = gameId)                    
+    let setHomeScore clubId gameId (db: Database) model  =
+            Queries.games db clubId 
+               |> Seq.tryFind(fun game -> game.Id = gameId)     
+               |> function
+                    | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
+                    | Some game -> 
+                        game.HomeScore <- model.value       
+                        db.SaveChanges() |> ignore
+                        Ok (Object())
+                    | None -> Error NotFound         
 
-            game.HomeScore <- ctx.BindJson<PostScore>().value
-            db.SaveChanges() |> ignore
-            next ctx
-
-
-    let setAwayScore clubId gameId next (ctx: HttpContext) =
-            let db = ctx.Database
-            let game = Queries.games db clubId 
-                       |> Seq.find(fun game -> game.Id = gameId)                    
-
-            game.AwayScore <- ctx.BindJson<PostScore>().value
-            db.SaveChanges() |> ignore
-            next ctx
+    let setAwayScore clubId gameId (db: Database) model  =
+            Queries.games db clubId 
+               |> Seq.tryFind(fun game -> game.Id = gameId)     
+               |> function
+                    | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
+                    | Some game -> 
+                        game.AwayScore <- model.value       
+                        db.SaveChanges() |> ignore
+                        Ok (Object())
+                    | None -> Error NotFound                 
 
 
 

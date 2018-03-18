@@ -33,22 +33,25 @@ module Framework =
     type Error = 
         | ValidationErrors of list<ValidationError>            
         | AuthorizationError            
+        | NotFound            
 
     let fromResult next ctx (result: Result<'T, Error>) =
         match result with
             | Ok r -> 
                 match r with
-                    | _ -> json r next ctx
+                | _ -> json r next ctx
             | Error e -> 
                 match e with
                 | ValidationErrors validationErrors ->
                     (setStatusCode 400 >=> json validationErrors) next ctx    
                 | AuthorizationError ->
                     (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx    
+                | NotFound ->
+                    (setStatusCode 404 >=> json ("404")) next ctx    
         
                 
-
     type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) 
+
 
     let invoke (action: Action) (next : HttpFunc) (ctx: HttpContext) =
             (action ctx) next ctx 

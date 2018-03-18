@@ -13,6 +13,7 @@ open MyTeam.Models.Enums
 open System
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+open Request
 
     
 type Asd = {
@@ -93,8 +94,8 @@ module App =
                                                            
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
-                                        routef "/%O/score/home" (GameApi.setHomeScore club.Id)
-                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id)                                   
+                                        routef "/%O/score/home" (GameApi.setHomeScore club.Id >> postJson)
+                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id >> postJson)                                   
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
                                         routef "/%O/squad/select/%O" (fun (gameId, playerId) ->
