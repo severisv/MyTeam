@@ -10,10 +10,7 @@ module GameApi =
 
     
     [<CLIMutable>]
-    type PostScore = {
-        value: Nullable<int>
-    }
-
+    type PostScore = { value: Nullable<int> }
     let setHomeScore clubId gameId (db: Database) model  =
             Queries.games db clubId 
                |> Seq.tryFind(fun game -> game.Id = gameId)     
@@ -22,7 +19,7 @@ module GameApi =
                     | Some game -> 
                         game.HomeScore <- model.value       
                         db.SaveChanges() |> ignore
-                        Ok (Object())
+                        Ok ()
                     | None -> Error NotFound         
 
     let setAwayScore clubId gameId (db: Database) model  =
@@ -33,7 +30,7 @@ module GameApi =
                     | Some game -> 
                         game.AwayScore <- model.value       
                         db.SaveChanges() |> ignore
-                        Ok (Object())
+                        Ok ()
                     | None -> Error NotFound                 
 
 

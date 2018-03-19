@@ -3,7 +3,6 @@ namespace MyTeam
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore
-open Microsoft.Extensions.DependencyInjection;
 open System
 open System.Threading.Tasks
 
