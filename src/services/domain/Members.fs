@@ -5,7 +5,7 @@ open MyTeam.Enums
 open MyTeam.Models.Enums
 open System.Linq
 
-type MemberId = Guid
+type MemberId = System.Guid
 type UserId = UserId of string
 
 type Role =

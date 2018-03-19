@@ -1,8 +1,7 @@
 namespace MyTeam
 
 open Microsoft.Extensions.Options
-open Microsoft.Extensions.ObjectPool
-
+open Giraffe
 
 module ImagesInternal =
     
@@ -77,7 +76,7 @@ open ImagesInternal
 module Images =
   
     let get (ctx: HttpContext) url getProps =
-        let options = (getService<IOptions<CloudinarySettings>> ctx).Value
+        let options = (ctx.GetService<IOptions<CloudinarySettings>>()).Value
         let baseUrl = baseUrl options.CloudName
 
         createImageUrl baseUrl url getProps

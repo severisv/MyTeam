@@ -3,6 +3,7 @@ namespace MyTeam.Games
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open System
 
 type GameId = Guid
 

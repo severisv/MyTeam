@@ -15,9 +15,6 @@ module Framework =
     let subRoute = subRouteCi
 
     type HttpContext = Http.HttpContext
-    let getService<'T> (ctx: HttpContext) =             
-        ctx.RequestServices.GetService<'T>()
-
         
     type Http.HttpContext with 
         member ctx.BindJson<'T> () =

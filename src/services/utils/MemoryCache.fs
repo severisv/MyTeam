@@ -3,7 +3,7 @@ namespace MyTeam
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Caching.Memory
 open System
-
+open Giraffe
 
 module Cache =
 
@@ -20,7 +20,7 @@ module Cache =
 
     type Clear = HttpContext -> Key -> unit
 
-    let getMemoryCache ctx = getService<IMemoryCache> ctx
+    let getMemoryCache (ctx: HttpContext) = ctx.GetService<IMemoryCache>()
 
     let get<'T> : Get<'T> =
         fun ctx key query ->
