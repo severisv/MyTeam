@@ -9,6 +9,7 @@ open MyTeam.Models.Enums
 open MyTeam.Views
 open MyTeam.Attendance.Queries
 open MyTeam.Attendance
+open MyTeam.Ajax
 
 module Register =
 

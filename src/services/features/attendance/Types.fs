@@ -5,6 +5,7 @@ open System
 open MyTeam.Domain.Members
 open MyTeam.Domain.Events
 open MyTeam.Domain
+open MyTeam.Ajax
             
 type PlayerDidAttend = bool            
 type PlayerAttendance = Member * PlayerDidAttend
@@ -41,6 +42,6 @@ type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * Player
 type GetPreviousTrainings = Database -> ClubId -> Event list
 type GetTraining = Database -> EventId -> Event
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
-type ConfirmAttendance = ClubId -> EventId -> MemberId -> bool -> Database -> Result<unit, Error>
+type ConfirmAttendance = ClubId -> EventId * MemberId -> Database -> CheckboxPayload -> Result<unit, Error>
 type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> Result<TeamAttendance list, Error>
 

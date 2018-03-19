@@ -9,7 +9,7 @@ open MyTeam.Attendance
 module Persistence =
 
     let confirmAttendance: ConfirmAttendance = 
-        fun clubId eventId playerId didAttend db ->
+        fun clubId (eventId, playerId) db model ->
             let (ClubId clubId) = clubId
 
             query {
@@ -25,13 +25,13 @@ module Persistence =
                     |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)
                     |> function 
                         | Some attendance ->
-                            attendance.DidAttend <- didAttend
+                            attendance.DidAttend <- model.value
                             db.EventAttendances.Attach(attendance) |> ignore
                         | None ->
                             let a = EventAttendance()                         
                             a.Id <- Guid.NewGuid()
                             a.EventId <- eventId
-                            a.DidAttend <- didAttend
+                            a.DidAttend <- model.value
                             a.IsAttending <- Nullable false
                             a.MemberId <- playerId                        
                             db.EventAttendances.Add(a) |> ignore

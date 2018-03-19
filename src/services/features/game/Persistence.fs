@@ -8,7 +8,7 @@ open System
 module Persistence =
 
     let selectPlayer: SelectPlayer = 
-        fun clubId eventId playerId isSelected db ->
+        fun clubId (eventId, playerId) db model ->
             let (ClubId clubId) = clubId
 
             query {
@@ -24,14 +24,14 @@ module Persistence =
                     |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)           
                     |> function
                         | Some a ->
-                            a.IsSelected <- isSelected
+                            a.IsSelected <- model.value
                             db.EventAttendances.Attach(a) |> ignore
                         | None ->
                             let a = EventAttendance()                         
                             a.Id <- Guid.NewGuid()
                             a.EventId <- eventId
                             a.MemberId <- playerId                        
-                            a.IsSelected <- isSelected                        
+                            a.IsSelected <- model.value                        
                             db.EventAttendances.Add(a) |> ignore
 
                     db.SaveChanges() |> ignore

@@ -1,10 +1,9 @@
 namespace MyTeam
 
 open Giraffe
-open Giraffe.GiraffeViewEngine
-open Microsoft.AspNetCore
 open System
 open System.Threading.Tasks
+open Microsoft.AspNetCore
 
 [<AutoOpen>]
 module Framework =
@@ -75,14 +74,3 @@ module Framework =
     let (>>=) result fn =
         result |> Result.bind(fn)    
 
-    let mergeAttributes (a: XmlAttribute list) (b: XmlAttribute list) =
-        a @ b |> List.groupBy (function
-                                | KeyValue (key, _) -> key
-                                | Boolean key -> key)
-              |> List.map (fun (key, values) ->
-                            let values = values |> List.map(function
-                                                    | KeyValue (_, value) -> value
-                                                    | Boolean key -> key)
-                                                |> String.concat " "
-                            KeyValue (key, values)                                            
-                          )                  
