@@ -8,63 +8,36 @@ open System
 
 module GameApi =
 
+    let getSquad clubId gameId next (ctx: HttpContext) =
+        (Queries.getSquad ctx.Database clubId gameId
+         |> json) next ctx
+
+    let updateGame clubId gameId db updateGame  =
+        Queries.games db clubId
+          |> Seq.tryFind(fun g -> g.Id = gameId)
+          |> function
+           | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
+           | Some game -> 
+                updateGame game
+                db.SaveChanges()
+                |> Ok
+           | None -> Error NotFound      
     
     [<CLIMutable>]
     type PostScore = { value: Nullable<int> }
     let setHomeScore clubId gameId db model  =
-            Queries.games db clubId 
-               |> Seq.tryFind(fun game -> game.Id = gameId)     
-               |> function
-                    | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
-                    | Some game -> 
-                        game.HomeScore <- model.value       
-                        db.SaveChanges() 
-                        |> Ok
-                    | None -> Error NotFound         
+            updateGame clubId gameId db (fun game -> game.HomeScore <- model.value)
 
     let setAwayScore clubId gameId db model  =
-            Queries.games db clubId 
-               |> Seq.tryFind(fun game -> game.Id = gameId)     
-               |> function
-                    | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
-                    | Some game -> 
-                        game.AwayScore <- model.value       
-                        db.SaveChanges() 
-                        |> Ok
-                    | None -> Error NotFound                 
-
-
-
-    let getSquad clubId gameId next (ctx: HttpContext) =
-        (Queries.getSquad ctx.Database clubId gameId
-         |> json) next ctx
+           updateGame clubId gameId db (fun game -> game.AwayScore <- model.value)
 
 
     [<CLIMutable>]
     type GamePlanModel = { GamePlan: string }
     let setGamePlan clubId gameId db model  =
-        Queries.games db clubId
-          |> Seq.tryFind(fun g -> g.Id = gameId)
-          |> function
-           | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
-           | Some game -> 
-                game.GamePlan <- model.GamePlan
-                db.SaveChanges()
-                |> Ok
-           | None -> Error NotFound                 
-
-
+        updateGame clubId gameId db (fun game -> game.GamePlan <- model.GamePlan)
  
     let publishGamePlan clubId gameId db _  =
-        Queries.games db clubId
-          |> Seq.tryFind(fun g -> g.Id = gameId)
-          |> function
-           | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
-           | Some game -> 
-                game.GamePlanIsPublished <- Nullable true
-                db.SaveChanges()
-                |> Ok
-           | None -> Error NotFound                 
+        updateGame clubId gameId db (fun game -> game.GamePlanIsPublished <- Nullable true)
 
- 
     let selectPlayer = Persistence.selectPlayer        
