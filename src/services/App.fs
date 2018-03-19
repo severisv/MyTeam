@@ -94,15 +94,15 @@ module App =
                                                            
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
-                                        routef "/%O/score/home" (GameApi.setHomeScore club.Id >> postJson)
-                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id >> postJson)                                   
+                                        routef "/%O/score/home" (GameApi.setHomeScore club.Id >> jsonPost)
+                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id >> jsonPost)                                   
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
                                         routef "/%O/squad/select/%O" (fun (gameId, playerId) ->
                                             Ajax.Api.checkbox <| GameApi.selectPlayer club.Id gameId playerId)                                   
 
-                                        routef "/%O/gameplan" (GameApi.setGamePlan club.Id)
-                                        routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id)
+                                        routef "/%O/gameplan" (GameApi.setGamePlan club.Id >> jsonPost)
+                                        routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id >> jsonPost)
                                     ]
                             ])                                                                                                                                                                                                                       
                        ] next ctx
