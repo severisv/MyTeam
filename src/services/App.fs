@@ -89,7 +89,7 @@ module App =
                         subRoute "/api/games"
                             (choose [
                                 GET >=> 
-                                    routef "/%O/squad" (GameApi.getSquad club.Id)
+                                    routef "/%O/squad" (GameApi.getSquad club.Id >> jsonGet)
                                     route "/events/types" >-> GameEventApi.getTypes
                                                            
                                 POST >=> 

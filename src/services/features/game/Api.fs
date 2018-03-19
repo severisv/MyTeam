@@ -3,15 +3,9 @@ namespace MyTeam
 open MyTeam.Games
 open MyTeam.Domain
 open MyTeam
-open Giraffe 
 open System
 
-module GameApi =
-
-    let getSquad clubId gameId next (ctx: HttpContext) =
-        (Queries.getSquad ctx.Database clubId gameId
-         |> json) next ctx
-
+module internal Helpers =
     let updateGame clubId gameId db updateGame  =
         Queries.games db clubId
           |> Seq.tryFind(fun g -> g.Id = gameId)
@@ -22,6 +16,15 @@ module GameApi =
                 db.SaveChanges()
                 |> Ok
            | None -> Error NotFound      
+
+open Helpers
+
+module GameApi =
+
+    let getSquad clubId gameId db =
+        Queries.getSquad db clubId gameId
+        |> Ok
+ 
     
     [<CLIMutable>]
     type PostScore = { value: Nullable<int> }
