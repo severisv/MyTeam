@@ -11,12 +11,9 @@ namespace MyTeam.ViewModels.Game
         public GameEventType Type { get; set; }
 
         public Guid? PlayerId { get; set; }
-        public string PlayerName { get; set; }
         [RequiredNO]
         public Guid GameId { get; set; }
         public Guid? AssistedById { get; set; }
-        public string AssistedByName { get; set; }
         public Guid Id { get; set; }
-        public DateTime DateTime { get; set; }
     }
 }

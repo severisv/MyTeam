@@ -27,6 +27,7 @@
     <Compile Include="features/common/views/partials/*.fs" />
     <Compile Include="features/common/views/*.fs" />
     <Compile Include="features/*/Types.fs" />
+    <Compile Include="features/*/W_Types.fs" />
     <Compile Include="features/*/Queries.fs" />
     <Compile Include="features/*/Persistence.fs" />
     <Compile Include="features/*/Api.fs" />

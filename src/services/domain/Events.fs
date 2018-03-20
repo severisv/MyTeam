@@ -5,6 +5,7 @@ open System.Linq
 open MyTeam
 
 type EventId = Guid
+type GameId = EventId
 
 type Event = {
     Id: EventId
