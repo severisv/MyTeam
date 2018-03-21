@@ -46,20 +46,6 @@ namespace MyTeam.Services.Domain
             };
         }
 
-        public IEnumerable<GameEventViewModel> GetGameEvents(Guid gameId)
-        {
-            return  _dbContext.GameEvents
-                .Where(ge => ge.GameId == gameId)
-                .OrderBy(ge => ge.CreatedDate)
-                .Select(ge => new GameEventViewModel {
-                    Id = ge.Id,
-                    GameId = gameId,
-                    PlayerId = ge.PlayerId,
-                    AssistedById = ge.AssistedById,
-                    Type = ge.Type,
-                }).ToList();
-        }
-
         public void Delete(Guid eventId)
         {
             var gameEvent = _dbContext.GameEvents.Single(g => g.Id == eventId);

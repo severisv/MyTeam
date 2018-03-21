@@ -2,9 +2,9 @@
 
 module.exports = React.createClass({
   getIconClassName(type) {
-    if (type == 0) return 'fa fa-soccer-ball-o'
-    if (type == 1) return 'icon icon-card-yellow'
-    if (type == 2) return 'icon icon-card-red'
+    if (type == 'Mål') return 'fa fa-soccer-ball-o'
+    if (type == 'Gult kort') return 'icon icon-card-yellow'
+    if (type == 'Rødt kort') return 'icon icon-card-red'
   },
 
   render() {

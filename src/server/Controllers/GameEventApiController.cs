@@ -32,14 +32,6 @@ namespace MyTeam.Controllers
             return new JsonResult(JsonResponse.Failure);
         }
 
-        public IActionResult Get(Guid gameId)
-        {
-            var events = _gameEventService.GetGameEvents(gameId);
-
-            return new JsonResult(events);
-        }
-
-
         [HttpPost]
         [RequireMember(Roles.Admin, Roles.Coach, Roles.NewsWriter)]
         public IActionResult Delete(Guid eventId)

@@ -7,7 +7,6 @@ namespace MyTeam.Services.Domain
     public interface IGameEventService
     {
         GameEventViewModel AddGameEvent(GameEventViewModel model);
-        IEnumerable<GameEventViewModel> GetGameEvents(Guid gameId);
         void Delete(Guid eventId);
     }
 }

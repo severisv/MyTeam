@@ -17,24 +17,33 @@ module GameEventApi =
     let get : Get =
         fun clubId gameId (db: Database) ->
             let (ClubId clubId) = clubId
-            db.Games 
-            |> Seq.tryFind (fun g -> g.Id = gameId && g.Team.ClubId = clubId)
+            query { 
+                for g in db.Games do
+                where (g.Id = gameId && g.Team.ClubId = clubId)
+                select (g.Id)
+            }
+            |> Seq.tryHead
             |> function
                 | None -> Error NotFound
-                | Some game ->
+                | Some gameId ->
                     query {
                         for ge in db.GameEvents do
-                        where (ge.GameId = game.Id && ge.Game.ClubId = clubId)
+                        where (ge.GameId = gameId)
                         sortBy (ge.CreatedDate)
-                        select ({
-                                  Id = ge.Id
-                                  GameId = game.Id
-                                  PlayerId = ge.PlayerId |> toOption
-                                  AssistedById = ge.AssistedById |> toOption
-                                  Type = enum<GameEventType> (int ge.Type)
-                        })
+                        select (ge.Id, gameId, ge.PlayerId, ge.AssistedById, ge.Type)
                     }
                     |> Seq.toList
+                    |> List.map(fun (id, gameId, playerId, assistedById, eventType) ->
+                                        {
+                                          Id = id
+                                          GameId = gameId
+                                          PlayerId = playerId |> toOption
+                                          AssistedById = assistedById |> toOption
+                                          Type = enum<GameEventType> (int eventType)
+                                    }
+                                )
                     |> Ok
+
+
 
 

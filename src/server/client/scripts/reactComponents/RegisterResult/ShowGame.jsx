@@ -20,7 +20,7 @@ export default class ShowGame extends React.Component {
 
   componentDidMount() {
     const { props, state } = this
-    get(this.props.getGameeventsUrl).then(response => {
+    get(`/api/games/${props.gameId}/events`).then(response => {
       this.setState({
         events: response,
         loadingEvents: false,

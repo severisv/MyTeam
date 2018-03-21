@@ -65,25 +65,25 @@ module Pages =
                                 ]
                                 a [_href "/";_class "navbar-brand" ] [ img [_src <| getImage club.Logo (fun o -> { o with Width = Some 100 }); _alt club.ShortName ] ]
                             ]
-                            div [_class "navbar-collapse collapse" ] ([
-                                ul [_class "nav navbar-nav"] [
-                                    li [] [a [_href "/spillere" ] [ encodedText "Spillere"] ]
-                                    li [] [a [_href "/kamper" ] [ encodedText "Kamper"] ]
-                                    li [] [a [_href "/tabell" ] [ encodedText "Tabell"] ]
-                                    li [] [a [_href "/statistikk" ] [ encodedText "Statistikk"] ]
-                                    li [] [a [_href "/om" ] [ encodedText "Om klubben"] ]
-                                    user |> Option.fold(fun _ _ -> 
-                                                            li [] [
-                                                                a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [
-                                                                    encodedText "Intern "
-                                                                    icon <| fa "angle-down" <| ""
-                                                                ] 
-                                                            ]
-                                                                                                
-                                                        ) (emptyText)                     
-                          
-                                ]
-                            ] @ (user |> Option.fold (fun _ user ->
+                            div [_class "navbar-collapse collapse" ] 
+                                ([
+                                    ul [_class "nav navbar-nav"] [
+                                        li [] [a [_href "/spillere" ] [ encodedText "Spillere"] ]
+                                        li [] [a [_href "/kamper" ] [ encodedText "Kamper"] ]
+                                        li [] [a [_href "/tabell" ] [ encodedText "Tabell"] ]
+                                        li [] [a [_href "/statistikk" ] [ encodedText "Statistikk"] ]
+                                        li [] [a [_href "/om" ] [ encodedText "Om klubben"] ]
+                                        user |> Option.fold(fun _ _ -> 
+                                                                li [] [
+                                                                    a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [
+                                                                        encodedText "Intern "
+                                                                        icon <| fa "angle-down" <| ""
+                                                                    ] 
+                                                                ]
+                                                                                                    
+                                                            ) (emptyText)                     
+                                    ]
+                                ] @ (user |> Option.fold (fun _ user ->
                                             ([
                                                     hr [_class "visible-xs submenu-divider" ]
                                                     ul [_class "nav navbar-nav submenu visible-xs"] 
@@ -96,8 +96,7 @@ module Pages =
                                                             coachMenuItems
                                                         ], [])))
 
-                                ) []
-
+                                            ) []
                             ))
                             loginPartial user                            
                             user |> Option.fold (fun _ user ->
