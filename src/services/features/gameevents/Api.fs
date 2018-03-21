@@ -4,6 +4,7 @@ open MyTeam.Games.Events
 open MyTeam.Domain
 open MyTeam
 open Microsoft.EntityFrameworkCore
+open MyTeam.Validation
 open System
 
 
@@ -36,7 +37,6 @@ module GameEventApi =
                     |> List.map(fun (id, gameId, playerId, assistedById, eventType) ->
                                         {
                                           Id = id
-                                          GameId = gameId
                                           PlayerId = playerId |> toOption
                                           AssistedById = assistedById |> toOption
                                           Type = enum<GameEventType> (int eventType)
@@ -46,6 +46,18 @@ module GameEventApi =
 
 
     let add : Add =
+        let cardDoesNotHaveAssist (_, model) =
+            if model.Type <> GameEventType.``Mål`` && model.AssistedById.IsSome 
+                then Error "Kort kan ikke ha assist"
+            else 
+                Ok()
+
+        let isNotAssistedBySelf (_, model) =
+            if model.PlayerId.IsSome && model.PlayerId = model.AssistedById 
+                then Error "Man kan ikke gi assist til seg selv"
+            else 
+                Ok()
+
         fun clubId gameId db model ->
             let (ClubId clubId) = clubId
             query { 
@@ -58,17 +70,27 @@ module GameEventApi =
                 | None -> Error NotFound
                 | Some c when c <> clubId -> Error AuthorizationError
                 | Some _ ->
-                    let ge = Models.Domain.GameEvent()
-                    ge.Id <- Guid.NewGuid()
-                    ge.GameId <- gameId
-                    ge.PlayerId <- (model.PlayerId |> toNullable)
-                    ge.AssistedById <- (model.PlayerId |> toNullable)
-                    ge.Type <- (enum<Models.Enums.GameEventType>(int ge.Type))
-                    ge.CreatedDate <- DateTime.Now
-                    db.GameEvents.Add(ge) |> ignore
-                    db.SaveChanges() |> ignore
-                    { model with Id = ge.Id } 
-                    |> Ok
+                    
+                    model ==>
+                    [
+                       <@ model @> >- [cardDoesNotHaveAssist]
+                       <@ model @> >- [isNotAssistedBySelf]
+                       <@ model.Type @> >- [isRequired]
+                    ] 
+                    >>= fun model ->  
+
+                        let ge = Models.Domain.GameEvent()
+                        ge.Id <- Guid.NewGuid()
+                        ge.GameId <- gameId
+                        ge.PlayerId <- (model.PlayerId |> toNullable)
+                        ge.AssistedById <- (model.AssistedById |> toNullable)
+                        ge.Type <- (enum<Models.Enums.GameEventType>(int ge.Type))
+                        ge.CreatedDate <- DateTime.Now
+
+                        db.GameEvents.Add(ge) |> ignore
+                        db.SaveChanges() |> ignore
+                        { model with Id = ge.Id } 
+                        |> Ok
 
 
 

@@ -16,7 +16,6 @@ type GameEventType =
 [<CLIMutable>]
 type GameEvent = {
     Id: GameEventId
-    GameId: GameId
     Type: GameEventType
     PlayerId: PlayerId option
     AssistedById: PlayerId option
