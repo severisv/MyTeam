@@ -85,23 +85,28 @@ module App =
                                         ]
                             ])
 
+
+
                         subRoute "/api/games"
                             (choose [
-                                GET >=> 
-                                    routef "/%O/squad" (GameApi.getSquad club.Id >> jsonGet)
-                                    route "/events/types" >=> (GameEventApi.getTypes |> jsonGet)
-                                    routef "/%O/events" (GameEventApi.get club.Id >> jsonGet)
-                                                           
                                 POST >=> 
                                     mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
                                         routef "/%O/score/home" (GameApi.setHomeScore club.Id >> jsonPost)
-                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id >> jsonPost)                                   
+                                        routef "/%O/score/away" (GameApi.setAwayScore club.Id >> jsonPost)       
+                                        routef "/%O/events" (GameEventApi.add club.Id >> jsonPost)       
+                                        routef "/%O/events/%O/delete" (GameEventApi.delete club.Id >> jsonGet)       
+
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
                                         routef "/%O/squad/select/%O" (GameApi.selectPlayer club.Id >> jsonPost)     
                                         routef "/%O/gameplan" (GameApi.setGamePlan club.Id >> jsonPost)
                                         routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id >> jsonPost)
                                     ]
+                                    
+                                GET >=> 
+                                    routef "/%O/squad" (GameApi.getSquad club.Id >> jsonGet)
+                                    route "/events/types" >=> (GameEventApi.getTypes |> jsonGet)
+                                    routef "/%O/events" (GameEventApi.get club.Id >> jsonGet)                                
                             ])                                                                                                                                                                                                                       
                        ] next ctx
                 | None ->

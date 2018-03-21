@@ -20,7 +20,7 @@ module.exports = React.createClass({
                       <option key={type} value={type}>
                         {type}
                       </option>
-                      ))}
+                    ))}
                   </select>
                   <span className="text-danger" />
                 </div>
@@ -33,7 +33,7 @@ module.exports = React.createClass({
                       <option key={player.id} value={player.id}>
                         {player.name}
                       </option>
-                      ))}
+                    ))}
                   </select>
                   <span className="text-danger" />
                 </div>
@@ -63,7 +63,7 @@ module.exports = React.createClass({
                 <option key={player.id} value={player.id}>
                   {player.name}
                 </option>
-                ))}
+              ))}
             </select>
             <span className="text-danger" />
           </div>

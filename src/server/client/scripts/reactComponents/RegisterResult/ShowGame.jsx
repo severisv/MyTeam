@@ -2,7 +2,7 @@
 
 import { get, post } from '../../api'
 
-const parseType = (type, types) => types.indexOf(type);
+const parseType = (type, types) => types.indexOf(type)
 
 export default class ShowGame extends React.Component {
   state = {
@@ -55,13 +55,14 @@ export default class ShowGame extends React.Component {
   }
 
   handleEventChange = event => {
-    const eventType = parseType(event.target.value, this.state.eventTypes);
+    const eventType = parseType(event.target.value, this.state.eventTypes)
     const playerId = this.state.playerId
       ? this.state.playerId
       : this.getEventPlayers(eventType)[0].id
 
     this.setState({
       type: eventType,
+      assistedById: null,
       playerId,
     })
   }
@@ -85,8 +86,7 @@ export default class ShowGame extends React.Component {
   }
 
   handleSubmit = () => {
-    const that = this
-    const state = that.state
+    const state = this.state
 
     const form = {
       Type: state.type,
@@ -99,26 +99,21 @@ export default class ShowGame extends React.Component {
     }
 
     this.setState({ isAddingEvent: true })
-    $.post(that.props.addGameeventUrl, form).then(response => {
-      if (response.success != false) {
-        that.setState({
-          events: that.state.events.concat([response]),
-          isAddingEvent: false,
-        })
-      }
+    post(`/api/games/${this.props.gameId}/events`, form).then(response => {
+      this.setState({
+        events: this.state.events.concat([response]),
+        isAddingEvent: false,
+      })
     })
   }
 
   deleteEvent = eventId => {
-    const that = this
-    that.setState({ isRemovingEvent: eventId })
-    $.post(that.props.deleteEventUrl, { eventId }).then(response => {
-      if (response.success) {
-        that.setState({
-          events: that.state.events.filter(event => event.id != eventId),
-          isRemovingEvent: undefined,
-        })
-      }
+    this.setState({ isRemovingEvent: eventId })
+    post(`/api/games/${this.props.gameId}/events/${eventId}/delete`, { eventId }).then(response => {
+      this.setState({
+        events: this.state.events.filter(event => event.id != eventId),
+        isRemovingEvent: undefined,
+      })
     })
   }
 
@@ -204,6 +199,7 @@ export default class ShowGame extends React.Component {
     if (this.state.loadingEvents) eventsClassName += ' u-fade-in--hidden'
     let playersClassName = 'col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 u-fade-in'
     if (this.state.loadingPlayers) playersClassName += ' u-fade-in--hidden'
+
     return (
       <div className="game-showEventsWrapper">
         <div className="row">
