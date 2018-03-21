@@ -89,7 +89,7 @@ module App =
                             (choose [
                                 GET >=> 
                                     routef "/%O/squad" (GameApi.getSquad club.Id >> jsonGet)
-                                    route "/events/types" >-> GameEventApi.getTypes
+                                    route "/events/types" >=> (GameEventApi.getTypes |> jsonGet)
                                     routef "/%O/events" (GameEventApi.get club.Id >> jsonGet)
                                                            
                                 POST >=> 
@@ -98,8 +98,7 @@ module App =
                                         routef "/%O/score/away" (GameApi.setAwayScore club.Id >> jsonPost)                                   
                                     ]
                                     mustBeInRole [Role.Trener] >=> choose [                                
-                                        routef "/%O/squad/select/%O" (GameApi.selectPlayer club.Id >> jsonPost)                                   
-
+                                        routef "/%O/squad/select/%O" (GameApi.selectPlayer club.Id >> jsonPost)     
                                         routef "/%O/gameplan" (GameApi.setGamePlan club.Id >> jsonPost)
                                         routef "/%O/gameplan/publish" (GameApi.publishGamePlan club.Id >> jsonPost)
                                     ]
