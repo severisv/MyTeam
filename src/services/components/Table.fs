@@ -1,7 +1,6 @@
 namespace MyTeam.Views
 
 open MyTeam
-open Giraffe
 open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]
@@ -25,28 +24,10 @@ module TableModule =
         Props: TableProperty list
     }
 
-
     type Table = {
         Rows: HtmlValue list list
         Columns: TableColumn list
-    }
-
-    let getAlignment props = 
-        props |> List.filter (function 
-                        | TableAlignment _ -> true
-                        | _ -> false  
-                       )
-        |> List.tryHead
-        |> function
-            | Some (TableAlignment t) -> t
-            | _ -> Left  
-
-    let getSorting props = 
-        props |> List.exists (fun p -> p = NoSort)
-              |> function
-                | true -> ""
-                | false -> "nosort"                   
-            
+    }                         
 
     let colClassName col =
         col.Props
@@ -71,8 +52,7 @@ module TableModule =
                                             th [_class <| colClassName col] (col.Value |> List.map toXmlNode)       
                                   ))                           
                             
-                        ]
-                                    
+                        ]   
                         tbody [] 
                                 (model.Rows 
                                     |> List.map(fun row ->
