@@ -55,22 +55,7 @@ module Framework =
         handler >=> invoke action     
 
     let empty : HttpHandler =
-        fun (next : HttpFunc) (ctx : HttpContext) ->     
+        fun (next : HttpFunc) (_ : HttpContext) ->     
         Task.FromResult None
 
-    let (=??) (first: string) (second: string) =
-        if not <| String.IsNullOrWhiteSpace(first) then first else second          
-
-
-    let (=?) (condition: bool) (first, second) =
-        if condition then first else second       
-
-    let (|??) option alternative =
-        match option with
-        | Some value -> value
-        | None -> alternative       
-
-
-    let (>>=) result fn =
-        result |> Result.bind(fn)    
-
+ 

@@ -5,7 +5,7 @@ open MyTeam.Domain
 open MyTeam
 open System
 
-module internal Helpers =
+module internal GameApiHelpers =
     let updateGame clubId gameId db updateGame  =
         Queries.games db clubId
           |> Seq.tryFind(fun g -> g.Id = gameId)
@@ -17,7 +17,7 @@ module internal Helpers =
                 |> Ok
            | None -> Error NotFound      
 
-open Helpers
+open GameApiHelpers
 
 module GameApi =
 

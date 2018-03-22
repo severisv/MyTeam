@@ -1,18 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Giraffe" Version="1.2.0-preview-1" />
-    <PackageReference Include="FSharp.Quotations.Evaluator" Version="1.1.0" />
-    <PackageReference Include="FSharp.Core" Version="4.3.*" />
+    <ProjectReference Include="..\database\Migrations.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="settings/*.fs" />
     <Compile Include="Framework.fs" />
@@ -30,6 +22,7 @@
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/W_Types.fs" />
     <Compile Include="features/*/Queries.fs" />
+    <Compile Include="features/*/W_Queries.fs" />
     <Compile Include="features/*/Persistence.fs" />
     <Compile Include="features/*/Api.fs" />
     <Compile Include="features/*/W_Api.fs" />
@@ -37,7 +30,12 @@
     <Compile Include="features/*/Pages.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
-   <ItemGroup>
-    <ProjectReference Include="..\database\Migrations.csproj" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Giraffe" Version="1.2.0-preview-1" />
+    <PackageReference Include="FSharp.Quotations.Evaluator" Version="1.1.0" />
+    <PackageReference Include="FSharp.Core" Version="4.3.*" />
   </ItemGroup>
 </Project>

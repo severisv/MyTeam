@@ -14,3 +14,8 @@ module Option =
         function
         | None -> Nullable()
         | Some x -> Nullable(x)
+
+    let toString =
+        function
+        | None -> ""
+        | Some x -> x.ToString()

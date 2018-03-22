@@ -36,7 +36,7 @@ module Register =
                      
         let registerAttendanceUrl (training: Event option) =
             match training with
-            | Some training -> sprintf "/intern/oppmote/registrer/%s" (str training.Id) 
+            | Some training -> sprintf "/intern/oppmote/registrer/%s" (string training.Id) 
             | None -> "/intern/oppmote/registrer"   
 
         let isSelected url = 
@@ -45,7 +45,7 @@ module Register =
         let getImage = Images.getMember ctx
 
         let editEventLink eventId =
-            editLink <| sprintf "/intern/arrangement/endre/%s" (str eventId)          
+            editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId)          
             
 
         let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Event) isCollapsed =

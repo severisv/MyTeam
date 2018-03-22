@@ -23,4 +23,4 @@ module BaseComponents =
     let toXmlNode = function
         | Node n -> n
         | Str s -> encodedText s
-        | Number i -> encodedText <| str i    
+        | Number i -> encodedText <| string i    

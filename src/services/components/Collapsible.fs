@@ -12,7 +12,7 @@ module Collapsible =
         | Collapsed
     let collapsible collapseState header children =
         let isCollapsed = collapseState = Collapsed
-        let id = Guid.NewGuid().ToString()
+        let id = Guid.NewGuid() |> string
 
         div [] [
             div [_class "collapselink-parent"] [    
@@ -21,7 +21,7 @@ module Collapsible =
                     attr "role" "button"
                     attr "data-toggle" "collapse"
                     _href <| sprintf "#%s" id
-                    attr "aria-expanded" (str <| not isCollapsed)
+                    attr "aria-expanded" (string <| not isCollapsed)
                   ] 
                   header                           
             ]

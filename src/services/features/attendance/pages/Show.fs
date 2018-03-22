@@ -21,7 +21,7 @@ module Show =
         let attendanceUrl year =               
             let year = match year with
                        | AllYears _ -> "total"
-                       | Year y -> str y           
+                       | Year y -> string y           
             
             sprintf "/intern/oppmote/%s" year       
 
@@ -43,13 +43,12 @@ module Show =
                         emptyText))
                     table [] (
                         {
-                            Type = Image
                             Columns = 
                                 [
-                                    { Value = [ Str "Spiller" ]; Align = Left }
-                                    { Value = [ Node <| Icons.training ""; Node whitespace; Str "Trening" ]; Align = Center }
-                                    { Value = [ Node <| Icons.game "" ; Node whitespace; Str "Kamp"]; Align = Center }
-                                    { Value = [ Node <| icon (fa "warning") ""; Node whitespace; Str "Ikke møtt" ]; Align = Center }
+                                    { Value = [ Str "Spiller" ]; Props = [CellType Image] }
+                                    { Value = [ Node <| Icons.training ""; Node whitespace; Str "Trening" ]; Props = [TableAlignment Center] }
+                                    { Value = [ Node <| Icons.game "" ; Node whitespace; Str "Kamp"]; Props = [TableAlignment Center] }
+                                    { Value = [ Node <| icon (fa "warning") ""; Node whitespace; Str "Ikke møtt" ]; Props = [TableAlignment Center] }
                                 ]
                             Rows = 
                                 (attendance |> List.map (fun (player, attendance) ->
@@ -89,7 +88,7 @@ module Show =
                     (block [] [
                         navList ({ 
                                     Header = "Sesonger"
-                                    Items = years |> List.map (fun year  -> { Text = [encodedText <| str year]; Url = attendanceUrl (Year year) })  
+                                    Items = years |> List.map (fun year  -> { Text = [encodedText <| string year]; Url = attendanceUrl (Year year) })  
                                     Footer = Some <| { Text = [encodedText "Total"]; Url = attendanceUrl AllYears }                                                               
                                     IsSelected = isSelected                                                               
                                })

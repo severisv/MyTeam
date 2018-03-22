@@ -57,6 +57,7 @@ namespace MyTeam.Models.Domain
         public int? StartYear => StartDate?.Year;
 
         public string ImageFull { get; set; }
+        [NotMapped]
         public string Image => ImageFull;
         public bool ProfileIsConfirmed { get; set; }
 

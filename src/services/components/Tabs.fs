@@ -18,9 +18,9 @@ module Tabs =
         IsSelected: (string -> bool)
     }
 
-    let tabs model =
+    let tabs attributes model =
         if model.Items.Length > 0 then
-            div [_class "stats-teamNav"] [
+            div attributes [
                 ul [_class "nav nav-pills mt-justified"] 
                     (model.Items |> List.map (fun t -> 
                                     li [_class (model.IsSelected t.Url =? ("active", ""))] [

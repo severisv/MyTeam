@@ -10,14 +10,14 @@ module Enums =
 
 
 
-    let tryParse<'T> value : Result<Option<'T>, string> = 
+    let tryParse<'T> value : Result<'T, string> = 
         if not (String.IsNullOrEmpty value) then
             try
-                Ok (Some (Enum.Parse(typeof<'T>, value, true)  :?> 'T))
+                Ok (Enum.Parse(typeof<'T>, value, true)  :?> 'T)
             with
             | :? ArgumentException -> Error (sprintf "Ugyldig verdi for Enum %s: '%s'" typeof<'T>.FullName value)                
         else
-            Ok None
+            Error "Input var en null eller en tom streng"
 
     let parse<'T> value = 
         try

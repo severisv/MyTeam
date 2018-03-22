@@ -32,8 +32,17 @@ module IconComponents =
                      | ExtraLarge -> "fa-3x"
                      | _ -> "")                
                 
-            icon className (eventType.ToString())            
+            icon className (string eventType) 
 
+    let playerStatusIcon (status: PlayerStatus) =                   
+            let className =
+                (match status with
+                 | PlayerStatus.Aktiv -> fa "user"
+                 | PlayerStatus.Veteran -> fa "trophy"
+                 | PlayerStatus.Trener -> "flaticon-football50"
+                 | _ -> fa "user-times")              
+                
+            icon className (string status) 
 
 module Icons = 
     let attendance = icon <| fa "check-square-o"

@@ -13,8 +13,8 @@ module Validators =
                     Error "E-postadressen er ugyldig"
 
 
-    let isRequired (__, value: 'a) =
-                let value = value.ToString()                              
+    let isRequired (__, value) =
+                let value = string value                       
 
                 if String.IsNullOrWhiteSpace(value) then
                     Error "Feltet er obligatorisk"

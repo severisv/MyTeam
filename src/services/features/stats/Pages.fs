@@ -56,7 +56,7 @@ module StatsPages =
                        | Team t -> t.ShortName 
             let year = match year with
                        | AllYears _ -> "total"
-                       | Year y -> str y           
+                       | Year y -> string y           
             
             sprintf "/statistikk/%s/%s" team year       
 
@@ -71,7 +71,8 @@ module StatsPages =
             main [] [
                 block [] [
                     row [] [
-                        tabs({ 
+                        tabs [_class "stats-teamNav"] 
+                             ({ 
                                 Items = (club.Teams 
                                         |> List.map (fun team  -> 
                                                             { 
@@ -94,7 +95,7 @@ module StatsPages =
                         navListMobile
                             ({ 
                                 Header = "Sesonger"
-                                Items = years |> List.map (fun year  -> { Text = str year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
                                 Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
                                 IsSelected = isSelected                                                               
                            })
@@ -103,15 +104,14 @@ module StatsPages =
                 block [] [
                     table [_class "stats-table"] (
                         {
-                            Type = Image
                             Columns = 
                                 [
-                                    { Value = [Str "Spiller"]; Align = Left }
-                                    { Value = [Node <| Icons.player "Kamper"]; Align = Center }
-                                    { Value = [Node <| Icons.goal "Mål"]; Align = Center }
-                                    { Value = [Node <| Icons.assist "Assists"]; Align = Center }
-                                    { Value = [Node <| Icons.yellowCard "Gule Kort"]; Align = Center }
-                                    { Value = [Node <| Icons.redCard "Røde kort"]; Align = Center }
+                                    { Value = [Str "Spiller"]; Props = [CellType Image] }
+                                    { Value = [Node <| Icons.player "Kamper"]; Props = [TableAlignment Center] }
+                                    { Value = [Node <| Icons.goal "Mål"]; Props = [TableAlignment Center] }
+                                    { Value = [Node <| Icons.assist "Assists"]; Props = [TableAlignment Center] }
+                                    { Value = [Node <| Icons.yellowCard "Gule Kort"]; Props = [TableAlignment Center] }
+                                    { Value = [Node <| Icons.redCard "Røde kort"]; Props = [TableAlignment Center] }
                                 ]
                             Rows = 
                                 (stats |> List.map (fun player ->
@@ -144,7 +144,7 @@ module StatsPages =
                     block [] [
                         navList ({ 
                                     Header = "Sesonger"
-                                    Items = years |> List.map (fun year  -> { Text = [encodedText <| str year]; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                    Items = years |> List.map (fun year  -> { Text = [encodedText <| string year]; Url = statsUrl selectedTeam (Year year) }                                                                   )  
                                     Footer = Some <| { Text = [encodedText "Total"]; Url = statsUrl selectedTeam AllYears }                                                               
                                     IsSelected = isSelected                                                               
                                })
