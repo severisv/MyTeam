@@ -5,7 +5,6 @@ open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam
 open Giraffe 
-open Request
 
 module MemberApi =
 
@@ -20,9 +19,7 @@ module MemberApi =
 
 
     [<CLIMutable>]
-    type SetStatus = {
-        Status: Status
-    }
+    type SetStatus = { Status: Status }
     let setStatus clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<SetStatus>()
             Persistence.setStatus ctx.Database clubId id model.Status 
@@ -31,27 +28,20 @@ module MemberApi =
         
     
     [<CLIMutable>]
-    type ToggleRole = {
-        Role: Role
-    }
+    type ToggleRole = { Role: Role }
     let toggleRole clubId id next (ctx: HttpContext) =
             let model = ctx.BindJson<ToggleRole>()
             Persistence.toggleRole ctx.Database clubId id model.Role
             |> Tenant.clearUserCache ctx clubId
-            next ctx    
+            next ctx
 
     [<CLIMutable>]
-    type ToggleTeam = {
-        TeamId: TeamId
-    }
-    let toggleTeam clubId id next (ctx: HttpContext) =
-            let model = ctx.BindJson<ToggleTeam>()
-            Persistence.toggleTeam ctx.Database clubId id model.TeamId
-            next ctx            
+    type ToggleTeam = { TeamId: TeamId }
+    let toggleTeam clubId id db model =
+            Persistence.toggleTeam db clubId id model.TeamId
+            |> Ok
 
 
            
-    let add clubId next (ctx: HttpContext) =
-            ctx.BindJson<AddMemberForm>() 
-            |> Persistence.add ctx.Database clubId            
-            |> fromResult next ctx
+    let add clubId db model =
+            Persistence.add db clubId model            

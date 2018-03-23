@@ -27,12 +27,14 @@ module Request =
                     (setStatusCode 404 >=> json ("404")) next ctx    
 
 
+
     type PostHandler<'a,'b> = Database -> 'a -> Result<'b,Error>
 
     let jsonPost<'a,'b> (fn: PostHandler<'a,'b>) next (ctx: HttpContext) =
         let payload = ctx.BindJson<'a>()
         fn ctx.Database payload
         |> fromResult next ctx
+
 
 
     type GetHandler<'a> = Database -> Result<'a,Error>

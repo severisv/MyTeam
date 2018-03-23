@@ -55,7 +55,7 @@ module App =
                             )
                         subRoute "/api/attendance"                            
                             (choose [ 
-                                GET >=> routef "/%O/recent" (fun teamId -> AttendanceApi.getRecentAttendance club teamId)
+                                GET >=> routef "/%O/recent" (AttendanceApi.getRecentAttendance club >> jsonGet)
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (AttendanceApi.confirmAttendance club.Id >> jsonPost)
                                                                
@@ -78,12 +78,12 @@ module App =
                                         choose [ 
                                             routef "/%O/status" (MemberApi.setStatus club.Id)
                                             routef "/%O/togglerole" (MemberApi.toggleRole club.Id)
-                                            routef "/%O/toggleteam" (MemberApi.toggleTeam club.Id)
+                                            routef "/%O/toggleteam" (MemberApi.toggleTeam club.Id >> jsonPost)
                                         ]       
                                 POST >=>  
                                     mustBeInRole [Role.Admin; Role.Trener] >=> 
                                         choose [ 
-                                            route "" >=> MemberApi.add club.Id
+                                            route "" >=> (MemberApi.add club.Id |> jsonPost)
                                         ]
                             ])
 
