@@ -1,6 +1,5 @@
-namespace MyTeam
+namespace MyTeam.Games.Events
 
-open MyTeam.Games.Events
 open MyTeam.Domain
 open MyTeam
 open Microsoft.EntityFrameworkCore
@@ -8,7 +7,7 @@ open MyTeam.Validation
 open System
 
 
-module GameEventApi =
+module Api =
     
     let getTypes _ =  
         Enums.getValues<GameEventType> ()

@@ -1,8 +1,9 @@
-namespace MyTeam
+namespace MyTeam.Events
 
+open MyTeam
 open MyTeam.Events
 
-module EventApi =
+module Api =
 
     
     [<CLIMutable>]

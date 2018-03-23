@@ -1,11 +1,11 @@
-namespace MyTeam
+namespace MyTeam.Attendance
 
 open MyTeam.Domain
 open MyTeam.Attendance
 open System
 open Queries
 
-module AttendanceApi =
+module Api =
     
     let confirmAttendance = Persistence.confirmAttendance
 

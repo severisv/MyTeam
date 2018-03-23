@@ -1,4 +1,4 @@
-namespace MyTeam.AttendancePages
+namespace MyTeam.Attendance.Pages
 
 open Giraffe
 open Giraffe.GiraffeViewEngine

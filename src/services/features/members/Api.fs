@@ -1,12 +1,11 @@
-namespace MyTeam
+namespace MyTeam.Members
 
-open MyTeam.Members
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam
 open Giraffe 
 
-module MemberApi =
+module Api =
 
     let list clubId (ctx: HttpContext) =
         Queries.list ctx.Database clubId
