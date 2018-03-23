@@ -5,7 +5,6 @@ using MyTeam.Filters;
 using MyTeam.Models.Enums;
 using MyTeam.Models.Structs;
 using MyTeam.Services.Domain;
-using MyTeam.ViewModels.Admin;
 
 namespace MyTeam.Controllers
 {
