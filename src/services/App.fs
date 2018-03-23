@@ -13,6 +13,7 @@ open Results
 
     
 module App =
+
     let webApp =
         removeTrailingSlash >=>
         fun next ctx ->
@@ -27,22 +28,23 @@ module App =
                     routef "/statistikk/%s/%s" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year) |> htmlGet)          
                     routef "/statistikk/%s" (fun teamName -> StatsPages.index club user (Some teamName) None |> htmlGet)      
                     subRoute "/intern" 
-                        (user |> Option.fold 
-                                    (fun _ user ->
-                                            (choose [ 
-                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
-                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                ]
-                                                GET >=> choose [                                                        
-                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
-                                                    route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
-                                                    routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
-                                                ]                                    
-                                            ])
-                                    )                        
-                                    empty
+                        mustBeMember >=>
+                            (user |> Option.fold 
+                                        (fun _ user ->
+                                                (choose [ 
+                                                    GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
+                                                        route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                        routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
+                                                    ]
+                                                    GET >=> choose [                                                        
+                                                        route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
+                                                        routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
+                                                        route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
+                                                        routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
+                                                    ]                                    
+                                                ])
+                                        )                        
+                                        empty
                         )
                     subRoute "/api/attendance"                            
                         (choose [ 

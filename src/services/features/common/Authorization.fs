@@ -7,10 +7,8 @@ open MyTeam.Domain.Members
 module Authorization =
     let accessDenied = setStatusCode 403 >=> text "Ingen tilgang"
 
-    let mustBeMember (user: Option<User>) =
-        requiresAuthPolicy (fun __ ->
-                                user.IsSome
-                            ) accessDenied
+    let mustBeMember = 
+        fun next ctx -> requiresAuthentication accessDenied next ctx
 
     let mustBeInRole (user: Option<User>) (roles: Role list) =
         requiresAuthPolicy (fun __ ->
