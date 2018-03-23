@@ -1,0 +1,89 @@
+﻿@using System.Threading.Tasks
+@using MyTeam
+@using MyTeam.Models.Shared
+@model MyTeam.ViewModels.Game.ShowGameViewModel
+@{
+    ViewBag.Title = $"{Model.Game.HomeTeam} - {Model.Game.AwayTeam}";
+    ViewBag.PageName = "Kampdetaljer";
+}
+
+<div class="mt-main">
+    <div class="mt-container">
+        @if (Context.UserIsInRole(Roles.Admin, Roles.Coach, Roles.NewsWriter))
+        {
+
+            if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
+            {
+                <a asp-action="edit" asp-controller="event" asp-route-eventId="@Model.Game.Id" class="edit-link pull-right" title="@Res.Edit"><i class="fa fa-edit"></i></a>
+            }
+            if (Model.Game.HasPassed())
+            {
+
+                <a asp-action="registerresult" asp-route-gameId="@Model.Game.Id" class="edit-link pull-right" title="Registrer resultat"><i class="flaticon-goal"></i></a>
+            }
+        }
+        @if (Context.UserIsMember() && Model.Game.GamePlanIsPublished == true)
+        {
+            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameid="@Model.Game.Id" class="registerSquad-gameplan-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+        }
+        <h3 class="game-header hidden-xs">@Model.Game.HomeTeam <span class="game-score">@Model.Game.HomeScore - @Model.Game.AwayScore</span> @Model.Game.AwayTeam</h3>
+        <table class="game-scoreTable visible-xs">
+            <tr><td>@Model.Game.HomeTeam</td><td class="game-scoreTable--score">@Model.Game.HomeScore</td></tr>
+            <tr><td>@Model.Game.AwayTeam</td><td class="game-scoreTable--score">@Model.Game.AwayScore</td></tr>
+        </table>
+        <hr/>
+        <div class="row game-details">
+            <div class="col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1 no-padding">
+                <div class="col-sm-5">
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="fa fa-13x fa-calendar pull-right"></i>
+                    </p>
+                    <p class="col-sm-9">
+                        @if (Model.Game.DateTime.Year < DateTime.Now.Year)
+                        {
+                            @Model.Game.DateTime.ToNoFull()
+                        }
+                        else
+                        {
+                            @Model.Game.DateTime.ToNo()
+                        }
+                    </p>
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="fa fa-13x fa-clock-o pull-right"></i>
+                    </p>
+                    <p class="col-sm-9">@Model.Game.DateTime.ToNoTime()</p>
+                </div>
+                <div class="col-sm-7">
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="fa-13x @Icons.GameType(Model.Game.GameType) pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.GameType</p>
+                    <p class="col-sm-3 col-xs-2">
+                        <i class="fa fa-13x fa-map-marker pull-right"></i>
+                    </p>
+                    <p class="col-sm-8">@Model.Game.Location</p>
+                </div>
+            </div>
+        </div>
+        @if (Model.Game.HasScore)
+        {
+            <div id="game-showEvents"
+                 data-game-id="@Model.Game.Id"
+                 data-show-player-url="@Url.Action("Show", "Player")"
+                 data-edit-mode="false"
+                 >
+            </div>
+        }
+    </div>
+
+    <div class="ajax-load"
+            href="@Url.Action("MatchReport", "News", new { gameId = Model.Game.Id })"
+            >
+
+    </div>
+
+</div>
+<div class="mt-sidebar">
+
+
+</div>

@@ -24,7 +24,7 @@ module Helpers =
 
     let npm args workingDir =
         let executable = findOnPath "npm.cmd"
-        shellExec executable args workingDir
+        shellExec executable args workingDir |> ignore
 
 
     let dotnet args workingDir =
@@ -55,28 +55,16 @@ module Helpers =
         | Publish
         | Test
 
-    let Dotnet command target =
-        match command with
-            | Restore -> (dotnet "restore" target)
-            | Build -> (dotnet "build --configuration Release" target)
-            | Publish -> (dotnet "publish --configuration Release -o ../../.deploy" target)
-            | Test -> (dotnet "test" target)
-
 
 [<AutoOpen>]
 module Settings =
-  let deployDir = "./.deploy/"
-  let webDir = "src/MyTeam/"
-  let projectFiles = !! "src/*/project.json" ++ "test/*/project.json"
-  let projects = projectFiles |> Seq.map(fun p -> Directory.GetParent(p).FullName)
-  let testProjectFiles = !! "test/*/project.json"
-  let testProjects = testProjectFiles |> Seq.map(fun p -> Directory.GetParent(p).FullName)
+  let webDir = "src/server/"
 
 
 [<AutoOpen>]
 module Targets =
   Target "Clean" (fun() ->
-    CleanDirs [deployDir; "./src/MyTeam/wwwroot/compiled" ]
+    CleanDirs ["./.deploy/"; "./src/server/wwwroot/compiled" ]
   )
 
   Target "NpmRestore" (fun _ ->
@@ -91,23 +79,20 @@ module Targets =
      npm "run build" webDir
   )
 
-  Target "RestorePackages" (fun _ ->
-     Dotnet Restore ""
-     |> ignore
+  Target "RestorePackages" (fun _ ->       
+    dotnet "restore" webDir
+  )
+
+  Target "MigrateDatabase" (fun _ ->
+     dotnet "ef database update" "src/database"         
   )
 
   Target "Build" (fun _ ->
-     projects
-     |> Seq.iter (fun proj -> Dotnet Build proj |> ignore)
-  )
-
-  Target "Test" (fun _ ->
-     testProjects
-     |> Seq.iter (fun proj -> Dotnet Test proj |> ignore)
+     dotnet "build --configuration Release" webDir         
   )
 
   Target "Publish" (fun _ ->
-     Dotnet Publish "src/MyTeam" |> ignore
+     dotnet "publish --configuration Release -o ../../.deploy" webDir
   )
 
   Target "Deploy" (fun _ ->
@@ -128,8 +113,8 @@ module Targets =
 
 "Clean"
 ==> "RestorePackages"
+==> "MigrateDatabase"
 ==> "Build"
-==> "Test"
 ==> "Publish"
 
 "Publish"

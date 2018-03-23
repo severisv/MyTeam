@@ -1,0 +1,126 @@
+﻿
+ul, ol {
+    list-style: none;
+    padding-left: 0;
+}
+
+a {
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+    &:hover, &:focus {
+        color: @link-color-hover;
+        text-decoration: none;
+    }
+}
+
+a.underline {
+    border-bottom: 0.1em solid transparent;
+    &:hover, &:focus {
+            border-bottom: 0.1em solid;
+
+    }
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+h1 {
+    font-size: 2.5em;
+    .r-under-xs({font-size: 2em;});
+    .r-under-xxs({font-size: 1.75em;});
+}
+
+h2, h3, h4, h5 {
+    text-align: center;
+    color: @black-faded;
+}
+
+h2 {
+    margin-bottom: 0.5em;
+}
+
+.list-users li {
+    height: 50px;
+    img {
+        margin-right: 1em;
+        height: 100%;
+    }
+
+    input.form-control[type=checkbox] {
+        margin-top: 0.65em;
+        margin-right: 0.65em;
+        float: right;
+    }
+
+    button {
+        margin-top: 0.6em;
+        min-width: 7em;
+
+        &:disabled {
+            cursor: default;
+        }
+    }
+}
+
+.list-users li:nth-child(odd) {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.faded {
+    color: @black-faded;
+}
+
+
+hr.sm {
+    margin-top: 0.3em;
+    margin-bottom: 0.5em;
+}
+
+
+
+
+.relative {
+    position: relative;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.linkSelect {
+    max-width: 7em;
+    .r-under-xs({    margin-top: 0.25em;});
+    background: transparent;
+    font-size: 1.5em;
+    text-align: center;
+    height: 2em;
+            color: @link-color;
+    option {
+        background: rgba(0,0,0,0.1);
+    }
+    &:hover {
+        border:1px solid @link-color;
+    }
+}
+
+.hashlink-anchor {
+    position:absolute;
+    margin-top: -105px;
+}
+
+
+.red {
+    color: @red;
+}
+.green {
+    color: @green;
+}
+
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+}

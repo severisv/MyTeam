@@ -1,0 +1,21 @@
+{
+  // "editor.formatOnSave": true,
+  "prettier.eslintIntegration": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/*.bundle.*": true,
+    "**/style.css": true,
+    "**/.deploy": true,
+    "**/obj": true,
+    "**/.fake": true,
+    "**/bin": true,
+    "**/node_modules": true,
+    "client/public": true,
+    "**/bundle.*": true,
+    "**/wwwroot/compiled/*": true,
+    "**/*.map": true,
+  }
+}

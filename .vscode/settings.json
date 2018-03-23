@@ -2,6 +2,14 @@
 
     "editor.trimAutoWhitespace": true,
     "prettier.tabWidth": 2,
-    "prettier.eslintIntegration": true
-
+    "prettier.eslintIntegration": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/bin" : true,
+        "**/obj" : true
+    }
 }

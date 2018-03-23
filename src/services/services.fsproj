@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\database\Migrations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="settings/*.fs" />
+    <Compile Include="utils/*/*.fs" />
+    <Compile Include="utils/*.fs" />
+    <Compile Include="components/common/*.fs" />
+    <Compile Include="components/*.fs" />
+    <Compile Include="domain/*.fs" />
+    <Compile Include="features/common/Clubs.fs" />
+    <Compile Include="features/common/Users.fs" />
+    <Compile Include="features/common/Tenant.fs" />
+    <Compile Include="features/common/Authorization.fs" />
+    <Compile Include="features/common/views/partials/*.fs" />
+    <Compile Include="features/common/views/*.fs" />
+    <Compile Include="features/*/Types.fs" />
+    <Compile Include="features/*/W_Types.fs" />
+    <Compile Include="features/*/Queries.fs" />
+    <Compile Include="features/*/W_Queries.fs" />
+    <Compile Include="features/*/Persistence.fs" />
+    <Compile Include="features/*/Api.fs" />
+    <Compile Include="features/*/W_Api.fs" />
+    <Compile Include="features/*/pages/*.fs" />
+    <Compile Include="features/*/Pages.fs" />
+    <Compile Include="App.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Giraffe" Version="1.2.0-preview-1" />
+    <PackageReference Include="FSharp.Quotations.Evaluator" Version="1.1.0" />
+    <PackageReference Include="FSharp.Core" Version="4.3.*" />
+  </ItemGroup>
+</Project>

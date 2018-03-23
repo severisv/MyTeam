@@ -1,0 +1,20 @@
+﻿@using MyTeam.Models.Enums
+
+<script>
+    var PlayerStatus = {
+       Active : '@Html.Raw(PlayerStatus.Aktiv)',
+       Inactive : '@Html.Raw(PlayerStatus.Inaktiv)',
+       Veteran : '@Html.Raw(PlayerStatus.Veteran)',
+       Trener : '@Html.Raw(PlayerStatus.Trener)',
+       Quit : '@Html.Raw(PlayerStatus.Sluttet)'
+    };
+
+    var PlayerRoles = {
+       Admin : '@Html.Raw(Roles.Admin)',
+       Coach : '@Html.Raw(Roles.Coach)',
+       NewsWriter : '@Html.Raw(Roles.NewsWriter)',
+       AttendanceTaker: '@Html.Raw(Roles.AttendanceTaker)',
+       Finemaster: '@Html.Raw(Roles.Finemaster)'
+    };
+
+</script>
