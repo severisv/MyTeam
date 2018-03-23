@@ -11,7 +11,7 @@ open MyTeam.Attendance
 
 module Show =
 
-    let view (club: Club) (user: Users.User) year next (ctx: HttpContext) =
+    let view (club: Club) (user: Users.User) year (ctx: HttpContext) =
 
         let (selectedYear, years, attendance) =
             getAttendance ctx.Database club.Id year
@@ -30,7 +30,7 @@ module Show =
 
         let registerAttendanceUrl = "/intern/oppmote/registrer"     
       
-        ([
+        [
             main [] [
                 block [] [
                     (user.IsInRole [Role.Admin;Role.Trener;Role.Oppmøte] =? 
@@ -87,4 +87,4 @@ module Show =
                     
         ] 
         |> layout club (Some user) (fun o -> { o with Title = "Oppmøte"}) ctx
-        |> htmlView) next ctx
+        |> Ok

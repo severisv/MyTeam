@@ -7,14 +7,14 @@ open Giraffe
 
 module Api =
 
-    let list clubId (ctx: HttpContext) =
-        Queries.list ctx.Database clubId
-        |> json
+    let list clubId db =
+        Queries.list db clubId
+        |> Ok
 
 
-    let getFacebookIds clubId (ctx: HttpContext) =
-        Queries.getFacebookIds ctx.Database clubId
-        |> json
+    let getFacebookIds clubId db =
+        Queries.getFacebookIds db clubId
+        |> Ok
 
 
     [<CLIMutable>]
@@ -39,8 +39,6 @@ module Api =
     let toggleTeam clubId id db model =
             Persistence.toggleTeam db clubId id model.TeamId
             |> Ok
-
-
            
     let add clubId db model =
             Persistence.add db clubId model            

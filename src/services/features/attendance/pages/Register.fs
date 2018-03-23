@@ -13,7 +13,7 @@ open MyTeam.Ajax
 
 module Register =
 
-    let view (club: Club) user trainingId next (ctx: HttpContext) =
+    let view (club: Club) user trainingId (ctx: HttpContext) =
         let db = ctx.Database
         
         let previousTrainings = 
@@ -65,7 +65,7 @@ module Register =
                             ))  
                         ]                       
                 ]       
-        ([
+        [
             main [_class "register-attendance"] [
                 block [] 
                         (model
@@ -82,8 +82,7 @@ module Register =
                                         ]                     
                                         p [] [ 
                                                 icon (fa "map-marker") ""
-                                                encodedText training.Location
-                                 
+                                                encodedText training.Location                                 
                                             ]
                                  
                                        ] 
@@ -96,8 +95,6 @@ module Register =
                             ]) 
                             [emptyText]
                             )
-                
-                     
             ]          
             sidebar [_class "register-attendance"] [               
                 (previousTrainings.Length > 0 =?
@@ -116,15 +113,7 @@ module Register =
                                })
                     ]
                    , emptyText)) 
-            ]                                   
-                    
+            ]               
         ] 
-        |> layout 
-            club 
-            (Some user) 
-            (fun o -> 
-                { o with 
-                    Title = "Registrer oppmøte"
-                }
-            ) ctx
-        |> htmlView) next ctx
+        |> layout club (Some user) (fun o -> { o with Title = "Registrer oppmøte" }) ctx
+        |> Ok

@@ -26,21 +26,21 @@ module App =
             match club with
                 | Some club ->
                       choose [
-                        route "/om" >-> (AboutPages.index club user)          
-                        route "/statistikk" >=> StatsPages.index club user None None      
-                        routef "/statistikk/%s/%s" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year))          
-                        routef "/statistikk/%s" (fun teamName -> StatsPages.index club user (Some teamName) None)      
+                        route "/om" >=> (AboutPages.index club user |> htmlGet)          
+                        route "/statistikk" >=> (StatsPages.index club user None None |> htmlGet)      
+                        routef "/statistikk/%s/%s" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year) |> htmlGet)          
+                        routef "/statistikk/%s" (fun teamName -> StatsPages.index club user (Some teamName) None |> htmlGet)      
                         subRoute "/intern" 
                             (user |> Option.fold 
                                         (fun _ user ->
                                                 (choose [ 
-                                                    GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=>  choose [ 
-                                                        route "/oppmote/registrer" >=> Attendance.Pages.Register.view club user None
-                                                        routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId))                                                       
+                                                    GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
+                                                        route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                        routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
                                                     ]
                                                     GET >=> choose [                                                        
-                                                        route "/oppmote" >=> Attendance.Pages.Show.view club user None
-                                                        routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year))
+                                                        route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
+                                                        routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
                                                         route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
                                                         routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
                                                     ]                                    
@@ -56,7 +56,7 @@ module App =
                                                                
                             ])                                     
                                                         
-                        route "/api/teams" >-> Teams.Api.list club.Id
+                        route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
                         route "/api/events" >=>                      
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                                 routef "/api/events/%O/description" (Events.Api.setDescription club.Id)
@@ -64,8 +64,8 @@ module App =
                         subRoute "/api/members" 
                             (choose [ 
                                 GET >=> choose [ 
-                                    route "" >-> Members.Api.list club.Id
-                                    route "/facebookids" >-> Members.Api.getFacebookIds club.Id
+                                    route "" >=> (Members.Api.list club.Id |> jsonGet)
+                                    route "/facebookids" >=> (Members.Api.getFacebookIds club.Id |> jsonGet)
                                 ]
                                 PUT >=> 
                                     mustBeInRole [Role.Admin; Role.Trener] >=> 

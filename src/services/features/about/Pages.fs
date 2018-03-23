@@ -1,7 +1,6 @@
 namespace MyTeam
 
 open Giraffe.GiraffeViewEngine
-open Giraffe
 
 module AboutPages = 
 
@@ -19,5 +18,5 @@ module AboutPages =
             div [] []
         ] 
         |> layout club user (fun o -> { o with Title = "Om klubben"}) ctx
-        |> htmlView
+        |> Ok
  

@@ -13,7 +13,7 @@ open MyTeam.Stats
 module StatsPages =  
 
  
-    let index (club: Club) user selectedTeamShortName selectedYear next (ctx: HttpContext) =
+    let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
 
         let db = ctx.Database
 
@@ -65,9 +65,8 @@ module StatsPages =
             statsUrl selectedTeam selectedYear = url      
 
         let getImage = Images.getMember ctx
-
       
-        ([
+        [
             main [] [
                 block [] [
                     row [] [
@@ -142,4 +141,4 @@ module StatsPages =
                 , emptyText))        
         ] 
         |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
-        |> htmlView) next ctx
+        |> Ok

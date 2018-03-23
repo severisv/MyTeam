@@ -20,15 +20,8 @@ module GiraffeHelpers =
                 
     type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) 
 
-
-    let invoke (action: Action) (next : HttpFunc) (ctx: HttpContext) =
-            (action ctx) next ctx 
-
-    let (>->) (handler: HttpHandler) (action: Action) =
-        handler >=> invoke action     
-
     let empty : HttpHandler =
-        fun (next : HttpFunc) (_ : HttpContext) ->     
+        fun (_ : HttpFunc) (_ : HttpContext) ->     
         Task.FromResult None
 
  

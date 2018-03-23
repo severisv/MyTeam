@@ -6,6 +6,6 @@ open Giraffe
 
 module Api =
 
-    let list clubId (ctx: HttpContext) =
-        Queries.list ctx.Database clubId
-        |> json
+    let list clubId db =
+        Queries.list db clubId
+        |> Ok
