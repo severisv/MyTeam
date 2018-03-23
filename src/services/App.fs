@@ -23,7 +23,6 @@ module App =
             let (club, user) = Tenant.get ctx
             let mustBeInRole = mustBeInRole user
 
-
             match club with
                 | Some club ->
                       choose [
@@ -55,9 +54,8 @@ module App =
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
                                                                
-                            ])                                      
-                                                                                                          
-                        
+                            ])                                     
+                                                        
                         route "/api/teams" >-> Teams.Api.list club.Id
                         route "/api/events" >=>                      
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 

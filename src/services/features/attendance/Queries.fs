@@ -176,7 +176,7 @@ module Queries =
         fun db club teamId periodStart ->
 
             match club.Teams |> List.exists (fun team -> team.Id = teamId) with
-            | false -> Error AuthorizationError
+            | false -> Error Unauthorized
             | true -> 
                 let now = DateTime.Now
 

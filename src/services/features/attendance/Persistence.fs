@@ -19,7 +19,7 @@ module Persistence =
             }
             |> Seq.tryHead
             |> function
-                | None -> Error AuthorizationError
+                | None -> Error Unauthorized
                 | Some eventId ->
                     db.EventAttendances 
                     |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)

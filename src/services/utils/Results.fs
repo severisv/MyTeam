@@ -8,23 +8,21 @@ type ValidationError = {
 
 type Error = 
     | ValidationErrors of list<ValidationError>            
-    | AuthorizationError            
+    | Unauthorized            
     | NotFound   
 
 module Results =
-    let fromResult next ctx (result: Result<'T, Error>) =
-        match result with
-            | Ok r -> 
-                match r with
-                | _ -> json r next ctx
-            | Error e -> 
-                match e with
-                | ValidationErrors validationErrors ->
-                    (setStatusCode 400 >=> json validationErrors) next ctx    
-                | AuthorizationError ->
-                    (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx    
-                | NotFound ->
-                    (setStatusCode 404 >=> json ("404")) next ctx    
+    let jsonResult next ctx =
+        function
+        | Ok result -> json result next ctx       
+        | Error e -> 
+            match e with
+            | ValidationErrors validationErrors ->
+                (setStatusCode 400 >=> json validationErrors) next ctx    
+            | Unauthorized ->
+                (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx    
+            | NotFound ->
+                (setStatusCode 404 >=> json ("404")) next ctx    
 
 
 
@@ -33,17 +31,16 @@ module Results =
     let jsonPost<'a,'b> (fn: PostHandler<'a,'b>) next (ctx: HttpContext) =
         let payload = ctx.BindJson<'a>()
         fn ctx.Database payload
-        |> fromResult next ctx
-
+        |> jsonResult next ctx
 
 
     type GetHandler<'a> = Database -> Result<'a,Error>
 
     let jsonGet<'a,'b> (fn: GetHandler<'a>) next (ctx: HttpContext) =          
         fn ctx.Database
-        |> fromResult next ctx
+        |> jsonResult next ctx
 
 
     let htmlGet<'a,'b> (fn: GetHandler<'a>) next (ctx: HttpContext) =          
         fn ctx.Database
-        |> fromResult next ctx
+        |> jsonResult next ctx

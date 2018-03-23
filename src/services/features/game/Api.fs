@@ -9,7 +9,7 @@ module internal Helpers =
         Queries.games db clubId
           |> Seq.tryFind(fun g -> g.Id = gameId)
           |> function
-           | Some game when (ClubId game.ClubId) <> clubId -> Error AuthorizationError
+           | Some game when (ClubId game.ClubId) <> clubId -> Error Unauthorized
            | Some game -> 
                 updateGame game
                 db.SaveChanges()

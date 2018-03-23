@@ -67,7 +67,7 @@ module Api =
             |> Seq.tryHead
             |> function
                 | None -> Error NotFound
-                | Some c when c <> clubId -> Error AuthorizationError
+                | Some c when c <> clubId -> Error Unauthorized
                 | Some _ ->
                     
                     model ==>
@@ -100,7 +100,7 @@ module Api =
             |> Seq.tryFind(fun ge -> ge.Id = gameEventId && ge.GameId = gameId)
             |> function
                 | None -> Error NotFound
-                | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Error AuthorizationError
+                | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Error Unauthorized
                 | Some gameEvent ->
                     db.GameEvents.Remove(gameEvent) |> ignore
                     db.SaveChanges() 
