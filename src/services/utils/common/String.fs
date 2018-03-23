@@ -1,6 +1,7 @@
 namespace MyTeam
 
 open System
+open System.Text.RegularExpressions
 
 [<AutoOpen>]
 module StringExtensions =
@@ -18,3 +19,15 @@ module StringExtensions =
         let isNumber (s: string) = s |> Seq.forall Char.IsDigit
 
         let toLowerString = string >> toLower
+
+        let isNullOrEmpty a = 
+            String.IsNullOrEmpty(a) 
+
+        let replace (a: string) (b: string) (str: string) = 
+            str.Replace(a,b)
+
+        let regexReplace (regex: string) (replaceWith: string) (str: string) =
+            let rgx = Regex(regex)
+            rgx.Replace(str, replaceWith)        
+
+                        

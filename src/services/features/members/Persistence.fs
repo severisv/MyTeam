@@ -6,6 +6,7 @@ open MyTeam.Domain.Members
 open MyTeam.Models.Domain
 open MyTeam.Validation
 open Microsoft.EntityFrameworkCore
+open System.Linq
 
 module Persistence =
     let setStatus : SetStatus =
@@ -98,6 +99,26 @@ module Persistence =
                   | __ -> Ok()
 
 
+            let urlName (form: AddMemberForm) =
+                let (ClubId clubId) = clubId
+                let rec addNumberIfTaken str =
+                    if db.Members.Any(fun m -> m.ClubId = clubId && m.UrlName = str) then 
+                        addNumberIfTaken <| sprintf "%s-1" str 
+                    else str
+
+                sprintf "%s%s%s-%s" form.FirstName (form.MiddleName |> isNullOrEmpty =? ("", "-")) form.MiddleName form.LastName
+                |> replace "Ø" "O"
+                |> replace "ø" "o"
+                |> replace "æ" "ae"
+                |> replace "Æ" "Ae"
+                |> replace "Å" "Aa"
+                |> replace "å" "aa"
+                |> replace "É" "e"
+                |> replace "é" "e"
+                |> regexReplace "[^a-zA-Z0-9 -]" ""
+                |> addNumberIfTaken
+
+
             let form = if form.FacebookId.HasValue then
                             { form with EmailAddress = getEmailFromFacebookId form.FacebookId }
                        else 
@@ -121,8 +142,8 @@ module Persistence =
                    memb.LastName <- form.LastName
                    memb.FacebookId <- form.FacebookId
                    memb.UserName <- form.EmailAddress
+                   memb.UrlName <- urlName form
                    db.Players.Add(memb) |> ignore
                    db.SaveChanges() |> ignore
                    Ok ()
                     
-
