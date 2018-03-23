@@ -2,18 +2,14 @@ namespace MyTeam
 
 open Giraffe
 open Giraffe.Serialization
-open Giraffe.GiraffeViewEngine
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
 open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Authorization
-open MyTeam.Views
-open MyTeam.Models.Enums
-open System
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
-open Request
+open Results
 
     
 type Asd = {

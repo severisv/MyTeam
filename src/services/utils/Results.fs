@@ -11,7 +11,7 @@ type Error =
     | AuthorizationError            
     | NotFound   
 
-module Request =
+module Results =
     let fromResult next ctx (result: Result<'T, Error>) =
         match result with
             | Ok r -> 
