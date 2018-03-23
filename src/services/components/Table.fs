@@ -20,15 +20,10 @@ module TableModule =
        | CellType of CellType
 
     type TableColumn = {
-        Value: HtmlValue list
+        Value: XmlNode list
         Props: TableProperty list
     }
-
-    type Table = {
-        Rows: HtmlValue list list
-        Columns: TableColumn list
-    }                         
-
+                   
     let colClassName col =
         col.Props
         |> List.map (function
@@ -41,27 +36,26 @@ module TableModule =
         |> List.distinct
         |> String.concat " "
 
-    let col value props =
+    let col props value =
          { Value = value; Props = props } 
 
-    let table attributes (model: Table) = 
+    let table attributes columns rows = 
         table ([_class "table tablesorter"] |> mergeAttributes attributes) [
                         thead [] [
-                            tr [] (model.Columns 
+                            tr [] (columns 
                                   |> List.map(fun col ->    
-                                            th [_class <| colClassName col] (col.Value |> List.map toXmlNode)       
-                                  ))                           
-                            
+                                            th [_class <| colClassName col] col.Value    
+                                  ))           
                         ]   
                         tbody [] 
-                                (model.Rows 
+                                (rows 
                                     |> List.map(fun row ->
                                         tr [] 
                                             (row
                                             |> List.mapi (fun i value ->
                                                     td 
-                                                        [_class <| colClassName model.Columns.[i] ] 
-                                                        [value |> toXmlNode]
+                                                        [_class <| colClassName columns.[i] ] 
+                                                        [value]
                                             ))                    
                                         )
                                 )

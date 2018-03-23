@@ -41,36 +41,29 @@ module Show =
                            ] 
                         ], 
                         emptyText))
-                    table [] (
-                        {
-                            Columns = 
-                                [
-                                    { Value = [ Str "Spiller" ]; Props = [CellType Image] }
-                                    { Value = [ Node <| Icons.training ""; Node whitespace; Str "Trening" ]; Props = [TableAlignment Center] }
-                                    { Value = [ Node <| Icons.game "" ; Node whitespace; Str "Kamp"]; Props = [TableAlignment Center] }
-                                    { Value = [ Node <| icon (fa "warning") ""; Node whitespace; Str "Ikke møtt" ]; Props = [TableAlignment Center] }
-                                ]
-                            Rows = 
-                                (attendance |> List.map (fun (player, attendance) ->
-                                                    [
-                                                        Node(span [] [
-                                                                    img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
-                                                                    whitespace 
-                                                                    a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
-                                                                        [
-                                                                            encodedText player.Name
-                                                                        ]                                                       
-                                                                ] 
-                                                                )                                    
-                                                                                                                            
-                                                        Number attendance.Trainings
-                                                        Number attendance.Games
-                                                        Number attendance.NoShows
-                                                    ]
-                                                    )
-                                )
-                        }
-                    ) 
+                    table [] 
+                            [
+                                col [CellType Image] [ encodedText "Spiller" ]
+                                col [TableAlignment Center] [ Icons.training ""; whitespace; encodedText "Trening" ]
+                                col [TableAlignment Center] [ Icons.game "" ; whitespace; encodedText "Kamp"]
+                                col [TableAlignment Center] [ icon (fa "warning") ""; whitespace; encodedText "Ikke møtt" ]
+                            ]                          
+                            (attendance |> List.map (fun (player, attendance) ->
+                                                [
+                                                    span [] [
+                                                                img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
+                                                                whitespace 
+                                                                a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
+                                                                    [
+                                                                        encodedText player.Name
+                                                                    ]                                                       
+                                                            ]                                                           
+                                                    encodedText <| string attendance.Trainings
+                                                    encodedText <| string attendance.Games
+                                                    encodedText <| string attendance.NoShows
+                                                ]
+                                                )
+                            )     
                 ]
             ]          
             sidebar [] [

@@ -14,13 +14,4 @@ module BaseComponents =
         let token = Antiforgery.getToken ctx
         input [_name "__RequestVerificationToken";_value token;_type "hidden" ]
 
-    
-    type HtmlValue = 
-        | Node of XmlNode 
-        | Str of string
-        | Number of int
-
-    let toXmlNode = function
-        | Node n -> n
-        | Str s -> encodedText s
-        | Number i -> encodedText <| string i    
+    let number = string >> encodedText

@@ -102,40 +102,33 @@ module StatsPages =
                     ]
                 ]     
                 block [] [
-                    table [_class "stats-table"] (
-                        {
-                            Columns = 
+                    table [_class "stats-table"] 
                                 [
-                                    { Value = [Str "Spiller"]; Props = [CellType Image] }
-                                    { Value = [Node <| Icons.player "Kamper"]; Props = [TableAlignment Center] }
-                                    { Value = [Node <| Icons.goal "Mål"]; Props = [TableAlignment Center] }
-                                    { Value = [Node <| Icons.assist "Assists"]; Props = [TableAlignment Center] }
-                                    { Value = [Node <| Icons.yellowCard "Gule Kort"]; Props = [TableAlignment Center] }
-                                    { Value = [Node <| Icons.redCard "Røde kort"]; Props = [TableAlignment Center] }
+                                    col [CellType Image] [encodedText "Spiller"]
+                                    col [TableAlignment Center] [Icons.player "Kamper"]
+                                    col [TableAlignment Center] [Icons.goal "Mål"]
+                                    col [TableAlignment Center] [Icons.assist "Assists"]
+                                    col [TableAlignment Center] [Icons.yellowCard "Gule Kort"]
+                                    col [TableAlignment Center] [Icons.redCard "Røde kort"]
                                 ]
-                            Rows = 
                                 (stats |> List.map (fun player ->
                                                     [
-                                                        Node(span [] [
+                                                        span [] [
                                                                     img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
                                                                     whitespace 
                                                                     a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
                                                                         [
                                                                             encodedText player.Name
                                                                         ]                                                       
-                                                                ] 
-                                                                )                                    
-                                                                                                                            
-                                                        Number player.Games
-                                                        Number player.Goals
-                                                        Number player.Assists
-                                                        Number player.YellowCards
-                                                        Number player.RedCards
+                                                                ]                                                         
+                                                        number player.Games
+                                                        number player.Goals
+                                                        number player.Assists
+                                                        number player.YellowCards
+                                                        number player.RedCards
                                                     ]
                                                     )
-                                )
-                        }
-                    ) 
+                                ) 
                 ]
             ]
             (years.Length > 0 =?
