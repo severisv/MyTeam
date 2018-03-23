@@ -104,7 +104,8 @@ module StatsPages =
                 block [] [
                     table [_class "stats-table"] 
                                 [
-                                    col [CellType Image] [encodedText "Spiller"]
+                                    col [CellType Image; NoSort] []
+                                    col [] [encodedText "Spiller"]
                                     col [TableAlignment Center] [Icons.player "Kamper"]
                                     col [TableAlignment Center] [Icons.goal "Mål"]
                                     col [TableAlignment Center] [Icons.assist "Assists"]
@@ -112,15 +113,10 @@ module StatsPages =
                                     col [TableAlignment Center] [Icons.redCard "Røde kort"]
                                 ]
                                 (stats |> List.map (fun player ->
+                                                    let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
                                                     [
-                                                        span [] [
-                                                                    img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
-                                                                    whitespace 
-                                                                    a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
-                                                                        [
-                                                                            encodedText player.Name
-                                                                        ]                                                       
-                                                                ]                                                         
+                                                        playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
+                                                        playerLink [encodedText player.Name]                                                       
                                                         number player.Games
                                                         number player.Goals
                                                         number player.Assists

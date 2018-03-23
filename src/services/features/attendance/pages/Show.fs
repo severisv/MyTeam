@@ -43,21 +43,17 @@ module Show =
                         emptyText))
                     table [] 
                             [
-                                col [CellType Image] [ encodedText "Spiller" ]
+                                col [CellType Image; NoSort] []
+                                col [] [ encodedText "Spiller" ]
                                 col [TableAlignment Center] [ Icons.training ""; whitespace; encodedText "Trening" ]
                                 col [TableAlignment Center] [ Icons.game "" ; whitespace; encodedText "Kamp"]
                                 col [TableAlignment Center] [ icon (fa "warning") ""; whitespace; encodedText "Ikke møtt" ]
                             ]                          
                             (attendance |> List.map (fun (player, attendance) ->
+                                                let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
                                                 [
-                                                    span [] [
-                                                                img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] 
-                                                                whitespace 
-                                                                a [_href <| sprintf "/spillere/vis/%s" player.UrlName] 
-                                                                    [
-                                                                        encodedText player.Name
-                                                                    ]                                                       
-                                                            ]                                                           
+                                                    playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
+                                                    playerLink [encodedText player.Name]                                                       
                                                     encodedText <| string attendance.Trainings
                                                     encodedText <| string attendance.Games
                                                     encodedText <| string attendance.NoShows
