@@ -3,6 +3,7 @@ namespace MyTeam
 open Giraffe
 open System.Threading.Tasks
 open Microsoft.AspNetCore
+open System
 
 [<AutoOpen>]
 module GiraffeHelpers =
@@ -25,3 +26,10 @@ module GiraffeHelpers =
         Task.FromResult None
 
  
+
+    let removeTrailingSlash next (ctx: HttpContext) =
+        let path = ctx.Request.Path.Value
+        if path.EndsWith("/") then
+            redirectTo true (sprintf "%s%s" (path.Remove(path.Length-1)) ctx.Request.QueryString.Value) next ctx
+        else         
+            next ctx
