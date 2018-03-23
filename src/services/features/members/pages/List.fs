@@ -10,7 +10,7 @@ open MyTeam.Views
 open MyTeam.Members
 open MyTeam.Attendance
 
-let view (club: Club) (user: Users.User) status next (ctx: HttpContext) =
+let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
 
     let status = match status with
                  | Some s -> Enums.tryParse<Status> s 
@@ -26,7 +26,7 @@ let view (club: Club) (user: Users.User) status next (ctx: HttpContext) =
 
     let getImage = Images.getMember ctx
 
-    ([
+    [
         main [] [
             block [] [
                 tabs [] (
@@ -65,4 +65,4 @@ let view (club: Club) (user: Users.User) status next (ctx: HttpContext) =
         ]
     ]
     |> layout club (Some user) (fun o -> { o with Title = "Lagliste" }) ctx
-    |> htmlView) next ctx
+    |> Ok

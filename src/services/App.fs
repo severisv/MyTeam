@@ -41,8 +41,8 @@ module App =
                                                     GET >=> choose [                                                        
                                                         route "/oppmote" >=> Attendance.Pages.Show.view club user None
                                                         routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year))
-                                                        route "/lagliste" >=> Members.Pages.List.view club user None
-                                                        routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status))
+                                                        route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
+                                                        routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
                                                     ]                                    
                                                 ])
                                         )                        
