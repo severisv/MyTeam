@@ -104,7 +104,7 @@ module Pages =
                                                         (internalMenuItems @
                                                          [                                                                             
                                                             user.IsInRole [Role.Admin;Role.Trener] =?
-                                                                (li [] [a [_href "/intern/admin" ] [Icons.coach ""; encodedText " Admin"]]                       
+                                                                (li [] [a [_href "/admin" ] [Icons.coach ""; encodedText " Admin"]]                       
                                                                 , emptyText)
                                                          ])
 
