@@ -106,11 +106,11 @@ module StatsPages =
                                 [
                                     col [CellType Image; NoSort] []
                                     col [] [encodedText "Spiller"]
-                                    col [TableAlignment Center] [Icons.player "Kamper"]
-                                    col [TableAlignment Center] [Icons.goal "Mål"]
-                                    col [TableAlignment Center] [Icons.assist "Assists"]
-                                    col [TableAlignment Center] [Icons.yellowCard "Gule Kort"]
-                                    col [TableAlignment Center] [Icons.redCard "Røde kort"]
+                                    col [Align Center] [Icons.player "Kamper"]
+                                    col [Align Center] [Icons.goal "Mål"]
+                                    col [Align Center] [Icons.assist "Assists"]
+                                    col [Align Center] [Icons.yellowCard "Gule Kort"]
+                                    col [Align Center] [Icons.redCard "Røde kort"]
                                 ]
                                 (stats |> List.map (fun player ->
                                                     let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]

@@ -14,7 +14,7 @@ module TableModule =
 
 
     type TableProperty =
-       | TableAlignment of TableAlignment
+       | Align of TableAlignment
        | NoSort
        | ClassName of string
        | CellType of CellType
@@ -28,7 +28,7 @@ module TableModule =
         col.Props
         |> List.map (function
                         | NoSort -> "nosort"
-                        | TableAlignment a -> sprintf "table-align--%s" (Enums.toString a |> toLower)
+                        | Align a -> sprintf "table-align--%s" (Enums.toString a |> toLower)
                         | ClassName s -> s
                         | CellType a -> sprintf "table-td-%s" (Enums.toString a |> toLower)
 

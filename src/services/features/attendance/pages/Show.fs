@@ -45,9 +45,9 @@ module Show =
                             [
                                 col [CellType Image; NoSort] []
                                 col [] [ encodedText "Spiller" ]
-                                col [TableAlignment Center] [ Icons.training ""; whitespace; encodedText "Trening" ]
-                                col [TableAlignment Center] [ Icons.game "" ; whitespace; encodedText "Kamp"]
-                                col [TableAlignment Center] [ icon (fa "warning") ""; whitespace; encodedText "Ikke møtt" ]
+                                col [Align Center] [ Icons.training ""; whitespace; encodedText "Trening" ]
+                                col [Align Center] [ Icons.game "" ; whitespace; encodedText "Kamp"]
+                                col [Align Center] [ icon (fa "warning") ""; whitespace; encodedText "Ikke møtt" ]
                             ]                          
                             (attendance |> List.map (fun (player, attendance) ->
                                                 let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
