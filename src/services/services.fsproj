@@ -7,7 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="settings/*.fs" />
-    <Compile Include="Framework.fs" />
     <Compile Include="utils/*/*.fs" />
     <Compile Include="utils/*.fs" />
     <Compile Include="components/common/*.fs" />

@@ -9,8 +9,6 @@ open MyTeam.Domain.Members
 open MyTeam.Views
 open MyTeam.Members
 open MyTeam.Attendance
-open MyTeam.Models.Enums
-
 
 let view (club: Club) (user: Users.User) status next (ctx: HttpContext) =
 
@@ -66,5 +64,5 @@ let view (club: Club) (user: Users.User) status next (ctx: HttpContext) =
             ]
         ]
     ]
-    |> layout club (Some user) id ctx
+    |> layout club (Some user) (fun o -> { o with Title = "Lagliste" }) ctx
     |> htmlView) next ctx

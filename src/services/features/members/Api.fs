@@ -5,6 +5,7 @@ open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam
 open Giraffe 
+open Request
 
 module MemberApi =
 

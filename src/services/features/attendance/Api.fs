@@ -5,7 +5,7 @@ open MyTeam.Domain
 open MyTeam.Attendance
 open System
 open Queries
-
+open Request
 
 module AttendanceApi =
     
