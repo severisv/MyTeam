@@ -98,10 +98,11 @@ module App =
                                 routef "/%O/squad" (Games.Api.getSquad club.Id >> jsonGet)
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)                                
-                        ])                                                                                                                                                                                                                       
+                        ])                                                                                                                                                                                                                                     
+                    redirectTo false "/404"
                    ] next ctx
             | None ->
-                choose [] next ctx
+                redirectTo false "/404" next ctx
 
     let useGiraffe (app : IApplicationBuilder)  =
             app.UseGiraffe webApp

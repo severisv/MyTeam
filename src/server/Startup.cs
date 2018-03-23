@@ -122,16 +122,6 @@ namespace MyTeam
 
             App.useGiraffe(app);
 
-            if (env.IsProduction())
-            {
-                app.Run(async context =>
-                {
-                    context.Response.Redirect("/404");
-                    await context.Response.WriteAsync("");
-                });
-            }
-
-
         }
     }
 }
