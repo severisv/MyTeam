@@ -19,7 +19,7 @@ module App =
         fun next ctx ->
             let (club, user) = Tenant.get ctx
             let mustBeInRole = mustBeInRole user
-            
+
             match club with
             | Some club ->
                   choose [
@@ -99,10 +99,10 @@ module App =
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)                                
                         ])                                                                                                                                                                                                                                     
-                    text "404"
+                    redirectTo false "/404"
                    ] next ctx
             | None ->
-                text "404_2" next ctx
+                redirectTo false "/404" next ctx
 
     let useGiraffe (app : IApplicationBuilder)  =
             app.UseGiraffe webApp

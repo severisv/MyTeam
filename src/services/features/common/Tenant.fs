@@ -19,22 +19,21 @@ module Tenant =
         let (UserId userId) = userId
         "user-" + string clubId + string userId 
 
-
     let get : Get =
         let getClubId (ctx: HttpContext) =
+
             let hostName = ctx.Request.Host.Value
 
-            let hostNameArray = if hostName.Contains("localhost") then 
-                                    ["www";"wamkam";".no"]
-                                else 
-                                    hostName.Split('.') |> Seq.toList
+            let hostNameArray =  hostName.Split('.') 
+                                    |> Seq.toList
+                                    |> List.map toLower
 
-            if hostNameArray.Length > 2 then
+            if hostNameArray.Length > 1 then
                 if "www".EqualsIc(hostNameArray.[0]) then
                     Some(ClubIdentifier hostNameArray.[1])
-                else 
+                else                 
                     Some(ClubIdentifier hostNameArray.[0])
-            else 
+            else
                 None                
 
         fun ctx ->
@@ -42,7 +41,6 @@ module Tenant =
                 getClubId ctx 
                 |> Option.bind (fun clubId -> 
                                     let clubQuery () = Clubs.get ctx clubId
-                                    
                                     Cache.get ctx (clubKey clubId) clubQuery
                                )
             let user =
