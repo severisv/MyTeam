@@ -42,9 +42,8 @@ module ImagesInternal =
 
 
         let replaceExtension extension (url: string) =
-            let extension = (Enums.toString extension).ToLower()
             [".png";".PNG";".bmp";".BMP";".tiff";".TIFF"]
-            |> List.fold (fun (acc: string) elem -> acc.Replace(elem, extension)) url
+            |> List.fold (fun (acc: string) elem -> acc.Replace(elem, extension |> toLowerString)) url
 
         let url = 
             baseUrl +

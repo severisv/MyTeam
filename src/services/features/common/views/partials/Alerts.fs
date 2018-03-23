@@ -14,12 +14,11 @@ module Alerts =
         | Warning
     
     let alertId alertType =     
-        Enums.toString alertType 
-        |> toLower
+        alertType |> toLowerString
 
     let alertClass alertType =     
-        Enums.toString alertType 
-        |> toLower
+        alertType 
+        |> toLowerString
         |> sprintf "alert alert-%s"
 
     let alertIcon alertType =     

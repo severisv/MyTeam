@@ -16,3 +16,5 @@ module StringExtensions =
         let toLower (a: string) = a.ToLower()
 
         let isNumber (s: string) = s |> Seq.forall Char.IsDigit
+
+        let toLowerString = string >> toLower

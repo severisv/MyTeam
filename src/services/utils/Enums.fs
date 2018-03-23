@@ -1,14 +1,11 @@
 namespace MyTeam
 open System
-open Microsoft.FSharp.Reflection
 
 module Enums =    
     let getValues<'T>() = 
         Enum.GetValues(typeof<'T>) 
         |> Seq.cast<'T> 
         |> Seq.toList            
-
-
 
     let tryParse<'T> value : Result<'T, string> = 
         if not (String.IsNullOrEmpty value) then
@@ -31,11 +28,3 @@ module Enums =
         | Some x when Enum.IsDefined (typeof<'T>, x) -> 
              Nullable(LanguagePrimitives.EnumToValue(x))
         | _ -> Nullable ()
-
-
-    let toString (x:'a) = 
-        match FSharpValue.GetUnionFields(x, typeof<'a>) with
-        | case, _ -> case.Name
-
-    let toLowerString (x:'a) = 
-        x |> toString |> toLower

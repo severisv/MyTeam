@@ -28,9 +28,9 @@ module TableModule =
         col.Props
         |> List.map (function
                         | NoSort -> "nosort"
-                        | Align a -> sprintf "table-align--%s" (Enums.toString a |> toLower)
+                        | Align a -> sprintf "table-align--%s" (string a |> toLower)
                         | ClassName s -> s
-                        | CellType a -> sprintf "table-td-%s" (Enums.toString a |> toLower)
+                        | CellType a -> sprintf "table-td-%s" (string a |> toLower)
 
                     )
         |> List.distinct

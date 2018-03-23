@@ -1,7 +1,6 @@
 namespace MyTeam
 
 open System
-open System.Security.Cryptography
 
 [<AutoOpen>]
 module Helpers =

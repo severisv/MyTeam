@@ -17,8 +17,8 @@ module Buttons =
         a 
             ([_href href;
               _class <| sprintf "btn btn-%s btn-%s" 
-                                        (Enums.toLowerString buttonType) 
-                                        (Enums.toLowerString size)
+                                        (toLowerString buttonType) 
+                                        (toLowerString size)
              ] 
              |> mergeAttributes attributes) 
             children
