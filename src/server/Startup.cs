@@ -64,13 +64,14 @@ namespace MyTeam
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
+            services.Configure<FacebookOptions>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });
             App.addGiraffe(services);
             App.registerJsonSerializers(services);
-            
+
             services.RegisterDependencies();
 
         }

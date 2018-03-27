@@ -12,7 +12,7 @@ open MyTeam.Attendance
 open MyTeam.Ajax
 
 
-let index (club: Club) user (ctx: HttpContext) =
+let index club user ctx =
     [
         main [] [
             block [] [
@@ -26,4 +26,27 @@ let index (club: Club) user (ctx: HttpContext) =
         Admin.coachMenu               
     ] 
     |> layout club user (fun o -> { o with Title = "Administrer spillere" }) ctx
+    |> Ok
+
+
+let invitePlayers club user ctx =
+    [    
+        div [
+            _id "add-players";
+            attr "data-statuses" (Enums.getValues<Status> () |> Json.serialize) 
+            attr "data-roles" (Enums.getValues<Role> () |> Json.serialize)                     
+            ] []
+    
+        Admin.coachMenu               
+    ] 
+    |> layout club user 
+                (fun o -> { 
+                            o with 
+                                Title = "Inviter spillere"
+                                Scripts = [ 
+                                            FacebookSdk.script ctx
+                                            Scripts.documentReady "window.mt_fb.login()" 
+                                        ]
+                        }
+                ) ctx
     |> Ok

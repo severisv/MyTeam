@@ -5,19 +5,15 @@ import '../stylesheets/style.less'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-
-import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers.jsx'
-import AddPlayers from './reactComponents/AddPlayers/AddPlayers.jsx'
-import GamePlan from './reactComponents/GamePlan/GamePlan.jsx'
-import ShowGame from './reactComponents/RegisterResult/ShowGame.jsx'
+import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers'
+import AddPlayers from './reactComponents/AddPlayers/AddPlayers'
+import GamePlan from './reactComponents/GamePlan/GamePlan'
+import ShowGame from './reactComponents/RegisterResult/ShowGame'
 
 import ajax from './ajaxHelpers'
 import global from './global'
 
 window.ajax = ajax
-
-window.EmailAdd = require('./reactComponents/AddPlayers/EmailAdd.jsx')
-window.FacebookAdd = require('./reactComponents/AddPlayers/FacebookAdd.jsx')
 
 window.checkbox = require('./checkbox')
 window.mt_fb = require('./facebook')

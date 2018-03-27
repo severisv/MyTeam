@@ -35,8 +35,7 @@ module.exports = React.createClass({
 
   addPlayer(user) {
     function getImageUrl(url, size) {
-      let imageUrl
-      $.ajax({
+      return $.ajax({
         url: url.url,
         async: false,
         data: {
@@ -45,11 +44,7 @@ module.exports = React.createClass({
           width: size,
           redirect: 0,
         },
-        success(response) {
-          imageUrl = response.data.url
-        },
       })
-      return imageUrl
     }
 
     const url = facebook.getUserImageUrl(user.id)

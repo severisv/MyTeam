@@ -16,12 +16,15 @@ module.exports = React.createClass({
 
   handleFirstnameChange(event) {
     this.setState({ firstname: event.target.value })
+    this.props.clearAlert()
   },
   handleLastnameChange(event) {
     this.setState({ lastname: event.target.value })
+    this.props.clearAlert()
   },
   handleEmailChange(event) {
     this.setState({ email: event.target.value })
+    this.props.clearAlert()
   },
 
   render() {

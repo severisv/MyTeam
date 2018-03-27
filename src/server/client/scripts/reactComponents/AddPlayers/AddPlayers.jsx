@@ -1,4 +1,7 @@
 ﻿import React from 'react'
+import FacebookAdd from './FacebookAdd'
+import EmailAdd from './EmailAdd'
+import Alert from '../Common/Alert'
 
 import { get, post } from '../../api'
 
@@ -43,8 +46,7 @@ export default class AddPlayers extends React.Component {
               isSubmitting: false,
             })
           } else {
-            this.setState({ validationMessage: '', isSubmitting: false })
-            mt.alert('success', 'Brukeren ble lagt til')
+            this.setState({ validationMessage: '', isSubmitting: false, success: true })
             this.clearEmailForm()
           }
         })
@@ -85,27 +87,32 @@ export default class AddPlayers extends React.Component {
     if (!validateEmail(user.email)) return 'Ugyldig e-postadresse'
   }
 
+  clearAlert = () => this.setState({ success: false })
+
   render() {
     const addWithFacebookClass = this.state.addUsingFacebook ? 'active' : ''
     const addWithEmailClass = this.state.addUsingFacebook ? '' : 'active'
     return (
-      <div className="add-players">
-        <h3>Legg til spillere</h3>
-
-        <div className="col-md-12 col-lg-8 no-padding">
-          <ul className="nav nav-pills mt-justified">
-            <li className={addWithFacebookClass}>
-              <a onClick={this.changeAddMethod.bind(null, 'facebook')}>
-                <i className="fa fa-facebook" /> Med Facebook
-              </a>
-            </li>
-            <li className={addWithEmailClass}>
-              <a onClick={this.changeAddMethod.bind(null, 'email')}>
-                <i className="fa fa-envelope" />&nbsp;Med e-post
-              </a>
-            </li>
-          </ul>
-          {this.renderAddModule()}
+      <div className="mt-main">
+        {this.state.success && <Alert type="success">Spilleren ble lagt til</Alert>}
+        <div className="mt-container">
+          <div className="add-players">
+            <div className="col-md-12 col-lg-8 no-padding">
+              <ul className="nav nav-pills mt-justified">
+                <li className={addWithFacebookClass}>
+                  <a onClick={this.changeAddMethod.bind(null, 'facebook')}>
+                    <i className="fa fa-facebook" /> Med Facebook
+                  </a>
+                </li>
+                <li className={addWithEmailClass}>
+                  <a onClick={this.changeAddMethod.bind(null, 'email')}>
+                    <i className="fa fa-envelope" />&nbsp;Med e-post
+                  </a>
+                </li>
+              </ul>
+              {this.renderAddModule()}
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -114,6 +121,12 @@ export default class AddPlayers extends React.Component {
     if (this.state.addUsingFacebook) {
       return <FacebookAdd addPlayer={this.addPlayer} existingIds={this.state.existingIds} />
     }
-    return <EmailAdd addPlayer={this.addPlayer} validationMessage={this.state.validationMessage} />
+    return (
+      <EmailAdd
+        clearAlert={this.clearAlert}
+        addPlayer={this.addPlayer}
+        validationMessage={this.state.validationMessage}
+      />
+    )
   }
 }

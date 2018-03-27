@@ -46,7 +46,8 @@ module App =
                                         )                        
                                         empty
                         )
-                    route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte]  >=> (Admin.Pages.index club user |> htmlGet)
+                    route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
+                    route "/admin/spillerinvitasjon" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     subRoute "/api/attendance"                            
                         (choose [ 
                             GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)
