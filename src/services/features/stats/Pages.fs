@@ -1,4 +1,4 @@
-namespace MyTeam
+namespace MyTeam.Stats
 
 open Giraffe
 open Giraffe.GiraffeViewEngine
@@ -10,9 +10,7 @@ open MyTeam.Views
 open System
 open MyTeam.Stats
 
-module StatsPages =  
-
- 
+module Pages =   
     let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
 
         let db = ctx.Database

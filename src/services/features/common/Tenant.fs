@@ -24,15 +24,16 @@ module Tenant =
 
             let hostName = ctx.Request.Host.Value
 
-            let hostNameArray =  hostName.Split('.') 
+            let hostNameArray = if hostName.Contains("localhost") then ["www";"wamkam";"no"]
+                                else hostName.Split('.') 
                                     |> Seq.toList
                                     |> List.map toLower
+                                |> List.filter (fun p -> p <> "www")
+
+
 
             if hostNameArray.Length > 1 then
-                if "www".EqualsIc(hostNameArray.[0]) then
-                    Some(ClubIdentifier hostNameArray.[1])
-                else                 
-                    Some(ClubIdentifier hostNameArray.[0])
+                Some(ClubIdentifier hostNameArray.[0])
             else
                 None                
 

@@ -9,13 +9,8 @@ open MyTeam.Views
 [<AutoOpen>]
 module Pages =   
 
-    let coachMenuItems = 
-        [
-            li [][a [_href "/intern/arrangement/ny"] [Icons.training ""; encodedText "Opprett arrangement"]]
-            li [][a [_href "/admin"] [Icons.user ""; encodedText "Administrer spillere"]]
-            li [][a [_href "/admin/spillerinvitasjon"] [icon <| fa "plus" <| ""; encodedText "Legg til spiller"]]
-            li [][a [_href "/nyheter/ny"] [Icons.news ""; encodedText "Skriv artikkel"]]
-        ]
+    let coachMenuItems = Views.Admin.coachMenuItems
+
 
     let internalMenuItems =
         [ 

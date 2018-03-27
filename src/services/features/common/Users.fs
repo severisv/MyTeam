@@ -4,7 +4,6 @@ open System
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Domain.Events
 open Microsoft.EntityFrameworkCore
 open System.Linq
 

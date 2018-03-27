@@ -1,4 +1,5 @@
 ﻿import React from 'react'
+import ManagePlayer from './ManagePlayer'
 
 import { get, put } from '../../api'
 
@@ -12,20 +13,13 @@ export default class ManagePlayers extends React.Component {
     }
   }
 
-  componentWillMount() {
-    this.options = {
-      playerStatus: PlayerStatus,
-      playerRoles: PlayerRoles,
-    }
-  }
-
   componentDidMount() {
     get('/api/members').then(response => {
       this.setState({
         players: response.map(player => ({
-            ...player.details,
-            teamIds: player.teams,
-            roles: player.roles
+          ...player.details,
+          teamIds: player.teams,
+          roles: player.roles,
         })),
       })
     })
@@ -105,7 +99,6 @@ export default class ManagePlayers extends React.Component {
   }
 
   renderPlayers = (playerStatus, isCollapsed) => {
-    
     if (!this.state.players) return ''
 
     const players = this.state.players.filter(player => {
@@ -116,19 +109,20 @@ export default class ManagePlayers extends React.Component {
 
     if (players.length <= 0) return ''
 
-    const options = this.options
     const routes = this.routes
     const teams = this.state.teams
     const setPlayerStatus = this.setPlayerStatus
     const togglePlayerRole = this.togglePlayerRole
     const toggleTeam = this.toggleTeam
+    const { roles, statuses } = this.props
     const playerElements = players.map((player, i) => (
       <ManagePlayer
         key={player.id}
         player={player}
         setPlayerStatus={setPlayerStatus}
         togglePlayerRole={togglePlayerRole}
-        options={options}
+        roles={roles}
+        statuses={statuses}
         routes={routes}
         teams={teams}
         toggleTeam={toggleTeam}
@@ -145,7 +139,7 @@ export default class ManagePlayers extends React.Component {
     ))
 
     return (
-      <div className="manage-players">
+      <div key={playerStatus} className="manage-players">
         <div className="row">
           <div className="col-sm-3 col-xs-7 headline">
             <strong>{playerStatus}</strong>
@@ -174,14 +168,6 @@ export default class ManagePlayers extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.renderPlayers(this.options.playerStatus.Active)}
-        {this.renderPlayers(this.options.playerStatus.Veteran)}
-        {this.renderPlayers(this.options.playerStatus.Inactive)}
-        {this.renderPlayers(this.options.playerStatus.Trener)}
-        {this.renderPlayers(this.options.playerStatus.Quit)}
-      </div>
-    )
+    return <div>{this.props.statuses.map(status => this.renderPlayers(status))}</div>
   }
 }

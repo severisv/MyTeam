@@ -12,18 +12,6 @@ namespace MyTeam.Controllers
     [RequireMember(Roles.Coach, Roles.Admin)]
     public class AdminController : BaseController
     {
-        private readonly IPlayerService _playerService;
-
-        public AdminController(IPlayerService playerService)
-        {
-            _playerService = playerService;
-        }
-
-
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [Route("spillerinvitasjon")]
         public IActionResult AddPlayers()

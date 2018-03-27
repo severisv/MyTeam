@@ -16,7 +16,7 @@ module.exports = React.createClass({
   },
 
   renderStatusOptions() {
-    const statuses = this.props.options.playerStatus
+    const statuses = this.props.statuses
     const statusList = []
     for (const key in statuses) {
       statusList.push(<option value={statuses[key]} key={statuses[key]}>
@@ -36,7 +36,7 @@ module.exports = React.createClass({
   },
 
   renderRoles() {
-    const roles = this.props.options.playerRoles
+    const roles = this.props.roles
     const player = this.state.player
     const buttons = []
     for (const key in roles) {

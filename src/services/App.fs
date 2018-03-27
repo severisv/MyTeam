@@ -24,9 +24,9 @@ module App =
             | Some club ->
                   choose [
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
-                    route "/statistikk" >=> (StatsPages.index club user None None |> htmlGet)      
-                    routef "/statistikk/%s/%s" (fun (teamName, year) -> StatsPages.index club user (Some teamName) (Some year) |> htmlGet)          
-                    routef "/statistikk/%s" (fun teamName -> StatsPages.index club user (Some teamName) None |> htmlGet)      
+                    route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
+                    routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
+                    routef "/statistikk/%s" (fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet)      
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user |> Option.fold 
@@ -46,6 +46,7 @@ module App =
                                         )                        
                                         empty
                         )
+                    route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte]  >=> (Admin.Pages.index club user |> htmlGet)
                     subRoute "/api/attendance"                            
                         (choose [ 
                             GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)

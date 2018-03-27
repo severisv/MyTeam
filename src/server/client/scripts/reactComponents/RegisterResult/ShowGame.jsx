@@ -1,5 +1,8 @@
 ﻿import React from 'react'
-
+import ListEvents from './ListEvents'
+import ListSquad from './ListSquad'
+import AddPlayerToSquad from './AddPlayerToSquad'
+import RegisterEvents from './RegisterEvents'
 import { get, post } from '../../api'
 
 const parseType = (type, types) => types.indexOf(type)
