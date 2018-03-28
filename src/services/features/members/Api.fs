@@ -8,7 +8,6 @@ open Giraffe
 module Api =
 
     let list clubId db =
-        failwith "asd"
         Queries.list db clubId
         |> Ok
 
