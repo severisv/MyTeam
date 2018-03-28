@@ -11,6 +11,7 @@ module Users =
      
     type User = {
          Id: MemberId
+         UserId: string
          FacebookId: string
          FirstName: string
          LastName: string
@@ -38,6 +39,7 @@ module Users =
                 |> Seq.map(fun m -> 
                                 {
                                  Id = m.Id
+                                 UserId = userId
                                  FacebookId = m.FacebookId
                                  FirstName = m.FirstName
                                  LastName = m.LastName

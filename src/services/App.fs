@@ -10,6 +10,7 @@ open MyTeam.Authorization
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Results
+open Microsoft.AspNetCore.Hosting
 
     
 module App =
@@ -32,18 +33,18 @@ module App =
                         mustBeMember >=>
                             (user |> Option.fold 
                                         (fun _ user ->
-                                                (choose [ 
-                                                    GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
-                                                        route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                        routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                    ]
-                                                    GET >=> choose [                                                        
-                                                        route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                        routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
-                                                        route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
-                                                        routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
-                                                    ]                                    
-                                                ])
+                                            (choose [ 
+                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
+                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
+                                                ]
+                                                GET >=> choose [                                                        
+                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
+                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
+                                                    route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
+                                                    routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
+                                                ]                                    
+                                            ])
                                         )                        
                                         empty
                         )
@@ -107,8 +108,16 @@ module App =
             | None ->
                 redirectTo false "/404" next ctx
 
+            
+
     let useGiraffe (app : IApplicationBuilder)  =
-            app.UseGiraffe webApp
+            let env = app.ApplicationServices.GetService<IHostingEnvironment>()
+            if env.IsDevelopment() |> not then
+                app.UseDeveloperExceptionPage() |> ignore
+                app.UseGiraffe webApp
+            else 
+                app.UseGiraffeErrorHandler(ErrorHandling.errorHandler)
+                   .UseGiraffe webApp
 
     let addGiraffe (services : IServiceCollection)  =
         services.AddGiraffe() |> ignore

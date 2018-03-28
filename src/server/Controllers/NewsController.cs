@@ -27,7 +27,7 @@ namespace MyTeam.Controllers
             _userManager = userManager;
         }
 
-
+        [Route("")]
         [Route("nyheter/{skip:int?}/{take:int?}")]
         public IActionResult Index(int skip = 0, int take = 4)
         {
