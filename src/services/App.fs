@@ -23,6 +23,7 @@ module App =
             match club with
             | Some club ->
                   choose [
+                    route "/404" >=> (Views.Error.notFound club user)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
                     routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          

@@ -16,16 +16,5 @@ namespace MyTeam.Controllers
             return View("Error", e);
 
         }
-
-        [Route("404")]
-        public IActionResult NotFoundAction()
-        {
-            HttpContext.Response.StatusCode = 404;
-            if(Request.IsAjaxRequest())
-                return PartialView("_NotFound");
-
-            return View("NotFound");
-
-        }
     }
 }
