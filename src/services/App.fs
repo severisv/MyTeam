@@ -112,7 +112,7 @@ module App =
 
     let useGiraffe (app : IApplicationBuilder)  =
             let env = app.ApplicationServices.GetService<IHostingEnvironment>()
-            if env.IsDevelopment() |> not then
+            if env.IsDevelopment() then
                 app.UseDeveloperExceptionPage() |> ignore
                 app.UseGiraffe webApp
             else 
