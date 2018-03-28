@@ -19,22 +19,17 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
                                             (string ctx.Request.QueryString)
                                 )
 
-                let isJsonRequest = ctx.Request.Headers.TryGetValue("Accept")
-                                    |> function
-                                        | (true, s) when s |> Seq.exists (fun s -> s = "application/json") -> true
-                                        | _ -> false
-
                 let isDeveloper (user: Users.User) = user.UserId = "severin@sverdvik.no"
 
                 (Tenant.get ctx 
                     |> function
                     | (Some club, Some user) when user |> isDeveloper -> 
-                        if isJsonRequest then
+                        if Request.isJson ctx then
                             json [ex.Message; string ex]
                         else
                             Views.Error.stackTrace club (Some user) ex
                     | (Some club, user) -> 
-                        if isJsonRequest then 
+                        if Request.isJson ctx then 
                             json ["500 server error"]
                         else 
                             Views.Error.serverError club user

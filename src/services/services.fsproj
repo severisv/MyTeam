@@ -20,6 +20,7 @@
     <Compile Include="common/views/Error.fs" />
     <Compile Include="common/Authorization.fs" />
     <Compile Include="common/ErrorHandling.fs" />
+    <Compile Include="common/ResultHandling.fs" />
     <Compile Include="features/*/Types.fs" />
     <Compile Include="features/*/W_Types.fs" />
     <Compile Include="features/*/Queries.fs" />
