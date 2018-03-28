@@ -24,7 +24,7 @@ module App =
             match club with
             | Some club ->
                   choose [
-                    route "/404" >=> (Views.Error.notFound club user)          
+                    route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
                     routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
@@ -103,10 +103,10 @@ module App =
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)                                
                         ])                                                                                                                                                                                                                                     
-                    redirectTo false "/404"
+                    setStatusCode 404 >=> Views.Error.notFound club user
                    ] next ctx
             | None ->
-                redirectTo false "/404" next ctx
+                (setStatusCode 404 >=> text "404") next ctx
 
             
 
