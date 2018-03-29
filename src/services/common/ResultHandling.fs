@@ -15,19 +15,12 @@ module Results =
                 (setStatusCode 404 >=> json ("404")) next ctx    
 
 
-
-
-    type PostHandler<'a,'b> = Database -> 'a -> Result<'b,Error>
-
-    let jsonPost<'a,'b> (fn: PostHandler<'a,'b>) next (ctx: HttpContext) =
+    let jsonPost<'a,'b> (fn: Database -> 'a -> Result<'b,Error>) next (ctx: HttpContext) =
         let payload = ctx.BindJson<'a>()
         fn ctx.Database payload
         |> jsonResult next ctx
 
-
-    type GetHandler<'a> = Database -> Result<'a,Error>
-
-    let jsonGet<'a> (fn: GetHandler<'a>) next (ctx: HttpContext) =          
+    let jsonGet<'a> (fn: Database -> Result<'a,Error>) next (ctx: HttpContext) =          
         fn ctx.Database
         |> jsonResult next ctx
 
@@ -37,16 +30,17 @@ module Results =
             |> function       
             | Ok result -> htmlView result next ctx       
             | Error e -> 
-                match e with
+                (match e with
                 | Unauthorized ->
-                    (setStatusCode 403 >=> text ("Ingen tilgang")) next ctx    
+                    setStatusCode 403 >=> text "Ingen tilgang"    
                 | NotFound ->
-                    (setStatusCode 404 >=>
+                    setStatusCode 404 >=>
                      (Tenant.get ctx 
                      |> function
                         | (Some club, user) -> 
                             Views.Error.notFound club user
                         | (None, _) -> text "Error"
-                     )) next ctx
-                | _ -> failwith "Ikke implementert"
+                     )
+                | _ -> failwith "Ikke implementert") next ctx
+                
         
