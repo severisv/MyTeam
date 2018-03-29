@@ -8,3 +8,5 @@ let isJson (ctx: HttpContext) =
         | (true, s) when s |> Seq.exists (fun s -> s = "application/json") -> true
         | _ -> false      
 
+let fullPath (ctx: HttpContext) =
+    (string ctx.Request.Path) + (string ctx.Request.QueryString)

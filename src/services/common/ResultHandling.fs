@@ -30,17 +30,20 @@ module Results =
             |> function       
             | Ok result -> htmlView result next ctx       
             | Error e -> 
+                let (club, user) = Tenant.get ctx
                 (match e with
                 | Unauthorized ->
-                    setStatusCode 403 >=> text "Ingen tilgang"    
+                    setStatusCode 403 >=>
+                        match club with 
+                        | Some club -> Views.Error.unauthorized club user                     
+                        | None -> text "403"
                 | NotFound ->
                     setStatusCode 404 >=>
-                     (Tenant.get ctx 
-                     |> function
+                        match (club, user) with
                         | (Some club, user) -> 
                             Views.Error.notFound club user
                         | (None, _) -> text "Error"
-                     )
+                     
                 | _ -> failwith "Ikke implementert") next ctx
                 
         
