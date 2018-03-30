@@ -24,6 +24,10 @@ type AttendanceSummary = {
 
 type PlayerAttendanceSummary = Member * AttendanceSummary
 
+type SelectedYear = 
+| AllYears
+| Year of int
+
 type Years = int list
 type Year = string option
 
