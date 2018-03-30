@@ -1,6 +1,7 @@
 namespace MyTeam.Stats
 
 open System.Linq
+open MyTeam.Domain
 open MyTeam.Models.Enums
 open System
 

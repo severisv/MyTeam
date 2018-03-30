@@ -10,6 +10,15 @@ type Team = {
         Name: string
 }
 
+type SelectedYear = 
+    | AllYears
+    | Year of int
+
+type SelectedTeam =
+    | All of Team list
+    | Team of Team
+
+
 type ClubIdentifier = ClubIdentifier of string
 type ClubId = ClubId of Guid
 
