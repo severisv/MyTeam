@@ -72,7 +72,7 @@ module Pages =
                 main [] [
                     block [] [
                         row [] [
-                            tabs [_class "stats-teamNav"] 
+                            tabs [_class "team-nav"] 
                                  ({ 
                                     Items = (club.Teams 
                                             |> List.map (fun team  -> 

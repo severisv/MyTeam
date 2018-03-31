@@ -1,4 +1,4 @@
-﻿$('#leagueTable')
+﻿$('.table-table')
   .find('td')
   .each(function f() {
     const content = this.innerText

@@ -124,7 +124,7 @@ module Pages =
 
                     script [_src "/compiled/lib/lib.bundle.js?v1"] []
                     script [_src "/compiled/app.js?v15" ] []
-            ] |> List.append o.Scripts)                
+            ] @ o.Scripts)                
         ]          
     
          

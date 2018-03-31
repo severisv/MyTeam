@@ -51,7 +51,13 @@ module Users =
                                              |> Seq.toList
                                  ProfileIsConfirmed = m.ProfileIsConfirmed
                                 })
-                |> Seq.tryHead                            
+                |> Seq.tryHead
+
+    let whenInRole (user: User option) roles fn =
+        user |> Option.bind(fun user ->
+                    if user.IsInRole roles then Some <| fn user
+                    else None
+            )                                
                                                     
 
                                                 

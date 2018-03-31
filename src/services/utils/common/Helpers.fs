@@ -25,3 +25,5 @@ module Helpers =
 
     let (>>=) result fn =
         result |> Result.bind(fn)    
+
+    let never = fun _ -> false    

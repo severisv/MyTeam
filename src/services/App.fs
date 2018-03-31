@@ -26,6 +26,9 @@ module App =
                   choose [
                     route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
+                    route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
+                    routef "/tabell/%s/%s" (fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
+                    routef "/tabell/%s" (fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet)         
                     route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
                     routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
                     routef "/statistikk/%s" (fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet)      
