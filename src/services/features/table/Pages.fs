@@ -60,14 +60,14 @@ module Pages =
                                 navListMobile
                                     ({ 
                                         Header = "Sesonger"
-                                        Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam selectedYear}                                                                   )  
+                                        Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
                                         Footer = None                                                               
                                         IsSelected = isSelected                                                               
                                    })
                                 hr []
                                 h2 [] [Icons.trophy "";whitespace;encodedText t.Title]
                                 br []
-                                table [_class "table-table"] 
+                                table [Striped; TableProperty.Attribute <| _class "table-table"] 
                                             [
                                                 col [NoSort;Align Center;Attr <| _class "hidden-xxs"] []
                                                 col [NoSort] [encodedText "Lag"]

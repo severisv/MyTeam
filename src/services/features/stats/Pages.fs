@@ -103,7 +103,7 @@ module Pages =
                         ]
                     ]     
                     block [] [
-                        table [_class "stats-table"] 
+                        table [TableProperty.Attribute <| _class "stats-table"] 
                                     [
                                         col [CellType Image; NoSort] []
                                         col [] [encodedText "Spiller"]

@@ -6,6 +6,21 @@ open Giraffe.GiraffeViewEngine
 [<AutoOpen>]
 module TableModule =  
 
+    type TableProperty =
+        | Attribute of XmlAttribute
+        | Striped   
+
+
+    let tableAttributes attr =
+        attr
+        |> List.map (function
+                        | Attribute a -> a
+                        | Striped -> _class "table--striped"
+                    )
+        |> List.distinct
+        |> mergeAttributes [_class "table tablesorter"]
+
+
     type TableAlignment = 
        | Left
        | Center
@@ -22,8 +37,8 @@ module TableModule =
     type TableColumn = {
         Value: XmlNode list
         Props: CellProperty list
-    }
-                   
+    }           
+
     let colAttributes col =
         col.Props
         |> List.map (function
@@ -38,8 +53,9 @@ module TableModule =
     let col props value =
          { Value = value; Props = props } 
 
-    let table attributes columns rows = 
-        table ([_class "table tablesorter"] |> mergeAttributes attributes) [
+
+    let table (attributes: TableProperty list) columns rows = 
+        table (tableAttributes attributes) [
                         thead [] [
                             tr [] (columns 
                                   |> List.map(fun col ->    
@@ -47,7 +63,7 @@ module TableModule =
                                   ))           
                         ]   
                         tbody [] 
-                                (rows 
+                                (rows
                                     |> List.map(fun row ->
                                         tr [] 
                                             (row
