@@ -45,11 +45,11 @@ let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
                 br []
                 table [] 
                         [
-                            col [NoSort; CellType Image; ClassName "hidden-xs"] [encodedText ""] 
+                            col [NoSort; CellType Image; Attr <| _class "hidden-xs"] [encodedText ""] 
                             col [] [encodedText "Navn"]
                             col [] [encodedText "Telefon"]
-                            col [ClassName "hidden-xs"] [encodedText "E-post"]
-                            col [ClassName "visible-lg"] [encodedText "Født"]
+                            col [Attr <| _class "hidden-xs"] [encodedText "E-post"]
+                            col [Attr <| _class "visible-lg"] [encodedText "Født"]
                         ]
                         (members |> List.filter (fun m -> m.Details.Status = status)
                                  |> List.map (fun m ->

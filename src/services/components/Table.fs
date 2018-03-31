@@ -13,28 +13,27 @@ module TableModule =
     type CellType = Normal | Image
 
 
-    type TableProperty =
+    type CellProperty =
        | Align of TableAlignment
        | NoSort
-       | ClassName of string
+       | Attr of XmlAttribute
        | CellType of CellType
 
     type TableColumn = {
         Value: XmlNode list
-        Props: TableProperty list
+        Props: CellProperty list
     }
                    
-    let colClassName col =
+    let colAttributes col =
         col.Props
         |> List.map (function
-                        | NoSort -> "nosort"
-                        | Align a -> sprintf "table-align--%s" (string a |> toLower)
-                        | ClassName s -> s
-                        | CellType a -> sprintf "table-td-%s" (string a |> toLower)
-
+                        | Attr a -> a
+                        | Align a -> _class <| sprintf "table-align--%s" (a |> toLowerString)
+                        | CellType a -> _class <| sprintf "table-td-%s" (a |> toLowerString)
+                        | NoSort -> _class "nosort"
                     )
         |> List.distinct
-        |> String.concat " "
+        |> mergeAttributes []
 
     let col props value =
          { Value = value; Props = props } 
@@ -44,7 +43,7 @@ module TableModule =
                         thead [] [
                             tr [] (columns 
                                   |> List.map(fun col ->    
-                                            th [_class <| colClassName col] col.Value    
+                                            th (colAttributes col) col.Value    
                                   ))           
                         ]   
                         tbody [] 
@@ -54,7 +53,7 @@ module TableModule =
                                             (row
                                             |> List.mapi (fun i value ->
                                                     td 
-                                                        [_class <| colClassName columns.[i] ] 
+                                                        (colAttributes columns.[i]) 
                                                         [value]
                                             ))                    
                                         )

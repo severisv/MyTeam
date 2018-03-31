@@ -69,13 +69,13 @@ module Pages =
                                 br []
                                 table [_class "table-table"] 
                                             [
-                                                col [NoSort;Align Center;ClassName "hidden-xxs"] []
+                                                col [NoSort;Align Center;Attr <| _class "hidden-xxs"] []
                                                 col [NoSort] [encodedText "Lag"]
                                                 col [NoSort; Align Center] [encodedText "Kamper"]
-                                                col [NoSort; Align Center; ClassName "hidden-sm hidden-xs"] [encodedText "Seier"]
-                                                col [NoSort; Align Center; ClassName "hidden-sm hidden-xs"] [encodedText "Uavgjort"]
-                                                col [NoSort; Align Center; ClassName "hidden-sm hidden-xs"] [encodedText "Tap"]
-                                                col [NoSort; Align Center; ClassName "hidden-xs"] [encodedText "Målforskjell"]
+                                                col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Seier"]
+                                                col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Uavgjort"]
+                                                col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Tap"]
+                                                col [NoSort; Align Center; Attr <| _class "hidden-xs"] [encodedText "Målforskjell"]
                                                 col [NoSort; Align Center] [encodedText "Poeng"]
                                             ]
                                             (t.Rows |> List.map (fun row ->
@@ -125,9 +125,7 @@ module Pages =
                                 , emptyText))        
                             ]
                     ] 
-                    |> layout club user (fun o -> { o with 
-                                                        Title = "Tabell"
-                                                        Scripts = [ script [_src "/compiled/scripts/table/table.js"] [] ]}) ctx
+                    |> layout club user (fun o -> { o with Title = "Tabell" }) ctx
                     |> Ok
 
                 | None -> Error NotFound        
