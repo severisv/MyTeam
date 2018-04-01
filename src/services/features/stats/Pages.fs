@@ -97,10 +97,9 @@ module Pages =
                                 Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
                                 IsSelected = isSelected                                                               
                            })
-                        
-                    ]     
-                    block [] [
-                        table [TableProperty.Attribute <| _class "stats-table"] 
+                        hr []
+                        br []                     
+                        table [Striped;TableProperty.Attribute <| _class "stats-table"] 
                                     [
                                         col [CellType Image; NoSort] []
                                         col [] [encodedText "Spiller"]
