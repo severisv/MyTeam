@@ -44,18 +44,15 @@ module Pages =
                         main [] [
                             block [] [
                                 tabs [_class "team-nav"] 
-                                     ({ 
-                                        Items = club.Teams 
-                                                |> List.map (fun team  -> 
-                                                                    { 
-                                                                        Text = team.Name
-                                                                        ShortText = team.ShortName
-                                                                        Icon = Some <| Icons.team ""
-                                                                        Url = tableUrl team selectedYear 
-                                                                    }
-                                                            )                           
-                                        IsSelected = isSelected
-                                   })                        
+                                    (club.Teams |> List.map (fun team  -> 
+                                                        { 
+                                                            Text = team.Name
+                                                            ShortText = team.ShortName
+                                                            Icon = Some <| Icons.team ""
+                                                            Url = tableUrl team selectedYear 
+                                                        }
+                                                ))                           
+                                    isSelected            
                            
                                 navListMobile
                                     ({ 

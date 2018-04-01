@@ -26,22 +26,23 @@ let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
 
     let getImage = Images.getMember ctx
 
+    let isSelected = (equals <| memberListUrl (status |> toLowerString))
+
     [
         main [] [
             block [] [
-                tabs [] (
-                    {
-                        Items = [Status.Aktiv; Status.Veteran; Status.Inaktiv]
-                                |> List.map (fun status -> 
-                                                {
-                                                    Text = status |> string
-                                                    ShortText = status |> string
-                                                    Url = memberListUrl (string status |> toLower)
-                                                    Icon = Some <| playerStatusIcon status
-                                                }
-                                             )
-                        IsSelected = (equals <| memberListUrl (status |> string |> toLower))
-                    })
+                tabs [] 
+                    ([Status.Aktiv; Status.Veteran; Status.Inaktiv]
+                    |> List.map (fun status -> 
+                                    {
+                                        Text = status |> string
+                                        ShortText = status |> string
+                                        Url = memberListUrl (string status |> toLower)
+                                        Icon = Some <| playerStatusIcon status
+                                    }
+                                 )
+                    )
+                    isSelected
                 br []
                 table [] 
                         [

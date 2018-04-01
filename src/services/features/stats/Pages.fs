@@ -72,26 +72,24 @@ module Pages =
                 main [] [
                     block [] [
                         tabs [_class "team-nav"] 
-                             ({ 
-                                Items = (club.Teams 
-                                        |> List.map (fun team  -> 
-                                                            { 
-                                                                Text = team.Name
-                                                                ShortText = team.ShortName
-                                                                Icon = Some <| Icons.team ""
-                                                                Url = statsUrl (Team team) selectedYear 
-                                                            }
-                                                    )) @ [
-                                                            {                                                              
-                                                                Text = "Samlet"
-                                                                ShortText = "Samlet"
-                                                                Icon = None
-                                                                Url = statsUrl (All club.Teams) selectedYear
-                                                            }
-                                                        ]                           
-                                IsSelected = isSelected
-                           })                        
-                   
+                             ((club.Teams 
+                             |> List.map (fun team  -> 
+                                                { 
+                                                    Text = team.Name
+                                                    ShortText = team.ShortName
+                                                    Icon = Some <| Icons.team ""
+                                                    Url = statsUrl (Team team) selectedYear 
+                                                }
+                                        )) @ [
+                                                {                                                              
+                                                    Text = "Samlet"
+                                                    ShortText = "Samlet"
+                                                    Icon = None
+                                                    Url = statsUrl (All club.Teams) selectedYear
+                                                }
+                                            ])                           
+                            isSelected
+                            
                         navListMobile
                             ({ 
                                 Header = "Sesonger"
