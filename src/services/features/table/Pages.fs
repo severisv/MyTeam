@@ -100,10 +100,16 @@ module Pages =
                                             block [] [
                                                 navList ({
                                                             Header = "Admin"
-                                                            Items = [{
-                                                                        Text = [icon (fa "plus") "";whitespace;encodedText "Legg til sesong"]
-                                                                        Url = "/sesong/opprett"
-                                                                    }]
+                                                            Items = [
+                                                                        {
+                                                                            Text = [icon (fa "plus") "";whitespace;encodedText "Legg til sesong"]
+                                                                            Url = "/sesong/opprett"
+                                                                        }
+                                                                        {
+                                                                            Text = [icon (fa "edit") "";whitespace;encodedText "Rediger sesong"]
+                                                                            Url = sprintf "/sesong/opprett/%i/%O" selectedYear selectedTeam.Id
+                                                                        }
+                                                                    ]
                                                             Footer = None
                                                             IsSelected = never
                                                         })
