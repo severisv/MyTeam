@@ -51,12 +51,12 @@ module Show =
                             ]                          
                             (attendance |> List.map (fun (player, attendance) ->
                                                 let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
-                                                [
-                                                    playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
-                                                    playerLink [encodedText player.Name]                                                       
-                                                    encodedText <| string attendance.Trainings
-                                                    encodedText <| string attendance.Games
-                                                    encodedText <| string attendance.NoShows
+                                                tableRow [] [
+                                                   playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
+                                                   playerLink [encodedText player.Name]                                                       
+                                                   encodedText <| string attendance.Trainings
+                                                   encodedText <| string attendance.Games
+                                                   encodedText <| string attendance.NoShows
                                                 ]
                                                 )
                             )     

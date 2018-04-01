@@ -2,6 +2,8 @@ namespace MyTeam.Views
 
 open MyTeam
 open Giraffe.GiraffeViewEngine
+open System.Xml
+open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]
 module TableModule =  
@@ -26,7 +28,6 @@ module TableModule =
        | Center
 
     type CellType = Normal | Image
-
 
     type CellProperty =
        | Align of TableAlignment
@@ -54,7 +55,11 @@ module TableModule =
          { Value = value; Props = props } 
 
 
-    let table (attributes: TableProperty list) columns rows = 
+    type TableRow = XmlAttribute list * XmlNode list
+    let tableRow attributes values = (attributes, values)
+    
+    
+    let table (attributes: TableProperty list) columns (rows: TableRow list) = 
         table (tableAttributes attributes) [
                         thead [] [
                             tr [] (columns 
@@ -64,8 +69,8 @@ module TableModule =
                         ]   
                         tbody [] 
                                 (rows
-                                    |> List.map(fun row ->
-                                        tr [] 
+                                    |> List.map(fun (attributes, row) ->
+                                        tr attributes 
                                             (row
                                             |> List.mapi (fun i value ->
                                                     td 

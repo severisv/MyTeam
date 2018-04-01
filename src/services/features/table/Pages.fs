@@ -76,19 +76,19 @@ module Pages =
                                                 col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Uavgjort"]
                                                 col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Tap"]
                                                 col [NoSort; Align Center; Attr <| _class "hidden-xs"] [encodedText "Målforskjell"]
-                                                col [NoSort; Align Center] [encodedText "Poeng"]
+                                                col [NoSort; Align Center] [encodedText club.Name]
                                             ]
-                                            (t.Rows |> List.map (fun row ->
-                                                                [
-                                                                    number row.Position
-                                                                    encodedText row.Team
-                                                                    number row.Games
-                                                                    number row.Wins
-                                                                    number row.Draws
-                                                                    number row.Losses
-                                                                    encodedText row.GoalDifference
-                                                                    number row.Points
-                                                                ]
+                                            (t.Rows |> List.map (fun r ->
+                                                                    tableRow [_class (r.Team.Contains(club.Name.Split(' ').[0])  =? ("team-primary", ""))] [
+                                                                        number r.Position
+                                                                        encodedText r.Team
+                                                                        number r.Games
+                                                                        number r.Wins
+                                                                        number r.Draws
+                                                                        number r.Losses
+                                                                        encodedText r.GoalDifference
+                                                                        number r.Points
+                                                                    ]
                                                                 )
                                             ) 
                                 (selectedYear = DateTime.Now.Year =? ( 

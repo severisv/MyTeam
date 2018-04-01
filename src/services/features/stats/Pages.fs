@@ -71,36 +71,35 @@ module Pages =
             [
                 main [] [
                     block [] [
-                        row [] [
-                            tabs [_class "team-nav"] 
-                                 ({ 
-                                    Items = (club.Teams 
-                                            |> List.map (fun team  -> 
-                                                                { 
-                                                                    Text = team.Name
-                                                                    ShortText = team.ShortName
-                                                                    Icon = Some <| Icons.team ""
-                                                                    Url = statsUrl (Team team) selectedYear 
-                                                                }
-                                                        )) @ [
-                                                                {                                                              
-                                                                    Text = "Samlet"
-                                                                    ShortText = "Samlet"
-                                                                    Icon = None
-                                                                    Url = statsUrl (All club.Teams) selectedYear
-                                                                }
-                                                            ]                           
-                                    IsSelected = isSelected
-                               })                        
-                       
-                            navListMobile
-                                ({ 
-                                    Header = "Sesonger"
-                                    Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
-                                    Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
-                                    IsSelected = isSelected                                                               
-                               })
-                        ]
+                        tabs [_class "team-nav"] 
+                             ({ 
+                                Items = (club.Teams 
+                                        |> List.map (fun team  -> 
+                                                            { 
+                                                                Text = team.Name
+                                                                ShortText = team.ShortName
+                                                                Icon = Some <| Icons.team ""
+                                                                Url = statsUrl (Team team) selectedYear 
+                                                            }
+                                                    )) @ [
+                                                            {                                                              
+                                                                Text = "Samlet"
+                                                                ShortText = "Samlet"
+                                                                Icon = None
+                                                                Url = statsUrl (All club.Teams) selectedYear
+                                                            }
+                                                        ]                           
+                                IsSelected = isSelected
+                           })                        
+                   
+                        navListMobile
+                            ({ 
+                                Header = "Sesonger"
+                                Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                                IsSelected = isSelected                                                               
+                           })
+                        
                     ]     
                     block [] [
                         table [TableProperty.Attribute <| _class "stats-table"] 
@@ -115,7 +114,7 @@ module Pages =
                                     ]
                                     (stats |> List.map (fun player ->
                                                         let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
-                                                        [
+                                                        tableRow [] [
                                                             playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
                                                             playerLink [encodedText player.Name]                                                       
                                                             number player.Games
