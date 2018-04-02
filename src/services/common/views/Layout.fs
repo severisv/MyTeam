@@ -41,7 +41,7 @@ module Pages =
         html [_lang "nb-no"] [
             head [] [
                 meta [_charset "utf-8"]
-                meta [_name "viewport";_content "width device-width, initial-scale 1.0"]
+                meta [_name "viewport";_content "width=device-width, initial-scale=1.0"]
                 meta [_title <| club.ShortName + (o.Title.HasValue =? (" - " + o.Title, "")) ]
                 o.MetaDescription.HasValue =? (meta [_name "description"; _content o.MetaDescription], emptyText)
                 title [] [encodedText <| club.Name + (o.Title.HasValue =? (" - " + o.Title, "")) ]
