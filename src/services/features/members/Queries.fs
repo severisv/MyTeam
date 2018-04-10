@@ -67,6 +67,8 @@ module Queries =
                         }
                 
                  )
+                |> List.sortBy (fun p -> p.Details.FirstName)     
+
     
     let getFacebookIds : GetFacebookIds =
         fun db clubId ->         
