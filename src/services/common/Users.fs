@@ -11,6 +11,7 @@ module Users =
      
     type User = {
          Id: MemberId
+         UserId: string
          FacebookId: string
          FirstName: string
          LastName: string
@@ -38,6 +39,7 @@ module Users =
                 |> Seq.map(fun m -> 
                                 {
                                  Id = m.Id
+                                 UserId = userId
                                  FacebookId = m.FacebookId
                                  FirstName = m.FirstName
                                  LastName = m.LastName
@@ -49,8 +51,15 @@ module Users =
                                              |> Seq.toList
                                  ProfileIsConfirmed = m.ProfileIsConfirmed
                                 })
-                |> Seq.tryHead                            
+                |> Seq.tryHead
+
+    let whenInRole (user: User option) roles fn =
+        user |> Option.bind(fun user ->
+                    if user.IsInRole roles then Some <| fn user
+                    else None
+            )                                
                                                     
+
                                                 
 
       

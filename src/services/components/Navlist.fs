@@ -55,7 +55,7 @@ module NavList =
 
     let navListMobile model =
         if model.Items.Length > 0 then
-            div [_class "nav-list--mobile"] [
+            div [_class "nav-list--mobile pull-right"] [
                     select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
                         (
                         (model.Items |> List.map (fun item ->

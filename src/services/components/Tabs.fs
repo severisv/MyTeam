@@ -13,17 +13,13 @@ module Tabs =
         Icon: XmlNode option
     }
 
-    type Tabs = {
-        Items: Tab list
-        IsSelected: (string -> bool)
-    }
-
-    let tabs attributes model =
-        if model.Items.Length > 0 then
+    let tabs attributes (items: Tab list) (isSelected: (string -> bool)) =
+        if items.Length > 0 then
             div attributes [
                 ul [_class "nav nav-pills mt-justified"] 
-                    (model.Items |> List.map (fun t -> 
-                                    li [_class (model.IsSelected t.Url =? ("active", ""))] [
+                    (items 
+                     |> List.map (fun t -> 
+                                    li [_class (isSelected t.Url =? ("active", ""))] [
                                         a [_href t.Url] [
                                             span [_class "hidden-xs" ] [t.Icon |?? emptyText] 
                                             span [_class "hidden-xs"] [whitespace;encodedText t.Text] 

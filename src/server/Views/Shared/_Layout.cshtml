@@ -43,7 +43,7 @@
             <ul class="nav navbar-nav">
                 <li><a asp-controller="player" asp-action="list">@Res.Players</a></li>
                 <li><a asp-controller="game" asp-action="index" asp-route-aar="">@Res.Games</a></li>
-                <li><a asp-controller="table" asp-action="index" asp-route-aar="">@Res.Table</a></li>
+                <li><a href="/tabell">@Res.Table</a></li>
                 <li><a href="/statistikk">@Res.Stats</a></li>
                 <li><a href="/om" >@Res.About</a></li>
                 @if (Context.UserIsMember())
@@ -85,7 +85,7 @@
         {
             <ul id="submenu-internal" class="nav navbar-nav submenu slide-down-child  hidden-xs collapse">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
-                <li><a href="intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
+                <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a href="/intern/lagliste"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))

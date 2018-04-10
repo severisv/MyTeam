@@ -83,7 +83,6 @@ namespace MyTeam
 
             if (env.IsDevelopment() || env.IsStaging())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
             else
@@ -91,28 +90,17 @@ namespace MyTeam
                 app.UseExceptionHandler("/Error/Error");
             }
 
-            try
-            {
-                var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
-                dbContext.Database.Migrate();
-            }
-            catch (Exception e)
-            {
-                if (env.IsDevelopment() || env.IsStaging()) app.WriteException(e);
-            }
-
-
+            var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
+            dbContext.Database.Migrate();
+        
             app.UseStaticFiles();
-
             app.UseAuthentication();
-
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("nb-NO"),
                 SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
                 SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
             });
-
 
             app.UseMvc(routes =>
             {

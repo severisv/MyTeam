@@ -2,9 +2,26 @@ namespace MyTeam.Views
 
 open MyTeam
 open Giraffe.GiraffeViewEngine
+open System.Xml
+open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]
 module TableModule =  
+
+    type TableProperty =
+        | Attribute of XmlAttribute
+        | Striped   
+
+
+    let tableAttributes attr =
+        attr
+        |> List.map (function
+                        | Attribute a -> a
+                        | Striped -> _class "table--striped"
+                    )
+        |> List.distinct
+        |> mergeAttributes [_class "table tablesorter"]
+
 
     type TableAlignment = 
        | Left
@@ -12,49 +29,52 @@ module TableModule =
 
     type CellType = Normal | Image
 
-
-    type TableProperty =
+    type CellProperty =
        | Align of TableAlignment
        | NoSort
-       | ClassName of string
+       | Attr of XmlAttribute
        | CellType of CellType
 
     type TableColumn = {
         Value: XmlNode list
-        Props: TableProperty list
-    }
-                   
-    let colClassName col =
+        Props: CellProperty list
+    }           
+
+    let colAttributes col =
         col.Props
         |> List.map (function
-                        | NoSort -> "nosort"
-                        | Align a -> sprintf "table-align--%s" (string a |> toLower)
-                        | ClassName s -> s
-                        | CellType a -> sprintf "table-td-%s" (string a |> toLower)
-
+                        | Attr a -> a
+                        | Align a -> _class <| sprintf "table-align--%s" (a |> toLowerString)
+                        | CellType a -> _class <| sprintf "table-td-%s" (a |> toLowerString)
+                        | NoSort -> _class "nosort"
                     )
         |> List.distinct
-        |> String.concat " "
+        |> mergeAttributes []
 
     let col props value =
          { Value = value; Props = props } 
 
-    let table attributes columns rows = 
-        table ([_class "table tablesorter"] |> mergeAttributes attributes) [
+
+    type TableRow = XmlAttribute list * XmlNode list
+    let tableRow attributes values = (attributes, values)
+    
+    
+    let table (attributes: TableProperty list) columns (rows: TableRow list) = 
+        table (tableAttributes attributes) [
                         thead [] [
                             tr [] (columns 
                                   |> List.map(fun col ->    
-                                            th [_class <| colClassName col] col.Value    
+                                            th (colAttributes col) col.Value    
                                   ))           
                         ]   
                         tbody [] 
-                                (rows 
-                                    |> List.map(fun row ->
-                                        tr [] 
+                                (rows
+                                    |> List.map(fun (attributes, row) ->
+                                        tr attributes 
                                             (row
                                             |> List.mapi (fun i value ->
                                                     td 
-                                                        [_class <| colClassName columns.[i] ] 
+                                                        (colAttributes columns.[i]) 
                                                         [value]
                                             ))                    
                                         )

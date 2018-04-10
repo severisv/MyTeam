@@ -1,15 +1,9 @@
 module MyTeam.Admin.Pages
 
-
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Views
-open MyTeam.Attendance.Queries
-open MyTeam.Attendance
-open MyTeam.Ajax
 
 
 let index club user ctx =

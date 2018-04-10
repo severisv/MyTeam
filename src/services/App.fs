@@ -10,6 +10,7 @@ open MyTeam.Authorization
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Results
+open Microsoft.AspNetCore.Hosting
 
     
 module App =
@@ -23,7 +24,11 @@ module App =
             match club with
             | Some club ->
                   choose [
+                    route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
+                    route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
+                    routef "/tabell/%s/%s" (fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
+                    routef "/tabell/%s" (fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet)         
                     route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
                     routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
                     routef "/statistikk/%s" (fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet)      
@@ -31,18 +36,18 @@ module App =
                         mustBeMember >=>
                             (user |> Option.fold 
                                         (fun _ user ->
-                                                (choose [ 
-                                                    GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
-                                                        route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                        routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                    ]
-                                                    GET >=> choose [                                                        
-                                                        route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                        routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
-                                                        route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
-                                                        routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
-                                                    ]                                    
-                                                ])
+                                            (choose [ 
+                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
+                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
+                                                ]
+                                                GET >=> choose [                                                        
+                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
+                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
+                                                    route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
+                                                    routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
+                                                ]                                    
+                                            ])
                                         )                        
                                         empty
                         )
@@ -101,13 +106,21 @@ module App =
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)                                
                         ])                                                                                                                                                                                                                                     
-                    redirectTo false "/404"
+                    setStatusCode 404 >=> Views.Error.notFound club user
                    ] next ctx
             | None ->
-                redirectTo false "/404" next ctx
+                (setStatusCode 404 >=> text "404") next ctx
+
+            
 
     let useGiraffe (app : IApplicationBuilder)  =
-            app.UseGiraffe webApp
+            let env = app.ApplicationServices.GetService<IHostingEnvironment>()
+            if env.IsDevelopment() then
+                app.UseDeveloperExceptionPage() |> ignore
+                app.UseGiraffe webApp
+            else 
+                app.UseGiraffeErrorHandler(ErrorHandling.errorHandler)
+                   .UseGiraffe webApp
 
     let addGiraffe (services : IServiceCollection)  =
         services.AddGiraffe() |> ignore

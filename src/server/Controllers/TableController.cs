@@ -26,27 +26,6 @@ namespace MyTeam.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index(Guid? teamId = null, Guid? seasonId = null)
-        {
-            var seasons = seasonId != null
-                ? _seasonService.GetTeamSeasonsFromSeasonId((Guid)seasonId):
-                _seasonService.GetForTeam(teamId ?? Club.TeamIds.First());
-
-            var teams = _dbContext.Teams
-                .OrderBy(t => t.SortOrder)
-                .Where(c => c.ClubId == Club.Id).Select(t => new TeamViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    ShortName = t.ShortName
-                })
-                .ToList();
-
-            var model = new TableViewModel(seasons, teams, seasonId);
-          
-            return View("Index", model);
-        }
-
 
         [Route("oppdater")]
         [RequireMember(Roles.Coach, Roles.Admin)]
