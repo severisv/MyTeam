@@ -33,7 +33,8 @@ module Queries =
                                 Roles = p.RolesString |> toRoleList
                             }
                     )
-            |> Seq.toList                
+            |> Seq.toList           
+            |> List.sortBy (fun p -> p.Details.FirstName)     
 
 
     let listMembersDetailed: ListMembersDetailed =
