@@ -52,7 +52,7 @@ mt_fb.login = function () {
 mt_fb.getSearchUrl = function () {
   const accessToken = mt_fb.aquireUserToken()
   if (accessToken) {
-    const url = 'https://graph.facebook.com/v2.5/search'
+    const url = 'https://graph.facebook.com/v2.11/search'
     return {
       url,
       accessToken,
@@ -65,7 +65,7 @@ mt_fb.getUserUrl = function (id) {
   const accessToken = mt_fb.aquireUserToken()
 
   if (accessToken) {
-    const url = `https://graph.facebook.com/v2.5/${id}`
+    const url = `https://graph.facebook.com/v2.11/${id}`
     return {
       url,
       accessToken,
@@ -77,7 +77,7 @@ mt_fb.getUserUrl = function (id) {
 mt_fb.getUserImageUrl = function (id) {
   const accessToken = mt_fb.aquireUserToken()
   if (accessToken) {
-    const url = `https://graph.facebook.com/v2.5/${id}/picture`
+    const url = `https://graph.facebook.com/v2.11/${id}/picture`
     return {
       url,
       accessToken,

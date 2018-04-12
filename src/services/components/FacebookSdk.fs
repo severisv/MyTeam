@@ -12,7 +12,7 @@ let script (ctx: HttpContext) =
                     FB.init({
                       appId      : '%s',
                       xfbml      : true,
-                      version    : 'v2.5'
+                      version    : 'v2.11'
                     });
 
                     window.mt_fb.isLoaded = true;

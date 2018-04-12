@@ -62,10 +62,11 @@ module App =
                         ])                                     
                                                     
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
-                    route "/api/events" >=>                      
-                        PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
-                            routef "/api/events/%O/description" (Events.Api.setDescription club.Id)
-                    
+                    subRoute "/api/events"                    
+                        (choose [
+                            PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
+                                routef "/%O/description" (Events.Api.setDescription club.Id)
+                        ])
                     subRoute "/api/members" 
                         (choose [ 
                             GET >=> choose [ 

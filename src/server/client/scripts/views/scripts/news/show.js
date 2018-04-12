@@ -47,6 +47,7 @@ function getFacebookName() {
     return
   }
 
+
   if (!window.mt_fb.isLoaded) {
     setTimeout(() => {
       getFacebookName()
