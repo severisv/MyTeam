@@ -33,7 +33,8 @@ module Queries =
                                 Roles = p.RolesString |> toRoleList
                             }
                     )
-            |> Seq.toList                
+            |> Seq.toList           
+            |> List.sortBy (fun p -> p.Details.FirstName)     
 
 
     let listMembersDetailed: ListMembersDetailed =
@@ -66,6 +67,8 @@ module Queries =
                         }
                 
                  )
+                |> List.sortBy (fun p -> p.Details.FirstName)     
+
     
     let getFacebookIds : GetFacebookIds =
         fun db clubId ->         
