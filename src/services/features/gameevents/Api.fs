@@ -58,6 +58,7 @@ module Api =
                 Ok()
 
         fun clubId gameId db model ->
+
             let (ClubId clubId) = clubId
             query { 
                 for g in db.Games do
@@ -83,7 +84,7 @@ module Api =
                         ge.GameId <- gameId
                         ge.PlayerId <- (model.PlayerId |> toNullable)
                         ge.AssistedById <- (model.AssistedById |> toNullable)
-                        ge.Type <- (enum<Models.Enums.GameEventType>(int ge.Type))
+                        ge.Type <- enum<Models.Enums.GameEventType>(int model.Type)
                         ge.CreatedDate <- DateTime.Now
 
                         db.GameEvents.Add(ge) |> ignore
