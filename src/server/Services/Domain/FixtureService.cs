@@ -127,10 +127,8 @@ namespace MyTeam.Services.Domain
         }
 
 
-        private string Decode(string str)
-        {
-            return HtmlEntity.DeEntitize(str).Trim();
-        }
+        private string Decode(string str) => HtmlEntity.DeEntitize(str).Trim();
+
     }
 
     internal class FixtureTableIndex

@@ -88,7 +88,12 @@ module App =
                         ])
 
                     subRoute "/api/games"
-                        (choose [
+                        (choose [                                                                
+                            GET >=>  choose [
+                                routef "/%O/squad" (Games.Api.getSquad club.Id >> jsonGet)
+                                route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
+                                routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)      
+                            ]     
                             POST >=> 
                                 mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
                                     routef "/%O/score/home" (Games.Api.setHomeScore club.Id >> jsonPost)
@@ -101,11 +106,7 @@ module App =
                                     routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)     
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id >> jsonPost)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
-                                ]                                    
-                            GET >=> 
-                                routef "/%O/squad" (Games.Api.getSquad club.Id >> jsonGet)
-                                route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
-                                routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)                                
+                                ]                     
                         ])                                                                                                                                                                                                                                     
                     setStatusCode 404 >=> Views.Error.notFound club user
                    ] next ctx
