@@ -57,8 +57,10 @@ module Register =
                         ul [ _class "list-users col-xs-11 col-md-10" ] 
                             (players |> List.map (fun (p, didAttend) ->
                                 li [ _class "register-attendance-item" ] [ 
-                                    img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
-                                    encodedText p.Name
+                                    span[] [
+                                        img [_src <| getImage p.Image p.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50})]
+                                        encodedText p.Name 
+                                        ]
                                     ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O" selectedEvent.Id p.Id) didAttend
                                     ajaxSuccessIndicator
                                 ]
