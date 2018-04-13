@@ -74,7 +74,7 @@ namespace MyTeam.Services.Repositories
                     ClubId = club.Id,
                     FirstName = "Severin",
                     LastName = "Sverdvik",
-                    PlayerStatus = PlayerStatus.Aktiv,
+                    Status = (int)PlayerStatus.Aktiv,
                     UserName = "severin@sverdvik.no",
                     PositionsString = $"{Position.Back}",
                     RolesString = Roles.Admin,

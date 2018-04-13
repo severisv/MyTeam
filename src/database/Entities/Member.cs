@@ -27,14 +27,6 @@ namespace MyTeam.Models.Domain
 
         [Required]
         public int Status { get; set; }
-        [NotMapped]
-        public PlayerStatus PlayerStatus
-        {
-            get => (PlayerStatus)Status;
-            set { Status = (int)value; }
-        }
-
-        [NotMapped]
         public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
 
         [DataType(DataType.Date)]

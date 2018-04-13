@@ -129,11 +129,11 @@ namespace MyTeam.Services.Domain
         {
             var query =
                 _dbContext.Players.Where(p => p.ClubId == clubId)
-                    .Where(p => p.PlayerStatus != PlayerStatus.Sluttet);
+                    .Where(p => p.Status != (int)PlayerStatus.Sluttet);
 
-            if (includeCoaches != true) query = query.Where(p => p.PlayerStatus != PlayerStatus.Trener);
+            if (includeCoaches != true) query = query.Where(p => p.Status != (int)PlayerStatus.Trener);
 
-            if (status != null) query = query.Where(p => p.PlayerStatus == status);
+            if (status != null) query = query.Where(p => p.Status == (int)status);
 
             var players = query
                 .Select(p => new SimplePlayerDto
@@ -143,7 +143,7 @@ namespace MyTeam.Services.Domain
                     FirstName = p.FirstName,
                     MiddleName = p.MiddleName,
                     LastName = p.LastName,
-                    Status = p.PlayerStatus,
+                    Status = (PlayerStatus)p.Status,
                     ImageFull = p.ImageFull,
                     UrlName = p.UrlName
                 }).ToList().OrderBy(p => p.Name);
@@ -185,7 +185,7 @@ namespace MyTeam.Services.Domain
                 ImageFull = p.ImageFull,
                 PositionsString = p.PositionsString,
                 FacebookId = p.FacebookId,
-                Status = p.PlayerStatus,
+                Status = (PlayerStatus)p.Status,
                 UrlName = p.UrlName
             }).SingleOrDefault();
 
@@ -207,7 +207,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return
-                _dbContext.Players.Where(p => p.PlayerStatus == status && p.ClubId == clubId)
+                _dbContext.Players.Where(p => p.Status == (int)status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
                     .Select(p => new ListPlayerViewModel
                     {
