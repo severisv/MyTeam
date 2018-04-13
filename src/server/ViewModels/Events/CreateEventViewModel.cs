@@ -203,7 +203,7 @@ namespace MyTeam.ViewModels.Events
             ev.Id = eventId;
             ev.ClubId = ClubId;
             ev.Location = Location;
-            ev.EventType = Type;
+            ev.Type = Type.ToInt();
             ev.DateTime = date + Time.AsTime().Value;
             ev.Description = Description;
             ev.Headline = Headline;

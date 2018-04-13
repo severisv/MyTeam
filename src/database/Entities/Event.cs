@@ -18,12 +18,6 @@ namespace MyTeam.Models.Domain
         public Guid ClubId { get; set; }
         [Required]
         public int Type { get; set; }
-        [NotMapped]
-        public EventType EventType
-        {
-            get => (EventType)Type;
-            set { Type = (int)value; }
-        }
         public int? GameType { get; set; }
         [NotMapped]
         public GameType? GameTypeValue
@@ -54,11 +48,11 @@ namespace MyTeam.Models.Domain
         public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => a.IsAttending == false).Select(a => a.Member);
 
         [NotMapped]
-        public bool IsGame => EventType == EventType.Kamp;
+        public bool IsGame => Type == EventType.Kamp.ToInt();
         [NotMapped]
-        public bool IsTraining => EventType == EventType.Trening;
+        public bool IsTraining => Type == EventType.Trening.ToInt();
         [NotMapped]
-        public bool IsCustom => EventType == EventType.Diverse;
+        public bool IsCustom => Type == EventType.Diverse.ToInt();
 
         public bool IsPublished { get; set; }
         public bool IsHomeTeam { get; set; }
@@ -69,7 +63,7 @@ namespace MyTeam.Models.Domain
 
         public bool SignupHasOpened()
         {
-            if (EventType == EventType.Diverse) return true;
+            if (Type.FromInt() == EventType.Diverse) return true;
             return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
         }
     }

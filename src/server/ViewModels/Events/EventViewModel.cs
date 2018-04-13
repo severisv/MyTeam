@@ -43,7 +43,7 @@ namespace MyTeam.ViewModels.Events
             GamePlanIsPublished = gamePlanIsPublished;
         }
 
-        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), e.Id, e.EventType, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished)
+        public EventViewModel(Event e) : this(e.ClubId, e.EventTeams.Select(t => t.TeamId), e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished)
         {
 
         }

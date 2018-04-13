@@ -211,10 +211,10 @@ namespace MyTeam.Controllers
 
             _eventService.Delete(Club.Id, eventId);
 
-            Alert(AlertType.Success, $"{ev.EventType} {Res.Deleted.ToLower()}");
+            Alert(AlertType.Success, $"{ev.Type.FromInt()} {Res.Deleted.ToLower()}");
             if (HttpContext.Request.IsAjaxRequest()) return PartialView("_Alerts");
             return RedirectToAction("Index");
         }
-        
+
     }
 }

@@ -37,7 +37,7 @@ namespace MyTeam.Services.Domain
                     Id = e.Id,
                     Location = e.Location,
                     Description = e.Description,
-                    Type = e.EventType,
+                    Type = e.Type.FromInt(),
                     IsPublished = e.IsPublished,
                     TeamIds = e.EventTeams.Select(et => et.TeamId).ToList()
                 }).Single();
@@ -122,7 +122,7 @@ namespace MyTeam.Services.Domain
                 Opponent = game.Opponent,
                 TeamId = game.TeamId,
                 GameTypeValue = game.GameType,
-                EventType = EventType.Kamp,
+                Type = EventType.Kamp.ToInt(),
                 ClubId = clubId,
                 EventTeams = new List<EventTeam>
                 {

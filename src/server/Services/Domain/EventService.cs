@@ -33,13 +33,13 @@ namespace MyTeam.Services.Domain
             var now = DateTime.Now;
             var query = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
-                .Where(t => type == EventType.Alle || t.EventType == type)
+                .Where(t => type == EventType.Alle || t.Type == type.ToInt())
                 .Where(t => t.DateTime >= now)
                 .Include(t => t.EventTeams)
                 .ToList();
 
             if (!showAll)
-                query = query.Where(t => t.SignupHasOpened() || (t.EventType == EventType.Kamp && t.GameTypeValue == GameType.Treningskamp)).ToList();
+                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp.ToInt() && t.GameTypeValue == GameType.Treningskamp)).ToList();
 
 
             var result = query
@@ -47,7 +47,7 @@ namespace MyTeam.Services.Domain
                 .Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.EventType, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             result = result.Where(r => r.TeamIds.ContainsAny(teamIds) || r.GameType == GameType.Treningskamp).ToList();
@@ -72,7 +72,7 @@ namespace MyTeam.Services.Domain
             var resultViewModels = result.Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Id, e.EventType, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                 )).ToList();
 
             return new PagedList<EventViewModel>(resultViewModels, skip, pageSize, totalCount);
@@ -83,7 +83,7 @@ namespace MyTeam.Services.Domain
             var now = DateTime.Now;
             return _dbContext.Events
                 .Where(t => t.EventTeams.Any(et => teamIds.Contains(et.TeamId)))
-                .Where(t => type == EventType.Alle || t.EventType == type)
+                .Where(t => type == EventType.Alle || t.Type == type.ToInt())
                 .Where(t => t.DateTime < now)
                 .OrderByDescending(e => e.DateTime);
 
@@ -146,7 +146,7 @@ namespace MyTeam.Services.Domain
             ev.GameTypeValue = model.GameType;
             ev.IsHomeTeam = model.IsHomeTeam;
 
-            if (ev.EventType == EventType.Kamp)
+            if (ev.Type.FromInt() == EventType.Kamp)
             {
                 ((Game)ev).TeamId = model.TeamIds.Single();
             }
@@ -180,7 +180,7 @@ namespace MyTeam.Services.Domain
              _dbContext.Events.Where(e => e.Id == eventId).Select(e =>
                 new EventViewModel(
                     e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.EventType, e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
+                    e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                         )).First();
 
 
@@ -190,7 +190,7 @@ namespace MyTeam.Services.Domain
 
             var events = eventId != null
                 ? _dbContext.Events.Where(e => e.Id == eventId)
-                : _dbContext.Events.Where(e => e.EventType == EventType.Trening && e.DateTime < now).OrderByDescending(e => e.DateTime);
+                : _dbContext.Events.Where(e => e.Type == EventType.Trening.ToInt() && e.DateTime < now).OrderByDescending(e => e.DateTime);
 
             return events
                 .Select(e => new RegisterAttendanceEventViewModel
@@ -204,7 +204,7 @@ namespace MyTeam.Services.Domain
                     }).ToList(),
                     Id = e.Id,
                     Location = e.Location,
-                    Type = e.EventType
+                    Type = e.Type.FromInt()
                 }).First();
         }
 
@@ -213,7 +213,7 @@ namespace MyTeam.Services.Domain
             var now = DateTime.Now;
             var query = _dbContext.Events
                 .Where(t => t.ClubId == clubId)
-                .Where(t => t.EventType == type)
+                .Where(t => t.Type == type.ToInt())
                 .Where(t => t.DateTime < now)
                 .OrderByDescending(e => e.DateTime);
 
@@ -251,7 +251,7 @@ namespace MyTeam.Services.Domain
                         e.EventTeams.Select(et => et.TeamId).ToList(),
                         e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected,
                         new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.Member.UrlName, (PlayerStatus)a.Member.Status))).ToList(),
-                        e.Id, e.EventType, e.GameTypeValue, e.DateTime, e.Voluntary, e.IsPublished)).First();
+                        e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Voluntary, e.IsPublished)).First();
 
     }
 }
