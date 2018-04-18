@@ -20,12 +20,14 @@ module StatsQueries =
             
             let treningskamp = Nullable <| int GameType.Treningskamp
 
+            let now = DateTime.Now
+
             let attendances =
                 match selectedYear with
                 | AllYears _ ->                 
                         query { 
                             for game in db.Games do
-                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp)
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp && game.DateTime < now)
                             leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
                             for ea in result do 
                             where ea.IsSelected 
@@ -34,7 +36,7 @@ module StatsQueries =
                 | Year year ->  
                         query { 
                             for game in db.Games do
-                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp && year = game.DateTime.Year)
+                            where (teamIds.Contains(game.TeamId) && game.GameType <> treningskamp && year = game.DateTime.Year  && game.DateTime < now)
                             leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
                             for ea in result do
                             where ea.IsSelected 
