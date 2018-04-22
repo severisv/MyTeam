@@ -29,7 +29,7 @@ namespace MyTeam.Controllers
 
         [Route("")]
         [Route("nyheter/{skip:int?}/{take:int?}")]
-        public IActionResult Index(int skip = 0, int take = 4)
+        public IActionResult Index(int skip = 0, int take = 6)
         {
             var model = _articleService.Get(HttpContext.GetClub().Id, skip, take);
             ViewBag.MetaDescription = _dbContext.Clubs.Where(c => c.Id == Club.Id).Select(c => c.Description).Single();
