@@ -10,6 +10,7 @@ export default class GamePlan extends React.Component {
     this.state = props.gameplan || {
       rows: [
         {
+          id: 0,
           time: 0,
           lw: 'LW',
           s: 'S',
@@ -39,56 +40,48 @@ export default class GamePlan extends React.Component {
   }
 
   setTime = (i, input) => {
-    const rows = this.state.rows
     const value = parseInt(input.target.value)
-    if (isNaN(value)) rows[i].time = ''
-    else rows[i].time = value
-    this.setState({
-      rows,
-    })
+    this.setState(state => ({
+      rows: state.rows.map(row => row === state.rows[i]
+        ? { ...row, time: isNaN(value) ? '' : value }
+        : row)
+    }))
   }
 
-  duplicateRow = () => {
-    const rows = this.state.rows
-    rows.push(JSON.parse(JSON.stringify(rows[rows.length - 1])))
-    this.setState({
-      rows,
-    })
+  duplicateRow = i => {
+    this.setState(state => ({
+      rows: state.rows.concat([{ ...state.rows[i], id: Date.now() }]).sort((a, b) => a.time - b.time),
+    }), this.save)
   }
 
   removeRow = i => {
-    const rows = this.state.rows
-    rows.splice(i, 1)
-    this.setState({
-      rows,
-    })
-    this.save()
+    this.setState(state => ({
+      rows: state.rows.filter(row => row !== state.rows[i]),
+    }), this.save)
   }
 
   save = () => {
-    const that = this
     if (this.props.iscoach == 'True') {
-      post(`/api/games/${that.props.gameid}/gameplan`, {
-        gamePlan: JSON.stringify(that.state),
+      post(`/api/games/${this.props.gameid}/gameplan`, {
+        gamePlan: JSON.stringify(this.state),
       })
         .then(response => {
-          that.setState({ errorMessage: undefined })
+          this.setState({ errorMessage: undefined })
         })
         .catch(() => {
-          that.setState({ errorMessage: 'Feil ved lagring' })
+          this.setState({ errorMessage: 'Feil ved lagring' })
         })
     }
   }
 
   publish = () => {
-    const that = this
-    that.setState({ isPublishing: true })
-    post(`/api/games/${that.props.gameid}/gameplan/publish`)
+    this.setState({ isPublishing: true })
+    post(`/api/games/${this.props.gameid}/gameplan/publish`)
       .then(() => {
-        that.setState({ errorMessage: undefined, isPublishing: undefined, isPublished: true })
+        this.setState({ errorMessage: undefined, isPublishing: undefined, isPublished: true })
       })
       .catch(() => {
-        that.setState({ errorMessage: 'Feil ved publisering' })
+        this.setState({ errorMessage: 'Feil ved publisering' })
       })
   }
 
@@ -99,8 +92,8 @@ export default class GamePlan extends React.Component {
         {player && player.ImageUrl ? (
           <img className="gameplan-playerImage" src={player.ImageUrl} />
         ) : (
-          ''
-        )}
+            ''
+          )}
         {this.props.iscoach == 'True' ? (
           <PlayerInput
             onBlur={this.save}
@@ -110,15 +103,15 @@ export default class GamePlan extends React.Component {
             players={this.props.players}
           />
         ) : (
-          <input readOnly value={lineup[position]} />
-        )}
+            <input readOnly value={lineup[position]} />
+          )}
       </div>
     )
   }
 
   render() {
-    const that = this
     const props = this.props
+    const state = this.state
 
     return (
       <div className="gameplan">
@@ -133,38 +126,44 @@ export default class GamePlan extends React.Component {
             <br />
             <br />
             {this.state.rows.map((lineup, i) => (
-              <div key={i}>
+              <div key={lineup.id}>
                 <div className="text-center">
                   <input
-                    readOnly={that.props.iscoach == 'False'}
+                    readOnly={props.iscoach == 'False'}
                     className="gp-time"
-                    onBlur={that.save}
-                    onChange={that.setTime.bind(null, i)}
+                    onBlur={this.save}
+                    onChange={this.setTime.bind(null, i)}
                     placeholder="tid"
                     value={lineup.time}
                   />min
                 </div>
                 <button
                   className={
-                    that.props.iscoach == 'True' && that.state.rows.length > 1
+                    props.iscoach == 'True' && state.rows.length > 1
                       ? 'pull-right hidden-print'
                       : 'hidden'
                   }
-                  onBlur={that.save}
-                  onClick={that.removeRow.bind(null, i)}
+                  onBlur={this.save}
+                  onClick={this.removeRow.bind(null, i)}
                 >
                   <i className="fa fa-times" />
                 </button>
+                <button
+                  className={props.iscoach == 'True' ? 'pull-right hidden-print' : 'hidden'}
+                  onClick={() => this.duplicateRow(i)}
+                >
+                  <i className="fa fa-plus" />
+                </button>
                 <br />
-                <div className="gp-row">{that.renderDiff(i)}</div>
+                <div className="gp-row">{this.renderDiff(i)}</div>
                 <br />
                 <div className="gameplan-field">
                   <div className="gp-row">
-                    {that.renderPlayerInput(lineup, i, 'lw')}
+                    {this.renderPlayerInput(lineup, i, 'lw')}
                     <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 's')}
+                    {this.renderPlayerInput(lineup, i, 's')}
                     <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'rw')}
+                    {this.renderPlayerInput(lineup, i, 'rw')}
                   </div>
                   <div className="gp-row">
                     <div className="gp-square" />
@@ -175,29 +174,29 @@ export default class GamePlan extends React.Component {
                   </div>
                   <div className="gp-row">
                     <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'lcm')}
+                    {this.renderPlayerInput(lineup, i, 'lcm')}
                     <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'rcm')}
+                    {this.renderPlayerInput(lineup, i, 'rcm')}
                     <div className="gp-square" />
+                  </div>
+                  <div className="gp-row">
+                    <div className="gp-square" />
+                    <div className="gp-square" />
+                    {this.renderPlayerInput(lineup, i, 'dm')}
+                    <div className="gp-square" />
+                    <div className="gp-square" />
+                  </div>
+                  <div className="gp-row">
+                    {this.renderPlayerInput(lineup, i, 'lb')}
+                    {this.renderPlayerInput(lineup, i, 'lcb')}
+                    <div className="gp-square" />
+                    {this.renderPlayerInput(lineup, i, 'rcb')}
+                    {this.renderPlayerInput(lineup, i, 'rb')}
                   </div>
                   <div className="gp-row">
                     <div className="gp-square" />
                     <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'dm')}
-                    <div className="gp-square" />
-                    <div className="gp-square" />
-                  </div>
-                  <div className="gp-row">
-                    {that.renderPlayerInput(lineup, i, 'lb')}
-                    {that.renderPlayerInput(lineup, i, 'lcb')}
-                    <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'rcb')}
-                    {that.renderPlayerInput(lineup, i, 'rb')}
-                  </div>
-                  <div className="gp-row">
-                    <div className="gp-square" />
-                    <div className="gp-square" />
-                    {that.renderPlayerInput(lineup, i, 'gk')}
+                    {this.renderPlayerInput(lineup, i, 'gk')}
                     <div className="gp-square" />
                     <div className="gp-square" />
                   </div>
@@ -207,8 +206,8 @@ export default class GamePlan extends React.Component {
             ))}
             <div className="text-center">
               <button
-                className={that.props.iscoach == 'True' ? 'btn btn-primary hidden-print' : 'hidden'}
-                onClick={this.duplicateRow}
+                className={props.iscoach == 'True' ? 'btn btn-primary hidden-print' : 'hidden'}
+                onClick={() => this.duplicateRow(state.rows.length - 1)}
               >
                 <i className="fa fa-plus" />
               </button>
@@ -252,7 +251,7 @@ export default class GamePlan extends React.Component {
     function getSubs() {
       const result = []
       for (const key in current) {
-        if (key != 'time') {
+        if (key != 'time' && key != 'id') {
           if (previous[key] != current[key]) {
             const substitution = {
               in: !isInLineup(previous, current[key]) ? current[key] : undefined,
