@@ -126,7 +126,7 @@ export default class GamePlan extends React.Component {
             <br />
             <br />
             {this.state.rows.map((lineup, i) => (
-              <div key={lineup.id}>
+              <div key={lineup.id || i}>
                 <div className="text-center">
                   <input
                     readOnly={props.iscoach == 'False'}
