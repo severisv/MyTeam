@@ -46,7 +46,7 @@ module Pages =
                 o.MetaDescription.HasValue =? (meta [_name "description"; _content o.MetaDescription], emptyText)
                 title [] [encodedText <| club.Name + (o.Title.HasValue =? (" - " + o.Title, "")) ]
                 link [_rel "icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
-                link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v20" ]
+                link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v22" ]
                 Analytics.script
             ]
             body []([
@@ -122,8 +122,8 @@ module Pages =
                         ] 
                         content)
 
-                    script [_src "/compiled/lib/lib.bundle.js?v20"] []
-                    script [_src "/compiled/app.js?v20" ] []
+                    script [_src "/compiled/lib/lib.bundle.js?v22"] []
+                    script [_src "/compiled/app.js?v22" ] []
             ] @ o.Scripts)                
         ]          
     
