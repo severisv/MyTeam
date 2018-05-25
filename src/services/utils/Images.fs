@@ -18,7 +18,7 @@ module ImagesInternal =
     type GetProps = ImageProperties -> ImageProperties
 
     let defaultArticle = ""
-    let baseUrl cloudName = sprintf "http://res.cloudinary.com/%s/" cloudName
+    let baseUrl cloudName = sprintf "https://res.cloudinary.com/%s/" cloudName
 
     let defaultProps = {
             Width = None

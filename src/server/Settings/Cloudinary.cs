@@ -8,7 +8,7 @@ namespace MyTeam.Settings
         public string DefaultArticle { get; }
         private readonly string _defaultMember;
         private readonly string _cloudName;
-        private string BaseLocation => $"http://res.cloudinary.com/{_cloudName}/";
+        private string BaseLocation => $"https://res.cloudinary.com/{_cloudName}/";
 
         public Cloudinary(IOptions<CloudinaryOptions> options)
         {
@@ -63,11 +63,11 @@ namespace MyTeam.Settings
             {
                 if (height == null)
                 {
-                    urlList.Insert((int) insertAt, $"c_scale,w_{width},q_{quality}");
+                    urlList.Insert((int)insertAt, $"c_scale,w_{width},q_{quality}");
                 }
                 else
                 {
-                    urlList.Insert((int) insertAt, $"c_fill,h_{height},w_{width},q_{quality}");
+                    urlList.Insert((int)insertAt, $"c_fill,h_{height},w_{width},q_{quality}");
                 }
             }
             var result = string.Join("/", urlList);
