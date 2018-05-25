@@ -1,6 +1,5 @@
-cd src
 call code .
-cd server
+cd src\server
 call npm install
 call dotnet restore
 call npm run copy-libs

@@ -113,7 +113,7 @@ module Targets =
 
 "Clean"
 ==> "RestorePackages"
-==> "MigrateDatabase"
+// ==> "MigrateDatabase"
 ==> "Build"
 ==> "Publish"
 

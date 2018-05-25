@@ -5,5 +5,6 @@ if not EXIST "packages\FAKE\tools\Fake.exe" NuGet.exe "Install" "FAKE" "-OutputD
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 
 node -v
+dotnet --version
 
 "packages\FAKE\tools\Fake.exe" build.fsx %*
