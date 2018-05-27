@@ -21,16 +21,19 @@ let fromString (table: TableString) =
         |> Array.map (fun row ->
                         row.Split(';')
                         |> fun row ->
-                                {
-                                        Position = row.[0] |> Number.parse
-                                        Team = row.[1]
-                                        Wins = row.[2] |> Number.parse
-                                        Draws = row.[3] |> Number.parse
-                                        Losses = row.[4] |> Number.parse
-                                        GoalsFor = row.[5] |> Number.parse
-                                        GoalsAgainst = row.[6] |> Number.parse
-                                        Points = row.[7] |> Number.parse
-                                }
+                                if row.Length > 6 then 
+                                        Some ({
+                                                Position = row.[0] |> Number.parse
+                                                Team = row.[1]
+                                                Wins = row.[2] |> Number.parse
+                                                Draws = row.[3] |> Number.parse
+                                                Losses = row.[4] |> Number.parse
+                                                GoalsFor = row.[5] |> Number.parse
+                                                GoalsAgainst = row.[6] |> Number.parse
+                                                Points = row.[7] |> Number.parse
+                                        })
+                                else None                                                                
                     )
-        |> Array.toList                 
+        |> Array.toList
+        |> List.choose id
                    

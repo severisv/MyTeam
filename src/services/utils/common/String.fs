@@ -30,4 +30,7 @@ module StringExtensions =
             let rgx = Regex(regex)
             rgx.Replace(str, replaceWith)        
 
+
+        let nullCheck s = 
+            if hasValue s then s else ""
                         

@@ -3,6 +3,7 @@ namespace MyTeam.Table
 open System.Linq
 open MyTeam.Domain
 open System
+open MyTeam
 
 module Queries =
 
@@ -28,7 +29,7 @@ module Queries =
             |> Seq.tryHead
             |> Option.map(fun (tableString, updatedDate, name) ->
                     {
-                        Rows = Table.fromString tableString
+                        Rows = Table.fromString <| nullCheck tableString
                         UpdatedDate = updatedDate
                         Title = name
                     }

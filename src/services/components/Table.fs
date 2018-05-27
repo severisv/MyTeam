@@ -2,8 +2,6 @@ namespace MyTeam.Views
 
 open MyTeam
 open Giraffe.GiraffeViewEngine
-open System.Xml
-open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]
 module TableModule =  
