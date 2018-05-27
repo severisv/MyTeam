@@ -28,13 +28,13 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("oppdater")]
+        [Route("oppdater/{year}/{teamId}")]
         [RequireMember(Roles.Coach, Roles.Admin)]
         public IActionResult UpdateSeason(int year, Guid teamId)
         {
             var season = _seasonService.GetForTeam(teamId).FirstOrDefault(s => s.StartDate.Year == year);
-            return season != null ? 
-                RedirectToAction("Update", new { seasonId = season.Id}) : 
+            return season != null ?
+                RedirectToAction("Update", new { seasonId = season.Id }) :
                 RedirectToAction("CreateSeason", new { year = year, teamId = teamId });
         }
 
@@ -68,7 +68,7 @@ namespace MyTeam.Controllers
                 _seasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl, model.AutoUpdateFixtures, model.FixturesSourceUrl);
                 _fixtureService.RefreshFixtures();
                 _tableService.RefreshTables();
-                
+
                 Alert(AlertType.Success, "Instillinger lagret");
             }
             return View("Update", model);
@@ -122,4 +122,4 @@ namespace MyTeam.Controllers
     }
 
 
-}  
+}

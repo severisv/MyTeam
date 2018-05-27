@@ -107,7 +107,7 @@ module Pages =
                                                                         }
                                                                         {
                                                                             Text = [icon (fa "edit") "";whitespace;encodedText "Rediger sesong"]
-                                                                            Url = sprintf "/sesong/opprett/%i/%O" selectedYear selectedTeam.Id
+                                                                            Url = sprintf "/sesong/oppdater/%i/%O" selectedYear selectedTeam.Id
                                                                         }
                                                                     ]
                                                             Footer = None
