@@ -23,6 +23,9 @@ module Pages =
         | Some selectedTeam ->
         
             let years = Queries.getYears db selectedTeam.Id
+
+            let tableUrl (team: Team) year = 
+                        sprintf "/tabell/%s/%i" team.ShortName year       
       
             match selectedYear with
             | None -> years |> List.tryHead
@@ -33,9 +36,6 @@ module Pages =
                 Queries.getTable db selectedTeam.Id selectedYear 
                 |> function
                 | Some t ->               
-
-                    let tableUrl (team: Team) year = 
-                        sprintf "/tabell/%s/%i" team.ShortName year       
 
                     let isSelected url = 
                         tableUrl selectedTeam selectedYear = url      
@@ -131,5 +131,17 @@ module Pages =
                     |> layout club user (fun o -> { o with Title = "Tabell" }) ctx
                     |> Ok
 
+                | None -> 
+                    years
+                    |> List.sortByDescending id
+                    |> List.tryHead
+                    |> function
+                    | Some y -> Error (Redirect <| tableUrl selectedTeam y)
+                    | None -> Error NotFound        
+            | _ -> 
+                years
+                |> List.sortByDescending id
+                |> List.tryHead
+                |> function
+                | Some y -> Error (Redirect <| tableUrl selectedTeam y)
                 | None -> Error NotFound        
-            | _ -> Error NotFound            

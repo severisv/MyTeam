@@ -13,6 +13,8 @@ module Results =
                 (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx    
             | NotFound ->
                 (setStatusCode 404 >=> json ("404")) next ctx    
+            | Redirect url ->
+                (redirectTo false url) next ctx              
 
 
     let jsonPost<'a,'b> (fn: Database -> 'a -> Result<'b,Error>) next (ctx: HttpContext) =
@@ -43,6 +45,8 @@ module Results =
                         | (Some club, user) -> 
                             Views.Error.notFound club user
                         | (None, _) -> text "Error"
+                | Redirect url -> 
+                    redirectTo false url                              
                      
                 | _ -> failwith "Ikke implementert") next ctx
                 

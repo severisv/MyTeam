@@ -10,7 +10,6 @@
             <ul class="nav nav-list">
                 <li class="nav-header">@Res.CoachMenu</li>
                 <li><a asp-action="create" asp-controller="event" asp-route-type="@EventType.Kamp"><i class='fa fa-plus'></i> @Res.Add @Res.Game.ToLower()</a></li>
-                <li><a asp-action="addgames" asp-controller="game"><i class='fa fa-calendar-plus-o'></i> Legg inn terminliste</a></li>
                 <li><a asp-action="updateseason" asp-controller="season" asp-route-year="@Model.SelectedSeason.Year" asp-route-teamid="@Model.TeamId" ><i class='fa fa-refresh'></i> Oppdatering av term.</a></li>
             </ul>
         </div>

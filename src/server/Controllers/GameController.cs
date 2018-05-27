@@ -75,7 +75,7 @@ namespace MyTeam.Controllers
             return View("RegisterSquad", model);
         }
 
-       
+
         [HttpPost]
         [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("laguttak/publiser")]
@@ -113,50 +113,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("terminliste")]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult AddGames()
-        {
-            var teams = _dbContext.Teams.Where(t => t.ClubId == Club.Id).Select(t => new TeamViewModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-                ShortName = t.ShortName
-            }).ToList();
-
-            var model = new AddGamesViewModel
-            {
-                Teams = teams,
-                TeamId = Guid.Empty
-            };
-            return View(model);
-        }
-
-        [Route("terminliste")]
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult AddGames(AddGamesViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                return View("AddGamesConfirm", model);
-            }
-            return View(model);
-        }
-
-        [Route("terminliste/bekreft")]
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult AddGamesConfirm(AddGamesViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                _gameService.AddGames(model.Games.Games, Club.Id);
-                return RedirectToAction("Index", "Game", new { year = model.Games?.Games?.FirstOrDefault()?.DateTime.Year, lag = model.ShortTeamName });
-            }
-            return View(model);
-        }
-
 
         [Route("bytteplan")]
         [RequireMember]
@@ -178,13 +134,14 @@ namespace MyTeam.Controllers
         public IActionResult GamePlanForGame(Guid gameId)
         {
             var game = _dbContext.Games.Where(g => g.Id == gameId)
-                .Select(g => 
-                    new { 
-                        TeamId = g.TeamId, 
-                        Opponent = g.Opponent, 
-                        GamePlan = g.GamePlan, 
+                .Select(g =>
+                    new
+                    {
+                        TeamId = g.TeamId,
+                        Opponent = g.Opponent,
+                        GamePlan = g.GamePlan,
                         GamePlanIsPublished = g.GamePlanIsPublished,
-                        Players = g.Attendees.Where(p => p.IsSelected).Select(p => 
+                        Players = g.Attendees.Where(p => p.IsSelected).Select(p =>
                             new SquadMember(
                                 p.MemberId,
                                 p.Member.FirstName,
@@ -192,7 +149,7 @@ namespace MyTeam.Controllers
                                 p.Member.Image,
                                 p.Member.FacebookId
                                ))
-                        })
+                    })
                 .ToList()
                 .Single();
 
@@ -207,7 +164,7 @@ namespace MyTeam.Controllers
                 this.HttpContext.Cloudinary()
                 );
 
-            
+
             if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
                 return RedirectToAction("NotFoundAction", "Error");
 

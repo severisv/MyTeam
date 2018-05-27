@@ -7,5 +7,6 @@ type ValidationError = {
 
 type Error = 
     | ValidationErrors of list<ValidationError>            
+    | Redirect of string
     | Unauthorized            
     | NotFound   
