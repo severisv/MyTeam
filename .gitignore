@@ -212,3 +212,5 @@ src/server/appsettings.Production.json
 
 src/MyTeam
 .vs/
+dist
+artifacts

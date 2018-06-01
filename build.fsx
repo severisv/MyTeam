@@ -1,124 +1,102 @@
-open Fake.ProcessHelper
-// include Fake lib
-#r @"packages/FAKE/tools/FakeLib.dll"
-open Fake
-open System.IO
 
-[<AutoOpen>]
-module Helpers =
+#r "paket:
+    nuget Fake.Core.Targets prerelease
+    nuget Fake.Core.Globbing prerelease
+    nuget Fake.Core.Process prerelease
+    nuget Fake.DotNet.Cli prerelease
+    nuget Fake.JavaScript.Npm prerelease
+    nuget Fake.IO.Zip prerelease"
 
-    let shellExec cmdPath args target =
-        let result = ExecProcess (
-                      fun info ->
-                        info.FileName <- cmdPath
-                        info.WorkingDirectory <- target
-                        info.Arguments <- args
-                      ) System.TimeSpan.MaxValue
-        if result <> 0 then failwith (sprintf "'%s' failed" cmdPath + " " + args)
+#load ".fake/build.fsx/intellisense.fsx"
 
-    let findOnPath name =
-        let executable = tryFindFileOnPath name
-        match executable with
-            | Some exec -> exec
-            | None -> failwith (sprintf "'%s' can't find" name)
-
-    let npm args workingDir =
-        let executable = findOnPath "npm.cmd"
-        shellExec executable args workingDir |> ignore
+open Fake.Core
+open Fake.JavaScript
+open Fake.IO
+open Fake.Core.TargetOperators
+open Fake.DotNet
+open Fake.Core.Globbing.Operators
 
 
-    let dotnet args workingDir =
-        let executable = findOnPath "dotnet.exe"
-        shellExec executable args workingDir
+let appName = "myteam"
+let webDir = __SOURCE_DIRECTORY__ + "/src/server/"
+let publishDirectory = __SOURCE_DIRECTORY__ + "/dist"
+let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
+let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
+
+let cleanDirs = Shell.cleanDirs
 
 
-    let rec execMsdeploy executable args workingDir attempt attempts =
-        try
-            shellExec executable args workingDir
-        with | _ ->
-            if attempt > 0 then
-                printf "MsDeploy attempt %i: \n" (1+attempts-attempt)
-                execMsdeploy executable args workingDir (attempt-1) attempts
-            else
-                printf "MsDeploy failed after %i attempts \n" attempts
-                reraise()
-
-    let msdeploy args workingDir =
-        let currentDir = FileSystemHelper.currentDirectory
-        let executable = sprintf "%s\webdeploy\msdeploy.exe" currentDir
-        execMsdeploy executable args workingDir 3 3
+Target.Create "Clean" <| fun _ ->
+    cleanDirs [publishDirectory; artifactsDirectory]
 
 
-    type DotnetCommands =
-        | Restore
-        | Build
-        | Publish
-        | Test
+let npmOptions = (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir })
+
+Target.Create "Restore-frontend" <| fun _ ->
+    Npm.install npmOptions
 
 
-[<AutoOpen>]
-module Settings =
-  let webDir = "src/server/"
+Target.Create "Copy-client-libs" <| fun _ ->
+    Npm.run "copy-libs" npmOptions
+
+Target.Create "Build-frontend" <| fun _ ->
+    Npm.run "build" npmOptions
 
 
-[<AutoOpen>]
-module Targets =
-  Target "Clean" (fun() ->
-    CleanDirs ["./.deploy/"; "./src/server/wwwroot/compiled" ]
-  )
+Target.Create "Restore-backend" <| fun _ ->       
+    DotNet.restore id webDir
 
-  Target "NpmRestore" (fun _ ->
-     npm "install" webDir
-  )
+Target.Create "Migrate-database" <| fun _ ->
+    DotNet.exec 
+        (fun o ->  
+          { o with  
+              WorkingDirectory = databaseDirectory
+          }) 
+         "ef database update" ""|> ignore        
 
-  Target "CopyClientLibs" (fun _ ->
-     npm "run copy-libs" webDir
-  )
 
-  Target "WebpackCompile" (fun _ ->
-     npm "run build" webDir
-  )
+Target.Create "Build-backend" <| fun _ ->
+    DotNet.build id webDir         
 
-  Target "RestorePackages" (fun _ ->       
-    dotnet "restore" webDir
-  )
 
-  Target "MigrateDatabase" (fun _ ->
-     dotnet "ef database update" "src/database"         
-  )
+Target.Create "Publish" <| fun _ ->     
+    DotNet.publish 
+        (fun o ->  
+          { o with  
+              OutputPath = Some publishDirectory
+          }) 
+        webDir
 
-  Target "Build" (fun _ ->
-     dotnet "build --configuration Release" webDir         
-  )
 
-  Target "Publish" (fun _ ->
-     dotnet "publish --configuration Release -o ../../.deploy" webDir
-  )
 
-  Target "Deploy" (fun _ ->
-     let currentDir = FileSystemHelper.currentDirectory
-     let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
-     let password = EnvironmentHelper.environVar "DEPLOY_PWD"
-     let args = sprintf "-source:IisApp='%s\.deploy' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension -enableRule:AppOffline -retryAttempts:2" currentDir appName appName appName password
-     msdeploy args "" |> ignore
-  )
+Target.Create "Create-Artifact" <| fun _ ->       
+    Directory.ensure artifactsDirectory
+    let artifactFilename = sprintf "%s/%s.zip" artifactsDirectory appName
+    !! (sprintf "%s/**/*.*" publishDirectory)
+    |> Zip.zip publishDirectory artifactFilename
 
-  Target "Default" (ignore)
+// Target.create "Deploy" (fun _ ->
+//  let currentDir = FileSystemHelper.currentDirectory
+//  let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
+//  let password = EnvironmentHelper.environVar "DEPLOY_PWD"
+//  let args = sprintf "-source:IisApp='%s\.deploy' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension -enableRule:AppOffline -retryAttempts:2" currentDir appName appName appName password
+//  msdeploy args "" |> ignore
+// )
+
 
 "Clean"
-==> "NpmRestore"
-==> "CopyClientLibs"
-==> "WebpackCompile"
+==> "Restore-frontend"
+==> "Copy-client-libs"
+==> "Build-frontend"
 ==> "Publish"
 
 "Clean"
-==> "RestorePackages"
-// ==> "MigrateDatabase"
-==> "Build"
+==> "Restore-backend"
+==> "Build-backend"
+==> "Migrate-database"
 ==> "Publish"
 
 "Publish"
-==> "Deploy"
-==> "Default"
+==> "Create-Artifact"
 
-RunTargetOrDefault "Default"
+Target.RunOrDefault "Create-Artifact"
