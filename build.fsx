@@ -80,10 +80,6 @@ Target.Create "Deploy" <| fun _ ->
     let username = Environment.environVar "DEPLOY_ENV_NAME"
     let password = Environment.environVar "DEPLOY_PWD"
 
-    printf "\n ---------------- %s \n" username
-    printf "\n ---------------- %s \n" password
-    printf "\n ---------------- %s \n" artifact
-
     Kudu.zipDeploy ({ 
                     Url = System.Uri <| sprintf "https://%s.scm.azurewebsites.net/" username
                     UserName = username
