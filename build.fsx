@@ -1,6 +1,6 @@
 
 #r "paket:
-    nuget Fake.Core.Targets prerelease
+    nuget Fake.Core.Target prerelease
     nuget Fake.Core.Globbing prerelease
     nuget Fake.Core.Process prerelease
     nuget Fake.DotNet.Cli prerelease
@@ -29,27 +29,27 @@ let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 let cleanDirs = Shell.cleanDirs
 
 
-Target.Create "Clean" <| fun _ ->
+Target.create "Clean" <| fun _ ->
     cleanDirs [publishDirectory; artifactsDirectory]
 
 
 let npmOptions = (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir })
 
-Target.Create "Restore-frontend" <| fun _ ->
+Target.create "Restore-frontend" <| fun _ ->
     Npm.install npmOptions
 
 
-Target.Create "Copy-client-libs" <| fun _ ->
+Target.create "Copy-client-libs" <| fun _ ->
     Npm.run "copy-libs" npmOptions
 
-Target.Create "Build-frontend" <| fun _ ->
+Target.create "Build-frontend" <| fun _ ->
     Npm.run "build" npmOptions
 
 
-Target.Create "Restore-backend" <| fun _ ->       
+Target.create "Restore-backend" <| fun _ ->       
     DotNet.restore id webDir
 
-Target.Create "Migrate-database" <| fun _ ->
+Target.create "Migrate-database" <| fun _ ->
     DotNet.exec 
         (fun o ->  
           { o with  
@@ -58,11 +58,11 @@ Target.Create "Migrate-database" <| fun _ ->
          "ef database update" ""|> ignore        
 
 
-Target.Create "Build-backend" <| fun _ ->
+Target.create "Build-backend" <| fun _ ->
     DotNet.build id webDir         
 
 
-Target.Create "Publish" <| fun _ ->     
+Target.create "Publish" <| fun _ ->     
     DotNet.publish 
         (fun o ->  
           { o with  
@@ -70,13 +70,13 @@ Target.Create "Publish" <| fun _ ->
           }) 
         webDir
 
-Target.Create "Create-Artifact" <| fun _ ->       
+Target.create "Create-Artifact" <| fun _ ->       
     Directory.ensure artifactsDirectory
     !! (sprintf "%s/**/*.*" publishDirectory)
     |> Zip.zip publishDirectory artifact
 
 
-Target.Create "Deploy" <| fun _ ->
+Target.create "Deploy" <| fun _ ->
     let username = Environment.environVar "DEPLOY_ENV_NAME"
     let password = Environment.environVar "DEPLOY_PWD"
 
@@ -86,6 +86,8 @@ Target.Create "Deploy" <| fun _ ->
                     Password = password
                     PackageLocation = artifact
                   }) 
+
+
 
 "Clean"
 ==> "Restore-frontend"
@@ -103,4 +105,4 @@ Target.Create "Deploy" <| fun _ ->
 ==> "Create-Artifact"
 ==> "Deploy"
 
-Target.RunOrDefault "Deploy"
+Target.runOrDefault "Deploy"
