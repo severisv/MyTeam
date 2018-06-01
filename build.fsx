@@ -5,6 +5,7 @@
     nuget Fake.Core.Process prerelease
     nuget Fake.DotNet.Cli prerelease
     nuget Fake.JavaScript.Npm prerelease
+    nuget Fake.Azure.Kudu prerelease
     nuget Fake.IO.Zip prerelease"
 
 #load ".fake/build.fsx/intellisense.fsx"
@@ -15,12 +16,14 @@ open Fake.IO
 open Fake.Core.TargetOperators
 open Fake.DotNet
 open Fake.Core.Globbing.Operators
+open Fake.Azure
 
 
 let appName = "myteam"
 let webDir = __SOURCE_DIRECTORY__ + "/src/server/"
 let publishDirectory = __SOURCE_DIRECTORY__ + "/dist"
 let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
+let artifact = sprintf "%s/%s.zip" artifactsDirectory appName
 let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 
 let cleanDirs = Shell.cleanDirs
@@ -67,22 +70,26 @@ Target.Create "Publish" <| fun _ ->
           }) 
         webDir
 
-
-
 Target.Create "Create-Artifact" <| fun _ ->       
     Directory.ensure artifactsDirectory
-    let artifactFilename = sprintf "%s/%s.zip" artifactsDirectory appName
     !! (sprintf "%s/**/*.*" publishDirectory)
-    |> Zip.zip publishDirectory artifactFilename
+    |> Zip.zip publishDirectory artifact
 
-// Target.create "Deploy" (fun _ ->
-//  let currentDir = FileSystemHelper.currentDirectory
-//  let appName = EnvironmentHelper.environVar "DEPLOY_ENV_NAME"
-//  let password = EnvironmentHelper.environVar "DEPLOY_PWD"
-//  let args = sprintf "-source:IisApp='%s\.deploy' -dest:IisApp='%s',ComputerName='https://%s.scm.azurewebsites.net/msdeploy.axd',UserName='$%s',Password='%s',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension -enableRule:AppOffline -retryAttempts:2" currentDir appName appName appName password
-//  msdeploy args "" |> ignore
-// )
 
+Target.Create "Deploy" <| fun _ ->
+    let username = Environment.environVar "DEPLOY_ENV_NAME"
+    let password = Environment.environVar "DEPLOY_PWD"
+
+    printf "\n ---------------- %s \n" username
+    printf "\n ---------------- %s \n" password
+    printf "\n ---------------- %s \n" artifact
+
+    Kudu.zipDeploy ({ 
+                    Url = System.Uri <| sprintf "https://%s.scm.azurewebsites.net/" username
+                    UserName = username
+                    Password = password
+                    PackageLocation = artifact
+                  }) 
 
 "Clean"
 ==> "Restore-frontend"
@@ -98,5 +105,6 @@ Target.Create "Create-Artifact" <| fun _ ->
 
 "Publish"
 ==> "Create-Artifact"
+==> "Deploy"
 
-Target.RunOrDefault "Create-Artifact"
+Target.RunOrDefault "Deploy"

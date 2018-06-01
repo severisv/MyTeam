@@ -2,6 +2,17 @@ STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
+    Fake.Azure.Kudu (5.0.0-rc017.237)
+      Fake.Core.Context (>= 5.0.0-rc017.237)
+      Fake.Core.Environment (>= 5.0.0-rc017.237)
+      Fake.Core.Process (>= 5.0.0-rc017.237)
+      Fake.Core.String (>= 5.0.0-rc017.237)
+      Fake.Core.Trace (>= 5.0.0-rc017.237)
+      Fake.IO.FileSystem (>= 5.0.0-rc017.237)
+      FSharp.Core (>= 4.3.4)
+      System.Diagnostics.FileVersionInfo (>= 4.3)
+      System.Diagnostics.Process (>= 4.3)
+      System.IO.FileSystem.Watcher (>= 4.3)
     Fake.Core.BuildServer (5.0.0-alpha018)
       Fake.Core.Environment (>= 5.0.0-alpha018)
       Fake.Core.String (>= 5.0.0-alpha018)
