@@ -1,6 +1,11 @@
 call code .
-cd src\server
+cd src\client
+call npm install
+cd..
+cd server
 call npm install
 call dotnet restore
 call npm run copy-libs
-call npm run watch
+start dotnet watch run
+start npm run watch
+call npm run watch-fable

@@ -5,6 +5,6 @@ open Fable.Core.JsInterop
 open Fable.Import
 
 let init() =
-    printf "herro 2k"
+    printf "herro 55k"
 
 init()
