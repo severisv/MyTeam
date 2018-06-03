@@ -8,6 +8,7 @@ open MyTeam.Domain.Members
 open MyTeam.Views
 open Attendance.Queries
 open MyTeam.Attendance
+open MyTeam.Shared.Components
 
 module Show =
 
@@ -45,8 +46,8 @@ module Show =
                             [
                                 col [CellType Image; NoSort] []
                                 col [] [ encodedText "Spiller" ]
-                                col [Align Center] [ Icons.training "";span [_class "hidden-xs"][ encodedText " Trening" ]]
-                                col [Align Center] [ Icons.game "" ;span [_class "hidden-xs"][ encodedText " Kamp"]]
+                                col [Align Center] [ !!(Icons.training "");span [_class "hidden-xs"][ encodedText " Trening" ]]
+                                col [Align Center] [ !!(Icons.game "");span [_class "hidden-xs"][ encodedText " Kamp"]]
                                 col [Align Center] [ icon (fa "warning") "";span [_class "hidden-xs"][ encodedText " Ikke møtt" ]]
                             ]                          
                             (attendance |> List.map (fun (player, attendance) ->

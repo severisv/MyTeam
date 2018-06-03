@@ -9,6 +9,7 @@ open MyTeam.Models.Enums
 open MyTeam.Views
 open System
 open MyTeam.Stats
+open MyTeam.Shared.Components
 
 module Pages =   
     let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
@@ -77,7 +78,7 @@ module Pages =
                                                 { 
                                                     Text = team.Name
                                                     ShortText = team.ShortName
-                                                    Icon = Some <| Icons.team ""
+                                                    Icon = Some <| !!(Icons.team "")
                                                     Url = statsUrl (Team team) selectedYear 
                                                 }
                                         )) @ [
@@ -103,11 +104,11 @@ module Pages =
                                     [
                                         col [CellType Image; NoSort] []
                                         col [] [encodedText "Spiller"]
-                                        col [Align Center] [Icons.player "Kamper"]
-                                        col [Align Center] [Icons.goal "Mål"]
-                                        col [Align Center] [Icons.assist "Assists"]
-                                        col [Align Center] [Icons.yellowCard "Gule Kort"]
-                                        col [Align Center] [Icons.redCard "Røde kort"]
+                                        col [Align Center] [!!(Icons.player "Kamper")]
+                                        col [Align Center] [!!(Icons.goal "Mål")]
+                                        col [Align Center] [!!(Icons.assist "Assists")]
+                                        col [Align Center] [!!(Icons.yellowCard "Gule Kort")]
+                                        col [Align Center] [!!(Icons.redCard "Røde kort")]
                                     ]
                                     (stats |> List.map (fun player ->
                                                         let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]

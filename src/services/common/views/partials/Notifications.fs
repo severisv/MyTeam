@@ -5,7 +5,7 @@ open MyTeam
 open MyTeam.Domain
 open System
 open System.Linq
-
+open MyTeam.Shared.Components
 
  type NotificationsModel = {
         UnansweredEventIds: Guid list
@@ -92,7 +92,7 @@ module Notifications =
                     ul [_class "dropdown-menu" ] [
                         li [] [
                             a [_href <| sprintf "/intern#event-%O" (model.UnansweredEventIds |> Seq.head) ] [
-                                Icons.signup ""
+                                !!(Icons.signup "")
                                 whitespace
                                 whitespace
                                 span [_class "hidden-xxs" ] [ 

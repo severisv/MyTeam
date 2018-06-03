@@ -8,6 +8,7 @@ open MyTeam.Domain.Members
 open System.Linq
 open MyTeam.Models.Enums
 open MyTeam.Views
+open MyTeam.Shared.Components
 open System
 
 module Pages =   
@@ -48,7 +49,7 @@ module Pages =
                                                         { 
                                                             Text = team.Name
                                                             ShortText = team.ShortName
-                                                            Icon = Some <| Icons.team ""
+                                                            Icon = Some <| !!(Icons.team "")
                                                             Url = tableUrl team selectedYear 
                                                         }
                                                 ))                           
@@ -62,7 +63,7 @@ module Pages =
                                         IsSelected = isSelected                                                               
                                    })
                                 hr []
-                                h2 [] [Icons.trophy "";whitespace;encodedText t.Title]
+                                h2 [] [!!(Icons.trophy "");whitespace;encodedText t.Title]
                                 br []
                                 table [Striped; TableProperty.Attribute <| _class "table-table"] 
                                             [

@@ -10,6 +10,8 @@ open MyTeam.Views
 open MyTeam.Attendance.Queries
 open MyTeam.Attendance
 open MyTeam.Ajax
+open MyTeam.Shared.Components
+open MyTeam.Shared.Domain
 
 module Register =
 
@@ -75,7 +77,7 @@ module Register =
                             [
                                 editEventLink training.Id
                                 div [_class "attendance-event" ] [
-                                    eventIcon EventType.Trening ExtraLarge        
+                                    !!(Icons.eventIcon EventType.Trening Icons.ExtraLarge)        
                                     div [ _class "faded" ] [ 
                                         p [] [
                                             icon (fa "calendar") "" 

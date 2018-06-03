@@ -15,7 +15,7 @@ let init() =
                       [ div [ Class "mt-container" ]
                             [ h3 [ Class "col-xs-5" ]
                                 [
-                                  icon
+                                  Icons.team ""
                                   str "Wam-Kam 1" ]
                               h3 [ Class "col-xs-6" ]
                                 [ i [ Class "fa fa-calendar" ] [ ]

@@ -1,15 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="domain/Events.fs" />
+    <Compile Include="domain/Players.fs" />
     <Compile Include="components/Icons.fs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Fable.React" Version="3.1.2" />
   </ItemGroup>
-
 </Project>
