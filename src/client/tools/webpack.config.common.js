@@ -7,7 +7,9 @@ var packageJson = JSON.parse(fs.readFileSync(resolve('../package.json')).toStrin
 var errorMsg = "{0} missing in package.json";
 
 var config = {
-  entry: ['babel-polyfill', 'whatwg-fetch', resolve(path.join("..", forceGet(packageJson, "fable.entry", errorMsg)))],
+  entry: [
+    // 'babel-polyfill', 'whatwg-fetch', 
+    resolve(path.join("..", forceGet(packageJson, "fable.entry", errorMsg)))],
   publicDir: resolve("../public"),
   buildDir: resolve("../../server/wwwroot/compiled/client"),
   nodeModulesDir: resolve("../node_modules"),

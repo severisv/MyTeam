@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\database\Migrations.csproj" />
+    <ProjectReference Include="..\shared\shared.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="settings/*.fs" />

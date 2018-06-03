@@ -19,14 +19,16 @@ module.exports = {
     port: 8080,
     hot: true,
     inline: true,
-    // proxy
+    proxy: {
+      "/": "http://localhost:5000"
+    }
   },
   module: {
     rules: common.getModuleRules()
   },
   plugins: common.getPlugins().concat([
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NamedModulesPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
   ]),
   resolve: {
     modules: [common.config.nodeModulesDir]
