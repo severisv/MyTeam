@@ -13,6 +13,6 @@ services:
   - mssql2017
 
 build_script:
-  build.cmd publish
+  build.cmd --target Create-Artifact
 test: off
 image: Visual Studio 2017
