@@ -4,7 +4,7 @@ cls
 node -v
 dotnet --version
 
-dotnet tool install fake-cli --tool-path .fake  --version --version 5.0.0-rc018.244
+dotnet tool install fake-cli --tool-path .fake  --version 5.0.0
 
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 

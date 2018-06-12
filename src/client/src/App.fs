@@ -10,7 +10,6 @@ open MyTeam.Shared.Components
 
 let init() =
 
-
     let element = div [ Class "mt-main" ]
                       [ div [ Class "mt-container" ]
                             [ h3 [ Class "col-xs-5" ]
