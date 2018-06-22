@@ -1,23 +1,23 @@
 var webpack = require("webpack");
 var common = require("./webpack.config.common");
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+var CopyWebpackPlugin = require("copy-webpack-plugin");
 
 console.log("Bundling for production...");
 
 module.exports = {
   entry: common.config.entry,
   output: {
-    filename: '[name].js?[hash]',
-    path: common.config.buildDir,
+    filename: "[name].js?[hash]",
+    path: common.config.buildDir
   },
   module: {
     rules: common.getModuleRules()
   },
   plugins: common.getPlugins().concat([
     // new ExtractTextPlugin('style.css'),
-    new CopyWebpackPlugin([{ from: common.config.publicDir }])
+    // new CopyWebpackPlugin([{ from: common.config.publicDir }])
   ]),
   resolve: {
     modules: [common.config.nodeModulesDir]
-  },
+  }
 };
