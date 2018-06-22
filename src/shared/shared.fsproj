@@ -7,7 +7,5 @@
     <Compile Include="domain/Players.fs" />
     <Compile Include="components/Icons.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Fable.React" Version="3.1.2" />
-  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

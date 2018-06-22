@@ -1,0 +1,27 @@
+source https://nuget.org/api/v2
+storage:none
+
+clitool dotnet-fable
+nuget Fable.Core
+nuget Fable.Import.Browser
+nuget Fable.React
+nuget FSharp.Quotations.Evaluator
+nuget Giraffe 1.2.0-preview-1
+nuget HtmlAgilityPack.CssSelectors.NetCore
+nuget Microsoft.AspNetCore.Antiforgery 
+nuget Microsoft.AspNetCore.Authentication.Facebook
+nuget Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+nuget Microsoft.AspNetCore.Hosting 
+nuget Microsoft.AspNetCore.Identity 
+nuget Microsoft.AspNetCore.Identity.EntityFrameworkCore
+nuget Microsoft.AspNetCore
+nuget Microsoft.AspNetCore.StaticFiles
+nuget Microsoft.AspNetCore.Mvc
+nuget Microsoft.EntityFrameworkCore 
+nuget Microsoft.EntityFrameworkCore.SqlServer 
+nuget Microsoft.EntityFrameworkCore.Tools 
+nuget Microsoft.Extensions.Caching.Abstractions 
+nuget Newtonsoft.Json
+nuget Sendgrid
+nuget SlackLogger
+nuget System.Net.Http
