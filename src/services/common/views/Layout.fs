@@ -4,6 +4,7 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Views
+open MyTeam.Shared.Components
 
 
 [<AutoOpen>]
@@ -14,10 +15,10 @@ module Pages =
 
     let internalMenuItems =
         [ 
-            li [] [a [_href "/intern" ] [Icons.signup ""; encodedText " Påmelding"]]
-            li [] [a [_href "/intern/oppmote" ] [Icons.attendance ""; encodedText " Oppmøte"]]
-            li [] [a [_href "/intern/boter" ] [Icons.fine ""; encodedText " Bøter"]]
-            li [] [a [_href "/intern/lagliste" ] [Icons.squadList ""; encodedText " Lagliste"]]
+            li [] [a [_href "/intern" ] [!!(Icons.signup ""); encodedText " Påmelding"]]
+            li [] [a [_href "/intern/oppmote" ] [!!(Icons.attendance ""); encodedText " Oppmøte"]]
+            li [] [a [_href "/intern/boter" ] [!!(Icons.fine ""); encodedText " Bøter"]]
+            li [] [a [_href "/intern/lagliste" ] [!!(Icons.squadList ""); encodedText " Lagliste"]]
         ]
     type LayoutModel = {
         Title: string
@@ -99,7 +100,7 @@ module Pages =
                                                         (internalMenuItems @
                                                          [                                                                             
                                                             user.IsInRole [Role.Admin;Role.Trener] =?
-                                                                (li [] [a [_href "/admin" ] [Icons.coach ""; encodedText " Admin"]]                       
+                                                                (li [] [a [_href "/admin" ] [!!(Icons.coach ""); encodedText " Admin"]]                       
                                                                 , emptyText)
                                                          ])
 

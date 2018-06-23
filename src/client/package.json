@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "fable": {
+    "entry": "src/FableApp.fsproj"
+  },
+  "scripts": {
+    "postinstall": "dotnet restore tools && dotnet restore src",
+    "build": "cd tools && dotnet fable webpack -- -p --config webpack.config.prod.js",
+    "watch": "cd tools && dotnet fable webpack -- -w --config webpack.config.prod.js",
+    "start": "cd tools && dotnet fable webpack-dev-server -- --config webpack.config.dev.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.2",
+    "babel-preset-env": "1.6.1",
+    "copy-webpack-plugin": "^4.4.1",
+    "fable-loader": "1.1.6",
+    "fable-utils": "1.0.6",
+    "html-webpack-plugin": "2.29.0",
+    "webpack": "3.8.1",
+    "webpack-dev-server": "2.9.4"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "whatwg-fetch": "^2.0.4"
+  }
+}

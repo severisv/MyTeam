@@ -1,0 +1,6 @@
+Microsoft.AspNetCore.Antiforgery
+Microsoft.AspNetCore.Hosting
+Microsoft.Extensions.Caching.Abstractions
+Giraffe
+FSharp.Quotations.Evaluator
+FSharp.Core

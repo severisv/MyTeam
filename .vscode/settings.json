@@ -17,5 +17,9 @@
     "**/bundle.*": true,
     "**/wwwroot/compiled/*": true,
     "**/*.map": true,
+    "**/.paket": true,
+    "**/paket-files": true,
+    "dist": true,
+    "artifacts": true,
   }
 }

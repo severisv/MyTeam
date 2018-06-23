@@ -4,6 +4,7 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Views
+open MyTeam.Shared.Components
 
 let internal errorMessage icon msg =
     h2 [_style "display: flex; align-items: center; justify-content:center; font-size: 2em"] [ 
@@ -14,7 +15,7 @@ let notFound club user next ctx =
     ([    
         main [] [
             block [] [
-                errorMessage (Icons.injury "") " Auda... vi finner ikke siden du leter etter :("
+                errorMessage !!(Icons.injury "") " Auda... vi finner ikke siden du leter etter :("
             ]    
         ]            
      ] 
@@ -25,7 +26,7 @@ let serverError club user next ctx =
     ([    
         main [] [
             block [] [
-                errorMessage (Icons.injury "") " Auda... det oppstod en feil. Vi har meldt fra til de det gjelder."
+                errorMessage !!(Icons.injury "") " Auda... det oppstod en feil. Vi har meldt fra til de det gjelder."
             ]    
         ]            
      ] 
@@ -37,7 +38,7 @@ let unauthorized club user next ctx =
     ([    
         main [] [
             block [] [
-                errorMessage (Icons.whistle "") " Offside! Denne siden har du ikke tilgang til."
+                errorMessage !!(Icons.whistle "") " Offside! Denne siden har du ikke tilgang til."
             ]    
         ]            
      ] 

@@ -25,12 +25,12 @@ namespace MyTeam.Controllers
         public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv)
         {
             var players = _playerService.GetPlayers(type, Club.Id);
-            
+
             var model = new ShowPlayersViewModel(players, type);
 
             ViewBag.PageName = Res.PlayersOfType(type);
 
-            return View("List",model);
+            return View("List", model);
         }
 
         [Route("vis/{name?}")]
@@ -39,14 +39,15 @@ namespace MyTeam.Controllers
             if (string.IsNullOrWhiteSpace(name)) return RedirectToAction("NotFoundAction", "Error");
 
             Guid playerId;
-            if(Guid.TryParse(name, out playerId)) {
+            if (Guid.TryParse(name, out playerId))
+            {
                 var player = _playerService.GetSingle(playerId);
-                return RedirectToAction("Show", new {name = player.UrlName});
+                return RedirectToAction("Show", new { name = player.UrlName });
             }
 
             var selectedPlayer = _playerService.GetSingle(Club.Id, name);
             if (selectedPlayer == null) return RedirectToAction("NotFoundAction", "Error");
-            
+
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Show", selectedPlayer);
@@ -54,7 +55,7 @@ namespace MyTeam.Controllers
 
             var players = _playerService.GetPlayers(selectedPlayer.Status, Club.Id);
             var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
-            return View("Show", model);  
+            return View("Show", model);
         }
 
 
@@ -70,7 +71,7 @@ namespace MyTeam.Controllers
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId, bool filterRedirect = false)
         {
-            if(filterRedirect)
+            if (filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
             var selectedPlayer = _playerService.GetSingle(playerId);
@@ -101,6 +102,6 @@ namespace MyTeam.Controllers
             }
             return PartialView("_Edit", model);
         }
-    
+
     }
 }

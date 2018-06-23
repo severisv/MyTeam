@@ -21,6 +21,7 @@ open Fake.Azure
 
 let appName = "myteam"
 let webDir = __SOURCE_DIRECTORY__ + "/src/server/"
+let clientDir = __SOURCE_DIRECTORY__ + "/src/client/"
 let publishDirectory = __SOURCE_DIRECTORY__ + "/dist"
 let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
 let artifact = sprintf "%s/%s.zip" artifactsDirectory appName
@@ -37,6 +38,7 @@ let npmOptions = (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir }
 
 Target.create "Restore-frontend" <| fun _ ->
     Npm.install npmOptions
+    Npm.install (fun p -> { p with WorkingDirectory = clientDir })
 
 
 Target.create "Copy-client-libs" <| fun _ ->
@@ -44,6 +46,7 @@ Target.create "Copy-client-libs" <| fun _ ->
 
 Target.create "Build-frontend" <| fun _ ->
     Npm.run "build" npmOptions
+    Npm.run "build-fable" npmOptions
 
 
 Target.create "Restore-backend" <| fun _ ->       
