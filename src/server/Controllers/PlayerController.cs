@@ -6,6 +6,8 @@ using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Player;
+using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
+
 
 
 namespace MyTeam.Controllers
@@ -36,7 +38,7 @@ namespace MyTeam.Controllers
         [Route("vis/{name?}")]
         public IActionResult Show(string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) return RedirectToAction("NotFoundAction", "Error");
+            if (string.IsNullOrWhiteSpace(name)) return new NotFoundResult(HttpContext);
 
             Guid playerId;
             if (Guid.TryParse(name, out playerId))
@@ -46,7 +48,7 @@ namespace MyTeam.Controllers
             }
 
             var selectedPlayer = _playerService.GetSingle(Club.Id, name);
-            if (selectedPlayer == null) return RedirectToAction("NotFoundAction", "Error");
+            if (selectedPlayer == null) return new NotFoundResult(HttpContext);
 
             if (Request.IsAjaxRequest())
             {

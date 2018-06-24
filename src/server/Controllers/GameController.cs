@@ -92,7 +92,7 @@ namespace MyTeam.Controllers
         public IActionResult Show(Guid gameId)
         {
             var game = _gameService.GetGame(gameId);
-            if (game == null) return RedirectToAction("NotFoundAction", "Error");
+            if (game == null) return new NotFoundResult(HttpContext);
 
             var model = new ShowGameViewModel(game);
 
@@ -166,7 +166,7 @@ namespace MyTeam.Controllers
 
 
             if (model == null || (!ControllerContext.HttpContext.UserIsInRole(Roles.Coach) && !model.IsPublished))
-                return RedirectToAction("NotFoundAction", "Error");
+                return new NotFoundResult(HttpContext);
 
             return View("GamePlan", model);
         }

@@ -8,6 +8,8 @@ using MyTeam.Models;
 using MyTeam.Models.Enums;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.News;
+using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
+
 
 namespace MyTeam.Controllers
 {
@@ -15,7 +17,7 @@ namespace MyTeam.Controllers
     {
         private const string BaseRoute = "nyheter/";
 
-     
+
         private readonly IArticleService _articleService;
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,12 +38,12 @@ namespace MyTeam.Controllers
             return View("Index", model);
         }
 
-        [Route(BaseRoute+"vis/{name}")]
+        [Route(BaseRoute + "vis/{name}")]
         public IActionResult Show(string name)
         {
             var model = _articleService.Get(Club.Id, name);
 
-            if(model == null) return RedirectToAction("NotFoundAction", "Error");
+            if (model == null) return new NotFoundResult(HttpContext);
             return View("Show", model);
         }
 
@@ -49,8 +51,8 @@ namespace MyTeam.Controllers
         public IActionResult ShowFallback(Guid articleId)
         {
             var article = _dbContext.Articles.SingleOrDefault(a => a.Id == articleId);
-            if (article == null) return RedirectToAction("NotFoundAction", "Error");
-            return RedirectToAction("Show", new {name = article.Name});
+            if (article == null) return new NotFoundResult(HttpContext);
+            return RedirectToAction("Show", new { name = article.Name });
         }
 
         [Route(BaseRoute + "kamprapport/{gameId}")]
@@ -62,7 +64,7 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route(BaseRoute+"ny")]
+        [Route(BaseRoute + "ny")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Create()
         {
@@ -73,7 +75,7 @@ namespace MyTeam.Controllers
             return View("Edit", model);
         }
 
-        [Route(BaseRoute+"endre")]
+        [Route(BaseRoute + "endre")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Edit(string navn)
         {
@@ -84,21 +86,21 @@ namespace MyTeam.Controllers
         }
 
         [HttpPost]
-        [Route(BaseRoute+"endre")]
+        [Route(BaseRoute + "endre")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Edit(EditArticleViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var name = _articleService.CreateOrUpdate(model, HttpContext.GetClub().Id, HttpContext.Member().Id);
-                return RedirectToAction("Show", new { name = name});
+                return RedirectToAction("Show", new { name = name });
             }
             model.Games = _articleService.GetGames(model.Published ?? DateTime.Now);
             return View("Edit", model);
 
         }
 
-        [Route(BaseRoute+"slett")]
+        [Route(BaseRoute + "slett")]
         [RequireMember(Roles.Coach, Roles.Admin, Roles.NewsWriter)]
         public IActionResult Delete(Guid articleId)
         {
@@ -118,13 +120,13 @@ namespace MyTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-               var facebookId = GetFacebookId();
+                var facebookId = GetFacebookId();
                 var comment = _articleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id, facebookId, model.Name, User.Identity.Name);
                 return PartialView("_GetComment", comment);
             }
             return Content("");
         }
-        
+
         public PartialViewResult GetComments(Guid articleId)
         {
             var comments = _articleService.GetComments(articleId);
