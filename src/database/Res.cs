@@ -66,7 +66,6 @@ namespace MyTeam.Resources
         public const string ManagePlayers = "Administrer spillere";
         public const string Mandatory = "Tellende oppmøte";
         public const string MandatoryExplaination = "Tellende oppmøte betyr at treningen teller med på oppmøtestatistikken";
-        public const string NotFound = "Siden finnes ikke";
         public const string Name = "Navn";
         public const string NoShows = "Ikke møtt";
 
