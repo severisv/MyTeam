@@ -780,7 +780,7 @@ NUGET
       NETStandard.Library (>= 1.6.1) - restriction: && (< net40) (>= netstandard1.3)
       Newtonsoft.Json (>= 9.0.1) - restriction: || (>= net40) (>= netstandard1.3)
       System.Net.Http (>= 4.0) - restriction: >= net40
-    SlackLogger (2.0.4)
+    SlackLogger (2.0.5)
       Microsoft.AspNetCore.Hosting.Abstractions (>= 2.0) - restriction: >= netstandard2.0
       Microsoft.Extensions.Configuration.Abstractions (>= 2.0) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging (>= 2.0) - restriction: >= netstandard2.0
