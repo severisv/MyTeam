@@ -92,15 +92,15 @@ namespace MyTeam
 
             var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
             dbContext.Database.Migrate();
-        
+
             app.UseStaticFiles();
             app.UseAuthentication();
-            // app.UseRequestLocalization(new RequestLocalizationOptions
-            // {
-            //     DefaultRequestCulture = new RequestCulture("nb-NO"),
-            //     SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
-            //     SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
-            // });
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("nb-NO"),
+                SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
+                SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
+            });
 
             app.UseMvc(routes =>
             {
