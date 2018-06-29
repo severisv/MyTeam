@@ -20,3 +20,19 @@ module AboutPages =
         |> layout club user (fun o -> { o with Title = "Om klubben"}) ctx
         |> Ok
  
+
+    let privacy club user (ctx: HttpContext) =        
+        [
+            div [_class "mt-container"] [
+                    p [] [encodedText "Wamkam.no benytter seg av informasjonskapsler."]
+                    br []
+                    p [] [encodedText "For ikke innloggede brukere lagrer wamkam.no kun anonymisert data om bruksmønster."]
+                    br []
+                    p [] [encodedText "For medlemmer lagres kontaktinformasjon, samt statistikk fra kamp og trening. For å fjerne all informasjon som er lagret om sin person, kontakt Severin Sverdvik (severin at sverdvik dot no)."]
+                    br []
+                    p [] [encodedText "Ved bruk av wamkam.no aksepterer man disse vilkårne."]
+                ]
+            div [] []
+        ] 
+        |> layout club user (fun o -> { o with Title = "Personvern"}) ctx
+        |> Ok
