@@ -37,17 +37,17 @@ module App =
                         mustBeMember >=>
                             (user |> Option.fold 
                                         (fun _ user ->
-                                            (choose [ 
-                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
-                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                ]
+                                            (choose [                                                
                                                 GET >=> choose [                                                        
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
                                                     routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
                                                     route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
                                                     routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
-                                                ]                                    
+                                                ]           
+                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
+                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
+                                                ]                         
                                             ])
                                         )                        
                                         empty
@@ -101,10 +101,9 @@ module App =
                                     routef "/%O/score/away" (Games.Api.setAwayScore club.Id >> jsonPost)       
                                     routef "/%O/events" (Games.Events.Api.add club.Id >> jsonPost)       
                                     routef "/%O/events/%O/delete" (Games.Events.Api.delete club.Id >> jsonGet)       
-
+                                    routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)     
                                 ]
                                 mustBeInRole [Role.Trener] >=> choose [                                
-                                    routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)     
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id >> jsonPost)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
