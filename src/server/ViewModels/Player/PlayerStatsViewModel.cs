@@ -11,9 +11,7 @@ namespace MyTeam.ViewModels.Player
         public Guid PlayerId { get; }
         public Guid TeamId { get; }
         public int Year { get; }
-
         public IEnumerable<GameEventViewModel> GameEvents { get; }
-
         public int GameCount { get; }
         public int GoalCount => GameEvents.Count(g => g.PlayerId == PlayerId && g.Type == GameEventType.Goal);
         public int AssistCount => GameEvents.Count(g => g.AssistedById == PlayerId);

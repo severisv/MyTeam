@@ -180,7 +180,7 @@ namespace MyTeam.Controllers
 
 
         [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("arrangement/endre")]
+        [Route("arrangement/endre/{eventId}")]
         public IActionResult Edit(Guid eventId)
         {
             var ev = _eventService.GetEventViewModel(eventId);
