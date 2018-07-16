@@ -25,3 +25,4 @@ nuget Newtonsoft.Json
 nuget Sendgrid
 nuget SlackLogger
 nuget System.Net.Http
+nuget TaskBuilder.fs 1.2.0-rc
