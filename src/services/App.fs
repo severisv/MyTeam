@@ -23,7 +23,7 @@ module App =
 
             match club with
             | Some club ->
-                  choose [
+                choose [
                     route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)          
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
