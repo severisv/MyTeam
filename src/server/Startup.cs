@@ -85,10 +85,6 @@ namespace MyTeam
             {
                 app.UseDatabaseErrorPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Error/Error");
-            }
 
             var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
             dbContext.Database.Migrate();
