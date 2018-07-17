@@ -39,15 +39,16 @@ module App =
                                         (fun _ user ->
                                             (choose [                                                
                                                 GET >=> choose [                                                        
-                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
+                               
                                                     route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
                                                     routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
+                                                    route "/oppmote/registrer" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
+                                                        >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                                    routef "/oppmote/registrer/%O" (fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet))                                                       
+                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
+                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
                                                 ]           
-                                                GET >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> choose [ 
-                                                    route "/oppmote/registrer" >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                    routef "/oppmote/registrer/%O" (fun eventId -> Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                ]                         
+                                                                     
                                             ])
                                         )                        
                                         empty
