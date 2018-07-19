@@ -3,10 +3,12 @@ namespace MyTeam
 open Microsoft.Extensions.Options
 open Giraffe
 
+type Format = 
+    | Jpg
+
 module ImagesInternal =
     
-    type Format = 
-        | Jpg
+
 
     type ImageProperties = {
         Width: int option
@@ -43,7 +45,7 @@ module ImagesInternal =
 
         let replaceExtension extension (url: string) =
             [".png";".PNG";".bmp";".BMP";".tiff";".TIFF"]
-            |> List.fold (fun (acc: string) elem -> acc.Replace(elem, extension |> toLowerString)) url
+            |> List.fold (fun (acc: string) elem -> acc.Replace(elem, sprintf ".%O" extension |> toLowerString)) url
 
         let url = 
             baseUrl +
@@ -74,17 +76,36 @@ open ImagesInternal
 
 module Images =
   
-    let get (ctx: HttpContext) url getProps =
-        let options = (ctx.GetService<IOptions<CloudinarySettings>>()).Value
+    let private getOptions (ctx: HttpContext) =
+        (ctx.GetService<IOptions<CloudinarySettings>>()).Value
+
+    let get ctx url getProps =
+        let options = getOptions ctx
         let baseUrl = baseUrl options.CloudName
 
         createImageUrl baseUrl url getProps
 
-    let defaultArticle ctx getProps = 
-        get ctx "image/upload/v1448309373/article_default_hnwnxo.jpg" getProps
+    let private defaultArticle ctx getProps = 
+        let options = getOptions ctx
+        let imageUrl = 
+            if hasValue options.DefaultMember then options.DefaultMember
+            else "image/upload/v1448309373/article_default_hnwnxo.jpg"
+        
+        get ctx imageUrl getProps
 
-    let defaultMember ctx getProps = 
-        get ctx "image/upload/v1448559418/default_player_dnwac0.gif" getProps
+    
+    let getArticle ctx url (getProps: GetProps) =
+        match url with
+        | value when hasValue value -> get ctx value getProps
+        | _ -> defaultArticle ctx getProps
+
+    let private defaultMember ctx getProps = 
+        let options = getOptions ctx
+        let imageUrl = 
+            if hasValue options.DefaultMember then options.DefaultMember
+            else "image/upload/v1448559418/default_player_dnwac0.gif"
+
+        get ctx imageUrl getProps
 
     let getMember ctx url facebookId (getProps: GetProps) =
         

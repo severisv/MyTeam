@@ -6,6 +6,7 @@ open MyTeam
 [<AutoOpen>]
 module BaseComponents =
 
+    let empty = rawText ""
     let whitespace = rawText "&nbsp;"
 
     let _empty = attr "" ""

@@ -20,6 +20,7 @@ module Pages =
             li [] [a [_href "/intern/boter" ] [!!(Icons.fine ""); encodedText " Bøter"]]
             li [] [a [_href "/intern/lagliste" ] [!!(Icons.squadList ""); encodedText " Lagliste"]]
         ]
+        
     type LayoutModel = {
         Title: string
         PageName: string

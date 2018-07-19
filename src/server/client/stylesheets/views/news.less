@@ -22,9 +22,9 @@ a.news-headline {
 .news-item h2 {
   margin-bottom: 0.25em;
   font-size: 2.5em;
-  .r-under-sm({font-size:2em;});
-  .r-under-xs({font-size:1.75em;});
-  .r-under-xxs({font-size:1.5em;});
+  .r-under-sm({font-size: 2em;});
+  .r-under-xs({font-size: 1.75em;});
+  .r-under-xxs({font-size: 1.5em;});
 }
 
 p.news-author {
@@ -44,6 +44,13 @@ p.news-author {
 
 .news-pager ul.pager {
   margin: 0;
+  display: flex;
+  justify-content: space-between;
+
+  &:after,
+  &:before {
+    display: none;
+  }
 }
 
 .mt-container .news-content,
@@ -79,4 +86,8 @@ p.news-author {
 .articleNav li.nav-header,
 .articleNav li a {
   padding-left: 0.3em;
+}
+
+.articleNav .nav-list:not(:last-of-type) {
+  margin-bottom: 1em;
 }

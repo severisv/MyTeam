@@ -86,6 +86,10 @@
     <Compile Include="features/teams/Types.fs" />
     <Compile Include="features/teams/Queries.fs" />
     <Compile Include="features/teams/Api.fs" />
+    <Compile Include="features/news/Types.fs" />
+    <Compile Include="features/news/Queries.fs" />
+    <Compile Include="features/news/pages/Components.fs" />
+    <Compile Include="features/news/pages/Index.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

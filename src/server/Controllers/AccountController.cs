@@ -137,7 +137,7 @@ namespace MyTeam.Controllers
                     }
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToAction(nameof(NewsController.Index), "News");
+                    return Redirect("/");
                 }
                 AddErrors(result);
             }
@@ -474,7 +474,7 @@ namespace MyTeam.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(NewsController.Index), "News");
+                return Redirect("/");
             }
         }
 

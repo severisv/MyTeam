@@ -24,7 +24,10 @@ module App =
             match club with
             | Some club ->
                 choose [
-                    route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)          
+                    route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)    
+                    route "/" >=> (News.Pages.Index.view club user id |> htmlGet)                         
+                    routef "/nyheter/%i/%i" (fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take)                         
+                    routef "/%i/%i" (fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                         
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      

@@ -34,3 +34,6 @@ module StringExtensions =
         let nullCheck s = 
             if hasValue s then s else ""
                         
+        let truncate length (str: string) =
+            if str.Length > length then str.Substring(0, length)
+            else str
