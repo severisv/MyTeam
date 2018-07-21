@@ -89,41 +89,5 @@ namespace MyTeam.Controllers
             return RedirectToAction("Edit", articleId);
         }
 
-        [Route(BaseRoute + "kommenter")]
-        [HttpPost]
-        [Authorize]
-        public IActionResult PostComment(PostCommentViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var facebookId = GetFacebookId();
-                var comment = _articleService.PostComment(model.ArticleId, model.Content, CurrentMember.Id, facebookId, model.Name, User.Identity.Name);
-                return PartialView("_GetComment", comment);
-            }
-            return Content("");
-        }
-
-        public PartialViewResult GetComments(Guid articleId)
-        {
-            var comments = _articleService.GetComments(articleId);
-
-            var facebookId = GetFacebookId();
-
-            return PartialView("_GetComments", new GetCommentsViewModel(comments, articleId, facebookId));
-        }
-
-        private string GetFacebookId()
-        {
-            string facebookId = null;
-            if (User.Identity.IsAuthenticated && !CurrentMember.Exists)
-            {
-                var user = _userManager.FindByEmailAsync(User.Identity.Name).Result;
-                facebookId =
-                    _dbContext.UserLogins.Where(u => u.LoginProvider == "Facebook" && u.UserId == user.Id)
-                        .Select(u => u.ProviderKey)
-                        .FirstOrDefault();
-            }
-            return facebookId;
-        }
     }
 }

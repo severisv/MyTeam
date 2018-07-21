@@ -21,33 +21,10 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public PagedList<ArticleViewModel> Get(Guid clubId, int skip, int take)
-        {
-            var query = _dbContext.Articles.Where(a => a.ClubId == clubId)
-                .OrderByDescending(a => a.Published);
-
-            var totalCount = query.Count();
-
-            var articles = query.Select(a =>
-                new ArticleViewModel
-                {
-                    Name = a.Name,
-                    Author = new MemberViewModel { Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
-                    AuthorId = a.AuthorId,
-                    Headline = a.Headline,
-                    Content = a.Content,
-                    ImageUrl = a.ImageUrl,
-                    Published = a.Published,
-                    CommentCount = (int)a.Comments.Count()
-                });
-
-            return new PagedList<ArticleViewModel>(articles.Skip(skip).Take(take), skip, take, totalCount);
-        }
-
         public ArticleViewModel Get(Guid clubId, string name)
         {
             var query = _dbContext.Articles.Where(a => a.Name == name && a.ClubId == clubId);
-                
+
             var result = Select(query);
 
             return result.FirstOrDefault();
@@ -61,14 +38,14 @@ namespace MyTeam.Services.Domain
                     {
                         Id = a.Id,
                         Name = a.Name,
-                        Author = new MemberViewModel {Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
+                        Author = new MemberViewModel { Fullname = a.Author.Fullname, UrlName = a.Author.UrlName },
                         AuthorId = a.AuthorId,
                         Headline = a.Headline,
                         Content = a.Content,
                         ImageUrl = a.ImageUrl,
                         Published = a.Published,
                         GameId = a.GameId,
-                        CommentCount = (int) a.Comments.Count()
+                        CommentCount = (int)a.Comments.Count()
                     });
             return result;
         }
@@ -103,7 +80,7 @@ namespace MyTeam.Services.Domain
 
             if (model.IsNew)
             {
-              
+
                 var name = CreateArticleName(model.Headline);
 
                 var newArticle = new Article
@@ -117,7 +94,7 @@ namespace MyTeam.Services.Domain
                     ImageUrl = model.ImageUrl,
                     Published = DateTime.Now,
                     GameId = model.IsMatchReport ? model.GameId : null
-            };
+                };
                 _dbContext.Add(newArticle);
                 _dbContext.SaveChanges();
 
@@ -159,37 +136,6 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<CommentViewModel> GetComments(Guid articleId)
-        {
-            var query = _dbContext.Comments.Where(c => c.ArticleId == articleId).Include(c => c.Member).ToList();
-            return query.Select(a =>
-                new CommentViewModel(
-                    new CommentMemberViewModel(a.Member), 
-                    articleId, a.Date, a.Content, a.AuthorName, a.AuthorFacebookId, a.AuthorUserName))
-                    .ToList().OrderBy(c => c.Date);
-        }
-
-        public CommentViewModel PostComment(Guid articleId, string content, Guid memberId, string facebookId, string name, string userName)
-        {
-            var comment = new Comment
-            {
-                ArticleId = articleId,
-                Content = content,
-                MemberId = memberId != Guid.Empty ? (Guid?)memberId : null,
-                Date = DateTime.Now,
-                AuthorFacebookId = facebookId,
-                AuthorName = name,
-                AuthorUserName = userName,
-            };
-
-            _dbContext.Comments.Add(comment);
-            _dbContext.SaveChanges();
-
-            var memberEntity =_dbContext.Members.FirstOrDefault(m => m.Id == memberId);
-           var member = new CommentMemberViewModel(memberEntity);
-            return new CommentViewModel(member, articleId, comment.Date, content, name, facebookId, userName);
-        }
-
         public IEnumerable<SimpleGame> GetGames(DateTime date)
             =>
                 _dbContext.Games.Where(g => g.DateTime <= date && g.DateTime >= date.AddDays(-14))
@@ -203,5 +149,5 @@ namespace MyTeam.Services.Domain
             return result.FirstOrDefault();
         }
     }
-    
+
 }
