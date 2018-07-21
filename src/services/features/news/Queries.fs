@@ -2,6 +2,7 @@ module MyTeam.News.Queries
 
 open MyTeam.Domain
 open MyTeam.News
+open MyTeam
 
 let getClubDescription : GetClubDescription =
     fun db clubId ->
@@ -15,7 +16,7 @@ let getClubDescription : GetClubDescription =
 
            
 
-let getArticles : GetArticles = 
+let listArticles : ListArticles = 
     fun db clubId paginationOptions ->
         let (ClubId clubId) = clubId
 
@@ -30,7 +31,7 @@ let getArticles : GetArticles =
                  }
                  |> Seq.map (fun (name,headline,image,published) ->
                             {
-                                UrlName = name
+                                Name = name
                                 Headline = headline
                                 Image = image
                                 Published = published
@@ -46,4 +47,34 @@ let getArticles : GetArticles =
             PaginationOptions = paginationOptions
             HasNext = hasNext
         }
+
+
+let getArticle : GetArticle =
+    fun db clubId name ->
+        let (ClubId clubId) = clubId
+        query {
+                    for article in db.Articles do
+                    where (article.Name = name && article.ClubId = clubId)
+                    select (article.Name, article.Headline, article.ImageUrl, article.Published, (article.Author.FirstName, article.Author.MiddleName, article.Author.LastName), article.Author.UrlName, article.Content, article.GameId)
+                 }
+                 |> Seq.map (fun (name,headline,image,published, authorName, authorUrlName, content, gameId) ->
+                            {
+                                Details = {         
+                                            Name = name
+                                            Headline = headline
+                                            Image = image
+                                            Published = published                                                                
+                                }
+                                Author = {
+                                            UrlName = authorUrlName
+                                            Name = authorName |> Members.fullName
+                                }
+                                Content = content
+                                GameId = gameId |> toOption
+                            }
+                           
+                 
+                 )
+                 |> Seq.tryHead
+
 

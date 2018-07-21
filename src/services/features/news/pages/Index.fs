@@ -36,9 +36,9 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
     let db = ctx.Database
     let description = Queries.getClubDescription db club.Id
 
-    let articles = Queries.getArticles db club.Id paginationOptions
+    let articles = Queries.listArticles db club.Id paginationOptions
 
-    let navArticles = Queries.getArticles db club.Id { Skip = 0; Take = 10 }
+    let navArticles = Queries.listArticles db club.Id { Skip = 0; Take = 10 }
 
     [
         main [] 

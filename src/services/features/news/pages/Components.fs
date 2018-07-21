@@ -10,14 +10,14 @@ open System
 open MyTeam.Views
 open MyTeam.Shared.Components
 
-let articleUrl article = 
-    sprintf "/nyheter/vis/%O" article.UrlName
+let articleUrl (article: Article) = 
+    sprintf "/nyheter/vis/%O" article.Name
 
 
-let editLink article (user: Users.User option) =
+let editLink (article: Article) (user: Users.User option) =
     user |> Option.bind (fun user ->
                             if user.IsInRole [Role.Admin;Role.Skribent;Role.Trener] then
-                                Some <| a [ _class "pull-right edit-link"; _href <| sprintf "/nyheter/endre?navn=%s" article.UrlName ] [ 
+                                Some <| a [ _class "pull-right edit-link"; _href <| sprintf "/nyheter/endre?navn=%s" article.Name ] [ 
                                            !!(Icons.edit "Rediger artikkel")
                                 ]
                             else None
@@ -33,7 +33,7 @@ let matchDetails =
    
 
 let image ctx article = 
-    Images.getArticle ctx article.Image (fun o -> { o with Format = Some Jpg; Quality = 85  })
+    Images.getArticle ctx article.Image (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
 
 
 let adminMenu (user: Users.User option) =

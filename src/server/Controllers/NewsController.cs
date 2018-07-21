@@ -30,22 +30,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route(BaseRoute + "vis/{name}")]
-        public IActionResult Show(string name)
-        {
-            var model = _articleService.Get(Club.Id, name);
-
-            if (model == null) return new NotFoundResult(HttpContext);
-            return View("Show", model);
-        }
-
-        [Route(BaseRoute + "vis")]
-        public IActionResult ShowFallback(Guid articleId)
-        {
-            var article = _dbContext.Articles.SingleOrDefault(a => a.Id == articleId);
-            if (article == null) return new NotFoundResult(HttpContext);
-            return RedirectToAction("Show", new { name = article.Name });
-        }
 
         [Route(BaseRoute + "kamprapport/{gameId}")]
         public IActionResult MatchReport(Guid gameId)

@@ -24,18 +24,19 @@ module App =
             match club with
             | Some club ->
                 choose [
-                    route "/404" >=> setStatusCode 404 >=> (Views.Error.notFound club user)    
+                    route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
                     route "/" >=> (News.Pages.Index.view club user id |> htmlGet)                         
-                    routef "/nyheter/%i/%i" (fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take)                         
-                    routef "/%i/%i" (fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                         
+                    routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
+                    routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
+                    routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
-                    routef "/tabell/%s/%s" (fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
-                    routef "/tabell/%s" (fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet)         
-                    route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)      
-                    routef "/statistikk/%s/%s" (fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet)          
-                    routef "/statistikk/%s" (fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet)      
+                    routef "/tabell/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
+                    routef "/tabell/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        
+                    route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)   
+                    routef "/statistikk/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
+                    routef "/statistikk/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user |> Option.fold 
@@ -44,12 +45,12 @@ module App =
                                                 GET >=> choose [                                                        
                                
                                                     route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
-                                                    routef "/lagliste/%s" (fun status -> Members.Pages.List.view club user (Some status) |> htmlGet)
+                                                    routef "/lagliste/%s" <| fun status -> Members.Pages.List.view club user (Some status) |> htmlGet
                                                     route "/oppmote/registrer" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
                                                         >=> (Attendance.Pages.Register.view club user None |> htmlGet)
                                                     routef "/oppmote/registrer/%O" (fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet))                                                       
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                    routef "/oppmote/%s" (fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet)
+                                                    routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet
                                                 ]           
                                                                      
                                             ])

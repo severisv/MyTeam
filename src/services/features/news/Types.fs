@@ -5,12 +5,27 @@ open MyTeam.Domain
 open System
 
 
+type ArticleName = string
+
 type Article = {
-  UrlName: string
+  Name: ArticleName
   Image: string
   Headline: string
   Published: DateTime
 }
+
+type Author = {
+  UrlName: string
+  Name: string
+}
+
+type ArticleDetailed = {
+    Details: Article
+    Author: Author
+    Content: string
+    GameId: System.Guid option
+}
+
 
 type PaginationOptions = {
     Skip: int
@@ -25,7 +40,9 @@ type PagedList<'a> =  {
 } with
   member p.HasPrevious = p.PaginationOptions.Skip > 0
 
-type GetArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
+type ListArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
+
+type GetArticle = Database -> ClubId -> ArticleName -> ArticleDetailed option
 
 type GetClubDescription = Database -> ClubId -> string option
 

@@ -13,6 +13,7 @@
     <Compile Include="utils/common/Helpers.fs" />
     <Compile Include="utils/common/Number.fs" />
     <Compile Include="utils/common/String.fs" />
+    <Compile Include="utils/common/Date.fs" />
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />
     <Compile Include="utils/AntiForgery.fs" />
@@ -90,6 +91,7 @@
     <Compile Include="features/news/Queries.fs" />
     <Compile Include="features/news/pages/Components.fs" />
     <Compile Include="features/news/pages/Index.fs" />
+    <Compile Include="features/news/pages/Show.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -18,6 +18,10 @@ type Role =
 
 type Status = PlayerStatus
         
+
+let fullName (firstName, middleName, lastName) =
+    sprintf "%s %s%s%s" firstName middleName (if middleName.HasValue then " " else "") lastName
+
 type Member = {
     Id: MemberId
     FacebookId: string
@@ -30,8 +34,11 @@ type Member = {
 } with
     member p.Name = sprintf "%s %s" p.FirstName p.LastName   
 
-    member m.FullName = 
-        sprintf "%s %s%s%s" m.FirstName m.MiddleName (if m.MiddleName.HasValue then " " else "") m.LastName
+    member m.FullName = fullName (m.FirstName, m.MiddleName, m.LastName)
+        
+
+
+
 
 let toRoleList (roleString : string) =
     if not <| isNull roleString && roleString.Length > 0 then
