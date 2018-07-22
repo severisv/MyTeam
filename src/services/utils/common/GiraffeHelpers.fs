@@ -33,10 +33,15 @@ module GiraffeHelpers =
         Task.FromResult None
 
  
-
     let removeTrailingSlash next (ctx: HttpContext) =
         let path = ctx.Request.Path.Value
         if path.EndsWith("/") && path.Length > 1 then
             redirectTo true (sprintf "%s%s" (path.Remove(path.Length-1)) ctx.Request.QueryString.Value) next ctx
         else         
             next ctx
+
+
+    let (=>) user fn =
+        user
+        |> Option.map fn
+        |> Option.defaultValue empty                   

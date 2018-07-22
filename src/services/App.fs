@@ -29,13 +29,14 @@ module App =
                     routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
                     routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
                     routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
-                    user |> Option.map (fun user ->
-                        choose [
-                            GET >=> (routef "/nyheter/endre/%s" <| fun name -> News.Pages.Edit.view club user name |> htmlGet)                    
-                            POST >=> (routef "/nyheter/endre/%s" <| fun name -> News.Pages.Edit.post club user name |> htmlGet)                                               
-                        ]
-                            )
-                         |> Option.defaultValue empty                        
+                    user => fun user ->
+                        routef "/nyheter/endre/%s" 
+                            <| fun name -> (mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] 
+                                >> choose  [
+                                             GET >=> (News.Pages.Edit.view club user name |> htmlGet)                   
+                                             POST >=> (News.Pages.Edit.post club user name |> htmlGet)                                            
+                                           ])
+                            
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
@@ -46,9 +47,8 @@ module App =
                     routef "/statistikk/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                     subRoute "/intern" 
                         mustBeMember >=>
-                            (user |> Option.fold 
-                                        (fun _ user ->
-                                            (choose [                                                
+                            (user => fun user ->
+                                            choose [                                                
                                                 GET >=> choose [                                                        
                                
                                                     route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
@@ -60,10 +60,8 @@ module App =
                                                     routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet
                                                 ]           
                                                                      
-                                            ])
-                                        )                        
-                                        empty
-                        )
+                                            ]
+                                        )    
                     route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
                     route "/admin/spillerinvitasjon" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     subRoute "/api/attendance"                            
