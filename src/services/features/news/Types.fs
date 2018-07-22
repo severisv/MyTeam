@@ -3,7 +3,7 @@ namespace MyTeam.News
 open MyTeam
 open MyTeam.Domain
 open System
-
+open MyTeam.Users
 
 type ArticleName = string
 
@@ -40,10 +40,30 @@ type PagedList<'a> =  {
 } with
   member p.HasPrevious = p.PaginationOptions.Skip > 0
 
+
+type Game = {
+    Id: System.Guid
+    Name: string
+}
+
+[<CLIMutable>]
+type ArticleModel = {
+    IsMatchReport: bool
+    GameId: System.Guid option
+    Headline: string
+    Content: string
+    ImageUrl: string
+}
+
+
+
 type ListArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
 
 type GetArticle = Database -> ClubId -> ArticleName -> ArticleDetailed option
 
 type GetClubDescription = Database -> ClubId -> string option
 
+type ListRecentGames = Database -> ClubId -> DateTime -> Game list
 
+
+type UpdateArticle = Database -> ClubId -> ArticleName -> ArticleModel -> Result<unit,Error> 

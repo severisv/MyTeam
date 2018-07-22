@@ -28,7 +28,7 @@ module ValidationHelpers =
                         if errors |> Seq.isEmpty then
                             Ok (form)
                         else
-                            Error (ValidationErrors errors)   
+                            Error errors  
 
     let getNameAndValue (expr : Expr<'T>) =
         let getName(expr : Expr) = 
@@ -53,3 +53,8 @@ module Framework =
        form |> bindResult validationResult    
 
 
+    let (>>=) result fn =
+        result |> Result.bind(fn)
+        |> function
+        | Ok r -> Ok r
+        | Error validationErrors -> Error (ValidationErrors validationErrors)    

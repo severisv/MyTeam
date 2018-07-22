@@ -20,13 +20,11 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
     | None -> Error NotFound
     | Some article ->    
 
-        let navArticles = Queries.listArticles db club.Id { Skip = 0; Take = 10 }
-
         [
             main [] [       
                     block [ _class "news-item"] [ 
                         div [ _class "news-imageWrapper" ] [
-                            img [ _src <| Components.image ctx article.Details ] ]                    
+                            img [ _src <| Components.image ctx article.Details.Image ] ]                    
                         Components.editLink article.Details user
                         h2 [] [ 
                             encodedText article.Details.Headline ]
@@ -53,7 +51,7 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
                     ]                      
             ]          
             sidebar [] [
-                Components.articleNav navArticles.Items
+                Components.articleNav db club
                 Components.twitterFeed
             ]    
         ]

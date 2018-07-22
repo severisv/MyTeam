@@ -18,6 +18,13 @@ module GiraffeHelpers =
         member ctx.BindJson<'T> () =
                     let task = ctx.BindJsonAsync<'T>()
                     task.ConfigureAwait(false).GetAwaiter().GetResult()      
+
+
+    type Http.HttpContext with 
+        member ctx.BindForm<'T> () =
+                    let task = ctx.BindFormAsync<'T>()
+                    task.ConfigureAwait(false).GetAwaiter().GetResult()                      
+                
                 
     type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) 
 

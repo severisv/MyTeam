@@ -17,7 +17,7 @@ let articleUrl (article: Article) =
 let editLink (article: Article) (user: Users.User option) =
     user |> Option.bind (fun user ->
                             if user.IsInRole [Role.Admin;Role.Skribent;Role.Trener] then
-                                Some <| a [ _class "pull-right edit-link"; _href <| sprintf "/nyheter/endre?navn=%s" article.Name ] [ 
+                                Some <| a [ _class "pull-right edit-link"; _href <| sprintf "/nyheter/endre/%s" article.Name ] [ 
                                            !!(Icons.edit "Rediger artikkel")
                                 ]
                             else None
@@ -32,8 +32,8 @@ let matchDetails =
         ]
    
 
-let image ctx article = 
-    Images.getArticle ctx article.Image (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
+let image ctx url = 
+    Images.getArticle ctx url (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
 
 
 let adminMenu (user: Users.User option) =
@@ -56,7 +56,10 @@ let adminMenu (user: Users.User option) =
     |> Option.defaultValue empty
   
 
-let articleNav articles =
+let articleNav db (club: Club) =
+    let articles = 
+        Queries.listArticles db club.Id { Skip = 0; Take = 10 }
+        |> fun a -> a.Items
 
     block [] [
         div [ _class "articleNav "] 
@@ -108,4 +111,66 @@ let twitterScript =
 
 
 
+let tinyMceScripts = 
+    let elementId = ".tinymce"
+    [
+       script [ _type "text/javascript"; _src "/compiled/lib/tinymce/tinymce.min.js" ] []
+       script [ _type "text/javascript" ] [ 
+           rawText <| sprintf "tinymce.init({
+                selector: '%s',
+                theme: 'modern',
+                plugins: [
+                    'advlist autolink link image lists charmap hr anchor pagebreak',
+                    'wordcount visualblocks visualchars insertdatetime media nonbreaking',
+                    'save table contextmenu directionality template paste code codesample'
+                ],
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | ',
+                extended_valid_elements: 'script[language|type|src|async]',
+                convert_urls: false
+            });" elementId ]
+    ]
 
+
+
+let cloudinaryScripts (options: CloudinarySettings) =
+
+    let unixTimestamp = int (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds
+
+    let queryString = sprintf "timestamp=%i%s" unixTimestamp options.ApiSecret
+    let signature = Sha1.hashStringForUTF8String queryString
+
+    [
+        script [_src "/compiled/lib/cloudinary.bundle.js" ][]
+        script [] [
+
+            rawText 
+                <| sprintf "$.cloudinary.config({ cloud_name: '%s', api_key: '%s', signature: '%s' });
+
+                                    var formData = {
+                                        api_key: '%s',
+                                        timestamp: '%i',
+                                        signature: '%s'
+                                    }
+
+                                    $('.cloudinary-fileupload').each(function () {
+                                        $(this).attr('data-form-data', JSON.stringify(formData));
+                                    });
+
+                                    $('.cloudinary-fileupload').bind('cloudinarydone', function (e, data) {
+                                        $('.cloudinary-preview').html(
+                                          $.cloudinary.image(data.result.public_id,
+                                            {
+                                                format: data.result.format, version: data.result.version,
+                                                crop: 'fill'
+                                            })
+                                        );
+                                        return true;
+
+                                    });
+
+                                    $('.cloudinary-fileupload').bind('fileuploadprogress', function (e, data) {
+                                        $('.cloudinary-progress-bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%%');
+                                    });" options.CloudName options.ApiKey signature options.ApiKey unixTimestamp signature
+                                    
+                                 ]      
+    ]

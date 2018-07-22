@@ -1,6 +1,5 @@
 ﻿using System;
 using MyTeam.Settings;
-using MyTeam.Util;
 
 namespace MyTeam.ViewModels.Shared
 {
@@ -15,13 +14,14 @@ namespace MyTeam.ViewModels.Shared
 
         public CloudinaryConfiguration(CloudinaryOptions options)
         {
-           CloudName = options.CloudName;
-           ApiKey = options.ApiKey;
-           ApiSecret = options.ApiSecret;
-           UnixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            CloudName = options.CloudName;
+            ApiKey = options.ApiKey;
+            ApiSecret = options.ApiSecret;
+            UnixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-        var queryString = $"timestamp={UnixTimestamp}{ApiSecret}";
-        Signature = Sha1.HashStringForUTF8String(queryString);
+            var queryString = $"timestamp={UnixTimestamp}{ApiSecret}";
+            Signature = MyTeam.Util.Sha1.HashStringForUTF8String(queryString);
         }
     }
 }
+

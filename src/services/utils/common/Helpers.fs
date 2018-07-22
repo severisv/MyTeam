@@ -23,7 +23,4 @@ module Helpers =
         | None -> alternative       
 
 
-    let (>>=) result fn =
-        result |> Result.bind(fn)    
-
     let never = fun _ -> false    

@@ -20,8 +20,8 @@ open Helpers
 
 module Api =
 
-    let getSquad clubId gameId db =
-        Queries.getSquad db clubId gameId
+    let getSquad gameId db =
+        Queries.getSquad db gameId
         |> Ok
  
     

@@ -27,6 +27,7 @@
     <Compile Include="utils/Results.fs" />
     <Compile Include="utils/Validation.fs" />
     <Compile Include="utils/Validators.fs" />
+    <Compile Include="utils/Sha1.fs" />
     <Compile Include="components/common/Base.fs" />
     <Compile Include="components/common/Buttons.fs" />
     <Compile Include="components/common/Icons.fs" />
@@ -89,9 +90,11 @@
     <Compile Include="features/teams/Api.fs" />
     <Compile Include="features/news/Types.fs" />
     <Compile Include="features/news/Queries.fs" />
+    <Compile Include="features/news/Persistence.fs" />
     <Compile Include="features/news/pages/Components.fs" />
     <Compile Include="features/news/pages/Index.fs" />
     <Compile Include="features/news/pages/Show.fs" />
+    <Compile Include="features/news/pages/Edit.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

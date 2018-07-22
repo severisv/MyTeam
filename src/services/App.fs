@@ -29,6 +29,13 @@ module App =
                     routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
                     routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
                     routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
+                    user |> Option.map (fun user ->
+                        choose [
+                            GET >=> (routef "/nyheter/endre/%s" <| fun name -> News.Pages.Edit.view club user name |> htmlGet)                    
+                            POST >=> (routef "/nyheter/endre/%s" <| fun name -> News.Pages.Edit.post club user name |> htmlGet)                                               
+                        ]
+                            )
+                         |> Option.defaultValue empty                        
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
@@ -96,7 +103,7 @@ module App =
                     subRoute "/api/games"
                         (choose [                                                                
                             GET >=>  choose [
-                                routef "/%O/squad" (Games.Api.getSquad club.Id >> jsonGet)
+                                routef "/%O/squad" (Games.Api.getSquad >> jsonGet)
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)      
                             ]     

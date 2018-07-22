@@ -13,7 +13,7 @@ module Queries =
 
 
     let getSquad : GetSquad = 
-        fun db clubId gameId ->
+        fun db gameId ->
             query {
                 for e in db.EventAttendances do
                 where (e.EventId = gameId && e.IsSelected)

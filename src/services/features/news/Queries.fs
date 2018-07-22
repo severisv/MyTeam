@@ -78,3 +78,21 @@ let getArticle : GetArticle =
                  |> Seq.tryHead
 
 
+
+let listRecentGames : ListRecentGames = 
+    fun db clubId date ->
+        let (ClubId clubId) = clubId
+        let fourteenDaysBefore = date.AddDays(-14.0)
+        query {
+                for g in db.Games do
+                where (g.ClubId = clubId && g.DateTime <= date && g.DateTime >= fourteenDaysBefore)
+                select (g.Id, g.Team.ShortName, g.Opponent)
+            }
+            |> Seq.map(fun (id, name, opponent) 
+                        -> 
+                            {
+                                Id = id
+                                Name = sprintf "%s vs %s" name opponent
+                            }
+            )
+            |> Seq.toList

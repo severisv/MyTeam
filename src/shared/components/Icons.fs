@@ -44,6 +44,7 @@ let playerStatusIcon (status: PlayerStatus) =
 
 let attendance = icon <| fa "check-square-o"
 let coach = icon <| "flaticon-football50"
+let delete = icon (fa "trash") "Slett"
 let edit = icon <| fa "edit"
 let signup = icon <| fa "calendar"
 let previous = icon <| fa "history"

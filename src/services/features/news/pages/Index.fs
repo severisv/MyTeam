@@ -38,8 +38,6 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
 
     let articles = Queries.listArticles db club.Id paginationOptions
 
-    let navArticles = Queries.listArticles db club.Id { Skip = 0; Take = 10 }
-
     [
         main [] 
             ((articles.Items |> List.map (fun article -> 
@@ -48,7 +46,7 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
                 block [ _class "news-item"] [ 
                     div [ _class "news-imageWrapper news-imageWrapper--short" ] [
                         a [ _href <| articleUrl ] [ 
-                            img [ _src <| Components.image ctx article ] ]
+                            img [ _src <| Components.image ctx article.Image ] ]
                     ]
                     Components.editLink article user
                     h2 [] [ 
@@ -66,7 +64,7 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
             ])
         sidebar [] [
             Components.adminMenu user
-            Components.articleNav navArticles.Items
+            Components.articleNav db club
             Components.twitterFeed
         ]    
     ]
