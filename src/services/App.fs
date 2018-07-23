@@ -29,14 +29,12 @@ module App =
                     routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
                     routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
                     routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
-                    user => fun user ->
-                        routef "/nyheter/endre/%s" 
-                            <| fun name -> (mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] 
-                                >> choose  [
-                                             GET >=> (News.Pages.Edit.view club user name |> htmlGet)                   
-                                             POST >=> (News.Pages.Edit.post club user name |> htmlGet)                                            
-                                           ])
-                            
+                    routef "/nyheter/endre/%s" <| fun name -> 
+                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
+                            choose  [
+                                        GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
+                                        POST >=> (user => fun user -> (News.Pages.Edit.post club user name |> htmlGet))                                            
+                                    ]                  
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> (AboutPages.index club user |> htmlGet)          
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
@@ -49,17 +47,16 @@ module App =
                         mustBeMember >=>
                             (user => fun user ->
                                             choose [                                                
-                                                GET >=> choose [                                                        
-                               
+                                                GET >=> choose [    
                                                     route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
                                                     routef "/lagliste/%s" <| fun status -> Members.Pages.List.view club user (Some status) |> htmlGet
                                                     route "/oppmote/registrer" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
                                                         >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                    routef "/oppmote/registrer/%O" (fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet))                                                       
+                                                    routef "/oppmote/registrer/%O" <| fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
+                                                                                                    >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
                                                     routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet
-                                                ]           
-                                                                     
+                                                ]                    
                                             ]
                                         )    
                     route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
