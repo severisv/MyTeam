@@ -16,10 +16,13 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
     let db = ctx.Database
     let cloudinarySettings = ctx.GetService<IOptions<CloudinarySettings>>()
     let latestGames = Queries.listRecentGames db club.Id published
+
     [
         main [] [
             block [] [
-                form [ _action <| sprintf "/nyheter/endre/%s" name; _method "POST" ] [                         
+                form [  _action (name |> Option.map (fun name -> sprintf "/nyheter/endre/%s" name) 
+                                      |> Option.defaultValue "/nyheter/ny") 
+                        _method "POST" ] [                         
                     div [ _class "cloudinary-preview news-imageWrapper" ][ 
                         img [ _src <| Components.image ctx article.ImageUrl ] 
                         ]
@@ -28,15 +31,19 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                     div [ _class "form-file-upload-wrapper btn btn-default" ] [ 
                         input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]
                       ]
-                    a [ _class "btn btn-danger pull-right confirm-dialog"; _href <| sprintf "/nyheter/slett/%s" name; attr "data-message" "Er du sikker på at du vil slette?" ][ 
-                        !!Icons.delete
-                      ]
+                    name |> Option.map (fun name -> 
+                                                a [ _class "btn btn-danger pull-right confirm-dialog"; _href <| sprintf "/nyheter/slett/%s" name; attr "data-message" "Er du sikker på at du vil slette artikkelen?" ][ 
+                                                    !!Icons.delete
+                                                  ]
+                                        )
+                         |> Option.defaultValue empty                                    
+                    
                     div [ _class "clearfix" ] []
                     br [] 
                     ul [ _class "text-danger" ] 
                         (validationErrors
                         |> List.collect (fun error -> error.Errors 
-                                                    |> List.map (fun e ->   li [] [encodedText <| sprintf "%s: %s" error.Name e] )))
+                                                    |> List.map (fun e -> li [] [encodedText <| sprintf "%s: %s" error.Name e] )))
                     div [ _class "form-group news-matchreportSelect" ] [ 
                         label [ _class "col-xs-3 col-sm-2 no-padding control-label" ] [ encodedText "Kamprapport?" ]
                         div [ _class "col-xs-9 col-sm-10 flex" ][ 
@@ -85,7 +92,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
         ]    
     ]
     |> layout club (Some user) (fun o -> { o with 
-                                            Title = "Rediger artikkel"
+                                            Title = name |> Option.map(fun _ -> "Rediger artikkel") |> Option.defaultValue "Skriv ny artikkel"
                                             Scripts = Components.tinyMceScripts @ Components.cloudinaryScripts cloudinarySettings.Value
                                     }
                         ) ctx
@@ -110,7 +117,7 @@ let view (club: Club) user name (ctx: HttpContext) =
         }, article.Details.Published)
         |> fun (article, published) ->
           
-            editView ctx club user name article published []
+            editView ctx club user (Some name) article published []
 
 let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
 
@@ -137,8 +144,43 @@ let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
             | Some article ->    
                 (form, article.Details.Published)
                 |> fun (article, published) ->
-                  
-                    editView ctx club user name article published validationErrors
+                    editView ctx club user (Some name) article published validationErrors
+
+
+let create (club: Club) user (ctx: HttpContext) =    
+    ({ 
+        IsMatchReport = false
+        GameId = None
+        Headline = ""
+        Content = ""
+        ImageUrl = ""    
+    }, System.DateTime.Now)
+    |> fun (article, published) ->      
+        editView ctx club user None article published []
+
+
+let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
+
+    let db = ctx.Database
+ 
+    let form = ctx.BindForm<ArticleModel>()
+        
+    form ==>
+        [        
+           <@ form.Headline @> >- [isRequired]
+           <@ form.Content @> >- [isRequired]
+        ]
+        |> function
+        | Ok form -> 
+            Persistence.createArticle db club.Id user form
+            |> Results.bind 
+                (fun name -> Redirect <| sprintf "/nyheter/vis/%s" name)
+            
+
+        | Error validationErrors ->          
+                (form, System.DateTime.Now)
+                |> fun (article, published) ->
+                    editView ctx club user None article published validationErrors
 
 let delete (club: Club) name (ctx: HttpContext) =
     

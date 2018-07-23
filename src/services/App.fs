@@ -35,11 +35,11 @@ module App =
                                         GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
                                         POST >=> (user => fun user -> (News.Pages.Edit.post club user name |> htmlGet))                                            
                                     ]
-                    routef "/nyheter/ny/%s" <| fun name -> 
+                    route "/nyheter/ny" >=>
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                             choose  [
-                                        GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
-                                        POST >=> (user => fun user -> (News.Pages.Edit.post club user name |> htmlGet))                                            
+                                        GET >=> (user => fun user -> (News.Pages.Edit.create club user |> htmlGet))                   
+                                        POST >=> (user => fun user -> (News.Pages.Edit.createPost club user |> htmlGet))                                            
                                     ]
                     routef "/nyheter/slett/%s" <| fun name -> 
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
