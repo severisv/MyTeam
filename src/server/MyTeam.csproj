@@ -4,6 +4,7 @@
     <AssemblyName>MyTeam</AssemblyName>
     <PackageId>MyTeam</PackageId>
     <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
   </PropertyGroup>
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*">
