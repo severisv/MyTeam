@@ -9,12 +9,6 @@ namespace MyTeam.Services.Domain
 {
     public interface IArticleService
     {
-        ArticleViewModel Get(Guid clubId, string name);
-        PagedList<SimpleArticleDto> GetSimple(Guid clubId, int take);
-        string CreateOrUpdate(EditArticleViewModel model, Guid clubId, Guid authorId);
-        void Delete(Guid articleId);
-
-        IEnumerable<SimpleGame> GetGames(DateTime now);
         ArticleViewModel GetMatchReport(Guid gameId);
     }
 }
