@@ -62,12 +62,11 @@ module App =
                     route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
                     route "/admin/spillerinvitasjon" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     subRoute "/api/attendance"                            
-                        (choose [ 
-                            GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)
-                            POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
-                                routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
-                                                           
-                        ])                                     
+                           <| choose [ 
+                                GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)
+                                POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
+                                    routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
+                            ]                                     
                                                     
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
                     subRoute "/api/events"                    
@@ -76,7 +75,7 @@ module App =
                                 routef "/%O/description" (Events.Api.setDescription club.Id)
                         ])
                     subRoute "/api/members" 
-                        (choose [ 
+                        <| choose [ 
                             GET >=> choose [ 
                                 route "" >=> (Members.Api.list club.Id |> jsonGet)
                                 route "/facebookids" >=> (Members.Api.getFacebookIds club.Id |> jsonGet)
@@ -93,10 +92,9 @@ module App =
                                     choose [ 
                                         route "" >=> (Members.Api.add club.Id |> jsonPost)
                                     ]
-                        ])
-
+                        ]
                     subRoute "/api/games"
-                        (choose [                                                                
+                        <| choose [                                                                
                             GET >=>  choose [
                                 routef "/%O/squad" (Games.Api.getSquad >> jsonGet)
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
@@ -114,7 +112,7 @@ module App =
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id >> jsonPost)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
-                        ])                                                                                                                                                                                                                                     
+                        ]                                                                                                                                                                                                                                     
                     setStatusCode 404 >=> Views.Error.notFound club user
                    ] next ctx
             | None ->
