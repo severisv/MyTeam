@@ -28,7 +28,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                     div [ _class "form-file-upload-wrapper btn btn-default" ] [ 
                         input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]
                       ]
-                    a [ _class "btn btn-danger pull-right confirm-dialog"; _href "delete"; attr "data-message" "Er du sikker på at du vil slette?" ][ 
+                    a [ _class "btn btn-danger pull-right confirm-dialog"; _href <| sprintf "/nyheter/slett/%s" name; attr "data-message" "Er du sikker på at du vil slette?" ][ 
                         !!Icons.delete
                       ]
                     div [ _class "clearfix" ] []
@@ -139,3 +139,14 @@ let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
                 |> fun (article, published) ->
                   
                     editView ctx club user name article published validationErrors
+
+let delete (club: Club) name (ctx: HttpContext) =
+    
+    let db = ctx.Database
+        
+    Persistence.deleteArticle db club.Id name
+    |> Result.bind (fun _ -> 
+        Error <| Redirect "/")
+            
+
+      

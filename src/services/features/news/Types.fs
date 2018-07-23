@@ -56,7 +56,6 @@ type ArticleModel = {
 }
 
 
-
 type ListArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
 
 type GetArticle = Database -> ClubId -> ArticleName -> ArticleDetailed option
@@ -65,5 +64,6 @@ type GetClubDescription = Database -> ClubId -> string option
 
 type ListRecentGames = Database -> ClubId -> DateTime -> Game list
 
-
 type UpdateArticle = Database -> ClubId -> ArticleName -> ArticleModel -> Result<unit,Error> 
+
+type DeleteArticle = Database -> ClubId -> ArticleName -> Result<unit,Error>

@@ -23,5 +23,20 @@ let saveArticle : UpdateArticle =
         | None -> Error NotFound                                                  
 
 
+let deleteArticle : DeleteArticle =
+    fun db clubId articleName ->
+        let (ClubId clubId) = clubId
+
+        db.Articles
+        |> Seq.tryFind (fun a -> a.ClubId = clubId && a.Name = articleName)
+        |> function
+        | Some a -> 
+              db.Remove(a) |> ignore    
+              db.SaveChanges() |> ignore
+              Ok()
+
+        | None -> Error NotFound                                                  
+
+
            
 
