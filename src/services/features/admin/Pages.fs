@@ -20,7 +20,7 @@ let index club user ctx =
         Admin.coachMenu               
     ] 
     |> layout club user (fun o -> { o with Title = "Administrer spillere" }) ctx
-    |> Ok
+    |> OkResult
 
 
 let invitePlayers club user ctx =
@@ -43,4 +43,4 @@ let invitePlayers club user ctx =
                                         ]
                         }
                 ) ctx
-    |> Ok
+    |> OkResult

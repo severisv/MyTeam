@@ -18,9 +18,9 @@ let saveArticle : UpdateArticle =
               a.ImageUrl <- model.ImageUrl
               a.GameId <- model.IsMatchReport =? (Nullable(), model.GameId |> toNullable)           
               db.SaveChanges() |> ignore
-              Ok()
+              OkResult()
 
-        | None -> Error NotFound                                                  
+        | None -> NotFound                                                  
 
 
 let deleteArticle : DeleteArticle =
@@ -33,9 +33,9 @@ let deleteArticle : DeleteArticle =
         | Some a -> 
               db.Remove(a) |> ignore    
               db.SaveChanges() |> ignore
-              Ok()
+              OkResult()
 
-        | None -> Error NotFound                                                  
+        | None -> NotFound                                                  
 
 
            

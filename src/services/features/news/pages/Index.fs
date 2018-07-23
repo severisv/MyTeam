@@ -74,4 +74,4 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
                                         Scripts = [ Components.twitterScript ]
                                     }
                         ) ctx
-    |> Ok
+    |> OkResult

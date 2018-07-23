@@ -9,12 +9,12 @@ module internal Helpers =
         Queries.games db clubId
           |> Seq.tryFind(fun g -> g.Id = gameId)
           |> function
-           | Some game when (ClubId game.ClubId) <> clubId -> Error Unauthorized
+           | Some game when (ClubId game.ClubId) <> clubId -> Unauthorized
            | Some game -> 
                 updateGame game
                 db.SaveChanges()
-                |> Ok
-           | None -> Error NotFound      
+                |> OkResult
+           | None -> NotFound      
 
 open Helpers
 
@@ -22,7 +22,7 @@ module Api =
 
     let getSquad gameId db =
         Queries.getSquad db gameId
-        |> Ok
+        |> OkResult
  
     
     [<CLIMutable>]

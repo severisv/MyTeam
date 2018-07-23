@@ -18,7 +18,7 @@ module Persistence =
             }
             |> Seq.tryHead
             |> function
-                | None -> Error Unauthorized
+                | None -> Unauthorized
                 | Some e ->
                     db.EventAttendances 
                     |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)           
@@ -35,4 +35,4 @@ module Persistence =
                             db.EventAttendances.Add(a) |> ignore
 
                     db.SaveChanges() |> ignore
-                    Ok ()
+                    OkResult ()

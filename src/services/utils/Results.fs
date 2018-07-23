@@ -5,8 +5,9 @@ type ValidationError = {
     Errors: string list
 }
 
-type Error = 
-    | ValidationErrors of list<ValidationError>            
+type HttpResult<'a> =
+    | OkResult of 'a
     | Redirect of string
+    | ValidationErrors of list<ValidationError>            
     | Unauthorized            
     | NotFound   

@@ -89,7 +89,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                                             Scripts = Components.tinyMceScripts @ Components.cloudinaryScripts cloudinarySettings.Value
                                     }
                         ) ctx
-    |> Ok
+    |> OkResult
 
 
 let view (club: Club) user name (ctx: HttpContext) =
@@ -98,7 +98,7 @@ let view (club: Club) user name (ctx: HttpContext) =
 
     Queries.getArticle db club.Id name
     |> function
-    | None -> Error NotFound
+    | None -> NotFound
     | Some article ->    
 
         ({ 
@@ -126,14 +126,14 @@ let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
         |> function
         | Ok form -> 
             Persistence.saveArticle db club.Id name form
-            |> Result.bind (fun _ -> 
-                Error (Redirect <| sprintf "/nyheter/vis/%s" name))
+            |> Results.bind (fun _ -> 
+                Redirect <| sprintf "/nyheter/vis/%s" name)
             
 
         | Error validationErrors ->
             Queries.getArticle db club.Id name
             |> function
-            | None -> Error NotFound
+            | None -> NotFound
             | Some article ->    
                 (form, article.Details.Published)
                 |> fun (article, published) ->
@@ -145,8 +145,7 @@ let delete (club: Club) name (ctx: HttpContext) =
     let db = ctx.Database
         
     Persistence.deleteArticle db club.Id name
-    |> Result.bind (fun _ -> 
-        Error <| Redirect "/")
+    |> Results.bind (fun _ -> Redirect "/")
             
 
       

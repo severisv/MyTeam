@@ -120,4 +120,4 @@ module Register =
             ]               
         ] 
         |> layout club (Some user) (fun o -> { o with Title = "Registrer oppmøte" }) ctx
-        |> Ok
+        |> OkResult

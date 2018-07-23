@@ -20,7 +20,7 @@ module Pages =
         | None -> club.Teams |> List.tryHead
         | Some s -> club.Teams |> List.tryFind (fun t -> t.ShortName |> toLower = (s |> toLower))
         |> function
-        | None -> Error NotFound
+        | None -> NotFound
         | Some selectedTeam ->
         
             let years = Queries.getYears db selectedTeam.Id
@@ -130,19 +130,19 @@ module Pages =
                             ]
                     ] 
                     |> layout club user (fun o -> { o with Title = "Tabell" }) ctx
-                    |> Ok
+                    |> OkResult
 
                 | None -> 
                     years
                     |> List.sortByDescending id
                     |> List.tryHead
                     |> function
-                    | Some y -> Error (Redirect <| tableUrl selectedTeam y)
-                    | None -> Error NotFound        
+                    | Some y -> Redirect <| tableUrl selectedTeam y
+                    | None -> NotFound        
             | _ -> 
                 years
                 |> List.sortByDescending id
                 |> List.tryHead
                 |> function
-                | Some y -> Error (Redirect <| tableUrl selectedTeam y)
-                | None -> Error NotFound        
+                | Some y -> Redirect <| tableUrl selectedTeam y
+                | None -> NotFound        

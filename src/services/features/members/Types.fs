@@ -35,4 +35,4 @@ type GetFacebookIds = Database -> ClubId -> string list
 type SetStatus = Database -> ClubId -> MemberId -> Status -> UserId
 type ToggleRole = Database -> ClubId -> MemberId -> Role -> UserId
 type ToggleTeam = Database -> ClubId -> MemberId -> TeamId -> unit
-type Add = Database -> ClubId -> AddMemberForm -> Result<unit, Error>
+type Add = Database -> ClubId -> AddMemberForm -> HttpResult<unit>

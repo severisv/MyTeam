@@ -66,4 +66,4 @@ let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
         ]
     ]
     |> layout club (Some user) (fun o -> { o with Title = "Lagliste" }) ctx
-    |> Ok
+    |> OkResult

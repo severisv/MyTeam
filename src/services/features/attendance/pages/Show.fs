@@ -88,4 +88,4 @@ module Show =
                     
         ] 
         |> layout club (Some user) (fun o -> { o with Title = "Oppmøte"}) ctx
-        |> Ok
+        |> OkResult

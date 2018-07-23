@@ -23,7 +23,7 @@ module Pages =
                     |> List.tryFind (fun t -> t.ShortName |> toLower = (s |> toLower))
                     |> Option.map(Team)
         |> function
-        | None -> Error NotFound
+        | None -> NotFound
         | Some selectedTeam ->
         
             let teamIds = 
@@ -140,4 +140,4 @@ module Pages =
                     , emptyText))        
             ] 
             |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
-            |> Ok
+            |> OkResult

@@ -21,6 +21,6 @@ type GameEvent = {
     AssistedById: PlayerId option
 }
 
-type Get = ClubId -> GameId -> Database -> Result<GameEvent list, Error>
-type Add = ClubId -> GameId -> Database -> GameEvent -> Result<GameEvent, Error>
-type Delete = ClubId -> (GameId * GameEventId) -> Database -> Result<unit, Error>
+type Get = ClubId -> GameId -> Database -> HttpResult<GameEvent list>
+type Add = ClubId -> GameId -> Database -> GameEvent -> HttpResult<GameEvent>
+type Delete = ClubId -> (GameId * GameEventId) -> Database -> HttpResult<unit>

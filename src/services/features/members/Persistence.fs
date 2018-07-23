@@ -145,5 +145,5 @@ module Persistence =
                    memb.UrlName <- urlName form
                    db.Players.Add(memb) |> ignore
                    db.SaveChanges() |> ignore
-                   Ok ()
+                   OkResult ()
                     

@@ -8,4 +8,4 @@ open System
 open MyTeam.Ajax
 
 type GetSquad = Database -> GameId -> Member list
-type SelectPlayer = ClubId -> GameId * MemberId -> Database -> CheckboxPayload -> Result<unit,Error>
+type SelectPlayer = ClubId -> GameId * MemberId -> Database -> CheckboxPayload -> HttpResult<unit>

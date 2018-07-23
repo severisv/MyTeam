@@ -11,7 +11,7 @@ module Api =
     
     let getTypes _ =  
         Enums.getValues<GameEventType> ()
-        |> Ok
+        |> OkResult
         
        
     let get : Get =
@@ -24,7 +24,7 @@ module Api =
             }
             |> Seq.tryHead
             |> function
-                | None -> Error NotFound
+                | None -> NotFound
                 | Some gameId ->
                     query {
                         for ge in db.GameEvents do
@@ -41,7 +41,7 @@ module Api =
                                           Type = enum<GameEventType> (int eventType)
                                         }
                                 )
-                    |> Ok
+                    |> OkResult
 
 
     let add : Add =
@@ -49,13 +49,13 @@ module Api =
             if model.Type <> GameEventType.``Mål`` && model.AssistedById.IsSome 
                 then Error "Kort kan ikke ha assist"
             else 
-                Ok()
+                Ok ()
 
         let isNotAssistedBySelf (_, model) =
             if model.PlayerId.IsSome && model.PlayerId = model.AssistedById 
                 then Error "Man kan ikke gi assist til seg selv"
             else 
-                Ok()
+                Ok ()
 
         fun clubId gameId db model ->
 
@@ -67,8 +67,8 @@ module Api =
             } 
             |> Seq.tryHead
             |> function
-                | None -> Error NotFound
-                | Some c when c <> clubId -> Error Unauthorized
+                | None -> NotFound
+                | Some c when c <> clubId -> Unauthorized
                 | Some _ ->
                     
                     model ==>
@@ -90,7 +90,8 @@ module Api =
                         db.GameEvents.Add(ge) |> ignore
                         db.SaveChanges() |> ignore
                         { model with Id = ge.Id } 
-                        |> Ok
+                        |> OkResult
+
 
 
 
@@ -100,11 +101,11 @@ module Api =
             db.GameEvents.Include(fun ge -> ge.Game) 
             |> Seq.tryFind(fun ge -> ge.Id = gameEventId && ge.GameId = gameId)
             |> function
-                | None -> Error NotFound
-                | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Error Unauthorized
+                | None -> NotFound
+                | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Unauthorized
                 | Some gameEvent ->
                     db.GameEvents.Remove(gameEvent) |> ignore
                     db.SaveChanges() 
                     |> ignore
-                    |> Ok
+                    |> OkResult
 

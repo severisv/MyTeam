@@ -9,12 +9,12 @@ module Api =
 
     let list clubId db =
         Queries.list db clubId
-        |> Ok
+        |> OkResult
 
 
     let getFacebookIds clubId db =
         Queries.getFacebookIds db clubId
-        |> Ok
+        |> OkResult
 
 
     [<CLIMutable>]
@@ -38,7 +38,7 @@ module Api =
     type ToggleTeam = { TeamId: TeamId }
     let toggleTeam clubId id db model =
             Persistence.toggleTeam db clubId id model.TeamId
-            |> Ok
+            |> OkResult
            
     let add clubId db model =
             Persistence.add db clubId model            

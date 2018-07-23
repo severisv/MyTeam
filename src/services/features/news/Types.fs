@@ -64,6 +64,6 @@ type GetClubDescription = Database -> ClubId -> string option
 
 type ListRecentGames = Database -> ClubId -> DateTime -> Game list
 
-type UpdateArticle = Database -> ClubId -> ArticleName -> ArticleModel -> Result<unit,Error> 
+type UpdateArticle = Database -> ClubId -> ArticleName -> ArticleModel -> HttpResult<unit> 
 
-type DeleteArticle = Database -> ClubId -> ArticleName -> Result<unit,Error>
+type DeleteArticle = Database -> ClubId -> ArticleName -> HttpResult<unit>

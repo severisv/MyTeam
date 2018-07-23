@@ -53,8 +53,7 @@ module Framework =
        form |> bindResult validationResult    
 
 
-    let (>>=) result fn =
-        result |> Result.bind(fn)
-        |> function
-        | Ok r -> Ok r
-        | Error validationErrors -> Error (ValidationErrors validationErrors)    
+    let (>>=) result (fn: 'a -> HttpResult<'b>) =
+        match result with 
+        | Ok a -> fn a
+        | Error ve -> ValidationErrors ve    

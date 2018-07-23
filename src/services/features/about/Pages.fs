@@ -18,7 +18,7 @@ module AboutPages =
             div [] []
         ] 
         |> layout club user (fun o -> { o with Title = "Om klubben"}) ctx
-        |> Ok
+        |> OkResult
  
 
     let privacy club user (ctx: HttpContext) =        
@@ -35,4 +35,4 @@ module AboutPages =
             div [] []
         ] 
         |> layout club user (fun o -> { o with Title = "Personvern"}) ctx
-        |> Ok
+        |> OkResult

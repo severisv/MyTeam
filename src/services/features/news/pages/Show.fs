@@ -17,7 +17,7 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
 
     Queries.getArticle db club.Id name
     |> function
-    | None -> Error NotFound
+    | None -> NotFound
     | Some article ->    
 
         [
@@ -60,4 +60,4 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
                                             Scripts = [ Components.twitterScript ]
                                         }
                             ) ctx
-        |> Ok
+        |> OkResult

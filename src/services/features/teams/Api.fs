@@ -8,4 +8,4 @@ module Api =
 
     let list clubId db =
         Queries.list db clubId
-        |> Ok
+        |> OkResult
