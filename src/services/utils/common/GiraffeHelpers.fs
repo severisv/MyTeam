@@ -3,7 +3,6 @@ namespace MyTeam
 open Giraffe
 open System.Threading.Tasks
 open Microsoft.AspNetCore
-open System
 
 [<AutoOpen>]
 module GiraffeHelpers =
@@ -25,8 +24,9 @@ module GiraffeHelpers =
                     let task = ctx.BindFormAsync<'T>()
                     task.ConfigureAwait(false).GetAwaiter().GetResult()                      
                 
-                
-    type Action = HttpContext -> (HttpFunc -> HttpContext -> HttpFuncResult) 
+
+
+module PipelineHelpers =
 
     let empty : HttpHandler =
         fun (_ : HttpFunc) (_ : HttpContext) ->     

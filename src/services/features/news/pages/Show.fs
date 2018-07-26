@@ -1,14 +1,11 @@
 module MyTeam.News.Pages.Show
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
-
-
 
 let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
 

@@ -42,26 +42,44 @@ let playerStatusIcon (status: PlayerStatus) =
             
         icon className (string status) 
 
+let gameType (gameType: GameType) =                   
+        let className =
+            gameType 
+            |> function
+            | GameType.Treningskamp -> "icon-handshake"
+            | GameType.Seriekamp -> fa "trophy"
+            | GameType.Norgesmesterskapet -> "flaticon-football42"
+            | GameType.Kretsmesterskapet -> "flaticon-football33"
+            | GameType.``OBOS Cup`` -> "flaticon-trophy4"      
+            | _ -> fa "trophy"
+            
+        icon className (string gameType)     
+
+let assist = icon <| "flaticon-football119"
 let attendance = icon <| fa "check-square-o"
+let ballInGoal = icon "flaticon-goal"
+let calendar = icon <| fa "calendar"
 let coach = icon <| "flaticon-football50"
 let delete = icon (fa "trash") "Slett"
 let edit = icon <| fa "edit"
-let signup = icon <| fa "calendar"
-let previous = icon <| fa "history"
-let upcoming = icon <| fa "calendar-o"
-let squadList = icon <| fa "users"
 let fine = icon <| fa "money"
+let game = icon <| fa "trophy"
+let gamePlan = icon (fa "exchange") "Bytteplan"
+let goal = icon <| fa "soccer-ball-o"
+let injury = icon <| "flaticon-football93"
+let mapMarker = icon <| fa "map-marker"
 let news = icon <| fa "newspaper-o"
 let payment = icon <| fa "list"
-let injury = icon <| "flaticon-football93"
-let assist = icon <| "flaticon-football119"
-let trophy = icon <| fa "trophy"
-let game = trophy
-let goal = icon <| fa "soccer-ball-o"
 let player = icon <| "flaticon-soccer18"
+let previous = icon <| fa "history"
+let redCard = icon <| "icon icon-card-red"
+let signup = icon <| fa "calendar"
+let squadList = icon <| fa "users"
 let team = icon <| "flaticon-football43"
 let training = icon <| "flaticon-couple40"
+let trophy = icon <| fa "trophy"
+let time = icon <| fa "clock-o"
+let upcoming = icon <| fa "calendar-o"
 let user = icon <| fa "user"
-let yellowCard = icon <| "icon icon-card-yellow"
-let redCard = icon <| "icon icon-card-red"
 let whistle = icon <| "flaticon-football75"
+let yellowCard = icon <| "icon icon-card-yellow"

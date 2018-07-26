@@ -18,3 +18,8 @@ module BaseComponents =
     let number = string >> encodedText
 
     let renderOption o = o |> Option.fold (fun _ o -> o) emptyText
+
+    let (=>) optn fn =
+        optn
+        |> Option.map fn
+        |> Option.defaultValue empty    

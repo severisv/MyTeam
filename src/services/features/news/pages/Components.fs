@@ -1,6 +1,5 @@
 module MyTeam.News.Pages.Components
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain

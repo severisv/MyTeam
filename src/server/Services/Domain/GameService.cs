@@ -109,32 +109,5 @@ namespace MyTeam.Services.Domain
               }).ToList().SingleOrDefault();
 
 
-        public void AddGames(List<ParsedGame> games, Guid clubId)
-        {
-            var gameEntities = games.Select(game => new Game
-            {
-                Id = game.Id,
-                DateTime = game.DateTime,
-                IsHomeTeam = game.IsHomeTeam,
-                AwayScore = game.AwayScore,
-                HomeScore = game.HomeScore,
-                Location = game.Location,
-                Opponent = game.Opponent,
-                TeamId = game.TeamId,
-                GameTypeValue = game.GameType,
-                Type = EventType.Kamp.ToInt(),
-                ClubId = clubId,
-                EventTeams = new List<EventTeam>
-                {
-                    new EventTeam
-                {
-                    Id = Guid.NewGuid(),
-                    TeamId = game.TeamId,
-                    EventId = game.Id
-                }}
-            }).ToList();
-            _dbContext.Games.AddRange(gameEntities);
-            _dbContext.SaveChanges();
-        }
     }
 }
