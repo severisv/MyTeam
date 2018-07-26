@@ -37,7 +37,7 @@ let get : Get =
                         ShortName = club.ShortName
                         Name = club.Name
                         Teams = teams
-                        Favicon = club.Name
+                        Favicon = club.Favicon
                         Logo = club.Logo
                     }) 
         |> Seq.tryHead                                  
