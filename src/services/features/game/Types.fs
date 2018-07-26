@@ -19,6 +19,7 @@ type Game = {
     DateTime: DateTime
     Location: string
     Type: GameType
+    MatchReportName: string option
 }
 
 

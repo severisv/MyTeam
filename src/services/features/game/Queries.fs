@@ -27,9 +27,9 @@ let getGame: GetGame =
                 query {
                     for game in db.Games do
                     where (game.Id = gameId)
-                    select (game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished)
+                    select (game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
                  }
-                 |> Seq.map (fun (name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished) ->
+                 |> Seq.map (fun (name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->
                     {
                         Id = gameId
                         HomeTeam = isHomeTeam =? (name, opponent)
@@ -40,6 +40,7 @@ let getGame: GetGame =
                         Location = location
                         Type = enum<GameType> (gameType.Value)
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
+                        MatchReportName = (hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )
                  |> Seq.tryHead

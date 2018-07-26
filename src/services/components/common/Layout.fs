@@ -1,6 +1,5 @@
 namespace MyTeam.Views
 
-open MyTeam
 open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]

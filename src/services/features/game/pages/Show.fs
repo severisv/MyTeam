@@ -18,6 +18,12 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     | None -> NotFound
     | Some game ->    
 
+        let matchReport =
+            game.MatchReportName 
+            |> Option.map (Common.News.Queries.getArticle db club.Id)
+            |> Option.defaultValue None
+      
+
         let gameHasPassed = game.DateTime < DateTime.Now
 
         [
@@ -107,7 +113,14 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                             attr "data-show-player-url" "/spillere/vis"
                             attr "data-edit-mode" "false" ][], empty)             
                 ]                
-                Ajax.load <| sprintf "/nyheter/kamprapport/%O" game.Id                
+           
+                matchReport => fun matchReport -> 
+                        block [ _class "u-fade-in-on-enter" ] [
+                            h2 [ _class "news-matchReport" ] [ encodedText "Kamprapport" ]
+                            hr [ ]
+                            Common.News.Components.showArticle ctx user matchReport None
+                        ]
+                  
             ] 
         ]
         |> layout club user (fun o -> { o with 

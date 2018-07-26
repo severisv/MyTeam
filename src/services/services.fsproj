@@ -47,6 +47,7 @@
     <Compile Include="common/Clubs.fs" />
     <Compile Include="common/Users.fs" />
     <Compile Include="common/Tenant.fs" />
+    <Compile Include="common/News.fs" />
     <Compile Include="common/views/partials/Admin.fs" />
     <Compile Include="common/views/partials/Alerts.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />

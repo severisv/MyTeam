@@ -6,7 +6,7 @@ open MyTeam.Domain
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
-
+open MyTeam.Common.News
 
 let private pagination articles =   
 

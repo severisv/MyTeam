@@ -4,28 +4,7 @@ open MyTeam
 open MyTeam.Domain
 open System
 open MyTeam.Users
-
-type ArticleName = string
-
-type Article = {
-  Name: ArticleName
-  Image: string
-  Headline: string
-  Published: DateTime
-}
-
-type Author = {
-  UrlName: string
-  Name: string
-}
-
-type ArticleDetailed = {
-    Details: Article
-    Author: Author
-    Content: string
-    GameId: System.Guid option
-}
-
+open MyTeam.Common.News
 
 type PaginationOptions = {
     Skip: int
@@ -57,8 +36,6 @@ type ArticleModel = {
 
 
 type ListArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
-
-type GetArticle = Database -> ClubId -> ArticleName -> ArticleDetailed option
 
 type GetClubDescription = Database -> ClubId -> string option
 
