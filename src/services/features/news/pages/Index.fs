@@ -38,7 +38,7 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
     let articles = Queries.listArticles db club.Id paginationOptions
 
     [
-        main [] 
+        mtMain [] 
             ((articles.Items |> List.map (fun article -> 
                 let articleUrl = Components.articleUrl article
 

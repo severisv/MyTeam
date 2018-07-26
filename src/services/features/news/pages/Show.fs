@@ -18,7 +18,7 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
     | None -> NotFound
     | Some article ->    
         [
-            main [] [  
+            mtMain [] [  
                 block [] [     
                     Common.News.Components.showArticle ctx user 
                         article

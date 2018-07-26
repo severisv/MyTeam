@@ -19,7 +19,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
     let latestGames = Queries.listRecentGames db club.Id published
 
     [
-        main [] [
+        mtMain [] [
             block [] [
                 form [  _action (name |> Option.map (fun name -> sprintf "/nyheter/endre/%s" name) 
                                       |> Option.defaultValue "/nyheter/ny") 

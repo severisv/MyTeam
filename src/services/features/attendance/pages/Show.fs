@@ -32,7 +32,7 @@ module Show =
         let registerAttendanceUrl = "/intern/oppmote/registrer"     
       
         [
-            main [] [
+            mtMain [] [
                 block [] [
                     (user.IsInRole [Role.Admin;Role.Trener;Role.Oppmøte] =? 
                        (div [_class "clearfix u-margin-bottom "] [ 

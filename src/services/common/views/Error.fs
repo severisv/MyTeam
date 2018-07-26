@@ -13,7 +13,7 @@ let internal errorMessage icon msg =
 
 let notFound club user next ctx =
     ([    
-        main [] [
+        mtMain [] [
             block [] [
                 errorMessage !!(Icons.injury "") " Auda... vi finner ikke siden du leter etter :("
             ]    
@@ -24,7 +24,7 @@ let notFound club user next ctx =
 
 let serverError club user next ctx =
     ([    
-        main [] [
+        mtMain [] [
             block [] [
                 errorMessage !!(Icons.injury "") " Auda... det oppstod en feil. Vi har meldt fra til de det gjelder."
             ]    
@@ -36,7 +36,7 @@ let serverError club user next ctx =
 
 let unauthorized club user next ctx =
     ([    
-        main [] [
+        mtMain [] [
             block [] [
                 errorMessage !!(Icons.whistle "") " Offside! Denne siden har du ikke tilgang til."
             ]    

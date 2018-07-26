@@ -27,7 +27,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
         let gameHasPassed = game.DateTime < DateTime.Now
 
         [
-            main [] [      
+            mtMain [] [      
                 div [ _class "mt-container" ] [                   
                   
                     user => fun user -> 

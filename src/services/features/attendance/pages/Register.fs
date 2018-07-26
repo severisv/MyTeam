@@ -70,7 +70,7 @@ module Register =
                         ]                       
                 ]       
         [
-            main [_class "register-attendance"] [
+            mtMain [_class "register-attendance"] [
                 block [] 
                         (model
                         |> Option.fold (fun _ (training, players) ->                  

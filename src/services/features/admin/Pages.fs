@@ -8,7 +8,7 @@ open MyTeam.Views
 
 let index club user ctx =
     [
-        main [] [
+        mtMain [] [
             block [] [
                 div [
                     _id "manage-players";

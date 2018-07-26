@@ -29,7 +29,7 @@ let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
     let isSelected = (equals <| memberListUrl (status |> toLowerString))
 
     [
-        main [] [
+        mtMain [] [
             block [] [
                 tabs [] 
                     ([Status.Aktiv; Status.Veteran; Status.Inaktiv]
