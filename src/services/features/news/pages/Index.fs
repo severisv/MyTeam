@@ -1,13 +1,12 @@
 module MyTeam.News.Pages.Index
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
-
+open MyTeam.Common.News
 
 let private pagination articles =   
 
@@ -39,7 +38,7 @@ let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: Http
     let articles = Queries.listArticles db club.Id paginationOptions
 
     [
-        main [] 
+        mtMain [] 
             ((articles.Items |> List.map (fun article -> 
                 let articleUrl = Components.articleUrl article
 

@@ -11,6 +11,5 @@ namespace MyTeam.Services.Domain
         IEnumerable<GameViewModel> GetGames(Guid teamId, int year, string teamName);
         IEnumerable<SeasonViewModel> GetSeasons(Guid teamId);
         GameViewModel GetGame(Guid gameId);
-        void AddGames(List<ParsedGame> games, Guid clubId);
     }
 }

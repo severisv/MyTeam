@@ -1,190 +1,141 @@
-﻿
-table.gamesTable tr td {
-    line-height: 2.5rem;
-    font-size: 1.15em;
-    text-align: center;
-    padding: 1.25rem 0;
+﻿table.gamesTable tr td {
+  line-height: 2.5rem;
+  font-size: 1.15em;
+  text-align: center;
+  padding: 1.25rem 0;
 
-    &.gameType {
-        font-size: 1.5em;
-        padding-right: 0.5rem;
-        }
+  &.gameType {
+    font-size: 1.5em;
+    padding-right: 0.5rem;
+  }
 }
 
 .gamesTable tr td.gamesTable-team {
-    font-size: 1.25em;
+  font-size: 1.25em;
 
-    .r-under-xs( {
-        font-size: 1em;
-    });
+  .r-under-xs({font-size: 1em;});
 
-    .r-under-xxs( {
-        font-size: 0.9em;
-    });
-    font-family: @fontBold;
-
-    &.gamesTable-team--left {
-        text-align: right;
-    }
-
-    &.gamesTable-team--right {
-        text-align: left;
-    }
+  .r-under-xxs({font-size: 0.9em;});
+  font-family: @fontBold;
+  &.gamesTable-team--left {
+    text-align: right;
+  }
+  &.gamesTable-team--right {
+    text-align: left;
+  }
 }
-
 .gamesTable tr td.gamesTable-date {
-    min-width: 3.6em;
-    font-size: 1em;
-    i {font-size: 0.75em;}
-     .r-under-xs( {
-        font-size: 0.9em;
-        });
-     .r-under-xxs( {
-        font-size: 0.8em;
-    });
+  min-width: 3.6em;
+  font-size: 1em;
+  i {
+    font-size: 0.75em;
+  }
+  .r-under-xs({font-size: 0.9em;});
+  .r-under-xxs({font-size: 0.8em;});
 }
-
 .gameResult {
-    white-space: nowrap;
-    border-radius: 1em;
-    padding: 0.2em 0.65em;
-    margin: 0 0.5em;
+  white-space: nowrap;
+  border-radius: 1em;
+  padding: 0.2em 0.65em;
+  margin: 0 0.5em;
 }
-
 .gameResult--win {
-    background: @greenLight;
+  background: @greenLight;
 }
-
 .gameResult--draw {
-    background: @yellowLight;
+  background: @yellowLight;
 }
 
 .gameResult--loss {
-    background: @redLight;
+  background: @redLight;
 }
-
 
 .games-showGameLink {
-    transition: all 0.25s ease-out;
-    cursor: pointer;
-
-    &:hover {
-        background-color: fade(@team-primary, 50) !important;
-        text-decoration: none;
-    }
-
-    &:focus {
-        text-decoration: none;
-    }
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  &:hover {
+    background-color: fade(@team-primary, 50) !important;
+    text-decoration: none;
+  }
+  &:focus {
+    text-decoration: none;
+  }
 }
-
 .game-header {
-    margin: 0 2em;
-
-    .r-under-xs( {
-        font-size: 1.5em;
-        margin-top: 0.2em;
-    }
-
-    );
-
-    .r-under-xxs( {
-        font-size: 1.2em;
-    }
-
-    );
+  margin: 0 2em;
+  .r-under-xs({font-size: 1.5em; margin-top: 0.2em;});
+  .r-under-xxs({font-size: 1.2em;});
 }
 
 .game-score {
-    font-size: 1.5em;
-    padding: 0 1em;
-
-    .r-under-xs( {
-        padding: 0 0.5em;
-        font-size: 1.2em;
-    }
-
-    );
+  font-size: 1.5em;
+  padding: 0 1em;
+  .r-under-xs({padding: 0 0.5em; font-size: 1.2em;});
 }
-
-
 .gameEvents {
-    margin-bottom: 1.5em;
+  margin-bottom: 1.5em;
 }
-
 .gameEvents .gameEvent {
-    position: relative;
-    font-size: 1.25em;
-    line-height: 1.5em;
-    margin-bottom: 0.5em;
-    i { font-size: 1.2em;}
-
-    .r-under-xxs({
-        font-size: 1em;
-    });
-
+  position: relative;
+  font-size: 1.25em;
+  line-height: 1.5em;
+  margin-bottom: 0.5em;
+  i {
+    font-size: 1.2em;
+  }
+  .r-under-xxs({font-size: 1em;});
 }
-
 .gameEvents .fa-spinner {
-    font-size: 1.55em;
+  font-size: 1.55em;
 }
 .gameEvents .fa-spinner.removeEvent {
-    font-size: 0.9em;
-    margin-top: 0.3em;
-    margin-right: 0.75em;
-    float:right;
+  font-size: 0.9em;
+  margin-top: 0.3em;
+  margin-right: 0.75em;
+  float: right;
 }
-
 .gameEvent .fa {
-    margin-right: 0.15em;
+  margin-right: 0.15em;
 }
-
 .game-showEventsWrapper {
-    padding-top: 1em;
+  padding-top: 1em;
 }
-
 .game-details {
-    color: @black-faded;
-    font-size: 0.9em;
-    margin-bottom: 1.5em;
+  color: @black-faded;
+  font-size: 0.9em;
+  margin-bottom: 1.5em;
 }
 
+.game-details-icon {
+  text-align: right;
+  & > i.fa {
+    font-size: 1.3em;
+  }
+}
 .game-squadList {
-     line-height:1.6em;
-     font-size: 1.2em;
-     i {
-         font-size: 1.25em;
-     }
-    .r-under-xxs({
-           font-size: 1em;
-            i {
-         font-size: 1em;
-     }
-    });
-
-
+  line-height: 1.6em;
+  font-size: 1.2em;
+  i {
+    font-size: 1.25em;
+  }
+  .r-under-xxs({font-size: 1em; i {font-size: 1em;}});
 }
-
 .game-squadList .fa-spinner {
-    font-size: 0.75em;
-    margin-left: 0.5em;
-
-    &.removePlayer {
-        float:right;
-        margin-top: 0.5em;
-    }
+  font-size: 0.75em;
+  margin-left: 0.5em;
+  &.removePlayer {
+    float: right;
+    margin-top: 0.5em;
+  }
 }
-
-.game-scoreTable{
-    font-size: 1.4em;
-    margin: 0 auto;
-    font-family: @fontBold;
+.game-scoreTable {
+  font-size: 1.4em;
+  margin: 0 auto;
+  font-family: @fontBold;
 }
-
 .game-scoreTable td {
-    padding: 0 0.5em;
+  padding: 0 0.5em;
 }
-
 .game-scoreTable--score {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }

@@ -5,7 +5,8 @@ open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Views
 open MyTeam.Shared.Components
-
+open Microsoft.Extensions.Hosting
+open Giraffe
 
 [<AutoOpen>]
 module Pages =   
@@ -29,6 +30,9 @@ module Pages =
     }
  
     let layout club (user: Option<Users.User>) getOptions (ctx: HttpContext) content =  
+
+        let isProduction = ctx.GetService<IHostingEnvironment>().IsProduction()
+
         let o = getOptions ({
                                 Title = ""
                                 PageName = ""
@@ -49,7 +53,7 @@ module Pages =
                 title [] [encodedText <| club.Name + (o.Title.HasValue =? (" - " + o.Title, "")) ]
                 link [_rel "icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
                 link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v2" ]
-                Analytics.script
+                isProduction =? (Analytics.script, empty)
             ]
             body []([
                     div [_class "navbar navbar-inverse navbar-fixed-top"] [

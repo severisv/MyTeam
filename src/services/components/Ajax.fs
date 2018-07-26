@@ -25,3 +25,7 @@ let ajaxCheckbox href isChecked =
         (isChecked =? (_checked, _empty))
     ]    
      
+
+
+let load url =
+      div [ _class "ajax-load" ;_href url ] []

@@ -42,7 +42,7 @@ module Pages =
                         tableUrl selectedTeam selectedYear = url      
                   
                     [
-                        main [] [
+                        mtMain [] [
                             block [] [
                                 tabs [_class "team-nav"] 
                                     (club.Teams |> List.map (fun team  -> 

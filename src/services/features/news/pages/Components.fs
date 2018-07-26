@@ -1,6 +1,5 @@
 module MyTeam.News.Pages.Components
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
@@ -8,32 +7,11 @@ open MyTeam.Domain.Members
 open MyTeam.News
 open System
 open MyTeam.Views
-open MyTeam.Shared.Components
+open MyTeam.Common.News
 
 let articleUrl (article: Article) = 
     sprintf "/nyheter/vis/%O" article.Name
 
-
-let editLink (article: Article) (user: Users.User option) =
-    user |> Option.bind (fun user ->
-                            if user.IsInRole [Role.Admin;Role.Skribent;Role.Trener] then
-                                Some <| a [ _class "pull-right edit-link"; _href <| sprintf "/nyheter/endre/%s" article.Name ] [ 
-                                           !!(Icons.edit "Rediger artikkel")
-                                ]
-                            else None
-                        )
-    |> Option.defaultValue empty
-    
-
-let matchDetails = 
-        div [] [
-            h2 [ _class "news-matchReport" ] [ encodedText "Kamprapport" ]
-            hr [ ]
-        ]
-   
-
-let image ctx url = 
-    Images.getArticle ctx url (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
 
 
 let adminMenu (user: Users.User option) =

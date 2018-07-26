@@ -70,7 +70,7 @@ module Pages =
             let getImage = Images.getMember ctx
           
             [
-                main [] [
+                mtMain [] [
                     block [] [
                         tabs [_class "team-nav"] 
                              ((club.Teams 

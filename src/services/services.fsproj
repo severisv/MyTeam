@@ -47,6 +47,7 @@
     <Compile Include="common/Clubs.fs" />
     <Compile Include="common/Users.fs" />
     <Compile Include="common/Tenant.fs" />
+    <Compile Include="common/News.fs" />
     <Compile Include="common/views/partials/Admin.fs" />
     <Compile Include="common/views/partials/Alerts.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />
@@ -72,6 +73,7 @@
     <Compile Include="features/game/Queries.fs" />
     <Compile Include="features/game/Persistence.fs" />
     <Compile Include="features/game/Api.fs" />
+    <Compile Include="features/game/pages/Show.fs" />
     <Compile Include="features/gameevents/Types.fs" />
     <Compile Include="features/gameevents/Api.fs" />
     <Compile Include="features/members/Types.fs" />
