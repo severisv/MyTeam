@@ -31,6 +31,11 @@ namespace MyTeam.Controllers
         }
 
 
+        [Route("vis")]
+        public IActionResult Vis(Guid gameId)
+        {
+            return Redirect($"/kamper/vis/{gameId}");
+        }
 
         [Route("{lagnavn?}/{aar:int?}")]
         public IActionResult Index(string lagnavn = null, int? aar = null)
