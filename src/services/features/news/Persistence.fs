@@ -16,7 +16,7 @@ let saveArticle : UpdateArticle =
               a.Headline <- model.Headline
               a.Content <- model.Content
               a.ImageUrl <- model.ImageUrl
-              a.GameId <- model.IsMatchReport =? (Nullable(), model.GameId |> toNullable)           
+              a.GameId <- model.IsMatchReport =? (model.GameId |> toNullable, Nullable())           
               db.SaveChanges() |> ignore
               OkResult()
 

@@ -126,7 +126,9 @@ let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
  
     let form = ctx.BindForm<ArticleModel>()
         
-    form ==>
+    { form with 
+        IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+    } ==>
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
