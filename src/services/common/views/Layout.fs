@@ -24,7 +24,7 @@ module Pages =
         
     type LayoutModel = {
         Title: string
-        PageName: string
+        MetaTitle: string
         MetaDescription: string
         Scripts: XmlNode list
     }
@@ -35,7 +35,7 @@ module Pages =
 
         let o = getOptions ({
                                 Title = ""
-                                PageName = ""
+                                MetaTitle = ""
                                 MetaDescription = ""
                                 Scripts = []
                             })
@@ -50,7 +50,7 @@ module Pages =
                 meta [_name "viewport";_content "width=device-width, initial-scale=1.0"]
                 meta [_title <| club.ShortName + (o.Title.HasValue =? (" - " + o.Title, "")) ]
                 o.MetaDescription.HasValue =? (meta [_name "description"; _content o.MetaDescription], emptyText)
-                title [] [encodedText <| club.Name + (o.Title.HasValue =? (" - " + o.Title, "")) ]
+                title [] [encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [_rel "icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
                 link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v4" ]
                 isProduction =? (Analytics.script, empty)
@@ -115,7 +115,7 @@ module Pages =
                     div [_class "mt-page-header"] [
                         div [_class "container"] [
                             h1 [] [
-                                encodedText (o.Title =?? o.PageName)
+                                encodedText o.Title
                             ]                           
                         ]
                     ]

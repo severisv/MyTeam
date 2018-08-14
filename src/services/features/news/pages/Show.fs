@@ -40,6 +40,7 @@ let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
             ]    
         ]
         |> layout club user (fun o -> { o with 
+                                            MetaTitle = article.Details.Headline
                                             Title = "Nyheter"
                                             Scripts = [ Components.twitterScript ]
                                         }
