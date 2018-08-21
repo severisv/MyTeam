@@ -8,6 +8,7 @@ nuget Fable.React
 nuget FSharp.Quotations.Evaluator
 nuget Giraffe 1.2.0-preview-1
 nuget HtmlAgilityPack.CssSelectors.NetCore
+nuget Microsoft.ApplicationInsights.AspNetCore
 nuget Microsoft.AspNetCore.Antiforgery 
 nuget Microsoft.AspNetCore.Authentication.Facebook
 nuget Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
