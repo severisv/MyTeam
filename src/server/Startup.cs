@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Microsoft.Extensions.Logging;
 
 namespace MyTeam
 {
@@ -77,9 +78,10 @@ namespace MyTeam
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.LogStart();
+            loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Warning);
 
             if (env.IsDevelopment() || env.IsStaging())
             {

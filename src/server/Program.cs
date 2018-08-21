@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using SlackLogger;
 using Microsoft.ApplicationInsights.AspNetCore;
 
-
 namespace MyTeam
 {
     public class Program
@@ -35,7 +34,7 @@ namespace MyTeam
                     {
                         options.WebhookUrl =
                             "https://hooks.slack.com/services/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";
-                        options.LogLevel = hostingContext.HostingEnvironment.IsDevelopment() ? LogLevel.None : LogLevel.Warning;
+                        options.LogLevel = hostingContext.HostingEnvironment.IsDevelopment() ? LogLevel.None : LogLevel.Information;
                         options.Channel = "#myteam";
                     });
                 })
