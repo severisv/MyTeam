@@ -6,7 +6,7 @@ nuget Fable.Core
 nuget Fable.Import.Browser
 nuget Fable.React
 nuget FSharp.Quotations.Evaluator
-nuget Giraffe 1.2.0-preview-1
+nuget Giraffe
 nuget HtmlAgilityPack.CssSelectors.NetCore
 nuget Microsoft.ApplicationInsights.AspNetCore
 nuget Microsoft.AspNetCore.Antiforgery 
@@ -26,4 +26,4 @@ nuget Newtonsoft.Json
 nuget Sendgrid
 nuget SlackLogger
 nuget System.Net.Http
-nuget TaskBuilder.fs 1.2.0-rc
+nuget TaskBuilder.fs

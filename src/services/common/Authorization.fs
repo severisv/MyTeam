@@ -27,7 +27,7 @@ module Authorization =
         fun next ctx -> requiresAuthentication accessDenied next ctx
 
     let mustBeInRole (user: Option<User>) (roles: Role list) =
-        requiresAuthPolicy (fun __ ->
+        evaluateUserPolicy  (fun __ ->
                                 match user with 
                                     | Some u -> u.IsInRole roles                                   
                                     | None -> false
