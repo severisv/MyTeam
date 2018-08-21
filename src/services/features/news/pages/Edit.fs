@@ -167,8 +167,14 @@ let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
     let db = ctx.Database
  
     let form = ctx.BindForm<ArticleModel>()
-        
-    form ==>
+
+    printf "\n --------------- \n  %O \n"   { form with 
+                                                       IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+    }
+
+    { form with 
+        IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+    } ==>
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]

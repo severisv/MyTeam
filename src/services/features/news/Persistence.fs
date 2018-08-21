@@ -51,7 +51,7 @@ let createArticle : CreateArticle =
         article.Headline <- model.Headline
         article.Content <- model.Content
         article.ImageUrl <- model.ImageUrl
-        article.GameId <- model.IsMatchReport =? (Nullable(), model.GameId |> toNullable)
+        article.GameId <- model.IsMatchReport =? (model.GameId |> toNullable, Nullable())           
         article.AuthorId <- Nullable(user.Id)
         article.Published <- DateTime.Now
         article.ClubId <- clubId
