@@ -30,6 +30,7 @@ namespace MyTeam
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddConsole();
                     logging.AddDebug();
+                    logging.AddAzureWebAppDiagnostics();
                     logging.AddSlack(options =>
                     {
                         options.WebhookUrl =

@@ -8,3 +8,4 @@ Microsoft.AspNetCore.Mvc
 Microsoft.AspNetCore.Authentication.Facebook
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 Microsoft.ApplicationInsights.AspNetCore
+Microsoft.Extensions.Logging.AzureAppServices
