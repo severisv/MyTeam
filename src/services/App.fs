@@ -54,7 +54,8 @@ module App =
                     routef "/statistikk/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
                     routef "/statistikk/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                     route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
-                    route "/om" >=> (AboutPages.index club user |> htmlGet)          
+                    route "/om" >=> (AboutPages.index club user |> htmlGet)        
+                    route "/yolo" >=> failwith "Feil as"  
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user => fun user ->
