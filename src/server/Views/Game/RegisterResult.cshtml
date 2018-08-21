@@ -9,12 +9,12 @@
     <div class="mt-container registerResult">
          <a asp-action="show" asp-route-gameId="@Model.Game.Id" class="pull-right" title="Vis kamp"><i class="fa fa-arrow-left"></i> <span class="hidden-xxs">Tilbake</span></a>
         <div class="game-header">
-            <span class="registerResult-teamScore no-wrap">
+            <span class="registerResult-teamScore">
                 @Model.Game.HomeTeam
                 <input type="tel" class="registerResult-score ajax-update" data-href="/api/games/@Model.Game.Id/score/home" value="@Model.Game.HomeScore" />
             </span>
               <span class="hidden-xs"> - </span>
-            <span class="registerResult-teamScore no-wrap">
+            <span class="registerResult-teamScore">
                 <input type="tel" class="registerResult-score ajax-update" data-href="/api/games/@Model.Game.Id/score/away" value="@Model.Game.AwayScore" />
                 @Model.Game.AwayTeam
             </span>
