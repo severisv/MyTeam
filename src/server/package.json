@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "awesome-typescript-loader": "^3.4.1",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -44,8 +44,8 @@
     "react-autosuggest": "^9.0.1",
     "react-datepicker": "^0.27.0",
     "react-dom": "15.2.1",
-    "typescript": "^2.6.2",
     "tinymce": "4.4.0",
+    "typescript": "^2.6.2",
     "webpack": "^3.9.1",
     "whatwg-fetch": "^2.0.3",
     "wildcards-entry-webpack-plugin": "^2.1.0"
