@@ -572,13 +572,6 @@ NUGET
       Microsoft.Extensions.Logging.Abstractions (>= 2.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 2.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.Logging.Abstractions (2.1.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46) (>= netstandard2.0)
-    Microsoft.Extensions.Logging.AzureAppServices (2.1.1)
-      Microsoft.Extensions.Configuration.EnvironmentVariables (>= 2.1.1) - restriction: >= netstandard2.0
-      Microsoft.Extensions.Configuration.Json (>= 2.1.1) - restriction: >= netstandard2.0
-      Microsoft.Extensions.Logging (>= 2.1.1) - restriction: >= netstandard2.0
-      Microsoft.Extensions.Logging.Abstractions (>= 2.1.1) - restriction: >= netstandard2.0
-      Microsoft.Extensions.Logging.Configuration (>= 2.1.1) - restriction: >= netstandard2.0
-      System.ValueTuple (>= 4.5) - restriction: >= netstandard2.0
     Microsoft.Extensions.Logging.Configuration (2.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging (>= 2.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options.ConfigurationExtensions (>= 2.1.1) - restriction: >= netstandard2.0
