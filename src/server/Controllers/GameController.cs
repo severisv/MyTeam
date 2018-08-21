@@ -10,6 +10,8 @@ using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.Table;
 using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MyTeam.Controllers
 {
@@ -34,6 +36,8 @@ namespace MyTeam.Controllers
         [Route("vis")]
         public IActionResult Vis(Guid gameId)
         {
+            var logger = HttpContext.RequestServices.GetService<ILogger<GameController>>();
+            logger.LogInformation($"Videresender fra {HttpContext.Request.Path}. Referer {Request.Headers["Referer"].ToString()}");
             return Redirect($"/kamper/vis/{gameId}");
         }
 

@@ -81,7 +81,7 @@ namespace MyTeam
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.LogStart();
-            loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Warning);
+            loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Information);
 
             if (env.IsDevelopment() || env.IsStaging())
             {
