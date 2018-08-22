@@ -34,7 +34,7 @@ module App =
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                             choose  [
                                         GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
-                                        POST >=> (user => fun user -> (News.Pages.Edit.post club user name |> htmlGet))                                            
+                                        POST >=> (user => fun user -> (News.Pages.Edit.editPost club user name |> htmlGet))                                            
                                     ]
                     route "/nyheter/ny" >=>
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
@@ -131,7 +131,6 @@ module App =
                 (setStatusCode 404 >=> ErrorHandling.logNotFound >=> text "404") next ctx
 
             
-
     let useGiraffe (app : IApplicationBuilder)  =
             let env = app.ApplicationServices.GetService<IHostingEnvironment>()
             if env.IsDevelopment() then

@@ -120,7 +120,7 @@ let view (club: Club) user name (ctx: HttpContext) =
           
             editView ctx club user (Some name) article published []
 
-let post (club: Club) (user: Users.User) name (ctx: HttpContext) =
+let editPost (club: Club) (user: Users.User) name (ctx: HttpContext) =
 
     let db = ctx.Database
  
