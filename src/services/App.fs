@@ -125,10 +125,10 @@ module App =
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
                         ]                                                                                                                                                                                                                                     
-                    setStatusCode 404 >=> Views.Error.notFound club user
+                    setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx
             | None ->
-                (setStatusCode 404 >=> text "404") next ctx
+                (setStatusCode 404 >=> ErrorHandling.logNotFound >=> text "404") next ctx
 
             
 

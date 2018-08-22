@@ -35,3 +35,9 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
                     | (None, _) -> text "Error"
                 ) next ctx
 
+
+let logNotFound next ctx =
+    Logger.get ctx 
+    |> fun logger ->
+        logger.LogWarning(sprintf "404: %s Referer: %s " (string ctx.Request.Path) (string ctx.Request.Headers.["Referer"]) )
+    next ctx

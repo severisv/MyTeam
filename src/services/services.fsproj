@@ -28,6 +28,7 @@
     <Compile Include="utils/Validation.fs" />
     <Compile Include="utils/Validators.fs" />
     <Compile Include="utils/Sha1.fs" />
+    <Compile Include="utils/Logger.fs" />
     <Compile Include="components/common/Base.fs" />
     <Compile Include="components/common/Buttons.fs" />
     <Compile Include="components/common/Icons.fs" />
