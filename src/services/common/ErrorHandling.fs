@@ -39,5 +39,14 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
 let logNotFound next ctx =
     Logger.get ctx 
     |> fun logger ->
-        logger.LogWarning(sprintf "404: %s Referer: %s " (string ctx.Request.Path) (string ctx.Request.Headers.["Referer"]) )
+        logger.LogWarning(sprintf "404: %s Referer: %s  \n %s" 
+                            (string ctx.Request.Path) 
+                            (string ctx.Request.Headers.["Referer"])
+                            (ctx.Request.Headers 
+                            |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains("cookie"))
+                            |> Seq.map (fun keyValue -> 
+                                sprintf "%s: %s" keyValue.Key (string keyValue.Value)
+                            )
+                            |> String.concat ",  ")
+                         )
     next ctx
