@@ -41,32 +41,6 @@ namespace MyTeam.Controllers
             return Redirect($"/kamper/vis/{gameId}");
         }
 
-        [Route("{lagnavn?}/{aar:int?}")]
-        public IActionResult Index(string lagnavn = null, int? aar = null)
-        {
-            var team = lagnavn ?? Club.Teams.First().ShortName;
-            var teamId = Club.Teams.First(t => t.ShortName == team).Id;
-
-            var seasons = _gameService.GetSeasons(teamId);
-
-            var teams = Club.Teams
-                .Select(t => new TeamViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    ShortName = t.ShortName
-                })
-                .ToList();
-
-            var year = aar ?? seasons?.FirstOrDefault()?.Year ?? DateTime.Now.Year;
-
-            var games = _gameService.GetGames(teamId, year, teams.Single(t => t.Id == teamId).Name);
-            var model = new GamesViewModel(seasons, teams, year, games, team, teamId);
-
-            return View("Index", model);
-        }
-
-
         [RequireMember(Roles.Coach, Roles.Admin)]
         [Route("laguttak")]
         public IActionResult RegisterSquad(Guid eventId)

@@ -14,7 +14,7 @@ module Tabs =
     }
 
     let tabs attributes (items: Tab list) (isSelected: (string -> bool)) =
-        if items.Length > 0 then
+        if items.Length > 1 then
             div attributes [
                 ul [_class "nav nav-pills mt-justified"] 
                     (items 

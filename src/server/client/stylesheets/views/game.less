@@ -1,20 +1,34 @@
-﻿table.gamesTable tr td {
-  line-height: 2.5rem;
+﻿.gamesTable {
+  display: table;
+}
+
+.gamesTable > a {
+  color: @blackNormal;
+  display: table-row;
+  height: 3.57em;
+}
+
+.gamesTable a > span {
+  display: table-cell;
   font-size: 1.15em;
   text-align: center;
-  padding: 1.25rem 0;
+  padding: 0;
+  vertical-align: middle;
 
   &.gameType {
     font-size: 1.5em;
     padding-right: 0.5rem;
   }
+
+  &.gamesTable-visible-xs {
+    // bootstrap visible-xs kræsja med display:table-cell
+    display: none;
+    .r-under-xs({display: table-cell;});
+  }
 }
-
-.gamesTable tr td.gamesTable-team {
+.gamesTable a > span.gamesTable-team {
   font-size: 1.25em;
-
   .r-under-xs({font-size: 1em;});
-
   .r-under-xxs({font-size: 0.9em;});
   font-family: @fontBold;
   &.gamesTable-team--left {
@@ -24,7 +38,7 @@
     text-align: left;
   }
 }
-.gamesTable tr td.gamesTable-date {
+.gamesTable a span.gamesTable-date {
   min-width: 3.6em;
   font-size: 1em;
   i {
@@ -39,17 +53,15 @@
   padding: 0.2em 0.65em;
   margin: 0 0.5em;
 }
-.gameResult--win {
+.gameResult--Seier {
   background: @greenLight;
 }
-.gameResult--draw {
+.gameResult--Uavgjort {
   background: @yellowLight;
 }
-
-.gameResult--loss {
+.gameResult--Tap {
   background: @redLight;
 }
-
 .games-showGameLink {
   transition: all 0.25s ease-out;
   cursor: pointer;
@@ -66,7 +78,6 @@
   .r-under-xs({font-size: 1.5em; margin-top: 0.2em;});
   .r-under-xxs({font-size: 1.2em;});
 }
-
 .game-score {
   font-size: 1.5em;
   padding: 0 1em;
@@ -105,7 +116,6 @@
   font-size: 0.9em;
   margin-bottom: 1.5em;
 }
-
 .game-details-icon {
   text-align: right;
   & > i.fa {

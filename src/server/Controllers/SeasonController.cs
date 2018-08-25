@@ -28,10 +28,11 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("oppdater/{year}/{teamId}")]
+        [Route("oppdater/{teamShortName}/{year}")]
         [RequireMember(Roles.Coach, Roles.Admin)]
-        public IActionResult UpdateSeason(int year, Guid teamId)
+        public IActionResult UpdateSeason(int year, string teamShortName)
         {
+            var teamId = Club.Teams.First(c => c.ShortName == teamShortName).Id;
             var season = _seasonService.GetForTeam(teamId).FirstOrDefault(s => s.StartDate.Year == year);
             return season != null ?
                 RedirectToAction("Update", new { seasonId = season.Id }) :

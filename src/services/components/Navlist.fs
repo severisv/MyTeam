@@ -32,8 +32,7 @@ module NavList =
                 | Some footer ->   
                     [ 
                     li [] [hr [] ]
-                    li [] [a [_href footer.Url;_class (model.IsSelected footer.Url =? ("active", ""))] footer.Text
-                        ]
+                    li [] [a [_href footer.Url;_class (model.IsSelected footer.Url =? ("active", ""))] footer.Text]
                     ]      
                 | None -> [] 
                 )  
@@ -54,7 +53,7 @@ module NavList =
     }
 
     let navListMobile model =
-        if model.Items.Length > 0 then
+        if model.Items.Length > 1 then
             div [_class "nav-list--mobile pull-right"] [
                     select [_class "linkSelect form-control pull-right hidden-md hidden-lg"]  
                         (

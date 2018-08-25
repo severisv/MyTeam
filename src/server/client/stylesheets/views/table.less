@@ -5,6 +5,7 @@
 }
 
 /* Table */
+
 table.table {
   tr {
     th {
@@ -40,11 +41,12 @@ table.table > tbody > tr > td.table-td-image {
   margin-right: 0.4em;
 }
 .table-td-image {
-  .r-under-xxs({ display: none;});
+  .r-under-xxs({display: none;});
 }
 .table-align--center {
   text-align: center;
 }
+.table--striped:not(table) > *:nth-child(odd),
 .table--striped tbody tr:nth-child(odd) {
   background-color: fade(@link-color, 5);
 }

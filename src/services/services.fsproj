@@ -75,6 +75,7 @@
     <Compile Include="features/game/Persistence.fs" />
     <Compile Include="features/game/Api.fs" />
     <Compile Include="features/game/pages/Show.fs" />
+    <Compile Include="features/game/pages/List.fs" />
     <Compile Include="features/gameevents/Types.fs" />
     <Compile Include="features/gameevents/Api.fs" />
     <Compile Include="features/members/Types.fs" />

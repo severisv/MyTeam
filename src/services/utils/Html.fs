@@ -1,5 +1,6 @@
 namespace MyTeam.Views
 
+open MyTeam
 open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]
@@ -15,3 +16,17 @@ module Html =
                                                 |> String.concat " "
                             KeyValue (key, values)                                            
                           )                  
+
+
+    let withClass className (c: XmlNode) =
+        match c with
+        | ParentNode ((elementName, attributes), children) ->
+            ParentNode ((elementName, 
+                            mergeAttributes 
+                                (attributes |> Seq.toList) 
+                                [_class className] 
+                            |> List.toArray                                
+                        ), children)    
+        | RawText r ->
+            RawText (r |> replace "class=\"" (sprintf "class=\"%s " className))                    
+        | _ -> c                          

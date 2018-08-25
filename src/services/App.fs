@@ -46,7 +46,10 @@ module App =
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                         GET >=> (News.Pages.Edit.delete club name |> htmlGet)                   
                                                                                                                                                                                                                                          
+                    route "/kamper" >=> (Games.Pages.List.view club user None None |> htmlGet)   
                     routef "/kamper/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                    routef "/kamper/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
+                    routef "/kamper/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
                     route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
                     routef "/tabell/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
                     routef "/tabell/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        

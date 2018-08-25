@@ -5,7 +5,7 @@ open System
 [<AutoOpen>]
 module Helpers =
     
-    let isNotNull = fun v -> v  |> isNull |> not
+    let isNotNull = fun v -> v  |> (isNull >> not)
     
     let equals s1 s2 =
         s1 = s2
