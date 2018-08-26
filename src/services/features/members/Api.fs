@@ -36,9 +36,9 @@ module Api =
 
     [<CLIMutable>]
     type ToggleTeam = { TeamId: TeamId }
-    let toggleTeam clubId id db model =
-            Persistence.toggleTeam db clubId id model.TeamId
+    let toggleTeam clubId id (ctx: HttpContext) model =
+            Persistence.toggleTeam ctx.Database clubId id model.TeamId
             |> OkResult
            
-    let add clubId db model =
-            Persistence.add db clubId model            
+    let add clubId (ctx: HttpContext) model =
+            Persistence.add ctx.Database clubId model            

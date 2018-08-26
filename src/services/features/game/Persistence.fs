@@ -8,7 +8,7 @@ open System
 module Persistence =
 
     let selectPlayer: SelectPlayer = 
-        fun clubId (eventId, playerId) db model ->
+        fun db clubId eventId playerId model ->
             let (ClubId clubId) = clubId
 
             query {
@@ -36,3 +36,23 @@ module Persistence =
 
                     db.SaveChanges() |> ignore
                     OkResult ()
+
+
+
+    let publishSquad: PublishSquad = 
+        fun db clubId gameId ->
+            let (ClubId clubId) = clubId
+
+            db.Games 
+            |> Seq.tryFind (fun e -> e.Id = gameId && e.ClubId = clubId)    
+            |> function
+                | Some a ->
+                    a.IsPublished <- true
+                    db.SaveChanges() |> ignore
+                    OkResult ()
+
+                | None ->
+                    NotFound
+
+            
+                

@@ -27,19 +27,28 @@ module Api =
     
     [<CLIMutable>]
     type PostScore = { value: Nullable<int> }
-    let setHomeScore clubId gameId db model  =
-            updateGame clubId gameId db (fun game -> game.HomeScore <- model.value)
+    let setHomeScore clubId gameId (ctx: HttpContext) model  =
+            updateGame clubId gameId ctx.Database (fun game -> game.HomeScore <- model.value)
 
-    let setAwayScore clubId gameId db model  =
-           updateGame clubId gameId db (fun game -> game.AwayScore <- model.value)
+    let setAwayScore clubId gameId (ctx: HttpContext) model  =
+           updateGame clubId gameId ctx.Database (fun game -> game.AwayScore <- model.value)
 
 
     [<CLIMutable>]
     type GamePlanModel = { GamePlan: string }
-    let setGamePlan clubId gameId db model  =
-        updateGame clubId gameId db (fun game -> game.GamePlan <- model.GamePlan)
+    let setGamePlan clubId gameId (ctx: HttpContext) model  =
+        updateGame clubId gameId ctx.Database (fun game -> game.GamePlan <- model.GamePlan)
  
-    let publishGamePlan clubId gameId db _  =
-        updateGame clubId gameId db (fun game -> game.GamePlanIsPublished <- Nullable true)
+    let publishGamePlan clubId gameId (ctx: HttpContext) _  =
+        updateGame clubId gameId ctx.Database (fun game -> game.GamePlanIsPublished <- Nullable true)
 
-    let selectPlayer = Persistence.selectPlayer        
+    let selectPlayer clubId (gameId, playerId) (ctx: HttpContext) model = 
+        Persistence.selectPlayer ctx.Database clubId gameId playerId model       
+    
+    let publishSquad = 
+        fun clubId gameId (ctx:HttpContext) _ ->
+            Persistence.publishSquad ctx.Database clubId gameId
+            |> Results.map (fun _ -> 
+                                Notifications.clearCache ctx clubId
+                            )
+

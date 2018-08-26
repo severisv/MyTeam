@@ -22,5 +22,5 @@ type GameEvent = {
 }
 
 type Get = ClubId -> GameId -> Database -> HttpResult<GameEvent list>
-type Add = ClubId -> GameId -> Database -> GameEvent -> HttpResult<GameEvent>
+type Add = ClubId -> GameId -> HttpContext -> GameEvent -> HttpResult<GameEvent>
 type Delete = ClubId -> (GameId * GameEventId) -> Database -> HttpResult<unit>

@@ -43,14 +43,6 @@ namespace MyTeam.Services.Domain
                 }).Single();
         }
 
-        public void PublishSquad(Guid eventId)
-        {
-            var ev = _dbContext.Events.Single(e => e.Id == eventId);
-            ev.IsPublished = true;
-            _dbContext.SaveChanges();
-            _cacheHelper.ClearNotificationCache(ev.ClubId);
-        }
-
 
         public GameViewModel GetGame(Guid gameId)
             =>

@@ -121,9 +121,10 @@ module App =
                                     routef "/%O/score/away" (Games.Api.setAwayScore club.Id >> jsonPost)       
                                     routef "/%O/events" (Games.Events.Api.add club.Id >> jsonPost)       
                                     routef "/%O/events/%O/delete" (Games.Events.Api.delete club.Id >> jsonGet)       
-                                    routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)     
+                                    routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)    
                                 ]
-                                mustBeInRole [Role.Trener] >=> choose [                                
+                                mustBeInRole [Role.Trener] >=> choose [         
+                                    routef "/%O/squad/publish" (Games.Api.publishSquad club.Id >> jsonPost)                           
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id >> jsonPost)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     

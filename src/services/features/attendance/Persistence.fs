@@ -9,7 +9,7 @@ open MyTeam.Attendance
 module Persistence =
 
     let confirmAttendance: ConfirmAttendance = 
-        fun clubId (eventId, playerId) db model ->
+        fun db clubId eventId playerId model ->
             let (ClubId clubId) = clubId
 
             query {

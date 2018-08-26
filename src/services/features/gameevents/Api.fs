@@ -57,8 +57,8 @@ module Api =
             else 
                 Ok ()
 
-        fun clubId gameId db model ->
-
+        fun clubId gameId (ctx:HttpContext) model ->
+            let db = ctx.Database
             let (ClubId clubId) = clubId
             query { 
                 for g in db.Games do

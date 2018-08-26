@@ -23,6 +23,8 @@ namespace MyTeam.Services.Application
             _dbContext = dbContext;
         }
 
+        private string NotificationKey(Guid clubId) => $"old-notifications-{clubId.ToString()}";
+
         private string GetMemberKey(Guid? clubId, string userName) => "old-user-" + clubId?.ToString() + userName;
         private string GetClubKey(string clubIdentifier) => "old-club-" + clubIdentifier;
 
@@ -106,10 +108,9 @@ namespace MyTeam.Services.Application
 
         public MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds)
         {
-            var key = clubId.ToString();
 
             object cachedValue;
-            Cache.TryGetValue(key, out cachedValue);
+            Cache.TryGetValue(NotificationKey(clubId), out cachedValue);
 
             var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
             if (notifications != null)
@@ -149,7 +150,7 @@ namespace MyTeam.Services.Application
 
             notifications[memberId] = memberNotification;
 
-            Cache.Set(key, notifications, _cacheOptions);
+            Cache.Set(NotificationKey(clubId), notifications, _cacheOptions);
 
             return memberNotification;
         }
@@ -162,7 +163,7 @@ namespace MyTeam.Services.Application
 
         public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)
         {
-            var key = clubId.ToString();
+            var key = NotificationKey(clubId);
 
             object cachedValue;
             Cache.TryGetValue(key, out cachedValue);
@@ -174,17 +175,6 @@ namespace MyTeam.Services.Application
             }
             Cache.Set(key, notifications);
             Cache.Remove("notifications-" + clubId.ToString());
-        }
-
-        public void ClearMemberCache(Guid memberId)
-        {
-            var member = _dbContext.Members.Where(m => m.Id == memberId).Select(m => new
-            {
-                m.ClubId,
-                Name = m.Email
-            }).ToList().Single();
-            var key = GetMemberKey(member.ClubId, member.Name);
-            Cache.Remove(key);
         }
     }
 }

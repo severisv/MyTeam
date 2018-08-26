@@ -16,9 +16,9 @@ module Results =
             (redirectTo false url) next ctx              
 
 
-    let jsonPost<'a,'b> (fn: Database -> 'a -> HttpResult<'b>) next (ctx: HttpContext) =
+    let jsonPost<'a,'b> (fn: HttpContext -> 'a -> HttpResult<'b>) next (ctx: HttpContext) =
         let payload = ctx.BindJson<'a>()
-        fn ctx.Database payload
+        fn ctx payload
         |> jsonResult next ctx
 
     let jsonGet<'a> (fn: Database -> HttpResult<'a>) next (ctx: HttpContext) =          
@@ -55,5 +55,13 @@ module Results =
         | Redirect url -> Redirect url
         | ValidationErrors ve -> ValidationErrors ve
         | NotFound -> NotFound 
-        | Unauthorized -> Unauthorized       
+        | Unauthorized -> Unauthorized
+
+    let map fn a =
+        match a with
+        | OkResult b -> OkResult <| fn b
+        | Redirect url -> Redirect url
+        | ValidationErrors ve -> ValidationErrors ve
+        | NotFound -> NotFound 
+        | Unauthorized -> Unauthorized 
                 

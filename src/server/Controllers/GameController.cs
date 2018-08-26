@@ -59,18 +59,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [HttpPost]
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("laguttak/publiser")]
-        public JsonResult PublishSquad(Guid eventId)
-        {
-            if (eventId == Guid.Empty) return new JsonResult(JsonResponse.ValidationFailed("EventId er null"));
-
-            _gameService.PublishSquad(eventId);
-
-            return new JsonResult(JsonResponse.Success());
-        }
-
 
         [Route("registrerresultat")]
         public IActionResult RegisterResult(Guid gameId)

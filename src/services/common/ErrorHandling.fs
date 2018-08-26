@@ -38,7 +38,7 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
 
 let logNotFound next (ctx: HttpContext) =
 
-    if  ["bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com" ]
+    if  ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com" ]
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not then             
             Logger.get ctx 

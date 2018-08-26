@@ -42,6 +42,6 @@ type GetAttendance = Database -> ClubId -> Year -> SelectedYear * Years * Player
 type GetPreviousTrainings = Database -> ClubId -> Event list
 type GetTraining = Database -> EventId -> Event
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
-type ConfirmAttendance = ClubId -> EventId * MemberId -> Database -> CheckboxPayload -> HttpResult<unit>
+type ConfirmAttendance = Database -> ClubId -> EventId ->  MemberId -> CheckboxPayload -> HttpResult<unit>
 type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> HttpResult<TeamAttendance list>
 

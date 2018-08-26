@@ -44,7 +44,8 @@ type Game = {
 type Year = int
 
 type GetSquad = Database -> GameId -> Member list
-type SelectPlayer = ClubId -> GameId * MemberId -> Database -> CheckboxPayload -> HttpResult<unit>
+type SelectPlayer = Database -> ClubId -> GameId -> MemberId -> CheckboxPayload -> HttpResult<unit>
+type PublishSquad = Database -> ClubId -> GameId -> HttpResult<unit>
 
 type GetGame = Database -> GameId -> Game option
 type ListGameYears = Database -> TeamId -> Year list
