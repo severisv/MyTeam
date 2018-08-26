@@ -68,7 +68,7 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                             |> List.map (fun game ->
                                 a [ _class "games-showGameLink"; _href <| sprintf "/kamper/vis/%O" game.Id ] [ 
                                     span [ _class "hidden-xs gameType" ][ 
-                                    !!(Icons.gameType game.Type)
+                                        !!(Icons.gameType game.Type)
                                     ]
                                     span [ _class "gamesTable-date" ][ 
                                         !!(Icons.calendar "") |> withClass "text-subtle hidden-xxs"
@@ -115,10 +115,11 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                                 navList 
                                     {
                                         Header = "Adminmeny"
-                                        Items = [
-                                            { Text = [ !!(Icons.add ""); encodedText " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
-                                            { Text = [ !!(Icons.refresh ""); encodedText " Oppdatering av term." ]; Url = sprintf "/sesong/oppdater/%s/%i" selectedTeam.ShortName selectedYear }
-                                        ]                            
+                                        Items = 
+                                            [
+                                                { Text = [ !!(Icons.add ""); encodedText " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
+                                                { Text = [ !!(Icons.refresh ""); encodedText " Oppdatering av term." ]; Url = sprintf "/sesong/oppdater/%s/%i" selectedTeam.ShortName selectedYear }
+                                            ]                            
                                         Footer = None
                                         IsSelected = never
                                     }    

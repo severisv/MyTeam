@@ -15,6 +15,7 @@ module StringExtensions =
             member s.HasValue = hasValue s
 
         let toLower (a: string) = a.ToLower()
+        let contains (a: string) (b: string) = a.Contains(b)
 
         let isNumber (s: string) = s |> Seq.forall Char.IsDigit
 
