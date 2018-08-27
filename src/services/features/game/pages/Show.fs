@@ -13,7 +13,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
     let db = ctx.Database
 
-    Queries.getGame db gameId
+    Queries.getGame db club.Id gameId
     |> function
     | None -> NotFound
     | Some game ->    
@@ -39,7 +39,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                     
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener;Role.Skribent] && gameHasPassed then
-                                    a [ _href <| sprintf "/kamper/registrerresultat?gameId=%O" game.Id ;_class "edit-link pull-right"][ 
+                                    a [ _href <| sprintf "/kamper/%O/resultat" game.Id ;_class "edit-link pull-right"][ 
                                         !!(Icons.ballInGoal "Registrer resultat")
                                     ]
                             else empty

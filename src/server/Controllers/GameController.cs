@@ -60,17 +60,6 @@ namespace MyTeam.Controllers
 
 
 
-        [Route("registrerresultat")]
-        public IActionResult RegisterResult(Guid gameId)
-        {
-
-            var game = _gameService.GetGame(gameId);
-            var model = new ShowGameViewModel(game);
-
-            return View("RegisterResult", model);
-        }
-
-
 
         [Route("bytteplan")]
         [RequireMember]

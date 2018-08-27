@@ -42,26 +42,5 @@ namespace MyTeam.Services.Domain
                     TeamIds = e.EventTeams.Select(et => et.TeamId).ToList()
                 }).Single();
         }
-
-
-        public GameViewModel GetGame(Guid gameId)
-            =>
-              _dbContext.Games
-              .Where(e => e.Id == gameId)
-              .Select(e => new GameViewModel
-              {
-                  DateTime = e.DateTime,
-                  Opponent = e.Opponent,
-                  Teams = e.EventTeams.Select(et => et.Team.Name),
-                  Id = e.Id,
-                  GamePlanIsPublished = e.GamePlanIsPublished,
-                  HomeScore = e.HomeScore,
-                  AwayScore = e.AwayScore,
-                  IsHomeTeam = e.IsHomeTeam,
-                  Location = e.Location,
-                  GameType = e.GameTypeValue
-              }).ToList().SingleOrDefault();
-
-
     }
 }

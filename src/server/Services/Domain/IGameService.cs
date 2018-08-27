@@ -7,6 +7,5 @@ namespace MyTeam.Services.Domain
     public interface IGameService
     {
         RegisterSquadEventViewModel GetRegisterSquadEventViewModel(Guid eventId);
-        GameViewModel GetGame(Guid gameId);
     }
 }

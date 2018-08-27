@@ -57,6 +57,8 @@ let gameType (gameType: GameType) =
 
 let add = icon <| fa "plus"
 let assist = icon <| "flaticon-football119"
+let arrowLeft = icon <| fa "arrow-left"
+let arrowRight = icon <| fa "arrow-right"
 let attendance = icon <| fa "check-square-o"
 let ballInGoal = icon "flaticon-goal"
 let calendar = icon <| fa "calendar"

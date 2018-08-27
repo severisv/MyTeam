@@ -23,10 +23,11 @@ let getSquad : GetSquad =
 
 
 let getGame: GetGame =
-    fun db gameId ->
+    fun db clubId gameId ->
+                let (ClubId clubId) = clubId
                 query {
                     for game in db.Games do
-                    where (game.Id = gameId)
+                    where (game.Id = gameId && game.ClubId = clubId)
                     select (game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
                  }
                  |> Seq.map (fun (name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->
