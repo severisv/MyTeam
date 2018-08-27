@@ -32,9 +32,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                   
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then
-                                 a [ _href <| sprintf "/intern/arrangement/endre/%O" game.Id;_class "edit-link pull-right"] [
-                                     !!(Icons.edit "Rediger")
-                                 ]
+                                 editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
                             else empty     
                     
                     user => fun user -> 
