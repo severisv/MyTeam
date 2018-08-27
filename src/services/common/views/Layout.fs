@@ -52,6 +52,7 @@ module Pages =
                 o.MetaDescription.HasValue =? (meta [_name "description"; _content o.MetaDescription], emptyText)
                 title [] [encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [_rel "icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
+                link [_rel "apple-touch-icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
                 link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v5" ]
                 isProduction =? (Analytics.script, empty)
             ]
