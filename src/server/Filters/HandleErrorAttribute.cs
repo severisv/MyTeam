@@ -18,7 +18,7 @@ namespace MyTeam.Filters
             {
                 var request = context.HttpContext.Request;
                 var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
-                logger.LogError(context.Exception, $"Error in {request.Method}: {request.Path}{request.QueryString}");
+                logger.LogError(context.Exception, $"Error in {request.Method}: {request.Path}{request.QueryString} \nReferer: {request.Headers["Referer"]}");
                 context.Result = new ErrorResult(context.HttpContext, context.Exception);
             }
         }

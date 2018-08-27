@@ -13,9 +13,10 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
         >=> fun next ctx -> 
                 logger.LogError(EventId(), 
                                 ex, 
-                                sprintf "Error in %s: %s" 
+                                sprintf "Error in %s: %s . \nReferer: %s" 
                                             ctx.Request.Method 
                                             (Request.fullPath ctx)
+                                            (string ctx.Request.Headers.["Referer"])
                                 )
 
                 let isDeveloper (user: Users.User) = user.UserId = "severin@sverdvik.no"
