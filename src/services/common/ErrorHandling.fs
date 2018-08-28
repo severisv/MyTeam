@@ -41,17 +41,22 @@ let logNotFound next (ctx: HttpContext) =
 
     if  ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com"; "Lynt.cz" ]
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
-        |> not then             
-            Logger.get ctx 
-            |> fun logger ->
-                logger.LogWarning(sprintf "404: %s Referer: %s  \n %s" 
-                                    (string ctx.Request.Path) 
-                                    (string ctx.Request.Headers.["Referer"])
-                                    (ctx.Request.Headers 
-                                    |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains("cookie"))
-                                    |> Seq.map (fun keyValue -> 
-                                        sprintf "%s: %s" keyValue.Key (string keyValue.Value)
-                                    )
-                                    |> String.concat ",  ")
-                                 )
+        |> not 
+        && 
+        ["wp-login.php"; "apple-touch" ]
+        |> Seq.exists (ctx.Request.Path |> string |> contains)
+        |> not           
+            then             
+                Logger.get ctx 
+                |> fun logger ->
+                    logger.LogWarning(sprintf "404: %s Referer: %s  \n %s" 
+                                        (string ctx.Request.Path) 
+                                        (string ctx.Request.Headers.["Referer"])
+                                        (ctx.Request.Headers 
+                                        |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains("cookie"))
+                                        |> Seq.map (fun keyValue -> 
+                                            sprintf "%s: %s" keyValue.Key (string keyValue.Value)
+                                        )
+                                        |> String.concat ",  ")
+                                     )
     next ctx
