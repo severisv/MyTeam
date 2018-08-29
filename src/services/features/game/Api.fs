@@ -3,6 +3,7 @@ namespace MyTeam.Games
 open MyTeam.Domain
 open MyTeam
 open System
+open Microsoft.EntityFrameworkCore
 
 module internal Helpers =
     let updateGame clubId gameId db updateGame  =
@@ -17,6 +18,7 @@ module internal Helpers =
            | None -> NotFound      
 
 open Helpers
+open MyTeam.Shared.Domain
 
 module Api =
 
@@ -52,3 +54,64 @@ module Api =
                                 Notifications.clearCache ctx clubId
                             )
 
+
+
+
+    let private calculateAverageAge (game: Models.Domain.Game) =
+        let ages = game.Attendees
+                        |> Seq.filter(fun a -> a.IsSelected)
+                        |> Seq.map (fun a -> a.Member.BirthDate)
+                        |> Seq.map toOption
+                        |> Seq.choose id
+                        |> Seq.map (fun birthDate -> 
+                            (DateTime.Today - birthDate).TotalDays / 365.25
+                            )
+                        |> Seq.toList                        
+            
+        Math.Round((List.sum ages / float ages.Length), 2)
+    
+    
+    type InsightsGame = {
+        Motstander: string
+        Stilling: int
+        Snittalder: float
+        SpilteStåle: bool
+    }
+
+    type Insights = {
+        Snittalder: float
+        Kamper: InsightsGame list
+    }
+
+    let getInsights club (teamName, year) (db: Database) =
+        club.Teams |> Seq.tryFind (fun t -> t.ShortName.ToLower() = (toLower teamName))
+        |> function
+        | None -> NotFound
+        | Some team ->
+            let now = DateTime.Now
+            db.Games.Include("Attendees.Member")
+            |> Seq.filter(fun game -> 
+                        game.TeamId = team.Id && 
+                        game.DateTime.Year = year && 
+                        game.DateTime < now &&
+                        game.GameType <> Nullable(0)                        
+                        )
+            |> Seq.filter (fun game -> game.Attendees |> Seq.exists (fun a -> a.IsSelected))              
+            |> Seq.sortBy(fun game -> game.DateTime)    
+            |> Seq.map (fun g ->  
+                let mf = (g.IsHomeTeam =? (g.HomeScore, g.AwayScore)) |> toOption |> Option.defaultValue 0
+                let mm = (g.IsHomeTeam =? (g.AwayScore, g.HomeScore)) |> toOption |> Option.defaultValue 0
+                {
+                    Motstander = g.Opponent
+                    Stilling = mf - mm
+                    Snittalder = calculateAverageAge g
+                    SpilteStåle = g.Attendees |> Seq.exists (fun p -> p.Member.FirstName = "Ståle" && p.IsSelected)
+                }
+            )
+            |> Seq.toList
+            |> fun games ->
+                {
+                    Snittalder = Math.Round((games |> List.sumBy (fun g -> g.Snittalder)) / float games.Length, 1)
+                    Kamper = games
+                }
+            |> OkResult

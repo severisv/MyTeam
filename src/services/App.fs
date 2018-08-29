@@ -113,6 +113,7 @@ module App =
                     subRoute "/api/games"
                         <| choose [                                                                
                             GET >=>  choose [
+                                routef "/insights/%s/%i" (Games.Api.getInsights club >> jsonGet)
                                 routef "/%O/squad" (Games.Api.getSquad >> jsonGet)
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)      
