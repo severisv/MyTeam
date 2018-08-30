@@ -43,7 +43,7 @@ let logNotFound next (ctx: HttpContext) =
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not 
         && 
-        ["wp-login.php"; "apple-touch" ]
+        ["wp-login.php"; "apple-touch"; "favicon.ico"]
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             
