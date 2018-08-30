@@ -75,23 +75,12 @@ module Api =
         BirthDate: Nullable<DateTime>
     }
 
-    type Out = {
-        GameId: Guid
-        Opponent: string
-        DateTime: DateTime
-        IsHomeTeam: bool
-        HomeScore: int option
-        AwayScore: int option
-        Attendees: Pl list
-    }
-
-    let private calculateAverageAge (game: Out) =
-        let ages = game.Attendees
-                    |> Seq.map (fun a -> a.BirthDate)
-                    |> Seq.map toOption
+    let private calculateAverageAge dateTime attendees =
+        let ages = attendees 
+                    |> Seq.map ((fun a -> a.BirthDate) >> toOption)
                     |> Seq.choose id
                     |> Seq.map (fun birthDate -> 
-                                    (game.DateTime - birthDate).TotalDays / 365.25                        )
+                                    (dateTime - birthDate).TotalDays / 365.25                        )
                     |> Seq.toList                        
         
         Math.Round((List.sum ages / float ages.Length), 2)
@@ -126,34 +115,26 @@ module Api =
                              game.IsHomeTeam))
             }               
             |> Seq.toList
+            |> List.sortBy(fun  (_, (_,_,_,_,dateTime,_)) -> dateTime)    
             |> List.groupBy (fun (_, (id,_,_,_,_,_)) ->  id)
-            |> List.map (fun (key, value) ->
-                                    let (_, (_,homeScore,awayScore,opponent,dateTime,isHomeTeam)) = value |> Seq.head 
-                                    {
-                                        GameId = key
-                                        DateTime = dateTime
-                                        Opponent = opponent
-                                        IsHomeTeam = isHomeTeam
-                                        HomeScore = homeScore |> toOption
-                                        AwayScore = awayScore |> toOption
-                                        Attendees = value |> List.map (fun ((firstName, birthDate), _) ->
-                                                                                                        {
-                                                                                                            FirstName = firstName
-                                                                                                            BirthDate = birthDate
-                                                                                                        }
+            |> List.map (fun (_, value) ->
+                                    let (_, (_,homeScore,awayScore,opponent,dateTime,isHomeTeam)) = value |> Seq.head                                
+                                    let attendees = 
+                                        value |> List.map (fun ((firstName, birthDate), _) ->
+                                                                                            {
+                                                                                                FirstName = firstName
+                                                                                                BirthDate = birthDate
+                                                                                            }
                                                                                 )
-                                    })
-            |> List.sortBy (fun g -> g.DateTime)                                
-            |> List.map (fun g ->  
-                let mf = (g.IsHomeTeam =? (g.HomeScore, g.AwayScore)) |> Option.defaultValue 0
-                let mm = (g.IsHomeTeam =? (g.AwayScore, g.HomeScore)) |> Option.defaultValue 0
-                {
-                    Motstander = g.Opponent
-                    Stilling = mf - mm
-                    Snittalder = calculateAverageAge g
-                    SpilteStåle = g.Attendees |> Seq.exists (fun p -> p.FirstName = "Ståle")
-                }
-            )
+                                    let mf = (isHomeTeam =? (homeScore, awayScore)) |> toOption |> Option.defaultValue 0
+                                    let mm = (isHomeTeam =? (awayScore, homeScore)) |> toOption |> Option.defaultValue 0
+                                    {
+                                        Motstander = opponent
+                                        Stilling = mf - mm
+                                        Snittalder = calculateAverageAge dateTime attendees
+                                        SpilteStåle = attendees |> Seq.exists (fun p -> p.FirstName = "Ståle")
+                                    }
+            )        
             |> Seq.toList
             |> fun games ->
                 {
