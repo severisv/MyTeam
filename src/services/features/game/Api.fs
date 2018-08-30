@@ -19,6 +19,8 @@ module internal Helpers =
 
 open Helpers
 open MyTeam.Shared.Domain
+open MyTeam.Models.Domain
+open MyTeam.Domain.Members
 
 module Api =
 
@@ -56,21 +58,6 @@ module Api =
 
 
 
-
-    let private calculateAverageAge (game: Models.Domain.Game) =
-        let ages = game.Attendees
-                        |> Seq.filter(fun a -> a.IsSelected)
-                        |> Seq.map (fun a -> a.Member.BirthDate)
-                        |> Seq.map toOption
-                        |> Seq.choose id
-                        |> Seq.map (fun birthDate -> 
-                            (game.DateTime - birthDate).TotalDays / 365.25
-                            )
-                        |> Seq.toList                        
-            
-        Math.Round((List.sum ages / float ages.Length), 2)
-    
-    
     type InsightsGame = {
         Motstander: string
         Stilling: int
@@ -83,29 +70,88 @@ module Api =
         Kamper: InsightsGame list
     }
 
+    type Pl = {
+        FirstName: string
+        BirthDate: Nullable<DateTime>
+    }
+
+    type Out = {
+        GameId: Guid
+        Opponent: string
+        DateTime: DateTime
+        IsHomeTeam: bool
+        HomeScore: int option
+        AwayScore: int option
+        Attendees: Pl list
+    }
+
+    let private calculateAverageAge (game: Out) =
+        let ages = game.Attendees
+                    |> Seq.map (fun a -> a.BirthDate)
+                    |> Seq.map toOption
+                    |> Seq.choose id
+                    |> Seq.map (fun birthDate -> 
+                                    (game.DateTime - birthDate).TotalDays / 365.25                        )
+                    |> Seq.toList                        
+        
+        Math.Round((List.sum ages / float ages.Length), 2)
+    
+      
+
+
     let getInsights club (teamName, year) (db: Database) =
         club.Teams |> Seq.tryFind (fun t -> t.ShortName.ToLower() = (toLower teamName))
         |> function
         | None -> NotFound
         | Some team ->
             let now = DateTime.Now
-            db.Games.Include("Attendees.Member")
-            |> Seq.filter(fun game -> 
-                        game.TeamId = team.Id && 
-                        game.DateTime.Year = year && 
-                        game.DateTime < now &&
-                        game.GameType <> Nullable(0)                        
-                        )
-            |> Seq.filter (fun game -> game.Attendees |> Seq.exists (fun a -> a.IsSelected))              
-            |> Seq.sortBy(fun game -> game.DateTime)    
-            |> Seq.map (fun g ->  
-                let mf = (g.IsHomeTeam =? (g.HomeScore, g.AwayScore)) |> toOption |> Option.defaultValue 0
-                let mm = (g.IsHomeTeam =? (g.AwayScore, g.HomeScore)) |> toOption |> Option.defaultValue 0
+            query {
+                for game in db.Games do
+                where (
+                     game.TeamId = team.Id && 
+                     game.DateTime.Year = year && 
+                     game.DateTime < now &&
+                     game.GameType <> Nullable(0) 
+                )
+                leftOuterJoin ge in db.EventAttendances on (game.Id = ge.EventId) into result
+                for ge in result do
+                where (ge.IsSelected) 
+                select (
+                        (ge.Member.FirstName, ge.Member.BirthDate),
+                            (game.Id,
+                             game.HomeScore,
+                             game.AwayScore,
+                             game.Opponent,
+                             game.DateTime,
+                             game.IsHomeTeam))
+            }               
+            |> Seq.toList
+            |> List.groupBy (fun (_, (id,_,_,_,_,_)) ->  id)
+            |> List.map (fun (key, value) ->
+                                    let (_, (_,homeScore,awayScore,opponent,dateTime,isHomeTeam)) = value |> Seq.head 
+                                    {
+                                        GameId = key
+                                        DateTime = dateTime
+                                        Opponent = opponent
+                                        IsHomeTeam = isHomeTeam
+                                        HomeScore = homeScore |> toOption
+                                        AwayScore = awayScore |> toOption
+                                        Attendees = value |> List.map (fun ((firstName, birthDate), _) ->
+                                                                                                        {
+                                                                                                            FirstName = firstName
+                                                                                                            BirthDate = birthDate
+                                                                                                        }
+                                                                                )
+                                    })
+            |> List.sortBy (fun g -> g.DateTime)                                
+            |> List.map (fun g ->  
+                let mf = (g.IsHomeTeam =? (g.HomeScore, g.AwayScore)) |> Option.defaultValue 0
+                let mm = (g.IsHomeTeam =? (g.AwayScore, g.HomeScore)) |> Option.defaultValue 0
                 {
                     Motstander = g.Opponent
                     Stilling = mf - mm
                     Snittalder = calculateAverageAge g
-                    SpilteStåle = g.Attendees |> Seq.exists (fun p -> p.Member.FirstName = "Ståle" && p.IsSelected)
+                    SpilteStåle = g.Attendees |> Seq.exists (fun p -> p.FirstName = "Ståle")
                 }
             )
             |> Seq.toList
