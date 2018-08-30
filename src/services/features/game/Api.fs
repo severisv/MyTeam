@@ -64,7 +64,7 @@ module Api =
                         |> Seq.map toOption
                         |> Seq.choose id
                         |> Seq.map (fun birthDate -> 
-                            (DateTime.Today - birthDate).TotalDays / 365.25
+                            (game.DateTime - birthDate).TotalDays / 365.25
                             )
                         |> Seq.toList                        
             
