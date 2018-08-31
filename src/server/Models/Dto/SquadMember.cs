@@ -12,7 +12,7 @@ namespace MyTeam.Models.Dto
         public string FacebookId { get;  }
 
         public string GetName(bool hasDuplicate) => 
-            $"{FirstName}{(hasDuplicate ? $" {LastName.Substring(0,1)}" : "")}";
+            $"{FirstName}{(hasDuplicate ? $" {LastName.Substring(0,2)}" : "")}";
 
         public SquadMember(
             Guid playerId, 
