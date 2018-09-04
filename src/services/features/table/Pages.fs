@@ -74,7 +74,7 @@ module Pages =
                                                 col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Uavgjort"]
                                                 col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Tap"]
                                                 col [NoSort; Align Center; Attr <| _class "hidden-xs"] [encodedText "Målforskjell"]
-                                                col [NoSort; Align Center] [encodedText club.Name]
+                                                col [NoSort; Align Center] [encodedText "Poeng"]
                                             ]
                                             (t.Rows |> List.map (fun r ->
                                                                     tableRow [_class (r.Team.Contains(club.Name.Split(' ').[0])  =? ("team-primary", ""))] [
