@@ -37,7 +37,7 @@ namespace MyTeam.Controllers
         public IActionResult Vis(Guid gameId)
         {
             var logger = HttpContext.RequestServices.GetService<ILogger<GameController>>();
-            logger.LogInformation($"Videresender fra {HttpContext.Request.Path}. Referer {Request.Headers["Referer"].ToString()}");
+            logger.LogInformation($"Videresender fra {HttpContext.Request.Path}. Referer {Request.Headers["Referer"].ToString()}  User-Agent {Request.Headers["User-Agent"].ToString()}");
             return Redirect($"/kamper/vis/{gameId}");
         }
 
