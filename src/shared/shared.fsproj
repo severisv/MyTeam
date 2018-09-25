@@ -6,6 +6,7 @@
     <Compile Include="domain/Events.fs" />
     <Compile Include="domain/Players.fs" />
     <Compile Include="components/Icons.fs" />
+    <Compile Include="ClientViews.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

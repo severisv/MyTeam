@@ -1,4 +1,4 @@
-module FableApp
+module MyTeam.Client.EditSeason
 
 open Fable.Core
 open Fable.Core.JsInterop
@@ -75,4 +75,3 @@ let init() =
                                
 
     ReactDom.render(element, document.getElementById("main"))            
-init()

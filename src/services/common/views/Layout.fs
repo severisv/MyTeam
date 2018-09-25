@@ -131,6 +131,7 @@ module Pages =
 
                     script [_src "/compiled/lib/lib.bundle.js?v22"] []
                     script [_src "/compiled/app.js?v22" ] []
+                    script [_src "/compiled/client/main.js" ] []
             ] @ o.Scripts)                
         ]          
     

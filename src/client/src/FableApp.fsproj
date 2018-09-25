@@ -4,7 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="App.fs" />
+    <Compile Include="EditSeason.fs" />
+    <Compile Include="SelectSquad.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\shared\shared.fsproj" />
