@@ -27,6 +27,6 @@ module Html =
                                 [_class className] 
                             |> List.toArray                                
                         ), children)    
-        | RawText r ->
-            RawText (r |> replace "class=\"" (sprintf "class=\"%s " className))                    
+        | Text r ->
+            Text (r |> replace "class=\"" (sprintf "class=\"%s " className))                    
         | _ -> c                          
