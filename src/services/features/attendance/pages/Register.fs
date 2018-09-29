@@ -47,7 +47,7 @@ module Register =
         let getImage = Images.getMember ctx
 
         let editEventLink eventId =
-            editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId)          
+            !!(editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId))          
             
 
         let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Event) isCollapsed =

@@ -36,7 +36,6 @@
     <Compile Include="components/Ajax.fs" />
     <Compile Include="components/Collapsible.fs" />
     <Compile Include="components/FacebookSdk.fs" />
-    <Compile Include="components/Links.fs" />
     <Compile Include="components/Navlist.fs" />
     <Compile Include="components/Scripts.fs" />
     <Compile Include="components/Table.fs" />

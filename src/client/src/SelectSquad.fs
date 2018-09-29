@@ -1,7 +1,7 @@
 module MyTeam.Client.SelectSquad
 
-open MyTeam.Shared.Domain
-
+open MyTeam.Domain.Members
+open System
 open Fable.Helpers.React
 open Fable.Import
 open Fable.Import.Browser
@@ -15,14 +15,15 @@ open MyTeam.Shared.Components.Layout
 
 
 let element = 
+
+        let gameId = Guid.NewGuid()
+        let members : Member list = []
+        let squad : Member list = []
+
         mtMain [] [
             block [Id "registerSquad"] 
                     [
-                        a [ Href "event/edit/gameId"
-                            Class "edit-link  pull-right"
-                            Title "Rediger kamp" ]
-                           [ i [ Class "fa fa-edit" ]
-                               [ ] ]
+                        editLink <| sprintf "/intern/arrangement/endre/%O" gameId
                         a [ Href "game/gameplan/gameId"
                             Class "registerSquad-gameplan-link pull-right"
                             Title "Bytteplan" ]
