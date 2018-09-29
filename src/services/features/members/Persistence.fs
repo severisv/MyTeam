@@ -2,6 +2,7 @@ namespace MyTeam.Members
 
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam.Models.Domain
 open MyTeam.Validation

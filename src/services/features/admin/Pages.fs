@@ -2,6 +2,7 @@ module MyTeam.Admin.Pages
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam.Views
 

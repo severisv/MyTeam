@@ -3,6 +3,7 @@ module MyTeam.News.Pages.Components
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam.News
 open System

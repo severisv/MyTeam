@@ -4,6 +4,7 @@ open MyTeam.Models.Enums
 open Giraffe.GiraffeViewEngine
 open MyTeam.Shared.Components
 
+
 [<AutoOpen>]
 module IconComponents =
 
@@ -19,12 +20,12 @@ module IconComponents =
         !!(Icons.icon name title)
 
 
-    let playerStatusIcon (status: PlayerStatus) =                   
+    let playerStatusIcon (status: MyTeam.Domain.PlayerStatus) =                   
         !!(match status with
-            | PlayerStatus.Aktiv -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Aktiv
-            | PlayerStatus.Veteran -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Veteran
-            | PlayerStatus.Trener -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Trener
-            | _ -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Inaktiv)       
+            | MyTeam.Domain.PlayerStatus.Aktiv -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Aktiv
+            | MyTeam.Domain.PlayerStatus.Veteran -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Veteran
+            | MyTeam.Domain.PlayerStatus.Trener -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Trener
+            | _ -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Inaktiv)       
 
     let eventIcon (status: EventType) size =                   
         !!(match status with

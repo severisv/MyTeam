@@ -14,11 +14,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     let db = ctx.Database
     
     [
-        mtMain [] [
-            block [] [
-                    div [_id ClientViews.selectSquad] []
-                    ]
-        ]
+        div [_id ClientViews.selectSquad] []
        
         sidebar [] [
             user =>

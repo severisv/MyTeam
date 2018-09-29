@@ -4,6 +4,7 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open System.Linq
 open MyTeam.Models.Enums

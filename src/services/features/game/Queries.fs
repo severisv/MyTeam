@@ -3,6 +3,7 @@ module MyTeam.Games.Queries
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Domain.Memberqueries
 open System.Linq
 open MyTeam.Shared.Domain
 

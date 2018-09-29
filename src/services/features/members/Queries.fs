@@ -2,7 +2,9 @@ namespace MyTeam.Members
 
 open MyTeam
 open MyTeam.Domain
+open MyTeam.Domain.Member
 open MyTeam.Domain.Members
+open MyTeam.Domain.Memberqueries
 open Microsoft.EntityFrameworkCore
 open System.Linq
 
@@ -25,7 +27,7 @@ module Queries =
                                              LastName = p.LastName
                                              Image = p.ImageFull
                                              UrlName = p.UrlName
-                                             Status = int p.Status |> enum<Status> 
+                                             Status = int p.Status |> enum<PlayerStatus> 
                                           })
                                 Teams = p.MemberTeams 
                                            |> Seq.map(fun team -> team.TeamId)
@@ -62,7 +64,7 @@ module Queries =
                                LastName = lastName
                                UrlName = urlName
                                Image = image    
-                               Status = enum<Status> status    
+                               Status = enum<PlayerStatus> status    
                             }
                         }
                 

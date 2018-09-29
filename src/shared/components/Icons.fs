@@ -1,6 +1,7 @@
 module MyTeam.Shared.Components.Icons
 
 open MyTeam.Shared.Domain
+open MyTeam.Domain
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
