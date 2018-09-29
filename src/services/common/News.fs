@@ -52,7 +52,7 @@ module Queries =
                                     }
                                     Author = {
                                                 UrlName = authorUrlName
-                                                Name = authorName |> Member.fullName
+                                                Name = authorName |> Members.fullName
                                     }
                                     Content = content
                                     GameId = gameId |> toOption

@@ -1,7 +1,6 @@
 namespace MyTeam.Members
 
 open MyTeam.Domain
-open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam
 open Giraffe 

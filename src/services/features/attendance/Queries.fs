@@ -3,7 +3,6 @@ namespace MyTeam.Attendance
 open System.Linq
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam.Domain.Memberqueries
 open MyTeam.Domain.Events

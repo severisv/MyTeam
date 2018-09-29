@@ -5,7 +5,6 @@ open Giraffe.Serialization
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
 open MyTeam
-open MyTeam.Domain.Member
 open MyTeam.Domain.Members
 open MyTeam.Authorization
 open Newtonsoft.Json
