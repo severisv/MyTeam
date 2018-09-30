@@ -6,7 +6,6 @@ open MyTeam.Domain.Events
 open MyTeam.Domain.Members
 open System
 open MyTeam.Ajax
-open MyTeam.Shared.Domain
 
 
 type Outcome = 

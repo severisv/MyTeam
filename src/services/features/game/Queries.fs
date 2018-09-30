@@ -5,7 +5,6 @@ open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Domain.Memberqueries
 open System.Linq
-open MyTeam.Shared.Domain
 
 let games (db : Database) clubId = 
     let (ClubId clubId) = clubId
@@ -43,7 +42,7 @@ let getGame: GetGame =
                         Location = location
                         Type = enum<GameType> (gameType.Value)
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
-                        MatchReportName = (hasValue matchReportName) =? (Some matchReportName, None)
+                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )
                  |> Seq.tryHead
@@ -81,7 +80,7 @@ let listGames: ListGames =
                         Location = location
                         Type = enum<GameType> (gameType.Value)
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
-                        MatchReportName = (hasValue matchReportName) =? (Some matchReportName, None)
+                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )
                  |> Seq.toList

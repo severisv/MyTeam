@@ -14,5 +14,5 @@ let formatShort (datetime: DateTime) =
 
 
 let formatTime (datetime: DateTime) =
-    datetime.ToString(@"HH\:mm")
+    datetime.ToString("HH:mm")
 

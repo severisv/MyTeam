@@ -13,7 +13,6 @@
     <Compile Include="utils/common/Helpers.fs" />
     <Compile Include="utils/common/Number.fs" />
     <Compile Include="utils/common/String.fs" />
-    <Compile Include="utils/common/Date.fs" />
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />
     <Compile Include="utils/AntiForgery.fs" />

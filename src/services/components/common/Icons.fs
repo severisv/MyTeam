@@ -29,10 +29,10 @@ module IconComponents =
 
     let eventIcon (status: EventType) size =                   
         !!(match status with
-            | EventType.Kamp -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Kamp size
-            | EventType.Trening -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Trening size
-            | EventType.Diverse -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Diverse size
-            | _ -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Alle size
+            | EventType.Kamp -> Icons.eventIcon MyTeam.Domain.EventType.Kamp size
+            | EventType.Trening -> Icons.eventIcon MyTeam.Domain.EventType.Trening size
+            | EventType.Diverse -> Icons.eventIcon MyTeam.Domain.EventType.Diverse size
+            | _ -> Icons.eventIcon MyTeam.Domain.EventType.Alle size
             
             )                             
             

@@ -11,7 +11,7 @@ open MyTeam.Attendance.Queries
 open MyTeam.Attendance
 open MyTeam.Ajax
 open MyTeam.Shared.Components
-open MyTeam.Shared.Domain
+open MyTeam.Domain
 
 module Register =
 

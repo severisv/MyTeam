@@ -9,17 +9,16 @@ module StringExtensions =
         type System.String with
             member s1.EqualsIc(s2: string) = System.String.Equals(s1, s2, System.StringComparison.CurrentCultureIgnoreCase)
 
-        let hasValue s = not <| String.IsNullOrWhiteSpace(s)
 
         type System.String with
-            member s.HasValue = hasValue s
+            member s.HasValue = Strings.hasValue s
 
-        let toLower (a: string) = a.ToLower()
+        let toLower = Strings.toLower
         let contains (a: string) (b: string) = a.Contains(b)
 
         let isNumber (s: string) = s |> Seq.forall Char.IsDigit
 
-        let toLowerString = string >> toLower
+        let toLowerString = string >> Strings.toLower
 
         let isNullOrEmpty a = 
             String.IsNullOrEmpty(a) 
@@ -33,7 +32,7 @@ module StringExtensions =
 
 
         let nullCheck s = 
-            if hasValue s then s else ""
+            if Strings.hasValue s then s else ""
                         
         let truncate length (str: string) =
             if str.Length > length then str.Substring(0, length)

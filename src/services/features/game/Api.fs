@@ -18,7 +18,7 @@ module internal Helpers =
            | None -> NotFound      
 
 open Helpers
-open MyTeam.Shared.Domain
+open MyTeam.Domain
 open MyTeam.Models.Domain
 open MyTeam.Domain.Members
 

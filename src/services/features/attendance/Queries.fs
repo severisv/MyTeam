@@ -5,7 +5,7 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Domain.Memberqueries
-open MyTeam.Domain.Events
+open MyTeam.Domain.Eventqueries
 open MyTeam.Models.Enums
 open System
 

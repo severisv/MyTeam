@@ -1,19 +1,9 @@
-module MyTeam.Domain.Events
+module MyTeam.Domain.Eventqueries
 
 open System
 open System.Linq
 open MyTeam
-
-type EventId = Guid
-type GameId = EventId
-
-type Event = {
-    Id: EventId
-    Date: DateTime       
-    Location: string
-} 
-
-
+open MyTeam.Domain.Events
 let selectEvents (events: IQueryable<Models.Domain.Event>) = 
         query {
             for e in events do

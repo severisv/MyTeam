@@ -8,16 +8,7 @@ open Microsoft.AspNetCore.Http
 type ConnectionStrings = {
     DefaultConnection: string
 
-}
-
-[<CLIMutable>]
-type CloudinarySettings = {
-    ApiKey: string
-    ApiSecret: string
-    CloudName: string
-    DefaultMember: string
-    DefaultArticle: string
-}    
+} 
 
 [<CLIMutable>]
 type FacebookOptions = {

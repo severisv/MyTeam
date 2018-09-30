@@ -8,103 +8,134 @@ open Fable.Import.Browser
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import.React
+open MyTeam.Domain
+open MyTeam.Domain.Events
 open MyTeam.Shared
 open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
-
+open MyTeam
 
 
 let element = 
 
-        let gameId = Guid.NewGuid()
+        let game : Event = {
+            Id = Guid.NewGuid()
+            Location = "Muselunden"
+            Date = DateTime.Now
+        }
         let members : Member list = []
         let squad : Member list = []
 
-        mtMain [] [
-            block [Id "registerSquad"] 
-                    [
-                        editLink <| sprintf "/intern/arrangement/endre/%O" gameId
-                        a [ Href "game/gameplan/gameId"
-                            Class "registerSquad-gameplan-link pull-right"
-                            Title "Bytteplan" ]
-                           [ i [ Class "fa fa-exchange" ]
-                               [ ] ]
-                        div [ Class "flex" ]
-                           [ div [ Class "flex-1 event-icon align-center" ]
-                               [ div [ Class "fa-3x" ]
-                                   [ span [ ]
-                                       [ str "eventIcon" ] ] ]
-                             div [ Class "flex-2 faded" ]
-                               [ p [ ]
-                                   [ 
-                                    Icons.calendar ""
-                                    str "Model.Game.DateTime.ToString(ddd d MMMM) &nbsp;"
-                                    span [ Class "no-wrap" ]
-                                       [ 
-                                        Icons.time ""   
-                                        str "Model.Game.DateTime.ToString(HH:mm)" ] 
-                                     ]
-                                 p [ ]
-                                   [ 
-                                        Icons.mapMarker ""
-                                        str "Game.Location" 
-                                    ] 
-                                ] 
-                            ]
-                        div [ Class "row" ]
-                           [ div [ Class "col-sm-6 col-xs-12" ]
+        let imageOptions = {
+            ApiKey = "string"
+            ApiSecret = "string"
+            CloudName = "string"
+            DefaultMember = "string"
+            DefaultArticle = "string"
+        }
+
+        let listPlayers (players: Member list) = 
+            div [ Class "col-sm-6 col-xs-12" ]
                                [ div [ Class "collapselink-parent" ]
                                    [ a [ Class "collapse-link "
                                          Role "button"
                                          DataToggle "collapse"
                                          Href "#ra-otherplayers-signedup"
                                          AriaExpanded true ]
-                                       [ str "Påmeldte spillere (@Model.Attendees.Count())" ] ]
+                                       [ str <| sprintf "Påmeldte spillere (%i)" players.Length ] ]
                                  div [ Id "ra-otherplayers-signedup"
                                        Class "collapse in" ]
-                                   [ str "@Html.Partial(_RegisterSquadListPlayers, Model.Attendees)" ]
+                                   [ 
+                                    ul [ Class "list-users" ]
+                                        (squad
+                                        |> List.map(fun m ->
+                                            li [ Class "register-attendance-item registerSquad-player" ]
+                                                [ span [ ]
+                                                    [ 
+                                                        img [ Class "hidden-xxs"
+                                                              Src <| MyTeam.Image.getMember imageOptions m.Image m.FacebookId 
+                                                                        (fun opts -> { opts with Height = Some 50; Width = Some 50 })
+                                                           ]
+                                                        str m.Name 
+                                                        ]
+                                                  span [ ]
+                                                    [ 
+                                                        //str "@if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))" 
+                                                    // <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                                        
+                                                    // <span id="playerAttendance-@player.Id" title="Oppmøte siste 8 uker" class="register-attendance-attendance">0%</span>
+                                                    // <input class="form-control register-attendance-input"
+                                                    //     data-player-id="@player.Id"
+                                                    //     data-player-name="@player.ShortName"
+                                                    //     data-event-id="@player.EventId"
+                                                    //     type="checkbox"
+                                                    //     checked
+                                                    //     />
+                                                    ]
+                                                  div [ Class "ra-info-elements" ]
+                                                    [ span [ Class "label label-danger" ]
+                                                        [ i [ Class "fa fa-exclamation-triangle" ]
+                                                            [ ] ] ] ]
+                                        ))
+                                   ]
                                  br [ ]
-                                 div [ Class "collapselink-parent" ]
-                                   [ a [ Class "collapse-link collapsed"
-                                         Role "button"
-                                         DataToggle "collapse"
-                                         Href "#ra-declinees"
-                                         AriaExpanded true ]
-                                       [ str "Kan ikke (@Model.Declinees.Count())" ] ]
-                                 div [ Id "ra-declinees"
-                                       Class "collapse" ]
-                                   [ str "@Html.Partial(_RegisterSquadListPlayers, Model.Declinees)" ]
-                                 br [ ]
-                                 div [ Class "collapselink-parent" ]
-                                   [ a [ Class "collapse-link collapsed"
-                                         Role "button"
-                                         DataToggle "collapse"
-                                         Href "#ra-otherplayers-active" ]
-                                       [ str "Ikke svart (@Model.OtherActivePlayers.Count())" ] ]
-                                 div [ Id "ra-otherplayers-active"
-                                       Class "collapse" ]
-                                   [ str "@Html.Partial(_RegisterSquadListPlayers, Model.OtherActivePlayers)" ]
-                                 br [ ]
-                                 div [ Class "collapselink-parent" ]
-                                   [ a [ Class "collapse-link collapsed"
-                                         Role "button"
-                                         DataToggle "collapse"
-                                         Href "#ra-otherplayers-inactive" ]
-                                       [ str "Øvrige ikke svart (@Model.OtherInactivePlayers.Count())" ] ]
-                                 div [ Id "ra-otherplayers-inactive"
-                                       Class "collapse" ]
-                                   [ str "@Html.Partial(_RegisterSquadListPlayers, Model.OtherInactivePlayers)" ] ]
+              
+                               ]
+
+
+        mtMain [] [
+            block [Id "registerSquad"] 
+                    [
+                        editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
+                        a [ Href "game/gameplan/gameId"
+                            Class "registerSquad-gameplan-link pull-right"
+                            Title "Bytteplan" ]
+                            [ 
+                               Icons.gamePlan
+                            ]
+                        div [ Class "flex" ]
+                           [ div [ Class "flex-1 event-icon align-center" ]
+                               [  
+                                Icons.eventIcon EventType.Kamp Icons.ExtraLarge       
+                               ]
+                             div [ Class "flex-2 faded" ]
+                               [ p [ ]
+                                   [ 
+                                    Icons.calendar ""
+                                    str " "
+                                    game.Date |> Date.format |> str
+                                    span [ Class "no-wrap" ]
+                                       [ 
+                                        Icons.time ""  
+                                        str " " 
+                                        game.Date |> Date.formatTime |> str
+                                        ] 
+                                     ]
+                                 p [ ]
+                                   [ 
+                                        Icons.mapMarker ""
+                                        str " "
+                                        str game.Location 
+                                    ] 
+                                ] 
+                            ]
+                        div [ Class "row" ]
+                           [
+                             listPlayers members
                              div [ Class "col-sm-6 col-xs-12 " ]
-                               [ h2 [ ] [ str "Tropp (squadCount)" ]   
+                               [ h2 [ ] [ str <| sprintf "Tropp (%i)" squad.Length ]   
                                  hr [ ]
                                  div [ ]
                                      [ 
                                         ul [ Id "squad"; Class "list-unstyled squad-list" ] 
-                                        //    "@foreach (var player in Model.Squad)"
-                                            [
-                                                li [ Id "@player.Id" ] [ 
-                                                    i [ Class "flaticon-soccer18" ] []
-                                                    str "&nbsp;@player.Name" ] ] 
+                                            (
+                                                squad 
+                                                |> List.map (fun m ->
+                                                                li [ Id "@player.Id" ] [ 
+                                                                    Icons.player ""
+                                                                    str <| sprintf " %s" m.Name]  
+                                                )
+                                            )
                                      ]
                                  hr [ ]
                                  div [ Class "registerSquad-publish"
@@ -123,24 +154,27 @@ let element =
                                                [ ] ] ]
                                      div [ ]
                                        [
-                                        // @if (Model.Game.IsPublished)
-                                         div [ Class "disabled btn btn-success btn-lg" ]
-                                           [ i [ Class "fa fa-check-circle" ] [ ] 
-                                             str "Publisert" ]
-                                        //  "else"
-                                         button [ Id "publishButton"
-                                                  HTMLAttr.Custom ("data-
-                                                  event-id", "@Model.Game.Id")
-                                                  Class "btn btn-primary btn-lg" ]
-                                           [ span [ ]
-                                               [ str "Publiser
-                                               tropp" ]
-                                             i [ Class "fa fa-spinner fa-spin" ]
-                                               [ ] ]
-                                         span [ Class "label-feedback label label-danger" ]
-                                           [ i [ Class "fa fa-exclamation-triangle" ]
-                                               [ ] ] ] ] ] ]                    
-                                           ]
+                                        (if true then // game.IsPublished then 
+                                            div [ Class "disabled btn btn-success btn-lg" ]
+                                               [ i [ Class "fa fa-check-circle" ] [ ] 
+                                                 str "Publisert" ]
+                                        else
+                                            div [] [
+                                                button [ Class "btn btn-primary btn-lg" ]
+                                                  [ span [ ]
+                                                      [ str "Publiser tropp" ]
+                                                    i [ Class "fa fa-spinner fa-spin" ]
+                                                      [ ] ]
+                                                span [ Class "label-feedback label label-danger" ]
+                                                  [ i [ Class "fa fa-exclamation-triangle" ]
+                                                      [ ] ] 
+                                            ]
+                                        )       
+                                        ] 
+                                    ] 
+                                ] 
+                            ]                    
+                       ]                                        
         ]
 
 ReactDom.render(element, document.getElementById(ClientViews.selectSquad))
