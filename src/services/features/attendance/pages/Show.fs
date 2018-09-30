@@ -9,7 +9,8 @@ open MyTeam.Views
 open Attendance.Queries
 open MyTeam.Attendance
 open MyTeam.Shared.Components
-
+open MyTeam.Components
+open Fable.Helpers.React.Props
 module Show =
 
     let view (club: Club) (user: Users.User) year (ctx: HttpContext) =
@@ -36,10 +37,10 @@ module Show =
                 block [] [
                     (user.IsInRole [Role.Admin;Role.Trener;Role.Oppmøte] =? 
                        (div [_class "clearfix u-margin-bottom "] [ 
-                            buttonLink registerAttendanceUrl Primary Sm [_class "pull-right hidden-lg hidden-md"] [
-                                icon (fa "check-square-o") ""
-                                encodedText " Registrer oppmøte"
-                           ] 
+                            !!(buttonLink registerAttendanceUrl Primary Sm [Class "pull-right hidden-lg hidden-md"] [
+                                Icons.icon (fa "check-square-o") ""
+                                Fable.Helpers.React.str " Registrer oppmøte"
+                             ]) 
                         ], 
                         emptyText))
                     table [] 

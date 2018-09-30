@@ -29,7 +29,6 @@
     <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/Logger.fs" />
     <Compile Include="components/common/Base.fs" />
-    <Compile Include="components/common/Buttons.fs" />
     <Compile Include="components/common/Icons.fs" />
     <Compile Include="components/common/Layout.fs" />
     <Compile Include="components/Ajax.fs" />

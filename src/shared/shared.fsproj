@@ -6,9 +6,7 @@
     <Compile Include="util/common/*.fs" />
     <Compile Include="util/*.fs" />
     <Compile Include="domain/*.fs" />
-    <Compile Include="components/Icons.fs" />
-    <Compile Include="components/Links.fs" />
-    <Compile Include="components/Layout.fs" />
+    <Compile Include="components/*.fs" />
     <Compile Include="ClientViews.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

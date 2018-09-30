@@ -13,6 +13,7 @@ open MyTeam.Domain.Events
 open MyTeam.Shared
 open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
+open MyTeam.Components
 open MyTeam
 
 
@@ -36,51 +37,51 @@ let element =
 
         let listPlayers (players: Member list) = 
             div [ Class "col-sm-6 col-xs-12" ]
-                               [ div [ Class "collapselink-parent" ]
-                                   [ a [ Class "collapse-link "
-                                         Role "button"
-                                         DataToggle "collapse"
-                                         Href "#ra-otherplayers-signedup"
-                                         AriaExpanded true ]
-                                       [ str <| sprintf "Påmeldte spillere (%i)" players.Length ] ]
-                                 div [ Id "ra-otherplayers-signedup"
-                                       Class "collapse in" ]
-                                   [ 
-                                    ul [ Class "list-users" ]
-                                        (squad
-                                        |> List.map(fun m ->
-                                            li [ Class "register-attendance-item registerSquad-player" ]
-                                                [ span [ ]
-                                                    [ 
-                                                        img [ Class "hidden-xxs"
-                                                              Src <| MyTeam.Image.getMember imageOptions m.Image m.FacebookId 
-                                                                        (fun opts -> { opts with Height = Some 50; Width = Some 50 })
-                                                           ]
-                                                        str m.Name 
-                                                        ]
-                                                  span [ ]
-                                                    [ 
-                                                        //str "@if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))" 
-                                                    // <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                                        
-                                                    // <span id="playerAttendance-@player.Id" title="Oppmøte siste 8 uker" class="register-attendance-attendance">0%</span>
-                                                    // <input class="form-control register-attendance-input"
-                                                    //     data-player-id="@player.Id"
-                                                    //     data-player-name="@player.ShortName"
-                                                    //     data-event-id="@player.EventId"
-                                                    //     type="checkbox"
-                                                    //     checked
-                                                    //     />
-                                                    ]
-                                                  div [ Class "ra-info-elements" ]
-                                                    [ span [ Class "label label-danger" ]
-                                                        [ i [ Class "fa fa-exclamation-triangle" ]
-                                                            [ ] ] ] ]
-                                        ))
-                                   ]
-                                 br [ ]
-              
-                               ]
+               [ div [ Class "collapselink-parent" ]
+                   [ a [ Class "collapse-link "
+                         Role "button"
+                         DataToggle "collapse"
+                         Href "#ra-otherplayers-signedup"
+                         AriaExpanded true ]
+                       [ str <| sprintf "Påmeldte spillere (%i)" players.Length ] ]
+                 div [ Id "ra-otherplayers-signedup"
+                       Class "collapse in" ]
+                   [ 
+                    ul [ Class "list-users" ]
+                        (squad
+                        |> List.map(fun m ->
+                            li [ Class "register-attendance-item registerSquad-player" ]
+                                [ span [ ]
+                                    [ 
+                                        img [ Class "hidden-xxs"
+                                              Src <| MyTeam.Image.getMember imageOptions m.Image m.FacebookId 
+                                                        (fun opts -> { opts with Height = Some 50; Width = Some 50 })
+                                           ]
+                                        str m.Name 
+                                        ]
+                                  span [ ]
+                                    [ 
+                                        //str "@if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))" 
+                                    // <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                                        
+                                    // <span id="playerAttendance-@player.Id" title="Oppmøte siste 8 uker" class="register-attendance-attendance">0%</span>
+                                    // <input class="form-control register-attendance-input"
+                                    //     data-player-id="@player.Id"
+                                    //     data-player-name="@player.ShortName"
+                                    //     data-event-id="@player.EventId"
+                                    //     type="checkbox"
+                                    //     checked
+                                    //     />
+                                    ]
+                                  div [ Class "ra-info-elements" ]
+                                    [ span [ Class "label label-danger" ]
+                                        [ i [ Class "fa fa-exclamation-triangle" ]
+                                            [ ] ] ] ]
+                        ))
+                   ]
+                 br [ ]
+
+               ]
 
 
         mtMain [] [
@@ -155,14 +156,13 @@ let element =
                                      div [ ]
                                        [
                                         (if true then // game.IsPublished then 
-                                            div [ Class "disabled btn btn-success btn-lg" ]
-                                               [ i [ Class "fa fa-check-circle" ] [ ] 
+                                            btn Success Lg [Class "disabled"]
+                                               [ Icons.checkCircle 
                                                  str "Publisert" ]
                                         else
                                             div [] [
-                                                button [ Class "btn btn-primary btn-lg" ]
-                                                  [ span [ ]
-                                                      [ str "Publiser tropp" ]
+                                                btn Primary Lg []
+                                                  [ str "Publiser tropp"    
                                                     i [ Class "fa fa-spinner fa-spin" ]
                                                       [ ] ]
                                                 span [ Class "label-feedback label label-danger" ]
