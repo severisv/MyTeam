@@ -35,6 +35,9 @@ let element =
             DefaultArticle = "string"
         }
 
+        let isPublished = true
+        let description = "Beskrivelse"
+
         let listPlayers (players: Member list) = 
             div [ Class "col-sm-6 col-xs-12" ]
                [ div [ Class "collapselink-parent" ]
@@ -128,34 +131,33 @@ let element =
                                  hr [ ]
                                  div [ ]
                                      [ 
-                                        ul [ Id "squad"; Class "list-unstyled squad-list" ] 
+                                        ul [ Class "list-unstyled squad-list" ] 
                                             (
                                                 squad 
                                                 |> List.map (fun m ->
-                                                                li [ Id "@player.Id" ] [ 
+                                                                li [] [ 
                                                                     Icons.player ""
                                                                     str <| sprintf " %s" m.Name]  
                                                 )
                                             )
                                      ]
                                  hr [ ]
-                                 div [ Class "registerSquad-publish"
-                                       Id "registerSquad-publish" ]
+                                 div [ Class "registerSquad-publish" ]
                                    [ div [ Class "relative registerSquad-messageWrapper" ]
                                        [ textarea [ Id "publishMessage"
                                                     Class "form-control"
                                                     HTMLAttr.Custom ("data-event-id", "@Model.Game.Id")
-                                                    Placeholder "Beskjed til spillerne" ]
-                                           [ str "@Model.Game.Description" ]
-                                         span [ Class "label-feedback label label-danger" ]
-                                           [ i [ Class "fa fa-exclamation-triangle" ]
-                                               [ ] ]
-                                         span [ Class "label-feedback label label-success" ]
-                                           [ i [ Class "fa fa-check" ]
-                                               [ ] ] ]
+                                                    Placeholder "Beskjed til spillerne"
+                                                    Value description
+                                                    OnChange (fun o -> printf "%O"  o)
+                                                     ]
+                                           [ ]
+                                         Labels.error
+                                         Labels.success 
+                                       ]
                                      div [ ]
                                        [
-                                        (if true then // game.IsPublished then 
+                                        (if isPublished then 
                                             btn Success Lg [Class "disabled"]
                                                [ Icons.checkCircle 
                                                  str "Publisert" ]
@@ -163,11 +165,9 @@ let element =
                                             div [] [
                                                 btn Primary Lg []
                                                   [ str "Publiser tropp"    
-                                                    i [ Class "fa fa-spinner fa-spin" ]
-                                                      [ ] ]
-                                                span [ Class "label-feedback label label-danger" ]
-                                                  [ i [ Class "fa fa-exclamation-triangle" ]
-                                                      [ ] ] 
+                                                    Icons.spinner
+                                                  ]
+                                                Labels.error
                                             ]
                                         )       
                                         ] 
