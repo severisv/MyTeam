@@ -17,15 +17,7 @@ module Members =
 
     let fullName (firstName, middleName, lastName) =
         sprintf "%s %s%s%s" firstName middleName (if not (String.IsNullOrEmpty(middleName)) then " " else "") lastName
-
-
   
-    let parse<'T> value = 
-        try
-            Enum.Parse(typeof<'T>, value, true)  :?> 'T
-        with
-        | :? ArgumentException -> failwithf "Ugyldig verdi for Enum %s: '%s'" typeof<'T>.FullName value             
-               
 
 
     type MemberId = System.Guid
@@ -38,8 +30,6 @@ module Members =
         | Skribent = 2
         | Oppmøte = 3
         | Botsjef = 4 
-
-        
 
         
 
@@ -58,13 +48,4 @@ module Members =
 
         member m.FullName = fullName (m.FirstName, m.MiddleName, m.LastName)
             
-
-    let toRoleList (roleString : string) =
-        if not <| isNull roleString && roleString.Length > 0 then
-            roleString.Split [|','|] 
-            |> Seq.map(parse<Role>)
-            |> Seq.toList
-        else []
-
-    let fromRoleList (roles: Role list) = System.String.Join(",", roles)
 

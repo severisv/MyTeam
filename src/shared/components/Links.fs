@@ -10,3 +10,4 @@ module LinkComponents =
             [Href href;Class "edit-link pull-right"]
             [Icons.edit "Rediger"]        
             
+

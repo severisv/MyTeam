@@ -8,6 +8,16 @@ open System.Linq
 
 open Members
 module Memberqueries =
+
+    let toRoleList (roleString : string) =
+        if not <| isNull roleString && roleString.Length > 0 then
+            roleString.Split [|','|] 
+            |> Seq.map(parse<Role>)
+            |> Seq.toList
+        else []
+
+    let fromRoleList (roles: Role list) = System.String.Join(",", roles)
+    
     let selectMembers =
             fun (players: IQueryable<Models.Domain.Member>) ->
                     query {

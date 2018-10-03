@@ -24,8 +24,19 @@ let element =
             Location = "Muselunden"
             Date = DateTime.Now
         }
-        let members : Member list = []
-        let squad : Member list = []
+        let members : Member list = [
+            { 
+                Id = Guid.NewGuid()
+                FacebookId = "string"
+                FirstName = "string"
+                MiddleName = "string"
+                LastName = "string"
+                UrlName = "string"
+                Image = "string"    
+                Status = Status.Aktiv      
+            }
+        ]
+        let squad = members
 
         let imageOptions = {
             ApiKey = "string"
@@ -40,16 +51,10 @@ let element =
 
         let listPlayers (players: Member list) = 
             div [ Class "col-sm-6 col-xs-12" ]
-               [ div [ Class "collapselink-parent" ]
-                   [ a [ Class "collapse-link "
-                         Role "button"
-                         DataToggle "collapse"
-                         Href "#ra-otherplayers-signedup"
-                         AriaExpanded true ]
-                       [ str <| sprintf "Påmeldte spillere (%i)" players.Length ] ]
-                 div [ Id "ra-otherplayers-signedup"
-                       Class "collapse in" ]
-                   [ 
+               [ 
+                 collapsible Open [
+                     str <| sprintf "Påmeldte spillere (%i)" players.Length
+                 ] [     
                     ul [ Class "list-users" ]
                         (squad
                         |> List.map(fun m ->
@@ -67,19 +72,20 @@ let element =
                                         //str "@if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))" 
                                     // <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
                                         
-                                    // <span id="playerAttendance-@player.Id" title="Oppmøte siste 8 uker" class="register-attendance-attendance">0%</span>
-                                    // <input class="form-control register-attendance-input"
-                                    //     data-player-id="@player.Id"
-                                    //     data-player-name="@player.ShortName"
-                                    //     data-event-id="@player.EventId"
-                                    //     type="checkbox"
-                                    //     checked
-                                    //     />
+                                    span [
+                                            Id <| sprintf "playerAttendance-%O" m.Id
+                                            Title "Oppmøte siste 8 uker"
+                                            Class "register-attendance-attendance"] 
+                                        [str "0%"]
+                                    input [
+                                        Class "form-control register-attendance-input"
+                                        Type "checkbox"
+                                        Checked true
+                                    ]                                    
                                     ]
                                   div [ Class "ra-info-elements" ]
-                                    [ span [ Class "label label-danger" ]
-                                        [ i [ Class "fa fa-exclamation-triangle" ]
-                                            [ ] ] ] ]
+                                         [ Labels.error ] 
+                                ]
                         ))
                    ]
                  br [ ]
@@ -88,7 +94,7 @@ let element =
 
 
         mtMain [] [
-            block [Id "registerSquad"] 
+            block [] 
                     [
                         editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
                         a [ Href "game/gameplan/gameId"
@@ -97,28 +103,31 @@ let element =
                             [ 
                                Icons.gamePlan
                             ]
-                        div [ Class "flex" ]
-                           [ div [ Class "flex-1 event-icon align-center" ]
+                        div [ Class "rs-header flex" ]
+                           [ div [ Class "flex-1 event-icon align-center flex-center" ]
                                [  
                                 Icons.eventIcon EventType.Kamp Icons.ExtraLarge       
                                ]
                              div [ Class "flex-2 faded" ]
                                [ p [ ]
                                    [ 
-                                    Icons.calendar ""
-                                    str " "
-                                    game.Date |> Date.format |> str
+                                    span [ ] [ 
+                                         Icons.calendar ""
+                                         whitespace
+                                         game.Date |> Date.format |> str ]
+                                    whitespace
                                     span [ Class "no-wrap" ]
                                        [ 
+                                        whitespace
                                         Icons.time ""  
-                                        str " " 
+                                        whitespace
                                         game.Date |> Date.formatTime |> str
                                         ] 
                                      ]
                                  p [ ]
                                    [ 
                                         Icons.mapMarker ""
-                                        str " "
+                                        whitespace
                                         str game.Location 
                                     ] 
                                 ] 
@@ -144,13 +153,11 @@ let element =
                                  hr [ ]
                                  div [ Class "registerSquad-publish" ]
                                    [ div [ Class "relative registerSquad-messageWrapper" ]
-                                       [ textarea [ Id "publishMessage"
-                                                    Class "form-control"
-                                                    HTMLAttr.Custom ("data-event-id", "@Model.Game.Id")
+                                       [ textarea [ Class "form-control"
                                                     Placeholder "Beskjed til spillerne"
                                                     Value description
                                                     OnChange (fun o -> printf "%O"  o)
-                                                     ]
+                                                 ]
                                            [ ]
                                          Labels.error
                                          Labels.success 
@@ -176,6 +183,6 @@ let element =
                             ]                    
                        ]                                        
         ]
-
+        
 ReactDom.render(element, document.getElementById(ClientViews.selectSquad))
 

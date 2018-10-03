@@ -4,15 +4,18 @@ open System
 
 
 let format (datetime: DateTime) =
-        datetime.ToString("ddd d MMMM")
+        let dayOfWeek = [ "man"; "tir"; "ons"; "tor"; "fre"; "lør"; "søn" ].[int datetime.DayOfWeek]
+        let month = [ "januar"; "februar"; "mars"; "april"; "juni"; "juli"; "august"; "september"; "oktober"; "november"; "desember" ].[datetime.Month]
+
+        sprintf "%s. %i %s" dayOfWeek datetime.Day month
 
 let formatLong (datetime: DateTime) =
-        datetime.ToString("dd.MM.yyyy")        
+        sprintf "%02i.%02i.%04i" datetime.Day datetime.Month datetime.Year
 
 let formatShort (datetime: DateTime) =
-        datetime.ToString("dd.MM")        
+        sprintf "%02i.%02i" datetime.Day datetime.Month
 
 
 let formatTime (datetime: DateTime) =
-    datetime.ToString("HH:mm")
+    sprintf "%02i:%02i" datetime.Hour datetime.Minute
 

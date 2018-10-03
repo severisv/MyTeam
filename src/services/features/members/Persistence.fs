@@ -3,6 +3,7 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Domain.Memberqueries
 open MyTeam.Models.Domain
 open MyTeam.Validation
 open Microsoft.EntityFrameworkCore
@@ -37,9 +38,9 @@ module Persistence =
                     |> Seq.head
 
             memb.RolesString <- memb.RolesString 
-                                |> Members.toRoleList
+                                |> Memberqueries.toRoleList
                                 |> toggleRoleInList role
-                                |> Members.fromRoleList
+                                |> Memberqueries.fromRoleList
                        
             db.SaveChanges() |> ignore        
             UserId (memb.UserName =?? "")
