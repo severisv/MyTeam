@@ -48,6 +48,7 @@ let element =
 
         let isPublished = true
         let description = "Beskrivelse"
+        let signupMessage = "kommer ikke"
 
         let listPlayers (players: Member list) = 
             div [ Class "col-sm-6 col-xs-12" ]
@@ -69,9 +70,11 @@ let element =
                                         ]
                                   span [ ]
                                     [ 
-                                        //str "@if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))" 
-                                    // <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage" data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
-                                        
+                                    Strings.hasValue signupMessage &?
+                                        tooltip signupMessage [Class "registerSquad-messageIcon"] [
+                                            Icons.comment
+                                        ]
+                                                                            
                                     span [
                                             Id <| sprintf "playerAttendance-%O" m.Id
                                             Title "Oppmøte siste 8 uker"
