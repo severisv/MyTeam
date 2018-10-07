@@ -49,3 +49,8 @@ module Members =
         member m.FullName = fullName (m.FirstName, m.MiddleName, m.LastName)
             
 
+    type MemberWithTeamsAndRoles = {
+        Details: Member
+        Teams: TeamId list 
+        Roles: Role list
+    }

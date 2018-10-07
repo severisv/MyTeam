@@ -4,6 +4,7 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Views
+open MyTeam.Common.Features
 open MyTeam.Domain.Members
 open MyTeam.Shared.Components
 open Shared.Features.Games.SelectSquad
@@ -16,19 +17,20 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     query {
         for game in db.Games do
         where (game.Id = gameId && game.ClubId = clubId)
-        select (game.DateTime, game.Location, game.Description, game.IsPublished, game.Attendees)
+        select (game.DateTime, game.Location, game.Description, game.IsPublished, game.TeamId, game.Attendees)
     }
-    |> Seq.map (fun (date, location, description, squadIsPublished, attendees) ->
+    |> Seq.map (fun (date, location, description, squadIsPublished, teamId, attendees) ->
                 ({
                     Id = gameId
                     Date = date
                     Location = location
                     Description = description =?? ""
+                    TeamId = teamId
                     Squad = {
                                 IsPublished = squadIsPublished
                                 MemberIds = attendees 
                                             |> Seq.filter(fun a -> a.IsSelected)
-                                            |> Seq.map(fun m -> m.Id) |> Seq.toList
+                                            |> Seq.map(fun m -> m.MemberId) |> Seq.toList
                     }
                 }, 
                 attendees 
@@ -48,14 +50,16 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     |> Seq.tryHead
     |> function
     | None -> NotFound
-    | Some (game, signups) ->   
+    | Some (game, signups) -> 
 
+        let members = Members.list db club.Id
 
         [
             Client.view clientView 
                         {
                             Game = game
                             Signups = signups
+                            Members = members |> List.filter(fun m -> m.Details.Status <> Status.Sluttet)
                             ImageOptions = Images.getOptions ctx
                         }
            

@@ -2,20 +2,16 @@ namespace MyTeam
 
 open MyTeam.Strings
 
-[<CLIMutable>]
-type CloudinarySettings = {
-    ApiKey: string
-    ApiSecret: string
-    CloudName: string
-    DefaultMember: string
-    DefaultArticle: string
-}
-
 type Format = 
     | Jpg
 
 
 module Image =
+    type CloudinaryOptions = {
+        CloudName: string
+        DefaultMember: string
+        DefaultArticle: string
+    }
 
     type ImageProperties = {
         Width: int option

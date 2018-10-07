@@ -9,6 +9,7 @@ open MyTeam.Domain.Members
 open MyTeam.Views
 open MyTeam.Members
 open MyTeam.Attendance
+open MyTeam.Common.Features.Members
 
 let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
 

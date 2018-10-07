@@ -15,6 +15,15 @@ type FacebookOptions = {
   AppId: string
 }
 
+[<CLIMutable>]
+type CloudinarySettings = {
+    ApiKey: string
+    ApiSecret: string
+    CloudName: string
+    DefaultMember: string
+    DefaultArticle: string
+}
+
 
 [<AutoOpen>]
 module Options =

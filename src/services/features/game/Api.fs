@@ -3,7 +3,6 @@ namespace MyTeam.Games
 open MyTeam.Domain
 open MyTeam
 open System
-open Microsoft.EntityFrameworkCore
 
 module internal Helpers =
     let updateGame clubId gameId db updateGame  =
@@ -88,7 +87,7 @@ module Api =
       
 
 
-    let getInsights club (teamName, year) (db: Database) =
+    let getInsights (club: Domain.Club) (teamName, year) (db: Database) =
         club.Teams |> Seq.tryFind (fun t -> t.ShortName.ToLower() = (toLower teamName))
         |> function
         | None -> NotFound

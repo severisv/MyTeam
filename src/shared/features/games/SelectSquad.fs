@@ -3,6 +3,7 @@ module Shared.Features.Games.SelectSquad
 open System
 open MyTeam
 open MyTeam.Domain.Members
+open MyTeam.Image
 
 type Signup = {
         MemberId: Guid
@@ -16,7 +17,7 @@ type RecentAttendance = {
     AttendancePercentage: int
 }
 
-type Player = Member * Signup option
+type Player = MemberWithTeamsAndRoles * Signup option
 
 type Squad = {
     MemberIds: Guid list
@@ -29,12 +30,14 @@ type GameDetailed = {
     Location: string
     Description: string
     Squad: Squad
+    TeamId: Guid
 }
 
 type Model = {
     Game: GameDetailed
-    ImageOptions: CloudinarySettings
+    ImageOptions: CloudinaryOptions
     Signups: Signup list
+    Members: MemberWithTeamsAndRoles list
 }
 
 let clientView = "select-squad"

@@ -7,8 +7,19 @@ open Image
 
 module Images =
   
-    let getOptions (ctx: HttpContext) =
+  
+    let getSecretOptions (ctx: HttpContext) =
         (ctx.GetService<IOptions<CloudinarySettings>>()).Value
+
+    let getOptions (ctx: HttpContext) =
+        getSecretOptions ctx 
+        |> fun opts ->
+            {
+                CloudName = opts.CloudName
+                DefaultMember = opts.DefaultMember
+                DefaultArticle = opts.DefaultArticle
+            }
+    
 
     let get ctx url getProps =
         let options = getOptions ctx

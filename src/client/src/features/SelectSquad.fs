@@ -35,27 +35,24 @@ let element model =
        
     
         let players: Player list = 
-            let signups: Signup list = []
-            let members: Member list = []
 
-            members
+            model.Members
             |> List.map (fun m ->
-                let s = signups 
-                        |> List.tryFind (fun s -> s.MemberId = m.Id)                                 
+                let s = model.Signups 
+                        |> List.tryFind (fun s -> s.MemberId = m.Details.Id)                                 
                 (m, s)
             )
 
     
 
-        let listPlayers (players: Player list) = 
-            div [ Class "col-sm-6 col-xs-12" ]
-               [ 
+        let listPlayers header (players: Player list) =          
                  collapsible Open [
-                     str <| sprintf "Påmeldte spillere (%i)" players.Length
+                     str <| sprintf "%s (%i)" header players.Length
                  ] [     
                     ul [ Class "list-users" ]
                         (players
                         |> List.map(fun (m, s) ->
+                            let m = m.Details
                             li [ Class "register-attendance-item registerSquad-player" ]
                                 [ span [ ]
                                     [ 
@@ -81,20 +78,18 @@ let element model =
                                     input [
                                         Class "form-control"
                                         Type "checkbox"
-                                        Checked true
+                                        Checked (game.Squad.MemberIds |> List.contains m.Id)
                                     ]                                    
                                     ]
                                   div [ Class "ra-info-elements" ]
                                          [ Labels.error ] 
                                 ]
                         ))
-                   ]
-                 br [ ]
-
-               ]
+                    br []
+                   ]               
 
         let squad = players 
-                    |> List.filter (fun (m, _) -> game.Squad.MemberIds |> List.contains m.Id)
+                    |> List.filter (fun (m, _) -> game.Squad.MemberIds |> List.contains m.Details.Id)
 
         mtMain [] [
             block [] 
@@ -138,7 +133,13 @@ let element model =
                             ]
                         div [ Class "row" ]
                            [
-                             listPlayers players
+                             div [ Class "col-sm-6 col-xs-12" ]
+                               [ 
+                                    listPlayers "Påmeldte spillere" (players |> List.filter(fun (_, s) -> s.IsSome && s.Value.IsAttending))
+                                    listPlayers "Kan ikke" (players |> List.filter(fun (_, s) -> s.IsSome && (not s.Value.IsAttending)))
+                                    listPlayers "Ikke svart" (players  |> List.filter(fun (m, s) -> not s.IsSome && (m.Teams |> List.contains game.TeamId)) )
+                                    listPlayers "Øvrige ikke svart" (players  |> List.filter(fun (m, s) -> not s.IsSome && (not (m.Teams |> List.contains game.TeamId))))
+                               ]
                              div [ Class "col-sm-6 col-xs-12 " ]
                                [ h2 [ ] [ str <| sprintf "Tropp (%i)" squad.Length ]   
                                  hr [ ]
@@ -147,10 +148,10 @@ let element model =
                                         ul [ Class "list-unstyled squad-list" ] 
                                             (
                                                 squad 
-                                                |> List.map (fun (m, s) ->
+                                                |> List.map (fun (m, _) ->
                                                                 li [] [ 
                                                                     Icons.player ""
-                                                                    str <| sprintf " %s" m.Name]  
+                                                                    str <| sprintf " %s" m.Details.Name]  
                                                 )
                                             )
                                      ]
@@ -196,5 +197,4 @@ if not <| isNull node then
                 |> ofJson<Model>
 
     ReactDom.render(element model, node)
-
 

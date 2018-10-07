@@ -4,21 +4,8 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open System
+open MyTeam.Common.Features.Members
 
-type MemberDetails = {
-    Details: Member
-    Phone: string
-    Email: string
-    BirthDate: DateTime option
-} 
-with member m.BirthYear = m.BirthDate |> Option.map (fun b -> b.Year)
-
-
-type MemberWithTeamsAndRoles = {
-    Details: Member
-    Teams: TeamId list 
-    Roles: Role list
-}
 
 [<CLIMutable>]
 type AddMemberForm = {
@@ -29,7 +16,6 @@ type AddMemberForm = {
     LastName: string
 }
 
-type ListMembers = Database -> ClubId -> MemberWithTeamsAndRoles list
 type ListMembersDetailed = Database -> ClubId -> MemberDetails list
 type GetFacebookIds = Database -> ClubId -> string list
 type SetStatus = Database -> ClubId -> MemberId -> PlayerStatus -> UserId

@@ -4,7 +4,7 @@ open System
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Domain.Memberqueries
+open MyTeam.Common.Features.Members
 open Microsoft.EntityFrameworkCore
 open System.Linq
 
@@ -46,7 +46,7 @@ module Users =
                                  LastName = m.LastName
                                  UrlName = m.UrlName
                                  Image = m.ImageFull
-                                 Roles = m.RolesString |> Memberqueries.toRoleList
+                                 Roles = m.RolesString |> toRoleList
                                  TeamIds = m.MemberTeams 
                                              |> Seq.map(fun team -> team.TeamId)
                                              |> Seq.toList

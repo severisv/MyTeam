@@ -2,8 +2,7 @@ module MyTeam.Games.Queries
 
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Domain.Members
-open MyTeam.Domain.Memberqueries
+open MyTeam.Common.Features.Members
 open System.Linq
 
 let games (db : Database) clubId = 

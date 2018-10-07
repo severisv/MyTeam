@@ -12,7 +12,7 @@ namespace MyTeam.ViewModels.Shared
         public int UnixTimestamp { get; }
 
 
-        public CloudinaryConfiguration(CloudinaryOptions options)
+        public CloudinaryConfiguration(CloudinarySettings options)
         {
             CloudName = options.CloudName;
             ApiKey = options.ApiKey;
