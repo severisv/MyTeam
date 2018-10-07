@@ -14,3 +14,7 @@ module Json =
 
            
 
+
+        let fableSerialize obj =
+            let jsonConverter = Fable.JsonConverter() :> JsonConverter
+            JsonConvert.SerializeObject(obj, [|jsonConverter|])

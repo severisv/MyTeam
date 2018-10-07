@@ -28,6 +28,7 @@
     <Compile Include="utils/Validators.fs" />
     <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/Logger.fs" />
+    <Compile Include="utils/Client.fs" />
     <Compile Include="components/common/Base.fs" />
     <Compile Include="components/common/Icons.fs" />
     <Compile Include="components/common/Layout.fs" />
@@ -99,6 +100,7 @@
     <Compile Include="features/news/pages/Show.fs" />
     <Compile Include="features/news/pages/Edit.fs" />
     <Compile Include="App.fs" />
+    <Compile Include="utils/Client.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

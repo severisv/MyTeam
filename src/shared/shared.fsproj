@@ -7,7 +7,7 @@
     <Compile Include="util/*.fs" />
     <Compile Include="domain/*.fs" />
     <Compile Include="components/*.fs" />
-    <Compile Include="ClientViews.fs" />
+    <Compile Include="features/*/*.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

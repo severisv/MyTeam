@@ -50,7 +50,7 @@ module App =
                     routef "/kamper/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
                     routef "/kamper/%O/resultat" <| fun gameId -> 
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
-                    routef "/kamper/%s/laguttak" <| fun gameId -> 
+                    routef "/kamper/%O/laguttak" <| fun gameId -> 
                         mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
                     routef "/kamper/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
                     routef "/kamper/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 

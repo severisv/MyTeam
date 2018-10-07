@@ -7,7 +7,7 @@ open Image
 
 module Images =
   
-    let private getOptions (ctx: HttpContext) =
+    let getOptions (ctx: HttpContext) =
         (ctx.GetService<IOptions<CloudinarySettings>>()).Value
 
     let get ctx url getProps =

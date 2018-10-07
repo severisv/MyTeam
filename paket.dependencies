@@ -5,6 +5,7 @@ clitool dotnet-fable
 nuget Fable.Core
 nuget Fable.Import.Browser
 nuget Fable.React
+nuget Fable.JsonConverter
 nuget FSharp.Quotations.Evaluator
 nuget Giraffe
 nuget HtmlAgilityPack.CssSelectors.NetCore

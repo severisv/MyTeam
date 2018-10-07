@@ -15,34 +15,11 @@ open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
 open MyTeam.Components
 open MyTeam
+open Shared.Features.Games.SelectSquad
+open Fable.Core.JsInterop
 
-type Signup = {
-        MemberId: Guid
-        IsAttending: bool
-        Message: string        
-    }
 
-type Squad = {
-    MemberIds: Guid list
-    IsPublished: bool
-}
-
-type RecentAttendance = {
-    MemberId: Guid
-    AttendancePercentage: int
-}
-
-type GameDetailed = {
-    Id: Guid
-    Date: DateTime
-    Location: string
-    Description: string
-    Squad: Squad
-}
-
-type Player = Member * Signup option
-
-let element = 
+let element model = 
     
         let recentAttendance : RecentAttendance list = []
 
@@ -53,34 +30,13 @@ let element =
             | Some a -> sprintf "%i%%" a.AttendancePercentage
             | None -> ""
 
-        let game : GameDetailed = {
-            Id = Guid.NewGuid()
-            Location = "Muselunden"
-            Date = DateTime.Now
-            Description = "Oppmøte 19.30"
-            Squad = {
-                    IsPublished = true
-                    MemberIds = []
-                }
-        }
-
+        let game = model.Game
+        let imageOptions = model.ImageOptions
        
-
+    
         let players: Player list = 
-            let members : Member list = [
-                { 
-                    Id = Guid.NewGuid()
-                    FacebookId = "string"
-                    FirstName = "string"
-                    MiddleName = "string"
-                    LastName = "string"
-                    UrlName = "string"
-                    Image = "string"    
-                    Status = Status.Aktiv      
-                }
-            ]
-
             let signups: Signup list = []
+            let members: Member list = []
 
             members
             |> List.map (fun m ->
@@ -88,14 +44,6 @@ let element =
                         |> List.tryFind (fun s -> s.MemberId = m.Id)                                 
                 (m, s)
             )
-
-        let imageOptions = {
-            ApiKey = "string"
-            ApiSecret = "string"
-            CloudName = "string"
-            DefaultMember = "string"
-            DefaultArticle = "string"
-        }
 
     
 
@@ -241,5 +189,12 @@ let element =
                        ]                                        
         ]
         
-ReactDom.render(element, document.getElementById(ClientViews.selectSquad))
+let node = document.getElementById(clientView)
+
+if not <| isNull node then
+    let model = node.getAttribute(Interop.modelAttributeName)
+                |> ofJson<Model>
+
+    ReactDom.render(element model, node)
+
 

@@ -6,8 +6,8 @@
     <ProjectReference Include="..\..\shared\shared.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditSeason.fs" />
-    <Compile Include="SelectSquad.fs" />
+    <Compile Include="features/EditSeason.fs" />
+    <Compile Include="features/SelectSquad.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>

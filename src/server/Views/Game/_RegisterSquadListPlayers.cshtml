@@ -1,0 +1,28 @@
+﻿@using System.Threading.Tasks
+@model System.Collections.Generic.IEnumerable<MyTeam.ViewModels.Game.RegisterSquadPlayerViewModel>
+    <ul class="list-users">
+        @foreach (var player in Model)
+        {
+        <li class="register-attendance-item registerSquad-player">
+            <span>
+                <img class="hidden-xxs" src="@Context.Cloudinary().MemberImage(player.ImageFull, player.FacebookId, 50, 50)" />
+                @player.ShortName
+            </span>
+            <span>
+                @if (!string.IsNullOrWhiteSpace(player.Attendance?.SignupMessage))
+                {
+                <a class="mt-popover registerSquad-messageIcon" data-container="body" data-content="@player.Attendance.SignupMessage"
+                    data-placement="right" data-toggle="popover" href="javascript:void(0);"><i class="fa fa-comment"></i></a>
+                }
+                <span id="playerAttendance-@player.Id" title="Oppmøte siste 8 uker" class="register-attendance-attendance">0%</span>
+                <input class="form-control register-attendance-input" data-player-id="@player.Id" data-player-name="@player.ShortName"
+                    data-event-id="@player.EventId" type="checkbox" @(player.Attendance?.IsSelected==true ? "checked" :
+                    "" ) />
+
+            </span>
+            <div class="ra-info-elements">
+                <span class="label label-danger"><i class="fa fa-exclamation-triangle"></i></span>
+            </div>
+        </li>
+        }
+    </ul>
