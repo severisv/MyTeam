@@ -16,27 +16,78 @@ open MyTeam.Shared.Components.Layout
 open MyTeam.Components
 open MyTeam
 
+type Signup = {
+        MemberId: Guid
+        IsAttending: bool
+        Message: string        
+    }
+
+type Squad = {
+    MemberIds: Guid list
+    IsPublished: bool
+}
+
+type RecentAttendance = {
+    MemberId: Guid
+    AttendancePercentage: int
+}
+
+type GameDetailed = {
+    Id: Guid
+    Date: DateTime
+    Location: string
+    Description: string
+    Squad: Squad
+}
+
+type Player = Member * Signup option
 
 let element = 
+    
+        let recentAttendance : RecentAttendance list = []
 
-        let game : Event = {
+        let getRecentAttendance memberId = 
+            recentAttendance
+            |> List.tryFind (fun a -> a.MemberId = memberId)
+            |> function
+            | Some a -> sprintf "%i%%" a.AttendancePercentage
+            | None -> ""
+
+        let game : GameDetailed = {
             Id = Guid.NewGuid()
             Location = "Muselunden"
             Date = DateTime.Now
+            Description = "Oppmøte 19.30"
+            Squad = {
+                    IsPublished = true
+                    MemberIds = []
+                }
         }
-        let members : Member list = [
-            { 
-                Id = Guid.NewGuid()
-                FacebookId = "string"
-                FirstName = "string"
-                MiddleName = "string"
-                LastName = "string"
-                UrlName = "string"
-                Image = "string"    
-                Status = Status.Aktiv      
-            }
-        ]
-        let squad = members
+
+       
+
+        let players: Player list = 
+            let members : Member list = [
+                { 
+                    Id = Guid.NewGuid()
+                    FacebookId = "string"
+                    FirstName = "string"
+                    MiddleName = "string"
+                    LastName = "string"
+                    UrlName = "string"
+                    Image = "string"    
+                    Status = Status.Aktiv      
+                }
+            ]
+
+            let signups: Signup list = []
+
+            members
+            |> List.map (fun m ->
+                let s = signups 
+                        |> List.tryFind (fun s -> s.MemberId = m.Id)                                 
+                (m, s)
+            )
 
         let imageOptions = {
             ApiKey = "string"
@@ -46,19 +97,17 @@ let element =
             DefaultArticle = "string"
         }
 
-        let isPublished = true
-        let description = "Beskrivelse"
-        let signupMessage = "kommer ikke"
+    
 
-        let listPlayers (players: Member list) = 
+        let listPlayers (players: Player list) = 
             div [ Class "col-sm-6 col-xs-12" ]
                [ 
                  collapsible Open [
                      str <| sprintf "Påmeldte spillere (%i)" players.Length
                  ] [     
                     ul [ Class "list-users" ]
-                        (squad
-                        |> List.map(fun m ->
+                        (players
+                        |> List.map(fun (m, s) ->
                             li [ Class "register-attendance-item registerSquad-player" ]
                                 [ span [ ]
                                     [ 
@@ -70,18 +119,19 @@ let element =
                                         ]
                                   span [ ]
                                     [ 
-                                    Strings.hasValue signupMessage &?
-                                        tooltip signupMessage [Class "registerSquad-messageIcon"] [
-                                            Icons.comment
-                                        ]
+                                    s => fun s -> 
+                                        Strings.hasValue s.Message &?
+                                            tooltip s.Message [Class "registerSquad-messageIcon"] [
+                                                Icons.comment
+                                            ]
                                                                             
                                     span [
                                             Id <| sprintf "playerAttendance-%O" m.Id
                                             Title "Oppmøte siste 8 uker"
-                                            Class "register-attendance-attendance"] 
-                                        [str "0%"]
+                                         ] 
+                                        [str <| getRecentAttendance m.Id]
                                     input [
-                                        Class "form-control register-attendance-input"
+                                        Class "form-control"
                                         Type "checkbox"
                                         Checked true
                                     ]                                    
@@ -95,6 +145,8 @@ let element =
 
                ]
 
+        let squad = players 
+                    |> List.filter (fun (m, _) -> game.Squad.MemberIds |> List.contains m.Id)
 
         mtMain [] [
             block [] 
@@ -126,6 +178,7 @@ let element =
                                         whitespace
                                         game.Date |> Date.formatTime |> str
                                         ] 
+
                                      ]
                                  p [ ]
                                    [ 
@@ -137,7 +190,7 @@ let element =
                             ]
                         div [ Class "row" ]
                            [
-                             listPlayers members
+                             listPlayers players
                              div [ Class "col-sm-6 col-xs-12 " ]
                                [ h2 [ ] [ str <| sprintf "Tropp (%i)" squad.Length ]   
                                  hr [ ]
@@ -146,7 +199,7 @@ let element =
                                         ul [ Class "list-unstyled squad-list" ] 
                                             (
                                                 squad 
-                                                |> List.map (fun m ->
+                                                |> List.map (fun (m, s) ->
                                                                 li [] [ 
                                                                     Icons.player ""
                                                                     str <| sprintf " %s" m.Name]  
@@ -155,10 +208,10 @@ let element =
                                      ]
                                  hr [ ]
                                  div [ Class "registerSquad-publish" ]
-                                   [ div [ Class "relative registerSquad-messageWrapper" ]
+                                   [ div [ Class "registerSquad-messageWrapper" ]
                                        [ textarea [ Class "form-control"
                                                     Placeholder "Beskjed til spillerne"
-                                                    Value description
+                                                    Value game.Description
                                                     OnChange (fun o -> printf "%O"  o)
                                                  ]
                                            [ ]
@@ -167,9 +220,10 @@ let element =
                                        ]
                                      div [ ]
                                        [
-                                        (if isPublished then 
+                                        (if game.Squad.IsPublished then 
                                             btn Success Lg [Class "disabled"]
                                                [ Icons.checkCircle 
+                                                 whitespace
                                                  str "Publisert" ]
                                         else
                                             div [] [
