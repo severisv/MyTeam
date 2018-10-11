@@ -2,10 +2,10 @@ namespace MyTeam.Domain
 open System
 
 type EventType = 
-        | Alle
-        | Trening
-        | Kamp
-        | Diverse
+        | Alle = 0
+        | Trening = 1
+        | Kamp = 2
+        | Diverse = 3
     
 
 type GameType =

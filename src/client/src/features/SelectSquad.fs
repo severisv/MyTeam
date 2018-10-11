@@ -21,10 +21,9 @@ open Fable.Core.JsInterop
 
 let element model = 
     
-        let recentAttendance : RecentAttendance list = []
 
         let getRecentAttendance memberId = 
-            recentAttendance
+            model.RecentAttendance
             |> List.tryFind (fun a -> a.MemberId = memberId)
             |> function
             | Some a -> sprintf "%i%%" a.AttendancePercentage

@@ -12,8 +12,8 @@ type Signup = {
     }
     
 
-type RecentAttendance = {
-    MemberId: Guid
+type TeamAttendance = {
+    MemberId: MemberId
     AttendancePercentage: int
 }
 
@@ -38,6 +38,7 @@ type Model = {
     ImageOptions: CloudinaryOptions
     Signups: Signup list
     Members: MemberWithTeamsAndRoles list
+    RecentAttendance: TeamAttendance list
 }
 
 let clientView = "select-squad"

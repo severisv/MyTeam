@@ -7,6 +7,7 @@ open MyTeam.Views
 open MyTeam.Common.Features
 open MyTeam.Domain.Members
 open MyTeam.Shared.Components
+open MyTeam.Games
 open Shared.Features.Games.SelectSquad
 
 let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
@@ -50,9 +51,12 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     |> Seq.tryHead
     |> function
     | None -> NotFound
+    | Some (game, _) when club.Teams |> Seq.exists(fun t -> t.Id = game.TeamId) |> not -> Unauthorized 
     | Some (game, signups) -> 
 
         let members = Members.list db club.Id
+
+        let recentAttendance = Queries.getRecentAttendance db game.TeamId
 
         [
             Client.view clientView 
@@ -61,6 +65,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                             Signups = signups
                             Members = members |> List.filter(fun m -> m.Details.Status <> Status.Sluttet)
                             ImageOptions = Images.getOptions ctx
+                            RecentAttendance = recentAttendance
                         }
            
             sidebar [] [

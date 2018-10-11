@@ -82,7 +82,6 @@ module App =
                     route "/admin/spillerinvitasjon" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     subRoute "/api/attendance"                            
                            <| choose [ 
-                                GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
                             ]                                     
