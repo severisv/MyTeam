@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack -p",
-    "build-fable": "cd ../client/tools && dotnet fable webpack -- -p --config webpack.config.prod.js",
+    "build-fable": "cd ../client/src && dotnet fable webpack -- -p --config config/webpack.prod.js",
     "watch": "webpack -w",
-    "watch-fable": "cd ../client/tools && dotnet fable webpack -- -w --config webpack.config.prod.js",
+    "watch-fable": "cd ../client/src && dotnet fable webpack -- -w --config config/webpack.dev.js",
     "copy-libs": "gulp"
   },
   "devDependencies": {

@@ -1,6 +1,5 @@
 module MyTeam.Client.SelectSquad
 
-open MyTeam.Domain.Members
 open System
 open Fable.Helpers.React
 open Fable.Import
@@ -9,18 +8,24 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import.React
 open MyTeam.Domain
-open MyTeam.Domain.Events
-open MyTeam.Shared
 open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
 open MyTeam.Components
 open MyTeam
 open Shared.Features.Games.SelectSquad
 open Fable.Core.JsInterop
+open Fable.Core
 
 
-let element model = 
-    
+
+
+
+
+type SelectSquad(props) =
+    inherit Component<Model, obj>(props)
+    override this.render() =
+
+        let model = this.props    
 
         let getRecentAttendance memberId = 
             model.RecentAttendance
@@ -189,6 +194,8 @@ let element model =
                        ]                                        
         ]
         
+let inline element model = ofType<SelectSquad,_,_> model []
+    
 let node = document.getElementById(clientView)
 
 if not <| isNull node then

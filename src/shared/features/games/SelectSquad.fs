@@ -33,6 +33,7 @@ type GameDetailed = {
     TeamId: Guid
 }
 
+
 type Model = {
     Game: GameDetailed
     ImageOptions: CloudinaryOptions

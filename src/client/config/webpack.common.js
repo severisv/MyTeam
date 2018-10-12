@@ -1,23 +1,25 @@
 var fs = require("fs");
 var path = require("path");
 var fableUtils = require("fable-utils");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
-var packageJson = JSON.parse(fs.readFileSync(resolve('../package.json')).toString());
+var packageJson = JSON.parse(
+  fs.readFileSync(resolve("../package.json")).toString()
+);
 var errorMsg = "{0} missing in package.json";
 
 var config = {
-  entry: [
-    // 'babel-polyfill', 'whatwg-fetch', 
-    resolve(path.join("..", forceGet(packageJson, "fable.entry", errorMsg)))],
-  publicDir: resolve("../public"),
+  entry: resolve(
+    path.join("..", forceGet(packageJson, "fable.entry", errorMsg))
+  ),
   buildDir: resolve("../../server/wwwroot/compiled/client"),
+  rootDir: resolve("../"),
   nodeModulesDir: resolve("../node_modules"),
   indexHtmlTemplate: resolve("../src/index.html")
-}
+};
 
 function resolve(filePath) {
-  return path.join(__dirname, filePath)
+  return path.join(__dirname, filePath);
 }
 
 function forceGet(obj, path, errorMsg) {
@@ -28,15 +30,13 @@ function forceGet(obj, path, errorMsg) {
     }
     throw new Error(errorMsg.replace("{0}", path));
   }
-  var parts = path.split('.');
+  var parts = path.split(".");
   return forceGetInner(obj, parts[0], parts.slice(1));
 }
 
 function getModuleRules(isProduction) {
   var babelOptions = fableUtils.resolveBabelOptions({
-    presets: [
-      ["env", { "targets": { "browsers": "> 1%" }, "modules": false }]
-    ],
+    presets: [["env", { targets: { browsers: "> 1%" }, modules: false }]]
   });
 
   return [
@@ -54,9 +54,9 @@ function getModuleRules(isProduction) {
       test: /\.js$/,
       exclude: /node_modules/,
       use: {
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: babelOptions
-      },
+      }
     }
   ];
 }
@@ -66,8 +66,8 @@ function getPlugins(isProduction) {
     new HtmlWebpackPlugin({
       filename: path.join(config.buildDir, "index.html"),
       template: config.indexHtmlTemplate,
-      // minify: isProduction ? {} : false
-    }),
+      minify: isProduction ? { collapseWhitespace: true } : false
+    })
   ];
 }
 
@@ -76,4 +76,4 @@ module.exports = {
   config: config,
   getModuleRules: getModuleRules,
   getPlugins: getPlugins
-}
+};
