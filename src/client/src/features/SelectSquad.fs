@@ -21,13 +21,11 @@ open Thoth.Json
 
 
 
-// type SelectSquad(props) =
-//     inherit Component<Model, obj>(props)
-//     override this.render() =
+type SelectSquad(props) =
+    inherit Component<Model, obj>(props)
+    override this.render() =
 
-        // let model = this.props    
-
-let element model =
+        let model = this.props    
 
         let getRecentAttendance memberId = 
             model.RecentAttendance
@@ -197,9 +195,8 @@ let element model =
                        ]                                        
         ]
         
-// let inline element model = ofType<SelectSquad,_,_> model []
-    
-
+let inline element model = ofType<SelectSquad,_,_> model []
+ 
 let node = document.getElementById(clientView)
 
 if not <| isNull node then
