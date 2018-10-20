@@ -59,11 +59,11 @@ let list : (Database -> ClubId -> MemberWithTeamsAndRoles list) =
                             {
                                 Details = ({
                                              Id = p.Id
-                                             FacebookId = p.FacebookId
+                                             FacebookId =  Strings.defaultValue p.MiddleName
                                              FirstName = p.FirstName
-                                             MiddleName = p.MiddleName
+                                             MiddleName = Strings.defaultValue p.MiddleName
                                              LastName = p.LastName
-                                             Image = p.ImageFull
+                                             Image =  Strings.defaultValue p.MiddleName
                                              UrlName = p.UrlName
                                              Status = int p.Status |> enum<PlayerStatus> 
                                           })

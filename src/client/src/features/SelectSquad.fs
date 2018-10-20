@@ -15,17 +15,19 @@ open MyTeam
 open Shared.Features.Games.SelectSquad
 open Fable.Core.JsInterop
 open Fable.Core
+open Thoth.Json
 
 
 
 
 
+// type SelectSquad(props) =
+//     inherit Component<Model, obj>(props)
+//     override this.render() =
 
-type SelectSquad(props) =
-    inherit Component<Model, obj>(props)
-    override this.render() =
+        // let model = this.props    
 
-        let model = this.props    
+let element model =
 
         let getRecentAttendance memberId = 
             model.RecentAttendance
@@ -114,9 +116,10 @@ type SelectSquad(props) =
                                [ p [ ]
                                    [ 
                                     span [ ] [ 
-                                         Icons.calendar ""
-                                         whitespace
-                                         game.Date |> Date.format |> str ]
+                                        Icons.calendar ""
+                                        whitespace
+                                        game.Date |> Date.format |> str 
+                                        ]
                                     whitespace
                                     span [ Class "no-wrap" ]
                                        [ 
@@ -194,13 +197,16 @@ type SelectSquad(props) =
                        ]                                        
         ]
         
-let inline element model = ofType<SelectSquad,_,_> model []
+// let inline element model = ofType<SelectSquad,_,_> model []
     
+
 let node = document.getElementById(clientView)
 
 if not <| isNull node then
-    let model = node.getAttribute(Interop.modelAttributeName)
-                |> ofJson<Model>
-
-    ReactDom.render(element model, node)
+        node.getAttribute(Interop.modelAttributeName)
+        |> Decode.Auto.fromString<Model>
+        |> function
+        | Ok model ->
+            ReactDom.render(element model, node)
+        | Error e -> failwithf "Json deserialization failed: %O" e
 

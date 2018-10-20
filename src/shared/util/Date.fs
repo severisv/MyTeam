@@ -18,4 +18,3 @@ let formatShort (datetime: DateTime) =
 
 let formatTime (datetime: DateTime) =
     sprintf "%02i:%02i" datetime.Hour datetime.Minute
-

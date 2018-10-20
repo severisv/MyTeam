@@ -1,13 +1,13 @@
 STORAGE: NONE
 NUGET
   remote: https://www.nuget.org/api/v2
-    dotnet-fable (2.0.3) - clitool: true
+    dotnet-fable (2.0.6) - clitool: true
       Dotnet.ProjInfo (>= 0.9) - restriction: >= netcoreapp2.0
       FSharp.Compiler.Service (>= 25.0.1) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.App (>= 2.0) - restriction: >= netcoreapp2.0
       Newtonsoft.Json (>= 11.0.2) - restriction: >= netcoreapp2.0
-    Dotnet.ProjInfo (0.11) - restriction: >= netcoreapp2.0
+    Dotnet.ProjInfo (0.12.2) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.1.18) - restriction: && (< net45) (>= netstandard2.0)
     Fable.Core (2.0)
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
@@ -16,7 +16,7 @@ NUGET
     Fable.JsonConverter (1.0.8)
       FSharp.Core (>= 4.2.3) - restriction: || (>= net45) (>= netstandard1.6)
       Newtonsoft.Json (>= 11.0.1) - restriction: || (>= net45) (>= netstandard1.6)
-    Fable.React (4.0.1)
+    Fable.React (4.1.1)
       Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
@@ -59,51 +59,52 @@ NUGET
     HtmlAgilityPack.CssSelectors.NetCore (1.1.1)
       HtmlAgilityPack (>= 1.6.16) - restriction: >= netstandard1.5
       NETStandard.Library (>= 1.6.1) - restriction: >= netstandard1.5
-    Microsoft.ApplicationInsights (2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+    Microsoft.ApplicationInsights (2.8.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.3)
       System.Diagnostics.DiagnosticSource (>= 4.5) - restriction: || (&& (>= net45) (< netstandard1.3)) (&& (< net45) (>= netstandard1.3)) (>= net46)
       System.Diagnostics.StackTrace (>= 4.3) - restriction: && (< net45) (>= netstandard1.3)
       System.Net.Requests (>= 4.3) - restriction: && (< net45) (>= netstandard1.3)
     Microsoft.ApplicationInsights.Agent.Intercept (2.4) - restriction: || (&& (>= net45) (< net451) (>= netstandard1.6)) (&& (>= net451) (< netstandard1.6)) (>= net46)
-    Microsoft.ApplicationInsights.AspNetCore (2.4.1)
-      Microsoft.ApplicationInsights (>= 2.7.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights.DependencyCollector (>= 2.7.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights.PerfCounterCollector (>= 2.7.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights.WindowsServer (>= 2.7.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (>= 2.7.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+    Microsoft.ApplicationInsights.AspNetCore (2.5)
+      Microsoft.ApplicationInsights (>= 2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights.DependencyCollector (>= 2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights.PerfCounterCollector (>= 2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights.WindowsServer (>= 2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (>= 2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       Microsoft.AspNetCore.Hosting (>= 1.0.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       Microsoft.Extensions.Configuration (>= 1.0.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       Microsoft.Extensions.Configuration.Json (>= 1.0.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       Microsoft.Extensions.DiagnosticAdapter (>= 1.0.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       Microsoft.Extensions.Logging.Abstractions (>= 1.0.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net451) (>= netstandard1.6)
+      System.Diagnostics.DiagnosticSource (>= 4.5) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
       System.Net.Http (>= 4.3.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (>= net46)
       System.Net.NameResolution (>= 4.3) - restriction: && (< net451) (>= netstandard1.6)
       System.Text.Encodings.Web (>= 4.3.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-    Microsoft.ApplicationInsights.DependencyCollector (2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights (2.8) - restriction: || (>= net45) (>= netstandard1.6)
+    Microsoft.ApplicationInsights.DependencyCollector (2.8.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights (2.8.1) - restriction: || (>= net45) (>= netstandard1.6)
       Microsoft.ApplicationInsights.Agent.Intercept (>= 2.4) - restriction: >= net45
       Microsoft.Extensions.PlatformAbstractions (>= 1.1) - restriction: && (< net45) (>= netstandard1.6)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.6)
       System.Data.SqlClient (>= 4.3.1) - restriction: && (< net45) (>= netstandard1.6)
       System.Diagnostics.DiagnosticSource (>= 4.5) - restriction: || (>= net45) (>= netstandard1.6)
       System.Diagnostics.StackTrace (>= 4.3) - restriction: && (< net45) (>= netstandard1.6)
-    Microsoft.ApplicationInsights.PerfCounterCollector (2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights (2.8) - restriction: || (>= net45) (>= netstandard1.6)
+    Microsoft.ApplicationInsights.PerfCounterCollector (2.8.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights (2.8.1) - restriction: || (>= net45) (>= netstandard1.6)
       Microsoft.Extensions.PlatformAbstractions (>= 1.1) - restriction: && (< net45) (>= netstandard1.6)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.6)
       System.Runtime.Serialization.Json (>= 4.3) - restriction: && (< net45) (>= netstandard1.6)
       System.Runtime.Serialization.Primitives (>= 4.3) - restriction: && (< net45) (>= netstandard1.6)
-    Microsoft.ApplicationInsights.WindowsServer (2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights (2.8) - restriction: || (>= net45) (>= netstandard1.6)
-      Microsoft.ApplicationInsights.DependencyCollector (>= 2.8) - restriction: >= net45
-      Microsoft.ApplicationInsights.PerfCounterCollector (>= 2.8) - restriction: >= net45
-      Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (2.8) - restriction: >= net45
+    Microsoft.ApplicationInsights.WindowsServer (2.8.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights (2.8.1) - restriction: || (>= net45) (>= netstandard1.6)
+      Microsoft.ApplicationInsights.DependencyCollector (>= 2.8.1) - restriction: >= net45
+      Microsoft.ApplicationInsights.PerfCounterCollector (>= 2.8.1) - restriction: >= net45
+      Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (2.8.1) - restriction: >= net45
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.6)
       System.Runtime.Serialization.Json (>= 4.3) - restriction: && (< net45) (>= netstandard1.6)
       System.Runtime.Serialization.Primitives (>= 4.3) - restriction: && (< net45) (>= netstandard1.6)
-    Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (2.8) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
-      Microsoft.ApplicationInsights (>= 2.8) - restriction: || (>= net45) (>= netstandard1.3)
+    Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel (2.8.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46)
+      Microsoft.ApplicationInsights (>= 2.8.1) - restriction: || (>= net45) (>= netstandard1.3)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.3) (< netstandard2.0)
       Newtonsoft.Json (>= 10.0.3) - restriction: && (< net45) (>= netstandard1.3) (< netstandard2.0)
       System.Diagnostics.Process (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.3) (< netstandard2.0)) (&& (< net45) (>= netstandard2.0))
@@ -947,7 +948,7 @@ NUGET
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
       System.Runtime (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
-    System.Diagnostics.DiagnosticSource (4.5.1) - restriction: || (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.6) (< win8) (< wpa81)) (&& (>= net45) (< net451) (< netstandard1.3) (>= netstandard1.6)) (&& (< net45) (>= net451) (>= netstandard1.3) (< netstandard1.6)) (&& (< net45) (>= netstandard1.6)) (&& (>= net451) (< netstandard1.3)) (>= net46) (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (>= netstandard2.0) (< portable-net45+win8+wpa81)
+    System.Diagnostics.DiagnosticSource (4.5.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.6) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.6) (< win8) (< wpa81)) (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46) (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (>= netstandard2.0) (< portable-net45+win8+wpa81)
     System.Diagnostics.FileVersionInfo (4.3) - restriction: >= netstandard2.0
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< netstandard1.3))
       System.Globalization (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
@@ -1737,6 +1738,12 @@ NUGET
       FSharp.Core (>= 4.1.17) - restriction: || (&& (>= net45) (< net46) (< netstandard1.6)) (&& (< net45) (>= netstandard1.6)) (&& (>= net46) (< netstandard1.6)) (>= net47)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net45) (>= netstandard1.6)
       System.ValueTuple (>= 4.4) - restriction: || (&& (>= net45) (< net46) (< netstandard1.6)) (&& (< net45) (>= netstandard1.6)) (&& (>= net46) (< netstandard1.6)) (>= net47)
+    Thoth.Json (2.3)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Thoth.Json.Net (2.3)
+      FSharp.Core (>= 4.5.2) - restriction: || (>= net46) (>= netstandard2.0)
+      Newtonsoft.Json (>= 11.0.2) - restriction: || (>= net46) (>= netstandard2.0)
     Utf8Json (1.3.7) - restriction: || (>= net461) (>= netstandard2.0)
       System.Reflection.Emit (>= 4.3) - restriction: || (&& (>= net45) (< netstandard2.0)) (&& (< net45) (>= netstandard2.0)) (>= net47)
       System.Reflection.Emit.Lightweight (>= 4.3) - restriction: || (&& (>= net45) (< netstandard2.0)) (&& (< net45) (>= netstandard2.0)) (>= net47)

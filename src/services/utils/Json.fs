@@ -1,6 +1,7 @@
 namespace MyTeam
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+open Thoth.Json.Net
 
 module Json =
           
@@ -14,7 +15,5 @@ module Json =
 
            
 
-
         let fableSerialize obj =
-            let jsonConverter = Fable.JsonConverter() :> JsonConverter
-            JsonConvert.SerializeObject(obj, [|jsonConverter|])
+            Encode.Auto.toString(0, obj)

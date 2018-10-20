@@ -6,6 +6,8 @@ nuget Fable.Core prelease
 nuget Fable.Import.Browser prelease
 nuget Fable.React prelease
 nuget Fable.JsonConverter prelease
+nuget Thoth.Json
+nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator
 nuget Giraffe
 nuget HtmlAgilityPack.CssSelectors.NetCore
