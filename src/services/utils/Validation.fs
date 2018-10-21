@@ -5,55 +5,45 @@ open Microsoft.FSharp.Quotations.Patterns
 open FSharp.Quotations.Evaluator
 open MyTeam
 
-type ValidationFn<'T> = (string * 'T) -> Result<unit, string>
-
+type ValidationFn<'T> = string * 'T -> Result<unit, string>
 
 module ValidationHelpers =
     let combine (validationFns : list<ValidationFn<'T>>) (name, value) =
-        {
-            Name = name
-            Errors = validationFns 
-                    |> List.map(fun fn -> fn(name, value)) 
-                    |> List.choose (fun result -> 
-                        match result with 
-                            | Ok _ -> None
-                            | Error e -> Some e
-                        )
-        }  
-
+        { Name = name
+          Errors =
+              validationFns
+              |> List.map (fun fn -> fn (name, value))
+              |> List.choose (fun result -> 
+                     match result with
+                     | Ok _ -> None
+                     | Error e -> Some e) }
+    
     let bindResult form errors =
-                        let errors = errors 
-                                    |> List.filter (fun e -> not (e.Errors |> List.isEmpty))                               
-                        
-                        if errors |> Seq.isEmpty then
-                            Ok (form)
-                        else
-                            Error errors  
-
+        let errors =
+            errors |> List.filter (fun e -> not (e.Errors |> List.isEmpty))
+        if errors |> Seq.isEmpty then Ok(form)
+        else Error errors
+    
     let getNameAndValue (expr : Expr<'T>) =
-        let getName(expr : Expr) = 
+        let getName (expr : Expr) =
             match expr with
             | PropertyGet(a, pi, list) -> pi.Name
-            | _ -> ""                          
-
+            | _ -> ""
         (getName expr, (QuotationEvaluator.Evaluate expr))
-
 
 open ValidationHelpers
 
 [<AutoOpen>]
 module Framework =
-    let validationError name message = 
-        { Name = name; Errors=[message] }
-
-    let (>-) (expr : Expr<'T>) (validationFns: list<ValidationFn<'T>>) =
+    let validationError name message =
+        { Name = name
+          Errors = [ message ] }
+    
+    let (>-) (expr : Expr<'T>) (validationFns : list<ValidationFn<'T>>) =
         getNameAndValue expr |> combine validationFns
-
-    let (==>) validationResult form =
-       form |> bindResult validationResult    
-
-
-    let (>>=) result (fn: 'a -> HttpResult<'b>) =
-        match result with 
+    let (==>) validationResult form = form |> bindResult validationResult
+    
+    let (>>=) result (fn : 'a -> HttpResult<'b>) =
+        match result with
         | Ok a -> fn a
-        | Error ve -> ValidationErrors ve    
+        | Error ve -> ValidationErrors ve
