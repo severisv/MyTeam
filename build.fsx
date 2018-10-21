@@ -1,12 +1,12 @@
 
 #r "paket:
-    nuget Fake.Core.Target prerelease
-    nuget Fake.Core.Globbing prerelease
-    nuget Fake.Core.Process prerelease
-    nuget Fake.DotNet.Cli prerelease
-    nuget Fake.JavaScript.Npm prerelease
-    nuget Fake.Azure.Kudu prerelease
-    nuget Fake.IO.Zip prerelease"
+    nuget Fake.Core.Target
+    nuget Fake.Core.Globbing
+    nuget Fake.Core.Process
+    nuget Fake.DotNet.Cli
+    nuget Fake.JavaScript.Npm
+    nuget Fake.Azure.Kudu
+    nuget Fake.IO.Zip"
 
 #load ".fake/build.fsx/intellisense.fsx"
 
@@ -27,12 +27,14 @@ let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
 let artifact = sprintf "%s/%s.zip" artifactsDirectory appName
 let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 
-let cleanDirs = Shell.cleanDirs
+
+Target.create "Install-dotnet" (fun _ ->
+        DotNet.install DotNet.Versions.FromGlobalJson |> ignore
+)
 
 
 Target.create "Clean" <| fun _ ->
-    cleanDirs [publishDirectory; artifactsDirectory]
-
+    Shell.cleanDirs [publishDirectory; artifactsDirectory]
 
 let npmOptions = (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir })
 
@@ -93,6 +95,7 @@ Target.create "Deploy" <| fun _ ->
 
 
 "Clean"
+==> "Install-dotnet"
 ==> "Restore-frontend"
 ==> "Copy-client-libs"
 ==> "Build-frontend"

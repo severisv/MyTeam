@@ -14,4 +14,4 @@ module Validators =
     let isRequired (__, value) =
         let value = string value
         if String.IsNullOrWhiteSpace(value) then Error "Feltet er obligatorisk"
-        else Ok()
+        else Ok ()
