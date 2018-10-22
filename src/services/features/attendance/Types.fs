@@ -5,7 +5,9 @@ open System
 open MyTeam.Domain.Members
 open MyTeam.Domain.Events
 open MyTeam.Domain
-open MyTeam.Ajax
+open MyTeam.Shared.Components.Input
+
+            
             
 type PlayerDidAttend = bool            
 type PlayerAttendance = Member * PlayerDidAttend

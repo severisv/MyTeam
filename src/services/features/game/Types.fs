@@ -5,7 +5,7 @@ open MyTeam.Domain
 open MyTeam.Domain.Events
 open MyTeam.Domain.Members
 open System
-open MyTeam.Ajax
+open MyTeam.Shared.Components.Input
 open Shared.Features.Games.SelectSquad
 
 type Outcome = 
@@ -45,7 +45,7 @@ type Year = int
 
 type GetRecentAttendance = Database -> TeamId -> TeamAttendance list
 type GetSquad = Database -> GameId -> Member list
-type SelectPlayer = Database -> ClubId -> GameId -> MemberId -> CheckboxPayload -> HttpResult<unit>
+type SelectPlayer = Database -> ClubId -> GameId -> MemberId -> CheckboxPayload -> HttpResult<CheckboxPayload>
 type PublishSquad = Database -> ClubId -> GameId -> HttpResult<unit>
 
 type GetGame = Database -> ClubId -> GameId -> Game option

@@ -14,4 +14,5 @@ module Json =
         settings.Converters.Add(StringEnumConverter())
         JsonConvert.SerializeObject(obj, settings)
     
-    let fableSerialize obj = Encode.Auto.toString (0, obj)
+    let fableSerialize obj = 
+        Encode.Auto.toString (0, obj)

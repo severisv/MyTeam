@@ -16,23 +16,32 @@ open Shared.Features.Games.SelectSquad
 open Fable.Core.JsInterop
 open Fable.Core
 open Thoth.Json
+open Fable.PowerPack
+open Fable.PowerPack.Fetch
+open MyTeam.Shared.Components.Input
 
 
 
 
 
 type SelectSquad(props) =
-    inherit Component<Model, obj>(props)
+    inherit Component<Model, Squad>(props)
+    do base.setInitState(props.Game.Squad)
+        
     override this.render() =
 
-        let model = this.props    
+        let model = 
+            { props with 
+                Game = { props.Game with Squad = this.state } 
+            }    
+   
 
         let getRecentAttendance memberId = 
             model.RecentAttendance
             |> List.tryFind (fun a -> a.MemberId = memberId)
             |> function
             | Some a -> sprintf "%i%%" a.AttendancePercentage
-            | None -> ""
+            | None -> "0%"
 
         let game = model.Game
         let imageOptions = model.ImageOptions
@@ -48,6 +57,37 @@ type SelectSquad(props) =
             )
 
     
+        let handleSelectPlayer playerId isSelected =
+            
+            let selectPlayer playerId isSelected =
+                this.setState(fun state props -> 
+                                { state with 
+                                        MemberIds = 
+                                            if isSelected then 
+                                                state.MemberIds @ [playerId] |> List.distinct   
+                                            else 
+                                                state.MemberIds |> List.except [playerId] 
+
+                                    })
+
+            selectPlayer playerId isSelected                                
+
+            promise {
+                let! res = postRecord (sprintf "/api/games/%O/squad/select/%O" game.Id playerId) { value = isSelected } []
+               
+                if not res.Ok then failwith "Received %O from server: %O" res.Status res.StatusText
+                let! value = res.json<CheckboxPayload>()
+                selectPlayer playerId value.value              
+            } 
+            |> Promise.catch(fun e -> 
+                    printf "%O" e
+                    selectPlayer playerId <| not isSelected
+            )
+            |> Promise.start              
+          
+
+          
+
 
         let listPlayers header (players: Player list) =          
                  collapsible Open [
@@ -83,6 +123,7 @@ type SelectSquad(props) =
                                         Class "form-control"
                                         Type "checkbox"
                                         Checked (game.Squad.MemberIds |> List.contains m.Id)
+                                        OnChange (fun input -> handleSelectPlayer m.Id input.Checked)
                                     ]                                    
                                     ]
                                   div [ Class "ra-info-elements" ]
@@ -203,7 +244,7 @@ if not <| isNull node then
         node.getAttribute(Interop.modelAttributeName)
         |> Decode.Auto.fromString<Model>
         |> function
-        | Ok model ->
+        | Ok model ->          
             ReactDom.render(element model, node)
         | Error e -> failwithf "Json deserialization failed: %O" e
 

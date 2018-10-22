@@ -35,7 +35,7 @@ module Persistence =
                             db.EventAttendances.Add(a) |> ignore
 
                     db.SaveChanges() |> ignore
-                    OkResult ()
+                    OkResult model
 
 
 

@@ -79,7 +79,7 @@ module Api =
                     |> Seq.map ((fun a -> a.BirthDate) >> toOption)
                     |> Seq.choose id
                     |> Seq.map (fun birthDate -> 
-                                    (dateTime - birthDate).TotalDays / 365.25                        )
+                                    (dateTime - birthDate).TotalDays / 365.25)
                     |> Seq.toList                        
         
         Math.Round((List.sum ages / float ages.Length), 2)

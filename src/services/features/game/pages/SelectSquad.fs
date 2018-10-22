@@ -58,6 +58,8 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
         let recentAttendance = Queries.getRecentAttendance db game.TeamId
 
+        printf "%O" game.Date
+        
         [
             Client.view clientView 
                         {

@@ -4,8 +4,8 @@ open System
 
 
 let format (datetime: DateTime) =
-        let dayOfWeek = [ "man"; "tir"; "ons"; "tor"; "fre"; "lør"; "søn" ].[int datetime.DayOfWeek]
-        let month = [ "januar"; "februar"; "mars"; "april"; "juni"; "juli"; "august"; "september"; "oktober"; "november"; "desember" ].[datetime.Month]
+        let dayOfWeek = ["søn"; "man"; "tir"; "ons"; "tor"; "fre"; "lør"].[int datetime.DayOfWeek]
+        let month = [ "januar"; "februar"; "mars"; "april"; "mai"; "juni"; "juli"; "august"; "september"; "oktober"; "november"; "desember" ].[datetime.Month - 1]
 
         sprintf "%s. %i %s" dayOfWeek datetime.Day month
 
