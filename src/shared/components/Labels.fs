@@ -5,13 +5,13 @@ open Fable.Helpers.React.Props
 
 
 let error =
-    span [ Class "label-feedback label label-danger" ]
+    span [ Class "label label-danger" ]
                                            [ i [ Class "fa fa-exclamation-triangle" ]
                                                [ ] ]                                              
 
 
 let success = 
-    span [ Class "label-feedback label label-success" ]
+    span [ Class "label label-success" ]
                                            [ i [ Class "fa fa-check" ]
                                                [ ] ]
                                                

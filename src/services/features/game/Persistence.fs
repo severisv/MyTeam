@@ -9,6 +9,7 @@ module Persistence =
 
     let selectPlayer: SelectPlayer = 
         fun db clubId eventId playerId model ->
+
             let (ClubId clubId) = clubId
 
             query {

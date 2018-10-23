@@ -10,6 +10,7 @@ open Fable.Import.React
 open MyTeam.Domain
 open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
+open MyTeam.Shared.Components.Input
 open MyTeam.Components
 open MyTeam
 open Shared.Features.Games.SelectSquad
@@ -18,10 +19,8 @@ open Fable.Core
 open Thoth.Json
 open Fable.PowerPack
 open Fable.PowerPack.Fetch
-open MyTeam.Shared.Components.Input
-
-
-
+open MyTeam.Client.Components
+ 
 
 
 type SelectSquad(props) =
@@ -57,36 +56,16 @@ type SelectSquad(props) =
             )
 
     
-        let handleSelectPlayer playerId isSelected =
-            
-            let selectPlayer playerId isSelected =
-                this.setState(fun state props -> 
-                                { state with 
-                                        MemberIds = 
-                                            if isSelected then 
-                                                state.MemberIds @ [playerId] |> List.distinct   
-                                            else 
-                                                state.MemberIds |> List.except [playerId] 
+        let handleSelectPlayer playerId isSelected =   
+            this.setState(fun state props -> 
+                            { state with 
+                                    MemberIds = 
+                                        if isSelected then 
+                                            state.MemberIds @ [playerId] |> List.distinct   
+                                        else 
+                                            state.MemberIds |> List.except [playerId] 
 
-                                    })
-
-            selectPlayer playerId isSelected                                
-
-            promise {
-                let! res = postRecord (sprintf "/api/games/%O/squad/select/%O" game.Id playerId) { value = isSelected } []
-               
-                if not res.Ok then failwith "Received %O from server: %O" res.Status res.StatusText
-                let! value = res.json<CheckboxPayload>()
-                selectPlayer playerId value.value              
-            } 
-            |> Promise.catch(fun e -> 
-                    printf "%O" e
-                    selectPlayer playerId <| not isSelected
-            )
-            |> Promise.start              
-          
-
-          
+                                })
 
 
         let listPlayers header (players: Player list) =          
@@ -119,15 +98,8 @@ type SelectSquad(props) =
                                             Title "Oppmøte siste 8 uker"
                                          ] 
                                         [str <| getRecentAttendance m.Id]
-                                    input [
-                                        Class "form-control"
-                                        Type "checkbox"
-                                        Checked (game.Squad.MemberIds |> List.contains m.Id)
-                                        OnChange (fun input -> handleSelectPlayer m.Id input.Checked)
-                                    ]                                    
-                                    ]
-                                  div [ Class "ra-info-elements" ]
-                                         [ Labels.error ] 
+                                    Checkbox.render { Value = game.Squad.MemberIds |> List.contains m.Id; Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id; OnChange = handleSelectPlayer m.Id }                    
+                                    ]                                  
                                 ]
                         ))
                     br []
@@ -236,7 +208,7 @@ type SelectSquad(props) =
                        ]                                        
         ]
         
-let inline element model = ofType<SelectSquad,_,_> model []
+let element model = ofType<SelectSquad,_,_> model []
  
 let node = document.getElementById(clientView)
 

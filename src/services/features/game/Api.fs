@@ -46,7 +46,7 @@ module Api =
         updateGame clubId gameId ctx.Database (fun game -> game.GamePlanIsPublished <- Nullable true)
 
     let selectPlayer clubId (gameId, playerId) (ctx: HttpContext) model = 
-        Persistence.selectPlayer ctx.Database clubId gameId playerId model       
+        Persistence.selectPlayer ctx.Database clubId gameId playerId model   
     
     let publishSquad = 
         fun clubId gameId (ctx:HttpContext) _ ->

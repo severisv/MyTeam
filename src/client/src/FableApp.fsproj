@@ -6,6 +6,7 @@
     <ProjectReference Include="..\..\shared\shared.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="components/*.fs" />
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/SelectSquad.fs" />
   </ItemGroup>
