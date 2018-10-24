@@ -21,6 +21,72 @@ open Fable.PowerPack
 open Fable.PowerPack.Fetch
 open MyTeam.Client.Components
  
+type TextareaState = 
+    {
+       IsPosting: bool
+       Error: bool
+    }
+
+             
+type TextareaProps = 
+    {
+        Value: string
+        Url: string
+    }         
+
+
+type Textarea(props) =
+    inherit Component<TextareaProps, TextareaState>(props)
+    do base.setInitState({ Error = false; IsPosting = false })
+
+    let mutable timeout = Browser.window.setTimeout(ignore, 0 , [])
+    member this.debounce fn wait = 
+                Browser.window.clearTimeout timeout
+                timeout <- Browser.window.setTimeout(fn, wait, [])
+
+    override this.render() =
+
+        let handleChange value =
+            
+            let props = this.props
+            let state = this.state
+
+            this.setState(fun state props -> { state with Error = false; IsPosting = true })
+            
+            this.debounce 
+                (fun () ->
+                    promise {
+                        let payload : StringPayload = { Value = value }
+                        let! res = postRecord props.Url payload []
+                       
+                        if not res.Ok then failwithf "Received %O from server: %O" res.Status res.StatusText
+                        this.setState(fun state props -> { state with IsPosting = false })
+                    } 
+                    |> Promise.catch(fun e -> 
+                            Browser.console.error <| sprintf "%O" e
+                            this.setState(fun state props -> { state with Error = true; IsPosting = false })
+                    )
+                    |> Promise.start)     
+                500              
+                
+                                                                   
+
+        div [Class "input-textarea"] [
+            textarea [ Class "form-control"
+                       Placeholder "Beskjed til spillerne"
+                       DefaultValue props.Value
+                       OnChange (fun input -> handleChange input.Value)
+                     ]
+               [ ]
+            (match this.state with 
+            | { IsPosting = true } -> Icons.spinner
+            | { Error = true } -> Icons.warning
+            | _ -> Icons.check)
+        ]
+   
+
+let textarea2 model = ofType<Textarea,_,_> model []
+
 
 
 type SelectSquad(props) =
@@ -176,14 +242,8 @@ type SelectSquad(props) =
                                  hr [ ]
                                  div [ Class "registerSquad-publish" ]
                                    [ div [ Class "registerSquad-messageWrapper" ]
-                                       [ textarea [ Class "form-control"
-                                                    Placeholder "Beskjed til spillerne"
-                                                    Value game.Description
-                                                    OnChange (fun o -> printf "%O"  o)
-                                                 ]
-                                           [ ]
-                                         Labels.error
-                                         Labels.success 
+                                       [ 
+                                         textarea2 { Value = game.Description; Url ="" }
                                        ]
                                      div [ ]
                                        [
