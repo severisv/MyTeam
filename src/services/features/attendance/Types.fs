@@ -5,7 +5,9 @@ open System
 open MyTeam.Domain.Members
 open MyTeam.Domain.Events
 open MyTeam.Domain
-open MyTeam.Ajax
+open MyTeam.Shared.Components.Input
+
+            
             
 type PlayerDidAttend = bool            
 type PlayerAttendance = Member * PlayerDidAttend
@@ -31,10 +33,7 @@ type SelectedYear =
 type Years = int list
 type Year = string option
 
-type TeamAttendance = {
-    MemberId: MemberId
-    AttendancePercentage: int
-}
+
 
 type PeriodStart = DateTime
 
@@ -43,5 +42,3 @@ type GetPreviousTrainings = Database -> ClubId -> Event list
 type GetTraining = Database -> EventId -> Event
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
 type ConfirmAttendance = Database -> ClubId -> EventId ->  MemberId -> CheckboxPayload -> HttpResult<unit>
-type GetRecentAttendance = Database -> Club -> TeamId -> PeriodStart -> HttpResult<TeamAttendance list>
-

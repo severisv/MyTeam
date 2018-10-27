@@ -1,6 +1,7 @@
 module MyTeam.News.Persistence
 
 open MyTeam.Domain
+open MyTeam.Domain.Members
 open MyTeam.News
 open MyTeam
 open System

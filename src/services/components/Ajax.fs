@@ -3,19 +3,17 @@ module MyTeam.Ajax
 open MyTeam
 open MyTeam.Views
 open Giraffe.GiraffeViewEngine
-
+open MyTeam.Shared.Components
    
 let ajaxSuccessIndicator =
     div [ _class "ajax-success-indicator" ] [
-        span [_class "label label-success" ] [icon (fa "check") ""]
-        span [ _class "label label-danger" ] [icon (fa "exclamation-triangle") ""]
+        !!Labels.success
+        !!Labels.error
         icon "loader fa fa-spin fa-spinner" ""
     ]
 
 
 
-[<CLIMutable>]
-type CheckboxPayload = { value: bool }        
 
 let ajaxCheckbox href isChecked =
     input [ 

@@ -4,6 +4,7 @@ open MyTeam.Models.Enums
 open Giraffe.GiraffeViewEngine
 open MyTeam.Shared.Components
 
+
 [<AutoOpen>]
 module IconComponents =
 
@@ -19,19 +20,19 @@ module IconComponents =
         !!(Icons.icon name title)
 
 
-    let playerStatusIcon (status: PlayerStatus) =                   
+    let playerStatusIcon (status: MyTeam.Domain.PlayerStatus) =                   
         !!(match status with
-            | PlayerStatus.Aktiv -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Aktiv
-            | PlayerStatus.Veteran -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Veteran
-            | PlayerStatus.Trener -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Trener
-            | _ -> Icons.playerStatusIcon MyTeam.Shared.Domain.PlayerStatus.Inaktiv)       
+            | MyTeam.Domain.PlayerStatus.Aktiv -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Aktiv
+            | MyTeam.Domain.PlayerStatus.Veteran -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Veteran
+            | MyTeam.Domain.PlayerStatus.Trener -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Trener
+            | _ -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Inaktiv)       
 
     let eventIcon (status: EventType) size =                   
         !!(match status with
-            | EventType.Kamp -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Kamp size
-            | EventType.Trening -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Trening size
-            | EventType.Diverse -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Diverse size
-            | _ -> Icons.eventIcon MyTeam.Shared.Domain.EventType.Alle size
+            | EventType.Kamp -> Icons.eventIcon MyTeam.Domain.EventType.Kamp size
+            | EventType.Trening -> Icons.eventIcon MyTeam.Domain.EventType.Trening size
+            | EventType.Diverse -> Icons.eventIcon MyTeam.Domain.EventType.Diverse size
+            | _ -> Icons.eventIcon MyTeam.Domain.EventType.Alle size
             
             )                             
             

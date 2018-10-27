@@ -2,9 +2,10 @@ module MyTeam.Games.Queries
 
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Domain.Members
+open MyTeam.Common.Features.Members
 open System.Linq
-open MyTeam.Shared.Domain
+open System
+open Shared.Features.Games.SelectSquad
 
 let games (db : Database) clubId = 
     let (ClubId clubId) = clubId
@@ -42,7 +43,7 @@ let getGame: GetGame =
                         Location = location
                         Type = enum<GameType> (gameType.Value)
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
-                        MatchReportName = (hasValue matchReportName) =? (Some matchReportName, None)
+                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )
                  |> Seq.tryHead
@@ -80,8 +81,49 @@ let listGames: ListGames =
                         Location = location
                         Type = enum<GameType> (gameType.Value)
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
-                        MatchReportName = (hasValue matchReportName) =? (Some matchReportName, None)
+                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )
                  |> Seq.toList
                  |> List.sortBy(fun g -> g.DateTime)
+
+
+
+let getRecentAttendance : GetRecentAttendance = 
+    fun db teamId ->
+
+        let periodStart = DateTime.Now.AddDays(-56.0)
+        let now = DateTime.Now
+
+        let eventIds = 
+            query {
+                for et in db.EventTeams do
+                where (
+                    et.TeamId = teamId &&
+                    et.Event.Type = (int EventType.Trening) &&
+                    et.Event.DateTime <= now &&
+                    et.Event.DateTime >= periodStart &&
+                    et.Event.Voluntary = false
+                )                 
+                select(et.EventId)
+            } |> Seq.toList
+
+        let eventAttendences = 
+            query {
+                for ea in db.EventAttendances do
+                where (eventIds.Contains(ea.EventId) && ea.DidAttend)
+                select (ea.EventId, ea.MemberId)
+            } |> Seq.toList
+
+        let eventCount = eventIds |> Seq.length
+
+        eventAttendences 
+        |> Seq.groupBy (fun (_, memberId) -> memberId) 
+        |> Seq.map (fun (memberId, values) -> 
+            {
+                MemberId = memberId
+                AttendancePercentage = (Seq.length values) * 100 / eventCount
+            }
+        )
+        |> Seq.toList
+        

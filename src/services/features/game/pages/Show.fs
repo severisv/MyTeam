@@ -32,7 +32,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                   
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then
-                                 editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
+                                 !!(editLink <| sprintf "/intern/arrangement/endre/%O" game.Id)
                             else empty     
                     
                     user => fun user -> 

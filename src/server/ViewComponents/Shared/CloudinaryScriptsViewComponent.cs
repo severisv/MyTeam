@@ -8,9 +8,9 @@ namespace MyTeam.ViewComponents.Shared
 {
     public class CloudinaryScriptsViewComponent : ViewComponent
     {
-        private readonly CloudinaryOptions _configuration;
+        private readonly CloudinarySettings _configuration;
 
-        public CloudinaryScriptsViewComponent(IOptions<CloudinaryOptions> configuration)
+        public CloudinaryScriptsViewComponent(IOptions<CloudinarySettings> configuration)
         {
             _configuration = configuration.Value;
         }

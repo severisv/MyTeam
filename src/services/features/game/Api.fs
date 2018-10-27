@@ -3,7 +3,6 @@ namespace MyTeam.Games
 open MyTeam.Domain
 open MyTeam
 open System
-open Microsoft.EntityFrameworkCore
 
 module internal Helpers =
     let updateGame clubId gameId db updateGame  =
@@ -18,7 +17,7 @@ module internal Helpers =
            | None -> NotFound      
 
 open Helpers
-open MyTeam.Shared.Domain
+open MyTeam.Domain
 open MyTeam.Models.Domain
 open MyTeam.Domain.Members
 
@@ -47,7 +46,7 @@ module Api =
         updateGame clubId gameId ctx.Database (fun game -> game.GamePlanIsPublished <- Nullable true)
 
     let selectPlayer clubId (gameId, playerId) (ctx: HttpContext) model = 
-        Persistence.selectPlayer ctx.Database clubId gameId playerId model       
+        Persistence.selectPlayer ctx.Database clubId gameId playerId model   
     
     let publishSquad = 
         fun clubId gameId (ctx:HttpContext) _ ->
@@ -80,7 +79,7 @@ module Api =
                     |> Seq.map ((fun a -> a.BirthDate) >> toOption)
                     |> Seq.choose id
                     |> Seq.map (fun birthDate -> 
-                                    (dateTime - birthDate).TotalDays / 365.25                        )
+                                    (dateTime - birthDate).TotalDays / 365.25)
                     |> Seq.toList                        
         
         Math.Round((List.sum ages / float ages.Length), 2)
@@ -88,7 +87,7 @@ module Api =
       
 
 
-    let getInsights club (teamName, year) (db: Database) =
+    let getInsights (club: Domain.Club) (teamName, year) (db: Database) =
         club.Teams |> Seq.tryFind (fun t -> t.ShortName.ToLower() = (toLower teamName))
         |> function
         | None -> NotFound

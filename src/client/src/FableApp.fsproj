@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EditSeason.fs" />
-    <Compile Include="SelectSquad.fs" />
+    <ProjectReference Include="..\..\shared\shared.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\shared\shared.fsproj" />
+    <Compile Include="components/CheckBox.fs" />
+    <Compile Include="components/Textarea.fs" />
+    <Compile Include="components/SubmitButton.fs" />
+    <Compile Include="features/EditSeason.fs" />
+    <Compile Include="features/SelectSquad.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>

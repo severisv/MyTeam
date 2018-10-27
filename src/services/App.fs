@@ -26,7 +26,7 @@ module App =
             | Some club ->
                 choose [
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
-                    route "/" >=> (News.Pages.Index.view club user id |> htmlGet)                         
+                    route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)                         
                     routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
                     routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
                     routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
@@ -46,22 +46,22 @@ module App =
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                         GET >=> (News.Pages.Edit.delete club name |> htmlGet)                   
                                                                                                                                                                                                                                          
-                    route "/kamper" >=> (Games.Pages.List.view club user None None |> htmlGet)   
+                    route "/kamper" >=> GET >=> (Games.Pages.List.view club user None None |> htmlGet)   
                     routef "/kamper/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
                     routef "/kamper/%O/resultat" <| fun gameId -> 
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
-                    routef "/kamper/%s/laguttak" <| fun gameId -> 
-                        mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
+                    routef "/kamper/%O/laguttak" <| fun gameId -> 
+                        GET >=> mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
                     routef "/kamper/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
                     routef "/kamper/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
-                    route "/tabell" >=> (Table.Pages.index club user None None |> htmlGet)      
+                    route "/tabell" >=> GET >=> (Table.Pages.index club user None None |> htmlGet)      
                     routef "/tabell/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
                     routef "/tabell/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        
-                    route "/statistikk" >=> (Stats.Pages.index club user None None |> htmlGet)   
+                    route "/statistikk" >=> GET >=> (Stats.Pages.index club user None None |> htmlGet)   
                     routef "/statistikk/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
                     routef "/statistikk/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
-                    route "/personvern" >=> (AboutPages.privacy club user |> htmlGet)          
-                    route "/om" >=> (AboutPages.index club user |> htmlGet)        
+                    route "/personvern" >=> GET >=> (AboutPages.privacy club user |> htmlGet)          
+                    route "/om" >=> GET >=> (AboutPages.index club user |> htmlGet)        
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user => fun user ->
@@ -78,11 +78,10 @@ module App =
                                                 ]                    
                                             ]
                                         )    
-                    route "/admin" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
-                    route "/admin/spillerinvitasjon" >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
+                    route "/admin" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
+                    route "/admin/spillerinvitasjon" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     subRoute "/api/attendance"                            
                            <| choose [ 
-                                GET >=> routef "/%O/recent" (Attendance.Api.getRecentAttendance club >> jsonGet)
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
                             ]                                     

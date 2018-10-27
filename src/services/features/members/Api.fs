@@ -2,13 +2,13 @@ namespace MyTeam.Members
 
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Common.Features
 open MyTeam
-open Giraffe 
 
 module Api =
 
     let list clubId db =
-        Queries.list db clubId
+        Members.list db clubId
         |> OkResult
 
 

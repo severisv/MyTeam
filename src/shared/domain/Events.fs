@@ -1,11 +1,11 @@
-namespace MyTeam.Shared.Domain
-
+namespace MyTeam.Domain
+open System
 
 type EventType = 
-        | Alle
-        | Trening
-        | Kamp
-        | Diverse
+        | Alle = 0
+        | Trening = 1
+        | Kamp = 2
+        | Diverse = 3
     
 
 type GameType =
@@ -14,4 +14,14 @@ type GameType =
     | Norgesmesterskapet = 2
     | Kretsmesterskapet = 3
     | ``OBOS Cup`` = 4
-        
+
+
+module Events = 
+        type EventId = Guid
+        type GameId = EventId
+
+        type Event = {
+            Id: EventId
+            Date: DateTime       
+            Location: string
+        } 

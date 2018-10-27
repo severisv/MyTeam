@@ -8,6 +8,11 @@ open Microsoft.AspNetCore.Http
 type ConnectionStrings = {
     DefaultConnection: string
 
+} 
+
+[<CLIMutable>]
+type FacebookOptions = {
+  AppId: string
 }
 
 [<CLIMutable>]
@@ -17,11 +22,6 @@ type CloudinarySettings = {
     CloudName: string
     DefaultMember: string
     DefaultArticle: string
-}    
-
-[<CLIMutable>]
-type FacebookOptions = {
-  AppId: string
 }
 
 

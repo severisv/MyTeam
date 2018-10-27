@@ -2,15 +2,10 @@ namespace MyTeam.Events
 
 open MyTeam
 open MyTeam.Events
+open MyTeam.Shared.Components.Input
 
 module Api =
-
-    
-    [<CLIMutable>]
-    type Description = {
-        Description: string
-    }
-    let setDescription clubId eventId next (ctx: HttpContext) =
-            let model = ctx.BindJson<Description>()
-            Persistence.setDescription ctx.Database clubId eventId model.Description
-            next ctx            
+    let setDescription clubId eventId next (ctx : HttpContext) =
+        let model = ctx.BindJson<StringPayload>()
+        Persistence.setDescription ctx.Database clubId eventId model.Value
+        next ctx

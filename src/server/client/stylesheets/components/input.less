@@ -1,103 +1,156 @@
 ﻿i.search-icon {
-  position: absolute;
-  top: 0.7em;
-  right: 0.5em;
-  color: @gray;
+    position: absolute;
+    top: 0.7em;
+    right: 0.5em;
+    color: @gray;
 }
 
 input[type="file"] {
-  width: 11em;
+    width: 11em;
 }
 
 input[type="file"]::-webkit-file-upload-button {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .form-file-upload-wrapper {
-  position: relative;
-  display: inline-block;
-  background-color: @white;
-  padding: 0 !important;
+    position: relative;
+    display: inline-block;
+    background-color: @white;
+    padding: 0 !important;
 }
 
 .form-file-upload-wrapper::after {
-  pointer-events: none;
-  content: "Endre bilde";
-  display: inline-block;
-  outline: none;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  cursor: pointer;
-  text-align: center;
-  position: absolute;
-  left: 1.5em;
-  top: 0.5em;
+    pointer-events: none;
+    content: "Endre bilde";
+    display: inline-block;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    left: 1.5em;
+    top: 0.5em;
 }
 
 .form-file-upload-wrapper::before {
-  content: "\f1c5";
-  font-family: "FontAwesome";
-  outline: none;
-  position: absolute;
-  top: 0.5em;
-  right: 1.5em;
-  pointer-events: none;
+    content: "\f1c5";
+    font-family: "FontAwesome";
+    outline: none;
+    position: absolute;
+    top: 0.5em;
+    right: 1.5em;
+    pointer-events: none;
 }
 
 .form-file-upload-wrapper input[type="file"] {
-  opacity: 0;
-  cursor: pointer;
-  padding: 6px 12px;
+    opacity: 0;
+    cursor: pointer;
+    padding: 6px 12px;
 }
 
 select {
-  transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
 }
 select:hover {
-  border: 1px solid fade(@black, 40);
+    border: 1px solid fade(@black, 40);
 }
 
 .validation-red {
-  color: @red;
+    color: @red;
 }
 
 form input[type="submit"],
 form button {
-  min-width: 6em;
+    min-width: 6em;
 }
 
 form input[type="submit"].isSubmitting,
 form button.isSubmitting {
-  .fa-spin {
-    display: inline-block;
-    margin-top: 0 !important;
-  }
-  .form-submitText {
-    display: none;
-  }
+    .fa-spin {
+        display: inline-block;
+        margin-top: 0 !important;
+    }
+    .form-submitText {
+        display: none;
+    }
 }
 
 form input[type="submit"]:not(.isSubmitting),
 form button:not(.isSubmitting) {
-  .fa-spin {
-    display: none;
-  }
-  .form-submitText {
-    display: inline-block;
-  }
+    .fa-spin {
+        display: none;
+    }
+    .form-submitText {
+        display: inline-block;
+    }
 }
 
 input[type="checkbox"] {
-  margin: 5px;
-  height: 24px;
-  width: 24px;
+    margin: 5px;
+    height: 24px;
+    width: 24px;
 }
 
 #mt-login input[type="checkbox"] {
-  margin-top: -2px;
-  margin-left: -11px;
+    margin-top: -2px;
+    margin-left: -11px;
 }
 
 .input-label-valign {
-  line-height: 2.6em;
+    line-height: 2.6em;
+}
+
+.input-checkbox {
+    position: relative;
+    .label {
+        position: absolute;
+        right: -3.1em;
+        top: -0.5em;
+    }
+}
+
+.input-textarea {
+    position: relative;
+
+    .fa {
+        position: absolute;
+        bottom: 0.5em;
+        right: 0.7em;
+    }
+
+    .fa-check {
+        color: @greenLight;
+
+        @keyframes input-textarea-fade-out-on-enter {
+            0% {
+                opacity: 1;
+            }
+            62% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        animation: input-textarea-fade-out-on-enter 1.5s ease-out forwards;
+    }
+    .fa-spinner {
+        color: fade(@black, 50);
+    }
+    .fa-exclamation-triangle {
+        color: @red;
+    }
+}
+
+.input-submit-button {
+    .label {
+        margin-left: 0.5em;
+    }
+     
+    .btn {
+        min-width: 10em;
+    }
+    
 }

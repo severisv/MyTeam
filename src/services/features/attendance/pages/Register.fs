@@ -11,7 +11,7 @@ open MyTeam.Attendance.Queries
 open MyTeam.Attendance
 open MyTeam.Ajax
 open MyTeam.Shared.Components
-open MyTeam.Shared.Domain
+open MyTeam.Domain
 
 module Register =
 
@@ -47,7 +47,7 @@ module Register =
         let getImage = Images.getMember ctx
 
         let editEventLink eventId =
-            editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId)          
+            !!(editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId))          
             
 
         let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Event) isCollapsed =

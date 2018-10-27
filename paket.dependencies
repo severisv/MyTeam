@@ -1,10 +1,14 @@
 source https://nuget.org/api/v2
 storage:none
 
-clitool dotnet-fable
-nuget Fable.Core
-nuget Fable.Import.Browser
-nuget Fable.React
+clitool dotnet-fable prelease
+nuget Fable.Core prelease
+nuget Fable.Import.Browser prelease
+nuget Fable.PowerPack
+nuget Fable.React prelease
+nuget Fable.JsonConverter prelease
+nuget Thoth.Json
+nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator
 nuget Giraffe
 nuget HtmlAgilityPack.CssSelectors.NetCore

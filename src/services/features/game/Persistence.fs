@@ -9,6 +9,7 @@ module Persistence =
 
     let selectPlayer: SelectPlayer = 
         fun db clubId eventId playerId model ->
+
             let (ClubId clubId) = clubId
 
             query {
@@ -35,7 +36,7 @@ module Persistence =
                             db.EventAttendances.Add(a) |> ignore
 
                     db.SaveChanges() |> ignore
-                    OkResult ()
+                    OkResult model
 
 
 

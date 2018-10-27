@@ -10,7 +10,7 @@ namespace MyTeam.Settings
         private readonly string _cloudName;
         private string BaseLocation => $"https://res.cloudinary.com/{_cloudName}/";
 
-        public Cloudinary(IOptions<CloudinaryOptions> options)
+        public Cloudinary(IOptions<CloudinarySettings> options)
         {
             _cloudName = options.Value.CloudName;
             _defaultMember = options.Value.DefaultMember ?? "image/upload/v1448559418/default_player_dnwac0.gif";

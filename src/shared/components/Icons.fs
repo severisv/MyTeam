@@ -1,6 +1,6 @@
 module MyTeam.Shared.Components.Icons
 
-open MyTeam.Shared.Domain
+open MyTeam.Domain
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -61,7 +61,10 @@ let arrowLeft = icon <| fa "arrow-left"
 let arrowRight = icon <| fa "arrow-right"
 let attendance = icon <| fa "check-square-o"
 let ballInGoal = icon "flaticon-goal"
+let check = icon (fa "check") ""
+let checkCircle = icon (fa "check-circle") ""
 let calendar = icon <| fa "calendar"
+let comment = icon (fa "comment") ""
 let coach = icon <| "flaticon-football50"
 let delete = icon (fa "trash") "Slett"
 let edit = icon <| fa "edit"
@@ -79,11 +82,13 @@ let refresh = icon <| fa "refresh"
 let redCard = icon <| "icon icon-card-red"
 let signup = icon <| fa "calendar"
 let squadList = icon <| fa "users"
+let spinner = icon (fa "spinner fa-spin") ""
 let team = icon <| "flaticon-football43"
 let training = icon <| "flaticon-couple40"
 let trophy = icon <| fa "trophy"
 let time = icon <| fa "clock-o"
 let upcoming = icon <| fa "calendar-o"
 let user = icon <| fa "user"
+let warning = icon (fa "exclamation-triangle") ""
 let whistle = icon <| "flaticon-football75"
 let yellowCard = icon <| "icon icon-card-yellow"

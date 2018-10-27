@@ -3,10 +3,12 @@ namespace MyTeam.Members
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
+open MyTeam.Common.Features.Members
 open MyTeam.Models.Domain
 open MyTeam.Validation
 open Microsoft.EntityFrameworkCore
 open System.Linq
+open MyTeam.Common.Features.Members
 
 module Persistence =
     let setStatus : SetStatus =
@@ -37,9 +39,9 @@ module Persistence =
                     |> Seq.head
 
             memb.RolesString <- memb.RolesString 
-                                |> Members.toRoleList
+                                |> toRoleList
                                 |> toggleRoleInList role
-                                |> Members.fromRoleList
+                                |> fromRoleList
                        
             db.SaveChanges() |> ignore        
             UserId (memb.UserName =?? "")

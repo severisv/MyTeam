@@ -1,3 +1,6 @@
+dotnet-fable
 Fable.Core
 Fable.Import.Browser
 Fable.React
+Fable.PowerPack
+Thoth.Json

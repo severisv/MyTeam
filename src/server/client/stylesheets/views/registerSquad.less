@@ -1,4 +1,8 @@
-﻿.squad-list {
+﻿.rs-header > .event-icon {
+  margin-bottom: 0.75em;
+}
+
+.squad-list {
   font-size: 1.5em;
   color: @black-faded;
   margin-left: 4rem;
@@ -19,20 +23,12 @@
   }
 }
 
-.r-under-xxs({
-    .registerSquad-publish {
-    padding: 0
-    ;}
-    .squad-list {
-    margin-left: 0;
-}
-});
+.r-under-xxs(
+  {.registerSquad-publish {padding: 0 ;} .squad-list {margin-left: 0;}}
+);
 
-.registerSquad-publish button {
-  min-width: 10em;
-  i {
-    display: none;
-  }
+.registerSquad-messageWrapper {
+  position: relative;
 }
 .registerSquad-messageWrapper .label {
   position: absolute;
@@ -44,7 +40,11 @@
   height: 10em;
 }
 .registerSquad-player {
-  .r-under-xxs({ padding-left: 1em; });
+  .r-under-xxs({padding-left: 1em;});
+
+  & > span:last-of-type > span:first-of-type {
+    margin-right: 0.5em;
+  }
 }
 .registerSquad-gameplan-link {
   font-size: 1.4em;
@@ -59,4 +59,5 @@
     display: none;
     position: absolute;
   }
+  
 }
