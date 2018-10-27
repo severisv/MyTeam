@@ -42,6 +42,8 @@ let selectMembers =
                  Image = imageFull
                  Status = enum<PlayerStatus> status })
 
+
+let (!!) = Strings.defaultValue
 let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
     fun db clubId -> 
         let (ClubId clubId) = clubId
@@ -50,12 +52,12 @@ let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
         |> Seq.map (fun p -> 
                { Details =
                      ({ Id = p.Id
-                        FacebookId = Strings.defaultValue p.MiddleName
-                        FirstName = p.FirstName
-                        MiddleName = Strings.defaultValue p.MiddleName
-                        LastName = p.LastName
-                        Image = Strings.defaultValue p.MiddleName
-                        UrlName = p.UrlName
+                        FacebookId = !!p.FacebookId
+                        FirstName = !!p.FirstName
+                        MiddleName = !!p.MiddleName
+                        LastName = !!p.LastName
+                        Image = !!p.Image
+                        UrlName = !!p.UrlName
                         Status = int p.Status |> enum<PlayerStatus> })
                  Teams =
                      p.MemberTeams

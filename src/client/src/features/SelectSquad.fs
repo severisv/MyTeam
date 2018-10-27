@@ -1,24 +1,109 @@
 module MyTeam.Client.SelectSquad
 
-open Fable.Core
-open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.Browser
 open Fable.Import.React
 open Fable.PowerPack
-open Fable.PowerPack.Fetch
 open MyTeam
 open MyTeam.Client.Components
 open MyTeam.Components
 open MyTeam.Domain
 open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Input
 open MyTeam.Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
-open System
 open Thoth.Json
+
+
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
+open Fable.Import
+open Fable.Import.React
+open Fable.PowerPack
+open Fable.PowerPack.Fetch
+open MyTeam.Components
+open MyTeam.Shared.Components
+open MyTeam.Shared.Components.Input
+
+
+
+type SubmitButtonState =
+    { IsSubmitted: bool  
+      IsPosting : bool
+      Error : bool }
+
+type SubmitButtonProps<'a> =
+    { IsSubmitted : bool
+      Text: string
+      SubmittedText: string
+      Url : string 
+      Payload: 'a }
+
+type SubmitButton<'a>(props) =
+    inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
+    
+    do 
+        base.setInitState({ IsSubmitted = props.IsSubmitted
+                            Error = false
+                            IsPosting = false })
+        
+    
+    override this.render() =
+        let handleClick _ =
+            let props = this.props
+            this.setState(fun state props -> 
+                { state with Error = false
+                             IsPosting = true })
+            promise { 
+                let! res = postRecord props.Url props.Payload []
+                if not res.Ok then 
+                    failwithf "Received %O from server: %O" res.Status res.StatusText
+                this.setState(fun state props -> { state with IsPosting = false; IsSubmitted = true })
+            }
+            |> Promise.catch(fun e -> 
+                   Browser.console.error <| sprintf "%O" e
+                   this.setState(fun state props -> 
+                       { state with Error = true
+                                    IsPosting = false }))
+            |> Promise.start                            
+
+        let props = this.props
+        let state = this.state
+
+        let defaultButton attr content = 
+            btn Primary Lg attr  content
+                                    
+        div [ Class "input-submit-button" ] [ 
+                  (match state with
+                      | { IsSubmitted = true } ->
+                          btn 
+                            Success 
+                            Lg 
+                            [ Class "disabled" ] 
+                            [ Icons.checkCircle
+                              whitespace
+                              str props.SubmittedText ]
+                      
+                      | { IsPosting = true } -> 
+                            defaultButton [ Class "disabled" ] [ Icons.spinner ]
+
+                      | { Error = true } -> 
+                            fragment [] [ 
+                                defaultButton [ OnClick handleClick ] [ str props.Text ]
+                                Labels.error
+                            ]
+
+                      | _ -> 
+                            defaultButton [ OnClick handleClick ] [ str props.Text ]
+                      )                                                 
+                   
+                
+            ] 
+
+                                        
+
+let submitButton model = ofType<SubmitButton<'a>, _, _> model []
 
 
 type SelectSquad(props) =
@@ -92,6 +177,9 @@ type SelectSquad(props) =
 
         let squad =
             players |> List.filter(fun (m, _) -> game.Squad.MemberIds |> List.contains m.Details.Id)
+        
+
+
         mtMain [] 
             [ block [] 
                   [ editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
@@ -110,9 +198,7 @@ type SelectSquad(props) =
                                                                          |> str ]
                                                                whitespace
                                                                span [ Class "no-wrap" ] [ whitespace
-                                                                                          
-                                                                                          Icons.time 
-                                                                                              ""
+                                                                                          Icons.time ""
                                                                                           whitespace
                                                                                           game.Date
                                                                                           |> Date.formatTime
@@ -161,16 +247,14 @@ type SelectSquad(props) =
                                     [ div [ Class "registerSquad-messageWrapper" ] 
                                           [ Textarea.render { Value = game.Description
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
-                                      div [] [ (if game.Squad.IsPublished then 
-                                                    btn Success Lg [ Class "disabled" ] 
-                                                        [ Icons.checkCircle
-                                                          whitespace
-                                                          str "Publisert" ]
-                                                else 
-                                                    div [] [ btn Primary Lg [] [ str 
-                                                                                     "Publiser tropp"
-                                                                                 Icons.spinner ]
-                                                             Labels.error ]) ] ] ] ] ] ]
+                                      submitButton 
+                                        { IsSubmitted = game.Squad.IsPublished
+                                          Text = "Publiser tropp"
+                                          SubmittedText = "Publisert"
+                                          Url = sprintf "/api/games/%O/squad/publish" game.Id
+                                          Payload = ignore }   
+                                    
+                                    ] ] ] ] ]
 
 let element model = ofType<SelectSquad, _, _> model []
 let node = document.getElementById(clientView)
