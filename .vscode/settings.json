@@ -21,5 +21,12 @@
     "**/paket-files": true,
     "dist": true,
     "artifacts": true,
-  }
+  },
+  "fantomas.noSpaceAfterComma": false,
+  "fantomas.noSpaceAfterSemiColon": false,
+  "fantomas.noSpaceAroundDelimiter": false,
+  "fantomas.noSpaceBeforeColon": false,
+  "fantomas.reorderOpenDeclaration": true,
+  "FSharp.fsacRuntime": "netcore",
+  "fantomas.pageWidth": 100
 }

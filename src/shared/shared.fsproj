@@ -3,11 +3,23 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="util/common/*.fs" />
-    <Compile Include="util/*.fs" />
-    <Compile Include="domain/*.fs" />
-    <Compile Include="components/*.fs" />
-    <Compile Include="features/*/*.fs" />
+    <Compile Include="util/common/Strings.fs" />
+    <Compile Include="util/Date.fs" />
+    <Compile Include="util/Html.fs" />
+    <Compile Include="util/Image.fs" />
+    <Compile Include="util/Interop.fs" />
+    <Compile Include="domain/Club.fs" />
+    <Compile Include="domain/Events.fs" />
+    <Compile Include="domain/Members.fs" />
+    <Compile Include="components/Buttons.fs" />
+    <Compile Include="components/Collapsible.fs" />
+    <Compile Include="components/Components.fs" />
+    <Compile Include="components/Icons.fs" />
+    <Compile Include="components/Input.fs" />
+    <Compile Include="components/Labels.fs" />
+    <Compile Include="components/Layout.fs" />
+    <Compile Include="components/Links.fs" />
+    <Compile Include="features/games/SelectSquad.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

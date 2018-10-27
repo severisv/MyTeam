@@ -122,6 +122,19 @@ input[type="checkbox"] {
 
     .fa-check {
         color: @greenLight;
+
+        @keyframes input-textarea-fade-out-on-enter {
+            0% {
+                opacity: 1;
+            }
+            62% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        animation: input-textarea-fade-out-on-enter 1.5s ease-out forwards;
     }
     .fa-spinner {
         color: fade(@black, 50);
