@@ -41,26 +41,7 @@ namespace MyTeam.Controllers
             return Redirect($"/kamper/vis/{gameId}");
         }
 
-        [RequireMember(Roles.Coach, Roles.Admin)]
-        [Route("laguttak")]
-        public IActionResult RegisterSquad(Guid eventId)
-        {
-            var ev = _gameService.GetRegisterSquadEventViewModel(eventId);
-
-            var players = _playerService.GetDto(Club.Id, includeCoaches: true);
-
-            if (ev == null) return new NotFoundResult(HttpContext);
-
-            var model = new RegisterSquadViewModel(ev, players.ToList());
-
-            ViewBag.Title = "Laguttak";
-
-            return View("RegisterSquad", model);
-        }
-
-
-
-
+        
         [Route("bytteplan")]
         [RequireMember]
         public IActionResult GamePlan()

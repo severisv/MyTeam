@@ -10,10 +10,9 @@ open MyTeam.Components
 open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Input
 
-
 type TextareaState =
     { IsPosting : bool
-      IsTouched: bool
+      IsTouched : bool
       Error : bool }
 
 type TextareaProps =

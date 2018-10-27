@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="components/CheckBox.fs" />
     <Compile Include="components/Textarea.fs" />
+    <Compile Include="components/SubmitButton.fs" />
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/SelectSquad.fs" />
   </ItemGroup>

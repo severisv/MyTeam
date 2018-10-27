@@ -16,96 +16,6 @@ open Shared.Features.Games.SelectSquad
 open Thoth.Json
 
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
-open MyTeam.Components
-open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Input
-
-
-
-type SubmitButtonState =
-    { IsSubmitted: bool  
-      IsPosting : bool
-      Error : bool }
-
-type SubmitButtonProps<'a> =
-    { IsSubmitted : bool
-      Text: string
-      SubmittedText: string
-      Url : string 
-      Payload: 'a }
-
-type SubmitButton<'a>(props) =
-    inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
-    
-    do 
-        base.setInitState({ IsSubmitted = props.IsSubmitted
-                            Error = false
-                            IsPosting = false })
-        
-    
-    override this.render() =
-        let handleClick _ =
-            let props = this.props
-            this.setState(fun state props -> 
-                { state with Error = false
-                             IsPosting = true })
-            promise { 
-                let! res = postRecord props.Url props.Payload []
-                if not res.Ok then 
-                    failwithf "Received %O from server: %O" res.Status res.StatusText
-                this.setState(fun state props -> { state with IsPosting = false; IsSubmitted = true })
-            }
-            |> Promise.catch(fun e -> 
-                   Browser.console.error <| sprintf "%O" e
-                   this.setState(fun state props -> 
-                       { state with Error = true
-                                    IsPosting = false }))
-            |> Promise.start                            
-
-        let props = this.props
-        let state = this.state
-
-        let defaultButton attr content = 
-            btn Primary Lg attr  content
-                                    
-        div [ Class "input-submit-button" ] [ 
-                  (match state with
-                      | { IsSubmitted = true } ->
-                          btn 
-                            Success 
-                            Lg 
-                            [ Class "disabled" ] 
-                            [ Icons.checkCircle
-                              whitespace
-                              str props.SubmittedText ]
-                      
-                      | { IsPosting = true } -> 
-                            defaultButton [ Class "disabled" ] [ Icons.spinner ]
-
-                      | { Error = true } -> 
-                            fragment [] [ 
-                                defaultButton [ OnClick handleClick ] [ str props.Text ]
-                                Labels.error
-                            ]
-
-                      | _ -> 
-                            defaultButton [ OnClick handleClick ] [ str props.Text ]
-                      )                                                 
-                   
-                
-            ] 
-
-                                        
-
-let submitButton model = ofType<SubmitButton<'a>, _, _> model []
-
-
 type SelectSquad(props) =
     inherit Component<Model, Squad>(props)
     do base.setInitState(props.Game.Squad)
@@ -183,7 +93,7 @@ type SelectSquad(props) =
         mtMain [] 
             [ block [] 
                   [ editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
-                    a [ Href "game/gameplan/gameId"
+                    a [ Href <| sprintf "/kamper/bytteplan/%O" game.Id
                         Class "registerSquad-gameplan-link pull-right"
                         Title "Bytteplan" ] [ Icons.gamePlan ]
                     
@@ -247,7 +157,7 @@ type SelectSquad(props) =
                                     [ div [ Class "registerSquad-messageWrapper" ] 
                                           [ Textarea.render { Value = game.Description
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
-                                      submitButton 
+                                      SubmitButton.render 
                                         { IsSubmitted = game.Squad.IsPublished
                                           Text = "Publiser tropp"
                                           SubmittedText = "Publisert"
