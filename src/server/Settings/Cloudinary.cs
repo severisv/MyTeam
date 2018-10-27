@@ -3,14 +3,14 @@ using Microsoft.Extensions.Options;
 
 namespace MyTeam.Settings
 {
-    public class Cloudinary : ICloudinary
+    public class Cloudinary
     {
         public string DefaultArticle { get; }
         private readonly string _defaultMember;
         private readonly string _cloudName;
         private string BaseLocation => $"https://res.cloudinary.com/{_cloudName}/";
 
-        public Cloudinary(IOptions<CloudinarySettings> options)
+        public Cloudinary(IOptions<CloudinaryOptions> options)
         {
             _cloudName = options.Value.CloudName;
             _defaultMember = options.Value.DefaultMember ?? "image/upload/v1448559418/default_player_dnwac0.gif";

@@ -19,7 +19,7 @@ namespace MyTeam.Services.Composition
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
-            services.AddTransient<ICloudinary, Cloudinary>();
+            services.AddTransient<Cloudinary>();
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
 

@@ -10,7 +10,7 @@ namespace MyTeam
     {
   
       
-        public static ICloudinary Cloudinary(this HttpContext context) => context.RequestServices.GetService<ICloudinary>();
+        public static Cloudinary Cloudinary(this HttpContext context) => context.RequestServices.GetService<Cloudinary>();
         
         public static bool UserIsMember(this HttpContext context) => context.Member().Exists;
     

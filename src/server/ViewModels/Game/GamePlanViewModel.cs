@@ -17,7 +17,7 @@ namespace MyTeam.ViewModels.Game
 
         public string Players { get; }
 
-        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished, IEnumerable<SquadMember> players, ICloudinary cloudinary)
+        public GamePlanViewModel(Guid gameId, string team, string opponent, string gamePlan, bool? isPublished, IEnumerable<SquadMember> players, Cloudinary cloudinary)
         {
             GameId = gameId;
             GamePlan = gamePlan;

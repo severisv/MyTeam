@@ -62,7 +62,7 @@ namespace MyTeam
                 });
 
 
-            services.Configure<CloudinarySettings>(Configuration.GetSection("Integration:Cloudinary"));
+            services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<FacebookOptions>(Configuration.GetSection("Authentication:Facebook"));

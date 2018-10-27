@@ -137,7 +137,6 @@ namespace MyTeam.Models
                 }
             }
             else {
-                System.Console.WriteLine(System.Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection"));
                 return System.Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
             }
         }

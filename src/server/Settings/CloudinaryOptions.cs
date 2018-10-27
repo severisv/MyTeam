@@ -2,7 +2,7 @@
 
 namespace MyTeam.Settings
 {
-    public class CloudinarySettings
+    public class CloudinaryOptions
     {
         public string ApiKey { get; set; }
         public string ApiSecret { get; set; }
