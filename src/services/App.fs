@@ -45,21 +45,38 @@ module App =
                     routef "/nyheter/slett/%s" <| fun name -> 
                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                         GET >=> (News.Pages.Edit.delete club name |> htmlGet)                   
-                                                                                                                                                                                                                                         
-                    route "/kamper" >=> GET >=> (Games.Pages.List.view club user None None |> htmlGet)   
-                    routef "/kamper/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
-                    routef "/kamper/%O/resultat" <| fun gameId -> 
-                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
-                    routef "/kamper/%O/laguttak" <| fun gameId -> 
-                        GET >=> mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
-                    routef "/kamper/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
-                    routef "/kamper/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
-                    route "/tabell" >=> GET >=> (Table.Pages.index club user None None |> htmlGet)      
-                    routef "/tabell/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
-                    routef "/tabell/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        
-                    route "/statistikk" >=> GET >=> (Stats.Pages.index club user None None |> htmlGet)   
-                    routef "/statistikk/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
-                    routef "/statistikk/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
+
+                    subRoute "/kamper"             
+                        <|  choose [                                                
+                                GET >=> choose [    
+                                    route "" >=> (Games.Pages.List.view club user None None |> htmlGet)
+                                    routef "/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                                    routef "/%O/resultat" <| fun gameId -> 
+                                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
+                                    routef "/%O/laguttak" <| fun gameId -> 
+                                        mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
+                                    routef "/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
+                                    routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
+                                ]
+                            ]                                                                                                                                                                                                                       
+                    subRoute "/tabell"   
+                        <| choose [
+                            GET >=> choose [
+                                        route "" >=> (Table.Pages.index club user None None |> htmlGet)      
+                                        routef "/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
+                                        routef "/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        
+                            ]
+                        ]          
+                    
+                    subRoute "/statistikk"   
+                        <| choose [
+                             GET >=> choose [
+                                               route "" >=> (Stats.Pages.index club user None None |> htmlGet)   
+                                               routef "/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
+                                               routef "/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
+                                ]                        
+                        ]                
+                 
                     route "/personvern" >=> GET >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> GET >=> (AboutPages.index club user |> htmlGet)        
                     subRoute "/intern" 
