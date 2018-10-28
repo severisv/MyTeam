@@ -12,8 +12,8 @@ module Images =
         getSecretOptions ctx
         |> fun opts -> 
             { CloudName = opts.CloudName
-              DefaultMember = opts.DefaultMember
-              DefaultArticle = opts.DefaultArticle }
+              DefaultMember = opts.DefaultMember =?? ""
+              DefaultArticle = opts.DefaultArticle =?? "" }
     
     let get ctx url getProps =
         let options = getOptions ctx
