@@ -7,7 +7,6 @@ namespace MyTeam.Services.Domain
     public interface ISeasonService
     {
         IEnumerable<SeasonViewModel> GetForTeam(Guid teamId);
-        IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId);
         void Delete(Guid seasonId);
         void Update(Guid seasonId, string name, bool autoUpdate, string sourceUrl, bool autoUpdateFixtures, string fixturesSourceUrl);
         void Update(Guid seasonId, string name, bool autoUpdate, string sourceUrl);

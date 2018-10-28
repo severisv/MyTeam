@@ -40,12 +40,6 @@ namespace MyTeam.Services.Domain
         }
 
     
-        public IEnumerable<SeasonViewModel> GetTeamSeasonsFromSeasonId(Guid seasonId)
-        {
-            var teamId = _dbContext.Seasons.Where(s => s.Id == seasonId).Select(s => s.Team.Id).Single();
-            return GetForTeam(teamId);
-        }
-
         public void Delete(Guid seasonId)
         {
             var season =_dbContext.Seasons.Single(s => s.Id == seasonId);
