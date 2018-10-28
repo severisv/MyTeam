@@ -26,26 +26,31 @@ module App =
             | Some club ->
                 choose [
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
-                    route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)                         
-                    routef "/nyheter/%i/%i" <| fun (skip, take) -> redirectTo true <| sprintf "/%i/%i" skip take                         
-                    routef "/%i/%i" <| fun (skip, take) -> News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet                        
-                    routef "/nyheter/vis/%s" <| fun name -> News.Pages.Show.view club user name |> htmlGet                      
-                    routef "/nyheter/endre/%s" <| fun name -> 
-                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
-                            choose  [
-                                        GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
-                                        POST >=> (user => fun user -> (News.Pages.Edit.editPost club user name |> htmlGet))                                            
-                                    ]
-                    route "/nyheter/ny" >=>
-                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
-                            choose  [
-                                        GET >=> (user => fun user -> (News.Pages.Edit.create club user |> htmlGet))                   
-                                        POST >=> (user => fun user -> (News.Pages.Edit.createPost club user |> htmlGet))                                            
-                                    ]
-                    routef "/nyheter/slett/%s" <| fun name -> 
-                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
-                                        GET >=> (News.Pages.Edit.delete club name |> htmlGet)                   
+                    
+                    route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
+                    routef "/%i/%i" <| fun (skip, take) -> GET >=> (News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                        
 
+                    subRoute "/nyheter"             
+                        <|  choose [                                                
+                                    routef "/%i/%i" <| fun (skip, take) -> GET >=> (redirectTo true <| sprintf "/%i/%i" skip take)                         
+                                    routef "/vis/%s" <| fun name -> GET >=> (News.Pages.Show.view club user name |> htmlGet)                      
+                                    routef "/endre/%s" <| fun name -> 
+                                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
+                                            choose  [
+                                                        GET >=> (user => fun user -> (News.Pages.Edit.view club user name |> htmlGet))                   
+                                                        POST >=> (user => fun user -> (News.Pages.Edit.editPost club user name |> htmlGet))                                            
+                                                    ]
+                                    route "/ny" >=>
+                                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
+                                            choose  [
+                                                        GET >=> (user => fun user -> (News.Pages.Edit.create club user |> htmlGet))                   
+                                                        POST >=> (user => fun user -> (News.Pages.Edit.createPost club user |> htmlGet))                                            
+                                                    ]
+                                    routef "/slett/%s" <| fun name -> 
+                                        mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
+                                                        GET >=> (News.Pages.Edit.delete club name |> htmlGet)       
+                            ] 
+                            
                     subRoute "/kamper"             
                         <|  choose [                                                
                                 GET >=> choose [    
@@ -97,6 +102,7 @@ module App =
                                         )    
                     route "/admin" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
                     route "/admin/spillerinvitasjon" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
+                    
                     subRoute "/api/attendance"                            
                            <| choose [ 
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
