@@ -19,17 +19,13 @@ namespace MyTeam.Controllers
     public class GameController : BaseController
     {
 
-
-        private readonly IGameService _gameService;
         private readonly IPlayerService _playerService;
         private readonly ApplicationDbContext _dbContext;
 
-        public GameController(IPlayerService playerService, ApplicationDbContext dbContext,
-            IGameService gameService)
+        public GameController(IPlayerService playerService, ApplicationDbContext dbContext)
         {
             _playerService = playerService;
             _dbContext = dbContext;
-            _gameService = gameService;
         }
 
 
@@ -41,7 +37,7 @@ namespace MyTeam.Controllers
             return Redirect($"/kamper/vis/{gameId}");
         }
 
-        
+
         [Route("bytteplan")]
         [RequireMember]
         public IActionResult GamePlan()

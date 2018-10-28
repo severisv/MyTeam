@@ -1,20 +1,19 @@
 module MyTeam.Games.Insights
 
 open MyTeam
-open System
 open MyTeam.Domain.Members
+open System
 
 type InsightsGame =
     { Motstander : string
       Stilling : int
-      Snittalder : float
-      SpilteStåle : bool }
+      Snittalder : float }
 
 type Insights =
     { Snittalder : float
       Kamper : InsightsGame list }
 
-type Pl =
+type Player =
     { FirstName : string
       BirthDate : Nullable<DateTime> }
 
@@ -61,19 +60,18 @@ let get (club : Domain.Club) (teamName, year) (db : Database) =
                             BirthDate = birthDate })
                
                let mf =
-                   (isHomeTeam =? (homeScore, awayScore))
+                   isHomeTeam =? (homeScore, awayScore)
                    |> toOption
                    |> Option.defaultValue 0
                
                let mm =
-                   (isHomeTeam =? (awayScore, homeScore))
+                   isHomeTeam =? (awayScore, homeScore)
                    |> toOption
                    |> Option.defaultValue 0
                
                { Motstander = opponent
                  Stilling = mf - mm
-                 Snittalder = calculateAverageAge dateTime attendees
-                 SpilteStåle = attendees |> Seq.exists(fun p -> p.FirstName = "Ståle") })
+                 Snittalder = calculateAverageAge dateTime attendees })
         |> Seq.toList
         |> fun games -> 
             { Snittalder =

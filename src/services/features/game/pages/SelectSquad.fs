@@ -57,8 +57,6 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
         let members = Members.list db club.Id
 
         let recentAttendance = Queries.getRecentAttendance db game.TeamId
-
-        printf "%O" game.Date
         
         [
             Client.view clientView 
