@@ -51,7 +51,6 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     |> Seq.tryHead
     |> function
     | None -> NotFound
-    | Some (game, _) when club.Teams |> Seq.exists(fun t -> t.Id = game.TeamId) |> not -> Unauthorized 
     | Some (game, signups) -> 
 
         let members = Members.list db club.Id

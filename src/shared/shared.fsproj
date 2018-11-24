@@ -20,6 +20,7 @@
     <Compile Include="components/Layout.fs" />
     <Compile Include="components/Links.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
+    <Compile Include="features/games/GamePlan.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

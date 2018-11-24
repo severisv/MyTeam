@@ -31,9 +31,7 @@ module Members =
         | Oppmøte = 3
         | Botsjef = 4 
 
-        
-
-            
+       
     type Member = {
         Id: MemberId
         FacebookId: string

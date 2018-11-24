@@ -27,6 +27,7 @@ namespace MyTeam.Models.Domain
         public int? HomeScore { get; set; }
         public int? AwayScore { get; set; }
         public string GamePlan { get; set; }
+        public string GamePlanState { get; set; }
         public virtual Team Team { get; set; }
         public virtual Article Report { get; set; }
         public virtual ICollection<GameEvent> GameEvents { get; set; }

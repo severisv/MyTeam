@@ -60,6 +60,8 @@ module App =
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
                                     routef "/%O/laguttak" <| fun gameId -> 
                                         mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
+                                    routef "/%O/bytteplan" <| fun gameId -> 
+                                        user => fun user -> (Games.Pages.GamePlan.view club user gameId |> htmlGet) 
                                     routef "/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
                                 ]
