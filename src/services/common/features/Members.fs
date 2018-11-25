@@ -6,6 +6,7 @@ open MyTeam.Domain.Members
 open Microsoft.EntityFrameworkCore
 open System.Linq
 open System
+open MyTeam.Strings
 
 type MemberDetails =
     { Details : Member
@@ -34,16 +35,15 @@ let selectMembers =
         }
         |> Seq.map (fun (id, facebookId, firstName, middleName, lastName, urlName, imageFull, status) -> 
                { Id = id
-                 FacebookId = facebookId
-                 FirstName = firstName
-                 MiddleName = middleName
-                 LastName = lastName
-                 UrlName = urlName
-                 Image = imageFull
+                 FacebookId = !!facebookId
+                 FirstName = !!firstName
+                 MiddleName = !!middleName
+                 LastName = !!lastName
+                 UrlName = !!urlName
+                 Image = !!imageFull
                  Status = enum<PlayerStatus> status })
 
 
-let (!!) = Strings.defaultValue
 let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
     fun db clubId -> 
         let (ClubId clubId) = clubId

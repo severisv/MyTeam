@@ -11,7 +11,6 @@
     <Compile Include="utils/common/Database.fs" />
     <Compile Include="utils/common/GiraffeHelpers.fs" />
     <Compile Include="utils/common/Helpers.fs" />
-    <Compile Include="utils/common/Number.fs" />
     <Compile Include="utils/common/String.fs" />
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />

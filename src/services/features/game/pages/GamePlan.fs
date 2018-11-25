@@ -32,9 +32,10 @@ let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
     }
     |> Seq.map(fun (opponent, gamePlan, gamePlanIsPublished, teamId, attendees) -> 
            ({ GameId = gameId
-              Team = club.Teams |> Seq.find(fun t -> t.Id = teamId) |> fun t -> t.Name
+              Team = club.Teams |> Seq.find(fun t -> t.Id = teamId) |> fun t -> t.ShortName
               Opponent = opponent
               GamePlanIsPublished = (gamePlanIsPublished = Nullable(true))
+              GamePlan = Strings.asOption gamePlan
               Players = Members.selectMembers (attendees.AsQueryable()) |> Seq.toList
               ImageOptions = Images.getOptions ctx
            })
@@ -48,5 +49,5 @@ let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
     | Some model -> 
 
         [ Client.view clientView model ]
-        |> layout club (Some user) (fun o -> { o with Title = "Kampplan" }) ctx
+        |> layout club (Some user) (fun o -> { o with Title = "Bytteplan" }) ctx
         |> OkResult

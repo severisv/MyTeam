@@ -11,6 +11,7 @@ type Model = {
     Team: string
     Opponent: string
     GamePlanIsPublished: bool
+    GamePlan: string option
     Players: Member list
     ImageOptions: CloudinaryOptions
 }

@@ -11,6 +11,7 @@
     <Compile Include="components/SubmitButton.fs" />
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/SelectSquad.fs" />
+    <Compile Include="features/GamePlan.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>
