@@ -4,7 +4,6 @@
     "entry": "src/FableApp.fsproj"
   },
   "scripts": {
-    "postinstall": "dotnet restore src",
     "build": "cd src && dotnet fable webpack -- -p --config config/webpack.prod.js",
     "watch": "cd src && dotnet fable webpack -- -w --config config/webpack.dev.js",
     "start": "cd src && dotnet fable webpack-serve -- --config config/webpack.dev.js",
