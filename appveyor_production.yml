@@ -4,6 +4,7 @@ environment:
     - node: "8"
 install:
   - ps: Install-Product node $env:node
+  - cmd: dotnet tool install fake-cli -g --version 5.10.1
 assembly_info:
   patch: false
 branches:
@@ -15,4 +16,3 @@ build_script:
   build.cmd
 test: off
 image: Visual Studio 2017
-clone_folder: c:\projects\myteam
