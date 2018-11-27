@@ -15,3 +15,4 @@ build_script:
   build.cmd
 test: off
 image: Visual Studio 2017
+clone_folder: c:\projects\myteam
