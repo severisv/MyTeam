@@ -10,7 +10,7 @@ install:
 assembly_info:
   patch: false
 branches:
-  only:
+  except:
   - master
 services:
   - mssql2017
