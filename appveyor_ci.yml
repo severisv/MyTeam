@@ -2,17 +2,20 @@ environment:
   version: 1.0.0
   matrix:
     - node: "8"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  NUGET_XMLDOC_MODE: skip
 install:
   - ps: Install-Product node $env:node
+  - cmd: cd .. && dotnet tool install fake-cli -g --version 5.10.1 && cd myteam
 assembly_info:
   patch: false
 branches:
-  except:
+  only:
   - master
 services:
   - mssql2017
-
 build_script:
   build.cmd --target Create-Artifact
 test: off
 image: Visual Studio 2017
+clone_folder: c:\projects\myteam
