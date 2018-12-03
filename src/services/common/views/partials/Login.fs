@@ -39,7 +39,7 @@ module Login =
             user |> Option.fold (fun _ (user: Users.User) ->
                                             div [_class "login-image-wrapper"] [
                                                 a [_title user.Name; _href <| "/spillere/vis/" + user.UrlName ] [
-                                                    img [_src <| getImage user.Image user.FacebookId (fun o -> { o with Height = Some 40; Width = Some 40 }) ]
+                                                    img [_src <| getImage (fun o -> { o with Height = Some 40; Width = Some 40 }) user.Image user.FacebookId  ]
                                                 ]
                                             ]
                             ) emptyText

@@ -113,7 +113,7 @@ module Pages =
                                     (stats |> List.map (fun player ->
                                                         let playerLink = a [_href <| sprintf "/spillere/vis/%s" player.UrlName; _title player.Name]
                                                         tableRow [] [
-                                                            playerLink [ img [_src <| getImage player.Image player.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })] ]
+                                                            playerLink [ img [_src <| getImage (fun o -> { o with Height = Some 50; Width = Some 50 }) player.Image player.FacebookId ] ]
                                                             playerLink [encodedText player.Name]                                                       
                                                             number player.Games
                                                             number player.Goals

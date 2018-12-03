@@ -51,8 +51,8 @@ module Pages =
                 meta [_title <| club.ShortName + (o.Title.HasValue =? (" - " + o.Title, "")) ]
                 o.MetaDescription.HasValue =? (meta [_name "description"; _content o.MetaDescription], emptyText)
                 title [] [encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
-                link [_rel "icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
-                link [_rel "apple-touch-icon"; _type "image/png"; _href <| getImage (club.Favicon =?? club.Logo) id]
+                link [_rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
+                link [_rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo)]
                 link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v5" ]
                 isProduction =? (Analytics.script, empty)
             ]
@@ -65,7 +65,7 @@ module Pages =
                                     span [_class "icon-bar" ] []
                                     span [_class "icon-bar" ] []
                                 ]
-                                a [_href "/";_class "navbar-brand" ] [ img [_src <| getImage club.Logo (fun o -> { o with Width = Some 100 }); _alt club.ShortName ] ]
+                                a [_href "/";_class "navbar-brand" ] [ img [_src <| getImage (fun o -> { o with Width = Some 100 }) club.Logo; _alt club.ShortName ] ]
                             ]
                             div [_class "navbar-collapse collapse" ] 
                                 ([

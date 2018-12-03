@@ -41,11 +41,18 @@
             background: transparent;
             width: 100%;
             border: none;
-            text-align: center;
-            padding: 0.15em 0;
+            padding: 0;
+            text-align: left;
             transition: background 0.15s ease-out;
+            white-space: nowrap;
             &:hover {
                 background: fade(@white, 50);
+            }
+            img {
+                width: 25px;
+                height: 25px;
+                display: inline-block;
+                margin-right: 0.25em;
             }
         }
         
@@ -69,6 +76,9 @@
         font-size: 1.5em;
         width: 2em;
         border: 0;
+        &:focus {
+            border: 0;
+        }
     }
     .gp-subs {
         font-size: 1.25em;
@@ -76,10 +86,10 @@
     }
 
     .gameplan-field {
-        max-width: 41em;
+        max-width: 46em;
         margin: 0 auto;
         padding: 1em;
-        padding-bottom: 0;
+        padding-bottom: 0.5em;
         background: @greenLightSubtle;
         border: 2px solid white;
     }

@@ -26,7 +26,7 @@ module Image =
           Quality = 100
           Format = None }
     
-    let get options url getProps =
+    let get options getProps url =
         let baseUrl = baseUrl options.CloudName
         
         let createImageUrl baseUrl (imageUrl : string) (getProps : GetProps) =
@@ -50,22 +50,22 @@ module Image =
             props.Format |> Option.fold (fun _ format -> url |> replaceExtension format) url
         createImageUrl baseUrl url getProps
     
-    let getArticle options url (getProps : GetProps) =
+    let getArticle options (getProps : GetProps) url =
         let defaultArticle options getProps =
             let imageUrl =
                 if hasValue options.DefaultMember then options.DefaultMember
                 else "image/upload/v1448309373/article_default_hnwnxo.jpg"
-            get options imageUrl getProps
+            get options getProps imageUrl
         match url with
-        | value when hasValue value -> get options value getProps
+        | value when hasValue value -> get options getProps value
         | _ -> defaultArticle options getProps
     
-    let getMember options url facebookId (getProps : GetProps) =
+    let getMember options (getProps : GetProps) url facebookId  =
         let defaultMember options getProps =
             let imageUrl =
                 if hasValue options.DefaultMember then options.DefaultMember
                 else "image/upload/v1448559418/default_player_dnwac0.gif"
-            get options imageUrl getProps
+            get options getProps imageUrl
         
         let isComplete(url : string) = url
                                        |> hasValue
@@ -82,6 +82,6 @@ module Image =
             sprintf "https://graph.facebook.com/%s/picture?type=%s" facebookId size
         match (url, facebookId) with
         | (url, _) when url |> isComplete -> url
-        | (url, _) when url |> hasValue -> get options url getProps
+        | (url, _) when url |> hasValue -> get options getProps url
         | (_, id) when id |> hasValue -> getFacebookImage id getProps
         | _ -> defaultMember options getProps

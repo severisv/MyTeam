@@ -118,7 +118,7 @@ type GamePlan(props) =
                                   |> function 
                                   | Ok s -> Some s
                                   | Error _ -> None)
-                           |> Option.defaultValue { Lineup = [ (System.Guid.NewGuid(), 0, [ None;None;None;None;None;None;None;None;None;None;None ]) ]; FocusedPlayer = None }))
+                           |> Option.defaultValue { Lineup = [ (System.Guid.NewGuid(), 0, [ 0 .. 10 ] |> List.map(fun _ -> None)) ]; FocusedPlayer = None }))
     
     override this.render() = 
         
@@ -141,22 +141,22 @@ type GamePlan(props) =
             | Some playerIndex ->
                 let subs = subs lineup
                 let name = lineup.[playerIndex]
-                let player = model.Players |> List.tryFind (fun p -> Some <| getName p = name)
-                let imageOptions = (fun (o: Image.ImageProperties) -> { o with Height = Some 40; Width = Some 40})
+                let getPlayer name = model.Players |> List.tryFind (fun p -> getName p = name)
+                let playerImage name =
+                    img [ 
+                      Class "gameplan-playerImage" 
+                      Src (Image.getMember model.ImageOptions (fun o -> { o with Height = Some 40; Width = Some 40})
+                            |> fun img -> 
+                                match getPlayer name with 
+                                | Some p -> img p.Image p.FacebookId  
+                                | None -> img "" "")
+                        ] 
                 fragment []
                     [                       
-                        (match player with 
-                          | Some p ->  img [ 
-                              Class "gameplan-playerImage" 
-                              Src <| Image.getMember model.ImageOptions p.Image p.FacebookId imageOptions 
-                            ]
-                          | None when name.IsSome -> 
-                                img [ 
-                                  Class "gameplan-playerImage" 
-                                  Src <| Image.getMember model.ImageOptions "" "" imageOptions 
-                                ]
+                        (match name with 
+                          | Some n -> playerImage n
                           | None -> div [Class "gameplan-playerImage"] []
-                          )                        
+                        )                         
                         input [ 
                            Type "text"
                            Class (if state.FocusedPlayer = Some playerIndex then "focused" else "")
@@ -165,14 +165,17 @@ type GamePlan(props) =
                            OnChange(fun e -> handlePlayerChange this.setState lineupId playerIndex (Strings.asOption e.Value))
                            OnFocus (fun e -> handleFocus e; handlePlayerFocus <| Some playerIndex)
                         ]
-                        ul [ Class (if state.FocusedPlayer = Some playerIndex then "visible" else "") ] [ 
-                            li [ ] (subs |> List.map (fun sub -> 
-                                                let name = getName sub 
-                                                button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange this.setState lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
-                                                    str name
+                        ul [ Class (if state.FocusedPlayer = Some playerIndex then "visible" else "") ] 
+                            (subs |> List.map (fun sub -> 
+                                                let name = getName sub
+                                                li [] [
+                                                    button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange this.setState lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
+                                                        playerImage name
+                                                        str name
+                                                    ]
                                                 ]
                                                 ))
-                        ]
+                        
                 ]    
             | None -> empty                             
 
@@ -222,7 +225,7 @@ type GamePlan(props) =
                                   br []                       
                                   div [ Class "gameplan-field" ]
                                     ([0 .. 5] |> List.map (fun row -> 
-                                                                div [Class "gp-row"] 
+                                                                div [] 
                                                                     ([0 .. 4] 
                                                                     |> List.map (fun col -> div [Class "gp-square"] [ square lineup lineupId row col]) ) 
                                                            ) ) 

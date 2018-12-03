@@ -19,10 +19,10 @@ module Images =
         let options = getOptions ctx
         Image.get options url getProps
     
-    let getArticle ctx url (getProps : GetProps) =
+    let getArticle ctx (getProps : GetProps) url =
         let options = getOptions ctx
-        Image.getArticle options url getProps
+        Image.getArticle options getProps url
     
-    let getMember ctx url facebookId (getProps : GetProps) =
+    let getMember ctx (getProps : GetProps) url facebookId  =
         let options = getOptions ctx
-        Image.getMember options url facebookId getProps
+        Image.getMember options getProps url facebookId 

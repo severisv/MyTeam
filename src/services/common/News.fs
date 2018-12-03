@@ -77,8 +77,8 @@ module Components =
     
  
 
-  let image ctx url = 
-      Images.getArticle ctx url (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
+  let image ctx = 
+      Images.getArticle ctx (fun o -> { o with Format = Some Jpg; Quality = 85; Width = Some 1280  })
 
   let showArticle ctx user article subHeaderLink =
       div [ _class "news-item"] [ 

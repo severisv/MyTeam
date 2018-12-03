@@ -56,7 +56,7 @@ let view (club: Club) (user: Users.User) status (ctx: HttpContext) =
                         (members |> List.filter (fun m -> m.Details.Status = status)
                                  |> List.map (fun m ->
                                                 tableRow [] [
-                                                    img [_src <| getImage m.Details.Image m.Details.FacebookId (fun o -> { o with Height = Some 50; Width = Some 50 })]
+                                                    img [_src <| getImage (fun o -> { o with Height = Some 50; Width = Some 50 }) m.Details.Image m.Details.FacebookId ]
                                                     encodedText m.Details.FullName
                                                     a [_href <| sprintf "tel:%s" m.Phone] [encodedText m.Phone]
                                                     a [_href <| sprintf "mailto:%s" m.Email] [encodedText m.Email]
