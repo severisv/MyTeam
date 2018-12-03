@@ -23,6 +23,35 @@ type State =
       FocusedPlayer: int option
      }
 
+let getName (players: Members.Member list)  (player: Members.Member) =
+            let rec getName numberOfLettersFromLastName =
+                let hashName (p: Members.Member) =
+                    match numberOfLettersFromLastName with
+                    | 0 -> p.FirstName
+                    | _ -> sprintf "%s %s" p.FirstName p.LastName.[0 .. numberOfLettersFromLastName - 1]
+
+                let name = hashName player
+                match (players |> List.filter (fun p -> hashName p = name)).Length with
+                | i when i < 2 -> name
+                | _ when numberOfLettersFromLastName >= player.LastName.Length -> name
+                | _ -> getName <| numberOfLettersFromLastName + 1               
+             
+
+            getName 0
+
+let updateLineup setState lineupId fn =
+    setState(fun state props ->
+                   { state with 
+                      Lineup = state.Lineup 
+                                |> List.map(fun (id, time, lineup) -> 
+                                            if id = lineupId then fn (id, time, lineup)
+                                            else (id, time, lineup)
+                                           )
+                   }
+    )
+        
+
+
 type GamePlan(props) =
     inherit Component<Model, State>(props)
     
@@ -39,41 +68,12 @@ type GamePlan(props) =
         
         let model = props
         let state = this.state
-        let (lineupId, time, lineup) = this.state.Lineup |> List.head
+                                        
+        let getName = getName model.Players
         
 
-        let getName (player: Members.Member) =
-            let rec getName numberOfLettersFromLastName =
-                let hashName (p: Members.Member) =
-                    match numberOfLettersFromLastName with
-                    | 0 -> p.FirstName
-                    | _ -> sprintf "%s %s" p.FirstName p.LastName.[0 .. numberOfLettersFromLastName - 1]
-
-                let name = hashName player
-                match (model.Players |> List.filter (fun p -> hashName p = name)).Length with
-                | i when i < 2 -> name
-                | _ when numberOfLettersFromLastName >= player.LastName.Length -> name
-                | _ -> getName <| numberOfLettersFromLastName + 1               
-             
-
-            getName 0                                
-            
-
-        let subs = 
-            model.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| getName p)) |> not)  
-
-
-        let updateLineup lineupId fn =
-            this.setState(fun state props ->
-                           { state with 
-                              Lineup = state.Lineup 
-                                        |> List.map(fun (id, time, lineup) -> 
-                                                    if id = lineupId then fn (id, time, lineup)
-                                                    else (id, time, lineup)
-                                                   )
-                           }
-            )
-
+        
+        let updateLineup = updateLineup this.setState
 
         let handleTimeChange lineupId value =
             updateLineup 
@@ -100,8 +100,12 @@ type GamePlan(props) =
         let handlePlayerFocus focusedPlayer = 
             this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })            
 
-        let square row col =
-
+        let subs lineup = 
+            model.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| getName p)) |> not)  
+            
+     
+        let square (lineup: List<string option>) lineupId row col =
+            let subs = subs lineup
             let playerSquare playerIndex =
                 let name = lineup.[playerIndex]
                 let player = model.Players |> List.tryFind (fun p -> Some p.Name = name)
@@ -143,50 +147,57 @@ type GamePlan(props) =
             | (4, 3) -> playerSquare 8
             | (4, 4) -> playerSquare 9
             | (5, 2) -> playerSquare 10
-            | _ -> empty        
-                            
+            | _ -> empty    
+
+                                  
 
         fragment [] [
         
             mtMain [ Class "gameplan"] [ 
-                block [] [ 
+                block [] ([ 
                     h2 [] [
                         str <| sprintf "%s vs %s" model.Team model.Opponent
                     ]
                     br []
                     br []
-                    div []
-                        [ div [ Class "text-center" ]
-                            [   
-                                input [ 
-                                        Type "text"
-                                        Class "gp-time"
-                                        Placeholder "tid"
-                                        Value time
-                                        OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
-                                        OnFocus handleFocus
-                                      ]
-                                str "min" 
-                            ]
-                          button [ Class "pull-right hidden-print" ]
-                            [ i [ Class "fa fa-times" ]
-                                []
-                            ]
-                          button [ Class "pull-right hidden-print" ]
-                            [ i [ Class "fa fa-plus" ]
-                                []
-                            ]
-                          br []                       
-                          div [ Class "gameplan-field" ]
-                            ([0 .. 5] |> List.map (fun row -> 
-                                                        div [Class "gp-row"] 
-                                                            ([0 .. 4] 
-                                                            |> List.map (fun col -> div [Class "gp-square"] [ square row col]) ) 
-                                                   ) ) 
-                          hr []
-                        ]
-                        
-                ]             
+                ] @
+                    (state.Lineup
+                     |> List.map(fun (lineupId, time, lineup) ->
+                     
+                            div []
+                                [ div [ Class "text-center" ]
+                                    [   
+                                        input [ 
+                                                Type "text"
+                                                Class "gp-time"
+                                                Placeholder "tid"
+                                                Value time
+                                                OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
+                                                OnFocus handleFocus
+                                              ]
+                                        str "min" 
+                                    ]
+                                  button [ Class "pull-right hidden-print" ]
+                                    [ i [ Class "fa fa-times" ]
+                                        []
+                                    ]
+                                  button [ Class "pull-right hidden-print" ]
+                                    [ i [ Class "fa fa-plus" ]
+                                        []
+                                    ]
+                                  br []                       
+                                  div [ Class "gameplan-field" ]
+                                    ([0 .. 5] |> List.map (fun row -> 
+                                                                div [Class "gp-row"] 
+                                                                    ([0 .. 4] 
+                                                                    |> List.map (fun col -> div [Class "gp-square"] [ square lineup lineupId row col]) ) 
+                                                           ) ) 
+                                  hr []
+                                ]
+
+                        ))
+                )     
+                             
             ]
             sidebar [] [
                     block [] [
