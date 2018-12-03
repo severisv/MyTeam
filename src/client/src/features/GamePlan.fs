@@ -23,6 +23,22 @@ type State =
       FocusedPlayer: int option
      }
 
+
+let getPlayerIndex row col =
+        match (row, col) with
+        | (0, 0) -> Some 0
+        | (0, 2) -> Some 1
+        | (0, 4) -> Some 2
+        | (2, 1) -> Some 3
+        | (2, 3) -> Some 4
+        | (3, 2) -> Some 5
+        | (4, 0) -> Some 6
+        | (4, 1) -> Some 7
+        | (4, 3) -> Some 8
+        | (4, 4) -> Some 9
+        | (5, 2) -> Some 10
+        | _ -> None
+
 let getName (players: Members.Member list)  (player: Members.Member) =
             let rec getName numberOfLettersFromLastName =
                 let hashName (p: Members.Member) =
@@ -50,7 +66,47 @@ let updateLineup setState lineupId fn =
                    }
     )
         
+let handleTimeChange setState lineupId value =
+        updateLineup
+            setState 
+            lineupId
+            (fun (id, time, lineup) -> (id, value, lineup))    
 
+let handlePlayerChange setState lineupId index value =
+            updateLineup
+                setState 
+                lineupId
+                (fun (id, time, lineup) -> 
+                                    (id,
+                                     time, 
+                                     lineup 
+                                     |> List.mapi (fun i playerName -> 
+                                                        if i = index then value 
+                                                        else playerName)
+                                    ))
+
+
+let duplicateLineup setState lineupId =
+    setState(fun state props ->
+               let (_, time, lineup) = state.Lineup 
+                                       |> List.find (fun (id, _, _) -> id = lineupId)
+               { state with 
+                  Lineup = state.Lineup @ [ (System.Guid.NewGuid(), time, lineup) ] 
+               }
+    )
+
+let removeLineup setState lineupId =
+    setState(fun state props ->            
+               { state with 
+                  Lineup = state.Lineup 
+                            |> List.filter (fun (id, _, __) -> id <> lineupId)
+               }
+    )
+
+
+let handleFocus (e: FocusEvent) = 
+        let target = e.target :?> Browser.HTMLInputElement
+        target.select()
 
 type GamePlan(props) =
     inherit Component<Model, State>(props)
@@ -71,32 +127,7 @@ type GamePlan(props) =
                                         
         let getName = getName model.Players
         
-
-        
-        let updateLineup = updateLineup this.setState
-
-        let handleTimeChange lineupId value =
-            updateLineup 
-                lineupId
-                (fun (id, time, lineup) -> (id, value, lineup))
-
-        let handlePlayerChange lineupId index value =
-            updateLineup 
-                lineupId
-                (fun (id, time, lineup) -> 
-                                    (id,
-                                     time, 
-                                     lineup 
-                                     |> List.mapi (fun i playerName -> 
-                                                        if i = index then value 
-                                                        else playerName)
-                                    ))
-     
-
-        let handleFocus (e: FocusEvent) = 
-                let target = e.target :?> Browser.HTMLInputElement
-                target.select()
-                
+                        
         let handlePlayerFocus focusedPlayer = 
             this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })            
 
@@ -105,49 +136,47 @@ type GamePlan(props) =
             
      
         let square (lineup: List<string option>) lineupId row col =
-            let subs = subs lineup
-            let playerSquare playerIndex =
+            getPlayerIndex row col
+            |> function
+            | Some playerIndex ->
+                let subs = subs lineup
                 let name = lineup.[playerIndex]
-                let player = model.Players |> List.tryFind (fun p -> Some p.Name = name)
+                let player = model.Players |> List.tryFind (fun p -> Some <| getName p = name)
+                let imageOptions = (fun (o: Image.ImageProperties) -> { o with Height = Some 40; Width = Some 40})
                 fragment []
-                    [
-                        img [ Class "gameplan-playerImage"
-                              Src (match player with 
-                                  | Some p -> Image.getMember model.ImageOptions p.Image p.FacebookId (fun o -> { o with Height = Some 40; Width = Some 40}) 
-                                  | None -> Image.getMember model.ImageOptions "" "" (fun o -> { o with Height = Some 40; Width = Some 40})
-                                  )
+                    [                       
+                        (match player with 
+                          | Some p ->  img [ 
+                              Class "gameplan-playerImage" 
+                              Src <| Image.getMember model.ImageOptions p.Image p.FacebookId imageOptions 
                             ]
+                          | None when name.IsSome -> 
+                                img [ 
+                                  Class "gameplan-playerImage" 
+                                  Src <| Image.getMember model.ImageOptions "" "" imageOptions 
+                                ]
+                          | None -> div [Class "gameplan-playerImage"] []
+                          )                        
                         input [ 
                            Type "text"
                            Class (if state.FocusedPlayer = Some playerIndex then "focused" else "")
                            Value (name |> Option.defaultValue "")
                            Placeholder "Ingen"
-                           OnChange(fun e -> handlePlayerChange lineupId playerIndex (Strings.asOption e.Value))
+                           OnChange(fun e -> handlePlayerChange this.setState lineupId playerIndex (Strings.asOption e.Value))
                            OnFocus (fun e -> handleFocus e; handlePlayerFocus <| Some playerIndex)
                         ]
                         ul [ Class (if state.FocusedPlayer = Some playerIndex then "visible" else "") ] [ 
                             li [ ] (subs |> List.map (fun sub -> 
                                                 let name = getName sub 
-                                                button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
+                                                button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange this.setState lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
                                                     str name
                                                 ]
                                                 ))
                         ]
-                    ]             
+                ]    
+            | None -> empty                             
 
-            match (row, col) with
-            | (0, 0) -> playerSquare 0
-            | (0, 2) -> playerSquare 1
-            | (0, 4) -> playerSquare 2
-            | (2, 1) -> playerSquare 3
-            | (2, 3) -> playerSquare 4
-            | (3, 2) -> playerSquare 5
-            | (4, 0) -> playerSquare 6
-            | (4, 1) -> playerSquare 7
-            | (4, 3) -> playerSquare 8
-            | (4, 4) -> playerSquare 9
-            | (5, 2) -> playerSquare 10
-            | _ -> empty    
+    
 
                                   
 
@@ -172,19 +201,24 @@ type GamePlan(props) =
                                                 Class "gp-time"
                                                 Placeholder "tid"
                                                 Value time
-                                                OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
+                                                OnChange (fun e -> handleTimeChange this.setState lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
                                                 OnFocus handleFocus
                                               ]
                                         str "min" 
                                     ]
-                                  button [ Class "pull-right hidden-print" ]
+                                  button [ 
+                                      Class "pull-right hidden-print" 
+                                      Disabled (state.Lineup.Length < 2)
+                                      OnClick (fun _ -> removeLineup this.setState lineupId)
+                                      ]
                                     [ i [ Class "fa fa-times" ]
                                         []
                                     ]
-                                  button [ Class "pull-right hidden-print" ]
-                                    [ i [ Class "fa fa-plus" ]
-                                        []
-                                    ]
+                                  button [ 
+                                      Class "pull-right hidden-print" 
+                                      OnClick (fun _ -> duplicateLineup this.setState lineupId)
+                                      ]
+                                    [ i [ Class "fa fa-plus" ] [] ]
                                   br []                       
                                   div [ Class "gameplan-field" ]
                                     ([0 .. 5] |> List.map (fun row -> 
