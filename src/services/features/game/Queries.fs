@@ -7,10 +7,6 @@ open System.Linq
 open System
 open Shared.Features.Games.SelectSquad
 
-let games (db : Database) clubId = 
-    let (ClubId clubId) = clubId
-    db.Games.Where(fun p -> p.ClubId = clubId)
-
 
 let getSquad : GetSquad = 
     fun db gameId ->

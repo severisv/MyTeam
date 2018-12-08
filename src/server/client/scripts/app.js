@@ -7,7 +7,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers'
 import AddPlayers from './reactComponents/AddPlayers/AddPlayers'
-import GamePlan from './reactComponents/GamePlan/GamePlan'
 import ShowGame from './reactComponents/RegisterResult/ShowGame'
 
 import ajax from './ajaxHelpers'
@@ -31,6 +30,5 @@ const render = (Component, target) => {
 
 render(ManagePlayers, 'manage-players')
 render(AddPlayers, 'add-players')
-render(GamePlan, 'gameplan')
 render(ShowGame, 'game-showEvents')
 render(ShowGame, 'registerResult-addEvent')

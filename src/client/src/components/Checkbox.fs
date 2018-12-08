@@ -27,8 +27,8 @@ type Checkbox(props) =
         base.setInitState({ Error = false
                             CurrentValue = props.Value })
     
-    override this.render() =
-        let handleChange isSelected =
+
+    member this.handleChange isSelected =
             let props = this.props
             let state = this.state
             props.OnChange isSelected
@@ -45,11 +45,14 @@ type Checkbox(props) =
                    this.setState(fun state props -> { state with Error = true })
                    props.OnChange state.CurrentValue)
             |> Promise.start
+
+    override this.render() =
+        
         span [ Class "input-checkbox" ] [ input 
                                               [ Class "form-control"
                                                 Type "checkbox"
                                                 Checked props.Value
-                                                OnChange(fun input -> handleChange input.Checked) ]
+                                                OnChange(fun input -> this.handleChange input.Checked) ]
                                           (if this.state.Error then Labels.error
                                            else empty) ]
 

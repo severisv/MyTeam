@@ -41,7 +41,6 @@
     "package": "^1.0.1",
     "path": "^0.12.7",
     "react": "15.2.1",
-    "react-autosuggest": "^9.0.1",
     "react-datepicker": "^0.27.0",
     "react-dom": "15.2.1",
     "tinymce": "4.4.0",

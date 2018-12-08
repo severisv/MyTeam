@@ -66,7 +66,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                             ImageOptions = Images.getOptions ctx
                             RecentAttendance = recentAttendance
                         }
-           
+                                   
             sidebar [] [
                 user =>
                     fun user -> 

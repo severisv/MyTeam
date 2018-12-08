@@ -154,7 +154,7 @@ module App =
                                 ]
                                 mustBeInRole [Role.Trener] >=> choose [         
                                     routef "/%O/squad/publish" (Games.Api.publishSquad club.Id >> jsonPost)                           
-                                    routef "/%O/gameplan" (Games.Api.setGamePlan club.Id >> jsonPost)
+                                    routef "/%O/gameplan" (Games.Api.setGamePlan club.Id)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
                         ]                                                                                                                                                                                                                                     

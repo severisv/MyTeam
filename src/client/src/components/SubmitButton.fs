@@ -23,15 +23,18 @@ type SubmitButtonProps<'a> =
       Url : string 
       Payload: 'a }
 
+
+let defaultButton attr content = 
+            btn Primary Lg attr  content      
+
 type SubmitButton<'a>(props) =
     inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
     
     do 
         base.setInitState(if props.IsSubmitted then Submitted else Default) 
         
-    
-    override this.render() =
-        let handleClick _ =
+
+    member this.handleClick _ =
             let props = this.props
             this.setState(fun _ _ -> Posting)
             promise { 
@@ -43,13 +46,13 @@ type SubmitButton<'a>(props) =
             |> Promise.catch(fun e -> 
                    Browser.console.error <| sprintf "%O" e
                    this.setState(fun _ _ -> Error))
-            |> Promise.start                            
+            |> Promise.start                              
+    
+    override this.render() =
 
         let props = this.props
         let state = this.state
-
-        let defaultButton attr content = 
-            btn Primary Lg attr  content
+        let handleClick =  this.handleClick
                                     
         div [ Class "input-submit-button" ] [ 
                   (match state with
@@ -70,11 +73,7 @@ type SubmitButton<'a>(props) =
                                             ]
                       | Default -> 
                             defaultButton [ OnClick handleClick ] [ str props.Text ]
-                      )                                                 
-                   
-                
+                      )                         
             ] 
-
-                                        
 
 let render model = ofType<SubmitButton<'a>, _, _> model []

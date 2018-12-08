@@ -3,10 +3,14 @@ namespace MyTeam.Games
 open MyTeam.Domain
 open MyTeam
 open System
+open System.Linq
+open Giraffe
 
-module internal Helpers =
-    let updateGame clubId gameId db updateGame  =
-        Queries.games db clubId
+module Api =
+
+    let internal updateGame clubId gameId (db: Database) updateGame  =
+        let (ClubId id) = clubId
+        db.Games.Where(fun p -> p.ClubId = id)
           |> Seq.tryFind(fun g -> g.Id = gameId)
           |> function
            | Some game when (ClubId game.ClubId) <> clubId -> Unauthorized
@@ -16,13 +20,6 @@ module internal Helpers =
                 |> OkResult
            | None -> NotFound      
 
-open Helpers
-open MyTeam.Domain
-open MyTeam.Models.Domain
-open MyTeam.Domain.Members
-open Insights
-
-module Api =
 
     let getSquad gameId db =
         Queries.getSquad db gameId
@@ -40,9 +37,11 @@ module Api =
 
     [<CLIMutable>]
     type GamePlanModel = { GamePlan: string }
-    let setGamePlan clubId gameId (ctx: HttpContext) model  =
-        updateGame clubId gameId ctx.Database (fun game -> game.GamePlan <- model.GamePlan)
- 
+    let setGamePlan clubId gameId next (ctx: HttpContext)   =
+        let gamePlan = ctx.ReadBodyFromRequestAsync().ConfigureAwait(false).GetAwaiter().GetResult()       
+        updateGame clubId gameId ctx.Database (fun game -> game.GamePlanState <- gamePlan)
+        |> Results.jsonResult next ctx
+
     let publishGamePlan clubId gameId (ctx: HttpContext) _  =
         updateGame clubId gameId ctx.Database (fun game -> game.GamePlanIsPublished <- Nullable true)
 

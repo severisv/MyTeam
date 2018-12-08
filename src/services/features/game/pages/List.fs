@@ -61,7 +61,7 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                     hr []
 
                     (if games.Length < 1 then
-                        alert Info "Det er ikke lagt inn noen kamper for denne sesongen"
+                        (!!(Components.Alerts.info "Det er ikke lagt inn noen kamper for denne sesongen"))
                     else 
                       div [ _class "table gamesTable table--striped" ]  
                             (games 

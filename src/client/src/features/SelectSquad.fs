@@ -93,7 +93,7 @@ type SelectSquad(props) =
         mtMain [] 
             [ block [] 
                   [ editLink <| sprintf "/intern/arrangement/endre/%O" game.Id
-                    a [ Href <| sprintf "/kamper/bytteplan/%O" game.Id
+                    a [ Href <| sprintf "/kamper/%O/bytteplan" game.Id
                         Class "registerSquad-gameplan-link pull-right"
                         Title "Bytteplan" ] [ Icons.gamePlan ]
                     
@@ -175,3 +175,5 @@ if not <| isNull node then
     |> function 
     | Ok model -> ReactDom.render(element model, node)
     | Error e -> failwithf "Json deserialization failed: %O" e
+
+

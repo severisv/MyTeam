@@ -5,6 +5,7 @@ open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.React
 open Fable.PowerPack
+open Fable.PowerPack.Fetch
 open MyTeam
 open MyTeam.Client.Components
 open MyTeam.Components
@@ -17,11 +18,12 @@ open Thoth.Json
 
 type Time = int
 type LineupId = System.Guid
+type Lineups = List<LineupId * Time * List<string option>>
 
 type State =
-    { Lineup : List<LineupId * Time * List<string option>>
-      FocusedPlayer: (LineupId * int) option
-     }
+    { Lineups : Lineups
+      FocusedPlayer : (LineupId * int) option 
+      ErrorMessage: string option }
 
 let matchLength = 90
 
@@ -40,6 +42,28 @@ let getPlayerIndex row col =
         | (5, 2) -> Some 10
         | _ -> None
 
+
+let save setState gameId (lineups: Lineups) = 
+    let url = sprintf "/api/games/%O/gameplan" gameId
+    promise { 
+        let! res = postRecord url lineups []
+        if not res.Ok then failwithf "Received %O from server: %O" res.Status res.StatusText
+        setState(fun state props ->
+                   { state with 
+                      ErrorMessage = None
+                   }
+            ) 
+    }
+    |> Promise.catch(fun e -> 
+           Browser.console.error <| sprintf "%O" e
+           setState(fun state props ->
+                   { state with 
+                      ErrorMessage = Some "Tilkoblingsproblemer, endringene blir ikke lagret"
+                   }
+            ) 
+    )
+    |> Promise.start
+
 let getName (players: Members.Member list)  (player: Members.Member) =
             let rec getName numberOfLettersFromLastName =
                 let hashName (p: Members.Member) =
@@ -51,31 +75,34 @@ let getName (players: Members.Member list)  (player: Members.Member) =
                 match (players |> List.filter (fun p -> hashName p = name)).Length with
                 | i when i < 2 -> name
                 | _ when numberOfLettersFromLastName >= player.LastName.Length -> name
-                | _ -> getName <| numberOfLettersFromLastName + 1               
-             
+                | _ -> getName <| numberOfLettersFromLastName + 1     
 
             getName 0
 
-let updateLineup setState lineupId fn =
+let updateLineup setState save lineupId fn =
     setState(fun state props ->
-                   { state with 
-                      Lineup = state.Lineup 
+                   let lineups = state.Lineups 
                                 |> List.map(fun (id, time, lineup) -> 
                                             if id = lineupId then fn (id, time, lineup)
                                             else (id, time, lineup)
                                            )
+                   save lineups
+                   { state with 
+                      Lineups = lineups
                    }
-    )
+    )                 
         
-let handleTimeChange setState lineupId value =
+let handleTimeChange setState save lineupId value =
         updateLineup
             setState 
+            save
             lineupId
             (fun (id, time, lineup) -> (id, value, lineup))    
 
-let handlePlayerChange setState lineupId index value =
+let handlePlayerChange setState save lineupId index value =
             updateLineup
-                setState 
+                setState
+                save
                 lineupId
                 (fun (id, time, lineup) -> 
                                     (id,
@@ -86,26 +113,28 @@ let handlePlayerChange setState lineupId index value =
                                                         else playerName)
                                     ))
 
-
-let duplicateLineup setState lineupId =
+let duplicateLineup setState save lineupId =
     setState(fun state props ->
-               let (_, time, lineup) = state.Lineup 
+               let (_, time, lineup) = state.Lineups 
                                        |> List.find (fun (id, _, _) -> id = lineupId)
+               let lineups = state.Lineups @ [ (System.Guid.NewGuid(), time, lineup) ] 
+               save lineups                               
                { state with 
-                  Lineup = state.Lineup @ [ (System.Guid.NewGuid(), time, lineup) ] 
+                  Lineups = lineups
                   FocusedPlayer = None
                }
     )
 
-let removeLineup setState lineupId =
-    setState(fun state props ->            
+let removeLineup setState save lineupId =
+    setState(fun state props ->        
+               let lineups = state.Lineups 
+                            |> List.filter (fun (id, _, __) -> id <> lineupId)    
+               save lineups                        
                { state with 
-                  Lineup = state.Lineup 
-                            |> List.filter (fun (id, _, __) -> id <> lineupId)
+                  Lineups = lineups
                   FocusedPlayer = None
                }
     )
-
 
 let handleFocus (e: FocusEvent) = 
         let target = e.target :?> Browser.HTMLInputElement
@@ -117,27 +146,34 @@ type GamePlan(props) =
     do 
         base.setInitState((props.GamePlan
                            |> Option.bind(fun g -> 
-                                  Decode.Auto.fromString<State>(g)
+                                  Decode.Auto.fromString<Lineups>(g)
                                   |> function 
                                   | Ok s -> Some s
-                                  | Error _ -> None)
-                           |> Option.defaultValue { Lineup = [ (System.Guid.NewGuid(), 0, [ 0 .. 10 ] |> List.map(fun _ -> None)) ]; FocusedPlayer = None }))
+                                  | Error e -> failwithf "%O" e )
+                           |> Option.defaultValue [ (System.Guid.NewGuid(), 0, [ 0 .. 10 ] |> List.map(fun _ -> None)) ]
+                           |> fun lineups ->
+                                { Lineups = lineups; FocusedPlayer = None; ErrorMessage = None }))
     
-    override this.render() = 
-        
+    override this.render() =         
+ 
         let model = props
         let state = this.state
                                         
         let getName = getName model.Players
         
-                        
         let handlePlayerFocus focusedPlayer = 
             this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })            
 
         let subs lineup = 
             model.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| getName p)) |> not)  
-            
-     
+
+        let save = save this.setState model.GameId  
+        let handlePlayerChange = handlePlayerChange this.setState save
+        let handleTimeChange = handleTimeChange this.setState save
+        let removeLineup = removeLineup this.setState save
+        let duplicateLineup = duplicateLineup this.setState save
+
+
         let square (lineup: List<string option>) lineupId row col =
             getPlayerIndex row col
             |> function
@@ -165,14 +201,14 @@ type GamePlan(props) =
                            Class (if state.FocusedPlayer = Some (lineupId, playerIndex) then "focused" else "")
                            Value (name |> Option.defaultValue "")
                            Placeholder "Ingen"
-                           OnChange(fun e -> handlePlayerChange this.setState lineupId playerIndex (Strings.asOption e.Value))
+                           OnChange(fun e -> handlePlayerChange lineupId playerIndex (Strings.asOption e.Value))
                            OnFocus (fun e -> handleFocus e; handlePlayerFocus <| Some (lineupId, playerIndex))
                         ]
                         ul [ Class (if state.FocusedPlayer = Some (lineupId, playerIndex) then "visible" else "") ] 
                             (subs |> List.map (fun sub -> 
                                                 let name = getName sub
                                                 li [] [
-                                                    button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange this.setState lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
+                                                    button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
                                                         playerImage name
                                                         str name
                                                     ]
@@ -186,13 +222,17 @@ type GamePlan(props) =
         
             mtMain [ Class "gameplan"] [ 
                 block [] ([ 
+                    (state.ErrorMessage
+                     |> function
+                     | Some message -> Alerts.danger message
+                     | None -> empty
+                    )
                     h2 [] [
                         str <| sprintf "%s vs %s" model.Team model.Opponent
                     ]
                     br []
                     br []
-                ] @
-                    (state.Lineup
+                    div [] (state.Lineups
                      |> List.map(fun (lineupId, time, lineup) ->
                             div []
                                 [ 
@@ -202,7 +242,7 @@ type GamePlan(props) =
                                                 Class "gp-time"
                                                 Placeholder "tid"
                                                 Value time
-                                                OnChange (fun e -> handleTimeChange this.setState lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
+                                                OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
                                                 OnFocus handleFocus
                                               ]
                                         str "min" 
@@ -210,21 +250,21 @@ type GamePlan(props) =
                                   div [Class "clearfix"] [  
                                       button [ 
                                           Class "pull-right hidden-print" 
-                                          Disabled (state.Lineup.Length < 2)
-                                          OnClick (fun _ -> removeLineup this.setState lineupId)
+                                          Disabled (state.Lineups.Length < 2)
+                                          OnClick (fun _ -> removeLineup lineupId)
                                           ]
                                         [ Icons.delete ]
                                       button [ 
                                           Class "pull-right hidden-print" 
-                                          OnClick (fun _ -> duplicateLineup this.setState lineupId)
+                                          OnClick (fun _ -> duplicateLineup lineupId)
                                           ]
                                         [ Icons.add "" ]
                                   ]
                                   div []
                                       (                                        
-                                        state.Lineup 
+                                        state.Lineups 
                                         |> List.findIndex (fun (id, _m, __) -> id = lineupId)
-                                        |> fun i -> if i > 0 then Some state.Lineup.[i-1] else None
+                                        |> fun i -> if i > 0 then Some state.Lineups.[i-1] else None
                                         |> function
                                         | Some (_, __, prevLineup) -> 
                                             let tryGet (list: string list) i = if list.Length > i then list.[i] else ""
@@ -254,6 +294,16 @@ type GamePlan(props) =
                             ]
                         )
                     )
+                    div [ Class "text-center" ] [
+                        br []
+                        SubmitButton.render 
+                                        { IsSubmitted = model.GamePlanIsPublished
+                                          Text = "Publiser"
+                                          SubmittedText = "Publisert"
+                                          Url = sprintf "/api/games/%O/gameplan/publish" model.GameId
+                                          Payload = ignore }   
+                    ]                   
+                ]
                 )                                  
             ]
             sidebar [] [
@@ -261,7 +311,7 @@ type GamePlan(props) =
                         h4 [] [str "Spilletid"]
                         div []
                             (
-                            let lineups = state.Lineup
+                            let lineups = state.Lineups
                                           |> List.sortBy (fun (_, time, __) -> time)
 
                             lineups                                      

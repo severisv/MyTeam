@@ -47,7 +47,6 @@
     <Compile Include="common/News.fs" />
     <Compile Include="common/Notifications.fs" />
     <Compile Include="common/views/partials/Admin.fs" />
-    <Compile Include="common/views/partials/Alerts.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />
     <Compile Include="common/views/partials/Login.fs" />
     <Compile Include="common/views/partials/Notifications.fs" />
@@ -71,7 +70,7 @@
     <Compile Include="features/game/Queries.fs" />
     <Compile Include="features/game/Persistence.fs" />
     <Compile Include="features/game/api/Insights.fs" />
-    <Compile Include="features/game/Api.fs" />
+    <Compile Include="features/game/GameApi.fs" />
     <Compile Include="features/game/pages/Show.fs" />
     <Compile Include="features/game/pages/List.fs" />
     <Compile Include="features/game/pages/Result.fs" />

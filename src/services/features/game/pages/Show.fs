@@ -44,7 +44,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
                     user => fun user -> 
                             if user.IsInRole [Role.Trener] || game.GamePlanIsPublished then
-                                    a [ _href <| sprintf "/kamper/bytteplan/%O" game.Id ;_class "registerSquad-gameplan-link pull-right"][ 
+                                    a [ _href <| sprintf "/kamper/%O/bytteplan" game.Id ;_class "registerSquad-gameplan-link pull-right"][ 
                                         !!Icons.gamePlan
                                     ]
                             else empty                            
@@ -117,8 +117,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                             h2 [ _class "news-matchReport" ] [ encodedText "Kamprapport" ]
                             hr [ ]
                             Common.News.Components.showArticle ctx user matchReport None
-                        ]
-                  
+                        ]                  
             ] 
         ]
         |> layout club user (fun o -> { o with 

@@ -25,12 +25,12 @@
         }
         if (!Model.SignupHasClosed() && Context.UserIsInRole(Roles.Coach))
         {
-            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a href="/kamper/@Model.Id/bytteplan" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
             <a href="/kamper/@Model.Id/laguttak" class="edit-link pull-right" title="@Res.TeamSelection"><i class="flaticon-football133"></i></a>
 
         }
         else if (Model.GamePlanIsPublished == true) {
-            <a asp-action="gameplanforgame" asp-controller="game" asp-route-gameId="@Model.Id" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
+            <a href="/kamper/@Model.Id/bytteplan" class="edit-link pull-right" title="Bytteplan"><i class="fa fa-exchange"></i></a>
         }
         else if (Context.UserIsInRole(Roles.Coach))
         {
