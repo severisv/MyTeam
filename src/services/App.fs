@@ -12,7 +12,6 @@ open Newtonsoft.Json.Converters
 open Results
 open Microsoft.AspNetCore.Hosting
 open PipelineHelpers
-
     
 module App =
 
@@ -157,7 +156,13 @@ module App =
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
-                        ]                                                                                                                                                                                                                                     
+                        ]
+                    subRoute "/api/seasons"
+                        <| choose [                                                                
+                            GET >=>  choose [
+                                route "/refresh" >=> Seasons.Api.refresh
+                            ]
+                        ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx
             | None ->

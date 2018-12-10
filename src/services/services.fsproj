@@ -99,6 +99,7 @@
     <Compile Include="features/news/pages/Index.fs" />
     <Compile Include="features/news/pages/Show.fs" />
     <Compile Include="features/news/pages/Edit.fs" />
+    <Compile Include="features/seasons/Api.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
