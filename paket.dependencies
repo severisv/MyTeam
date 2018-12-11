@@ -10,6 +10,7 @@ nuget Fable.JsonConverter prelease
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator
+nuget FSharp.Data
 nuget Giraffe
 nuget HtmlAgilityPack.CssSelectors.NetCore
 nuget Microsoft.ApplicationInsights.AspNetCore

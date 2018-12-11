@@ -157,10 +157,10 @@ module App =
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
                         ]
-                    subRoute "/api/seasons"
+                    subRoute "/api/tables"
                         <| choose [                                                                
                             GET >=>  choose [
-                                route "/refresh" >=> Seasons.Api.refresh
+                                route "/refresh" >=> Table.Refresh.run
                             ]
                         ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user

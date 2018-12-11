@@ -10,3 +10,6 @@ module Number =
             match Int32.TryParse s with
                 | true, i -> Some i
                 | _ -> None
+
+        let isNumber =
+            tryParse >> fun res -> res.IsSome            

@@ -89,6 +89,7 @@
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
     <Compile Include="features/table/Pages.fs" />
+    <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/teams/Types.fs" />
     <Compile Include="features/teams/Queries.fs" />
     <Compile Include="features/teams/Api.fs" />
@@ -99,7 +100,6 @@
     <Compile Include="features/news/pages/Index.fs" />
     <Compile Include="features/news/pages/Show.fs" />
     <Compile Include="features/news/pages/Edit.fs" />
-    <Compile Include="features/seasons/Api.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

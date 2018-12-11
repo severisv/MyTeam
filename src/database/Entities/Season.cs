@@ -21,6 +21,7 @@ namespace MyTeam.Models.Domain
         public Table Table => new Table(TableString);
 
         public string TableString { get; set; }
+        public string TableJson { get; set; }
 
         public virtual Team Team { get; set; }
         public bool AutoUpdateTable { get; set; }
