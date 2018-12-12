@@ -5,7 +5,6 @@ open MyTeam.Domain
 open MyTeam.Domain.Table
 
 
-
 type Table = {
     Rows: TableRow list
     UpdatedDate: System.DateTime

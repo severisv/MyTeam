@@ -16,3 +16,6 @@ module Json =
     
     let fableSerialize obj = 
         Encode.Auto.toString (0, obj)
+
+    let fableDeserialize<'t> = 
+        Decode.Auto.fromString<'t>    

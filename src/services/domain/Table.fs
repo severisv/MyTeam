@@ -16,6 +16,12 @@ type TableRow = {
         member row.Games = row.Wins + row.Draws + row.Losses
         member row.GoalDifference = sprintf "%i - %i" row.GoalsFor row.GoalsAgainst
 
+let fromJson obj = 
+    Json.fableDeserialize<TableRow list> obj
+    |> function 
+    | Ok value -> value 
+    | Error e -> failwith e
+
 let fromString (table: TableString) =
         table.Split('|')
         |> Array.map (fun row ->

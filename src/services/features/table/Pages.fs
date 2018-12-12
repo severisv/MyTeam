@@ -1,12 +1,9 @@
 namespace MyTeam.Table
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open System.Linq
-open MyTeam.Models.Enums
 open MyTeam.Views
 open MyTeam.Shared.Components
 open System
@@ -101,16 +98,10 @@ module Pages =
                                             block [] [
                                                 navList ({
                                                             Header = "Admin"
-                                                            Items = [
-                                                                        {
-                                                                            Text = [icon (fa "plus") "";whitespace;encodedText "Legg til sesong"]
-                                                                            Url = "/sesong/opprett"
-                                                                        }
-                                                                        {
-                                                                            Text = [icon (fa "edit") "";whitespace;encodedText "Rediger sesong"]
-                                                                            Url = sprintf "/sesong/oppdater/%i/%O" selectedYear selectedTeam.Id
-                                                                        }
-                                                                    ]
+                                                            Items = [   { Text = [icon (fa "plus") "";whitespace;encodedText "Legg til sesong"]
+                                                                          Url = "/sesong/opprett" }
+                                                                        { Text = [icon (fa "edit") "";whitespace;encodedText "Rediger sesong"]
+                                                                          Url = sprintf "/sesong/oppdater/%i/%O" selectedYear selectedTeam.Id } ]
                                                             Footer = None
                                                             IsSelected = never
                                                         })
