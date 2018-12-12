@@ -68,7 +68,7 @@ namespace MyTeam.Controllers
             {
                 _seasonService.Update(model.SeasonId, model.Name, model.AutoUpdate, model.SourceUrl, model.AutoUpdateFixtures, model.FixturesSourceUrl);
                 _fixtureService.RefreshFixtures();
-                _tableService.RefreshTables();
+                // _tableService.RefreshTables();
 
                 Alert(AlertType.Success, "Instillinger lagret");
             }
@@ -112,7 +112,7 @@ namespace MyTeam.Controllers
             {
                 _seasonService.CreateSeason(model.TeamId, model.Year.Value, model.Name, model.AutoUpdate, model.SourceUrl, model.AutoUpdateFixtures, model.FixturesSourceUrl);
                 _fixtureService.RefreshFixtures();
-                _tableService.RefreshTables();
+                // _tableService.RefreshTables();
 
                 Alert(AlertType.Success, $"{Res.Season} {Res.Saved.ToLower()}");
                 return RedirectToAction("Index", "Table", new { teamId = model.TeamId });
