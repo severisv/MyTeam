@@ -6,7 +6,11 @@ open Giraffe
 open FSharp.Data
 open Microsoft.Extensions.Logging
 
+#if !DEBUG
 type TableHtml = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/tabell/?fiksId=158443">
+#else
+type TableHtml = HtmlProvider<"features/table/table.html">
+#endif
 
 let run next (ctx: HttpContext)  = 
     let now = DateTime.Now
