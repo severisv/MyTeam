@@ -4,10 +4,9 @@ open MyTeam
 open System
 open Giraffe
 open FSharp.Data
-open MyTeam.Domain.Table
 open Microsoft.Extensions.Logging
 
-type Table = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/tabell/?fiksId=158443">
+type TableHtml = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/tabell/?fiksId=158443">
 
 let run next (ctx: HttpContext)  = 
     let now = DateTime.Now
@@ -25,7 +24,7 @@ let run next (ctx: HttpContext)  =
     |> Seq.toList
     |> List.iter (fun season ->
         try
-            let html = Table.Load(season.TableSourceUrl)
+            let html = TableHtml.Load(season.TableSourceUrl)
             let table = html.Tables.Table1.Rows
                         |> Array.filter (fun row -> row.Plass |> Number.isNumber)
                         |> Array.map (fun row -> 

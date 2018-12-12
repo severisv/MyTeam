@@ -39,7 +39,6 @@
     <Compile Include="components/Table.fs" />
     <Compile Include="components/Tabs.fs" />
     <Compile Include="domain/Events.fs" />
-    <Compile Include="domain/Table.fs" />
     <Compile Include="common/features/*.fs" />
     <Compile Include="common/Clubs.fs" />
     <Compile Include="common/Users.fs" />

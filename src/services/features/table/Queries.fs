@@ -21,6 +21,13 @@ module Queries =
 
     let getTable: GetTable =
         fun db teamId year ->
+
+            let fromJson obj = 
+                Json.fableDeserialize<TableRow list> obj
+                |> function 
+                | Ok value -> value 
+                | Error e -> failwith e
+
             query {
                 for season in db.Seasons do
                 where (season.TeamId = teamId && season.StartDate.Year = year)
@@ -30,7 +37,7 @@ module Queries =
             |> Option.map(fun (tableJson, updatedDate, name) ->
                     {
                         Rows =  if hasValue tableJson then
-                                    Table.fromJson tableJson
+                                    fromJson tableJson
                                 else 
                                     []
                         UpdatedDate = updatedDate

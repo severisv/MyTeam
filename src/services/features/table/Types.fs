@@ -2,7 +2,19 @@ namespace MyTeam.Table
 
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Domain.Table
+
+type TableRow = {
+        Team: string
+        Position: int
+        Points: int
+        GoalsFor: int
+        GoalsAgainst: int
+        Wins: int
+        Draws: int
+        Losses: int
+    } with 
+        member row.Games = row.Wins + row.Draws + row.Losses
+        member row.GoalDifference = sprintf "%i - %i" row.GoalsFor row.GoalsAgainst
 
 
 type Table = {
