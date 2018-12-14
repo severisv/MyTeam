@@ -33,8 +33,9 @@ let run next (ctx: HttpContext)  =
         try
 
             let isLike a b =
-                (a |> Strings.toLower) 
-                |> Strings.contains (Strings.toLower b)
+                b 
+                |> (Strings.toLower >> Strings.removeAllWhitespaces) 
+                |> Strings.contains <| (Strings.removeAllWhitespaces >> Strings.toLower) a
 
             let isCurrentTeam =
                 isLike team.Name
@@ -55,22 +56,22 @@ let run next (ctx: HttpContext)  =
 
             let html = GamesHtml.Load(season.FixturesSourceUrl)
             html.Tables.Table1.Rows
-            |> Array.filter (fun row -> 
-                                                          
+            |> Array.filter (fun row ->                                                           
                                 row.Hjemmelag |> isCurrentTeam || 
                                 row.Bortelag |> isCurrentTeam)
             |> Array.iter (fun row -> 
                                 let isHomeTeam = isCurrentTeam row.Hjemmelag
-                                let opponent = if isHomeTeam then row.Bortelag else row.Hjemmelag                                            
+                                let opponent = if isHomeTeam then row.Bortelag else row.Hjemmelag 
+                                               |> Strings.removeDoubleWhitespaces  
                                 let game = 
                                     existingGames 
-                                    |> List.tryFind (fun game -> game.Opponent |> isLike opponent)
+                                    |> List.tryFind (fun game -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
                                     |> function
                                     | Some existingGame -> 
                                         db.Games.Attach(existingGame) |> ignore
                                         existingGame
                                     | None ->
-                                       
+                                                                         
                                         let et = new System.Collections.Generic.List<Models.Domain.EventTeam>()
                                         et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
 
@@ -99,7 +100,7 @@ let run next (ctx: HttpContext)  =
                                                    
                         
                                 game.DateTime <- (date.Date.Add time)
-                                game.Location <- row.Bane                            
+                                game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            
                         )
 
             season.FixturesUpdated <- Nullable now 
