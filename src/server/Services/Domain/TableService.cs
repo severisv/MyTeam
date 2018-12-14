@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using HtmlAgilityPack;
-using HtmlAgilityPack.CssSelectors.NetCore;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Models.Domain;

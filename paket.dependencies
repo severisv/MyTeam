@@ -12,7 +12,6 @@ nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator
 nuget FSharp.Data
 nuget Giraffe
-nuget HtmlAgilityPack.CssSelectors.NetCore
 nuget Microsoft.ApplicationInsights.AspNetCore
 nuget Microsoft.AspNetCore.Antiforgery 
 nuget Microsoft.AspNetCore.Authentication.Facebook
@@ -30,5 +29,4 @@ nuget Microsoft.Extensions.Caching.Abstractions
 nuget Newtonsoft.Json
 nuget Sendgrid
 nuget SlackLogger
-nuget System.Net.Http
 nuget TaskBuilder.fs
