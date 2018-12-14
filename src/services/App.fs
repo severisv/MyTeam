@@ -142,6 +142,8 @@ module App =
                                 routef "/%O/squad" (Games.Api.getSquad >> jsonGet)
                                 route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
                                 routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)      
+                                route "/refresh" >=> Games.Refresh.run
+
                             ]     
                             POST >=> 
                                 mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
