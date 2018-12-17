@@ -81,6 +81,7 @@ let listGames: ListGames =
                     }                    
                  )
                  |> Seq.toList
+                 |> List.distinctBy (fun g -> g.Id) // Fordi det er en feil med databasemodellen som gjør at mange artikler kan peke på samme kamp
                  |> List.sortBy(fun g -> g.DateTime)
 
 

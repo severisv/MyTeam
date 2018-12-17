@@ -12,7 +12,6 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IRemedyRateService, RemedyRateService>();
             services.AddTransient<IFineService, FineService>();
-            services.AddTransient<IFixtureService, FixtureService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ISeasonService, SeasonService>();
