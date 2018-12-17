@@ -77,7 +77,7 @@ module.exports = React.createClass({
         <div className="col-sm-3 mp-name">{player.fullName}</div>
         <div className="col-sm-2 col-xs-7  mp-status">{this.renderStatusOptions()}</div>
         {teamElements}
-        <div className="col-sm-5 col-xs-12 mp-roles">
+        <div className="mp-roles">
           {this.renderRoles()}
           <a className="pull-right" title="Rediger spiller" href={editPlayerHref}>
             <i className="fa fa-edit" />

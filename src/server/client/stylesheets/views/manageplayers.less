@@ -1,55 +1,48 @@
-﻿
-
-.manage-players {
-    .headline{
-        font-size: 2em;
-        .smaller {
-            font-size: 0.75em;
-        }
+﻿.manage-players {
+  .col-sm-1 {
+    max-width: 2.5em !important;
+  }
+  .col-xs-2,
+  .col-sm-2 {
+    .r-above-xs({padding: 0; max-width: 7em;}) !important;
+  }
+  .headline {
+    font-size: 2em;
+    .smaller {
+      font-size: 0.75em;
     }
-    .subheadline{
-        padding-top: 1.1em;
-    }
-
-      .mp-name {
-          .r-xs({font-size:1.2em;})
-    }
-      .mp-roles {
-          padding-right: 0.3em;
-      }
+  }
+  .subheadline {
+    padding-top: 1.1em;
+  }
+  .mp-name {
+      font-size: 0.9em;
+    .r-xs({font-size: 1.2em;});
+  }
+  .roles-header strong {
+      padding-left: 1em;
+  }
+  .mp-roles {
+    padding-right: 0.3em;
+    padding-left: 1em;
+    .r-under-xs({width: 100%;});
+  }
 }
-  
 .manage-players select.form-control {
-    width: 7em;
-    padding: 6px 6px;
-    display: inline-block; 
-    .r-xs({width: 12em;});
+  width: 6em;
+  padding: 6px 6px;
+  display: inline-block;
+  .r-xs({width: 12em;});
 }
-
 .manage-players .row {
-              .r-xs({padding: 0.5em 0em;});
-
-     &:nth-of-type(even){
-        background-color:rgba(0,0,0,0.05);
-    }
-
+  .r-xs({padding: 0.5em 0em;});
+  &:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 }
 .manage-players .row.list-player > div {
-    overflow:hidden;
-    line-height: 2.4em;
-
-   
+  overflow: hidden;
+  line-height: 2.4em;
 }
-
-.r-under-md({
-    .manage-players button.btn {
-        padding: 5px 5px;
-    }  
-});
-
- .r-under-xs({
-    .manage-players button.btn {
-        padding: 5px 10px;
-    }  
-});
-
+.r-under-md({.manage-players button.btn {padding: 5px 5px;}});
+.r-under-xs({.manage-players button.btn {padding: 5px 10px;}});

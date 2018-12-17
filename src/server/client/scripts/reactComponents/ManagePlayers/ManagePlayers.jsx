@@ -158,7 +158,7 @@ export default class ManagePlayers extends React.Component {
             <strong>Status</strong>
           </div>
           {teamElements}
-          <div className="col-xs-3 subheadline hidden-xs">
+          <div className="roles-header subheadline hidden-xs">
             <strong>Roller</strong>
           </div>
         </div>
