@@ -8,10 +8,13 @@
   <ItemGroup>
     <Compile Include="components/CheckBox.fs" />
     <Compile Include="components/Textarea.fs" />
+    <Compile Include="components/Textinput.fs" />
     <Compile Include="components/SubmitButton.fs" />
+    <Compile Include="components/EditBlock.fs" />
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/GamePlan.fs" />
     <Compile Include="features/SelectSquad.fs" />
+    <Compile Include="features/Table.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

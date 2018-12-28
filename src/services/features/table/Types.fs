@@ -17,7 +17,7 @@ type TableRow = {
         member row.GoalDifference = sprintf "%i - %i" row.GoalsFor row.GoalsAgainst
 
 
-type Table = {
+type LeagueTable = {
     Rows: TableRow list
     UpdatedDate: System.DateTime
     Title: string
@@ -25,5 +25,5 @@ type Table = {
 
 type Year = int
 type GetYears = Database -> TeamId -> Year list
-type GetTable = Database -> TeamId -> Year -> Table option
+type GetTable = Database -> TeamId -> Year -> LeagueTable option
 

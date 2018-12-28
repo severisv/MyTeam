@@ -68,9 +68,9 @@ module App =
                     subRoute "/tabell"   
                         <| choose [
                             GET >=> choose [
-                                        route "" >=> (Table.Pages.index club user None None |> htmlGet)      
-                                        routef "/%s/%s" <| fun (teamName, year) -> Table.Pages.index club user (Some teamName) (Some year) |> htmlGet       
-                                        routef "/%s" <| fun teamName -> Table.Pages.index club user (Some teamName) None |> htmlGet        
+                                        route "" >=> (Table.Table.view club user None None |> htmlGet)      
+                                        routef "/%s/%s" <| fun (teamName, year) -> Table.Table.view club user (Some teamName) (Some year) |> htmlGet       
+                                        routef "/%s" <| fun teamName -> Table.Table.view club user (Some teamName) None |> htmlGet        
                             ]
                         ]          
                     
@@ -114,7 +114,7 @@ module App =
                     subRoute "/api/events"                    
                         (choose [
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
-                                routef "/%O/description" (Events.Api.setDescription club.Id)
+                                routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
                         ])
                     subRoute "/api/members" 
                         <| choose [ 
@@ -164,6 +164,8 @@ module App =
                             GET >=>  choose [
                                 route "/refresh" >=> Table.Refresh.run
                             ]
+                            PUT >=> mustBeInRole [Role.Admin] >=> 
+                                routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
                         ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx

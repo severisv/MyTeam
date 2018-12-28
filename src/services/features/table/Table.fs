@@ -6,10 +6,11 @@ open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Views
 open MyTeam.Shared.Components
+open Shared.Features.Table.Table
 open System
 
-module Pages =   
-    let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
+module Table =   
+    let view (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
 
         let db = ctx.Database
 
@@ -37,18 +38,16 @@ module Pages =
 
                     let isSelected url = 
                         tableUrl selectedTeam selectedYear = url      
-                  
+
                     [
                         mtMain [] [
-                            block [] [
+                            block [] [                                
                                 tabs [_class "team-nav"] 
                                     (club.Teams |> List.map (fun team  -> 
-                                                        { 
-                                                            Text = team.Name
-                                                            ShortText = team.ShortName
-                                                            Icon = Some <| !!(Icons.team "")
-                                                            Url = tableUrl team selectedYear 
-                                                        }
+                                                        { Text = team.Name
+                                                          ShortText = team.ShortName
+                                                          Icon = Some <| !!(Icons.team "")
+                                                          Url = tableUrl team selectedYear }
                                                 ))                           
                                     isSelected            
                            
@@ -60,11 +59,15 @@ module Pages =
                                         IsSelected = isSelected                                                               
                                    })
                                 hr []
-                                h2 [] [!!(Icons.trophy "");whitespace;encodedText t.Title]
+                                (if (user |> Option.map (fun (user: Users.User) -> user.IsInRole [Role.Admin])
+                                          |> Option.defaultValue false) then
+                                    Client.view clientView { Title = t.Title; Team = selectedTeam.ShortName; Year = selectedYear }
+                                else 
+                                    h2 [] [!!(Icons.trophy ""); whitespace; encodedText t.Title])
                                 br []
                                 table [Striped; TableProperty.Attribute <| _class "table-table"] 
                                             [
-                                                col [NoSort;Align Center;Attr <| _class "hidden-xxs"] []
+                                                col [NoSort; Align Center; Attr <| _class "hidden-xxs"] []
                                                 col [NoSort] [encodedText "Lag"]
                                                 col [NoSort; Align Center] [encodedText "Kamper"]
                                                 col [NoSort; Align Center; Attr <| _class "hidden-sm hidden-xs"] [encodedText "Seier"]
@@ -88,13 +91,12 @@ module Pages =
                                             ) 
                                 (selectedYear = DateTime.Now.Year =? ( 
                                     span [_class "subtle ft-sm"] 
-                                         [encodedText <| "Sist oppdatert: " + t.UpdatedDate.ToString("d MMM kl HH:mm") ],emptyText))
-                               
-                            ]
+                                         [encodedText <| "Sist oppdatert: " + t.UpdatedDate.ToString("d MMM kl HH:mm") ], emptyText))
+                               ]
                         ]
                         sidebar [] [
                             Users.whenInRole user [Role.Admin; Role.Trener; Role.Skribent] 
-                                        (fun user -> 
+                                        (fun _ -> 
                                             block [] [
                                                 navList ({
                                                             Header = "Admin"
@@ -115,8 +117,7 @@ module Pages =
                                                 Footer = None                                                               
                                                 IsSelected = isSelected                                                               
                                            })
-                                ]
-                                                             
+                                ]                                                             
                                 , emptyText))        
                             ]
                     ] 

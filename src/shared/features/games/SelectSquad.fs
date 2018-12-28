@@ -1,7 +1,6 @@
 module Shared.Features.Games.SelectSquad
 
 open System
-open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Image
 
@@ -11,7 +10,6 @@ type Signup = {
         Message: string        
     }
     
-
 type TeamAttendance = {
     MemberId: MemberId
     AttendancePercentage: int

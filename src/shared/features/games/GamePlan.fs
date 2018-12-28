@@ -16,5 +16,5 @@ type Model = {
     ImageOptions: CloudinaryOptions
 }
 
-let clientView = "gameplan2"
+let clientView = "gameplan"
 let modelAttribute = "model"

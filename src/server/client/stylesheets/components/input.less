@@ -111,14 +111,9 @@ input[type="checkbox"] {
     }
 }
 
+.input-text,
 .input-textarea {
     position: relative;
-
-    .fa {
-        position: absolute;
-        bottom: 0.5em;
-        right: 0.7em;
-    }
 
     .fa-check {
         color: @greenLight;
@@ -142,15 +137,33 @@ input[type="checkbox"] {
     .fa-exclamation-triangle {
         color: @red;
     }
+
+    .fa {
+        position: absolute;
+        right: 0.7em;
+    }
 }
+
+.input-textarea {
+    .fa {
+        bottom: 0.5em;
+    }
+}
+
+.input-text {
+    .fa {
+        bottom: 0.75em;
+    }
+}
+
+
 
 .input-submit-button {
     .label {
         margin-left: 0.5em;
     }
-     
+
     .btn {
         min-width: 10em;
     }
-    
 }

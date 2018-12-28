@@ -237,14 +237,12 @@ type GamePlan(props) =
                             div []
                                 [ 
                                   div [ Class "text-center" ] [   
-                                        input [ 
-                                                Type "text"
+                                        input [ Type "text"
                                                 Class "gp-time"
                                                 Placeholder "tid"
                                                 Value time
                                                 OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
-                                                OnFocus handleFocus
-                                              ]
+                                                OnFocus handleFocus ]
                                         str "min" 
                                     ]
                                   div [Class "clearfix"] [  

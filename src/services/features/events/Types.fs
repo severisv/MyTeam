@@ -11,5 +11,3 @@ type Event = {
     Id: EventId
     Description: string
 }
-
-type SetDescription = Database -> ClubId -> EventId -> string -> unit
