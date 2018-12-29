@@ -166,6 +166,10 @@ module App =
                             ]
                             PUT >=> mustBeInRole [Role.Admin] >=> 
                                 routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
+                            PUT >=> mustBeInRole [Role.Admin] >=> 
+                                routef "/%s/%i/sourceurl" (Table.Api.setSourceUrl club >> jsonPost)
+                            POST >=> mustBeInRole [Role.Admin] >=> 
+                                routef "/%s/%i/autoupdate" (Table.Api.setAutoUpdate club >> jsonPost)
                         ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx

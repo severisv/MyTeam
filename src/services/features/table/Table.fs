@@ -61,7 +61,7 @@ module Table =
                                 hr []
                                 (if (user |> Option.map (fun (user: Users.User) -> user.IsInRole [Role.Admin])
                                           |> Option.defaultValue false) then
-                                    Client.view clientView { Title = t.Title; Team = selectedTeam.ShortName; Year = selectedYear }
+                                    Client.view clientView { Title = t.Title; Team = selectedTeam.ShortName; Year = selectedYear; AutoUpdateTable = t.AutoUpdate; SourceUrl = t.SourceUrl }
                                 else 
                                     h2 [] [!!(Icons.trophy ""); whitespace; encodedText t.Title])
                                 br []

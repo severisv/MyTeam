@@ -12,33 +12,62 @@ open MyTeam.Shared.Components
 open Shared.Features.Table.Table
 open Thoth.Json
 
+
+let formRow lbl inpt =
+    div [ Class "row" ] [ label [ Class "col-xs-4" ] [ lbl ]
+                          div [ Class "col-xs-6" ] [ inpt ]
+                          div [ Class "col-xs-1" ] [] ]
+
 type State =
-    { Title : string }
+    { Title : string
+      AutoUpdate : bool
+      SourceUrl : string }
 
 type EditTable(props) =
     inherit Component<Model, State>(props)
-    do base.setInitState ({ Title = props.Title })
+    do base.setInitState ({ Title = props.Title
+                            AutoUpdate = props.AutoUpdateTable
+                            SourceUrl = props.SourceUrl })
     override this.render() =
         let props = this.props
         let state = this.state
-        let handleChange value = this.setState (fun state props -> { state with Title = value })
+        let handleTitleChange value = this.setState (fun state props -> { state with Title = value })
+        let handleSourceUrlChange value = this.setState (fun state props -> { state with SourceUrl = value })
+        let handleAutoUpdateChange value = this.setState (fun state props -> { state with AutoUpdate = value })
+
         fragment [] 
             [ EditBlock.render 
                   { Render =
                         fun isInEditMode -> 
-                            if not isInEditMode then 
-                                fragment [] [ h2 [] [ Icons.trophy ""
-                                                      whitespace
-                                                      str state.Title ] ]
-                            else 
-                                div [ Class "table-edit" ] 
-                                    [ Icons.trophy ""
-                                      whitespace
-                                      Textinput.render { Value = state.Title
-                                                         Url =
-                                                             sprintf "/api/tables/%s/%i/title" 
-                                                                 props.Team props.Year
-                                                         OnChange = handleChange } ] } ]
+                            fragment [] [
+                                (if isInEditMode then    
+                                    div [ Class "table-edit" ] [
+                                        formRow (str "Divisjon") 
+                                                (Textinput.render { Value = state.Title
+                                                                    Url = sprintf "/api/tables/%s/%i/title" props.Team props.Year
+                                                                    OnChange = handleTitleChange })
+
+                                        formRow (str "Oppdater automatisk") 
+                                                (Checkbox.render { Value = props.AutoUpdateTable
+                                                                   Url = sprintf "/api/tables/%s/%i/autoupdate" props.Team props.Year
+                                                                   OnChange = handleAutoUpdateChange })                                                        
+
+                                        
+                                        (if state.AutoUpdate then
+                                            formRow (str "Url til tabell på fotball.no") 
+                                                    (Textinput.render { Value = state.SourceUrl
+                                                                        Url = sprintf "/api/tables/%s/%i/sourceurl" props.Team props.Year
+                                                                        OnChange = handleSourceUrlChange })
+                                         else empty)                                                                
+                                        br []
+                                    ]
+                                 else empty)
+                                h2 [] [ Icons.trophy ""
+                                        whitespace
+                                        str state.Title ] 
+                            ]
+                  } 
+            ]
 
 let element model = ofType<EditTable, _, _> model []
 let node = document.getElementById (clientView)

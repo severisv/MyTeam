@@ -21,6 +21,8 @@ type LeagueTable = {
     Rows: TableRow list
     UpdatedDate: System.DateTime
     Title: string
+    AutoUpdate: bool
+    SourceUrl: string
 }
 
 type Year = int

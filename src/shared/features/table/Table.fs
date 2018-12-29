@@ -10,6 +10,8 @@ type Model = {
     Title: string
     Team: string
     Year: int
+    AutoUpdateTable: bool
+    SourceUrl: string
 }
 
 let clientView = "table"

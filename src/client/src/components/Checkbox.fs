@@ -27,7 +27,6 @@ type Checkbox(props) =
         base.setInitState({ Error = false
                             CurrentValue = props.Value })
     
-
     member this.handleChange isSelected =
             let props = this.props
             let state = this.state
@@ -37,8 +36,8 @@ type Checkbox(props) =
                 let! res = postRecord props.Url { value = isSelected } []
                 if not res.Ok then failwithf "Received %O from server: %O" res.Status res.StatusText
                 let! value = res.json<CheckboxPayload>()
-                this.setState(fun state props -> { state with CurrentValue = value.value })
-                props.OnChange value.value
+                this.setState(fun state props -> { state with CurrentValue = isSelected })
+                props.OnChange isSelected
             }
             |> Promise.catch(fun e -> 
                    Browser.console.error <| sprintf "%O" e
@@ -47,11 +46,12 @@ type Checkbox(props) =
             |> Promise.start
 
     override this.render() =
-        
+        let state = this.state
+
         span [ Class "input-checkbox" ] [ input 
                                               [ Class "form-control"
                                                 Type "checkbox"
-                                                Checked props.Value
+                                                Checked state.CurrentValue
                                                 OnChange(fun input -> this.handleChange input.Checked) ]
                                           (if this.state.Error then Labels.error
                                            else empty) ]

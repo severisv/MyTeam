@@ -31,17 +31,19 @@ module Queries =
             query {
                 for season in db.Seasons do
                 where (season.TeamId = teamId && season.StartDate.Year = year)
-                select (season.TableJson, season.TableUpdated, season.Name) 
+                select (season.TableJson, season.TableUpdated, season.Name, season.AutoUpdateTable, season.TableSourceUrl) 
             } 
             |> Seq.tryHead
-            |> Option.map(fun (tableJson, updatedDate, name) ->
+            |> Option.map(fun (tableJson, updatedDate, name, autoUpdateTable, tableSourceUrl) ->
                     {
                         Rows =  if hasValue tableJson then
                                     fromJson tableJson
                                 else 
                                     []
                         UpdatedDate = updatedDate
-                        Title = name
+                        Title = !!name
+                        AutoUpdate = autoUpdateTable
+                        SourceUrl = !!tableSourceUrl 
                     }
                 )
     
