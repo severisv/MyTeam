@@ -10,11 +10,13 @@ module Buttons =
     type ButtonType = 
         | Primary
         | Success
+        | Danger
+        | Default
 
     type ButtonSize = 
         | Sm
+        | Normal
         | Lg
-
 
     let buttonLink href (buttonType: ButtonType) (size: ButtonSize) attributes children  =
         a 

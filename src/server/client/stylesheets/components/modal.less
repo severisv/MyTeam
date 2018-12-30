@@ -1,0 +1,80 @@
+@modal-z-index: 1050;
+@black: @blackNormal;
+@light-grey: @lightGray;
+@white: @white;
+
+.modal {
+    z-index: @modal-z-index;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    // Reset styles fordi modaler kan være inne i tabeller, list osv
+    font-size: 15px;
+    line-height: 1;
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  .modal-wrapper {
+    z-index: @modal-z-index;
+    box-shadow: 0px 0px 2px 0px fade(@black, 50);
+    background-color: fade(@white, 95);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 500px;
+    border-radius: 2px;
+    margin-bottom: 20vh;
+  
+ 
+  
+    @keyframes modal-enter {
+      0% {
+        transform: translate(0, 20%);
+        opacity: 0;
+      }
+      40% {
+        transform: translate(0, 20%);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(0, 0%);
+        opacity: 1;
+      }
+    }
+  
+    animation: modal-enter 0.2s ease-in-out forwards;
+  }
+  
+  .modal-window {
+    padding: 1.5em;
+    min-height: 10em;
+    max-height: 70vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+
+    & > button.edit-link.pull-right {
+        position: absolute;
+        top: 0.5em;
+        right: 0.25em;
+    }
+  }
+  
+  .modal-overlay {
+    z-index: @modal-z-index;
+    display: block;
+    background-color: @light-grey;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 150%;
+    opacity: 0.9;
+    filter: alpha(opacity=65);
+  }

@@ -12,11 +12,10 @@ open MyTeam.Shared.Components
 open Shared.Features.Table.Table
 open Thoth.Json
 
-
-let formRow lbl inpt =
+let formRow lbl inpt right =
     div [ Class "row" ] [ label [ Class "col-xs-4" ] [ lbl ]
                           div [ Class "col-xs-6" ] [ inpt ]
-                          div [ Class "col-xs-1" ] [] ]
+                          div [ Class "col-xs-1" ] [ right ] ]
 
 type State =
     { Title : string
@@ -46,18 +45,36 @@ type EditTable(props) =
                                                 (Textinput.render { Value = state.Title
                                                                     Url = sprintf "/api/tables/%s/%i/title" props.Team props.Year
                                                                     OnChange = handleTitleChange })
+                                                (Modal.render 
+                                                    { OpenButton = fun handleOpen -> btn Danger Normal [ OnClick handleOpen ] [ Icons.delete ]
+                                                      Content = 
+                                                        fun handleClose ->
+                                                            div [] [ 
+                                                              h4 [] [str <| sprintf "Er du sikker på at du vil slette tabellen for %s %i?" props.Team props.Year] 
+                                                              div [ Class "text-center"] [
+                                                                  br []
+                                                                  SubmitButton.render { IsSubmitted = false
+                                                                                        Text = "Ja" 
+                                                                                        SubmittedText = "Slettet"
+                                                                                        Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
+                                                                                        OnSubmit = Browser.location.reload }
+                                                                  btn Default Lg [ OnClick handleClose ] [ str "Nei" ]
+                                                              ]
+                                                          ]
+                                                    })                                                                
 
                                         formRow (str "Oppdater automatisk") 
                                                 (Checkbox.render { Value = props.AutoUpdateTable
                                                                    Url = sprintf "/api/tables/%s/%i/autoupdate" props.Team props.Year
                                                                    OnChange = handleAutoUpdateChange })                                                        
-
-                                        
+                                                empty
+                                                                                                   
                                         (if state.AutoUpdate then
                                             formRow (str "Url til tabell på fotball.no") 
                                                     (Textinput.render { Value = state.SourceUrl
                                                                         Url = sprintf "/api/tables/%s/%i/sourceurl" props.Team props.Year
                                                                         OnChange = handleSourceUrlChange })
+                                                    empty                                                            
                                          else empty)                                                                
                                         br []
                                     ]

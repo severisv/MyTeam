@@ -11,6 +11,7 @@
     <Compile Include="components/Textinput.fs" />
     <Compile Include="components/SubmitButton.fs" />
     <Compile Include="components/EditBlock.fs" />
+    <Compile Include="components/Modal.fs" />
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/GamePlan.fs" />
     <Compile Include="features/SelectSquad.fs" />

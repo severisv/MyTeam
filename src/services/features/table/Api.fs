@@ -40,3 +40,20 @@ let setSourceUrl club teamNameYear ctx model =
 let setAutoUpdate club teamNameYear ctx (model: CheckboxPayload) =
     update club teamNameYear ctx (fun season -> season.AutoUpdateTable <- model.value)
     
+
+let delete (club: Club) (teamName, year) (db: Database) =
+    let (ClubId clubId) = club.Id
+    club.Teams
+    |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
+    |> function 
+    | None -> NotFound
+    | Some team -> 
+        db.Seasons
+        |> Seq.tryFind (fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        |> function 
+        | None -> NotFound
+        | Some season -> 
+            db.Seasons.Remove(season) |> ignore
+            db.SaveChanges() |> ignore
+            OkResult()
+            

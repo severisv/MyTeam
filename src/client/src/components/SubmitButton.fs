@@ -9,6 +9,9 @@ open Fable.PowerPack.Fetch
 open MyTeam.Components
 open MyTeam.Shared.Components
 
+type Endpoint<'a> =
+    | Post of string * 'a
+    | Delete of string
 
 type SubmitButtonState =
     | Default
@@ -20,8 +23,8 @@ type SubmitButtonProps<'a> =
     { IsSubmitted : bool
       Text: string
       SubmittedText: string
-      Url : string 
-      Payload: 'a }
+      Endpoint : Endpoint<'a>
+      OnSubmit: unit -> unit }
 
 
 let defaultButton attr content = 
@@ -33,15 +36,19 @@ type SubmitButton<'a>(props) =
     do 
         base.setInitState(if props.IsSubmitted then Submitted else Default) 
         
-
     member this.handleClick _ =
             let props = this.props
-            this.setState(fun _ _ -> Posting)
+            this.setState(fun _ _ -> Posting)     
             promise { 
-                let! res = postRecord props.Url props.Payload []
+                let! res = 
+                    match props.Endpoint with
+                        | Post (url, payload) -> postRecord url payload []
+                        | Delete url -> fetch url [Method HttpMethod.DELETE]
+                
                 if not res.Ok then 
                     failwithf "Received %O from server: %O" res.Status res.StatusText
                 this.setState(fun state props -> Submitted )
+                props.OnSubmit()
             }
             |> Promise.catch(fun e -> 
                    Browser.console.error <| sprintf "%O" e
@@ -54,26 +61,23 @@ type SubmitButton<'a>(props) =
         let state = this.state
         let handleClick =  this.handleClick
                                     
-        div [ Class "input-submit-button" ] [ 
-                  (match state with
-                      | Submitted ->
-                          btn 
-                            Success 
-                            Lg 
-                            [ Class "disabled" ] 
-                            [ Icons.checkCircle
-                              whitespace
-                              str props.SubmittedText ]
-                      
-                      | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
-
-                      | Error -> fragment [] [ 
-                                                defaultButton [ OnClick handleClick ] [ str props.Text ]
-                                                Labels.error
-                                            ]
-                      | Default -> 
-                            defaultButton [ OnClick handleClick ] [ str props.Text ]
-                      )                         
-            ] 
+        match state with
+          | Submitted ->
+              btn 
+                Success 
+                Lg 
+                [ Class "disabled" ] 
+                [ Icons.checkCircle
+                  whitespace
+                  str props.SubmittedText ]
+          
+          | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
+          | Error -> fragment [] 
+                              [ 
+                                defaultButton [ OnClick handleClick ] [ str props.Text ]
+                                Labels.error
+                              ]
+          | Default -> 
+                defaultButton [ OnClick handleClick ] [ str props.Text ]
 
 let render model = ofType<SubmitButton<'a>, _, _> model []
