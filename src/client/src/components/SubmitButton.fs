@@ -27,7 +27,15 @@ type SubmitButtonProps<'a> =
       Endpoint : Endpoint<'a>
       IsDisabled: bool
       OnSubmit: unit -> unit }
-
+    
+let defaultProps =
+    { Size = Lg
+      IsSubmitted = false
+      Text = ""
+      SubmittedText = ""
+      Endpoint = Post ("", ignore)
+      IsDisabled = false
+      OnSubmit = ignore }
 
 let defaultButton size attr content = 
             btn Primary size attr content      
@@ -85,4 +93,4 @@ type SubmitButton<'a>(props) =
           | Default -> 
                 defaultButton [ OnClick handleClick ] [ str props.Text ]
 
-let render model = ofType<SubmitButton<'a>, _, _> model []
+let render getProps = ofType<SubmitButton<'a>, _, _> (getProps defaultProps) []

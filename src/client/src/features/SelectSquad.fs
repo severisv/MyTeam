@@ -157,15 +157,13 @@ type SelectSquad(props) =
                                     [ div [ Class "registerSquad-messageWrapper" ] 
                                           [ Textarea.render { Value = game.Description
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
-                                      SubmitButton.render 
-                                        { IsSubmitted = game.Squad.IsPublished
-                                          IsDisabled = false
-                                          Size = Lg
-                                          Text = "Publiser tropp"
-                                          SubmittedText = "Publisert"
-                                          Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, ignore) 
-                                          OnSubmit = ignore }   
                                     
+                                      SubmitButton.render 
+                                        (fun o -> { o with 
+                                                      IsSubmitted = game.Squad.IsPublished
+                                                      Text = "Publiser tropp"
+                                                      SubmittedText = "Publisert"
+                                                      Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, ignore) })
                                     ] ] ] ] ]
 
 let element model = ofType<SelectSquad, _, _> model []

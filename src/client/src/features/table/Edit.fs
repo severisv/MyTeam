@@ -53,13 +53,16 @@ type EditTable(props) =
                                                               h4 [] [str <| sprintf "Er du sikker på at du vil slette tabellen for %s %i?" props.Team props.Year] 
                                                               div [ Class "text-center"] [
                                                                   br []
-                                                                  SubmitButton.render { IsSubmitted = false
-                                                                                        IsDisabled = false
-                                                                                        Size = Lg
-                                                                                        Text = "Ja" 
-                                                                                        SubmittedText = "Slettet"
-                                                                                        Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
-                                                                                        OnSubmit = Browser.location.reload }
+                                                                  SubmitButton.render 
+                                                                    (fun o -> 
+                                                                    { o with
+                                                                        IsSubmitted = false
+                                                                        IsDisabled = false
+                                                                        Size = Lg
+                                                                        Text = "Ja" 
+                                                                        SubmittedText = "Slettet"
+                                                                        Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
+                                                                        OnSubmit = Browser.location.reload })
                                                                   btn Default Lg [ OnClick handleClose ] [ str "Nei" ]
                                                               ]
                                                           ]
