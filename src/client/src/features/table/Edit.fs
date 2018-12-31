@@ -1,4 +1,4 @@
-module MyTeam.Client.Table
+module MyTeam.Client.Table.Edit
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -23,7 +23,7 @@ type State =
       SourceUrl : string }
 
 type EditTable(props) =
-    inherit Component<Model, State>(props)
+    inherit Component<EditModel, State>(props)
     do base.setInitState ({ Title = props.Title
                             AutoUpdate = props.AutoUpdateTable
                             SourceUrl = props.SourceUrl })
@@ -54,6 +54,8 @@ type EditTable(props) =
                                                               div [ Class "text-center"] [
                                                                   br []
                                                                   SubmitButton.render { IsSubmitted = false
+                                                                                        IsDisabled = false
+                                                                                        Size = Lg
                                                                                         Text = "Ja" 
                                                                                         SubmittedText = "Slettet"
                                                                                         Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
@@ -87,11 +89,11 @@ type EditTable(props) =
             ]
 
 let element model = ofType<EditTable, _, _> model []
-let node = document.getElementById (clientView)
+let node = document.getElementById editView
 
 if not <| isNull node then 
     node.getAttribute (Interop.modelAttributeName)
-    |> Decode.Auto.fromString<Model>
+    |> Decode.Auto.fromString<EditModel>
     |> function 
     | Ok model -> ReactDom.render (element model, node)
     | Error e -> failwithf "Json deserialization failed: %O" e

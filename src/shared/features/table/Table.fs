@@ -6,7 +6,7 @@ open MyTeam.Domain.Members
 open MyTeam.Image
 
 
-type Model = {
+type EditModel = {
     Title: string
     Team: string
     Year: int
@@ -14,5 +14,9 @@ type Model = {
     SourceUrl: string
 }
 
-let clientView = "table"
+type CreateModel = {
+    Team: string
+}
+let editView = "edit-table"
+let createView = "create-table"
 let modelAttribute = "model"

@@ -22,7 +22,7 @@ let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn 
             let season =
                 Models.Domain.Season
                     (StartDate = DateTime(year, 01, 01), EndDate = DateTime(year, 12, 31), Name = "", 
-                     TeamId = team.Id, TableSourceUrl = "")
+                     TeamId = team.Id, TableSourceUrl = "", TableUpdated = DateTime.Now)
             db.Seasons.Add(season) |> ignore
             season
         | Some s -> s
@@ -31,17 +31,17 @@ let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn 
             db.SaveChanges() |> ignore
             OkResult()
 
+
+let create club teamNameYear ctx _ =
+    update club teamNameYear ctx (fun season -> season.Name <- "")
 let setTitle club teamNameYear ctx model =
     update club teamNameYear ctx (fun season -> season.Name <- model.Value)
-
 let setSourceUrl club teamNameYear ctx model =
     update club teamNameYear ctx (fun season -> season.TableSourceUrl <- model.Value)
-
-let setAutoUpdate club teamNameYear ctx (model: CheckboxPayload) =
+let setAutoUpdate club teamNameYear ctx (model : CheckboxPayload) =
     update club teamNameYear ctx (fun season -> season.AutoUpdateTable <- model.value)
-    
 
-let delete (club: Club) (teamName, year) (db: Database) =
+let delete (club : Club) (teamName, year) (db : Database) =
     let (ClubId clubId) = club.Id
     club.Teams
     |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
@@ -56,4 +56,3 @@ let delete (club: Club) (teamName, year) (db: Database) =
             db.Seasons.Remove(season) |> ignore
             db.SaveChanges() |> ignore
             OkResult()
-            

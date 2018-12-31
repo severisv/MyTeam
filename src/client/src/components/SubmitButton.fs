@@ -20,15 +20,17 @@ type SubmitButtonState =
     | Error
 
 type SubmitButtonProps<'a> =
-    { IsSubmitted : bool
+    { Size: ButtonSize
+      IsSubmitted : bool
       Text: string
       SubmittedText: string
       Endpoint : Endpoint<'a>
+      IsDisabled: bool
       OnSubmit: unit -> unit }
 
 
-let defaultButton attr content = 
-            btn Primary Lg attr  content      
+let defaultButton size attr content = 
+            btn Primary size attr content      
 
 type SubmitButton<'a>(props) =
     inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
@@ -60,12 +62,13 @@ type SubmitButton<'a>(props) =
         let props = this.props
         let state = this.state
         let handleClick =  this.handleClick
+        let defaultButton = defaultButton props.Size
                                     
         match state with
           | Submitted ->
               btn 
                 Success 
-                Lg 
+                props.Size 
                 [ Class "disabled" ] 
                 [ Icons.checkCircle
                   whitespace
@@ -77,6 +80,8 @@ type SubmitButton<'a>(props) =
                                 defaultButton [ OnClick handleClick ] [ str props.Text ]
                                 Labels.error
                               ]
+          | Default when props.IsDisabled -> 
+                defaultButton [ Class "disabled" ] [ str props.Text ]
           | Default -> 
                 defaultButton [ OnClick handleClick ] [ str props.Text ]
 

@@ -15,7 +15,8 @@
     <Compile Include="features/EditSeason.fs" />
     <Compile Include="features/GamePlan.fs" />
     <Compile Include="features/SelectSquad.fs" />
-    <Compile Include="features/Table.fs" />
+    <Compile Include="features/table/Edit.fs" />
+    <Compile Include="features/table/Create.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

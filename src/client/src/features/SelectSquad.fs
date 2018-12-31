@@ -159,6 +159,8 @@ type SelectSquad(props) =
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
                                       SubmitButton.render 
                                         { IsSubmitted = game.Squad.IsPublished
+                                          IsDisabled = false
+                                          Size = Lg
                                           Text = "Publiser tropp"
                                           SubmittedText = "Publisert"
                                           Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, ignore) 

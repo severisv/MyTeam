@@ -295,7 +295,9 @@ type GamePlan(props) =
                     div [ Class "text-center" ] [
                         br []
                         SubmitButton.render 
-                                        { IsSubmitted = model.GamePlanIsPublished
+                                        { Size = Lg
+                                          IsDisabled = false
+                                          IsSubmitted = model.GamePlanIsPublished
                                           Text = "Publiser"
                                           SubmittedText = "Publisert"
                                           Endpoint = SubmitButton.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, ignore) 

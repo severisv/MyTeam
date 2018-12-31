@@ -16,9 +16,6 @@ module BaseComponents =
         input [_name "__RequestVerificationToken";_value token;_type "hidden" ]
 
     let number = string >> encodedText
-
-    let renderOption o = o |> Option.fold (fun _ o -> o) emptyText
-
     let (=>) optn fn =
         optn
         |> Option.map fn
