@@ -11,7 +11,6 @@ using MyTeam.Models.Structs;
 using MyTeam.Resources;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Events;
-using MyTeam.ViewModels.Table;
 using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
 using UnauthorizedResult = MyTeam.Extensions.Mvc.UnauthorizedResult;
 

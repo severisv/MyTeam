@@ -17,9 +17,6 @@ namespace MyTeam.Models.Domain
 
         public DateTime TableUpdated { get; set; }
 
-        [NotMapped]
-        public Table Table => new Table(TableString);
-
         public string TableString { get; set; }
         public string TableJson { get; set; }
 

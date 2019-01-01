@@ -14,8 +14,6 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IFineService, FineService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IPaymentService, PaymentService>();
-            services.AddTransient<ISeasonService, SeasonService>();
-            services.AddTransient<ITableService, TableService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<Cloudinary>();
             services.AddTransient<IEmailSender, AuthMessageSender>();

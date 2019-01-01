@@ -9,7 +9,6 @@ using MyTeam.Models.Enums;
 using MyTeam.Resources;
 using MyTeam.Settings;
 using MyTeam;
-using MyTeam.ViewModels.Table;
 
 namespace MyTeam.ViewModels.Events
 {

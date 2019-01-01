@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyTeam.ViewModels.Table
+namespace MyTeam.ViewModels.Events
 {
     public class TeamViewModel
     {
