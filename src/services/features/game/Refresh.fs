@@ -63,44 +63,50 @@ let run next (ctx: HttpContext)  =
                                 let isHomeTeam = isCurrentTeam row.Hjemmelag
                                 let opponent = if isHomeTeam then row.Bortelag else row.Hjemmelag 
                                                |> Strings.removeDoubleWhitespaces  
-                                let game = 
-                                    existingGames 
-                                    |> List.tryFind (fun game -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
-                                    |> function
-                                    | Some existingGame -> 
-                                        db.Games.Attach(existingGame) |> ignore
-                                        existingGame
-                                    | None ->
-                                                                         
-                                        let et = new System.Collections.Generic.List<Models.Domain.EventTeam>()
-                                        et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
-
-                                        let g = 
-                                            Models.Domain.Game(
-                                                IsHomeTeam = isHomeTeam,
-                                                Opponent = opponent,
-                                                TeamId = season.TeamId,
-                                                EventTeams = et,
-                                                Type = int EventType.Kamp,
-                                                ClubId = team.ClubId,
-                                                GameType = (GameType.Seriekamp |> int |> Nullable)
-                                            )
-                                        db.Games.Add(g) |> ignore
-                                        g                                            
-
+                                
                                 let date = (row.Dato |> DateTime.Parse)
-                                let time = row.Tid 
-                                                   |> string 
-                                                   |> Strings.trim
-                                                   |> Strings.split [|'.'|] 
-                                                   |> List.map float
-                                                   |> function 
-                                                   | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
-                                                   | r -> failwithf "Klarte ikke parse tid: %O" r
-                                                   
-                        
-                                game.DateTime <- (date.Date.Add time)
-                                game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            
+                                
+                                if date < season.StartDate || date > season.EndDate then
+                                    logger.LogWarning(sprintf "Prøver å legge til kamp som ikke er for gjeldende sesong. SeasonId %O Rad: %O" season.Id row)
+                                    ()
+
+                                else
+                                    let game = 
+                                        existingGames 
+                                        |> List.tryFind (fun game -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
+                                        |> function
+                                        | Some existingGame -> 
+                                            db.Games.Attach(existingGame) |> ignore
+                                            existingGame
+                                        | None ->
+                                                                             
+                                            let et = new System.Collections.Generic.List<Models.Domain.EventTeam>()
+                                            et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
+
+                                            let g = 
+                                                Models.Domain.Game(
+                                                    IsHomeTeam = isHomeTeam,
+                                                    Opponent = opponent,
+                                                    TeamId = season.TeamId,
+                                                    EventTeams = et,
+                                                    Type = int EventType.Kamp,
+                                                    ClubId = team.ClubId,
+                                                    GameType = (GameType.Seriekamp |> int |> Nullable)
+                                                )
+                                            db.Games.Add(g) |> ignore
+                                            g                                            
+
+                                    let time = row.Tid 
+                                                       |> string 
+                                                       |> Strings.trim
+                                                       |> Strings.split [|'.'|] 
+                                                       |> List.map float
+                                                       |> function 
+                                                       | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
+                                                       | r -> failwithf "Klarte ikke parse tid: %O" r
+                                                                                   
+                                    game.DateTime <- (date.Date.Add time)
+                                    game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            
                         )
 
             season.FixturesUpdated <- Nullable now 
