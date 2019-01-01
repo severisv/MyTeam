@@ -164,20 +164,22 @@ module App =
                             GET >=>  choose [
                                 route "/refresh" >=> Table.Refresh.run
                             ]
-                            PUT >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
-                            PUT >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i/sourceurl" (Table.Api.setSourceUrl club >> jsonPost)
-                            POST >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i/autoupdate" (Table.Api.setAutoUpdate club >> jsonPost)
-                            PUT >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i/fixturesourceurl" (Table.Api.setFixtureSourceUrl club >> jsonPost)
-                            POST >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i/autoupdatefixtures" (Table.Api.setAutoUpdateFixtures club >> jsonPost)
-                            POST >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i" (Table.Api.create club >> jsonPost)
-                            DELETE >=> mustBeInRole [Role.Admin] >=> 
-                                routef "/%s/%i" (Table.Api.delete club >> jsonGet)
+                            mustBeInRole [Role.Admin] >=> 
+                                choose [
+                                    PUT >=> choose [
+                                        routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
+                                        routef "/%s/%i/fixturesourceurl" (Table.Api.setFixtureSourceUrl club >> jsonPost)
+                                        routef "/%s/%i/sourceurl" (Table.Api.setSourceUrl club >> jsonPost)
+                                    ]
+                                    POST >=> choose [
+                                        routef "/%s/%i/autoupdate" (Table.Api.setAutoUpdate club >> jsonPost)
+                                        routef "/%s/%i/autoupdatefixtures" (Table.Api.setAutoUpdateFixtures club >> jsonPost)
+                                        routef "/%s/%i" (Table.Api.create club >> jsonPost)
+                                    ]                             
+                                    DELETE >=> 
+                                        routef "/%s/%i" (Table.Api.delete club >> jsonGet)
+                                ]
+                           
                         ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx
