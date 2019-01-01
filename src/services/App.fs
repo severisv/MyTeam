@@ -170,6 +170,10 @@ module App =
                                 routef "/%s/%i/sourceurl" (Table.Api.setSourceUrl club >> jsonPost)
                             POST >=> mustBeInRole [Role.Admin] >=> 
                                 routef "/%s/%i/autoupdate" (Table.Api.setAutoUpdate club >> jsonPost)
+                            PUT >=> mustBeInRole [Role.Admin] >=> 
+                                routef "/%s/%i/fixturesourceurl" (Table.Api.setFixtureSourceUrl club >> jsonPost)
+                            POST >=> mustBeInRole [Role.Admin] >=> 
+                                routef "/%s/%i/autoupdatefixtures" (Table.Api.setAutoUpdateFixtures club >> jsonPost)
                             POST >=> mustBeInRole [Role.Admin] >=> 
                                 routef "/%s/%i" (Table.Api.create club >> jsonPost)
                             DELETE >=> mustBeInRole [Role.Admin] >=> 

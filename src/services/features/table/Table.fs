@@ -66,7 +66,9 @@ module Table =
                                                       Team = selectedTeam.ShortName
                                                       Year = selectedYear
                                                       AutoUpdateTable = t.AutoUpdate
-                                                      SourceUrl = t.SourceUrl }
+                                                      SourceUrl = t.SourceUrl
+                                                      AutoUpdateFixtures = t.AutoUpdateFixtures
+                                                      FixtureSourceUrl = t.FixtureSourceUrl }
                                     else 
                                         h2 [] [!!(Icons.trophy ""); whitespace; encodedText t.Title])
                                     br []

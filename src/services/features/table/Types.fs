@@ -23,6 +23,8 @@ type LeagueTable = {
     Title: string
     AutoUpdate: bool
     SourceUrl: string
+    AutoUpdateFixtures: bool
+    FixtureSourceUrl: string
 }
 
 type Year = int

@@ -12,6 +12,8 @@ type EditModel = {
     Year: int
     AutoUpdateTable: bool
     SourceUrl: string
+    AutoUpdateFixtures: bool
+    FixtureSourceUrl: string
 }
 
 type CreateModel = {

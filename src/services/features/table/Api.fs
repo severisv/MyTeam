@@ -40,6 +40,10 @@ let setSourceUrl club teamNameYear ctx model =
     update club teamNameYear ctx (fun season -> season.TableSourceUrl <- model.Value)
 let setAutoUpdate club teamNameYear ctx (model : CheckboxPayload) =
     update club teamNameYear ctx (fun season -> season.AutoUpdateTable <- model.value)
+let setFixtureSourceUrl club teamNameYear ctx model =
+    update club teamNameYear ctx (fun season -> season.FixturesSourceUrl <- model.Value)
+let setAutoUpdateFixtures club teamNameYear ctx (model : CheckboxPayload) =
+    update club teamNameYear ctx (fun season -> season.AutoUpdateFixtures <- model.value)
 
 let delete (club : Club) (teamName, year) (db : Database) =
     let (ClubId clubId) = club.Id

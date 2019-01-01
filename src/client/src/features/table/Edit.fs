@@ -19,20 +19,23 @@ let formRow lbl inpt right =
 
 type State =
     { Title : string
-      AutoUpdate : bool
-      SourceUrl : string }
+      AutoUpdateTable : bool
+      TableSourceUrl : string 
+      AutoUpdateFixtures : bool
+      FixtureSourceUrl : string }
 
 type EditTable(props) =
     inherit Component<EditModel, State>(props)
     do base.setInitState ({ Title = props.Title
-                            AutoUpdate = props.AutoUpdateTable
-                            SourceUrl = props.SourceUrl })
+                            AutoUpdateTable = props.AutoUpdateTable
+                            TableSourceUrl = props.SourceUrl
+                            FixtureSourceUrl = props.FixtureSourceUrl
+                            AutoUpdateFixtures = props.AutoUpdateFixtures })
     override this.render() =
         let props = this.props
         let state = this.state
-        let handleTitleChange value = this.setState (fun state props -> { state with Title = value })
-        let handleSourceUrlChange value = this.setState (fun state props -> { state with SourceUrl = value })
-        let handleAutoUpdateChange value = this.setState (fun state props -> { state with AutoUpdate = value })
+        let update fn = this.setState (fun state _ -> fn state)
+
 
         fragment [] 
             [ EditBlock.render 
@@ -44,7 +47,7 @@ type EditTable(props) =
                                         formRow (str "Divisjon") 
                                                 (Textinput.render { Value = state.Title
                                                                     Url = sprintf "/api/tables/%s/%i/title" props.Team props.Year
-                                                                    OnChange = handleTitleChange })
+                                                                    OnChange = fun value -> update (fun state -> { state with Title = value }) })
                                                 (Modal.render 
                                                     { OpenButton = fun handleOpen -> btn Danger Normal [ OnClick handleOpen ] [ Icons.delete ]
                                                       Content = 
@@ -68,19 +71,34 @@ type EditTable(props) =
                                                           ]
                                                     })                                                                
 
-                                        formRow (str "Oppdater automatisk") 
+                                        formRow (str "Oppdater tabell automatisk") 
                                                 (Checkbox.render { Value = props.AutoUpdateTable
                                                                    Url = sprintf "/api/tables/%s/%i/autoupdate" props.Team props.Year
-                                                                   OnChange = handleAutoUpdateChange })                                                        
+                                                                   OnChange = fun value -> update (fun state -> { state with AutoUpdateTable = value }) })                                                        
                                                 empty
                                                                                                    
-                                        (if state.AutoUpdate then
+                                        (if state.AutoUpdateTable then
                                             formRow (str "Url til tabell på fotball.no") 
-                                                    (Textinput.render { Value = state.SourceUrl
+                                                    (Textinput.render { Value = state.TableSourceUrl
                                                                         Url = sprintf "/api/tables/%s/%i/sourceurl" props.Team props.Year
-                                                                        OnChange = handleSourceUrlChange })
+                                                                        OnChange = fun value -> update (fun state -> { state with TableSourceUrl = value }) })
                                                     empty                                                            
-                                         else empty)                                                                
+                                         else empty)
+
+                                        formRow (str "Oppdater kamper automatisk") 
+                                                (Checkbox.render { Value = props.AutoUpdateFixtures
+                                                                   Url = sprintf "/api/tables/%s/%i/autoupdatefixtures" props.Team props.Year
+                                                                   OnChange = fun value -> update (fun state -> { state with AutoUpdateFixtures = value }) })                                                        
+                                                empty
+                                                                                                   
+                                        (if state.AutoUpdateFixtures then
+                                            formRow (str "Url til kamper på fotball.no") 
+                                                    (Textinput.render { Value = state.FixtureSourceUrl
+                                                                        Url = sprintf "/api/tables/%s/%i/fixturesourceurl" props.Team props.Year
+                                                                        OnChange = fun value -> update (fun state -> { state with FixtureSourceUrl = value }) })
+                                                    empty                                                            
+                                         else empty)                            
+
                                         br []
                                     ]
                                  else empty)
