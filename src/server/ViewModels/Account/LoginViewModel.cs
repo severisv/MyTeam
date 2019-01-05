@@ -18,7 +18,7 @@ namespace MyTeam.ViewModels.Account
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Husk meg?")]
+        [Display(Name = "Husk meg")]
         public bool RememberMe { get; set; }
     }
 }

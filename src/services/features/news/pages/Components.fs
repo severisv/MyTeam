@@ -63,6 +63,7 @@ let twitterFeed =
     block [] [
         h4 [] [ 
            i [ _class "fa fa-twitter" ] [] 
+           whitespace
            encodedText "Siste Tweets" 
         ]
         a [ 

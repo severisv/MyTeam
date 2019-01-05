@@ -287,7 +287,7 @@ a {
 
 .btn {
     transition: all 0.2s ease-out;
-    border: none;
+    border: 1px solid transparent;
     border-radius: 2px;
 
 }
@@ -298,6 +298,7 @@ a {
 
     &:hover {
         background-color: darken(@blueLight, 10);
+        border-color: darken(@blueLight, 10);
     }
 }
 
@@ -307,6 +308,7 @@ a {
 
     &:hover {
         background-color: darken(@greenLight, 5);
+        border-color: darken(@greenLight, 5);
     }
 
 }
@@ -327,6 +329,7 @@ a {
 
     &:hover {
         background-color: darken(@redLight, 5);
+        border-color: darken(@redLight, 5);
     }
 }
 
@@ -336,6 +339,8 @@ a {
 
     &:hover, &:focus {
         background-color: darken(@orangeLight, 5);
+        border-color: darken(@orangeLight, 5);
+
     }
 }
 
