@@ -92,7 +92,12 @@ module Components =
               a [ _class "underline"; _href <| sprintf "/spillere/vis/%s" article.Author.UrlName ] [ 
                   encodedText article.Author.Name 
               ]          
-              span [ _class "datetime" ] [ encodedText <| sprintf " %s" (Date.format article.Details.Published) ]            
+              span [ _class "datetime" ] 
+                   [ 
+                       encodedText <| sprintf " %s" (Date.format article.Details.Published) 
+                       whitespace
+                       (if article.Details.Published.Year <> DateTime.Now.Year then encodedText <| string article.Details.Published.Year else empty)
+                   ]            
               subHeaderLink |> Option.defaultValue empty                      
           ]
           hr [ _class "sm" ]
