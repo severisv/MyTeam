@@ -1,8 +1,9 @@
 module MyTeam.Shared.Components.Input
 
 [<CLIMutable>]
-type CheckboxPayload = { value: bool }      
-
+type CheckboxPayload =
+    { value : bool }
 
 [<CLIMutable>]
-type StringPayload = { Value: string }      
+type StringPayload =
+    { Value : string }

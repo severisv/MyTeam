@@ -20,7 +20,7 @@ let internal alertClass alertType =
     |> sprintf "alert alert-%s"
 
 let internal alertIcon =
-    function
+    function 
     | Success -> Icons.check
     | Info -> Icons.info ""
     | InfoSubtle -> Icons.info ""

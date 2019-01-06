@@ -33,7 +33,7 @@ let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn 
 
 
 let create club teamNameYear ctx _ =
-    update club teamNameYear ctx (fun season -> season.Name <- "")
+    update club teamNameYear ctx (fun season -> season.TableUpdated <- DateTime.Now)
 let setTitle club teamNameYear ctx model =
     update club teamNameYear ctx (fun season -> season.Name <- model.Value)
 let setSourceUrl club teamNameYear ctx model =

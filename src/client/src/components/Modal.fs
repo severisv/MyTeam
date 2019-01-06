@@ -4,11 +4,8 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
 open MyTeam.Components
 open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Input
 
 type State =
     { IsVisible : bool }

@@ -8,13 +8,10 @@ open MyTeam
 open MyTeam.Client.Components
 open MyTeam.Components
 open MyTeam.Shared.Components
+open MyTeam.Shared.Components.Forms
 open Shared.Features.Table.Table
 open Thoth.Json
 
-let formRow lbl inpt right =
-    div [ Class "row" ] [ label [ Class "col-xs-4" ] [ lbl ]
-                          div [ Class "col-xs-6" ] [ inpt ]
-                          div [ Class "col-xs-1" ] [ right ] ]
 
 type State =
     { Year : int option }
@@ -42,16 +39,13 @@ type CreateTable(props) =
             { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Legg til sesong" ]
               Content = 
                 fun handleClose ->
-                    div [] [ 
+                    form [] [ 
                         h4 [] [str "Legg til sesong"]
-                        div [] [ 
-                            label [ ] [str "År"] 
-                            input [ Class "form-control"
-                                    Type "text"
-                                    OnChange (fun e -> handleYearChange e.Value)
-                                    Value (state.Year |> Option.map (string) |> Option.defaultValue "" |> str) ] 
-                            ]
-                        br []
+                        formRow [] 
+                                [str "År"] 
+                                [textInput [ OnChange (fun e -> handleYearChange e.Value)
+                                             Value (state.Year |> Option.map (string) |> Option.defaultValue "" |> str) ]]
+                            
                         SubmitButton.render 
                                         (fun o -> 
                                         { o with

@@ -58,8 +58,7 @@ type SelectSquad(props) =
                                     [ 
                                         img [ Class "hidden-xxs"
                                               Src <| MyTeam.Image.getMember imageOptions (fun opts -> { opts with Height = Some 50; Width = Some 50 }) m.Image m.FacebookId 
-                                                        
-                                           ]
+                                            ]
                                         str m.Name 
                                         ]
                                   span [ ]
@@ -68,8 +67,7 @@ type SelectSquad(props) =
                                         Strings.hasValue s.Message &?
                                             tooltip s.Message [Class "registerSquad-messageIcon"] [
                                                 Icons.comment
-                                            ]
-                                                                            
+                                            ]                                                                            
                                     span [
                                             Id <| sprintf "playerAttendance-%O" m.Id
                                             Title "Oppmøte siste 8 uker"
@@ -88,8 +86,6 @@ type SelectSquad(props) =
         let squad =
             players |> List.filter(fun (m, _) -> game.Squad.MemberIds |> List.contains m.Details.Id)
         
-
-
         mtMain [] 
             [ block [] 
                   [ editLink <| sprintf "/intern/arrangement/endre/%O" game.Id

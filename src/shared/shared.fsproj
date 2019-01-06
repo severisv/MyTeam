@@ -21,6 +21,7 @@
     <Compile Include="components/Layout.fs" />
     <Compile Include="components/Links.fs" />
     <Compile Include="components/Alerts.fs" />
+    <Compile Include="components/Forms.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
     <Compile Include="features/games/GamePlan.fs" />
     <Compile Include="features/table/Table.fs" />
