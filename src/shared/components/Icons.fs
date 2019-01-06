@@ -1,59 +1,51 @@
 module MyTeam.Shared.Components.Icons
 
-open MyTeam.Domain
-
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
+open MyTeam.Domain
 
-
-type IconSize = 
+type IconSize =
     | Normal
     | Large
     | ExtraLarge
 
-let fa name = 
-    sprintf "fa fa-%s" name
+let fa name = sprintf "fa fa-%s" name
 
 let icon name title =
-    i [Class name;Title title ] []
+    i [ Class name
+        Title title ] []
 
 let eventIcon eventType size =
-        let className =
-            sprintf "%s %s"
-                (match eventType with
-                 | EventType.Kamp -> fa "trophy"
-                 | EventType.Trening -> "flaticon-couple40"
-                 | EventType.Diverse -> fa "beer"
-                 | _ -> fa "calendar")
-                (match size with
-                 | Large -> "fa-2x"
-                 | ExtraLarge -> "fa-3x"
-                 | _ -> "")                
-            
-        icon className (string eventType) 
+    let className = sprintf "%s %s" (match eventType with
+                                     | EventType.Kamp -> fa "trophy"
+                                     | EventType.Trening -> "flaticon-couple40"
+                                     | EventType.Diverse -> fa "beer"
+                                     | _ -> fa "calendar") (match size with
+                                                            | Large -> "fa-2x"
+                                                            | ExtraLarge -> "fa-3x"
+                                                            | _ -> "")
+    icon className (string eventType)
 
-let playerStatusIcon (status: PlayerStatus) =                   
-        let className =
-            (match status with
-             | PlayerStatus.Aktiv -> fa "user"
-             | PlayerStatus.Veteran -> fa "trophy"
-             | PlayerStatus.Trener -> "flaticon-football50"
-             | _ -> fa "user-times")              
-            
-        icon className (string status) 
+let playerStatusIcon (status : PlayerStatus) =
+    let className =
+        (match status with
+         | PlayerStatus.Aktiv -> fa "user"
+         | PlayerStatus.Veteran -> fa "trophy"
+         | PlayerStatus.Trener -> "flaticon-football50"
+         | _ -> fa "user-times")
+    icon className (string status)
 
-let gameType (gameType: GameType) =                   
-        let className =
-            gameType 
-            |> function
-            | GameType.Treningskamp -> "icon-handshake"
-            | GameType.Seriekamp -> fa "trophy"
-            | GameType.Norgesmesterskapet -> "flaticon-football42"
-            | GameType.Kretsmesterskapet -> "flaticon-football33"
-            | GameType.``OBOS Cup`` -> "flaticon-trophy4"      
-            | _ -> fa "trophy"
-            
-        icon className (string gameType)     
+let gameType (gameType : GameType) =
+    let className =
+        gameType
+        |> function 
+        | GameType.Treningskamp -> "icon-handshake"
+        | GameType.Seriekamp -> fa "trophy"
+        | GameType.Norgesmesterskapet -> "flaticon-football42"
+        | GameType.Kretsmesterskapet -> "flaticon-football33"
+        | GameType.``OBOS Cup`` -> "flaticon-trophy4"
+        | _ -> fa "trophy"
+    icon className (string gameType)
 
 let add = icon <| fa "plus"
 let assist = icon <| "flaticon-football119"
