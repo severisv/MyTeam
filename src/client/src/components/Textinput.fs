@@ -18,7 +18,7 @@ type State =
 type Props =
     { Value : string
       Url : string
-      OnChange: string -> unit }
+      OnChange : string -> unit }
 
 type Textinput(props) =
     inherit Component<Props, State>(props)

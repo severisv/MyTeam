@@ -23,22 +23,22 @@ type Textarea(props) =
     inherit Component<TextareaProps, TextareaState>(props)
     
     do 
-        base.setInitState({ Error = false
-                            IsTouched = false
-                            IsPosting = false })
+        base.setInitState ({ Error = false
+                             IsTouched = false
+                             IsPosting = false })
     
-    let mutable timeout = Browser.window.setTimeout(ignore, 0, [])
+    let mutable timeout = Browser.window.setTimeout (ignore, 0, [])
     
     member this.debounce fn wait =
         Browser.window.clearTimeout timeout
-        timeout <- Browser.window.setTimeout(fn, wait, [])
+        timeout <- Browser.window.setTimeout (fn, wait, [])
     
     override this.render() =
         let handleChange value =
             let props = this.props
             let state = this.state
             this.debounce (fun () -> 
-                this.setState(fun state props -> 
+                this.setState (fun state props -> 
                     { state with Error = false
                                  IsTouched = true
                                  IsPosting = true })
@@ -47,11 +47,11 @@ type Textarea(props) =
                     let! res = putRecord props.Url payload []
                     if not res.Ok then 
                         failwithf "Received %O from server: %O" res.Status res.StatusText
-                    this.setState(fun state props -> { state with IsPosting = false })
+                    this.setState (fun state props -> { state with IsPosting = false })
                 }
-                |> Promise.catch(fun e -> 
+                |> Promise.catch (fun e -> 
                        Browser.console.error <| sprintf "%O" e
-                       this.setState(fun state props -> 
+                       this.setState (fun state props -> 
                            { state with Error = true
                                         IsPosting = false }))
                 |> Promise.start) 750
