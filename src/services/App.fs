@@ -82,9 +82,14 @@ module App =
                                                routef "/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                                 ]                        
                         ]                
-                 
-                    route "/personvern" >=> GET >=> (AboutPages.privacy club user |> htmlGet)          
-                    route "/om" >=> GET >=> (AboutPages.index club user |> htmlGet)        
+                
+                    route "/om" >=> GET >=> (About.show club user |> htmlGet)        
+                    route "/om/endre" >=> 
+                        mustBeInRole [Role.Admin] >=> 
+                            choose  [
+                                        GET >=> (About.edit club user |> htmlGet)                   
+                                        POST >=> (About.editPost club user |> htmlGet)                   
+                                    ]                    
                     route "/støttespillere" >=> GET >=> (Sponsors.show club user |> htmlGet)        
                     route "/støttespillere/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
