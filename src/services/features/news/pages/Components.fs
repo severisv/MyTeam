@@ -96,6 +96,7 @@ let tinyMceScripts =
        script [ _type "text/javascript"; _src "/compiled/lib/tinymce/tinymce.min.js" ] []
        script [ _type "text/javascript" ] [ 
            rawText <| sprintf "tinymce.init({
+                height: '480',
                 selector: '%s',
                 theme: 'modern',
                 plugins: [

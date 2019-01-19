@@ -53,7 +53,7 @@ module Pages =
                 title [] [encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [_rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
                 link [_rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo)]
-                link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v5" ]
+                link [_rel "stylesheet"; _href "/compiled/site.bundle.css?v6" ]
                 isProduction =? (Analytics.script, empty)
             ]
             body []([
