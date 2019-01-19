@@ -75,6 +75,7 @@ module Pages =
                                         li [] [a [_href "/tabell" ] [ encodedText "Tabell"] ]
                                         li [] [a [_href "/statistikk" ] [ encodedText "Statistikk"] ]
                                         li [] [a [_href "/om" ] [ encodedText "Om klubben"] ]
+                                        li [_class "hidden-sm"] [a [_href "/støttespillere" ] [ encodedText "Støttespillere"] ]
                                         user |> Option.fold(fun _ _ -> 
                                                                 li [] [
                                                                     a [_class "slide-down-parent hidden-xs"; attr "data-submenu" "#submenu-internal"; _href "javascript:void(0)" ] [

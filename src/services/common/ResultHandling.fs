@@ -13,7 +13,7 @@ module Results =
         | NotFound ->
             (setStatusCode 404 >=> json ("404")) next ctx    
         | Redirect url ->
-            (redirectTo false url) next ctx              
+            (redirectTo false (System.Uri.EscapeUriString url)) next ctx              
 
 
     let jsonPost<'a,'b> (fn: HttpContext -> 'a -> HttpResult<'b>) next (ctx: HttpContext) =
@@ -45,7 +45,7 @@ module Results =
                         Views.Error.notFound club user
                     | (None, _) -> text "Error") next ctx
             | Redirect url -> 
-                redirectTo false url next ctx                              
+                redirectTo false (System.Uri.EscapeUriString url) next ctx                              
                  
             | ValidationErrors _ -> failwith "Ikke implementert"
 

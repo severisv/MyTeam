@@ -85,6 +85,15 @@ module App =
                  
                     route "/personvern" >=> GET >=> (AboutPages.privacy club user |> htmlGet)          
                     route "/om" >=> GET >=> (AboutPages.index club user |> htmlGet)        
+                    route "/støttespillere" >=> GET >=> (Sponsors.show club user |> htmlGet)        
+                    route "/støttespillere/endre" >=> 
+                        mustBeInRole [Role.Admin] >=> 
+                            choose  [
+                                        GET >=> (Sponsors.edit club user |> htmlGet)                   
+                                        POST >=> (Sponsors.editPost club user |> htmlGet)                   
+                                    ]
+                    
+                       
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user => fun user ->
