@@ -80,8 +80,6 @@ let add : Add =
         | None -> NotFound
         | Some c when c <> clubId -> Unauthorized
         | Some _ -> 
-
-
             model 
             |> Validation.map  [ <@ model @> >- [ cardDoesNotHaveAssist ]
                                  <@ model @> >- [ isNotAssistedBySelf ]
