@@ -126,8 +126,8 @@ module Persistence =
                        else 
                           form                        
           
-            Validation.map 
-                form
+            form 
+            |> Validation.map 
                 [
                    <@ form @> >- [facebookIdOrEmailIsPresent]
                    <@ form @> >- [memberDoesNotExist db]
@@ -135,7 +135,8 @@ module Persistence =
                    <@ form.FirstName @> >- [isRequired]
                    <@ form.LastName @> >- [isRequired]
                 ] 
-                >>= fun form -> 
+            |> Validation.bindToHttpResult 
+                (fun form -> 
                        let (ClubId clubId) = clubId
                        let memb = Player()
 
@@ -149,4 +150,5 @@ module Persistence =
                        db.Players.Add(memb) |> ignore
                        db.SaveChanges() |> ignore
                        OkResult ()
+                )
                     

@@ -80,21 +80,25 @@ let add : Add =
         | None -> NotFound
         | Some c when c <> clubId -> Unauthorized
         | Some _ -> 
-            Validation.map
-                model [ <@ model @> >- [ cardDoesNotHaveAssist ]
-                        <@ model @> >- [ isNotAssistedBySelf ]
-                        <@ model.Type @> >- [ isRequired ] ]
-            >>= fun model -> 
-                let ge = Models.Domain.GameEvent()
-                ge.Id <- Guid.NewGuid()
-                ge.GameId <- gameId
-                ge.PlayerId <- (model.PlayerId |> toNullable)
-                ge.AssistedById <- (model.AssistedById |> toNullable)
-                ge.Type <- enum<Models.Enums.GameEventType> (int model.Type)
-                ge.CreatedDate <- DateTime.Now
-                db.GameEvents.Add(ge) |> ignore
-                db.SaveChanges() |> ignore
-                { model with Id = ge.Id } |> OkResult
+
+
+            model 
+            |> Validation.map  [ <@ model @> >- [ cardDoesNotHaveAssist ]
+                                 <@ model @> >- [ isNotAssistedBySelf ]
+                                 <@ model.Type @> >- [ isRequired ] ]
+            |> Validation.bindToHttpResult 
+                (fun model -> 
+                    let ge = Models.Domain.GameEvent()
+                    ge.Id <- Guid.NewGuid()
+                    ge.GameId <- gameId
+                    ge.PlayerId <- (model.PlayerId |> toNullable)
+                    ge.AssistedById <- (model.AssistedById |> toNullable)
+                    ge.Type <- enum<Models.Enums.GameEventType> (int model.Type)
+                    ge.CreatedDate <- DateTime.Now
+                    db.GameEvents.Add(ge) |> ignore
+                    db.SaveChanges() |> ignore
+                    { model with Id = ge.Id } |> OkResult
+                )
 
 let delete : Delete =
     fun clubId (gameId, gameEventId) (db : Database) -> 

@@ -126,10 +126,10 @@ let editPost (club: Club) (user: Users.User) name (ctx: HttpContext) =
  
     let form = ctx.BindForm<ArticleModel>()
 
-    Validation.map    
-        { form with 
+    { form with 
             IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
-        } 
+    } 
+    |> Validation.map
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
@@ -169,10 +169,10 @@ let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
  
     let form = ctx.BindForm<ArticleModel>()
  
-    Validation.map
-        { form with 
+    { form with 
             IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
-        } 
+    } 
+    |> Validation.map
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
