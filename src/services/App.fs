@@ -154,8 +154,8 @@ module App =
                             GET >=>  choose [
                                 routef "/insights/%s/%i" (Games.Api.getInsights club >> jsonGet)
                                 routef "/%O/squad" (Games.Api.getSquad >> jsonGet)
-                                route "/events/types" >=> (Games.Events.Api.getTypes |> jsonGet)
-                                routef "/%O/events" (Games.Events.Api.get club.Id >> jsonGet)      
+                                route "/events/types" >=> (Gameevents.getTypes |> jsonGet)
+                                routef "/%O/events" (Gameevents.get club.Id >> jsonGet)      
                                 route "/refresh" >=> Games.Refresh.run
 
                             ]     
@@ -163,8 +163,8 @@ module App =
                                 mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> choose [ 
                                     routef "/%O/score/home" (Games.Api.setHomeScore club.Id >> jsonPost)
                                     routef "/%O/score/away" (Games.Api.setAwayScore club.Id >> jsonPost)       
-                                    routef "/%O/events" (Games.Events.Api.add club.Id >> jsonPost)       
-                                    routef "/%O/events/%O/delete" (Games.Events.Api.delete club.Id >> jsonGet)       
+                                    routef "/%O/events" (Gameevents.add club.Id >> jsonPost)       
+                                    routef "/%O/events/%O/delete" (Gameevents.delete club.Id >> jsonGet)       
                                     routef "/%O/squad/select/%O" (Games.Api.selectPlayer club.Id >> jsonPost)    
                                 ]
                                 mustBeInRole [Role.Trener] >=> choose [         

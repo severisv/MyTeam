@@ -126,26 +126,27 @@ module Persistence =
                        else 
                           form                        
           
-            form ==>
-            [
-               <@ form @> >- [facebookIdOrEmailIsPresent]
-               <@ form @> >- [memberDoesNotExist db]
-               <@ form.EmailAddress @> >- [isValidEmail]
-               <@ form.FirstName @> >- [isRequired]
-               <@ form.LastName @> >- [isRequired]
-            ] 
-            >>= fun form -> 
-                   let (ClubId clubId) = clubId
-                   let memb = Player()
+            Validation.map 
+                form
+                [
+                   <@ form @> >- [facebookIdOrEmailIsPresent]
+                   <@ form @> >- [memberDoesNotExist db]
+                   <@ form.EmailAddress @> >- [isValidEmail]
+                   <@ form.FirstName @> >- [isRequired]
+                   <@ form.LastName @> >- [isRequired]
+                ] 
+                >>= fun form -> 
+                       let (ClubId clubId) = clubId
+                       let memb = Player()
 
-                   memb.ClubId <- clubId
-                   memb.FirstName <- form.FirstName
-                   memb.MiddleName <- form.MiddleName
-                   memb.LastName <- form.LastName
-                   memb.FacebookId <- form.FacebookId
-                   memb.UserName <- form.EmailAddress
-                   memb.UrlName <- urlName form
-                   db.Players.Add(memb) |> ignore
-                   db.SaveChanges() |> ignore
-                   OkResult ()
+                       memb.ClubId <- clubId
+                       memb.FirstName <- form.FirstName
+                       memb.MiddleName <- form.MiddleName
+                       memb.LastName <- form.LastName
+                       memb.FacebookId <- form.FacebookId
+                       memb.UserName <- form.EmailAddress
+                       memb.UrlName <- urlName form
+                       db.Players.Add(memb) |> ignore
+                       db.SaveChanges() |> ignore
+                       OkResult ()
                     

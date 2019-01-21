@@ -24,7 +24,6 @@
     <Compile Include="utils/Request.fs" />
     <Compile Include="utils/Results.fs" />
     <Compile Include="utils/Validation.fs" />
-    <Compile Include="utils/Validators.fs" />
     <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/Logger.fs" />
     <Compile Include="utils/Client.fs" />
@@ -74,8 +73,7 @@
     <Compile Include="features/game/pages/SelectSquad.fs" />
     <Compile Include="features/game/pages/GamePlan.fs" />
     <Compile Include="features/game/Refresh.fs" />
-    <Compile Include="features/gameevents/Types.fs" />
-    <Compile Include="features/gameevents/Api.fs" />
+    <Compile Include="features/gameevents/Gameevents.fs" />
     <Compile Include="features/members/Types.fs" />
     <Compile Include="features/members/Queries.fs" />
     <Compile Include="features/members/Persistence.fs" />
