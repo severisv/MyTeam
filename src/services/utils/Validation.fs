@@ -15,12 +15,11 @@ let validate (expr : Expr<'T>) (validationFns : list<ValidationFn<'T>>) =
             | PropertyGet(a, pi, list) -> pi.Name
             | _ -> ""
         (getName expr, (QuotationEvaluator.Evaluate expr))
-    
     { Name = name
       Errors =
           validationFns
           |> List.map (fun fn -> fn (name, value))
-          |> List.choose (function
+          |> List.choose (function 
                  | Ok _ -> None
                  | Error e -> Some e) }
 
@@ -31,16 +30,14 @@ let map errors form =
     if errors |> Seq.isEmpty then Ok form
     else Error errors
 
-
 let bindToHttpResult (fn : 'a -> HttpResult<'b>) =
-    function
+    function 
     | Ok a -> fn a
     | Error ve -> ValidationErrors ve
 
-
 let isValidEmail (__, value) =
     let regex = Text.RegularExpressions.Regex @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
-    if String.IsNullOrWhiteSpace(value) || regex.IsMatch value then Ok()
+    if String.IsNullOrWhiteSpace  value  || regex.IsMatch value then Ok()
     else Error "E-postadressen er ugyldig"
 
 let isRequired (__, value) =
