@@ -124,31 +124,31 @@ let editPost (club: Club) (user: Users.User) name (ctx: HttpContext) =
 
     let db = ctx.Database
  
-    let form = ctx.BindForm<ArticleModel>()
-
-    { form with 
-            IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
-    } 
-    |> Validation.map
+    let form = 
+        { ctx.BindForm<ArticleModel>() with 
+                IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+        } 
+    
+    validate
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
         ]
-        |> function
-        | Ok form -> 
-            Persistence.saveArticle db club.Id name form
-            |> Results.bind (fun _ -> 
-                Redirect <| sprintf "/nyheter/vis/%s" name)
-            
+    |> function
+    | Ok () -> 
+        Persistence.saveArticle db club.Id name form
+        |> Results.bind (fun _ -> 
+            Redirect <| sprintf "/nyheter/vis/%s" name)
+        
 
-        | Error validationErrors ->
-            Queries.getArticle db club.Id name
-            |> function
-            | None -> NotFound
-            | Some article ->    
-                (form, article.Details.Published)
-                |> fun (article, published) ->
-                    editView ctx club user (Some name) article published validationErrors
+    | Error validationErrors ->
+        Queries.getArticle db club.Id name
+        |> function
+        | None -> NotFound
+        | Some article ->    
+            (form, article.Details.Published)
+            |> fun (article, published) ->
+                editView ctx club user (Some name) article published validationErrors
 
 
 let create (club: Club) user (ctx: HttpContext) =    
@@ -167,27 +167,27 @@ let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
 
     let db = ctx.Database
  
-    let form = ctx.BindForm<ArticleModel>()
- 
-    { form with 
-            IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
-    } 
-    |> Validation.map
+    let form =  
+        { ctx.BindForm<ArticleModel>() with 
+                IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+        } 
+
+    validate
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
         ]
-        |> function
-        | Ok form -> 
-            Persistence.createArticle db club.Id user form
-            |> Results.bind 
-                (fun name -> Redirect <| sprintf "/nyheter/vis/%s" name)
-            
+    |> function
+    | Ok () -> 
+        Persistence.createArticle db club.Id user form
+        |> Results.bind 
+            (fun name -> Redirect <| sprintf "/nyheter/vis/%s" name)
+        
 
-        | Error validationErrors ->          
-                (form, System.DateTime.Now)
-                |> fun (article, published) ->
-                    editView ctx club user None article published validationErrors
+    | Error validationErrors ->          
+            (form, System.DateTime.Now)
+            |> fun (article, published) ->
+                editView ctx club user None article published validationErrors
 
 let delete (club: Club) name (ctx: HttpContext) =
     

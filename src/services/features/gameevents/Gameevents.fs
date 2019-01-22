@@ -80,23 +80,23 @@ let add : Add =
         | None -> NotFound
         | Some c when c <> clubId -> Unauthorized
         | Some _ -> 
-            model 
-            |> Validation.map  [ <@ model @> >- [ cardDoesNotHaveAssist ]
-                                 <@ model @> >- [ isNotAssistedBySelf ]
-                                 <@ model.Type @> >- [ isRequired ] ]
-            |> Validation.bindToHttpResult 
-                (fun model -> 
-                    let ge = Models.Domain.GameEvent()
-                    ge.Id <- Guid.NewGuid()
-                    ge.GameId <- gameId
-                    ge.PlayerId <- (model.PlayerId |> toNullable)
-                    ge.AssistedById <- (model.AssistedById |> toNullable)
-                    ge.Type <- enum<Models.Enums.GameEventType> (int model.Type)
-                    ge.CreatedDate <- DateTime.Now
-                    db.GameEvents.Add(ge) |> ignore
-                    db.SaveChanges() |> ignore
-                    { model with Id = ge.Id } |> OkResult
-                )
+            validate [ <@ model @> >- [ cardDoesNotHaveAssist ]
+                       <@ model @> >- [ isNotAssistedBySelf ]
+                       <@ model.Type @> >- [ isRequired ] ]
+            |> function 
+            | Ok() -> 
+                let ge = Models.Domain.GameEvent()
+                ge.Id <- Guid.NewGuid()
+                ge.GameId <- gameId
+                ge.PlayerId <- (model.PlayerId |> toNullable)
+                ge.AssistedById <- (model.AssistedById |> toNullable)
+                ge.Type <- enum<Models.Enums.GameEventType> (int model.Type)
+                ge.CreatedDate <- DateTime.Now
+                db.GameEvents.Add ge  |> ignore
+                db.SaveChanges() |> ignore
+                { model with Id = ge.Id } 
+                |> OkResult
+            | Error e -> ValidationErrors e
 
 let delete : Delete =
     fun clubId (gameId, gameEventId) (db : Database) -> 
@@ -107,7 +107,7 @@ let delete : Delete =
         | None -> NotFound
         | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Unauthorized
         | Some gameEvent -> 
-            db.GameEvents.Remove(gameEvent) |> ignore
+            db.GameEvents.Remove gameEvent |> ignore
             db.SaveChanges()
             |> ignore
             |> OkResult
