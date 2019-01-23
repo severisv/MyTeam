@@ -103,8 +103,9 @@ namespace MyTeam.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("ny")]
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             var model = new RegisterViewModel();
             return View(model);
         }
@@ -115,7 +116,7 @@ namespace MyTeam.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Route("ny")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = "/")
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +138,7 @@ namespace MyTeam.Controllers
                     }
                     await _signInManager.SignInAsync(user, isPersistent: true);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return Redirect("/");
+                    return Redirect(returnUrl);
                 }
                 AddErrors(result);
             }

@@ -8,7 +8,7 @@
 <div class="mt-main">
 <div class="mt-container">
 
-    <form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
+    <form asp-controller="Account" asp-action="Register" asp-route-returnUrl="@(ViewData["ReturnUrl"])" method="post" class="form-horizontal" role="form">
         <h4>Opprett en ny konto</h4>
         <hr />
         <div asp-validation-summary="All" class="text-danger"></div>

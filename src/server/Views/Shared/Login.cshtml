@@ -71,10 +71,10 @@
                         </div>
                         <br />
                         <p class="col-md-offset-2 col-sm-offset-0">
-                            <a asp-controller="account" asp-action="Register">Registrer ny bruker</a>
+                            <a asp-controller="account" asp-action="Register" asp-route-returnUrl="@(ViewData["ReturnUrl"])">Registrer ny bruker</a>
                         </p>
                         <p class="col-md-offset-2 col-sm-offset-0">
-                            <a asp-controller="account" asp-action="ForgotPassword">Glemt passordet?</a>
+                            <a asp-controller="account" asp-action="ForgotPassword" asp-route-returnUrl="@(ViewData["ReturnUrl"])" >Glemt passordet?</a>
                         </p>
                     </form>
                 </section>
