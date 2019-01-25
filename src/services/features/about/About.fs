@@ -57,7 +57,7 @@ let edit (club : Club) (user : Users.User option) (ctx : HttpContext) =
                                      _class "form-control tinymce"
                                      _placeholder "Innhold" ] [ rawText about ] 
                         br []
-                        !!(btn Primary ButtonSize.Normal [Type "submit"] [Fable.Helpers.React.str "Lagre"])
+                        !!(btn [Primary; Type "submit"] [Fable.Helpers.React.str "Lagre"])
                       ] ]
         ]
         |> layout club user (fun o -> { o with Title = "Om klubben"; Scripts = MyTeam.News.Pages.Components.tinyMceScripts }) ctx

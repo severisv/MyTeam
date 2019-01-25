@@ -49,6 +49,6 @@ let view (club : Club) (user : Users.User option) (ctx : HttpContext) =
                                         [ textInput [ Name "lastname" ] ]
                                     
                                     formRow [ Horizontal 2 ] [] 
-                                        [ btn2 [ Primary ] [ Fable.Helpers.React.str "Send" ] ] ]) ]) ] ]
+                                        [ btn [ Primary ] [ Fable.Helpers.React.str "Send" ] ] ]) ]) ] ]
         |> layout club user (fun o -> { o with Title = "Be om tilgang" }) ctx
         |> OkResult

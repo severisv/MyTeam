@@ -31,15 +31,8 @@ module Buttons =
                    <| sprintf "btn btn-%s btn-%s" (Strings.toLower buttonType) 
                           (Strings.toLower size) ] attributes) children
     
-    let btn (buttonType : ButtonType) (size : ButtonSize) attributes children =
-        button 
-            (Html.mergeClasses 
-                 [ Class 
-                   <| sprintf "btn btn-%s btn-%s" (Strings.toLower buttonType) 
-                          (Strings.toLower size) ] attributes) children
 
-
-    let btn2 (props : IHTMLProp list) children =
+    let btn (props : IHTMLProp list) children =
         let buttonType = props
                         |> List.tryFind (fun p -> p :? ButtonType)
                         |> Option.map (fun p -> p :?> ButtonType)

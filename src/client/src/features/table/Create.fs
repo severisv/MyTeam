@@ -55,7 +55,7 @@ type CreateTable(props) =
                                               Endpoint = SubmitButton.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, ignore)
                                               IsDisabled = not <| isValid state.Year
                                               OnSubmit = fun _ -> Browser.location.replace(sprintf "/tabell/%s/%i" props.Team state.Year.Value) })                       
-                        btn Default Normal [ OnClick handleClose ] [ str "Avbryt" ]                      
+                        btn [ OnClick handleClose ] [ str "Avbryt" ]                      
                   ]
             }                                                             
         

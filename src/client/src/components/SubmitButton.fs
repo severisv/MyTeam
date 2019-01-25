@@ -37,7 +37,7 @@ let defaultProps =
       IsDisabled = false
       OnSubmit = ignore }
 
-let defaultButton size attr content = btn Primary size attr content
+let defaultButton size attr content = btn ([ Primary; size ] @ attr) content
 
 type SubmitButton<'a>(props) =
     inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
@@ -69,9 +69,11 @@ type SubmitButton<'a>(props) =
         let defaultButton = defaultButton props.Size
         match state with
         | Submitted -> 
-            btn Success props.Size [ Class "disabled" ] [ Icons.checkCircle
-                                                          whitespace
-                                                          str props.SubmittedText ]
+            btn [ Success
+                  props.Size
+                  Class "disabled" ] [ Icons.checkCircle
+                                       whitespace
+                                       str props.SubmittedText ]
         | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
         | Error -> 
             fragment [] [ defaultButton [ OnClick handleClick ] [ str props.Text ]
