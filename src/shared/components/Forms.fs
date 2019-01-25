@@ -7,39 +7,44 @@ open Fable.Helpers.React.Props
 open Fable.Import.React
 open MyTeam.Shared.Util.Html
 
-let textInput attr =
-    input (attr
-           |> mergeClasses [ Class "form-control"
-                             Type "text" ])
+
 
 type FormProps =
     | Horizontal of int
     interface IHTMLProp
 
-type IFormAttributes =
-    inherit HTMLAttributes
-    abstract horizontal : int option with get, set
+let form (props : IHTMLProp list) children =
+    let horizontal =
+        props
+        |> List.tryFind (fun p -> p :? FormProps)
+        |> Option.map (fun p -> p :?> FormProps)
+    form ((props @ [ OnSubmit(fun e -> e.preventDefault()) ])
+          |> mergeClasses [ Class(match horizontal with
+                                  | Some(Horizontal h) -> "form-horizontal"
+                                  | _ -> "") ]) children
 
-let formRow props lbl input =
-    let p : IFormAttributes = keyValueList CaseRules.LowerFirst props |> unbox
+let formRow (props : IHTMLProp list) lbl input =
+    let horizontal =
+        props
+        |> List.tryFind (fun p -> p :? FormProps)
+        |> Option.map (fun p -> p :?> FormProps)
     div (props |> mergeClasses [ Class "form-group" ]) [ label 
                                                              [ Class 
                                                                <| sprintf "control-label %s" 
-                                                                      (p.horizontal
+                                                                      (horizontal
                                                                        |> function 
-                                                                       | Some h -> 
+                                                                       | Some(Horizontal h) -> 
                                                                            sprintf "col-sm-%i" h
                                                                        | None -> "") ] lbl
-                                                         div [ Class(p.horizontal
+                                                         div [ Class(horizontal
                                                                      |> function 
-                                                                     | Some h -> 
+                                                                     | Some(Horizontal h) -> 
                                                                          sprintf "col-sm-%i" 
                                                                              (12 - h)
                                                                      | None -> "") ] input ]
 
-let form (props: IHTMLProp list) children =
-    let p : IFormAttributes = keyValueList CaseRules.LowerFirst props |> unbox
-    form ((props @ [ OnSubmit(fun e -> e.preventDefault()) ])
-          |> mergeClasses [ Class(match p.horizontal with
-                                  | (Some _) -> "form-horizontal"
-                                  | _ -> "") ]) children
+
+let textInput attr =
+    input (attr
+           |> mergeClasses [ Class "form-control"
+                             Type "text" ])

@@ -61,7 +61,6 @@ namespace MyTeam
                     o.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
 
-
             services.Configure<CloudinaryOptions>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOpts>(Configuration.GetSection("Authentication:Facebook"));

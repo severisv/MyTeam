@@ -25,10 +25,8 @@ module App =
             | Some club ->
                 choose [
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
-                    
                     route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                        
-
                     subRoute "/nyheter"             
                         <|  choose [                                                
                                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (redirectTo true <| sprintf "/%i/%i" skip take)                         
@@ -77,12 +75,12 @@ module App =
                     subRoute "/statistikk"   
                         <| choose [
                              GET >=> choose [
-                                               route "" >=> (Stats.Pages.index club user None None |> htmlGet)   
-                                               routef "/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
-                                               routef "/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
+                                       route "" >=> (Stats.Pages.index club user None None |> htmlGet)   
+                                       routef "/%s/%s" <| fun (teamName, year) -> Stats.Pages.index club user (Some teamName) (Some year) |> htmlGet         
+                                       routef "/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                                 ]                        
                         ]     
-                    route "/registrer" >=> GET >=> (Members.Pages.RequestAccess.view club user |> htmlGet)        
+                    route "/blimed" >=> GET >=> (Members.Pages.RequestAccess.view club user |> htmlGet)        
                     route "/om" >=> GET >=> (About.show club user |> htmlGet)        
                     route "/om/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
