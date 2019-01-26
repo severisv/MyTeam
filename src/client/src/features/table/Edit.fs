@@ -44,7 +44,7 @@ type EditTable(props) =
                                 (if isInEditMode then    
                                     fragment [] [
                                         (Modal.render 
-                                                    { OpenButton = fun handleOpen -> btn Danger Normal [ OnClick handleOpen; Class "pull-right" ] [ Icons.delete ]
+                                                    { OpenButton = fun handleOpen -> btn [ Danger; OnClick handleOpen; Class "pull-right" ] [ Icons.delete ]
                                                       Content = 
                                                         fun handleClose ->
                                                             div [] [ 
@@ -61,7 +61,7 @@ type EditTable(props) =
                                                                         SubmittedText = "Slettet"
                                                                         Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
                                                                         OnSubmit = Browser.location.reload })
-                                                                  btn Default Lg [ OnClick handleClose ] [ str "Nei" ]
+                                                                  btn [ Lg; OnClick handleClose ] [ str "Nei" ]
                                                               ]
                                                           ]
                                                     })
