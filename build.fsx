@@ -55,8 +55,9 @@ Target.create "Build-frontend" <| fun _ ->
           { o with  
               WorkingDirectory = clientDir + "/src"
           } |> dotnetOptions) 
-         "fable webpack -- -p --config config/webpack.prod.js" ""|> ignore       
-
+         "fable webpack -- -p --config config/webpack.prod.js" ""
+          |> fun result ->
+                if not result.OK then failwithf "Step failed: %O" result.Errors   
 
 Target.create "Restore-backend" <| fun _ ->       
     DotNet.restore dotnetOptions webDir
