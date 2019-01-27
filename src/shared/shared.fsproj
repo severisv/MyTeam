@@ -9,6 +9,7 @@
     <Compile Include="util/Image.fs" />
     <Compile Include="util/Interop.fs" />
     <Compile Include="util/Number.fs" />
+    <Compile Include="util/Validation.fs" />
     <Compile Include="domain/Club.fs" />
     <Compile Include="domain/Events.fs" />
     <Compile Include="domain/Members.fs" />

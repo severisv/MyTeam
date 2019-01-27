@@ -188,6 +188,25 @@ namespace MyTeam.Controllers
             if (result.Succeeded)
             {
                 _logger.LogDebug(5, "User logged in with {Name} provider.", info.LoginProvider);
+
+                var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                if (!info.Principal.Claims.Any(c => c.Type == "facebookFirstName"))
+                    await _userManager.AddClaimAsync(user,
+                    new Claim("facebookFirstName",
+                           info.Principal.Claims.First(c => c.Type == ClaimTypes.GivenName).Value));
+
+                if (!info.Principal.Claims.Any(c => c.Type == "facebookLastName"))
+                    await _userManager.AddClaimAsync(user,
+                        new Claim("facebookLastName",
+                                    info.Principal.Claims.First(c => c.Type == ClaimTypes.Surname).Value));
+
+                if (!info.Principal.Claims.Any(c => c.Type == "facebookId"))
+                    await _userManager.AddClaimAsync(user,
+                        new Claim("facebookId",
+                                    info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
+
                 return RedirectToLocal(returnUrl);
             }
             if (result.RequiresTwoFactor)
@@ -234,6 +253,15 @@ namespace MyTeam.Controllers
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: true);
+                        await _userManager.AddClaimAsync(user,
+                        new Claim("facebookFirstName",
+                               info.Principal.Claims.First(c => c.Type == ClaimTypes.GivenName).Value));
+                        await _userManager.AddClaimAsync(user,
+                            new Claim("facebookLastName",
+                                        info.Principal.Claims.First(c => c.Type == ClaimTypes.Surname).Value));
+                        await _userManager.AddClaimAsync(user,
+                            new Claim("facebookId",
+                                        info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
 
                         _playerService.AddEmailToPlayer(model.FacebookId, model.Email);

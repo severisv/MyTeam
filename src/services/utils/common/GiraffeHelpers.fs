@@ -7,6 +7,12 @@ open Microsoft.AspNetCore
 [<AutoOpen>]
 module GiraffeHelpers =
 
+    type System.Security.Claims.ClaimsPrincipal with 
+        member user.GetClaim claimType =
+               user.Claims |> Seq.tryFind(fun c -> c.Type = claimType)
+                           |> Option.map (fun c -> c.Value)
+
+
     let route = routeCi
     let routef = routeCif
     let subRoute = subRouteCi

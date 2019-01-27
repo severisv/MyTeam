@@ -39,3 +39,13 @@ let isRequired (__, value) =
     let value = string value
     if String.IsNullOrWhiteSpace value then Error "Feltet er obligatorisk"
     else Ok()
+
+let minLength length (name, value) =
+    let value = string value
+    if value |> Strings.hasValue && value.Length < length then Error <| sprintf "%s må være minst %i tegn" name length
+    else Ok()
+
+let maxLength length (name, value) =
+    let value = string value
+    if value |> Strings.hasValue && value.Length > length then Error <| sprintf "%s kan være maks %i tegn" name length
+    else Ok()

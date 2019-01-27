@@ -29,6 +29,7 @@ namespace MyTeam.Models
         public DbSet<RemedyRate> RemedyRates { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<MemberRequest> MemberRequests { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

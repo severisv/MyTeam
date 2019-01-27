@@ -8,7 +8,6 @@ open Fable.Import.React
 open MyTeam.Shared.Util.Html
 
 
-
 type FormProps =
     | Horizontal of int
     interface IHTMLProp
@@ -48,3 +47,7 @@ let textInput attr =
     input (attr
            |> mergeClasses [ Class "form-control"
                              Type "text" ])
+
+
+let validationMessage messages =
+    span [Class "text-danger"] (messages |> List.map str)

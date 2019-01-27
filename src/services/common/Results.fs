@@ -21,36 +21,36 @@ let htmlResult next ctx =
     function 
     | OkResult result -> htmlView result next ctx
     | Unauthorized -> 
-        let (club, user) = Tenant.get ctx
-        (setStatusCode 403 >=> match club with
-                               | Some club -> Views.Error.unauthorized club user
-                               | None -> text "403") next ctx
+        (setStatusCode 403 >=> (Tenant.get ctx
+                               |> function
+                               | (Some club, user) -> Views.Error.unauthorized club user
+                               | (None, _) -> text "403")) next ctx
     | NotFound -> 
-        let (club, user) = Tenant.get ctx
-        (setStatusCode 404 >=> match (club, user) with
+        (setStatusCode 404 >=> (Tenant.get ctx
+                               |> function
                                | (Some club, user) -> Views.Error.notFound club user
-                               | (None, _) -> text "Error") next ctx
+                               | (None, _) -> text "Error")) next ctx
     | Redirect url -> redirectTo false (System.Uri.EscapeUriString url) next ctx
     | ValidationErrors _ -> failwith "Ikke implementert"
 
 let htmlGet (fn : HttpContext -> HttpResult<GiraffeViewEngine.XmlNode>) next ctx =
     fn ctx |> htmlResult next ctx
 
-let htmlPost<'a> (fn : HttpContext -> Result<'a, string> -> HttpResult<GiraffeViewEngine.XmlNode>) 
+let htmlPost<'a> (fn : Result<'a, string> -> HttpContext -> HttpResult<GiraffeViewEngine.XmlNode>) 
     next (ctx : HttpContext) =
     let payload = ctx.TryBindForm<'a>()
-    fn ctx payload |> htmlResult next ctx
+    fn payload ctx |> htmlResult next ctx
 
-let bind fn a =
-    match a with
+let bind fn =
+    function
     | OkResult b -> fn b
     | Redirect url -> Redirect url
     | ValidationErrors ve -> ValidationErrors ve
     | NotFound -> NotFound
     | Unauthorized -> Unauthorized
 
-let map fn a =
-    match a with
+let map fn =
+    function
     | OkResult b -> OkResult <| fn b
     | Redirect url -> Redirect url
     | ValidationErrors ve -> ValidationErrors ve

@@ -80,7 +80,11 @@ module App =
                                        routef "/%s" <| fun teamName -> Stats.Pages.index club user (Some teamName) None |> htmlGet      
                                 ]                        
                         ]     
-                    route "/blimed" >=> GET >=> (Members.Pages.RequestAccess.view club user |> htmlGet)        
+                    route "/blimed" >=> 
+                        choose [
+                            GET >=> (Members.Pages.RequestAccess.get club user |> htmlGet)        
+                            POST >=> (Members.Pages.RequestAccess.post club user |> htmlPost)
+                        ]
                     route "/om" >=> GET >=> (About.show club user |> htmlGet)        
                     route "/om/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
