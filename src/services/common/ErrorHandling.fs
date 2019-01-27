@@ -55,7 +55,7 @@ let logNotFound next (ctx: HttpContext) =
                                         (string ctx.Request.Path) 
                                         (string ctx.Request.Headers.["Referer"])
                                         (ctx.Request.Headers 
-                                        |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains("cookie"))
+                                        |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains "cookie")
                                         |> Seq.map (fun keyValue -> 
                                             sprintf "%s: %s" keyValue.Key (string keyValue.Value)
                                         )

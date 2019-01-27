@@ -51,7 +51,7 @@
     <Compile Include="common/views/Layout.fs" />
     <Compile Include="common/views/Error.fs" />
     <Compile Include="common/ErrorHandling.fs" />
-    <Compile Include="common/ResultHandling.fs" />
+    <Compile Include="common/Results.fs" />
     <Compile Include="common/Authorization.fs" />
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />

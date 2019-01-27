@@ -22,7 +22,13 @@ module GiraffeHelpers =
     type Http.HttpContext with 
         member ctx.BindForm<'T> () =
                     let task = ctx.BindFormAsync<'T>()
-                    task.ConfigureAwait(false).GetAwaiter().GetResult()                      
+                    task.ConfigureAwait(false).GetAwaiter().GetResult()  
+
+
+    type Http.HttpContext with 
+        member ctx.TryBindForm<'T> () =
+                    let task = ctx.TryBindFormAsync<'T>()
+                    task.ConfigureAwait(false).GetAwaiter().GetResult()                                         
                 
 
 
