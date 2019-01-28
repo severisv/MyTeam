@@ -28,6 +28,7 @@ type Game = {
 [<CLIMutable>]
 type ArticleModel = {
     IsMatchReport: bool
+    HideAuthor: bool
     GameId: System.Guid option
     Headline: string
     Content: string

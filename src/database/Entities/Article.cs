@@ -17,6 +17,7 @@ namespace MyTeam.Models.Domain
         public string Headline { get; set; }
         [Required]
         public string Content { get; set; }
+        public bool HideAuthor { get; set; }
         public string ImageUrl { get; set; }
         [Required]
         public DateTime Published { get; set; }

@@ -70,14 +70,31 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                                            )))
                                       ]
                                   ]
+                              ]  
+                        ]
+                    div [_class "clearfix"] []
+                    div [_class "form-group"] [
+                        label [ _class "col-xs-3 col-sm-2 no-padding control-label"; _style "margin-top: 0.5em;" ] [ encodedText "Skjul forfatter" ]
+                        div [ _class "col-xs-9 col-sm-10 flex" ][ 
+                            div [][ 
+                                input [ 
+                                    _name "HideAuthor"
+                                    _type "checkbox"
+                                    _class "form-control";
+                                    article.HideAuthor =? (_checked, _empty)
+                                ]
                               ]
-                          ]                      
+                            div [ _class "flex-2" ] []
+                        ]
+                    ]        
                     br []
                     br []                     
-                    label [ _name "Headline" ] [ encodedText "Overskrift:" ]
-                    div [ _class "form-group" ][ 
-                        input [ _class "form-control"; _name "Headline"; _placeholder "Sensasjonell snuoperasjon av Sleivdal"; _value article.Headline ]
-                      ]
+                    div [] [
+                        label [ _name "Headline" ] [ encodedText "Overskrift:" ]
+                        div [ _class "form-group" ][ 
+                            input [ _class "form-control"; _name "Headline"; _placeholder "Sensasjonell snuoperasjon av Sleivdal"; _value article.Headline ]
+                          ]
+                    ]
                     div [ _class "form-group" ] [
                         textarea [ _name "Content"; _class "form-control update-table tinymce"; _placeholder "Innhold" ] [ rawText article.Content ]
                       ]
@@ -115,6 +132,7 @@ let view (club: Club) user name (ctx: HttpContext) =
             Headline = article.Details.Headline
             Content = article.Content
             ImageUrl = article.Details.Image    
+            HideAuthor = article.HideAuthor
         }, article.Details.Published)
         |> fun (article, published) ->
           
@@ -127,6 +145,7 @@ let editPost (club: Club) (user: Users.User) name (ctx: HttpContext) =
     let form = 
         { ctx.BindForm<ArticleModel>() with 
                 IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+                HideAuthor = (string ctx.Request.Form.["HideAuthor"]) = "on" // Workaround
         } 
     
     validate
@@ -158,6 +177,7 @@ let create (club: Club) user (ctx: HttpContext) =
         Headline = ""
         Content = ""
         ImageUrl = ""    
+        HideAuthor = false
     }, System.DateTime.Now)
     |> fun (article, published) ->      
         editView ctx club user None article published []
@@ -170,6 +190,7 @@ let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
     let form =  
         { ctx.BindForm<ArticleModel>() with 
                 IsMatchReport = (string ctx.Request.Form.["IsMatchReport"]) = "on" // Workaround
+                HideAuthor = (string ctx.Request.Form.["HideAuthor"]) = "on" // Workaround
         } 
 
     validate
