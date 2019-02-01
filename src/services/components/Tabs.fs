@@ -21,7 +21,7 @@ module Tabs =
                      |> List.map (fun t -> 
                                     li [_class (isSelected t.Url =? ("active", ""))] [
                                         a [_href t.Url] [
-                                            span [_class "hidden-xs" ] [t.Icon |?? emptyText] 
+                                            span [_class "hidden-xs" ] [t.Icon |> Option.defaultValue emptyText] 
                                             span [_class "hidden-xs"] [whitespace;encodedText t.Text] 
                                             span [_class "visible-xs"] [encodedText t.ShortText]
                                         ]

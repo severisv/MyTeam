@@ -26,6 +26,7 @@
     <Compile Include="features/games/SelectSquad.fs" />
     <Compile Include="features/games/GamePlan.fs" />
     <Compile Include="features/table/Table.fs" />
+    <Compile Include="features/admin/AddPlayers.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

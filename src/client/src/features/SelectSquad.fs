@@ -159,7 +159,7 @@ type SelectSquad(props) =
                                                       IsSubmitted = game.Squad.IsPublished
                                                       Text = "Publiser tropp"
                                                       SubmittedText = "Publisert"
-                                                      Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, ignore) })
+                                                      Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
                                     ] ] ] ] ]
 
 let element model = ofType<SelectSquad, _, _> model []

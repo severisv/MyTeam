@@ -12,7 +12,7 @@ let mergeClasses (a : IHTMLProp list) (b : IHTMLProp list) =
                |> function 
                | ClassName c -> c
                | Class c -> c
-               | _ -> "")
+               | _ -> "")   
         |> String.concat " "
         |> Strings.trim
     

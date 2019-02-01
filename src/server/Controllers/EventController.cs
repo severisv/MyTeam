@@ -20,7 +20,6 @@ namespace MyTeam.Controllers
     [Route("intern")]
     public class EventController : BaseController
     {
-
         private readonly ApplicationDbContext _dbContext;
         private readonly IEventService _eventService;
         private readonly IPlayerService _playerService;

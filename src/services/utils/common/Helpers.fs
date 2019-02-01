@@ -17,10 +17,4 @@ module Helpers =
     let (=?) (condition: bool) (first, second) =
         if condition then first else second       
 
-    let (|??) option alternative =
-        match option with
-        | Some value -> value
-        | None -> alternative       
-
-
     let never = fun _ -> false    

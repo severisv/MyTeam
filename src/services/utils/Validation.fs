@@ -19,25 +19,26 @@ let validateField (expr : Expr<'T>) (validationFns : list<ValidationFn<'T>>) =
       Errors =
           validationFns
           |> List.map (fun fn -> fn (name, value))
-          |> List.choose (function 
+          |> List.choose (function
                  | Ok _ -> None
                  | Error e -> Some e) }
 
 let (>-) = validateField
+
 
 let validate errors =
     let errors = errors |> List.filter (fun e -> e.Errors |> (List.isEmpty >> not))
     if errors |> Seq.isEmpty then Ok()
     else Error errors
 
-let isValidEmail (__, value) =
+let isValidEmail (name, value) =
     let regex = Text.RegularExpressions.Regex @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
     if String.IsNullOrWhiteSpace value || regex.IsMatch value then Ok()
-    else Error "E-postadressen er ugyldig"
+    else Error <| sprintf "%s er ikke en gyldig e-postadresse" name
 
-let isRequired (__, value) =
+let isRequired (name, value) =
     let value = string value
-    if String.IsNullOrWhiteSpace value then Error "Feltet er obligatorisk"
+    if String.IsNullOrWhiteSpace value then Error <| sprintf "%s må fylles ut" name
     else Ok()
 
 let minLength length (name, value) =

@@ -148,7 +148,7 @@ module App =
                             POST >=>  
                                 mustBeInRole [Role.Admin; Role.Trener] >=> 
                                     choose [ 
-                                        route "" >=> (Members.Api.add club.Id |> jsonPost)
+                                        route "" >=> (Members.Api.add club |> jsonPost)
                                     ]
                         ]
                     subRoute "/api/games"

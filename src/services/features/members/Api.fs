@@ -4,6 +4,7 @@ open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Common.Features
 open MyTeam
+open Shared.Features.Admin.AddPlayers
 
 module Api =
 

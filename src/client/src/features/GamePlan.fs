@@ -299,7 +299,7 @@ type GamePlan(props) =
                                           IsSubmitted = model.GamePlanIsPublished
                                           Text = "Publiser"
                                           SubmittedText = "Publisert"
-                                          Endpoint = SubmitButton.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, ignore) })
+                                          Endpoint = SubmitButton.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, None) })
                     ]                   
                 ]
                 )                                  

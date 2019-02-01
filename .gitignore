@@ -215,3 +215,4 @@ src/MyTeam
 dist
 artifacts
 paket-files
+.idea

@@ -262,7 +262,7 @@ namespace MyTeam.Controllers
                         await _userManager.AddClaimAsync(user,
                             new Claim("facebookId",
                                         info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
-                        _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
+                        _logger.LogInformation(6, "User {Email} created an account using {Name} provider.", model.Email, info.LoginProvider);
 
                         _playerService.AddEmailToPlayer(model.FacebookId, model.Email);
                         return RedirectToLocal(returnUrl);

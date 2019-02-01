@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
@@ -76,7 +76,7 @@
     <Compile Include="features/gameevents/Gameevents.fs" />
     <Compile Include="features/members/Types.fs" />
     <Compile Include="features/members/Queries.fs" />
-    <Compile Include="features/members/Persistence.fs" />
+    <Compile Include="features\members\MemberPersistence.fs" />
     <Compile Include="features/members/Api.fs" />
     <Compile Include="features/members/pages/List.fs" />
     <Compile Include="features/members/pages/RequestAccess.fs" />

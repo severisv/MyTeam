@@ -25,8 +25,7 @@ module Buttons =
     let buttonLink href (buttonType : ButtonType) (size : ButtonSize) attributes children =
         a 
             (Html.mergeClasses 
-                 [ Href href
-                   
+                 [ Href href                   
                    Class 
                    <| sprintf "btn btn-%s btn-%s" (Strings.toLower buttonType) 
                           (Strings.toLower size) ] attributes) children
@@ -42,6 +41,9 @@ module Buttons =
                     |> List.tryFind (fun p -> p :? ButtonSize)
                     |> Option.map (fun p -> p :?> ButtonSize)
                     |> Option.defaultValue Normal        
+
+        let props = props
+                    |> List.filter (fun p -> not (p :? ButtonSize || p :? ButtonType))
 
         button 
             (Html.mergeClasses 
