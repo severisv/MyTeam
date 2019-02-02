@@ -14,6 +14,7 @@ open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
 open Thoth.Json
+open MyTeam.Client.Util
 
 
 type SelectSquad(props) =
@@ -162,14 +163,6 @@ type SelectSquad(props) =
                                                       Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
                                     ] ] ] ] ]
 
-let element model = ofType<SelectSquad, _, _> model []
-let node = document.getElementById(clientView)
 
-if not <| isNull node then 
-    node.getAttribute(Interop.modelAttributeName)
-    |> Decode.Auto.fromString<Model>
-    |> function 
-    | Ok model -> ReactDom.render(element model, node)
-    | Error e -> failwithf "Json deserialization failed: %O" e
-
-
+let element = ofType<SelectSquad, _, _>
+ReactHelpers.render Decode.Auto.fromString<Model> clientView element 

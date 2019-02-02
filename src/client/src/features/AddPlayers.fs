@@ -2,15 +2,14 @@ module MyTeam.Client.Admin.AddPlayers
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fable.Import
 open Fable.Import.React
 open MyTeam
 open MyTeam.Client.Components
 open MyTeam.Components
-open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Forms
 open MyTeam.Shared.Components.Layout
 open Shared.Features.Admin.AddPlayers
+open MyTeam.Client.Util
 open Thoth.Json
 
 let defaultForm = {
@@ -110,15 +109,6 @@ type AddPlayers(props) =
         ]
 
 
+let element = ofType<AddPlayers, _, _>
 
-
-
-let element model = ofType<AddPlayers, _, _> model []
-let node = Browser.document.getElementById clientView
-
-if not <| isNull node then
-    node.getAttribute (Interop.modelAttributeName)
-    |> Decode.Auto.fromString<Model>
-    |> function
-     | Ok model -> ReactDom.render (element model, node)
-     | Error e -> failwithf "Json deserialization failed: %O" e
+ReactHelpers.render Decode.Auto.fromString<Model> clientView element 

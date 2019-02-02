@@ -14,6 +14,7 @@ open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Layout
 open Shared.Features.Games.GamePlan
 open Thoth.Json
+open MyTeam.Client.Util
 
 
 type Time = int
@@ -342,12 +343,5 @@ type GamePlan(props) =
             ]
         ]
 
-let element model = ofType<GamePlan, _, _> model []
-let node = Browser.document.getElementById(clientView)
-
-if not <| isNull node then 
-    node.getAttribute(Interop.modelAttributeName)
-    |> Decode.Auto.fromString<Model>
-    |> function 
-    | Ok model -> ReactDom.render(element model, node)
-    | Error e -> failwithf "Json deserialization failed: %O" e
+let element = ofType<GamePlan, _, _>
+ReactHelpers.render Decode.Auto.fromString<Model> clientView element 
