@@ -34,7 +34,6 @@ module Register =
             | None -> previousTrainings 
                       |> List.tryHead
                       |> Option.map getModel
-
                      
         let registerAttendanceUrl (training: Event option) =
             match training with
@@ -70,7 +69,7 @@ module Register =
                         ]                       
                 ]       
         [
-            mtMain [_class "register-attendance"] [
+            mtMain [_class "mt-main--narrow register-attendance"] [
                 block [] 
                         (model
                         |> Option.fold (fun _ (training, players) ->                  
@@ -100,7 +99,7 @@ module Register =
                             [emptyText]
                             )
             ]          
-            sidebar [_class "register-attendance"] [               
+            sidebar [] [               
                 (previousTrainings.Length > 0 =?
                     (block [] [
                         navList ({ 

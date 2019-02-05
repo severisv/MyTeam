@@ -58,7 +58,9 @@ type SelectSquad(props) =
                                 [ span [ ]
                                     [ 
                                         img [ Class "hidden-xxs"
-                                              Src <| MyTeam.Image.getMember imageOptions (fun opts -> { opts with Height = Some 50; Width = Some 50 }) m.Image m.FacebookId 
+                                              Src <| MyTeam.Image.getMember imageOptions
+                                                         (fun opts -> { opts with Height = Some 50; Width = Some 50 })
+                                                         m.Image m.FacebookId 
                                             ]
                                         str m.Name 
                                         ]

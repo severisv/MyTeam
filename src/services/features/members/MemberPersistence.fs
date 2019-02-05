@@ -127,6 +127,12 @@ let add : Add =
                                         )
                                 )
                            ) |> ignore
+             
+             db.MemberRequests
+             |> Seq.tryFind(fun mr -> mr.ClubId = clubId && mr.Email = form.``E-postadresse``)
+             |> Option.map (fun mr -> db.MemberRequests.Remove mr)
+             |> ignore
+             
              db.SaveChanges() |> ignore
              OkResult()
          | Error e -> ValidationErrors e

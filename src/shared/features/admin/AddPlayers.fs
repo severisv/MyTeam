@@ -2,6 +2,7 @@ module Shared.Features.Admin.AddPlayers
 
 open System
 open MyTeam
+open MyTeam.Image
 
 
 [<CLIMutable>]
@@ -13,9 +14,9 @@ type AddMemberForm = {
     Etternavn: string
 }
 
-
 type Model = {
-    Year: int option
+    ImageOptions: CloudinaryOptions
+    MemberRequests: AddMemberForm list
 }
 
 let clientView = "addplayers"

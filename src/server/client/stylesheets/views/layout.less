@@ -22,8 +22,8 @@ div.mt-main {
   min-height: 24em;
 }
 
-.mt-main.narrow {
-  .r-above(@md-min+1, {width: 68%;});
+div.mt-main--narrow {
+  max-width: 600px;
 }
 
 div.mt-sidebar {
@@ -32,6 +32,11 @@ div.mt-sidebar {
   .r-above(@md-max, {width: 20%;});
 
   .r-under(@md-min, {display: none;});
+}
+
+div.mt-main--narrow + div.mt-sidebar {
+  float: left;
+  margin-left: 1em;
 }
 
 .mt-page-header {

@@ -136,7 +136,6 @@ module App =
                         <| choose [ 
                             GET >=> choose [ 
                                 route "" >=> (Members.Api.list club.Id |> jsonGet)
-                                route "/facebookids" >=> (Members.Api.getFacebookIds club.Id |> jsonGet)
                             ]
                             PUT >=> 
                                 mustBeInRole [Role.Admin; Role.Trener] >=> 

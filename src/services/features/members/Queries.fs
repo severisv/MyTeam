@@ -45,15 +45,4 @@ module Queries =
                         }
                 
                  )
-                |> List.sortBy (fun p -> p.Details.FirstName)     
-
-    
-    let getFacebookIds : GetFacebookIds =
-        fun db clubId ->         
-            members db clubId
-            |> selectMembers
-            |> Seq.map (fun m -> m.FacebookId)
-            |> Seq.filter isNotNull
-            |> Seq.toList
-
-
+                |> List.sortBy (fun p -> p.Details.FirstName)         

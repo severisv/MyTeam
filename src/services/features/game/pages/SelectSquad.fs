@@ -54,7 +54,6 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     | Some (game, signups) -> 
 
         let members = Members.list db club.Id
-
         let recentAttendance = Queries.getRecentAttendance db game.TeamId
         
         [

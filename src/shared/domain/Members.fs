@@ -9,8 +9,7 @@ type PlayerStatus =
     | Trener = 3
     | Sluttet = 4
 
- 
-  
+   
 module Members = 
   
     type Status = PlayerStatus
@@ -18,8 +17,6 @@ module Members =
     let fullName (firstName, middleName, lastName) =
         sprintf "%s %s%s%s" firstName middleName (if not (String.IsNullOrEmpty(middleName)) then " " else "") lastName
   
-
-
     type MemberId = System.Guid
     type PlayerId = MemberId
     type UserId = UserId of string
