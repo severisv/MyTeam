@@ -70,7 +70,7 @@ module Queries =
                 let players = 
                     query {
                         for p in db.Members do
-                        where (playerIds.Contains(p.Id) && p.Status <> (int PlayerStatus.Trener))
+                        where (playerIds.Contains p.Id && p.Status <> (int PlayerStatus.Trener))
                     } 
                     |> selectMembers
                     |> Seq.map 
@@ -87,6 +87,9 @@ module Queries =
                                 NoShows = attendances 
                                             |> List.filter (fun (a, eventType) -> eventType = (int EventType.Trening) && a.IsAttending = Nullable true && not a.DidAttend) 
                                             |> List.length
+                                TrainingVictories = attendances 
+                                            |> List.filter (fun (a, eventType) -> eventType = (int EventType.Trening) && a.WonTraining = true) 
+                                            |> List.length
                             })
                         )    
 
@@ -95,6 +98,7 @@ module Queries =
                     where (a.Games + a.Trainings > 0)
                     sortByDescending a.Trainings
                     thenByDescending a.Games
+                    thenByDescending a.TrainingVictories
                     thenByDescending a.NoShows
                 } |> Seq.toList
         
@@ -139,25 +143,27 @@ module Queries =
                 query {
                     for a in db.EventAttendances do
                     where (a.EventId = eventId)
-                    select (a.MemberId, a.DidAttend, a.IsAttending)
+                    select (a.MemberId, a.DidAttend, a.IsAttending, a.WonTraining)
                 } |> Seq.toList
                 
             let players = 
                 players
                 |> List.map (fun p ->
-                    let playerDidAttend = 
-                        attendees 
-                        |> List.exists (fun (playerId, didAttend, _) -> p.Id = playerId && didAttend)
+                    let (playerDidAttend, playerWonTraining) = 
+                        (attendees 
+                         |> List.exists (fun (playerId, didAttend, _, _) -> p.Id = playerId && didAttend),
+                         attendees 
+                         |> List.exists (fun (playerId, _, _, wonTraining) -> p.Id = playerId && wonTraining))
 
-                    p, playerDidAttend
+                    p, playerDidAttend, playerWonTraining
                  )     
-                |> List.sortBy (fun (p,_) -> p.Name)
+                |> List.sortBy (fun (p,_, _) -> p.Name)
           
 
-            let playerIsAttending ((p, _): PlayerAttendance) =
-                attendees |> List.exists (fun (id, _, isAttending) -> p.Id = id && (isAttending = Nullable true))
+            let playerIsAttending ((p, _, _): PlayerAttendance) =
+                attendees |> List.exists (fun (id, _, isAttending, _) -> p.Id = id && (isAttending = Nullable true))
 
-            let playerIsActive (p: Members.Member, _) =
+            let playerIsActive (p: Members.Member, _, _) =
                 p.Status = MyTeam.Domain.PlayerStatus.Aktiv    
 
             let attendingPlayers = players |> List.filter (playerIsAttending)

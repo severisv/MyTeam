@@ -10,7 +10,8 @@ open MyTeam.Shared.Components.Input
             
             
 type PlayerDidAttend = bool            
-type PlayerAttendance = Member * PlayerDidAttend
+type PlayerDidWin = bool            
+type PlayerAttendance = Member * PlayerDidAttend * PlayerDidWin
 
 type Playerlist = {
     Attending: PlayerAttendance list
@@ -22,6 +23,7 @@ type AttendanceSummary = {
     Games: int
     Trainings: int
     NoShows: int
+    TrainingVictories: int
 }   
 
 type PlayerAttendanceSummary = Member * AttendanceSummary
@@ -42,3 +44,4 @@ type GetPreviousTrainings = Database -> ClubId -> Event list
 type GetTraining = Database -> EventId -> Event
 type GetPlayers = Database -> ClubId -> EventId -> Playerlist
 type ConfirmAttendance = Database -> ClubId -> EventId ->  MemberId -> CheckboxPayload -> HttpResult<unit>
+type ConfirmVictory = Database -> ClubId -> EventId ->  MemberId -> CheckboxPayload -> HttpResult<unit>

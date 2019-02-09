@@ -56,7 +56,6 @@
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />
     <Compile Include="features/attendance/Queries.fs" />
-    <Compile Include="features/attendance/Persistence.fs" />
     <Compile Include="features/attendance/Api.fs" />
     <Compile Include="features/attendance/pages/Register.fs" />
     <Compile Include="features/attendance/pages/Show.fs" />

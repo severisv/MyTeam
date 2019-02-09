@@ -28,7 +28,6 @@ let selectMembers =
     fun (players : IQueryable<Models.Domain.Member>) -> 
         query { 
             for p in players do
-                sortBy p.FirstName
                 select 
                     (p.Id, p.FacebookId, p.FirstName, p.MiddleName, p.LastName, 
                      p.UrlName, p.ImageFull, p.Status)
@@ -42,6 +41,7 @@ let selectMembers =
                  UrlName = !!urlName
                  Image = !!imageFull
                  Status = enum<PlayerStatus> status })
+        |> Seq.sortBy (fun p -> p.FirstName)
 
 
 let list : Database -> ClubId -> MemberWithTeamsAndRoles list =

@@ -124,6 +124,8 @@ module App =
                            <| choose [ 
                                 POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
                                     routef "/%O/registrer/%O" (Attendance.Api.confirmAttendance club.Id >> jsonPost)
+                                POST >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] >=> 
+                                    routef "/%O/registrer/%O/victory" (Attendance.Api.registerVictory club.Id >> jsonPost)
                             ]                                     
                                                     
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)

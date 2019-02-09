@@ -26,6 +26,11 @@ module Html =
                 ((elementName, 
                   mergeAttributes (attributes |> Seq.toList) 
                       [ _class className ] |> List.toArray), children)
+        | VoidElement(elementName, attributes) -> 
+            VoidElement
+                (elementName, 
+                  mergeAttributes (attributes |> Seq.toList) 
+                      [ _class className ] |> List.toArray)
         | Text r -> 
             Text(r |> replace "class=\"" (sprintf "class=\"%s " className))
         | _ -> c
