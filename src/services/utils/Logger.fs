@@ -1,7 +1,7 @@
 module MyTeam.Logger
 
-open MyTeam
+open System
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 
-let get<'T> (ctx : HttpContext) = ctx.RequestServices.GetService<ILogger<'T>>()
+let get<'T> (serviceProvicer : IServiceProvider) = serviceProvicer.GetService<ILogger<'T>>()

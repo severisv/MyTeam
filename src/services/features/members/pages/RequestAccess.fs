@@ -12,6 +12,7 @@ open MyTeam.Shared.Components
 open MyTeam.Shared.Components.Forms
 open MyTeam.Validation
 open MyTeam.Views
+open Microsoft.Extensions.Logging
 
 [<CLIMutable>]
 type RequestAccessForm =
@@ -114,6 +115,9 @@ let post (club : Club) (user : Users.User option) form (ctx : HttpContext) =
                       LastName = form.Etternavn, Email = ctx.User.Identity.Name, 
                       FacebookId = form.FacebookId)) |> ignore
             db.SaveChanges() |> ignore
+            
+            Logger.get ctx.RequestServices |> fun logger ->
+                logger.LogInformation(sprintf "Ny medlemsforespørsel: \n%O" form)            
             view None [] club user ctx
         | Error e -> view (Some form) e club user ctx
     | Error e -> failwith e

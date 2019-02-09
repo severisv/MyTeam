@@ -49,7 +49,7 @@ let logNotFound next (ctx: HttpContext) =
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             
-                Logger.get ctx 
+                Logger.get ctx.RequestServices 
                 |> fun logger ->
                     logger.LogWarning(sprintf "404: %s Referer: %s  \n %s" 
                                         (string ctx.Request.Path) 

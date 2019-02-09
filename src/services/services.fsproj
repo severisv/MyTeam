@@ -27,6 +27,7 @@
     <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/Logger.fs" />
     <Compile Include="utils/Client.fs" />
+    <Compile Include="utils/Email.fs" />
     <Compile Include="components/common/Base.fs" />
     <Compile Include="components/common/Icons.fs" />
     <Compile Include="components/common/Layout.fs" />
@@ -76,7 +77,7 @@
     <Compile Include="features/members/Types.fs" />
     <Compile Include="features/members/Queries.fs" />
     <Compile Include="features\members\MemberPersistence.fs" />
-    <Compile Include="features/members/Api.fs" />
+    <Compile Include="features\members\MemberApi.fs" />
     <Compile Include="features/members/pages/List.fs" />
     <Compile Include="features/members/pages/RequestAccess.fs" />
     <Compile Include="features/stats/Types.fs" />

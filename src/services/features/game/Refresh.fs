@@ -18,7 +18,7 @@ type GamesHtml = HtmlProvider<"features/game/games.html">
 let run next (ctx: HttpContext)  = 
     let now = DateTime.Now
     let db = ctx.Database
-    let logger = Logger.get ctx
+    let logger = Logger.get ctx.RequestServices
 
     query {
         for season in db.Seasons do

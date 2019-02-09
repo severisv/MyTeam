@@ -2,6 +2,7 @@
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.Settings;
+using Services.Utils;
 
 namespace MyTeam.Services.Composition
 {
@@ -16,7 +17,7 @@ namespace MyTeam.Services.Composition
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<Cloudinary>();
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<EmailSender>();
         }
     }
 }

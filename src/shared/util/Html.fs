@@ -8,17 +8,20 @@ let mergeClasses (a : IHTMLProp list) (b : IHTMLProp list) =
         attr
         |> List.filter (fun a -> a :? HTMLAttr)
         |> List.map (fun a ->
+            if a :? HTMLAttr then
+
                a :?> HTMLAttr
                |> function
                | ClassName c -> c
                | Class c -> c
-               | _ -> "")
+               | _ -> ""
+            else "")
         |> String.concat " "
         |> Strings.trim
 
     let excludeClasses : IHTMLProp list -> IHTMLProp list =
         List.filter (fun e ->
-            if (e :? HTMLAttr) then
+            if e :? HTMLAttr then
                 e :?> HTMLAttr
                 |> function
                 | ClassName c -> false

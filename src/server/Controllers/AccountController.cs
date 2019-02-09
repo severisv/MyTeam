@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
 using MyTeam.Resources;
-using MyTeam.Services;
+using Services.Utils;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
@@ -23,7 +23,7 @@ namespace MyTeam.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly IPlayerService _playerService;
         private readonly ICacheHelper _cacheHelper;
@@ -31,7 +31,7 @@ namespace MyTeam.Controllers
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
+            EmailSender emailSender,
             ILoggerFactory loggerFactory,
             IPlayerService playerService,
             ICacheHelper cacheHelper)
