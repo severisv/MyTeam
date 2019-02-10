@@ -5,6 +5,7 @@ open MyTeam.Domain.Members
 open MyTeam.News
 open MyTeam
 open System
+open Server.Common.News
 
 let saveArticle : UpdateArticle =
     fun db clubId articleName model ->

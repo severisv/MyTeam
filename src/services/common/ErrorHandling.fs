@@ -3,6 +3,7 @@ module Server.ErrorHandling
 open Giraffe
 open MyTeam
 open System
+open Common
 open Microsoft.Extensions.Logging
 open Microsoft.AspNetCore.Hosting
 

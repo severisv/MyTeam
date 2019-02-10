@@ -9,6 +9,7 @@ open MyTeam.Domain.Members
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Microsoft.AspNetCore.Hosting
+open Common
 open Results
 open Authorization
 open PipelineHelpers

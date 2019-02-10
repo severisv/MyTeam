@@ -3,7 +3,7 @@ module MyTeam.News.Queries
 open MyTeam.Domain
 open MyTeam.News
 open MyTeam
-open MyTeam.Common.News
+open Server.Common.News
 
 let getClubDescription : GetClubDescription =
     fun db clubId ->

@@ -2,6 +2,7 @@ module MyTeam.Games.Pages.Show
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Server
 open MyTeam.Domain
 open MyTeam.Games
 open MyTeam.Views
@@ -21,8 +22,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
         let matchReport =
             game.MatchReportName 
             |> Option.map (Common.News.Queries.getArticle db club.Id)
-            |> Option.defaultValue None
-      
+            |> Option.defaultValue None      
 
         let gameHasPassed = game.DateTime < DateTime.Now
 

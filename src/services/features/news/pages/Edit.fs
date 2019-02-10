@@ -11,8 +11,7 @@ open MyTeam.News.Pages
 open MyTeam.Views
 open MyTeam.Shared.Components
 open Microsoft.Extensions.Options
-open MyTeam.Common.News
-
+open Server.Common.News
 
 let private editView (ctx: HttpContext) (club: Club) user name (article: ArticleModel) published validationErrors =
     let db = ctx.Database

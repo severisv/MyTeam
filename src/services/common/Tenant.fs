@@ -1,4 +1,4 @@
-module MyTeam.Tenant
+module Server.Common.Tenant
 
 open MyTeam
 open MyTeam.Domain.Members

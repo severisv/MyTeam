@@ -4,7 +4,7 @@ open MyTeam
 open MyTeam.Domain
 open System
 open MyTeam.Users
-open MyTeam.Common.News
+open Server.Common.News
 
 type PaginationOptions = {
     Skip: int

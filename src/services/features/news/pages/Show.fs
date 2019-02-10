@@ -6,7 +6,8 @@ open MyTeam.Views
 open MyTeam.Domain
 open MyTeam.News
 open MyTeam.News.Pages
-open MyTeam.Common.News
+open Server.Common.News
+open Server
 
 let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
 

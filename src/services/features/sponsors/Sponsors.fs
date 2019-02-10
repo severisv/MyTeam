@@ -2,14 +2,11 @@ module MyTeam.Sponsors
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Common.News
 open MyTeam.Components
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Shared.Components
-open MyTeam.Users
 open MyTeam.Views
-open System
 open Fable.Helpers.React.Props
 
 type Sponsors = string

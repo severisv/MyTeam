@@ -1,4 +1,4 @@
-namespace MyTeam.Common.News
+namespace Server.Common.News
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
