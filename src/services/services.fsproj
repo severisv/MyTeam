@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Server</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\database\Migrations.csproj" />
@@ -37,7 +38,6 @@
     <Compile Include="components/Scripts.fs" />
     <Compile Include="components/Table.fs" />
     <Compile Include="components/Tabs.fs" />
-    <Compile Include="domain/Events.fs" />
     <Compile Include="common/features/*.fs" />
     <Compile Include="common/Clubs.fs" />
     <Compile Include="common/Users.fs" />

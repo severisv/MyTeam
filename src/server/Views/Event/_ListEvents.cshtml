@@ -1,12 +1,11 @@
-﻿@using System.Threading.Tasks
-@model IEnumerable<MyTeam.ViewModels.Events.EventViewModel>
+﻿@model IEnumerable<MyTeam.ViewModels.Events.EventViewModel>
 
 @foreach (var ev in Model)
 {
     if (Context.Member().BelongsToTeam(ev.TeamIds.ToArray()) || ev.GameType == GameType.Treningskamp)
     {  
         @Html.Partial("_Show", ev)
-        @if (ev.SignupHasOpened())
+        if (ev.SignupHasOpened())
         {
             @Html.Partial("_Signup", ev)
         }

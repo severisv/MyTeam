@@ -38,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a asp-controller="news" asp-action="index" class="navbar-brand"><img src="@Context.Cloudinary().Image(club?.Logo, 100)" alt="Wam-Kam"/></a>
+            <a href="/" class="navbar-brand"><img src="@Context.Cloudinary().Image(club?.Logo, 100)" alt="Wam-Kam"/></a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -92,7 +92,7 @@
                 <li><a href="/intern/lagliste"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
                 @if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
                 {
-                    <li><a asp-controller="admin" asp-action="index"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
+                    <li><a href="/"><i class="@Icons.Coach"></i> @Res.AdminPage</a></li>
                 }
             </ul>
         }

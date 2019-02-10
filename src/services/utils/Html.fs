@@ -33,4 +33,3 @@ module Html =
                       [ _class className ] |> List.toArray)
         | Text r -> 
             Text(r |> replace "class=\"" (sprintf "class=\"%s " className))
-        | _ -> c

@@ -4,9 +4,9 @@ open System.Linq
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Common.Features.Members
-open MyTeam.Domain.Eventqueries
 open MyTeam.Models.Enums
 open System
+open MyTeam.Domain.Events
 
 module Queries =
 
@@ -105,6 +105,18 @@ module Queries =
             
             selectedYear, years, attendance
             
+            
+    let internal selectEvents (events: IQueryable<Models.Domain.Event>) = 
+        query {
+            for e in events do
+                        select (e.Id, e.Location, e.DateTime)
+        } |> Seq.map(fun (id, location, date) ->
+                        {
+                            Id = id
+                            Date = date
+                            Location = location                    
+                        }
+                    )
 
     let getPreviousTrainings: GetPreviousTrainings =
         fun db clubId ->
