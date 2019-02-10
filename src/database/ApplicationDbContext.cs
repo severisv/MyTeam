@@ -106,6 +106,12 @@ namespace MyTeam.Models
                 .WithMany(c => c.Comments)
                 .IsRequired(false);
 
+
+            builder.Entity<Article>()
+                .HasOne(a => a.Game)
+                .WithOne(g => g.Report)
+                .IsRequired(false);
+
         }
     }
 
