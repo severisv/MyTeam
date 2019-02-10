@@ -14,6 +14,5 @@ namespace MyTeam.ViewModels.Game
         [RequiredNO]
         public Guid GameId { get; set; }
         public Guid? AssistedById { get; set; }
-        public Guid Id { get; set; }
     }
 }
