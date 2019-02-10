@@ -39,13 +39,13 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
 
 let logNotFound next (ctx: HttpContext) =
 
-    if  not (String.IsNullOrEmpty(ctx.Request.Headers.["Referer"] |> string)) 
+    if  not <| String.IsNullOrEmpty(ctx.Request.Headers.["Referer"] |> string) 
         &&
         ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com"; "Lynt.cz"; "DotBot" ]
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not 
         && 
-        ["wp-login.php"; "apple-touch"; "favicon.ico"]
+        ["wp-login.php"; "apple-touch"; "favicon.ico"; "index.php"]
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             
@@ -59,6 +59,6 @@ let logNotFound next (ctx: HttpContext) =
                                         |> Seq.map (fun keyValue -> 
                                             sprintf "%s: %s" keyValue.Key (string keyValue.Value)
                                         )
-                                        |> String.concat ",  ")
+                                        |> String.concat ",\n  ")
                                      )
     next ctx
