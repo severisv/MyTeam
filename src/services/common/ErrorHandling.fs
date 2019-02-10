@@ -1,11 +1,10 @@
-module MyTeam.ErrorHandling
+module Server.ErrorHandling
 
 open Giraffe
 open MyTeam
 open System
 open Microsoft.Extensions.Logging
 open Microsoft.AspNetCore.Hosting
-
 
 let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger) =
         clearResponse

@@ -1,16 +1,16 @@
-namespace MyTeam
+namespace Server
 
+open MyTeam
 open Giraffe
 open Giraffe.Serialization
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open MyTeam
 open MyTeam.Domain.Members
-open MyTeam.Authorization
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
-open Results
 open Microsoft.AspNetCore.Hosting
+open Results
+open Authorization
 open PipelineHelpers
     
 module App =

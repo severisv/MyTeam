@@ -7,6 +7,7 @@ nuget Fable.Import.Browser prelease
 nuget Fable.PowerPack
 nuget Fable.React prelease
 nuget Fable.JsonConverter prelease
+nuget Microsoft.Extensions.Logging.ApplicationInsights
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator

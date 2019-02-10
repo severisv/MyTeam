@@ -1,6 +1,7 @@
-module MyTeam.Results
+module Server.Results
 
 open Giraffe
+open MyTeam
 
 let jsonResult next ctx =
     function 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +13,8 @@ using MyTeam.Settings;
 using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Microsoft.Extensions.Logging;
+using Server;
 
 namespace MyTeam
 {
@@ -76,10 +74,9 @@ namespace MyTeam
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.LogStart();
-            loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Information);
 
             if (env.IsDevelopment() || env.IsStaging())
             {

@@ -1,5 +1,6 @@
 namespace MyTeam.Games
 
+open Server
 open MyTeam.Domain
 open MyTeam
 open System

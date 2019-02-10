@@ -1,5 +1,6 @@
 module MyTeam.News.Pages.Edit
 
+open Server
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam

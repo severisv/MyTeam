@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SlackLogger;
-using Microsoft.ApplicationInsights.AspNetCore;
 
 namespace MyTeam
 {
@@ -30,6 +29,7 @@ namespace MyTeam
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddConsole();
                     logging.AddDebug();
+                    logging.AddApplicationInsights(hostingContext.Configuration["ApplicationInsights:InstrumentationKey"] ?? "");
                     logging.AddSlack(options =>
                     {
                         options.WebhookUrl =
