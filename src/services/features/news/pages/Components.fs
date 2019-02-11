@@ -8,6 +8,7 @@ open MyTeam.News
 open System
 open MyTeam.Views
 open Server.Common.News
+open MyTeam.Views.BaseComponents
 
 let articleUrl (article: Article) = 
     sprintf "/nyheter/vis/%O" article.Name

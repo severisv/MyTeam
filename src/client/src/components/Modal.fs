@@ -4,8 +4,9 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.React
-open MyTeam.Components
-open MyTeam.Shared.Components
+open Shared.Components
+open Shared.Components.Base
+
 
 type State =
     { IsVisible : bool }

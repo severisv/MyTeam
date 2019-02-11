@@ -3,6 +3,7 @@ namespace MyTeam.Views
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Microsoft.AspNetCore.Http
+open MyTeam.Views.BaseComponents
 
 [<AutoOpen>]
 module Login =
@@ -27,8 +28,6 @@ module Login =
                     ]
                 ]
             ]
-
-
 
     let userPartial ctx notifications user   =
         let getImage = Images.getMember ctx

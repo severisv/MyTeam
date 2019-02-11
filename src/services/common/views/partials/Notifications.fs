@@ -2,7 +2,9 @@ namespace MyTeam.Views
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Shared.Components
+open Shared.Components
+open MyTeam.Views.BaseComponents
+
 
 [<AutoOpen>]
 module NotificationViews =

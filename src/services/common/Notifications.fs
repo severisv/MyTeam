@@ -5,6 +5,7 @@ open MyTeam.Domain
 open System
 open System.Linq
 
+
 type NotificationsModel =
     { UnansweredEventIds : Guid list }
     member m.UnansweredEvents = m.UnansweredEventIds.Length

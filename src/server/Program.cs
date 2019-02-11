@@ -39,7 +39,7 @@ namespace MyTeam
                     });
                 })
                 .UseStartup<Startup>()
-//                .UseApplicationInsights()
+                .UseApplicationInsights()
                 .Build();
 
             host.Run();

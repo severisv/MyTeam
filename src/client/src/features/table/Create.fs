@@ -6,10 +6,11 @@ open Fable.Import
 open Fable.Import.React
 open MyTeam
 open MyTeam.Client.Components
-open MyTeam.Components
-open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Forms
+open Shared.Components
+open Shared.Components
+open Shared.Components.Forms
 open Shared.Features.Table.Table
+open Shared.Components.Base
 open Thoth.Json
 
 

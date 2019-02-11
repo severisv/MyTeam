@@ -2,12 +2,13 @@ module MyTeam.Sponsors
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Components
+open Shared.Components
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Shared.Components
+open Shared.Components
 open MyTeam.Views
 open Fable.Helpers.React.Props
+open MyTeam.Views.BaseComponents
 
 type Sponsors = string
 
@@ -65,7 +66,7 @@ let editPost (club: Club) user (ctx: HttpContext) =
 
     let db = ctx.Database 
     let (ClubId clubId) = club.Id
-    let form = ctx.BindForm<MyTeam.Shared.Components.Input.StringPayload>()
+    let form = ctx.BindForm<Shared.Components.Input.StringPayload>()
     db.Clubs
     |> Seq.tryFind (fun c -> c.Id = clubId)
     |> function 

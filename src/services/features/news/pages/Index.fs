@@ -7,6 +7,8 @@ open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
 open Server.Common.News
+open MyTeam.Views.BaseComponents
+
 
 let private pagination articles =   
 

@@ -4,9 +4,11 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
-open MyTeam.Shared.Components
+open Shared.Components
 open MyTeam.Views
 open System
+open MyTeam.Views.BaseComponents
+
 
 type ArticleName = string
 

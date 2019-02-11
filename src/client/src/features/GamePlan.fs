@@ -8,13 +8,15 @@ open Fable.PowerPack
 open Fable.PowerPack.Fetch
 open MyTeam
 open MyTeam.Client.Components
-open MyTeam.Components
+open Shared.Components
 open MyTeam.Domain
-open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Layout
+open Shared.Components.Base
+open Shared.Components.Layout
 open Shared.Features.Games.GamePlan
 open Thoth.Json
 open MyTeam.Client.Util
+open Shared.Components.Base
+
 
 
 type Time = int

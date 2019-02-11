@@ -3,7 +3,7 @@ module MyTeam.Views.Error
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Shared.Components
+open Shared.Components
 open MyTeam.Views
 
 let internal errorMessage icon msg =

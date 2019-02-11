@@ -5,7 +5,7 @@ open MyTeam.Domain
 open MyTeam.Domain.Events
 open MyTeam.Domain.Members
 open System
-open MyTeam.Shared.Components.Input
+open Shared.Components.Input
 open Shared.Features.Games.SelectSquad
 
 type Outcome = 

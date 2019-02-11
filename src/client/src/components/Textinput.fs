@@ -6,9 +6,9 @@ open Fable.Import
 open Fable.Import.React
 open Fable.PowerPack
 open Fable.PowerPack.Fetch
-open MyTeam.Components
-open MyTeam.Shared.Components
-open MyTeam.Shared.Components.Input
+open Shared.Components
+open Shared.Components.Input
+open Shared.Components.Base
 
 type State =
     { IsPosting : bool

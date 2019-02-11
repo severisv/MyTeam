@@ -7,6 +7,8 @@ open MyTeam.Domain.Members
 open Shared.Features.Games.GamePlan
 open System
 open System.Linq
+
+
 let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
 
     let db = ctx.Database

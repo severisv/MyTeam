@@ -4,7 +4,7 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Views
-open MyTeam.Shared.Components
+open Shared.Components
 
 let coachMenuItems = [
     li [][a [_href "/intern/arrangement/ny"] [!!(Icons.training ""); encodedText "Opprett arrangement"]]

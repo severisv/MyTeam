@@ -3,7 +3,8 @@ module MyTeam.Ajax
 open MyTeam
 open MyTeam.Views
 open Giraffe.GiraffeViewEngine
-open MyTeam.Shared.Components
+open Shared.Components
+open MyTeam.Views.BaseComponents
    
 let ajaxSuccessIndicator =
     div [ _class "ajax-success-indicator" ] [
@@ -11,9 +12,6 @@ let ajaxSuccessIndicator =
         !!Labels.error
         icon "loader fa fa-spin fa-spinner" ""
     ]
-
-
-
 
 let ajaxCheckbox href isChecked =
     input [ 
@@ -23,7 +21,5 @@ let ajaxCheckbox href isChecked =
         (isChecked =? (_checked, _empty))
     ]    
      
-
-
 let load url =
       div [ _class "ajax-load" ;_href url ] []

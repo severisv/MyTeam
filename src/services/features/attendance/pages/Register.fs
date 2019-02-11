@@ -1,6 +1,7 @@
 namespace MyTeam.Attendance.Pages
 
 open Giraffe.GiraffeViewEngine
+open Shared.Components
 open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Events
@@ -8,7 +9,7 @@ open MyTeam.Views
 open MyTeam.Attendance.Queries
 open MyTeam.Attendance
 open MyTeam.Ajax
-open MyTeam.Shared.Components
+open MyTeam.Views.BaseComponents
 
 module Register =
 

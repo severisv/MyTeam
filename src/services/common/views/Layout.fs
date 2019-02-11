@@ -4,9 +4,10 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Domain.Members
 open MyTeam.Views
-open MyTeam.Shared.Components
+open Shared.Components
 open Microsoft.Extensions.Hosting
 open Giraffe
+open MyTeam.Views.BaseComponents
 
 [<AutoOpen>]
 module Pages =

@@ -3,15 +3,17 @@ module MyTeam.News.Pages.Edit
 open Server
 open Giraffe
 open Giraffe.GiraffeViewEngine
+open Shared.Components
 open MyTeam
 open MyTeam.Validation
 open MyTeam.Domain
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
-open MyTeam.Shared.Components
 open Microsoft.Extensions.Options
 open Server.Common.News
+open MyTeam.Views.BaseComponents
+
 
 let private editView (ctx: HttpContext) (club: Club) user name (article: ArticleModel) published validationErrors =
     let db = ctx.Database

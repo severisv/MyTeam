@@ -5,7 +5,7 @@ open MyTeam.Domain
 open MyTeam.Models
 open MyTeam.Models.Domain
 open MyTeam.Events
-open MyTeam.Shared.Components.Input
+open Shared.Components.Input
 
 let setDescription clubId eventId (ctx : HttpContext) (model: StringPayload) =
     let db = ctx.Database

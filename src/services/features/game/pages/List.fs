@@ -5,9 +5,10 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Games
 open MyTeam.Views
-open MyTeam.Domain.Members
-open MyTeam.Shared.Components
+open MyTeam.Views.BaseComponents
+open Shared.Components
 open System
+open MyTeam.Domain.Members
 
 let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYear (ctx: HttpContext) =
 
@@ -61,7 +62,7 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                     hr []
 
                     (if games.Length < 1 then
-                        (!!(Components.Alerts.info "Det er ikke lagt inn noen kamper for denne sesongen"))
+                        (!!(Alerts.info "Det er ikke lagt inn noen kamper for denne sesongen"))
                     else 
                       div [ _class "table gamesTable table--striped" ]  
                             (games 

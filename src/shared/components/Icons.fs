@@ -1,4 +1,4 @@
-module MyTeam.Shared.Components.Icons
+module Shared.Components.Icons
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

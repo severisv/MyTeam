@@ -1,4 +1,4 @@
-module MyTeam.Shared.Util.Html
+module Shared.Util.Html
 
 open Fable.Helpers.React.Props
 open MyTeam

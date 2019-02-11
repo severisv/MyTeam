@@ -2,6 +2,7 @@ namespace MyTeam.Views
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open MyTeam.Views.BaseComponents
 
 [<AutoOpen>]
 module Tabs =  

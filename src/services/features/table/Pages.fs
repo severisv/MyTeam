@@ -5,9 +5,11 @@ open MyTeam
 open MyTeam.Domain
 open MyTeam.Domain.Members
 open MyTeam.Views
-open MyTeam.Shared.Components
+open Shared.Components
 open Shared.Features.Table.Table
 open System
+open MyTeam.Views.BaseComponents
+
 
 module Table =   
     let view (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =

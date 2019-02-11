@@ -5,7 +5,7 @@ open System
 open MyTeam.Domain.Members
 open MyTeam.Domain.Events
 open MyTeam.Domain
-open MyTeam.Shared.Components.Input
+open Shared.Components.Input
 
             
             

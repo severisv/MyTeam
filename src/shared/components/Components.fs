@@ -1,11 +1,10 @@
-namespace MyTeam.Components
+namespace Shared.Components
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open MyTeam.Shared.Util
+open Shared.Util
 
-[<AutoOpen>]
-module DivComponents =
+module Base =
     let whitespace = str " "
     let empty = str ""
     

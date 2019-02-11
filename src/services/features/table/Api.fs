@@ -2,9 +2,8 @@ module MyTeam.Table.Api
 
 open MyTeam
 open MyTeam.Domain
-open MyTeam.Events
 open MyTeam.Models
-open MyTeam.Shared.Components.Input
+open Shared.Components.Input
 open System
 
 let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn =

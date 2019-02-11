@@ -1,7 +1,6 @@
 module MyTeam.Games.Insights
 
 open MyTeam
-open MyTeam.Domain.Members
 open System
 
 type InsightsGame =

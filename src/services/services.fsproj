@@ -84,7 +84,7 @@
     <Compile Include="features/stats/Pages.fs" />
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
-    <Compile Include="features/table/Table.fs" />
+    <Compile Include="features\table\Pages.fs" />
     <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />

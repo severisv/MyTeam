@@ -1,4 +1,4 @@
-call code .
+start rider ./MyTeam.sln
 cd src\client
 call npm install
 cd..

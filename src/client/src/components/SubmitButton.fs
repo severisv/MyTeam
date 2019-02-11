@@ -6,11 +6,12 @@ open Fable.Import
 open Fable.Import.React
 open Fable.PowerPack
 open Fable.PowerPack.Fetch
-open MyTeam.Components
-open MyTeam.Shared.Components
+open Shared.Components
 open MyTeam
 open Fable.Core.JsInterop
 open Thoth.Json
+open Shared.Components.Base
+
 
 
 type LowercaseValidationError = {

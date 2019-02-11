@@ -9,7 +9,8 @@ open MyTeam.Models.Enums
 open MyTeam.Views
 open System
 open MyTeam.Stats
-open MyTeam.Shared.Components
+open Shared.Components
+open MyTeam.Views.BaseComponents
 
 module Pages =   
     let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =

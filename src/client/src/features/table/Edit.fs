@@ -7,8 +7,8 @@ open Fable.Import.Browser
 open Fable.Import.React
 open MyTeam
 open MyTeam.Client.Components
-open MyTeam.Components
-open MyTeam.Shared.Components
+open Shared.Components
+open Shared.Components.Base
 open Shared.Features.Table.Table
 open Shared.Components.Forms
 open Thoth.Json

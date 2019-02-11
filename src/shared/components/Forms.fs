@@ -1,11 +1,11 @@
-module MyTeam.Shared.Components.Forms
+module Shared.Components.Forms
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import.React
-open MyTeam.Shared.Util.Html
+open Shared.Util.Html
 
 type FormProps =
     | Horizontal of int

@@ -3,7 +3,6 @@ namespace MyTeam.Views
 open Giraffe.GiraffeViewEngine
 open MyTeam
 
-[<AutoOpen>]
 module BaseComponents =
 
     let empty = rawText ""

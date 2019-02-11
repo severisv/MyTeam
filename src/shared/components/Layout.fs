@@ -1,8 +1,8 @@
-module MyTeam.Shared.Components.Layout
+module Shared.Components.Layout
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open MyTeam.Shared.Util
+open Shared.Util
 
 
 

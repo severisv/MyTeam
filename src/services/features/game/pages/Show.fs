@@ -7,8 +7,9 @@ open MyTeam.Domain
 open MyTeam.Games
 open MyTeam.Views
 open MyTeam.Domain.Members
-open MyTeam.Shared.Components
 open System
+open Shared.Components
+open MyTeam.Views.BaseComponents
 
 let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
@@ -28,8 +29,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
         [
             mtMain [] [      
-                div [ _class "mt-container" ] [                   
-                  
+                div [ _class "mt-container" ] [  
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then
                                  !!(editLink <| sprintf "/intern/arrangement/endre/%O" game.Id)

@@ -1,4 +1,4 @@
-module MyTeam.Shared.Components.Input
+module Shared.Components.Input
 
 [<CLIMutable>]
 type CheckboxPayload =

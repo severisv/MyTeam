@@ -1,9 +1,10 @@
-module MyTeam.Components.Alerts
+module Shared.Components.Alerts
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open MyTeam
-open MyTeam.Shared.Components
+open Shared.Components
+open Shared.Components.Base
 
 type AlertType =
     | Success

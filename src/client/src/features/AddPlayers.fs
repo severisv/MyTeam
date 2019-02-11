@@ -5,13 +5,15 @@ open Fable.Helpers.React.Props
 open MyTeam
 open MyTeam.Client.Components
 open MyTeam.Client.Components
-open MyTeam.Components
-open MyTeam.Shared.Components.Forms
-open MyTeam.Shared.Components.Layout
+open Shared.Components
+open Shared.Components.Forms
+open Shared.Components.Layout
 open Shared.Features.Admin.AddPlayers
 open MyTeam.Client.Util.ReactHelpers
 open Thoth.Json
-open MyTeam.Shared.Components
+open Shared.Components
+open Shared.Components.Base
+
 
 let defaultForm = {
     ``E-postadresse`` = ""

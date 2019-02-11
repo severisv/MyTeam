@@ -2,7 +2,7 @@ namespace MyTeam.Views
 
 open MyTeam.Models.Enums
 open Giraffe.GiraffeViewEngine
-open MyTeam.Shared.Components
+open Shared.Components
 
 
 [<AutoOpen>]
