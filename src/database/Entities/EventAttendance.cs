@@ -9,7 +9,6 @@ namespace MyTeam.Models.Domain
         public Guid EventId { get; set; }
         [Required]
         public Guid MemberId { get; set; }
-        [Required]
         public bool? IsAttending { get; set; }
         public bool DidAttend { get; set; }
         public bool IsSelected { get; set; }
