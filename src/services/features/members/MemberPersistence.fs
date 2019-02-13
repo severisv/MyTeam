@@ -2,9 +2,10 @@ module MyTeam.Members.Persistence
 
 open Microsoft.EntityFrameworkCore
 open MyTeam
+open Shared
 open MyTeam.Common.Features.Members
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Models.Domain
 
 let setStatus : SetStatus =

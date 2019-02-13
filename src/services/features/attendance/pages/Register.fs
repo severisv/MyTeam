@@ -3,8 +3,9 @@ namespace MyTeam.Attendance.Pages
 open Giraffe.GiraffeViewEngine
 open Shared.Components
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Events
+open Shared
+open Shared.Domain
+open Shared.Domain.Events
 open MyTeam.Views
 open MyTeam.Attendance.Queries
 open MyTeam.Attendance

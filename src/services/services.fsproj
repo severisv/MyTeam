@@ -48,7 +48,7 @@
     <Compile Include="common/views/partials/Analytics.fs" />
     <Compile Include="common/views/partials/Login.fs" />
     <Compile Include="common/views/partials/Notifications.fs" />
-    <Compile Include="common/views/Layout.fs" />
+    <Compile Include="common\views\Layout.fs" />
     <Compile Include="common/views/Error.fs" />
     <Compile Include="common/ErrorHandling.fs" />
     <Compile Include="common/Results.fs" />
@@ -59,7 +59,6 @@
     <Compile Include="features/attendance/Api.fs" />
     <Compile Include="features/attendance/pages/Register.fs" />
     <Compile Include="features/attendance/pages/Show.fs" />
-    <Compile Include="features/events/Types.fs" />
     <Compile Include="features/events/EventsApi.fs" />
     <Compile Include="features/game/Types.fs" />
     <Compile Include="features/game/Queries.fs" />
@@ -84,7 +83,7 @@
     <Compile Include="features/stats/Pages.fs" />
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
-    <Compile Include="features\table\Pages.fs" />
+    <Compile Include="features\table\TablePages.fs" />
     <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />

@@ -2,7 +2,7 @@ module Shared.Components.Alerts
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open MyTeam
+open Shared
 open Shared.Components
 open Shared.Components.Base
 

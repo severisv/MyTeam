@@ -2,13 +2,14 @@ module MyTeam.Games.Pages.List
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Games
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
 open Shared.Components
 open System
-open MyTeam.Domain.Members
+open Shared.Domain.Members
 
 let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYear (ctx: HttpContext) =
 

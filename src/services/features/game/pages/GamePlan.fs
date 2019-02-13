@@ -1,9 +1,10 @@
 module MyTeam.Games.Pages.GamePlan
 
 open MyTeam
+open Shared
 open MyTeam.Common.Features
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open Shared.Features.Games.GamePlan
 open System
 open System.Linq

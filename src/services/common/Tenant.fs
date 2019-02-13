@@ -1,10 +1,10 @@
 module Server.Common.Tenant
 
 open MyTeam
-open MyTeam.Domain.Members
-open MyTeam.Domain
+open Shared
+open Shared.Domain.Members
+open Shared.Domain
 open MyTeam.Users
-
 
 type Get = HttpContext -> Option<Club> * Option<User>
 type ClearUserCache = HttpContext -> ClubId -> UserId -> unit
@@ -26,7 +26,7 @@ let get : Get =
         let hostNameArray = if hostName.Contains("localhost") then ["www";"wamkam";"no"]
                             else hostName.Split('.') 
                                 |> Seq.toList
-                                |> List.map toLower
+                                |> List.map Strings.toLower
                             |> List.filter (fun p -> p <> "www")
 
 

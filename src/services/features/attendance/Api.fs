@@ -2,7 +2,8 @@ module MyTeam.Attendance.Api
 
 open MyTeam.Attendance
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Models.Domain
 open System
 

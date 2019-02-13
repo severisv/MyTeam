@@ -1,5 +1,6 @@
 namespace MyTeam
 
+open Shared
 open System
 open System.Text.RegularExpressions
 

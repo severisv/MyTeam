@@ -1,10 +1,9 @@
-module MyTeam.Client.Util.ReactHelpers
+module Client.Util.ReactHelpers
 
 open Fable.Import
 open Fable.Import.React
 open Fable.Helpers.React
-open MyTeam
-
+open Shared
 
 let render deserializeFn id comp =
     Browser.document.getElementById id

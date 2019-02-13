@@ -1,7 +1,8 @@
 module MyTeam.Table.Api
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Models
 open Shared.Components.Input
 open System

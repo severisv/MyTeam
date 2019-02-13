@@ -3,6 +3,7 @@ module MyTeam.Views.Error
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Shared
 open Shared.Components
 open MyTeam.Views
 

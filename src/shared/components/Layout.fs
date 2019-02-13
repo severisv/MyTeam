@@ -4,8 +4,6 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Shared.Util
 
-
-
 let mtMain attributes children =
     div (attributes |> Html.mergeClasses [ Class "mt-main" ]) children
 

@@ -2,8 +2,9 @@ module MyTeam.News.Pages.Components
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.News
 open System
 open MyTeam.Views

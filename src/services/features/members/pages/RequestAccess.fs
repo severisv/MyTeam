@@ -4,9 +4,10 @@ open Fable.Helpers.React.Props
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Shared
 open Shared.Components.Buttons
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Members
 open Shared.Components
 open Shared.Components.Forms

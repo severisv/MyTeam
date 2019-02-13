@@ -2,6 +2,7 @@ module Server.ErrorHandling
 
 open Giraffe
 open MyTeam
+open Shared
 open System
 open Common
 open Microsoft.Extensions.Logging

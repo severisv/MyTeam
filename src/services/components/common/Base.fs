@@ -2,6 +2,7 @@ namespace MyTeam.Views
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Shared
 
 module BaseComponents =
 

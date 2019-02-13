@@ -1,3 +1,3 @@
-module MyTeam.Interop
+module Shared.Interop
 
 let modelAttributeName = "model"

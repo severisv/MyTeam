@@ -1,8 +1,8 @@
 module Shared.Features.Games.SelectSquad
 
 open System
-open MyTeam.Domain.Members
-open MyTeam.Image
+open Shared.Domain.Members
+open Shared.Image
 
 type Signup = {
         MemberId: Guid

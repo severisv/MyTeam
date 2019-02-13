@@ -1,9 +1,10 @@
 module MyTeam.News.Persistence
 
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.News
 open MyTeam
+open Shared
 open System
 open Server.Common.News
 

@@ -1,7 +1,8 @@
 namespace MyTeam.Stats
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open System
 
 type SelectedYear = 

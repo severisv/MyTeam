@@ -1,4 +1,4 @@
-module MyTeam.Client.Components.Textarea
+module Client.Components.Textarea
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

@@ -2,8 +2,9 @@ module Server.Authorization
 
 open Giraffe
 open MyTeam
+open Shared
 open MyTeam.Users
-open MyTeam.Domain.Members
+open Shared.Domain.Members
 open Common
 
 

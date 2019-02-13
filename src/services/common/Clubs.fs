@@ -1,7 +1,8 @@
 module MyTeam.Clubs
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 
 type Get = HttpContext -> ClubIdentifier -> Option<Club>
 

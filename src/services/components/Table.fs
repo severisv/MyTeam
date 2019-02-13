@@ -1,6 +1,7 @@
 namespace MyTeam.Views
 
 open MyTeam
+open Shared.Strings
 open Giraffe.GiraffeViewEngine
 
 [<AutoOpen>]

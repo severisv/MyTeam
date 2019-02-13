@@ -2,6 +2,7 @@ module Server.Results
 
 open Giraffe
 open MyTeam
+open Shared
 open Common
 
 let jsonResult next ctx =

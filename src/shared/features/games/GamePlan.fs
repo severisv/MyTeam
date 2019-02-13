@@ -1,9 +1,9 @@
 module Shared.Features.Games.GamePlan
 
 open System
-open MyTeam
-open MyTeam.Domain.Members
-open MyTeam.Image
+open Shared
+open Shared.Domain.Members
+open Shared.Image
 
 
 type Model = {

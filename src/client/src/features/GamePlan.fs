@@ -1,4 +1,4 @@
-module MyTeam.Client.GamePlan
+module Client.GamePlan
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -6,18 +6,15 @@ open Fable.Import
 open Fable.Import.React
 open Fable.PowerPack
 open Fable.PowerPack.Fetch
-open MyTeam
-open MyTeam.Client.Components
+open Shared
+open Client.Components
 open Shared.Components
-open MyTeam.Domain
+open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.GamePlan
 open Thoth.Json
-open MyTeam.Client.Util
-open Shared.Components.Base
-
-
+open Client.Util
 
 type Time = int
 type LineupId = System.Guid

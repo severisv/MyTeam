@@ -2,8 +2,9 @@ namespace Server.Common.News
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Views
 open System

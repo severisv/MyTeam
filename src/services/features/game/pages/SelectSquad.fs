@@ -2,10 +2,11 @@ module MyTeam.Games.Pages.SelectSquad
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Views
 open MyTeam.Common.Features
-open MyTeam.Domain.Members
+open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Games
 open Shared.Features.Games.SelectSquad

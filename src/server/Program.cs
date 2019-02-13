@@ -41,7 +41,7 @@ namespace MyTeam
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .Build();
-
+            
             host.Run();
         }
     }

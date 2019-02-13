@@ -1,7 +1,8 @@
 module MyTeam.Games.Queries
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Common.Features.Members
 open System.Linq
 open System

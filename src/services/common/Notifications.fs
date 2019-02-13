@@ -1,7 +1,8 @@
 module MyTeam.Notifications
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open System
 open System.Linq
 

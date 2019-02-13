@@ -1,19 +1,16 @@
-module MyTeam.Client.Admin.AddPlayers
+module Client.Admin.AddPlayers
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open MyTeam
-open MyTeam.Client.Components
-open MyTeam.Client.Components
-open Shared.Components
-open Shared.Components.Forms
-open Shared.Components.Layout
-open Shared.Features.Admin.AddPlayers
-open MyTeam.Client.Util.ReactHelpers
+open Client.Components
+open Client.Util.ReactHelpers
 open Thoth.Json
+open Shared
 open Shared.Components
 open Shared.Components.Base
-
+open Shared.Components.Layout
+open Shared.Components.Forms
+open Shared.Features.Admin.AddPlayers
 
 let defaultForm = {
     ``E-postadresse`` = ""

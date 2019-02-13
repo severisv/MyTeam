@@ -1,4 +1,4 @@
-module MyTeam.Client.Components.EditBlock
+module Client.Components.EditBlock
 
 open Fable.Helpers.React
 open Fable.Import

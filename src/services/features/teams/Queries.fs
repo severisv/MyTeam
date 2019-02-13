@@ -1,7 +1,8 @@
 namespace MyTeam.Teams
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 
 module Queries =
 

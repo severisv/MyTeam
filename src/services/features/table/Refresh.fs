@@ -1,6 +1,7 @@
 module MyTeam.Table.Refresh
 
 open MyTeam
+open Shared
 open System
 open Giraffe
 open FSharp.Data

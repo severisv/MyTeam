@@ -8,6 +8,7 @@ open Microsoft.Extensions.DependencyInjection
 open SendGrid
 open SendGrid.Helpers.Mail
 open MyTeam
+open Shared
 
 
 module Email =

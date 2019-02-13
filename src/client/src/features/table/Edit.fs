@@ -1,17 +1,18 @@
-module MyTeam.Client.Table.Edit
+module Client.Table.Edit
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.Browser
 open Fable.Import.React
-open MyTeam
-open MyTeam.Client.Components
+open Shared
+open Client.Components
 open Shared.Components
 open Shared.Components.Base
 open Shared.Features.Table.Table
 open Shared.Components.Forms
 open Thoth.Json
+open Client.Util
 
 
 type State =
@@ -109,13 +110,7 @@ type EditTable(props) =
                             ]
                   } 
             ]
-
-let element model = ofType<EditTable, _, _> model []
-let node = document.getElementById editView
-
-if not <| isNull node then 
-    node.getAttribute (Interop.modelAttributeName)
-    |> Decode.Auto.fromString<EditModel>
-    |> function 
-    | Ok model -> ReactDom.render (element model, node)
-    | Error e -> failwithf "Json deserialization failed: %O" e
+            
+let element = ofType<EditTable, _, _>
+ReactHelpers.render Decode.Auto.fromString<EditModel> editView element
+            

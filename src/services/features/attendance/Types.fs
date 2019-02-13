@@ -1,13 +1,12 @@
 namespace MyTeam.Attendance
 
 open MyTeam
+open Shared
 open System
-open MyTeam.Domain.Members
-open MyTeam.Domain.Events
-open MyTeam.Domain
-open Shared.Components.Input
-
-            
+open Shared.Domain.Members
+open Shared.Domain.Events
+open Shared.Domain
+open Shared.Components.Input            
             
 type PlayerDidAttend = bool            
 type PlayerDidWin = bool            

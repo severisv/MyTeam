@@ -1,10 +1,7 @@
 module Shared.Components.Forms
 
-open Fable.Core
-open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fable.Import.React
 open Shared.Util.Html
 
 type FormProps =

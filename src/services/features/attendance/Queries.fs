@@ -1,12 +1,13 @@
 namespace MyTeam.Attendance
 
+open System
 open System.Linq
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
+open Shared.Domain.Events
 open MyTeam.Common.Features.Members
 open MyTeam.Models.Enums
-open System
-open MyTeam.Domain.Events
 
 module Queries =
 
@@ -176,7 +177,7 @@ module Queries =
                 attendees |> List.exists (fun (id, _, isAttending, _) -> p.Id = id && (isAttending = Nullable true))
 
             let playerIsActive (p: Members.Member, _, _) =
-                p.Status = MyTeam.Domain.PlayerStatus.Aktiv    
+                p.Status = Domain.PlayerStatus.Aktiv    
 
             let attendingPlayers = players |> List.filter (playerIsAttending)
             let othersActive = players |> List.filter playerIsActive |> List.except attendingPlayers

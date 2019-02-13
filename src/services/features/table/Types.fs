@@ -1,7 +1,8 @@
 namespace MyTeam.Table
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 
 type TableRow = {
         Team: string

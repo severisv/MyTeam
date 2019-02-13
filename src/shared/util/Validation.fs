@@ -1,4 +1,4 @@
-namespace MyTeam
+namespace Shared
 
 type ValidationError =
     { Name : string

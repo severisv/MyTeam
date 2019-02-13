@@ -1,10 +1,11 @@
 namespace MyTeam.Games
 
-open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Events
-open MyTeam.Domain.Members
 open System
+open MyTeam
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
+open Shared.Domain.Events
 open Shared.Components.Input
 open Shared.Features.Games.SelectSquad
 
@@ -40,8 +41,6 @@ type Game = {
             | _ -> None            
 
 type Year = int
-
-
 
 type GetRecentAttendance = Database -> TeamId -> TeamAttendance list
 type GetSquad = Database -> GameId -> Member list

@@ -1,10 +1,5 @@
 module Shared.Features.Table.Table
 
-open System
-open MyTeam
-open MyTeam.Domain.Members
-open MyTeam.Image
-
 
 type EditModel = {
     Title: string

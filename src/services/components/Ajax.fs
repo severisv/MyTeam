@@ -1,6 +1,7 @@
 module MyTeam.Ajax
 
 open MyTeam
+open Shared
 open MyTeam.Views
 open Giraffe.GiraffeViewEngine
 open Shared.Components

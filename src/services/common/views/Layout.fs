@@ -1,12 +1,13 @@
 namespace MyTeam
 
+open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain.Members
-open MyTeam.Views
+open Shared
+open Shared.Domain.Members
 open Shared.Components
 open Microsoft.Extensions.Hosting
-open Giraffe
+open MyTeam.Views
 open MyTeam.Views.BaseComponents
 
 [<AutoOpen>]
@@ -16,12 +17,10 @@ module Pages =
 
 
     let internalMenuItems =
-        [
-            li [] [ a [ _href "/intern" ] [ !!(Icons.signup ""); encodedText " Påmelding" ] ]
+        [   li [] [ a [ _href "/intern" ] [ !!(Icons.signup ""); encodedText " Påmelding" ] ]
             li [] [ a [ _href "/intern/oppmote" ] [ !!(Icons.attendance ""); encodedText " Oppmøte" ] ]
             li [] [ a [ _href "/intern/boter" ] [ !!(Icons.fine ""); encodedText " Bøter" ] ]
-            li [] [ a [ _href "/intern/lagliste" ] [ !!(Icons.squadList ""); encodedText " Lagliste" ] ]
-        ]
+            li [] [ a [ _href "/intern/lagliste" ] [ !!(Icons.squadList ""); encodedText " Lagliste" ] ] ]
 
     type LayoutModel = {
         Title : string
@@ -49,8 +48,8 @@ module Pages =
             head [] [
                 meta [ _charset "utf-8" ]
                 meta [ _name "viewport"; _content "width=device-width, initial-scale=1.0" ]
-                meta [ _title <| club.ShortName + (o.Title.HasValue =? (" - " + o.Title, "")) ]
-                o.MetaDescription.HasValue =? (meta [ _name "description"; _content o.MetaDescription ], emptyText)
+                meta [ _title <| club.ShortName + (Strings.hasValue o.Title =? (" - " + o.Title, "")) ]
+                Strings.hasValue o.MetaDescription =? (meta [ _name "description"; _content o.MetaDescription ], emptyText)
                 title [] [ encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [ _rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
                 link [ _rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]

@@ -1,7 +1,8 @@
 namespace MyTeam.Games
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Models.Domain
 open System
 

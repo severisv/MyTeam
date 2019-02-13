@@ -1,12 +1,13 @@
 module MyTeam.Common.Features.Members
 
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open Microsoft.EntityFrameworkCore
 open System.Linq
 open System
-open MyTeam.Strings
+open Shared.Strings
 
 type MemberDetails =
     { Details : Member

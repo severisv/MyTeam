@@ -1,10 +1,7 @@
 namespace MyTeam.Table
 
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Strings
-open System
-open System.Linq
+open Shared.Strings
 
 module Queries =
     let getYears : GetYears =

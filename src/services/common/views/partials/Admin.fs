@@ -2,7 +2,8 @@ module MyTeam.Views.Admin
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain.Members
 open MyTeam.Views
 open Shared.Components
 

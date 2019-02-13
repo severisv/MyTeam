@@ -2,8 +2,9 @@ namespace MyTeam.Table
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Views
 open Shared.Components
 open Shared.Features.Table.Table

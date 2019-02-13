@@ -2,10 +2,11 @@ module MyTeam.Games.Pages.Result
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Games
 open MyTeam.Views
-open MyTeam.Domain.Members
+open Shared.Domain.Members
 open Shared.Components
 open System
 open MyTeam.Views.BaseComponents

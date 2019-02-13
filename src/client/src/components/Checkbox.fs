@@ -1,4 +1,4 @@
-module MyTeam.Client.Components.Checkbox
+module Client.Components.Checkbox
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

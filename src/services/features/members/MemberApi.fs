@@ -1,9 +1,10 @@
 module MyTeam.Members.Api
 
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Common.Features
 open MyTeam
+open Shared
 open Shared.Features.Admin.AddPlayers
 open System.Linq
 open MyTeam.Validation

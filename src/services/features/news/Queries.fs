@@ -1,8 +1,9 @@
 module MyTeam.News.Queries
 
-open MyTeam.Domain
+open Shared.Domain
 open MyTeam.News
 open MyTeam
+open Shared
 open Server.Common.News
 
 let getClubDescription : GetClubDescription =

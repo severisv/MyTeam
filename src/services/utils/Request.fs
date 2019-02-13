@@ -1,6 +1,7 @@
 module MyTeam.Request
 
 open MyTeam
+open Shared
 
 let isJson (ctx : HttpContext) =
     ctx.Request.Headers.TryGetValue("Accept")

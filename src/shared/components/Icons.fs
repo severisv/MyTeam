@@ -2,7 +2,7 @@ module Shared.Components.Icons
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open MyTeam.Domain
+open Shared.Domain
 
 type IconSize =
     | Normal

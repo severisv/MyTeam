@@ -3,7 +3,8 @@ namespace MyTeam.Stats
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open System.Linq
 open MyTeam.Models.Enums
 open MyTeam.Views

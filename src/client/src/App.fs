@@ -1,8 +1,7 @@
-namespace MyTeam.Client
-
+namespace Client
 
 module EntryPoint =
-
+    
     [
         SelectSquad.element |> ignore
         GamePlan.element |> ignore

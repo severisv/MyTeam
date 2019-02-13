@@ -1,4 +1,4 @@
-module MyTeam.Date
+module Shared.Date
 
 open System
 

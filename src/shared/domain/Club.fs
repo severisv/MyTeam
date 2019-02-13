@@ -1,4 +1,4 @@
-namespace MyTeam.Domain
+namespace Shared.Domain
 
 open System
 

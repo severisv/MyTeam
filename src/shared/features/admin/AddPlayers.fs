@@ -1,8 +1,6 @@
 module Shared.Features.Admin.AddPlayers
 
-open System
-open MyTeam
-open MyTeam.Image
+open Shared.Image
 
 
 [<CLIMutable>]

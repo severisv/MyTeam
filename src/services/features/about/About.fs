@@ -3,8 +3,9 @@ module MyTeam.About
 open Giraffe.GiraffeViewEngine
 open Shared.Components
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Views
 open Fable.Helpers.React.Props
 open MyTeam.Views.BaseComponents

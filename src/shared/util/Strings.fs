@@ -1,4 +1,4 @@
-module MyTeam.Strings
+module Shared.Strings
 
 open System
 open System.Text.RegularExpressions

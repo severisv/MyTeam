@@ -2,9 +2,10 @@ module MyTeam.Sponsors
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Shared
 open Shared.Components
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Views
 open Fable.Helpers.React.Props

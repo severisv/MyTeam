@@ -1,6 +1,7 @@
 namespace MyTeam.Views
 
 open MyTeam
+open Shared
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open System

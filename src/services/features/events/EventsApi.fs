@@ -1,11 +1,19 @@
 module MyTeam.Events.Api
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open MyTeam.Models
 open MyTeam.Models.Domain
-open MyTeam.Events
 open Shared.Components.Input
+
+type EventId = Guid
+
+type Event = {
+    Id: EventId
+    Description: string
+}
+
 
 let setDescription clubId eventId (ctx : HttpContext) (model: StringPayload) =
     let db = ctx.Database

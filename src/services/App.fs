@@ -1,11 +1,12 @@
 namespace Server
 
 open MyTeam
+open Shared
 open Giraffe
 open Giraffe.Serialization
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open MyTeam.Domain.Members
+open Shared.Domain.Members
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Microsoft.AspNetCore.Hosting
@@ -114,7 +115,7 @@ module App =
                                                     routef "/oppmote/registrer/%O" <| fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
                                                                                                     >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                    routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| toLower year) |> htmlGet
+                                                    routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
                                                 ]                    
                                             ]
                                         )    

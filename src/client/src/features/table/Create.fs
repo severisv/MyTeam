@@ -1,18 +1,17 @@
-module MyTeam.Client.Table.Create
+module Client.Table.Create
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
 open Fable.Import.React
-open MyTeam
-open MyTeam.Client.Components
-open Shared.Components
+open Shared
+open Client.Components
 open Shared.Components
 open Shared.Components.Forms
 open Shared.Features.Table.Table
 open Shared.Components.Base
 open Thoth.Json
-
+open Client.Util
 
 type State =
     { Year : int option }
@@ -60,15 +59,5 @@ type CreateTable(props) =
                   ]
             }                                                             
         
-                  
-            
-
-let element model = ofType<CreateTable, _, _> model []
-let node = Browser.document.getElementById createView
-
-if not <| isNull node then 
-    node.getAttribute (Interop.modelAttributeName)
-    |> Decode.Auto.fromString<CreateModel>
-    |> function 
-    | Ok model -> ReactDom.render (element model, node)
-    | Error e -> failwithf "Json deserialization failed: %O" e
+let element = ofType<CreateTable, _, _>
+ReactHelpers.render Decode.Auto.fromString<CreateModel> createView element

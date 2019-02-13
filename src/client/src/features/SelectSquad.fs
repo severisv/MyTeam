@@ -1,20 +1,18 @@
-module MyTeam.Client.SelectSquad
+module Client.SelectSquad
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import.React
 open Fable.PowerPack
-open MyTeam
-open MyTeam.Client.Components
+open Shared
+open Client.Components
 open Shared.Components
-open MyTeam.Domain
+open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
+open Client.Util
 open Thoth.Json
-open MyTeam.Client.Util
-open Shared.Components.Base
-
 
 type SelectSquad(props) =
     inherit Component<Model, Squad>(props)
@@ -57,7 +55,7 @@ type SelectSquad(props) =
                                 [ span []
                                     [
                                         img [ Class "hidden-xxs"
-                                              Src <| MyTeam.Image.getMember imageOptions
+                                              Src <| Image.getMember imageOptions
                                                          (fun opts -> { opts with Height = Some 50; Width = Some 50 })
                                                          m.Image m.FacebookId
                                             ]

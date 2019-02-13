@@ -1,5 +1,6 @@
-namespace MyTeam.Domain
+namespace Shared.Domain
 
+open Shared
 open System
 
 type PlayerStatus =
@@ -15,7 +16,7 @@ module Members =
     type Status = PlayerStatus
 
     let fullName (firstName, middleName, lastName) =
-        sprintf "%s %s%s%s" firstName middleName (if not (String.IsNullOrEmpty(middleName)) then " " else "") lastName
+        sprintf "%s %s%s%s" firstName middleName (if not <| Strings.hasValue middleName then " " else "") lastName
   
     type MemberId = System.Guid
     type PlayerId = MemberId
@@ -27,7 +28,6 @@ module Members =
         | Skribent = 2
         | Oppmøte = 3
         | Botsjef = 4 
-
        
     type Member = {
         Id: MemberId
@@ -41,8 +41,7 @@ module Members =
     } with
         member p.Name = sprintf "%s %s" p.FirstName p.LastName   
 
-        member m.FullName = fullName (m.FirstName, m.MiddleName, m.LastName)
-            
+        member m.FullName = fullName (m.FirstName, m.MiddleName, m.LastName)          
 
     type MemberWithTeamsAndRoles = {
         Details: Member

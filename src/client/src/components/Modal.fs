@@ -1,4 +1,4 @@
-module MyTeam.Client.Components.Modal
+module Client.Components.Modal
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

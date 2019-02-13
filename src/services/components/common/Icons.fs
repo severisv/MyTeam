@@ -3,6 +3,7 @@ namespace MyTeam.Views
 open MyTeam.Models.Enums
 open Giraffe.GiraffeViewEngine
 open Shared.Components
+open Shared
 
 
 [<AutoOpen>]
@@ -20,19 +21,19 @@ module IconComponents =
         !!(Icons.icon name title)
 
 
-    let playerStatusIcon (status: MyTeam.Domain.PlayerStatus) =                   
+    let playerStatusIcon (status: Domain.PlayerStatus) =                   
         !!(match status with
-            | MyTeam.Domain.PlayerStatus.Aktiv -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Aktiv
-            | MyTeam.Domain.PlayerStatus.Veteran -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Veteran
-            | MyTeam.Domain.PlayerStatus.Trener -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Trener
-            | _ -> Icons.playerStatusIcon MyTeam.Domain.PlayerStatus.Inaktiv)       
+            | Domain.PlayerStatus.Aktiv -> Icons.playerStatusIcon Domain.PlayerStatus.Aktiv
+            | Domain.PlayerStatus.Veteran -> Icons.playerStatusIcon Domain.PlayerStatus.Veteran
+            | Domain.PlayerStatus.Trener -> Icons.playerStatusIcon Domain.PlayerStatus.Trener
+            | _ -> Icons.playerStatusIcon Domain.PlayerStatus.Inaktiv)       
 
     let eventIcon (status: EventType) size =                   
         !!(match status with
-            | EventType.Kamp -> Icons.eventIcon MyTeam.Domain.EventType.Kamp size
-            | EventType.Trening -> Icons.eventIcon MyTeam.Domain.EventType.Trening size
-            | EventType.Diverse -> Icons.eventIcon MyTeam.Domain.EventType.Diverse size
-            | _ -> Icons.eventIcon MyTeam.Domain.EventType.Alle size
+            | EventType.Kamp -> Icons.eventIcon Domain.EventType.Kamp size
+            | EventType.Trening -> Icons.eventIcon Domain.EventType.Trening size
+            | EventType.Diverse -> Icons.eventIcon Domain.EventType.Diverse size
+            | _ -> Icons.eventIcon Domain.EventType.Alle size
             
             )                             
             

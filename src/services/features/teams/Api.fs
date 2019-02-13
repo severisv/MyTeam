@@ -1,7 +1,8 @@
 namespace MyTeam.Teams
 
 open MyTeam
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain.Members
 open Giraffe 
 
 module Api =

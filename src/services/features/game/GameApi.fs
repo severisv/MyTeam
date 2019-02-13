@@ -1,8 +1,9 @@
 namespace MyTeam.Games
 
 open Server
-open MyTeam.Domain
+open Shared.Domain
 open MyTeam
+open Shared
 open System
 open System.Linq
 open Giraffe

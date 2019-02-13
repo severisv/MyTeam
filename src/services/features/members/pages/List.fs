@@ -3,10 +3,11 @@ module MyTeam.Members.Pages.List
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
+open Shared
 open MyTeam.Attendance
 open MyTeam.Common.Features.Members
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Members
 open MyTeam.Views
 

@@ -1,4 +1,4 @@
-module MyTeam.Client.Components.Textinput
+module Client.Components.Textinput
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

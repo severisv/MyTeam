@@ -2,10 +2,11 @@ module MyTeam.Admin.Pages
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain.Members
 open Shared.Features.Admin.AddPlayers
 open MyTeam.Views
-open MyTeam.Domain
+open Shared.Domain
 
 let index club user ctx =
     [ mtMain [] 

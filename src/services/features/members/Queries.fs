@@ -1,8 +1,9 @@
 namespace MyTeam.Members
 
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Common.Features.Members
 open Microsoft.EntityFrameworkCore
 open System.Linq

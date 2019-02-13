@@ -1,6 +1,6 @@
-namespace MyTeam
+namespace Shared
 
-open MyTeam.Strings
+open Shared.Strings
 
 type Format = Jpg
 
@@ -53,11 +53,11 @@ module Image =
     let getArticle options (getProps : GetProps) url =
         let defaultArticle options getProps =
             let imageUrl =
-                if hasValue options.DefaultMember then options.DefaultMember
+                if Strings.hasValue options.DefaultMember then options.DefaultMember
                 else "image/upload/v1448309373/article_default_hnwnxo.jpg"
             get options getProps imageUrl
         match url with
-        | value when hasValue value -> get options getProps value
+        | value when Strings.hasValue value -> get options getProps value
         | _ -> defaultArticle options getProps
     
     let getMember options (getProps : GetProps) url facebookId  =

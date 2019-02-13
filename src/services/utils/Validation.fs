@@ -4,6 +4,7 @@ open FSharp.Quotations.Evaluator
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Quotations.Patterns
 open MyTeam
+open Shared
 open System
 
 type ValidationFn<'T> = string * 'T -> Result<unit, string>

@@ -5,8 +5,9 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open Shared.Components
 open MyTeam
+open Shared
 open MyTeam.Validation
-open MyTeam.Domain
+open Shared.Domain
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views

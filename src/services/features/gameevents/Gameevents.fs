@@ -2,9 +2,10 @@ module MyTeam.Gameevents
 
 open Microsoft.EntityFrameworkCore
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Events
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
+open Shared.Domain.Events
 open MyTeam.Validation
 open System
 

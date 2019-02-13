@@ -1,7 +1,8 @@
 namespace MyTeam.News
 
 open MyTeam
-open MyTeam.Domain
+open Shared
+open Shared.Domain
 open System
 open MyTeam.Users
 open Server.Common.News

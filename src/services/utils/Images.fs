@@ -2,7 +2,8 @@ namespace MyTeam
 
 open Microsoft.Extensions.Options
 open Giraffe
-open Image
+open Shared
+open Shared.Image
 
 module Images =
     let getSecretOptions (ctx : HttpContext) =

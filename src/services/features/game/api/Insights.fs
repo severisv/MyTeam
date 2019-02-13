@@ -1,6 +1,7 @@
 module MyTeam.Games.Insights
 
 open MyTeam
+open Shared
 open System
 
 type InsightsGame =

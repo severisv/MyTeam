@@ -3,8 +3,9 @@ module MyTeam.Attendance.Pages.Show
 open Giraffe.GiraffeViewEngine
 open Shared.Components
 open MyTeam
-open MyTeam.Domain
-open MyTeam.Domain.Members
+open Shared
+open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.Views
 open Attendance.Queries
 open MyTeam.Attendance
