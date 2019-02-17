@@ -13,7 +13,6 @@ namespace MyTeam.Services.Domain
         IEnumerable<int> GetYears(Guid id);
         string GetPaymentInformation(Guid clubId);
         void UpdatePaymentInformation(Guid clubId, string paymentInformation);
-        int GetDueAmount(Guid memberId);
     }
 
 }

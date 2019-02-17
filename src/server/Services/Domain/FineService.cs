@@ -115,11 +115,6 @@ namespace MyTeam.Services.Domain
             paymentInfo.Info = paymentInformation;
             _dbContext.SaveChanges();
         }
-
-        public int GetDueAmount(Guid memberId)
-            =>
-                 _dbContext.Fines.Where(f => f.MemberId == memberId).Sum(f => f.Amount) -
-                 _dbContext.Payments.Where(f => f.MemberId == memberId).Sum(f => f.Amount);
         
     }
 }

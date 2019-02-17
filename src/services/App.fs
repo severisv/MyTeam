@@ -6,10 +6,11 @@ open Giraffe
 open Giraffe.Serialization
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open Shared.Domain.Members
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+open Server.Features
 open Microsoft.AspNetCore.Hosting
+open Shared.Domain.Members
 open Common
 open Results
 open Authorization
@@ -116,6 +117,8 @@ module App =
                                                                                                     >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
                                                     routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
+                                                    route "/boter" >=> (Fines.summary club user None |> htmlGet)
+                                                    routef "/boter/%i" <| fun year -> Fines.summary club user (year |> Some) |> htmlGet
                                                 ]                    
                                             ]
                                         )    

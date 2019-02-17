@@ -27,22 +27,7 @@ namespace MyTeam.Controllers
             _paymentService = paymentService;
         }
 
-        [Route("{aar:int?}")]
-        public IActionResult Index(int? aar = null)
-        {
-            var year = aar ?? DateTime.Now.Year;
-            var years = _fineService.GetYears(Club.Id);
-            var fines = _fineService.GetFines(Club.Id);
-            var payments = _paymentService.GetPayments(Club.Id);
-            var currentUserDue = _fineService.GetDueAmount(CurrentMember.Id);
-            var paymentInfo = _fineService.GetPaymentInformation(Club.Id);
-            var paymentInfoModel = new PaymentInfoViewModel(CurrentMember.Image, CurrentMember.FacebookId, paymentInfo, currentUserDue);
-            var model = new IndexViewModel(years, year, fines, payments, paymentInfoModel);
-            return View(model);
-
-        }
-
-
+       
         [Route("vis/{aar:int?}/{memberId?}")]
         public IActionResult List(int? aar = null, Guid? memberId = null)
         {

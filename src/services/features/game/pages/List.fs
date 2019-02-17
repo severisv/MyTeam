@@ -44,13 +44,10 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                     tabs [_class "team-nav"] 
                             (club.Teams 
                             |> List.map (fun team  -> 
-                                                { 
-                                                    Text = team.Name
-                                                    ShortText = team.ShortName
-                                                    Icon = Some !!(Icons.team "")
-                                                    Url = listGamesUrl team.ShortName selectedYear 
-                                                }
-                                        ))                        
+                                                { Text = team.Name
+                                                  ShortText = team.ShortName
+                                                  Icon = Some !!(Icons.team "")
+                                                  Url = listGamesUrl team.ShortName selectedYear } ))                        
                             isSelected
                             
                     navListMobile

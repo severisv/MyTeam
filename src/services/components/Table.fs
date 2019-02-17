@@ -25,6 +25,7 @@ module TableModule =
     type TableAlignment = 
        | Left
        | Center
+       | Right
 
     type CellType = Normal | Image
 
