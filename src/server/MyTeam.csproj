@@ -15,9 +15,6 @@
     <ProjectReference Include="..\services\services.fsproj" />
     <ProjectReference Include="..\database\Migrations.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\compiled\**\*" />
-  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 
 </Project>
