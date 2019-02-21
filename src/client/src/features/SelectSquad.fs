@@ -51,7 +51,7 @@ type SelectSquad(props) =
                         (players
                         |> List.map (fun (m, s) ->
                             let m = m.Details
-                            li [ Class "register-attendance-item registerSquad-player" ]
+                            li [ Class "registerSquad-player" ]
                                 [ span []
                                     [
                                         img [ Class "hidden-xxs"
@@ -61,16 +61,14 @@ type SelectSquad(props) =
                                             ]
                                         str m.Name
                                         ]
-                                  span []
-                                        [
+                                  span [Style [Display "flex"; JustifyContent "flex-end"; AlignItems "center"] ] [
                                         s => fun s ->
                                             Strings.hasValue s.Message &?
                                                 tooltip s.Message [ Class "registerSquad-messageIcon" ] [
                                                     Icons.comment
                                                 ]
-                                        span [ Id <| sprintf "playerAttendance-%O" m.Id
-                                               Title "Oppmøte siste 8 uker" ]
-                                            [ str <| getRecentAttendance m.Id ]
+                                        span [ Title "Oppmøte siste 8 uker" ]
+                                             [ str <| getRecentAttendance m.Id ]
                                         Checkbox.render
                                             { Value = game.Squad.MemberIds |> List.contains m.Id
                                               Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
@@ -126,7 +124,8 @@ type SelectSquad(props) =
                                     (players
                                      |> List.filter
                                             (fun (m, s) ->
-                                            not s.IsSome && (m.Teams |> List.contains game.TeamId)))
+                                            not s.IsSome &&
+                                            (m.Teams |> List.contains game.TeamId)))
 
                                 listPlayers "Øvrige ikke svart"
                                     (players

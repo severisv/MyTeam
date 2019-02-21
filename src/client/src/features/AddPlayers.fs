@@ -68,7 +68,7 @@ let element props children =
                      ul [ Class "list-users" ] 
                         (props.MemberRequests
                          |> List.map (fun request ->
-                            li [ Class "register-attendance-item" ] [ 
+                            li [] [ 
                                 span[] [
                                     img [Src <| Image.getMember props.ImageOptions
                                                      (fun opts -> { opts with Height = Some 50; Width = Some 50 })
