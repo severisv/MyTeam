@@ -16,7 +16,10 @@ module Members =
     type Status = PlayerStatus
 
     let fullName (firstName, middleName, lastName) =
-        sprintf "%s %s%s%s" firstName middleName (if not <| Strings.hasValue middleName then " " else "") lastName
+        if Strings.hasValue middleName then
+            sprintf "%s %s %s" firstName middleName lastName
+        else
+            sprintf "%s %s" firstName lastName
   
     type MemberId = System.Guid
     type PlayerId = MemberId

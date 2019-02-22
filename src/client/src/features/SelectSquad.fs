@@ -12,8 +12,26 @@ open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
 open Client.Util
+open Shared.Domain.Members
 open Thoth.Json
 
+
+type Category =
+    | ``Påmeldte spillere``
+    | ``Kan ikke``
+    | ``Ikke svart``
+    | ``Øvrige ikke svart``
+
+let getCategory teamId =
+    function
+    | (_, Some signup) -> if signup.IsAttending then
+                            ``Påmeldte spillere``
+                          else
+                              ``Kan ikke``
+    | (m, _) when m.Teams |> List.contains teamId && m.Details.Status = PlayerStatus.Aktiv
+         -> ``Ikke svart``
+    | _ -> ``Øvrige ikke svart``
+       
 type SelectSquad(props) =
     inherit Component<Model, Squad>(props)
     do base.setInitState (props.Game.Squad)
@@ -43,24 +61,26 @@ type SelectSquad(props) =
                                  else state.MemberIds |> List.except [ playerId ] })
 
 
-        let listPlayers header (players : Player list) =
-                 collapsible Open [
-                     str <| sprintf "%s (%i)" header players.Length
+        let listPlayers (category: Category) collapseState =
+                 let players = players
+                               |> List.filter(getCategory game.TeamId >> (=) category)
+                 
+                 collapsible collapseState [
+                     str <| sprintf "%s (%i)" (string category) players.Length
                  ] [
                     ul [ Class "list-users" ]
-                        (players
+                        (players                        
                         |> List.map (fun (m, s) ->
                             let m = m.Details
                             li [ Class "registerSquad-player" ]
                                 [ span []
-                                    [
-                                        img [ Class "hidden-xxs"
-                                              Src <| Image.getMember imageOptions
-                                                         (fun opts -> { opts with Height = Some 50; Width = Some 50 })
-                                                         m.Image m.FacebookId
-                                            ]
-                                        str m.Name
-                                        ]
+                                    [ img [ Class "hidden-xxs"
+                                            Src <| Image.getMember imageOptions
+                                                       (fun opts -> { opts with Height = Some 50; Width = Some 50 })
+                                                       m.Image m.FacebookId
+                                          ]
+                                      str m.Name
+                                    ]
                                   span [Style [Display "flex"; JustifyContent "flex-end"; AlignItems "center"] ] [
                                         s => fun s ->
                                             Strings.hasValue s.Message &?
@@ -111,28 +131,10 @@ type SelectSquad(props) =
 
                     div [ Class "row" ]
                         [ div [ Class "col-sm-6 col-xs-12" ]
-                              [ listPlayers "Påmeldte spillere"
-                                    (players
-                                     |> List.filter (fun (_, s) -> s.IsSome && s.Value.IsAttending))
-
-                                listPlayers "Kan ikke"
-                                    (players
-                                     |> List.filter
-                                            (fun (_, s) -> s.IsSome && (not s.Value.IsAttending)))
-
-                                listPlayers "Ikke svart"
-                                    (players
-                                     |> List.filter
-                                            (fun (m, s) ->
-                                            not s.IsSome &&
-                                            (m.Teams |> List.contains game.TeamId)))
-
-                                listPlayers "Øvrige ikke svart"
-                                    (players
-                                     |> List.filter
-                                            (fun (m, s) ->
-                                            not s.IsSome
-                                            && (not (m.Teams |> List.contains game.TeamId)))) ]
+                              [ listPlayers ``Påmeldte spillere`` Open
+                                listPlayers ``Kan ikke`` Open
+                                listPlayers ``Ikke svart`` Open
+                                listPlayers ``Øvrige ikke svart`` Collapsed ]
 
                           div [ Class "col-sm-6 col-xs-12 " ]
                               [ h2 [] [ str <| sprintf "Tropp (%i)" squad.Length ]
