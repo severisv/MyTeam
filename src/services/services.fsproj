@@ -99,6 +99,7 @@
     <Compile Include="features/sponsors/Sponsors.fs" />
     <Compile Include="features/about/About.fs" />
     <Compile Include="features\fines\Fines.fs" />
+    <Compile Include="features\fines\FineSummary.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
