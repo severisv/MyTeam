@@ -118,7 +118,7 @@ module App =
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
                                                     routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
                                                     route "/boter" >=> (Fines.Summary.view club user None |> htmlGet)
-                                                    routef "/boter/%i" <| fun year -> Fines.Summary.view club user (year |> Some) |> htmlGet
+                                                    routef "/boter/%s" <| fun year -> Fines.Summary.view club user (year |> Some) |> htmlGet
                                                 ]                    
                                             ]
                                         )    

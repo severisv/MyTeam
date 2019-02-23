@@ -60,7 +60,7 @@
             <ul class="nav navbar-nav submenu visible-xs">
                 <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
                 <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
-                <li><a asp-controller="fine" asp-action="index"><i class="@Icons.Fine"></i> Bøter</a></li>
+                <li><a href="/intern/boter"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a href="/intern/lagliste"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
             </ul>
             if (Context.UserIsInRole(Roles.Admin, Roles.Coach))
