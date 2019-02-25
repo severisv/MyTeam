@@ -3,9 +3,9 @@ module MyTeam.Notifications
 open MyTeam
 open Shared
 open Shared.Domain
+open Shared.Domain.Members
 open System
 open System.Linq
-
 
 type NotificationsModel =
     { UnansweredEventIds : Guid list }
@@ -15,7 +15,7 @@ let private key clubId =
     let (ClubId clubId) = clubId
     sprintf "notifications-%O" clubId
 
-let get (ctx : HttpContext) club (user : Users.User) =
+let get (ctx : HttpContext) (club: Club) (user : User) =
     let (ClubId clubId) = club.Id
     let db = ctx.Database
     let now = DateTime.Now

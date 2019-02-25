@@ -3,6 +3,7 @@ namespace MyTeam.Views
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
+open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Views.BaseComponents
 
@@ -10,7 +11,7 @@ open MyTeam.Views.BaseComponents
 [<AutoOpen>]
 module NotificationViews =
 
-    let notifications (ctx: HttpContext) club (user: Users.User) =
+    let notifications (ctx: HttpContext) club (user: User) =
 
         let model = Notifications.get ctx club user
         

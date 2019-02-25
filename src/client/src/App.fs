@@ -9,5 +9,6 @@ module EntryPoint =
         Table.Create.element |> ignore
         Table.Create.element |> ignore
         Admin.AddPlayers.element |> ignore
+        Fines.List.element |> ignore
     ] 
     |> ignore

@@ -60,7 +60,7 @@ module Queries =
             |> Seq.tryHead
 
 module Components =
-    let editLink (article : Article) (user : Users.User option) =
+    let editLink (article : Article) (user : User option) =
         user => (fun user -> 
         if user.IsInRole [ Role.Admin; Role.Skribent; Role.Trener ] then 
             a [ _class "pull-right edit-link"

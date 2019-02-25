@@ -4,6 +4,7 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
@@ -31,7 +32,7 @@ let private pagination articles =
         ]
     ]           
 
-let view (club: Club) (user: Users.User option) getPaginationOptions  (ctx: HttpContext) =
+let view (club: Club) (user: User option) getPaginationOptions  (ctx: HttpContext) =
 
     let paginationOptions = getPaginationOptions { Skip = 0; Take = 6 }
 

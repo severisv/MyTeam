@@ -13,7 +13,7 @@ open Shared.Features.Games.SelectSquad
 open MyTeam.Views.BaseComponents
 
 
-let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
+let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
     let db = ctx.Database
 

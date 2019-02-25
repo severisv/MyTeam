@@ -12,7 +12,7 @@ open MyTeam.Attendance
 open Fable.Helpers.React.Props
 
 
-let view (club : Club) (user : Users.User) year (ctx : HttpContext) =
+let view (club : Club) (user : User) year (ctx : HttpContext) =
 
     let (selectedYear, years, attendance) =
         getAttendance ctx.Database club.Id year

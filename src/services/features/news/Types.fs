@@ -3,8 +3,8 @@ namespace MyTeam.News
 open MyTeam
 open Shared
 open Shared.Domain
+open Shared.Domain.Members
 open System
-open MyTeam.Users
 open Server.Common.News
 
 type PaginationOptions = {

@@ -8,6 +8,7 @@ open MyTeam
 open Shared
 open MyTeam.Validation
 open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.News
 open MyTeam.News.Pages
 open MyTeam.Views
@@ -141,7 +142,7 @@ let view (club: Club) user name (ctx: HttpContext) =
           
             editView ctx club user (Some name) article published []
 
-let editPost (club: Club) (user: Users.User) name (ctx: HttpContext) =
+let editPost (club: Club) (user: User) name (ctx: HttpContext) =
 
     let db = ctx.Database
  
@@ -186,7 +187,7 @@ let create (club: Club) user (ctx: HttpContext) =
         editView ctx club user None article published []
 
 
-let createPost (club: Club) (user: Users.User) (ctx: HttpContext) =
+let createPost (club: Club) (user: User) (ctx: HttpContext) =
 
     let db = ctx.Database
  

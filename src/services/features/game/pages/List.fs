@@ -11,7 +11,7 @@ open Shared.Components
 open System
 open Shared.Domain.Members
 
-let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYear (ctx: HttpContext) =
+let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ctx: HttpContext) =
 
     let db = ctx.Database
 
@@ -51,12 +51,9 @@ let view (club: Club) (user: Users.User option) selectedTeamShortName selectedYe
                             isSelected
                             
                     navListMobile
-                        ({ 
-                            Header = "Sesonger"
-                            Items = years |> List.map (fun year  -> { Text = string year; Url = listGamesUrl selectedTeam.ShortName year }                                                                   )  
+                        ({  Items = years |> List.map (fun year  -> { Text = string year; Url = listGamesUrl selectedTeam.ShortName year }                                                                   )  
                             Footer = None                                                               
-                            IsSelected = isSelected                                                               
-                       })
+                            IsSelected = isSelected })
                     hr []
 
                     (if games.Length < 1 then

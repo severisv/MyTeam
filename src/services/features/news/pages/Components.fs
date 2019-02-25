@@ -16,7 +16,7 @@ let articleUrl (article: Article) =
 
 
 
-let adminMenu (user: Users.User option) =
+let adminMenu (user: User option) =
     user |> Option.bind(fun user ->
         if user.IsInRole [Role.Admin;Role.Skribent;Role.Trener] then
             Some <| block [] [ 

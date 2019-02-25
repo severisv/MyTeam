@@ -28,7 +28,7 @@ namespace MyTeam.Controllers
         }
 
        
-        [Route("vis/{aar:int?}/{memberId?}")]
+        [Route("vis/old/{aar:int?}/{memberId?}")]
         public IActionResult List(int? aar = null, Guid? memberId = null)
         {
             var year = aar ?? DateTime.Now.Year;

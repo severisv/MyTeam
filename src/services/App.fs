@@ -117,8 +117,11 @@ module App =
                                                                                                     >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
                                                     route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
                                                     routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
-                                                    route "/boter" >=> (Fines.Summary.view club user None |> htmlGet)
-                                                    routef "/boter/%s" <| fun year -> Fines.Summary.view club user (year |> Some) |> htmlGet
+                                                    route "/boter/vis" >=> (Fines.List.view club user None Shared.Features.Fines.AllMembers |> htmlGet)
+                                                    routef "/boter/vis/%s/%O" <| fun (year, memberId) -> Fines.List.view club user (year |> Some) (Shared.Features.Fines.Member memberId) |> htmlGet
+                                                    routef "/boter/vis/%s" <| fun year -> Fines.List.view club user (year |> Some) Shared.Features.Fines.AllMembers |> htmlGet
+                                                    route "/boter/oversikt" >=> (Fines.Summary.view club user None |> htmlGet)
+                                                    routef "/boter/oversikt/%s" <| fun year -> Fines.Summary.view club user (year |> Some) |> htmlGet
                                                 ]                    
                                             ]
                                         )    
@@ -180,6 +183,13 @@ module App =
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]                     
+                        ]
+                    subRoute "/api/fines"
+                        <| choose [   
+                            DELETE >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [ 
+                                    routef "/%O" (Fines.Api.delete club >> jsonGet)                                     
+                                ]                                  
                         ]
                     subRoute "/api/tables"
                         <| choose [                                                                

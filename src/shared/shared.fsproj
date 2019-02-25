@@ -23,7 +23,10 @@
     <Compile Include="components/Links.fs" />
     <Compile Include="components/Alerts.fs" />
     <Compile Include="components/Forms.fs" />
+    <Compile Include="components\Tables.fs" />
     <Compile Include="components\Currency.fs" />
+    <Compile Include="components\Tabs.fs" />
+    <Compile Include="components\Navlist.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
     <Compile Include="features/games/GamePlan.fs" />
     <Compile Include="features/table/Table.fs" />

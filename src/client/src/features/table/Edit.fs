@@ -62,7 +62,7 @@ type EditTable(props) =
                                                                         SubmittedText = "Slettet"
                                                                         Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
                                                                         OnSubmit = Some Browser.location.reload })
-                                                                  btn [ Lg; OnClick handleClose ] [ str "Nei" ]
+                                                                  btn [ Lg; OnClick !> handleClose ] [ str "Nei" ]
                                                               ]
                                                           ]
                                                     })

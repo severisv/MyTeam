@@ -11,7 +11,7 @@ open Shared.Domain.Members
 open MyTeam.Members
 open MyTeam.Views
 
-let view (club : Club) (user : Users.User) status (ctx : HttpContext) =
+let view (club : Club) (user : User) status (ctx : HttpContext) =
     let status =
         match status with
         | Some s -> 

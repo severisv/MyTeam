@@ -77,29 +77,21 @@ module Pages =
                         tabs [_class "team-nav"] 
                              ((club.Teams 
                              |> List.map (fun team  -> 
-                                                { 
-                                                    Text = team.Name
+                                                {   Text = team.Name
                                                     ShortText = team.ShortName
                                                     Icon = Some <| !!(Icons.team "")
-                                                    Url = statsUrl (Team team) selectedYear 
-                                                }
-                                        )) @ [
-                                                {                                                              
-                                                    Text = "Samlet"
+                                                    Url = statsUrl (Team team) selectedYear  }
+                                        )) @ [  {   Text = "Samlet"
                                                     ShortText = "Samlet"
                                                     Icon = None
-                                                    Url = statsUrl (All club.Teams) selectedYear
-                                                }
+                                                    Url = statsUrl (All club.Teams) selectedYear }
                                             ])                           
                             isSelected
                             
                         navListMobile
-                            ({ 
-                                Header = "Sesonger"
-                                Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                            ({  Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
                                 Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
-                                IsSelected = isSelected                                                               
-                           })
+                                IsSelected = isSelected })
                         hr []
                         br []                     
                         table [Striped;TableProperty.Attribute <| _class "stats-table"] 
