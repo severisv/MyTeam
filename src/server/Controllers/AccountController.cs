@@ -14,6 +14,7 @@ using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using System;
+using Microsoft.Extensions.Options;
 
 namespace MyTeam.Controllers
 {
@@ -252,7 +253,6 @@ namespace MyTeam.Controllers
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: true);
                         await _userManager.AddClaimAsync(user,
                         new Claim("facebookFirstName",
                                info.Principal.Claims.First(c => c.Type == ClaimTypes.GivenName).Value));
@@ -262,6 +262,9 @@ namespace MyTeam.Controllers
                         await _userManager.AddClaimAsync(user,
                             new Claim("facebookId",
                                         info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
+
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+
                         _logger.LogInformation(6, "User {Email} created an account using {Name} provider.", model.Email, info.LoginProvider);
 
                         _playerService.AddEmailToPlayer(model.FacebookId, model.Email);
@@ -509,4 +512,5 @@ namespace MyTeam.Controllers
 
         #endregion
     }
+   
 }
