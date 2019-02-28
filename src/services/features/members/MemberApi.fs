@@ -116,7 +116,7 @@ let add clubId (ctx : HttpContext) model =
 
                      db.SaveChanges() |> ignore
                      db.Users 
-                     |> Seq.tryFind (fun u -> u.Email = form.``E-postadresse``)
+                     |> Seq.tryFind (fun u -> u.NormalizedUserName = form.``E-postadresse``.ToUpper())
                      |> Option.iter (fun u -> Tenant.clearUserCache ctx club.Id (UserId u.Id))
                      OkResult()
                  | Error e -> ValidationErrors e
