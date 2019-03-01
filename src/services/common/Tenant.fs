@@ -16,7 +16,7 @@ let private clubKey club =
 let private memberKey clubId userId =
     let (ClubId clubId) = clubId
     let (UserId userId) = userId
-    "user-" + string clubId + string userId 
+    "user-" + string clubId + (userId.ToLower())
 
 let get : Get =
     let getClubId (ctx: HttpContext) =
