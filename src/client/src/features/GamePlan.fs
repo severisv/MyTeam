@@ -13,6 +13,7 @@ open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.GamePlan
+open Shared.Domain.Members
 open Thoth.Json
 open Client.Util
 
@@ -23,7 +24,9 @@ type Lineups = List<LineupId * Time * List<string option>>
 type State =
     { Lineups : Lineups
       FocusedPlayer : (LineupId * int) option 
-      ErrorMessage: string option }
+      ErrorMessage: string option
+      Players: Member list
+    }
 
 let matchLength = 90
 
@@ -117,7 +120,8 @@ let duplicateLineup setState save lineupId =
     setState(fun state props ->
                let (_, time, lineup) = state.Lineups 
                                        |> List.find (fun (id, _, _) -> id = lineupId)
-               let lineups = state.Lineups @ [ (System.Guid.NewGuid(), time, lineup) ] 
+               let lineups = state.Lineups @ [ (System.Guid.NewGuid(), time, lineup) ]
+                                |> List.sortBy (fun (_, time, _) -> time)
                save lineups                               
                { state with 
                   Lineups = lineups
@@ -152,36 +156,42 @@ type GamePlan(props) =
                                   | Error e -> failwithf "%O" e )
                            |> Option.defaultValue [ (System.Guid.NewGuid(), 0, [ 0 .. 10 ] |> List.map(fun _ -> None)) ]
                            |> fun lineups ->
-                                { Lineups = lineups; FocusedPlayer = None; ErrorMessage = None }))
+                                { Lineups = lineups
+                                  FocusedPlayer = None
+                                  ErrorMessage = None
+                                  Players = props.Players
+                                            |> List.map (fun p -> { p with FirstName = getName props.Players p })
+                              }))
     
     override this.render() =         
  
         let model = props
-        let state = this.state
-                                        
-        let getName = getName model.Players
+        let state = this.state                                       
         
         let handlePlayerFocus focusedPlayer = 
-            this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })            
+            this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })
+            
+        let sortLineup _ = 
+            this.setState(fun state _ -> { state with Lineups = state.Lineups |> List.sortBy (fun (_, time, _) -> time) })        
 
         let subs lineup = 
-            model.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| getName p)) |> not)  
+            state.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| p.FirstName)) |> not)  
 
         let save = save this.setState model.GameId  
         let handlePlayerChange = handlePlayerChange this.setState save
         let handleTimeChange = handleTimeChange this.setState save
         let removeLineup = removeLineup this.setState save
         let duplicateLineup = duplicateLineup this.setState save
-
-
+                      
         let square (lineup: List<string option>) lineupId row col =
             getPlayerIndex row col
             |> function
             | Some playerIndex ->
                 let subs = subs lineup
                 let name = lineup.[playerIndex]
-                let getPlayer name = model.Players |> List.tryFind (fun p -> getName p = name)
-                let playerImage name =
+                let getPlayer name = state.Players |> List.tryFind (fun p -> p.FirstName = name)
+                
+                let playerImage (name: string) =
                     img [ 
                       Class "gameplan-playerImage" 
                       Src (Image.getMember model.ImageOptions (fun o -> { o with Height = Some 40; Width = Some 40})
@@ -206,9 +216,12 @@ type GamePlan(props) =
                         ]
                         ul [ Class (if state.FocusedPlayer = Some (lineupId, playerIndex) then "visible" else "") ] 
                             (subs |> List.map (fun sub -> 
-                                                let name = getName sub
+                                                let name = sub.FirstName
                                                 li [] [
-                                                    button [ OnClick (fun e -> e.preventDefault(); handlePlayerChange lineupId playerIndex (Some <| getName sub); handlePlayerFocus None) ] [
+                                                    button [ OnClick (fun e ->
+                                                                        e.preventDefault()
+                                                                        handlePlayerChange lineupId playerIndex (Some <| sub.FirstName)
+                                                                        handlePlayerFocus None) ] [
                                                         playerImage name
                                                         str name
                                                     ]
@@ -234,7 +247,7 @@ type GamePlan(props) =
                     br []
                     div [] (state.Lineups
                      |> List.map(fun (lineupId, time, lineup) ->
-                            div []
+                            div [Key <| string lineupId]
                                 [ 
                                   div [ Class "text-center" ] [   
                                         input [ Type "text"
@@ -242,7 +255,8 @@ type GamePlan(props) =
                                                 Placeholder "tid"
                                                 Value time
                                                 OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
-                                                OnFocus handleFocus ]
+                                                OnFocus handleFocus
+                                                OnBlur sortLineup ]
                                         str "min" 
                                     ]
                                   div [Class "clearfix"] [  
@@ -330,6 +344,7 @@ type GamePlan(props) =
                              |> List.reduce List.append
                              |> List.groupBy (fun (player, _) -> player)
                              |> List.map (fun (key, values) -> (key, values |> List.sumBy(fun (_, time) -> time)) )
+                             |> List.sortBy (fun (player, _) -> player)                             
                              |> List.map (fun (player, time) -> 
                                 div [] [
                                     str player
