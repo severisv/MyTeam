@@ -211,6 +211,7 @@ type GamePlan(props) =
                            Class (if state.FocusedPlayer = Some (lineupId, playerIndex) then "focused" else "")
                            Value (name |> Option.defaultValue "")
                            Placeholder "Ingen"
+                           OnClick(fun e -> e.stopPropagation())
                            OnChange(fun e -> handlePlayerChange lineupId playerIndex (Strings.asOption e.Value))
                            OnFocus (fun e -> handleFocus e; handlePlayerFocus <| Some (lineupId, playerIndex))
                         ]
@@ -233,7 +234,7 @@ type GamePlan(props) =
 
         fragment [] [
         
-            mtMain [ Class "gameplan"] [ 
+            mtMain [ Class "gameplan"; OnClick (fun _ -> this.setState(fun state props -> { state with FocusedPlayer = None  }))] [ 
                 block [] ([ 
                     (state.ErrorMessage
                      |> function
