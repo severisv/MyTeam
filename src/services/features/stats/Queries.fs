@@ -71,25 +71,26 @@ module StatsQueries =
                             |> Seq.distinct
 
 
-            let result = query {
-                                for p in db.Players do
-                                where (playerIds.Contains(p.Id))
-                                select (p.Id, p.FacebookId, p.FirstName, p.LastName, p.ImageFull, p.UrlName)
-                            } |> Seq.toList
-                              |> List.map (fun (id, facebookId, firstName, lastName, imageFull, urlName) ->
-                                        {
-                                            FacebookId = facebookId
-                                            FirstName = firstName
-                                            LastName = lastName
-                                            UrlName = urlName                                  
-                                            Games = attendances |> Seq.filter (fun a -> a = id) |> Seq.length
-                                            Goals = gameEvents |> Seq.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> Seq.length
-                                            Assists = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
-                                            YellowCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
-                                            RedCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
-                                            Image = imageFull
-                                        }
-                               )
+            let result =
+                query {
+                    for p in db.Members do
+                    where (playerIds.Contains(p.Id))
+                    select (p.Id, p.FacebookId, p.FirstName, p.LastName, p.ImageFull, p.UrlName)
+                } |> Seq.toList
+                  |> List.map (fun (id, facebookId, firstName, lastName, imageFull, urlName) ->
+                            {
+                                FacebookId = facebookId
+                                FirstName = firstName
+                                LastName = lastName
+                                UrlName = urlName                                  
+                                Games = attendances |> Seq.filter (fun a -> a = id) |> Seq.length
+                                Goals = gameEvents |> Seq.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> Seq.length
+                                Assists = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
+                                YellowCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
+                                RedCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
+                                Image = imageFull
+                            }
+                   )
                        
             query {
                  for p in result do

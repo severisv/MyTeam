@@ -5,6 +5,13 @@ open MyTeam
 open Shared
 open Common
 
+let json result next (ctx: HttpContext) =
+     match ctx.TryGetRequestHeader "json-mode" with
+            | Some "fable" ->
+                    (setHttpHeader "Content-Type" "application/json" >=>
+                        setBodyFromString (Json.fableSerialize result)) next ctx
+            | _ -> json result next ctx
+
 let jsonResult next ctx =
     function 
     | OkResult result -> json result next ctx

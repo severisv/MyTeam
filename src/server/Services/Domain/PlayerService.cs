@@ -31,8 +31,8 @@ namespace MyTeam.Services.Domain
         public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress)
         {
             var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
-                _dbContext.Players.FirstOrDefault(p => p.UserName == emailAddress) :
-                _dbContext.Players.FirstOrDefault(p => p.FacebookId == facebookId);
+                _dbContext.Members.FirstOrDefault(p => p.UserName == emailAddress) :
+                _dbContext.Members.FirstOrDefault(p => p.FacebookId == facebookId);
 
 
             if (!string.IsNullOrWhiteSpace(facebookId) && string.IsNullOrWhiteSpace(emailAddress))
@@ -49,7 +49,7 @@ namespace MyTeam.Services.Domain
             {
                 var club = _dbContext.Clubs.Single(c => c.ClubIdentifier == clubId);
 
-                var player = new Player
+                var player = new Member
                 {
                     FacebookId = facebookId,
                     FirstName = firstName,
@@ -60,7 +60,7 @@ namespace MyTeam.Services.Domain
                     UrlName = GetUrlName(club.Id, firstName, middleName, lastName)
                 };
 
-                _dbContext.Players.Add(player);
+                _dbContext.Members.Add(player);
                 _dbContext.SaveChanges();
 
                 var message = string.IsNullOrWhiteSpace(facebookId)
@@ -97,7 +97,7 @@ namespace MyTeam.Services.Domain
 
         public void EditPlayer(EditPlayerViewModel model, Guid clubId)
         {
-            var player = _dbContext.Players.Single(p => p.Id == model.PlayerId);
+            var player = _dbContext.Members.Single(p => p.Id == model.PlayerId);
             player.FirstName = model.FirstName;
             player.MiddleName = model.MiddleName;
             player.LastName = model.LastName;
@@ -114,7 +114,7 @@ namespace MyTeam.Services.Domain
         public void AddEmailToPlayer(string facebookId, string email)
         {
             if (string.IsNullOrWhiteSpace(facebookId)) return;
-            var players = _dbContext.Players.Where(p => p.FacebookId == facebookId).ToList();
+            var players = _dbContext.Members.Where(p => p.FacebookId == facebookId).ToList();
             foreach (var player in players)
             {
                 if (string.IsNullOrWhiteSpace(player.UserName))
@@ -128,7 +128,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null, bool includeCoaches = false)
         {
             var query =
-                _dbContext.Players.Where(p => p.ClubId == clubId)
+                _dbContext.Members.Where(p => p.ClubId == clubId)
                     .Where(p => p.Status != (int)PlayerStatus.Sluttet);
 
             if (includeCoaches != true) query = query.Where(p => p.Status != (int)PlayerStatus.Trener);
@@ -161,16 +161,16 @@ namespace MyTeam.Services.Domain
 
         public ShowPlayerViewModel GetSingle(Guid clubId, string name)
         {
-            var query = _dbContext.Players.Where(p => p.UrlName == name.ToLower() && p.ClubId == clubId);
+            var query = _dbContext.Members.Where(p => p.UrlName == name.ToLower() && p.ClubId == clubId);
             return GetPlayer(query);
         }
 
         public ShowPlayerViewModel GetSingle(Guid playerId)
         {
-            var query = _dbContext.Players.Where(p => p.Id == playerId);
+            var query = _dbContext.Members.Where(p => p.Id == playerId);
             return GetPlayer(query);
         }
-        private ShowPlayerViewModel GetPlayer(IQueryable<Player> query)
+        private ShowPlayerViewModel GetPlayer(IQueryable<Member> query)
         {
             var player = query.Select(p => new ShowPlayerViewModel
             {
@@ -207,7 +207,7 @@ namespace MyTeam.Services.Domain
         public IEnumerable<ListPlayerViewModel> GetPlayers(PlayerStatus status, Guid clubId)
         {
             return
-                _dbContext.Players.Where(p => p.Status == (int)status && p.ClubId == clubId)
+                _dbContext.Members.Where(p => p.Status == (int)status && p.ClubId == clubId)
                     .OrderBy(p => p.FirstName)
                     .Select(p => new ListPlayerViewModel
                     {

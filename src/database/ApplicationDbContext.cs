@@ -24,7 +24,6 @@ namespace MyTeam.Models
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberTeam> MemberTeams { get; set; }
-        public DbSet<Player> Players { get; set; }
         public DbSet<PaymentInformation> PaymentInformation { get; set; }
         public DbSet<RemedyRate> RemedyRates { get; set; }
         public DbSet<Season> Seasons { get; set; }
@@ -51,7 +50,6 @@ namespace MyTeam.Models
             builder.Entity<EventAttendance>().ToTable("EventAttendance");
             builder.Entity<Member>().ToTable("Member");
             builder.Entity<MemberTeam>().ToTable("MemberTeam");
-            builder.Entity<Player>().ToTable("Player");
             builder.Entity<Season>().ToTable("Season");
             builder.Entity<Member>().ToTable("Member");
             builder.Entity<Team>().ToTable("Team");

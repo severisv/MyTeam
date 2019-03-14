@@ -12,10 +12,10 @@ namespace MyTeam.Models.Domain
         public Guid? PlayerId { get; set; }
         public Guid? AssistedById { get; set; }
         public GameEventType Type { get; set; }
-        public virtual Player AssistedBy { get; set; }
+        public virtual Member AssistedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public virtual Game Game { get; set; }
-        public virtual Player Player { get; set; }
+        public virtual Member Player { get; set; }
 
       }
 }

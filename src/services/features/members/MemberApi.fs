@@ -88,8 +88,8 @@ let add clubId (ctx : HttpContext) model =
                 |> function
                  | Ok() ->
                      let (ClubId clubId) = clubId
-                     db.Players.Add (
-                            Player ( ClubId = clubId,
+                     db.Members.Add (
+                            Member ( ClubId = clubId,
                                      FirstName = form.Fornavn,
                                      MiddleName = form.Mellomnavn,
                                      LastName = form.Etternavn,
