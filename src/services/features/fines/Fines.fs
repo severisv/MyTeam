@@ -3,7 +3,7 @@ module Server.Features.Fines.Common
 open MyTeam
 open Shared.Domain
 open Shared
-open Shared.Features.Fines
+open Shared.Features.Fines.Common
 open System
 
 let getYears (db: Database) clubId =

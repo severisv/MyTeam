@@ -25,8 +25,7 @@ type State =
     { Lineups : Lineups
       FocusedPlayer : (LineupId * int) option 
       ErrorMessage: string option
-      Players: Member list
-    }
+      Players: Member list }
 
 let matchLength = 90
 
@@ -324,8 +323,7 @@ type GamePlan(props) =
                         h4 [] [str "Spilletid"]
                         div []
                             (
-                            let lineups = state.Lineups
-                                          |> List.sortBy (fun (_, time, __) -> time)
+                            let lineups = state.Lineups |> List.sortBy (fun (_, time, __) -> time)
 
                             lineups                                      
                              |> List.map (fun (lineupId, time, lineup) -> 

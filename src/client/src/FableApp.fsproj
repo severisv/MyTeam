@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="util\ReactHelpers.fs" />
+    <Compile Include="util\Http.fs" />
     <Compile Include="components/CheckBox.fs" />
     <Compile Include="components/Textarea.fs" />
     <Compile Include="components/Textinput.fs" />

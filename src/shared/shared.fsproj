@@ -32,6 +32,8 @@
     <Compile Include="features/table/Table.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
     <Compile Include="features\fines\Fines.fs" />
+    <Compile Include="features\fines\FineList.fs" />
+    <Compile Include="features\fines\AddFines.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

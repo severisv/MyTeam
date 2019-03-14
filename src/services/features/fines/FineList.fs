@@ -16,7 +16,8 @@ open Fable.Helpers
 open Fable.Helpers.React.Props
 open MyTeam
 open MyTeam.Common.Features
-open Shared.Features.Fines
+open Shared.Features.Fines.Common
+open Shared.Features.Fines.List
 
 
 let view (club : Club) (user : User) (year : string option) (selectedMember: SelectedMember) (ctx : HttpContext) =

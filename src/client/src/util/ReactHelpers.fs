@@ -17,18 +17,20 @@ let render deserializeFn id comp =
              | Error e -> failwithf "Json deserialization failed: %O" e
 
 
-type Lifecycles = {
-    ComponentDidMount : unit -> unit }
+
 
 type OutProps<'Props, 'State> =
     'Props * 'State * (('State -> 'Props -> 'State) -> unit)
 
 type UpdateFn<'TState> = 'TState -> 'TState
 
+type Lifecycles<'Props, 'State> = {
+    ComponentDidMount : OutProps<'Props, 'State> -> unit }
+
 type ComponentProps<'Props, 'State> = {
     Props : 'Props
     InitialState : 'State
-    Lifecycles : Lifecycles option
+    Lifecycles : Lifecycles<'Props, 'State> option
     Children : OutProps<'Props, 'State> -> ReactElement
  }
 
@@ -38,7 +40,7 @@ type StateProvider<'Props, 'State>(props) =
 
     override this.componentDidMount() =
         props.Lifecycles
-        |> Option.map (fun l -> l.ComponentDidMount())
+        |> Option.map (fun l -> l.ComponentDidMount(this.props.Props, this.state, this.update))
         |> Option.defaultValue()
 
     member this.update updateFn =
