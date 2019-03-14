@@ -72,7 +72,7 @@
     <Compile Include="features/game/pages/GamePlan.fs" />
     <Compile Include="features/game/Refresh.fs" />
     <Compile Include="features/gameevents/Gameevents.fs" />
-    <Compile Include="features/members/Types.fs" />
+    <Compile Include="features\members\MemberTypes.fs" />
     <Compile Include="features/members/Queries.fs" />
     <Compile Include="features\members\MemberPersistence.fs" />
     <Compile Include="features\members\MemberApi.fs" />

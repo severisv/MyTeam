@@ -23,7 +23,7 @@ module Queries =
                 for m in db.Members do
                 where (m.ClubId = clubId)
                 select (m.Id, m.FirstName, m.MiddleName, m.LastName, m.FacebookId,
-                        m.UrlName, m.ImageFull, m.Status, m.BirthDate, m.Phone, m.Email)
+                        m.UrlName, m.ImageFull, m.Status, m.BirthDate, m.Phone, m.UserName)
                 } 
                 |> Seq.toList
                 |> List.map (fun (id, firstName, middleName, lastName, facebookId,

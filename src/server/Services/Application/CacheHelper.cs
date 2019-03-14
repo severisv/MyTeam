@@ -45,7 +45,7 @@ namespace MyTeam.Services.Application
                 return member;
             }
 
-            member = _dbContext.Players
+            member = _dbContext.Members
                 .Where(p => clubId == p.ClubId && p.UserName == username)
                 .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName, p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 

@@ -109,7 +109,7 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCacheByMemberId(clubId, memberId);
 
-            return _dbContext.Players.Where(p => p.Id == memberId)
+            return _dbContext.Members.Where(p => p.Id == memberId)
                     .Select(p => new AttendeeViewModel(memberId, eventId, attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected,
                                 new AttendeePlayerViewModel(memberId, p.FirstName, p.LastName, p.UserName, p.UrlName, (PlayerStatus)p.Status))).First();
         }

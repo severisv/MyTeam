@@ -48,22 +48,26 @@ let selectMembers =
 let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
     fun db clubId -> 
         let (ClubId clubId) = clubId
-        db.Members.Where(fun p -> p.ClubId = clubId)
-          .Include(fun p -> p.MemberTeams)
-        |> Seq.map (fun p -> 
+        query {
+            for m in db.Members do
+            where (m.ClubId = clubId)
+            join eventTeam in db.MemberTeams on (m.Id = eventTeam.MemberId)
+            select ((m.Id, m.FacebookId, m.FirstName, m.MiddleName, m.LastName, m.ImageFull, m.UrlName, m.Status, m.RolesString), eventTeam.TeamId)
+        }
+        |> Seq.toList
+        |> List.groupBy (fun (m, _) -> m)
+        |> List.map(fun (key, values) -> (key, values |> List.map(fun (m, teamId) -> teamId)))
+        |> List.map (fun ((id, facebookId, firstName, middleName, lastName, image, urlName, status, rolesString), teamIds) -> 
                { Details =
-                     ({ Id = p.Id
-                        FacebookId = !!p.FacebookId
-                        FirstName = !!p.FirstName
-                        MiddleName = !!p.MiddleName
-                        LastName = !!p.LastName
-                        Image = !!p.Image
-                        UrlName = !!p.UrlName
-                        Status = int p.Status |> enum<PlayerStatus> })
-                 Teams =
-                     p.MemberTeams
-                     |> Seq.map (fun team -> team.TeamId)
-                     |> Seq.toList
-                 Roles = p.RolesString |> toRoleList })
+                     ({ Id = id
+                        FacebookId = !!facebookId
+                        FirstName = !!firstName
+                        MiddleName = !!middleName
+                        LastName = !!lastName
+                        Image = !!image
+                        UrlName = !!urlName
+                        Status = int status |> enum<PlayerStatus> })
+                 Teams = teamIds                   
+                 Roles = rolesString |> toRoleList })
         |> Seq.toList
         |> List.sortBy (fun p -> p.Details.FirstName)

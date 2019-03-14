@@ -40,21 +40,11 @@ namespace MyTeam.Models.Domain
         [Display(Name = Res.Phone)]
         public string Phone { get; set; }
 
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = Res.Email)]
-        [NotMapped]
-        public string Email => UserName;
-
-        [NotMapped]
-        public int? StartYear => StartDate?.Year;
-
         public string ImageFull { get; set; }
         [NotMapped]
         public string Image => ImageFull;
         public bool ProfileIsConfirmed { get; set; }
 
-        [NotMapped]
-        public string Fullname => $"{FirstName} {MiddleName} {LastName}";
         [NotMapped]
         public string Name => $"{FirstName} {LastName}";
 
@@ -63,6 +53,10 @@ namespace MyTeam.Models.Domain
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        
+        public virtual string PositionsString { get; set; }
+        public virtual ICollection<GameEvent> Assists { get; set; }
+        public virtual ICollection<GameEvent> GameEvents { get; set; }
 
     }
 
