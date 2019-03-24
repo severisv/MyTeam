@@ -14,18 +14,21 @@ type Event = {
     Description: string
 }
 
-
 let setDescription clubId eventId (ctx : HttpContext) (model: StringPayload) =
     let db = ctx.Database
     let (ClubId clubId) = clubId
-    let event = db.Events
-                |> Seq.filter(fun e -> e.Id = eventId)
-                |> Seq.head
 
-    if event.ClubId <> clubId then 
-        Unauthorized
-
-    else
-        event.Description <- model.Value
-        db.SaveChanges() |> ignore
-        OkResult()
+    query {
+        for e in db.Events do
+            where (e.Id = eventId)
+            select e }
+    |> Seq.head
+    |> fun event ->
+        
+        if event.ClubId <> clubId then 
+            Unauthorized
+    
+        else
+            event.Description <- model.Value
+            db.SaveChanges() |> ignore
+            OkResult()

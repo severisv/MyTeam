@@ -5,22 +5,18 @@ open Shared
 open Shared.Domain
 
 module Queries =
-
-    let teams (db: Database) clubId = 
-        let (ClubId clubId) = clubId
-        db.Teams
-        |> Seq.filter(fun t -> t.ClubId = clubId)
+       
 
     let list : ListTeams =
         fun db clubId ->
-
-            teams db clubId
-            |> Seq.map(fun t -> 
-                            {
-                                Id = t.Id
-                                ShortName = t.ShortName
-                                Name = t.Name                               
-                            }
-                    )
-            |> Seq.toList
+            let (ClubId clubId) = clubId
+            query {
+                for t in db.Teams do
+                    where (t.ClubId = clubId)
+                    select (t.Id, t.ShortName, t.Name)  }
+            |> Seq.toList            
+            |> List.map(fun (id, shortName, name) -> 
+                            {   Id = id
+                                ShortName = shortName
+                                Name = name  })
             |> List.sortBy(fun t -> t.ShortName)

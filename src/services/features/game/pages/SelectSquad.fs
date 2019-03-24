@@ -12,7 +12,6 @@ open MyTeam.Games
 open Shared.Features.Games.SelectSquad
 open MyTeam.Views.BaseComponents
 
-
 let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
 
     let db = ctx.Database
@@ -21,9 +20,16 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
     query {
         for game in db.Games do
         where (game.Id = gameId && game.ClubId = clubId)
-        select (game.DateTime, game.Location, game.Description, game.IsPublished, game.TeamId, game.Attendees)
+        select (gameId, game.DateTime, game.Location, game.Description, game.IsPublished, game.TeamId)
     }
-    |> Seq.map (fun (date, location, description, squadIsPublished, teamId, attendees) ->
+    |> Seq.toList
+    |> List.map (fun (gameId, date, location, description, squadIsPublished, teamId) ->
+                let attendees =
+                    query {
+                        for a in db.EventAttendances do
+                            where (a.EventId = gameId)
+                            select a }
+                    |> Seq.toList
                 ({
                     Id = gameId
                     Date = date
@@ -33,22 +39,20 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                     Squad = {
                                 IsPublished = squadIsPublished
                                 MemberIds = attendees 
-                                            |> Seq.filter(fun a -> a.IsSelected)
-                                            |> Seq.map(fun m -> m.MemberId) |> Seq.toList
+                                            |> List.filter(fun a -> a.IsSelected)
+                                            |> List.map(fun m -> m.MemberId) |> Seq.toList
                     }
                 }, 
                 attendees 
-                |> Seq.map (fun a ->
+                |> List.map (fun a ->
                                 if a.IsAttending.HasValue then
                                     Some {
                                         MemberId = a.MemberId
                                         IsAttending = a.IsAttending.Value
                                         Message = a.SignupMessage =?? ""
                                     }
-                                else None
-                            )          
-                |> Seq.choose id
-                |> Seq.toList
+                                else None)
+                |> List.choose id
                 )                    
         )
     |> Seq.tryHead

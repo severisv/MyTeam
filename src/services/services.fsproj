@@ -79,7 +79,7 @@
     <Compile Include="features/members/pages/List.fs" />
     <Compile Include="features/members/pages/RequestAccess.fs" />
     <Compile Include="features/stats/Types.fs" />
-    <Compile Include="features/stats/Queries.fs" />
+    <Compile Include="features\stats\StatsQueries.fs" />
     <Compile Include="features/stats/Pages.fs" />
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
