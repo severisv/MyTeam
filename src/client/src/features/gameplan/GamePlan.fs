@@ -16,37 +16,30 @@ open Shared.Features.Games.GamePlan
 open Shared.Domain.Members
 open Thoth.Json
 open Client.Util
+open Client.GamePlan.Formation
 
 type Time = int
 type LineupId = System.Guid
-type Lineups = List<LineupId * Time * List<string option>>
 
+type Lineup = {
+    Id: LineupId
+    Time: Time
+    Players: List<string option>
+}
+
+type GamePlanState = {
+    Lineups: Lineup list
+    Formation: Formation
+    MatchLength: int
+}
+       
 type State =
-    { Lineups : Lineups
+    { GamePlan : GamePlanState
       FocusedPlayer : (LineupId * int) option 
       ErrorMessage: string option
-      Players: Member list
-    }
+      Players: Member list }
 
-let matchLength = 90
-
-let getPlayerIndex row col =
-        match (row, col) with
-        | (0, 0) -> Some 0
-        | (0, 2) -> Some 1
-        | (0, 4) -> Some 2
-        | (2, 1) -> Some 3
-        | (2, 3) -> Some 4
-        | (3, 2) -> Some 5
-        | (4, 0) -> Some 6
-        | (4, 1) -> Some 7
-        | (4, 3) -> Some 8
-        | (4, 4) -> Some 9
-        | (5, 2) -> Some 10
-        | _ -> None
-
-
-let save setState gameId (lineups: Lineups) = 
+let save setState gameId (lineups: GamePlanState) = 
     let url = sprintf "/api/games/%O/gameplan" gameId
     promise { 
         let! res = postRecord url lineups []
@@ -54,20 +47,16 @@ let save setState gameId (lineups: Lineups) =
         setState(fun state props ->
                    { state with 
                       ErrorMessage = None
-                   }
-            ) 
-    }
+                   }) }
     |> Promise.catch(fun e -> 
            Browser.console.error <| sprintf "%O" e
            setState(fun state props ->
                    { state with 
                       ErrorMessage = Some "Tilkoblingsproblemer, endringene blir ikke lagret"
-                   }
-            ) 
-    )
+                   }))
     |> Promise.start
 
-let getName (players: Members.Member list)  (player: Members.Member) =
+let getName (players: Members.Member list) (player: Members.Member) =
             let rec getName numberOfLettersFromLastName =
                 let hashName (p: Members.Member) =
                     match numberOfLettersFromLastName with
@@ -84,15 +73,13 @@ let getName (players: Members.Member list)  (player: Members.Member) =
 
 let updateLineup setState save lineupId fn =
     setState(fun state props ->
-                   let lineups = state.Lineups 
-                                |> List.map(fun (id, time, lineup) -> 
-                                            if id = lineupId then fn (id, time, lineup)
-                                            else (id, time, lineup)
-                                           )
-                   save lineups
-                   { state with 
-                      Lineups = lineups
-                   }
+                   let gamePlan = { state.GamePlan with
+                                        Lineups = state.GamePlan.Lineups
+                                                    |> List.map(fun line -> 
+                                                                if line.Id = lineupId then fn line
+                                                                else line) }
+                   save gamePlan
+                   { state with GamePlan = gamePlan }
     )                 
         
 let handleTimeChange setState save lineupId value =
@@ -100,45 +87,46 @@ let handleTimeChange setState save lineupId value =
             setState 
             save
             lineupId
-            (fun (id, time, lineup) -> (id, value, lineup))    
+            (fun line -> { line with Time = value })   
 
 let handlePlayerChange setState save lineupId index value =
             updateLineup
                 setState
                 save
                 lineupId
-                (fun (id, time, lineup) -> 
-                                    (id,
-                                     time, 
-                                     lineup 
-                                     |> List.mapi (fun i playerName -> 
-                                                        if i = index then value 
-                                                        else playerName)
-                                    ))
+                (fun line -> 
+                        { line with
+                                Players = line.Players
+                                         |> List.mapi (fun i playerName -> 
+                                            if i = index then value 
+                                            else playerName)
+                        })
 
 let duplicateLineup setState save lineupId =
     setState(fun state props ->
-               let (_, time, lineup) = state.Lineups 
-                                       |> List.find (fun (id, _, _) -> id = lineupId)
-               let lineups = state.Lineups @ [ (System.Guid.NewGuid(), time, lineup) ]
-                                |> List.sortBy (fun (_, time, _) -> time)
-               save lineups                               
-               { state with 
-                  Lineups = lineups
-                  FocusedPlayer = None
-               }
-    )
+               let line = state.GamePlan.Lineups |> List.find (fun line -> line.Id = lineupId)
+               let gamePlan = { state.GamePlan with
+                                    Lineups = state.GamePlan.Lineups @ [  { Id = System.Guid.NewGuid()
+                                                                            Time = line.Time
+                                                                            Players = line.Players } ]
+                                              |> List.sortBy (fun line -> line.Time)}                                                          
+                                
+               save gamePlan                               
+               { state with
+                  GamePlan = gamePlan
+                  FocusedPlayer = None })
 
 let removeLineup setState save lineupId =
     setState(fun state props ->        
-               let lineups = state.Lineups 
-                            |> List.filter (fun (id, _, __) -> id <> lineupId)    
-               save lineups                        
+               let gamePlan =
+                    { state.GamePlan with
+                        Lineups = state.GamePlan.Lineups 
+                            |> List.filter (fun line -> line.Id <> lineupId)}                
+               save gamePlan                        
                { state with 
-                  Lineups = lineups
+                  GamePlan = gamePlan
                   FocusedPlayer = None
-               }
-    )
+               })
 
 let handleFocus (e: FocusEvent) = 
         let target = e.target :?> Browser.HTMLInputElement
@@ -150,13 +138,19 @@ type GamePlan(props) =
     do 
         base.setInitState((props.GamePlan
                            |> Option.bind(fun g -> 
-                                  Decode.Auto.fromString<Lineups>(g)
+                                  Decode.Auto.fromString<GamePlanState>(g)
                                   |> function 
                                   | Ok s -> Some s
                                   | Error e -> failwithf "%O" e )
-                           |> Option.defaultValue [ (System.Guid.NewGuid(), 0, [ 0 .. 10 ] |> List.map(fun _ -> None)) ]
-                           |> fun lineups ->
-                                { Lineups = lineups
+                           |> Option.defaultValue {
+                               Lineups = [{ Id = System.Guid.NewGuid(); Time = 0; Players = [ 0 .. 10 ] |> List.map(fun _ -> None)}]
+                               Formation = Ellever FourFourTwo
+                               MatchLength = 90
+                           }
+                                                             
+                           
+                           |> fun gamePlan ->
+                                { GamePlan = gamePlan
                                   FocusedPlayer = None
                                   ErrorMessage = None
                                   Players = props.Players
@@ -172,7 +166,7 @@ type GamePlan(props) =
             this.setState(fun state _ -> { state with FocusedPlayer = focusedPlayer })
             
         let sortLineup _ = 
-            this.setState(fun state _ -> { state with Lineups = state.Lineups |> List.sortBy (fun (_, time, _) -> time) })        
+            this.setState(fun state _ -> { state with GamePlan = { state.GamePlan with Lineups = state.GamePlan.Lineups |> List.sortBy (fun line-> line.Time) }})        
 
         let subs lineup = 
             state.Players |> List.filter(fun p -> lineup |> List.exists (fun l -> l = (Some <| p.FirstName)) |> not)  
@@ -184,7 +178,7 @@ type GamePlan(props) =
         let duplicateLineup = duplicateLineup this.setState save
                       
         let square (lineup: List<string option>) lineupId row col =
-            getPlayerIndex row col
+            getPlayerIndex state.GamePlan.Formation row col
             |> function
             | Some playerIndex ->
                 let subs = subs lineup
@@ -213,7 +207,7 @@ type GamePlan(props) =
                            Placeholder "Ingen"
                            OnClick(fun e -> e.stopPropagation())
                            OnChange(fun e -> handlePlayerChange lineupId playerIndex (Strings.asOption e.Value))
-                           OnFocus (fun e -> handleFocus e; handlePlayerFocus <| Some (lineupId, playerIndex))
+                           OnFocus (fun e -> handlePlayerFocus <| Some (lineupId, playerIndex))
                         ]
                         ul [ Class (if state.FocusedPlayer = Some (lineupId, playerIndex) then "visible" else "") ] 
                             (subs |> List.map (fun sub -> 
@@ -246,16 +240,16 @@ type GamePlan(props) =
                     ]
                     br []
                     br []
-                    div [] (state.Lineups
-                     |> List.map(fun (lineupId, time, lineup) ->
-                            div [Key <| string lineupId]
+                    div [] (state.GamePlan.Lineups
+                     |> List.map(fun lineup ->
+                            div [Key <| string lineup.Id]
                                 [ 
                                   div [ Class "text-center" ] [   
                                         input [ Type "text"
                                                 Class "gp-time"
                                                 Placeholder "tid"
-                                                Value time
-                                                OnChange (fun e -> handleTimeChange lineupId <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
+                                                Value lineup.Time
+                                                OnChange (fun e -> handleTimeChange lineup.Id <| (Number.tryParse e.Value |> Option.defaultValue 0)) 
                                                 OnFocus handleFocus
                                                 OnBlur sortLineup ]
                                         str "min" 
@@ -263,26 +257,26 @@ type GamePlan(props) =
                                   div [Class "clearfix"] [  
                                       button [ 
                                           Class "pull-right hidden-print" 
-                                          Disabled (state.Lineups.Length < 2)
-                                          OnClick (fun _ -> removeLineup lineupId)
+                                          Disabled (state.GamePlan.Lineups.Length < 2)
+                                          OnClick (fun _ -> removeLineup lineup.Id)
                                           ]
                                         [ Icons.delete ]
                                       button [ 
                                           Class "pull-right hidden-print" 
-                                          OnClick (fun _ -> duplicateLineup lineupId)
+                                          OnClick (fun _ -> duplicateLineup lineup.Id)
                                           ]
                                         [ Icons.add "" ]
                                   ]
                                   div []
                                       (                                        
-                                        state.Lineups 
-                                        |> List.findIndex (fun (id, _m, __) -> id = lineupId)
-                                        |> fun i -> if i > 0 then Some state.Lineups.[i-1] else None
+                                        state.GamePlan.Lineups 
+                                        |> List.findIndex (fun line -> line.Id = lineup.Id)
+                                        |> fun i -> if i > 0 then Some state.GamePlan.Lineups.[i-1] else None
                                         |> function
-                                        | Some (_, __, prevLineup) -> 
+                                        | Some prevLineup -> 
                                             let tryGet (list: string list) i = if list.Length > i then list.[i] else ""
-                                            let ins = lineup |> List.except prevLineup |> List.choose id
-                                            let outs = prevLineup |> List.except lineup |> List.choose id
+                                            let ins = lineup.Players |> List.except prevLineup.Players |> List.choose id
+                                            let outs = prevLineup.Players |> List.except lineup.Players |> List.choose id
 
                                             [0 .. (max ins.Length outs.Length) - 1] 
                                             |> List.map (fun i -> 
@@ -301,7 +295,7 @@ type GamePlan(props) =
                                     ([0 .. 5] |> List.map (fun row -> 
                                                                 div [] 
                                                                     ([0 .. 4] 
-                                                                    |> List.map (fun col -> div [Class "gp-square"] [ square lineup lineupId row col]) ) 
+                                                                    |> List.map (fun col -> div [Class "gp-square"] [ square lineup.Players lineup.Id row col]) ) 
                                                            ) ) 
                                   hr []                                 
                             ]
@@ -324,23 +318,21 @@ type GamePlan(props) =
                         h4 [] [str "Spilletid"]
                         div []
                             (
-                            let lineups = state.Lineups
-                                          |> List.sortBy (fun (_, time, __) -> time)
+                            let lineups = state.GamePlan.Lineups
+                                          |> List.sortBy (fun line -> line.Time)
 
                             lineups                                      
-                             |> List.map (fun (lineupId, time, lineup) -> 
-                                            lineup 
+                             |> List.map (fun line -> 
+                                            line.Players 
                                             |> List.choose id 
                                             |> List.map(fun p -> 
-                                                let lineupIndex = lineups |> List.findIndex(fun (lid, _, _) -> lid = lineupId) 
+                                                let lineupIndex = lineups |> List.findIndex(fun l -> l.Id = line.Id) 
                                                 let nextTime = if lineupIndex + 1 < lineups.Length then 
-                                                                    let (_, t, __) = lineups.[lineupIndex+1]
+                                                                    let t = lineups.[lineupIndex+1].Time
                                                                     t
                                                                else
-                                                                    matchLength
-
-                                                (p, nextTime - time)
-                                            ) 
+                                                                    state.GamePlan.MatchLength
+                                                (p, nextTime - line.Time)) 
                                         )
                              |> List.reduce List.append
                              |> List.groupBy (fun (player, _) -> player)
