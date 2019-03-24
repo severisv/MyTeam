@@ -1,7 +1,6 @@
 namespace MyTeam.Games
 
 open MyTeam
-open Shared
 open Shared.Domain
 open MyTeam.Models.Domain
 open System
@@ -9,25 +8,27 @@ open System
 module Persistence =
 
     let selectPlayer: SelectPlayer = 
-        fun db clubId eventId playerId model ->
-
+        fun db clubId eventId playerId model ->            
             let (ClubId clubId) = clubId
-
             query {
                 for e in db.Events do
                 where (e.ClubId = clubId && e.Id = eventId)
                 select (e.Id)
             }
-            |> Seq.tryHead
+            |> Seq.toList
+            |> List.tryHead
             |> function
                 | None -> Unauthorized
-                | Some e ->
-                    db.EventAttendances 
-                    |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)           
+                | Some e ->          
+                    query {
+                        for e in db.EventAttendances do
+                            where (e.EventId = eventId && e.MemberId = playerId)
+                            select e                       
+                        }
+                    |> Seq.tryHead
                     |> function
                         | Some a ->
-                            a.IsSelected <- model.value
-                            db.EventAttendances.Attach(a) |> ignore
+                            a.IsSelected <- model.value                      
                         | None ->
                             let a = EventAttendance()                         
                             a.Id <- Guid.NewGuid()
@@ -36,9 +37,8 @@ module Persistence =
                             a.IsSelected <- model.value                        
                             db.EventAttendances.Add(a) |> ignore
 
-                    db.SaveChanges() |> ignore
+                    db.SaveChanges() |> ignore                 
                     OkResult model
-
 
 
     let publishSquad: PublishSquad = 
