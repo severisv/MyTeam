@@ -6,7 +6,6 @@ open Shared.Domain
 
 module Queries =
        
-
     let list : ListTeams =
         fun db clubId ->
             let (ClubId clubId) = clubId
@@ -20,3 +19,5 @@ module Queries =
                                 ShortName = shortName
                                 Name = name  })
             |> List.sortBy(fun t -> t.ShortName)
+
+

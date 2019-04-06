@@ -87,7 +87,7 @@
     <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />
-    <Compile Include="features/teams/Queries.fs" />
+    <Compile Include="features\teams\TeamsQueries.fs" />
     <Compile Include="features/teams/Api.fs" />
     <Compile Include="features/news/Types.fs" />
     <Compile Include="features/news/Queries.fs" />

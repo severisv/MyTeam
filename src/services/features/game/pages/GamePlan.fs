@@ -21,7 +21,8 @@ let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
                 (game.Opponent, 
                  game.GamePlanState, 
                  game.GamePlanIsPublished, 
-                 game.TeamId, 
+                 game.TeamId,
+                 game.Team.Formation,
                  query {                     
                     for attendee in game.Attendees do
                         where(attendee.IsSelected)
@@ -29,7 +30,7 @@ let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
                  }                 
              )
     }
-    |> Seq.map(fun (opponent, gamePlan, gamePlanIsPublished, teamId, attendees) -> 
+    |> Seq.map(fun (opponent, gamePlan, gamePlanIsPublished, teamId, formation, attendees) -> 
            ({ GameId = gameId
               Team = club.Teams 
                      |> Seq.find(fun t -> t.Id = teamId) 
@@ -38,7 +39,15 @@ let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
               GamePlanIsPublished = (gamePlanIsPublished = Nullable(true))
               GamePlan = Strings.asOption gamePlan
               Players = Members.selectMembers (attendees.AsQueryable()) |> Seq.toList
-              ImageOptions = Images.getOptions ctx })
+              ImageOptions = Images.getOptions ctx
+              Formation = match int formation with
+                          | 0 -> Ellever FourThreeThree
+                          | 433 -> Ellever FourThreeThree
+                          | 442 -> Ellever FourFourTwo
+                          | 321 -> Sjuer ThreeTwoOne
+                          | 231 -> Sjuer TwoThreeOne
+                          | _ -> failwithf "Ukjent formasjon %O" formation
+               })
     )                
     |> Seq.tryHead
     |> function 

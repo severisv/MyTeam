@@ -59,7 +59,7 @@
         }
         
     }
-    input {
+    input:not([type="radio"]) {
         text-align: center;
         background: transparent;
         width: 100%;
@@ -78,7 +78,7 @@
     .gp-time {
         font-size: 1.5em;
         width: 2em;
-        border: 0;
+        border: 0 !important;
         &:focus {
             border: 0;
         }

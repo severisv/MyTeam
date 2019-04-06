@@ -1,4 +1,4 @@
-module Client.GamePlan
+module Client.GamePlan.View
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -14,6 +14,7 @@ open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.GamePlan
 open Shared.Domain.Members
+open Shared.Components.Input
 open Thoth.Json
 open Client.Util
 open Client.GamePlan.Formation
@@ -29,7 +30,7 @@ type Lineup = {
 
 type GamePlanState = {
     Lineups: Lineup list
-    Formation: Formation
+    Formation: Formations
     MatchLength: int
 }
        
@@ -127,7 +128,17 @@ let removeLineup setState save lineupId =
                   GamePlan = gamePlan
                   FocusedPlayer = None
                })
-
+    
+let setFormation setState save formation =
+    setState(fun state props ->        
+               let gamePlan =
+                    { state.GamePlan with
+                        Formation = formation }        
+               save gamePlan                        
+               { state with 
+                  GamePlan = gamePlan
+               })  
+ 
 let handleFocus (e: FocusEvent) = 
         let target = e.target :?> Browser.HTMLInputElement
         target.select()
@@ -144,11 +155,11 @@ type GamePlan(props) =
                                   | Error e -> failwithf "%O" e )
                            |> Option.defaultValue {
                                Lineups = [{ Id = System.Guid.NewGuid(); Time = 0; Players = [ 0 .. 10 ] |> List.map(fun _ -> None)}]
-                               Formation = Ellever FourFourTwo
-                               MatchLength = 90
+                               Formation = props.Formation
+                               MatchLength = match props.Formation with
+                                             | Sjuer _ -> 60
+                                             | Ellever _ -> 90
                            }
-                                                             
-                           
                            |> fun gamePlan ->
                                 { GamePlan = gamePlan
                                   FocusedPlayer = None
@@ -158,7 +169,7 @@ type GamePlan(props) =
                               }))
     
     override this.render() =         
- 
+        
         let model = props
         let state = this.state                                       
         
@@ -175,6 +186,7 @@ type GamePlan(props) =
         let handlePlayerChange = handlePlayerChange this.setState save
         let handleTimeChange = handleTimeChange this.setState save
         let removeLineup = removeLineup this.setState save
+        let setFormation = setFormation this.setState save
         let duplicateLineup = duplicateLineup this.setState save
                       
         let square (lineup: List<string option>) lineupId row col =
@@ -240,6 +252,14 @@ type GamePlan(props) =
                     ]
                     br []
                     br []
+                    div [Style [TextAlign "right"]] [
+                        radio setFormation
+                            ((match props.Formation with
+                             | Sjuer _ -> [ThreeTwoOne; TwoThreeOne] |> List.map Sjuer
+                             | Ellever _ -> [FourFourTwo; FourThreeThree] |> List.map Ellever                                
+                            ) |> List.map (fun v -> { Label = string v; Value = v }))
+                            (Some state.GamePlan.Formation)
+                    ]
                     div [] (state.GamePlan.Lineups
                      |> List.map(fun lineup ->
                             div [Key <| string lineup.Id]

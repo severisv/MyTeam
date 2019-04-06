@@ -6,6 +6,15 @@ using System.Linq;
 
 namespace MyTeam.Models.Domain
 {
+
+    public enum Formasjon
+    {
+        FireFireTo = 442,
+        FireTreTre = 442,
+        TreToEn = 321,
+        ToTreEn = 231,
+    }
+    
     public class Team : Entity
     {
         [Required]
@@ -15,6 +24,8 @@ namespace MyTeam.Models.Domain
         public int SortOrder { get; set; }
         [Required]
         public Guid ClubId { get; set; }
+        
+        public Formasjon Formation { get; set; }
         public virtual Club Club { get; set; }
         public virtual ICollection<MemberTeam> MemberTeams { get; set; }
         public virtual ICollection<Season> Seasons { get; set; }
