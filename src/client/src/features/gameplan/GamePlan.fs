@@ -355,6 +355,7 @@ type GamePlan(props) =
                                                 (p, nextTime - line.Time)) 
                                         )
                              |> List.reduce List.append
+                             |> List.append (state.Players |> List.map(fun p -> (p.FirstName, 0)))
                              |> List.groupBy (fun (player, _) -> player)
                              |> List.map (fun (key, values) -> (key, values |> List.sumBy(fun (_, time) -> time)) )
                              |> List.sortBy (fun (player, _) -> player)                             
