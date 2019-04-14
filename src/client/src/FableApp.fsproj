@@ -14,12 +14,13 @@
     <Compile Include="components/SubmitButton.fs" />
     <Compile Include="components/EditBlock.fs" />
     <Compile Include="components/Modal.fs" />
-    <Compile Include="features/GamePlan.fs" />
     <Compile Include="features/SelectSquad.fs" />
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features/AddPlayers.fs" />
     <Compile Include="features\fines\FineList.fs" />
+    <Compile Include="features\gameplan\Formation.fs" />
+    <Compile Include="features\gameplan\GamePlan.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

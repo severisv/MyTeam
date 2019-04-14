@@ -15,14 +15,12 @@ type FacebookOptions = {
   AppId: string
 }
 
-[<CLIMutable>]
-type CloudinarySettings = {
-    ApiKey: string
-    ApiSecret: string
-    CloudName: string
-    DefaultMember: string
-    DefaultArticle: string
-}
+type CloudinarySettings() =
+    member val ApiKey = Unchecked.defaultof<string> with get, set
+    member val ApiSecret = Unchecked.defaultof<string> with get, set
+    member val CloudName = Unchecked.defaultof<string> with get, set
+    member val DefaultMember = Unchecked.defaultof<string> with get, set
+    member val DefaultArticle = Unchecked.defaultof<string> with get, set
 
 
 [<AutoOpen>]

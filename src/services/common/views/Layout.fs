@@ -123,8 +123,8 @@ module Pages =
                         content
 
                     script [ _src "/compiled/lib/lib.bundle.js?v23" ] []
-                    script [ _src "/compiled/app.js?v23" ] []
-                    script [ _src "/compiled/client/main.js?v1" ] []
+                    script [ _src "/compiled/app.js?v24" ] []
+                    script [ _src "/compiled/client/main.js?v2" ] []
             ] @ o.Scripts)
         ]
 

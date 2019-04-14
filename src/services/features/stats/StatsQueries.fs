@@ -68,7 +68,7 @@ module StatsQueries =
    
 
             let playerIds = attendances 
-                            |> Seq.distinct
+                            |> List.distinct
 
 
             let result =
@@ -83,11 +83,11 @@ module StatsQueries =
                                 FirstName = firstName
                                 LastName = lastName
                                 UrlName = urlName                                  
-                                Games = attendances |> Seq.filter (fun a -> a = id) |> Seq.length
-                                Goals = gameEvents |> Seq.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> Seq.length
-                                Assists = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
-                                YellowCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
-                                RedCards = gameEvents |> Seq.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
+                                Games = attendances |> List.filter (fun a -> a = id) |> List.length
+                                Goals = gameEvents |> List.filter(fun ge -> ge.Type = GameEventType.Goal && ge.PlayerId = Nullable id) |> Seq.length
+                                Assists = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
+                                YellowCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
+                                RedCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
                                 Image = imageFull
                             }
                    )

@@ -15,7 +15,10 @@
 
     .gp-square {
         display: inline-block;
-        width: 20%;
+        width: 22%;        
+        &:nth-of-type(3) {
+            width: 12%; 
+        }
         height: 2em;
         position: relative;
 
@@ -29,9 +32,8 @@
             display: none;
             border: 2px solid fade(@white, 50);
             position: absolute;
-            border-top: 0;
             border-radius: 2px;
-            width: 100%;
+            min-width: 100%;
         }       
         ul.visible {
             display: block;
@@ -57,7 +59,7 @@
         }
         
     }
-    input {
+    input:not([type="radio"]) {
         text-align: center;
         background: transparent;
         width: 100%;
@@ -66,6 +68,7 @@
         &.focused,
         &:focus {
             border: 2px solid fade(@white, 50);
+            border-bottom: 0;
         }
     }
     
@@ -75,7 +78,7 @@
     .gp-time {
         font-size: 1.5em;
         width: 2em;
-        border: 0;
+        border: 0 !important;
         &:focus {
             border: 0;
         }

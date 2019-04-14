@@ -83,7 +83,7 @@
     <Compile Include="features/members/pages/List.fs" />
     <Compile Include="features/members/pages/RequestAccess.fs" />
     <Compile Include="features/stats/Types.fs" />
-    <Compile Include="features/stats/Queries.fs" />
+    <Compile Include="features\stats\StatsQueries.fs" />
     <Compile Include="features/stats/Pages.fs" />
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
@@ -91,7 +91,7 @@
     <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />
-    <Compile Include="features/teams/Queries.fs" />
+    <Compile Include="features\teams\TeamsQueries.fs" />
     <Compile Include="features/teams/Api.fs" />
     <Compile Include="features/news/Types.fs" />
     <Compile Include="features/news/Queries.fs" />

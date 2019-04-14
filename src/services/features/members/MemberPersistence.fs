@@ -13,8 +13,9 @@ let setStatus : SetStatus =
         let members = Queries.members db clubId
 
         let memb =
-            members
-            |> Seq.filter (fun p -> p.Id = memberId)
+            query { for m in members do
+                    where (m.Id = memberId)
+                    select m }
             |> Seq.head
         memb.Status <- (int status)
         db.SaveChanges() |> ignore
@@ -29,8 +30,9 @@ let toggleRole : ToggleRole =
         let members = Queries.members db clubId
 
         let memb =
-            members
-            |> Seq.filter (fun p -> p.Id = memberId)
+            query { for m in db.Members do
+                    where (m.Id = memberId)
+                    select m }
             |> Seq.head
         memb.RolesString <- memb.RolesString
                             |> toRoleList
@@ -43,17 +45,17 @@ let toggleTeam : ToggleTeam =
     fun db clubId memberId teamId ->
         let (ClubId clubId) = clubId
 
-        let memb =
-            db.Members.Include(fun m -> m.MemberTeams)
-            |> Seq.filter (fun m -> m.Id = memberId)
+        let memb =            
+            query { for m in db.Members.Include(fun m -> m.MemberTeams) do
+                    where (m.Id = memberId)
+                    select m }
             |> Seq.head
         if memb.ClubId <> clubId then
             failwith "Prøver å redigere spiller fra annen klubb - ingen tilgang"
-        let memberTeam =
-            memb.MemberTeams
-            |> Seq.filter (fun mt -> mt.TeamId = teamId)
-            |> Seq.tryHead
-        match memberTeam with
+
+        memb.MemberTeams
+        |> Seq.tryFind (fun mt -> mt.TeamId = teamId)
+        |> function
         | Some m -> db.Remove(m) |> ignore
         | None ->
             let memberTeam = MemberTeam()
