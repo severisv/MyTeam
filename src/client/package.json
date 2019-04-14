@@ -1,7 +1,7 @@
 {
   "private": true,
   "fable": {
-    "entry": "src/FableApp.fsproj"
+    "entry": "src/client.fsproj"
   },
   "scripts": {
     "build": "cd src && dotnet fable webpack -- -p --config config/webpack.prod.js",

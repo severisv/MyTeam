@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>FableApp</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\shared\shared.fsproj" />
@@ -18,6 +19,7 @@
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features/AddPlayers.fs" />
+    <Compile Include="features\fines\Add.fs" />
     <Compile Include="features\fines\FineList.fs" />
     <Compile Include="features\gameplan\Formation.fs" />
     <Compile Include="features\gameplan\GamePlan.fs" />
