@@ -31,4 +31,5 @@ let listRemedyRates (club: Club) (db: Database) =
     |> List.map(fun (id, name) ->
         { Id = id
           Name = name })
+    |> List.sortBy (fun r -> r.Name)
     |> OkResult

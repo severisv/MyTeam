@@ -6,9 +6,9 @@ open Shared.Features.Fines.Common
 
 [<CLIMutable>]
 type AddFine = {
-    MemberId: Guid
+    MemberId: Guid option
     Date: DateTime
-    RateId: Guid
+    RateId: Guid option
     ExtraRate: int option
     Comment: string
 }

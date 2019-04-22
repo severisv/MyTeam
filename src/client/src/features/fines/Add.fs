@@ -12,11 +12,13 @@ open Shared.Domain.Members
 open Shared.Features.Fines.Common
 open Shared.Features.Fines.Add
 open Client.Util
+open Shared.Domain
+open System
 
 type AddFineState = {
     Players: MemberWithTeamsAndRoles list
     Rates: RemedyRate list
-    Form: AddFine option
+    Form: AddFine
     Error: string option
     Success: string list
     
@@ -29,12 +31,18 @@ let addFine =
             fun handleClose ->
                  komponent<unit, AddFineState>
                      ()
-                     { Form = None; Players = []; Rates = []; Error = None; Success = [] }
+                     { Form =
+                         {   MemberId = None
+                             Date = System.DateTime.Now
+                             RateId = None
+                             ExtraRate = None
+                             Comment = ""  }
+                       Players = []; Rates = []; Error = None; Success = [] }
                      (Some <| { ComponentDidMount =
                                     fun (_, _, setState) ->
                                         Http.get "/api/members" Decode.Auto.fromString<MemberWithTeamsAndRoles list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
-                                                        { state with Players = result })                                                                                   
+                                                        { state with Players = result |> List.filter(fun p -> p.Details.Status = PlayerStatus.Aktiv) })                                                                                   
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting
                                                           av spillere. Prøv å laste siden på nytt" }) }
@@ -46,31 +54,45 @@ let addFine =
                                                 
                                      })
                      (fun (props, state, setState) ->
+                        let setFormValue update =
+                            setState (fun state props -> { state with Form = update state.Form })
+                            
                         form [] [
                             h4 [] [ str "Registrer bot" ]
                             state.Error => Alerts.danger
                             formRow []
                                     [ str "Hvem" ]
-                                    [ textInput [OnChange ignore
-                                                 Value "" ] ]
+                                    [ selectInput [ Value state.Form.MemberId
+                                                    OnChange (fun e ->
+                                                                let id = e.Value
+                                                                setFormValue (fun form ->
+                                                                    { form with MemberId = Some <| Guid.Parse id }))]
+                                    (state.Players |> List.map (fun p ->
+                                        { Name = p.Details.Name; Value = p.Details.Id   })) ]
                             formRow []
                                     [ str "Dato" ]
-                                    [ textInput [OnChange ignore
-                                                 Value "" ] ]                                    
+                                    [ dateInput [OnChange ignore
+                                                 Value state.Form.Date ] ]                                    
                             formRow []
                                     [ str "Hva" ]
-                                    [ textInput [OnChange ignore
-                                                 Value "" ] ]
+                                    [ selectInput [Value state.Form.MemberId
+                                                   OnChange (fun e ->
+                                                                let id = e.Value
+                                                                setFormValue (fun form ->
+                                                                    { form with RateId = Some <| Guid.Parse id }))]
+                                    (state.Rates |> List.map (fun r -> { Name = r.Name; Value = r.Id   })) ]
                                     
                             formRow []
                                     [ str "Tillegg" ]
                                     [ textInput [OnChange ignore
-                                                 Value "" ] ]
+                                                 Placeholder "Eventuelt tillegg til normalsats"
+                                                 Value state.Form.ExtraRate ] ]
                                     
                             formRow []
                                     [ str "Kommentar" ]
                                     [ textInput [OnChange ignore
-                                                 Value "" ] ]
+                                                 Placeholder "Eventuell kommentar"
+                                                 Value state.Form.Comment ] ]
                             
                             formRow [] [] [
                                 SubmitButton.render

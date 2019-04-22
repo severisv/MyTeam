@@ -41,4 +41,19 @@ let textInput attr =
            |> mergeClasses [ Class "form-control"
                              Type "text" ])
 
+let dateInput attr =
+    input (attr
+           |> mergeClasses [ Class "form-control"
+                             Type "text" ])    
+    
+type SelectOption<'a> = { Name: string; Value: 'a }
+let selectInput attr options =
+    select (attr
+           |> mergeClasses [ Class "form-control" ])
+           (options |> List.map(fun o ->
+                                    option [Value o.Value] [str o.Name]
+        ))
+
+    
+
 let validationMessage messages = span [ Class "text-danger" ] (messages |> List.map str)
