@@ -36,10 +36,10 @@ module Pages =
             let treningskamp = (Nullable <| int GameType.Treningskamp)
             let years =
                 query {
-                    for gameEvent in db.GameEvents do
-                    where (teamIds.Contains(gameEvent.Game.TeamId) 
-                          && gameEvent.Game.GameType <> treningskamp)
-                    select (gameEvent.Game.DateTime.Year)
+                    for game in db.Games do
+                    where (teamIds.Contains(game.TeamId) 
+                          && game.GameType <> treningskamp)
+                    select (game.DateTime.Year)
                     distinct
                 }
                 |> Seq.toList
