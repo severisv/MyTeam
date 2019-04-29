@@ -2,11 +2,11 @@
 source https://nuget.org/api/v2
 storage:none
 
-clitool dotnet-fable prelease
-nuget Fable.Core prelease
-nuget Fable.Import.Browser prelease
+clitool dotnet-fable
+nuget Fable.Core
+nuget Fable.Import.Browser
 nuget Fable.PowerPack
-nuget Fable.React prelease
+nuget Fable.React
 nuget Fable.JsonConverter prelease
 nuget Microsoft.Extensions.Logging.ApplicationInsights
 nuget Thoth.Json

@@ -57,10 +57,10 @@ let addFine =
                         let setFormValue update =
                             setState (fun state props -> { state with Form = update state.Form })
                             
-                        form [] [
+                        form [Horizontal 3] [
                             h4 [] [ str "Registrer bot" ]
                             state.Error => Alerts.danger
-                            formRow []
+                            formRow [Horizontal 3]
                                     [ str "Hvem" ]
                                     [ selectInput [ Value state.Form.MemberId
                                                     OnChange (fun e ->
@@ -69,11 +69,11 @@ let addFine =
                                                                     { form with MemberId = Some <| Guid.Parse id }))]
                                     (state.Players |> List.map (fun p ->
                                         { Name = p.Details.Name; Value = p.Details.Id   })) ]
-                            formRow []
+                            formRow [Horizontal 3]
                                     [ str "Dato" ]
                                     [ dateInput [OnChange ignore
                                                  Value state.Form.Date ] ]                                    
-                            formRow []
+                            formRow [Horizontal 3]
                                     [ str "Hva" ]
                                     [ selectInput [Value state.Form.MemberId
                                                    OnChange (fun e ->
@@ -82,19 +82,25 @@ let addFine =
                                                                     { form with RateId = Some <| Guid.Parse id }))]
                                     (state.Rates |> List.map (fun r -> { Name = r.Name; Value = r.Id   })) ]
                                     
-                            formRow []
+                            formRow [Horizontal 3]
                                     [ str "Tillegg" ]
-                                    [ textInput [OnChange ignore
-                                                 Placeholder "Eventuelt tillegg til normalsats"
-                                                 Value state.Form.ExtraRate ] ]
+                                    [ textInput [
+                                                 Validation (false, "Testing")
+                                                 OnChange (fun e ->
+                                                                let value = e.Value
+                                                                setFormValue (fun form ->
+                                                                    { form with ExtraRate = Some <| int value }))                                                 
+                                                 Placeholder "Eventuelt tillegg til normalsats" ] ]
                                     
-                            formRow []
+                            formRow [Horizontal 3]
                                     [ str "Kommentar" ]
-                                    [ textInput [OnChange ignore
-                                                 Placeholder "Eventuell kommentar"
-                                                 Value state.Form.Comment ] ]
+                                    [ textInput [OnChange (fun e ->
+                                                                let value = e.Value
+                                                                setFormValue (fun form ->
+                                                                    { form with Comment = value }))
+                                                 Placeholder "Eventuell kommentar" ] ]
                             
-                            formRow [] [] [
+                            formRow [Horizontal 3] [] [
                                 SubmitButton.render
                                     (fun o ->
                                         { o with
