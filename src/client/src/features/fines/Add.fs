@@ -3,7 +3,7 @@ module Client.Fines.Add
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Client.Components
-open Client.Util.ReactHelpers
+open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared.Components
 open Shared.Components.Base

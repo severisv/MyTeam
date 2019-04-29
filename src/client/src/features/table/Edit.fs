@@ -10,7 +10,7 @@ open Shared.Components.Base
 open Shared.Features.Table.Table
 open Shared.Components.Forms
 open Thoth.Json
-open Client.Util
+open Shared.Util
 
 
 type State =

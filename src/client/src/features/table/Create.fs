@@ -11,7 +11,7 @@ open Shared.Components.Forms
 open Shared.Features.Table.Table
 open Shared.Components.Base
 open Thoth.Json
-open Client.Util
+open Shared.Util
 
 type State =
     { Year : int option }
@@ -58,6 +58,6 @@ type CreateTable(props) =
                         btn [ OnClick !> handleClose ] [ str "Avbryt" ]                      
                   ]
             }                                                             
-        
+                
 let element = ofType<CreateTable, _, _>
 ReactHelpers.render Decode.Auto.fromString<CreateModel> createView element

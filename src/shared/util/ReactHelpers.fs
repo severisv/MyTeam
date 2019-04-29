@@ -1,4 +1,4 @@
-module Client.Util.ReactHelpers
+module Shared.Util.ReactHelpers
 
 open Fable.Import
 open Fable.Import.React

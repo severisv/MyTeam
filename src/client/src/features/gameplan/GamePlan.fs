@@ -16,7 +16,7 @@ open Shared.Features.Games.GamePlan
 open Shared.Domain.Members
 open Shared.Components.Input
 open Thoth.Json
-open Client.Util
+open Shared.Util
 open Client.GamePlan.Formation
 
 type Time = int

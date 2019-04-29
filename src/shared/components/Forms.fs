@@ -4,7 +4,7 @@ open Shared.Components.Base
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Shared.Util.Html
-open Client.Util.ReactHelpers
+open Shared.Util.ReactHelpers
 
 type FormProps =
     | Horizontal of int

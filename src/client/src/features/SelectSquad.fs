@@ -11,7 +11,7 @@ open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
-open Client.Util
+open Shared.Util
 open Shared.Domain.Members
 open Thoth.Json
 
