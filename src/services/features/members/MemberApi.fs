@@ -7,6 +7,7 @@ open MyTeam
 open Shared
 open Shared.Features.Admin.AddPlayers
 open System.Linq
+open Shared.Validation
 open MyTeam.Validation
 open MyTeam.Models.Domain
 open Services.Utils
@@ -45,7 +46,7 @@ let add clubId (ctx : HttpContext) model =
 
                 let clubId = club.Id
 
-                let memberDoesNotExist db ((_, form) : string * AddMemberForm) =
+                let memberDoesNotExist db _ form =
                     let members = Queries.members db clubId
                     if not <| Strings.hasValue form.``E-postadresse`` then
                         Ok()

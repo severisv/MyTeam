@@ -7,6 +7,7 @@ open Shared.Domain
 open Shared.Domain.Members
 open Shared.Domain.Events
 open MyTeam.Validation
+open Shared.Validation
 open System
 
 type GameEventId = Guid
@@ -58,12 +59,12 @@ let get : Get =
             |> OkResult
 
 let add : Add =
-    let cardDoesNotHaveAssist (_, model) =
+    let cardDoesNotHaveAssist _ model =
         if model.Type <> GameEventType.Mål && model.AssistedById.IsSome then 
             Error "Kort kan ikke ha assist"
         else Ok()
     
-    let isNotAssistedBySelf (_, model) =
+    let isNotAssistedBySelf _ model =
         if model.PlayerId.IsSome && model.PlayerId = model.AssistedById then 
             Error "Man kan ikke gi assist til seg selv"
         else Ok()

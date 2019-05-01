@@ -7,6 +7,7 @@ open Shared.Components
 open MyTeam
 open Shared
 open MyTeam.Validation
+open Shared.Validation
 open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.News
@@ -37,10 +38,11 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                         input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]
                       ]
                     name |> Option.map (fun name -> 
-                                                a [ _class "btn btn-danger pull-right confirm-dialog"; _href <| sprintf "/nyheter/slett/%s" name; attr "data-message" "Er du sikker på at du vil slette artikkelen?" ][ 
+                                                a [ _class "btn btn-danger pull-right confirm-dialog"
+                                                    _href <| sprintf "/nyheter/slett/%s" name
+                                                    attr "data-message" "Er du sikker på at du vil slette artikkelen?" ][ 
                                                     !!Icons.delete
-                                                  ]
-                                        )
+                                                  ])
                          |> Option.defaultValue empty                                    
                     
                     div [ _class "clearfix" ] []

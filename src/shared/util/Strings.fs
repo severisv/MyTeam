@@ -3,7 +3,7 @@ module Shared.Strings
 open System
 open System.Text.RegularExpressions
 
-let hasValue s = not <| String.IsNullOrWhiteSpace(s)
+let hasValue s = not <| String.IsNullOrWhiteSpace s
 let toLower (a: obj) = (string a).ToLower()
 let split separator (str: string) = str.Split(separator) |> Array.toList
 let trim (str: string) = str.Trim()

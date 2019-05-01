@@ -43,7 +43,7 @@ type InputState = {
 }
 
 type InputProps =
-    | Validation of (bool * string)
+    | Validation of Result<unit, string> list
     interface IHTMLProp
 
 let textInput (attr: IHTMLProp list) =
@@ -61,7 +61,10 @@ let textInput (attr: IHTMLProp list) =
             let (isValid, validationMessage) =
                 props
                 |> function
-                | Some(Validation (i, m)) when state.IsTouched -> i, Some m
+                | Some(Validation e) when state.IsTouched
+                     -> e
+                        |> List.map (function | Ok () -> (true, None) | Error m -> false, Some m)
+                        |> List.reduce (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc)
                 | _ -> true, None
             
             fragment [] [

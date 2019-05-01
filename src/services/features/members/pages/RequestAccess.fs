@@ -1,17 +1,15 @@
 module MyTeam.Members.Pages.RequestAccess
 
 open Fable.Helpers.React.Props
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Components.Buttons
 open Shared.Domain
 open Shared.Domain.Members
-open MyTeam.Members
-open Shared.Components
 open Shared.Components.Forms
 open MyTeam.Validation
+open Shared.Validation
 open MyTeam.Views
 open Microsoft.Extensions.Logging
 

@@ -5,6 +5,7 @@ open Fable.Helpers.React.Props
 open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
+open Shared.Validation
 open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Forms
@@ -15,13 +16,20 @@ open Client.Util
 open Shared.Domain
 open System
 
+type AddFineForm = {
+    MemberId: Guid option
+    Date: DateTime
+    RateId: Guid option
+    ExtraRate: string
+    Comment: string
+}
+
 type AddFineState = {
     Players: MemberWithTeamsAndRoles list
     Rates: RemedyRate list
-    Form: AddFine
+    Form: AddFineForm
     Error: string option
-    Success: string list
-    
+    Success: string list    
 }
 
 let addFine =
@@ -35,7 +43,7 @@ let addFine =
                          {   MemberId = None
                              Date = System.DateTime.Now
                              RateId = None
-                             ExtraRate = None
+                             ExtraRate = ""
                              Comment = ""  }
                        Players = []; Rates = []; Error = None; Success = [] }
                      (Some <| { ComponentDidMount =
@@ -56,49 +64,49 @@ let addFine =
                      (fun (props, state, setState) ->
                         let setFormValue update =
                             setState (fun state props -> { state with Form = update state.Form })
-                            
+                                                    
                         form [Horizontal 3] [
                             h4 [] [ str "Registrer bot" ]
                             state.Error => Alerts.danger
                             formRow [Horizontal 3]
-                                    [ str "Hvem" ]
-                                    [ selectInput [ Value state.Form.MemberId
-                                                    OnChange (fun e ->
+                                    [str "Hvem"]
+                                    [selectInput [Value state.Form.MemberId
+                                                  OnChange (fun e ->
                                                                 let id = e.Value
                                                                 setFormValue (fun form ->
                                                                     { form with MemberId = Some <| Guid.Parse id }))]
                                     (state.Players |> List.map (fun p ->
                                         { Name = p.Details.Name; Value = p.Details.Id   })) ]
                             formRow [Horizontal 3]
-                                    [ str "Dato" ]
-                                    [ dateInput [OnChange ignore
-                                                 Value state.Form.Date ] ]                                    
+                                    [str "Dato" ]
+                                    [dateInput [OnChange ignore
+                                                Value state.Form.Date ] ]                                    
                             formRow [Horizontal 3]
-                                    [ str "Hva" ]
-                                    [ selectInput [Value state.Form.MemberId
-                                                   OnChange (fun e ->
+                                    [str "Hva" ]
+                                    [selectInput [Value state.Form.MemberId
+                                                  OnChange (fun e ->
                                                                 let id = e.Value
                                                                 setFormValue (fun form ->
                                                                     { form with RateId = Some <| Guid.Parse id }))]
                                     (state.Rates |> List.map (fun r -> { Name = r.Name; Value = r.Id   })) ]
                                     
                             formRow [Horizontal 3]
-                                    [ str "Tillegg" ]
-                                    [ textInput [
-                                                 Validation (false, "Testing")
-                                                 OnChange (fun e ->
+                                    [str "Tillegg" ]
+                                    [textInput [
+                                                Validation [isNumber "Tillegg" state.Form.ExtraRate]
+                                                OnChange (fun e ->
                                                                 let value = e.Value
                                                                 setFormValue (fun form ->
-                                                                    { form with ExtraRate = Some <| int value }))                                                 
-                                                 Placeholder "Eventuelt tillegg til normalsats" ] ]
+                                                                    { form with ExtraRate = value }))                                                 
+                                                Placeholder "Eventuelt tillegg til normalsats" ] ]
                                     
                             formRow [Horizontal 3]
-                                    [ str "Kommentar" ]
-                                    [ textInput [OnChange (fun e ->
+                                    [str "Kommentar" ]
+                                    [textInput [OnChange (fun e ->
                                                                 let value = e.Value
                                                                 setFormValue (fun form ->
                                                                     { form with Comment = value }))
-                                                 Placeholder "Eventuell kommentar" ] ]
+                                                Placeholder "Eventuell kommentar" ] ]
                             
                             formRow [Horizontal 3] [] [
                                 SubmitButton.render
