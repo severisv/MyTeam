@@ -9,6 +9,7 @@ open Shared.Validation
 open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Forms
+open Shared.Components.Datepicker
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
 open Shared.Features.Fines.Add
@@ -72,16 +73,13 @@ let addFine =
                                 "RateId", isSome "Hva" state.Form.RateId
                                 "ExtraRate", isNumber "Tillegg" state.Form.ExtraRate
                             ]
-                            
-                        Browser.console.log state
-                                                    
+                                                                               
                         form [Horizontal 3] [
                             h4 [] [ str "Registrer bot" ]
                             state.Error => Alerts.danger
                             formRow [Horizontal 3]
                                     [str "Hvem"]
-                                    [selectInput [Value state.Form.MemberId
-                                                  OnChange (fun e ->
+                                    [selectInput [OnChange (fun e ->
                                                                 let id = e.Value
                                                                 setFormValue (fun form ->
                                                                     { form with MemberId = Some <| Guid.Parse id }))]
@@ -89,12 +87,10 @@ let addFine =
                                         { Name = p.Details.Name; Value = p.Details.Id   })) ]
                             formRow [Horizontal 3]
                                     [str "Dato" ]
-                                    [dateInput [OnChange ignore
-                                                Value state.Form.Date ] ]                                    
+                                    [dateInput [Value state.Form.Date ] ]                                    
                             formRow [Horizontal 3]
                                     [str "Hva" ]
-                                    [selectInput [Value state.Form.MemberId
-                                                  OnChange (fun e ->
+                                    [selectInput [OnChange (fun e ->
                                                                 let id = e.Value
                                                                 setFormValue (fun form ->
                                                                     { form with RateId = Some <| Guid.Parse id }))]

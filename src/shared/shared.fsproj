@@ -23,6 +23,7 @@
     <Compile Include="components/Layout.fs" />
     <Compile Include="components/Links.fs" />
     <Compile Include="components/Alerts.fs" />
+    <Compile Include="components\Datepicker.fs" />
     <Compile Include="components/Forms.fs" />
     <Compile Include="components\Tables.fs" />
     <Compile Include="components\Currency.fs" />

@@ -1,6 +1,7 @@
 module Shared.Components.Forms
 
 open Shared.Components.Base
+open Shared.Components.Datepicker
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Shared.Util.Html
@@ -15,8 +16,8 @@ let form (props : IHTMLProp list) children =
         props
         |> List.tryFind (fun p -> p :? FormProps)
         |> Option.map (fun p -> p :?> FormProps)
-    form ((props @ [ OnSubmit(fun e -> e.preventDefault()) ])
-          |> mergeClasses [ Class(match horizontal with
+    form ((props @ [OnSubmit(fun e -> e.preventDefault()) ])
+          |> mergeClasses [Class(match horizontal with
                                   | Some(Horizontal h) -> "form-horizontal"
                                   | _ -> "") ]) children
 
@@ -81,9 +82,9 @@ let textInput (attr: IHTMLProp list) =
    
 
 let dateInput attr =
-    input (attr
-           |> mergeClasses [Class "form-control"
-                            Type "text" ])    
+    datePicker
+            (attr
+           |> mergeClasses [Class "form-control"])    
     
 type SelectOption<'a> = { Name: string; Value: 'a }
 let selectInput attr options =

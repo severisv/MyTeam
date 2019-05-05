@@ -1,4 +1,6 @@
 ﻿import ajax from './ajaxHelpers'
+import Datepicker from './reactComponents/Shared/Datepicker.jsx'
+
 
 import ReactDOM from 'react-dom'
 import React from 'react'
@@ -116,8 +118,6 @@ function applyMtAnchorListeners($scope) {
     window.location = url
   })
 }
-
-const Datepicker = require('./reactComponents/Shared/Datepicker.jsx')
 
 function applyDatepickers($scope) {
   $scope.find('.datepicker').each((i, element) => {
