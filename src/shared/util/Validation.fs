@@ -53,5 +53,12 @@ module Validation =
             if str |> Number.isNumber |> not then
                 Error <| sprintf "%s må være et heltall" name
             else Ok()
+            
+    let isSome name (value: 'a option) =
+        if value.IsSome then Ok()
+        else Error <| sprintf "%s må være et valgt" name
+            
+
+
 
 

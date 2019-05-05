@@ -54,6 +54,7 @@ type EditTable(props) =
                                                     IsSubmitted = false
                                                     IsDisabled = false
                                                     Size = Lg
+                                                    ButtonStyle = Danger
                                                     Text = "Ja" 
                                                     SubmittedText = "Slettet"
                                                     Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year

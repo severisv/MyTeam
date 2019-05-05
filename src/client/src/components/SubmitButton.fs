@@ -12,8 +12,6 @@ open Fable.Core.JsInterop
 open Thoth.Json
 open Shared.Components.Base
 
-
-
 type LowercaseValidationError = {
     name: string
     errors: string list
@@ -29,7 +27,6 @@ let postRecord2<'T> (url : string) (record : 'T) (properties : RequestProperties
 
     let init = List.append defaultProps properties
     GlobalFetch.fetch (RequestInfo.Url url, requestProps init)
-
 
 type Endpoint<'a> =
     | Post of string * 'a option
@@ -50,6 +47,7 @@ type SubmitButtonProps<'a> =
     { Size : ButtonSize
       IsSubmitted : bool
       Text : string
+      ButtonStyle : ButtonType
       SubmittedText : string
       Endpoint : Endpoint<'a>
       IsDisabled : bool
@@ -60,13 +58,14 @@ let defaultProps =
     { Size = Lg
       IsSubmitted = false
       Text = ""
+      ButtonStyle = Primary
       SubmittedText = ""
       Endpoint = Post("", None)
       IsDisabled = false
       OnError = None
       OnSubmit = None }
 
-let defaultButton size attr content = btn ([ Primary; size ] @ attr) content
+let defaultButton size buttonStyle attr content = btn ([ buttonStyle; size ] @ attr) content
 
 type SubmitButton<'a>(props) =
     inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
@@ -112,18 +111,18 @@ type SubmitButton<'a>(props) =
                | None -> this.setState (fun _ _ -> Error))
         |> Promise.start
 
-    override this.render() =
+    override this.render() =                
         let props = this.props
         let state = this.state
         let handleClick = this.handleClick
-        let defaultButton = defaultButton props.Size
+        let defaultButton = defaultButton props.Size props.ButtonStyle
         match state with
         | Submitted ->
             btn [ Success
                   props.Size
-                  Class "disabled" ] [ Icons.checkCircle
-                                       whitespace
-                                       str props.SubmittedText ]
+                  Class "disabled" ] [Icons.checkCircle
+                                      whitespace
+                                      str props.SubmittedText]
         | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
         | Error ->
             fragment [] [ defaultButton [ OnClick handleClick ] [ str props.Text ]

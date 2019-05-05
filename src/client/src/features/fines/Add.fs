@@ -13,6 +13,7 @@ open Shared.Domain.Members
 open Shared.Features.Fines.Common
 open Shared.Features.Fines.Add
 open Client.Util
+open Fable.Import
 open Shared.Domain
 open System
 
@@ -50,20 +51,29 @@ let addFine =
                                     fun (_, _, setState) ->
                                         Http.get "/api/members" Decode.Auto.fromString<MemberWithTeamsAndRoles list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
-                                                        { state with Players = result |> List.filter(fun p -> p.Details.Status = PlayerStatus.Aktiv) })                                                                                   
+                                                        { state with Players = result |> List.filter(fun p -> p.Details.Status = PlayerStatus.Aktiv)
+                                                                     Form = { state.Form with MemberId = result |> List.map(fun r -> r.Details.Id) |> List.tryHead } } )                                                                                   
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting
                                                           av spillere. Prøv å laste siden på nytt" }) }
                                         Http.get "/api/fines/remedyrates" Decode.Auto.fromString<RemedyRate list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
-                                                        { state with Rates = result })                                                                                   
+                                                        { state with Rates = result; Form = { state.Form with RateId = result |> List.map(fun r -> r.Id) |> List.tryHead } })                                                                                   
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting av bøtesatser. Prøv å laste siden på nytt" }) }
-                                                
                                      })
                      (fun (props, state, setState) ->
                         let setFormValue update =
                             setState (fun state props -> { state with Form = update state.Form })
+                            
+                        let validation =
+                            Map [
+                                "MemberId", isSome "Hvem" state.Form.MemberId
+                                "RateId", isSome "Hva" state.Form.RateId
+                                "ExtraRate", isNumber "Tillegg" state.Form.ExtraRate
+                            ]
+                            
+                        Browser.console.log state
                                                     
                         form [Horizontal 3] [
                             h4 [] [ str "Registrer bot" ]
@@ -93,7 +103,7 @@ let addFine =
                             formRow [Horizontal 3]
                                     [str "Tillegg" ]
                                     [textInput [
-                                                Validation [isNumber "Tillegg" state.Form.ExtraRate]
+                                                Validation [validation.["ExtraRate"]]
                                                 OnChange (fun e ->
                                                                 let value = e.Value
                                                                 setFormValue (fun form ->
@@ -112,6 +122,7 @@ let addFine =
                                 SubmitButton.render
                                     (fun o ->
                                         { o with
+                                              IsDisabled = validation |> Map.toList |>  List.exists (function | (_, Error e) -> true | _ -> false)
                                               Size = ButtonSize.Normal
                                               Text = "Legg til"
                                               Endpoint = SubmitButton.Post (sprintf "/api/fines/", None)
