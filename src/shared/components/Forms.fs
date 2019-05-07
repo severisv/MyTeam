@@ -82,6 +82,8 @@ let textInput (attr: IHTMLProp list) =
    
 
 let dateInput attr =
+    Fable.Import.Browser.console.log attr
+
     datePicker
             (attr
            |> mergeClasses [Class "form-control"])    

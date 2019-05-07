@@ -20,7 +20,7 @@ open System
 
 type AddFineForm = {
     MemberId: Guid option
-    Date: DateTime
+    Date: DateTime option
     RateId: Guid option
     ExtraRate: string
     Comment: string
@@ -43,7 +43,7 @@ let addFine =
                      ()
                      { Form =
                          {   MemberId = None
-                             Date = System.DateTime.Now
+                             Date = Some System.DateTime.Now
                              RateId = None
                              ExtraRate = ""
                              Comment = ""  }
@@ -69,11 +69,12 @@ let addFine =
                             
                         let validation =
                             Map [
+                                "Date", isSome "Dato" state.Form.Date
                                 "MemberId", isSome "Hvem" state.Form.MemberId
                                 "RateId", isSome "Hva" state.Form.RateId
                                 "ExtraRate", isNumber "Tillegg" state.Form.ExtraRate
                             ]
-                                                                               
+                                                                                                       
                         form [Horizontal 3] [
                             h4 [] [ str "Registrer bot" ]
                             state.Error => Alerts.danger
@@ -85,9 +86,13 @@ let addFine =
                                                                     { form with MemberId = Some <| Guid.Parse id }))]
                                     (state.Players |> List.map (fun p ->
                                         { Name = p.Details.Name; Value = p.Details.Id   })) ]
+                                    
                             formRow [Horizontal 3]
                                     [str "Dato" ]
-                                    [dateInput [Value state.Form.Date ] ]                                    
+                                    [dateInput [Value state.Form.Date
+                                                OnDateChange (fun date ->
+                                                                    setFormValue (fun form ->
+                                                                    { form with Date = date }))]]                                    
                             formRow [Horizontal 3]
                                     [str "Hva" ]
                                     [selectInput [OnChange (fun e ->

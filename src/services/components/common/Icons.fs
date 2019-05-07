@@ -10,7 +10,7 @@ open Shared
 module IconComponents =
 
     let fromReactComponent c = 
-        rawText <| Fable.Helpers.ReactServer.renderToString(c)
+        rawText <| Fable.Helpers.ReactServer.renderToString c
 
     let (!!) c = fromReactComponent c
 

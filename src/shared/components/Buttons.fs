@@ -44,7 +44,7 @@ module Buttons =
 
         let props = props
                     |> List.filter (fun p -> not (p :? ButtonSize || p :? ButtonType))
-
+       
         button 
             (Html.mergeClasses 
                  [ Class 
