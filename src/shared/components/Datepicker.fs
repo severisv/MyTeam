@@ -16,7 +16,9 @@ type DateChangeHandler =
         | OnDateChange of (System.DateTime option -> unit)
         interface IHTMLProp
    
-let DatePicker : React.ComponentClass<obj> = importDefault "react-datepicker"
+let DatePicker: React.ComponentClass<obj> = importDefault "react-datepicker"
+let setDefaultLocale: string -> unit = import "setDefaultLocale" "react-datepicker"
+let no: obj = importDefault "date-fns/locale/nb";
 
 let datePicker (props : IHTMLProp list) =
            
@@ -27,33 +29,30 @@ let datePicker (props : IHTMLProp list) =
                             match attr with
                             | Value v -> Date.tryParse <| string v
                             | _ -> None
-                    | _ -> None
-                        )
+                    | _ -> None)
                 |> List.choose id
-                |> List.tryHead
-              
+                |> List.tryHead              
                 
     let handleChange = props
                         |> List.tryFind (fun p -> p :? DateChangeHandler)
                         |> Option.map (fun p ->
                                        let fn = p :?> DateChangeHandler
                                        let (OnDateChange handleChange) = fn
-                                       handleChange
-                                       )
-                        |> Option.defaultValue (fun _ -> ())                                              
+                                       handleChange)
+                        |> Option.defaultValue ignore                                             
     
     komponent<IHTMLProp list, DatePickerState>
         props
         { Value = value }
         None
         (fun (props, state, setState) ->                
-
-            
             Fable.Helpers.React.from DatePicker
                                      (props
                                      |> Html.mergeClasses
                                                    [Type "text"
                                                     HTMLAttr.Custom ("selected", state.Value) 
+                                                    HTMLAttr.Custom ("locale", no) 
+                                                    HTMLAttr.Custom ("dateFormat", "dd.MM.yyyy") 
                                                     OnChange(fun e ->
                                                         let date = Date.tryParse <| string e
                                                         handleChange date
