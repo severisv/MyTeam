@@ -12,17 +12,10 @@ open Fable.Core.JsInterop
 open Thoth.Json
 open Shared.Components.Base
 
-type LowercaseValidationError = {
-    name: string
-    errors: string list
-}
-
-let toUpperCaseValidationError er = { Name = er.name; Errors = er.errors  }
-
 let postRecord2<'T> (url : string) (record : 'T) (properties : RequestProperties list) =
     let defaultProps =
         [ RequestProperties.Method HttpMethod.POST
-       ; requestHeaders [ ContentType "application/json" ]
+       ; requestHeaders [ ContentType "application/json"; Custom ("json-mode", "fable") ]
        ; RequestProperties.Body !^(Encode.Auto.toString (0, record)) ]
 
     let init = List.append defaultProps properties
@@ -38,7 +31,6 @@ type SubmitButtonState =
     | Posting
     | Error
 
-
 type SubmitError =
     | Exception of string
     | ValidationError of ValidationError list
@@ -46,25 +38,15 @@ type SubmitError =
 type SubmitButtonProps<'a> =
     { Size : ButtonSize
       IsSubmitted : bool
-      Text : string
+      Text : React.ReactElement
       ButtonStyle : ButtonType
       SubmittedText : string
       Endpoint : Endpoint<'a>
       IsDisabled : bool
       OnError : (SubmitError -> unit) option
-      OnSubmit : (unit -> unit) option }
+      OnSubmit : (string -> unit) option }
 
-let defaultProps =
-    { Size = Lg
-      IsSubmitted = false
-      Text = ""
-      ButtonStyle = Primary
-      SubmittedText = ""
-      Endpoint = Post("", None)
-      IsDisabled = false
-      OnError = None
-      OnSubmit = None }
-
+   
 let defaultButton size buttonStyle attr content = btn ([ buttonStyle; size ] @ attr) content
 
 type SubmitButton<'a>(props) =
@@ -84,10 +66,9 @@ type SubmitButton<'a>(props) =
 
             match (res.Status, props.OnError, res.Ok) with
             | (400, Some onError, _) ->
-                  let! validationErrors = res.json<LowercaseValidationError array>()
+                  let! validationErrors = res.json<ValidationError array>()
                   this.setState (fun state props -> Default)
                   let result = validationErrors
-                               |> Array.map toUpperCaseValidationError
                                |> Array.toList
                   props.OnError.Value(ValidationError result)
 
@@ -99,7 +80,8 @@ type SubmitButton<'a>(props) =
                 match props.OnSubmit with
                 | Some onSubmit ->
                     this.setState (fun state props -> Default)
-                    onSubmit()
+                    let! result = res.text()
+                    onSubmit(result)
                 | None -> this.setState (fun state props -> Submitted)
         }
         |> Promise.catch (fun e ->
@@ -125,9 +107,17 @@ type SubmitButton<'a>(props) =
                                       str props.SubmittedText]
         | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
         | Error ->
-            fragment [] [ defaultButton [ OnClick handleClick ] [ str props.Text ]
+            fragment [] [ defaultButton [ OnClick handleClick ] [ props.Text ]
                           Labels.error ]
-        | Default when props.IsDisabled -> defaultButton [ Class "disabled" ] [ str props.Text ]
-        | Default -> defaultButton [ OnClick handleClick ] [ str props.Text ]
+        | Default when props.IsDisabled -> defaultButton [ Class "disabled" ] [ props.Text ]
+        | Default -> defaultButton [ OnClick handleClick ] [ props.Text ]
 
-let render getProps = ofType<SubmitButton<'a>, _, _> (getProps defaultProps) []
+let render getProps = ofType<SubmitButton<'a>, _, _> (getProps { Size = Lg
+                                                                 IsSubmitted = false
+                                                                 Text = str ""
+                                                                 ButtonStyle = Primary
+                                                                 SubmittedText = ""
+                                                                 Endpoint = Post("", None)
+                                                                 IsDisabled = false
+                                                                 OnError = None
+                                                                 OnSubmit = None }) []

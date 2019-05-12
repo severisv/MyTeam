@@ -24,9 +24,21 @@ let isSelected year selectedMember =
     (=) (createUrl year selectedMember)
 
 let handleDeleted setState fineId =
-    fun str -> setState (fun (state : State) props -> { state with
-                                                            Fines = state.Fines
-                                                                    |> List.filter (fun fine -> fineId <> fine.Id) })
+        setState (fun (state : State) props ->
+                { state with
+                    Fines = state.Fines
+                            |> List.filter (fun fine -> fineId <> fine.Id) })
+
+let handleAdded year selectedMember setState fine =
+    let add fine = setState (fun (state : State) props ->
+                    { state with
+                        Fines = state.Fines
+                                |> List.append [fine]
+                                |> List.sortByDescending (fun fine -> fine.Issued) })
+    match (year, selectedMember) with
+    | (Year year, _) when year <> fine.Issued.Year -> ()
+    | (_, Member memberId) when memberId <> fine.Member.Id -> ()
+    | _ -> add fine
 
 let element props children =
         komponent<ListModel, State>
@@ -43,6 +55,13 @@ let element props children =
                             [ fineNav props.User props.Path ]
 
                         block [] [
+                            props.User.IsInRole [ Role.Botsjef ] &?
+                                fragment [] [
+                                    div [Class "clearfix hidden-lg hidden-md u-margin-bottom"] [
+                                        Add.addFine
+                                            (fun handleOpen -> btn [OnClick handleOpen; Primary; Class "pull-right"] [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                            (handleAdded year selectedMember setState) (handleDeleted setState)]]       
+                            
                             selectNav []
                                 ({ Items = props.Members |> List.map (fun m -> {  Text = string m.Name
                                                                                   Url = createUrl year (Member m.Id) })
@@ -52,8 +71,8 @@ let element props children =
                                 ({ Items = props.Years |> List.map (fun year -> { Text = string year
                                                                                   Url = createUrl (Year year) selectedMember })
                                    Footer = Some <| { Text = "Total"; Url = createUrl AllYears selectedMember }
-                                   IsSelected = isSelected year selectedMember })
-
+                                   IsSelected = isSelected year selectedMember })                         
+                            
                             table []
                                 [ col [ CellType Image; NoSort ] []
                                   col [ NoSort ] []
@@ -84,10 +103,10 @@ let element props children =
                                                                           SubmitButton.render
                                                                             (fun o ->
                                                                             { o with
-                                                                                Text = "Ja"
+                                                                                Text = str "Ja"
                                                                                 Endpoint = SubmitButton.Delete <| sprintf "/api/fines/%O" fine.Id
-                                                                                OnSubmit = Some (handleClose >> handleDeleted setState fine.Id) })
-                                                                          btn [ Lg; OnClick !>handleClose ] [ str "Nei" ]
+                                                                                OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState fine.Id)) })
+                                                                          btn [ Lg; OnClick !> handleClose ] [ str "Nei" ]
                                                                       ]
                                                                   ]
                                                             }
@@ -102,6 +121,8 @@ let element props children =
                                     block [] [
                                         navListBase [ Header <| str "Botsjef" ] [
                                             Add.addFine
+                                                (fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                                (handleAdded year selectedMember setState) (handleDeleted setState)
                                         ]
                                     ]
                         props.Years.Length > 0 &?

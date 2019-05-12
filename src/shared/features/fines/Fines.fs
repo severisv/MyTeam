@@ -15,11 +15,19 @@ type SelectedMember =
     | AllMembers
     | Member of Guid
 
-
 type RemedyRate = {
     Id: Guid
+    Amount: int
     Name: string
 }
+
+type Fine = {
+    Id: Guid
+    Member: Member
+    Description: string
+    Amount: int
+    Issued: DateTime
+ }
 
 let fineNav (user : User) (currentPath : string) =
     tabs []

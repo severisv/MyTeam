@@ -190,6 +190,11 @@ module App =
                                 choose [
                                     route "/remedyrates" >=> (Fines.Api.listRemedyRates club |> jsonGet)
                                 ]
+                            POST >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [
+                                    route "" >=> (Fines.Api.add club |> jsonPost)
+                                
+                            ]
                             DELETE >=> 
                                 mustBeInRole [Role.Botsjef] >=> choose [ 
                                     routef "/%O" (Fines.Api.delete club >> jsonGet)                                     

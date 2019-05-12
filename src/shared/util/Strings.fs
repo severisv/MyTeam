@@ -14,3 +14,7 @@ let defaultValue a = if hasValue a then a else ""
 let asOption a = if hasValue a then Some a else None
 let (!!) = defaultValue
 let replace (a: string) (b: string) (str: string) = str.Replace(a,b)
+let truncate maxLength (str: string)  =
+    if str.Length > maxLength then
+        sprintf "%s..." (str.Substring(0, maxLength))
+    else str
