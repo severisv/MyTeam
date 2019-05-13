@@ -84,7 +84,7 @@ type SelectNavList = {
 
 let selectNav classes model =
     let cls = classes |> List.tryHead |> Option.defaultValue ""
-    if model.Items.Length > 1 then
+    if model.Items.Length > 1 || model.Footer.IsSome then
         div [ Class cls ] [
                 select [ Class "linkSelect form-control pull-right" ]
                     ((model.Items |> List.map (fun item ->

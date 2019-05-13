@@ -56,7 +56,7 @@ let element props children =
                             [ fineNav props.User props.Path ]
 
                         block [] [
-                            props.User.IsInRole [ Role.Botsjef ] &?
+                            props.User.IsInRole [Role.Botsjef] &?
                                 fragment [] [
                                     div [Class "clearfix hidden-lg hidden-md u-margin-bottom"] [
                                         Add.addFine
