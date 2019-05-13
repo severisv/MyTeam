@@ -51,7 +51,7 @@ module Pages =
                 title [] [ encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [ _rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
                 link [ _rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
-                link [ _rel "stylesheet"; _href "/compiled/site.bundle.css?v7" ]
+                link [ _rel "stylesheet"; _href "/compiled/site.bundle.css?v25" ]
                 isProduction =? (Analytics.script, empty)
             ]
             body [] ([
@@ -122,9 +122,9 @@ module Pages =
                     div [ _id "main-container"; _class "container" ]
                         content
 
-                    script [ _src "/compiled/lib/lib.bundle.js?v23" ] []
-                    script [ _src "/compiled/app.js?v24" ] []
-                    script [ _src "/compiled/client/main.js?v2" ] []
+                    script [ _src "/compiled/lib/lib.bundle.js?v25" ] []
+                    script [ _src "/compiled/app.js?v25" ] []
+                    script [ _src "/compiled/client/main.js?v25" ] []
             ] @ o.Scripts)
         ]
 

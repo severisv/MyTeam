@@ -17,7 +17,7 @@
     <title>@club?.Name@(ViewBag.Title != null ? " - " : "")@ViewBag.Title</title>
     <link rel="icon" type="image/png" href="@Context.Cloudinary().Image(club?.Favicon ?? club?.Logo)">
     <link rel="apple-touch-icon" type="image/png" href="@Context.Cloudinary().Image(club?.Favicon ?? club?.Logo)">
-    <link rel="stylesheet" href="~/compiled/site.bundle.css?v7" />
+    <link rel="stylesheet" href="~/compiled/site.bundle.css?v25" />
     <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -107,8 +107,8 @@
     @RenderBody()
     <footer></footer>
 </div>
-<script src="~/compiled/lib/lib.bundle.js?v21"></script>
-<script src="~/compiled/app.js?v21"></script>
+<script src="~/compiled/lib/lib.bundle.js?v25"></script>
+<script src="~/compiled/app.js?v25"></script>
 @RenderSection("scripts", required: false)
 <script>console.log('Server side: @Context.Elapsed()ms');</script>
 </body>
