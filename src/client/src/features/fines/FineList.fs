@@ -7,6 +7,7 @@ open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
 open Shared.Components
+open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Components.Nav
@@ -89,7 +90,9 @@ let element props children =
                                                                                                          Width = Some 50 })
                                                                                       fine.Member.Image fine.Member.FacebookId ] ]
                                                         playerLink [ str fine.Member.Name ]
-                                                        str fine.Description
+                                                        fragment [] [str fine.Description
+                                                                     Strings.hasValue fine.Comment &?
+                                                                        Base.tooltip fine.Comment [Style [MarginLeft "0.5em"]] [Icons.infoCircle ""]]
                                                         currency [] fine.Amount
                                                         Date.formatShort fine.Issued |> str
                                                         Modal.render

@@ -1,23 +1,13 @@
 module Server.Features.Fines.List
 
-open System
 open System.Linq
-open Giraffe.GiraffeViewEngine
 open Shared.Domain
 open Shared.Domain.Members
-open Shared
 open MyTeam
-open MyTeam.Views
-open Shared.Components
-open Currency
 open Common
-open Tables
-open Fable.Helpers
-open Fable.Helpers.React.Props
-open MyTeam
-open MyTeam.Common.Features
 open Shared.Features.Fines.Common
 open Shared.Features.Fines.List
+open Shared.Strings
 
 
 let view (club : Club) (user : User) (year : string option) (selectedMember: SelectedMember) (ctx : HttpContext) =
@@ -35,18 +25,18 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
              query {
                  for fine in db.Fines do
                      where (fine.Rate.ClubId = clubId)
-                     select (fine.Id, fine.MemberId, fine.Issued, fine.Amount,  fine.RateName)
+                     select (fine.Id, fine.MemberId, fine.Issued, fine.Amount,  fine.RateName, fine.Comment)
              }
          | Year year ->
              query {
                  for fine in db.Fines do
                      where (fine.Rate.ClubId = clubId && fine.Issued.Year = year)
-                     select (fine.Id, fine.MemberId, fine.Issued, fine.Amount, fine.RateName)
+                     select (fine.Id, fine.MemberId, fine.Issued, fine.Amount, fine.RateName, fine.Comment)
              }
          |> Seq.toList
     
      let members =
-         let memberIds = fines |> List.map (fun (_, memberId, _, _ ,_) -> memberId)
+         let memberIds = fines |> List.map (fun (_, memberId, _, _ ,_,_) -> memberId)
          query {
              for memb in db.Members do
                  where (memberIds.Contains memb.Id) }
@@ -55,11 +45,12 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
     
      let fines =
          fines
-         |> List.map (fun (fineId, memberId, issued, amount, rateName) ->
+         |> List.map (fun (fineId, memberId, issued, amount, rateName, comment) ->
              { Id = fineId
                Member = members |> List.find (fun m -> m.Id = memberId) 
                Amount = amount
                Description = rateName
+               Comment = !!comment
                Issued = issued })
          |> List.filter (fun m ->
              match selectedMember with

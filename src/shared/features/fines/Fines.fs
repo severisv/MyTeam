@@ -1,7 +1,4 @@
 module Shared.Features.Fines.Common
-open Fable.Import.React
-open Shared.Image
-open Shared
 open System
 open Shared.Domain.Members
 open Shared.Components
@@ -25,6 +22,7 @@ type Fine = {
     Id: Guid
     Member: Member
     Description: string
+    Comment: string
     Amount: int
     Issued: DateTime
  }

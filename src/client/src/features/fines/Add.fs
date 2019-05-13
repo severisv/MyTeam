@@ -204,6 +204,7 @@ let addFine openLink onAdd onDelete =
                                                                                               |> List.find (fun p -> p.Id = fine.MemberId)                                                                                              
                                                                                      Description = fine.RateName
                                                                                      Amount = fine.Amount
+                                                                                     Comment = fine.Comment
                                                                                      Issued = fine.Date })
                                                                         | Error e -> setState (fun state props -> { state with Error = Some e })) })
                                     btn [OnClick !> handleClose ] [str "Lukk"]
