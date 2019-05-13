@@ -10,7 +10,7 @@
 {
     <tr class="@Model.Id">
         <td>
-            <a asp-controller="fine" asp-action="list" asp-route-aar="@selectedYear" asp-route-memberid="@Model.MemberId">
+            <a href="/intern/boter/vis/@selectedYear/@Model.MemberId">
                 <span class="no-wrap hidden-xs">@Model.FirstName @Model.LastName</span>
             </a>
             <span class="no-wrap visible-xs">@Model.FirstName @Model.LastName.Substring(0, 1).</span>

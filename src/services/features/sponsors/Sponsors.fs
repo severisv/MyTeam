@@ -26,7 +26,7 @@ let getSponsors : GetSponsors =
         |> Seq.tryHead
         |> Option.defaultValue ""
 
-let show (club : Club) (user : Users.User option) (ctx : HttpContext) =
+let show (club : Club) (user : User option) (ctx : HttpContext) =
     let db = ctx.Database
     getSponsors db club.Id
     |> fun sponsors -> 
@@ -43,7 +43,7 @@ let show (club : Club) (user : Users.User option) (ctx : HttpContext) =
         |> OkResult
 
 
-let edit (club : Club) (user : Users.User option) (ctx : HttpContext) =
+let edit (club : Club) (user : User option) (ctx : HttpContext) =
     let db = ctx.Database
     getSponsors db club.Id
     |> fun sponsors -> 

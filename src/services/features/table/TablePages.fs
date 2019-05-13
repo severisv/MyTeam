@@ -55,14 +55,13 @@ module Table =
                             isSelected            
                    
                         navListMobile
-                            ({ Header = "Sesonger"
-                               Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
+                            ({ Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
                                Footer = None                                                               
                                IsSelected = isSelected })
                         hr []
                         t => fun t ->
                                 div [] [
-                                    (if (user |> Option.map (fun (user: Users.User) -> user.IsInRole [Role.Admin])
+                                    (if (user |> Option.map (fun (user: User) -> user.IsInRole [Role.Admin])
                                               |> Option.defaultValue false) then
                                         Client.view editView 
                                                     { Title = t.Title

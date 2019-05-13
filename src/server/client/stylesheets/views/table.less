@@ -26,6 +26,10 @@ table.table {
         border-top: 1px solid transparent;
       }
     }
+    
+    .nopadding {
+      padding: 0;
+    }
   }
 }
 
@@ -50,7 +54,7 @@ table.table > tbody > tr > td.table-td-image {
   text-align: right;
 }
 
-.tablesorter .table-align--right {
+.tablesorter .table-align--right:not(.nosort) {
   padding-right: 2em;
 }
 

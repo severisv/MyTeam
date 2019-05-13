@@ -10,12 +10,10 @@ open MyTeam
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
 open Shared.Components
+open Shared.Features.Fines
 open Currency
 open Common
 
-type SelectedYear =
-    | AllYears
-    | Year of int
 
 type Summary = {
     Member : Member
@@ -29,26 +27,13 @@ type Amount = {
     Amount : int
  }
 
-let view (club : Club) (user : Users.User) (year : string option) (ctx : HttpContext) =
+let view (club : Club) (user : User) (year : string option) (ctx : HttpContext) =
 
      let (ClubId clubId) = club.Id
      let db = ctx.Database
-     let years =
-           query {
-               for fine in db.Fines do
-                   where (fine.Rate.ClubId = clubId)
-                   select fine.Issued.Year
-                   distinct
-           }
-           |> Seq.toList
-           |> List.sortDescending
 
-     let year =
-         match year with
-         | None -> Year(years |> List.tryHead |> Option.defaultValue DateTime.Now.Year)
-         | Some y when y = "total" -> AllYears
-         | Some y when y |> isNumber -> Year <| Number.parse y
-         | Some y -> failwithf "Valgt år kan ikke være %s" y
+     let years = getYears db club.Id
+     let year = getSelectedYear year years
 
 
      let allFines =
@@ -132,9 +117,9 @@ let view (club : Club) (user : Users.User) (year : string option) (ctx : HttpCon
      let createUrl =
          function
          | AllYears ->
-             "/intern/boter/total"
+             "/intern/boter/oversikt/total"
          | Year y ->
-             sprintf "/intern/boter/%i" y
+             sprintf "/intern/boter/oversikt/%i" y
 
 
      let isSelected url =
@@ -143,12 +128,11 @@ let view (club : Club) (user : Users.User) (year : string option) (ctx : HttpCon
      [
         mtMain [] [
             block []
-                [ fineNav user ctx.Request.Path.Value ]
+                [ !!(fineNav user ctx.Request.Path.Value) ]
 
             block [] [
                 navListMobile
-                    ({ Header = "Sesonger"
-                       Items = years |> List.map (fun year -> { Text = string year
+                    ({ Items = years |> List.map (fun year -> { Text = string year
                                                                 Url = createUrl <| Year year })
                        Footer = Some <| { Text = "Total"; Url = createUrl AllYears }
                        IsSelected = isSelected })
@@ -184,12 +168,11 @@ let view (club : Club) (user : Users.User) (year : string option) (ctx : HttpCon
                                                                               player.Image player.FacebookId ] ]
                                                 playerLink [ encodedText player.Name ]
                                                 !!(currency [ Colored(fun a -> if a <= 0 then Positive else Negative) ] remaining)
-                                                !!(currency [] total)
+                                                !!(currency [] total) 
                                             ]))
-                div [ _class "text-right"
-                      _style "padding-right: 2em;"
+                div [ _class "fine-total"
                     ] [ encodedText "Total"
-                        b [ _style "margin-left: 3em;" ] [ encodedText <| sprintf "%i,-" (fines |> List.sumBy (fun f -> f.Total)) ] ]
+                        b [] [ encodedText <| sprintf "%i,-" (fines |> List.sumBy (fun f -> f.Total)) ] ]
             ]
         ]
         (years.Length > 0 =?

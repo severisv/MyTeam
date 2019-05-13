@@ -14,9 +14,7 @@ open MyTeam.Views.BaseComponents
 let articleUrl (article: Article) = 
     sprintf "/nyheter/vis/%O" article.Name
 
-
-
-let adminMenu (user: Users.User option) =
+let adminMenu (user: User option) =
     user |> Option.bind(fun user ->
         if user.IsInRole [Role.Admin;Role.Skribent;Role.Trener] then
             Some <| block [] [ 
@@ -35,7 +33,6 @@ let adminMenu (user: Users.User option) =
     )
     |> Option.defaultValue empty
   
-
 let articleNav db (club: Club) =
     let articles = 
         Queries.listArticles db club.Id { Skip = 0; Take = 10 }
@@ -53,11 +50,8 @@ let articleNav db (club: Club) =
                                     (values |> List.map (fun article ->
                                                              li [] [ 
                                                                 a [ _href <| articleUrl article ] [ 
-                                                                    encodedText <| truncate 22 article.Headline ]
-                                                                ]                                           
-                                    ))
-                                    )       
-            ))
+                                                                    encodedText <| truncate 22 article.Headline ] ]                                           
+                                    )))))
     ]
    
 
@@ -90,8 +84,6 @@ let twitterScript =
     
     ]
 
-
-
 let tinyMceScripts = 
     let elementId = ".tinymce"
     [
@@ -111,8 +103,6 @@ let tinyMceScripts =
                 convert_urls: false
             });" elementId ]
     ]
-
-
 
 let cloudinaryScripts (options: CloudinarySettings) =
 

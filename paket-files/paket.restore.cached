@@ -592,8 +592,8 @@ NUGET
       Microsoft.Extensions.Logging.Abstractions (>= 2.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 2.2) - restriction: >= netstandard2.0
     Microsoft.Extensions.Logging.Abstractions (2.2) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6)) (>= net46) (>= netstandard2.0)
-    Microsoft.Extensions.Logging.ApplicationInsights (2.9.0-beta3)
-      Microsoft.ApplicationInsights (>= 2.9.0-beta3) - restriction: >= netstandard2.0
+    Microsoft.Extensions.Logging.ApplicationInsights (2.9.1)
+      Microsoft.ApplicationInsights (>= 2.9.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging (>= 2.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.Logging.Configuration (2.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging (>= 2.2) - restriction: >= netstandard2.0

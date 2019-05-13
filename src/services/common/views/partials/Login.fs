@@ -3,6 +3,7 @@ namespace MyTeam.Views
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
+open Shared.Domain.Members
 open Microsoft.AspNetCore.Http
 open MyTeam.Views.BaseComponents
 
@@ -36,14 +37,14 @@ module Login =
                             
         div [_class "navbar-topRight"] [
             loginPartial
-            user |> Option.fold (fun _ (user: Users.User) ->
+            user |> Option.fold (fun _ (user: User) ->
                                             div [_class "login-image-wrapper"] [
                                                 a [_title user.Name; _href <| "/spillere/vis/" + user.UrlName ] [
                                                     img [_src <| getImage (fun o -> { o with Height = Some 40; Width = Some 40 }) user.Image user.FacebookId  ]
                                                 ]
                                             ]
                             ) emptyText
-            user |> Option.fold (fun _ (user: Users.User) ->
+            user |> Option.fold (fun _ (user: User) ->
                                         notifications user                                                                        
                             ) emptyText
         ]                                                  

@@ -23,13 +23,13 @@
   
   .modal-wrapper {
     z-index: @modal-z-index;
-    box-shadow: 0px 0px 2px 0px fade(@black, 50);
-    background-color: fade(@white, 95);
-    overflow-y: auto;
-    overflow-x: hidden;
+    box-shadow: 0px 0px 2px 0px fade(#e4e5e6, 50);
+    background-color: fade(@white, 99);
     width: 500px;
     border-radius: 2px;
-    margin-bottom: 20vh;
+    margin-top: 2vh;
+    max-height: 98vh;
+    overflow-y: auto;
   
  
   
@@ -51,14 +51,15 @@
     animation: modal-enter 0.2s ease-in-out forwards;
   }
   
+    
   .modal-window {
     padding: 1.5em;
     min-height: 10em;
-    max-height: 70vh;
     height: auto;
     display: flex;
     flex-direction: column;
 
+    
     & > button.edit-link.pull-right {
         position: absolute;
         top: 0.5em;
@@ -81,9 +82,21 @@
 
 
   .modal {
-    .btn + .btn,
+    .btn + .btn
     {
         margin-left: 1em;
         margin-right: 1em;
     }
+    
+    
+    .r-under-xs({
+      .form-group {
+        margin-bottom: 5px;
+      }
+      .table {
+        margin-bottom: 10px;
+      }
+    });
 }
+  
+  

@@ -1,17 +1,15 @@
 module MyTeam.Members.Pages.RequestAccess
 
 open Fable.Helpers.React.Props
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Components.Buttons
 open Shared.Domain
 open Shared.Domain.Members
-open MyTeam.Members
-open Shared.Components
 open Shared.Components.Forms
 open MyTeam.Validation
+open Shared.Validation
 open MyTeam.Views
 open Microsoft.Extensions.Logging
 
@@ -30,7 +28,7 @@ let internal inputRow name value (validationErrors : ValidationError list) =
                              |> List.filter (fun ve -> ve.Name = name)
                              |> List.collect (fun ve -> ve.Errors)) ]
 
-let internal view model validationErrors (club : Club) (user : Users.User option) 
+let internal view model validationErrors (club : Club) (user : User option) 
     (ctx : HttpContext) =
     let db = ctx.Database
     user
@@ -95,7 +93,7 @@ let get (club : Club) user (ctx : HttpContext) =
               FacebookId = ctx.User.GetClaim "facebookId" |> Option.defaultValue "" }
         view (Some model) [] club user ctx
 
-let post (club : Club) (user : Users.User option) form (ctx : HttpContext) =
+let post (club : Club) (user : User option) form (ctx : HttpContext) =
     form
     |> function 
     | Ok form -> 

@@ -1,32 +1,30 @@
-﻿const moment = require('moment')
-const React = require('react')
-const ReactDatepicker = require('react-datepicker')
-const react = require('react')
-require('moment/locale/nb')
+﻿import moment from 'moment'
+import 'react'
+import ReactDatepicker from 'react-datepicker'
+import 'moment/locale/nb'
+import React from "react";
 
 moment.locale('nb')
 
-const Datepicker = react.createClass({
-  getInitialState() {
-    const date = this.props.value ? moment(this.props.value, 'DD.MM.YYYY') : undefined
-    return { value: date }
-  },
+export default class Datepicker extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {  
+      value: props.value ? moment(props.value, 'DD.MM.YYYY') : undefined
+    }
+  }
 
-  handleChange(date) {
-    this.setState({ value: date })
-  },
 
   render() {
     return (
       <ReactDatepicker
         name={this.props.name}
-        onChange={this.handleChange}
+        onChange={date =>     this.setState({ value: date })}
         selected={this.state.value}
         className="form-control"
         placeholderText={moment().format('DD.MM.YYYY')}
       />
     )
-  },
-})
+  }
+}
 
-module.exports = Datepicker

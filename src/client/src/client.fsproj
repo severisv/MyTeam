@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>FableApp</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\shared\shared.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="util\ReactHelpers.fs" />
+    <Compile Include="util\Http.fs" />
     <Compile Include="components/CheckBox.fs" />
     <Compile Include="components/Textarea.fs" />
     <Compile Include="components/Textinput.fs" />
@@ -17,6 +18,8 @@
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features/AddPlayers.fs" />
+    <Compile Include="features\fines\Add.fs" />
+    <Compile Include="features\fines\FineList.fs" />
     <Compile Include="features\gameplan\Formation.fs" />
     <Compile Include="features\gameplan\GamePlan.fs" />
     <Compile Include="App.fs" />

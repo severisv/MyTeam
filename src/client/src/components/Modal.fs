@@ -13,7 +13,7 @@ type State =
 
 type Props =
     { OpenButton : (React.MouseEvent -> unit) -> React.ReactElement
-      Content : (React.MouseEvent -> unit) -> React.ReactElement }
+      Content : (unit -> unit) -> React.ReactElement }
 
 let openModal setState _ = setState (fun state props -> { state with IsVisible = true })
 let closeModal setState _ = setState (fun state props -> { state with IsVisible = false })

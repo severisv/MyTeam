@@ -12,7 +12,7 @@ open MyTeam.Attendance
 open Fable.Helpers.React.Props
 
 
-let view (club : Club) (user : Users.User) year (ctx : HttpContext) =
+let view (club : Club) (user : User) year (ctx : HttpContext) =
 
     let (selectedYear, years, attendance) =
         getAttendance ctx.Database club.Id year
@@ -38,7 +38,7 @@ let view (club : Club) (user : Users.User) year (ctx : HttpContext) =
             block [] [
                 (user.IsInRole [ Role.Admin; Role.Trener; Role.Oppmøte ] =?
                    (div [ _class "clearfix u-margin-bottom " ] [
-                        !!(buttonLink registerAttendanceUrl Primary Sm [ Class "pull-right hidden-lg hidden-md" ] [
+                        !!(buttonLink registerAttendanceUrl Primary ButtonSize.Normal [ Class "pull-right hidden-lg hidden-md" ] [
                             Icons.icon (fa "check-square-o") ""
                             Fable.Helpers.React.str " Registrer oppmøte"
                          ])

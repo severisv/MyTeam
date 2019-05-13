@@ -26,7 +26,7 @@ let getAbout : GetAbout =
         |> Seq.tryHead
         |> Option.defaultValue ""
 
-let show (club : Club) (user : Users.User option) (ctx : HttpContext) =
+let show (club : Club) (user : User option) (ctx : HttpContext) =
     let db = ctx.Database
     getAbout db club.Id
     |> fun about -> 
@@ -44,7 +44,7 @@ let show (club : Club) (user : Users.User option) (ctx : HttpContext) =
         |> OkResult
 
 
-let edit (club : Club) (user : Users.User option) (ctx : HttpContext) =
+let edit (club : Club) (user : User option) (ctx : HttpContext) =
     let db = ctx.Database
     getAbout db club.Id
     |> fun about -> 

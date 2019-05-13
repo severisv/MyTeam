@@ -3,7 +3,7 @@ module Client.Admin.AddPlayers
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Client.Components
-open Client.Util.ReactHelpers
+open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
 open Shared.Components
@@ -79,7 +79,7 @@ let element props children =
                                          (fun o ->
                                          { o with
                                                Size = Normal
-                                               Text = "Legg til"
+                                               Text = str "Legg til"
                                                SubmittedText = "Lagt til"
                                                Endpoint = SubmitButton.Post ("/api/members", Some request)
                                          })
@@ -128,10 +128,10 @@ let element props children =
                                          (fun o ->
                                          { o with
                                                Size = Normal
-                                               Text = "Legg til"
+                                               Text = str "Legg til"
                                                SubmittedText = "Lagt til"
                                                Endpoint = SubmitButton.Post ("/api/members", Some state.Player)
-                                               OnSubmit = Some <| onSubmitForm setState
+                                               OnSubmit = Some <| !> (onSubmitForm setState)
                                                OnError = Some <| onFormError setState
                                          })
                                  ]

@@ -10,6 +10,7 @@
     <Compile Include="util/Interop.fs" />
     <Compile Include="util/Number.fs" />
     <Compile Include="util/Validation.fs" />
+    <Compile Include="util\ReactHelpers.fs" />
     <Compile Include="domain/Club.fs" />
     <Compile Include="domain/Events.fs" />
     <Compile Include="domain/Members.fs" />
@@ -22,13 +23,19 @@
     <Compile Include="components/Layout.fs" />
     <Compile Include="components/Links.fs" />
     <Compile Include="components/Alerts.fs" />
+    <Compile Include="components\Datepicker.fs" />
     <Compile Include="components/Forms.fs" />
+    <Compile Include="components\Tables.fs" />
     <Compile Include="components\Currency.fs" />
+    <Compile Include="components\Tabs.fs" />
+    <Compile Include="components\Navlist.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
     <Compile Include="features/games/GamePlan.fs" />
     <Compile Include="features/table/Table.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
     <Compile Include="features\fines\Fines.fs" />
+    <Compile Include="features\fines\FineList.fs" />
+    <Compile Include="features\fines\AddFines.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

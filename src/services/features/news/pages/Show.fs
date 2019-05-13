@@ -5,12 +5,13 @@ open MyTeam
 open Shared
 open MyTeam.Views
 open Shared.Domain
+open Shared.Domain.Members
 open MyTeam.News
 open MyTeam.News.Pages
 open Server.Common.News
 open Server
 
-let view (club: Club) (user: Users.User option) name (ctx: HttpContext) =
+let view (club: Club) (user: User option) name (ctx: HttpContext) =
 
 
     let db = ctx.Database

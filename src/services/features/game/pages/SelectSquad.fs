@@ -12,7 +12,7 @@ open MyTeam.Games
 open Shared.Features.Games.SelectSquad
 open MyTeam.Views.BaseComponents
 
-let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
+let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
     let db = ctx.Database
 
@@ -40,8 +40,7 @@ let view (club: Club) (user: Users.User option) gameId (ctx: HttpContext) =
                                 IsPublished = squadIsPublished
                                 MemberIds = attendees 
                                             |> List.filter(fun a -> a.IsSelected)
-                                            |> List.map(fun m -> m.MemberId) |> Seq.toList
-                    }
+                                            |> List.map(fun m -> m.MemberId) |> Seq.toList }
                 }, 
                 attendees 
                 |> List.map (fun a ->

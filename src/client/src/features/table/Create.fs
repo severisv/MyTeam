@@ -11,7 +11,7 @@ open Shared.Components.Forms
 open Shared.Features.Table.Table
 open Shared.Components.Base
 open Thoth.Json
-open Client.Util
+open Shared.Util
 
 type State =
     { Year : int option }
@@ -50,14 +50,14 @@ type CreateTable(props) =
                                         (fun o -> 
                                         { o with
                                               Size = Normal
-                                              Text = "Legg til" 
+                                              Text = str "Legg til" 
                                               SubmittedText = "Lagt til"
                                               Endpoint = SubmitButton.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
                                               IsDisabled = not <| isValid state.Year
                                               OnSubmit = Some <| fun _ -> Browser.location.replace(sprintf "/tabell/%s/%i" props.Team state.Year.Value) })                       
-                        btn [ OnClick handleClose ] [ str "Avbryt" ]                      
+                        btn [ OnClick !> handleClose ] [ str "Avbryt" ]                      
                   ]
             }                                                             
-        
+                
 let element = ofType<CreateTable, _, _>
 ReactHelpers.render Decode.Auto.fromString<CreateModel> createView element

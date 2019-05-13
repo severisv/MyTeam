@@ -51,3 +51,26 @@ module Members =
         Teams: TeamId list 
         Roles: Role list
     }
+    
+    type User = {
+         Id: MemberId
+         UserId: string
+         FacebookId: string
+         FirstName: string
+         LastName: string
+         UrlName: string
+         Image: string
+         Roles: Role list
+         TeamIds: Guid list
+         ProfileIsConfirmed: bool
+    } with 
+        member user.Name = sprintf "%s %s" user.FirstName user.LastName
+        member user.IsInRole roles = user.Roles |> List.exists(fun role -> roles |> List.contains(role))
+
+    
+    
+    let whenInRole (user: User option) roles fn =
+        user |> Option.bind(fun user ->
+                    if user.IsInRole roles then Some <| fn user
+                    else None
+            )                                

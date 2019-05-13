@@ -19,7 +19,7 @@ module Pages =
     let internalMenuItems =
         [   li [] [ a [ _href "/intern" ] [ !!(Icons.signup ""); encodedText " Påmelding" ] ]
             li [] [ a [ _href "/intern/oppmote" ] [ !!(Icons.attendance ""); encodedText " Oppmøte" ] ]
-            li [] [ a [ _href "/intern/boter" ] [ !!(Icons.fine ""); encodedText " Bøter" ] ]
+            li [] [ a [ _href "/intern/boter/oversikt" ] [ !!(Icons.fine ""); encodedText " Bøter" ] ]
             li [] [ a [ _href "/intern/lagliste" ] [ !!(Icons.squadList ""); encodedText " Lagliste" ] ] ]
 
     type LayoutModel = {
@@ -29,7 +29,7 @@ module Pages =
         Scripts : XmlNode list
     }
 
-    let layout club (user : Option<Users.User>) getOptions (ctx : HttpContext) content =
+    let layout club (user : Option<User>) getOptions (ctx : HttpContext) content =
 
         let isProduction = ctx.GetService<IHostingEnvironment>().IsProduction()
 

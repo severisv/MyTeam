@@ -18,3 +18,7 @@ let formatShort (datetime: DateTime) =
 
 let formatTime (datetime: DateTime) =
     sprintf "%02i:%02i" datetime.Hour datetime.Minute
+
+let tryParse (dateString: string) =
+    let couldParse, parsedDate = System.DateTime.TryParse dateString
+    if couldParse then Some parsedDate else None

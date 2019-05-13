@@ -10,7 +10,7 @@ open System
 open System.Linq
 
 
-let view (club : Club) (user : Users.User) gameId (ctx : HttpContext) =
+let view (club : Club) (user : User) gameId (ctx : HttpContext) =
 
     let db = ctx.Database
     let (ClubId clubId) = club.Id

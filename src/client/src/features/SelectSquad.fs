@@ -11,7 +11,7 @@ open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Features.Games.SelectSquad
-open Client.Util
+open Shared.Util
 open Shared.Domain.Members
 open Thoth.Json
 
@@ -156,7 +156,7 @@ type SelectSquad(props) =
                                       SubmitButton.render
                                         (fun o -> { o with
                                                       IsSubmitted = game.Squad.IsPublished
-                                                      Text = "Publiser tropp"
+                                                      Text = str "Publiser tropp"
                                                       SubmittedText = "Publisert"
                                                       Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
                                     ] ] ] ] ]

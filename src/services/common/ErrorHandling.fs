@@ -3,6 +3,7 @@ module Server.ErrorHandling
 open Giraffe
 open MyTeam
 open Shared
+open Shared.Domain.Members
 open System
 open Common
 open Microsoft.Extensions.Logging
@@ -20,7 +21,7 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
                                             (string ctx.Request.Headers.["Referer"])
                                 )
 
-                let isDeveloper (user: Users.User) = user.UserId = "severin@sverdvik.no"
+                let isDeveloper (user: User) = user.UserId = "severin@sverdvik.no"
 
                 (Tenant.get ctx 
                     |> function

@@ -1,7 +1,7 @@
 {
   "private": true,
   "fable": {
-    "entry": "src/FableApp.fsproj"
+    "entry": "src/client.fsproj"
   },
   "scripts": {
     "build": "cd src && dotnet fable webpack -- -p --config config/webpack.prod.js",
@@ -23,7 +23,9 @@
     "webpack-serve": "^1.0.4"
   },
   "dependencies": {
+    "date-fns": "^2.0.0-alpha.27",
     "react": "^16.5.2",
+    "react-datepicker": "^2.5.0",
     "react-dom": "^16.5.2"
   }
 }
