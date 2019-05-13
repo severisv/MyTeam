@@ -50,7 +50,7 @@ type CreateTable(props) =
                                         (fun o -> 
                                         { o with
                                               Size = Normal
-                                              Text = "Legg til" 
+                                              Text = str "Legg til" 
                                               SubmittedText = "Lagt til"
                                               Endpoint = SubmitButton.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
                                               IsDisabled = not <| isValid state.Year
