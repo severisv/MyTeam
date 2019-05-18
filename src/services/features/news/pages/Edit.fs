@@ -72,7 +72,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                                         ] @
                                            (latestGames 
                                            |> List.map (fun game -> 
-                                                option [ attr "selected" <| string (Some game.Id = article.GameId); _value <| string game.Id ][ encodedText game.Name ]
+                                                option [ Some game.Id = article.GameId =? (_selected, _empty) ; _value <| string game.Id ][ encodedText game.Name ]
                                            )))
                                       ]
                                   ]
