@@ -31,7 +31,7 @@
     <Compile Include="utils/Email.fs" />
     <Compile Include="components/common/Base.fs" />
     <Compile Include="components/common/Icons.fs" />
-    <Compile Include="components/common/Layout.fs" />
+    <Compile Include="components\common\LayoutComponents.fs" />
     <Compile Include="components/Ajax.fs" />
     <Compile Include="components/Collapsible.fs" />
     <Compile Include="components/Navlist.fs" />

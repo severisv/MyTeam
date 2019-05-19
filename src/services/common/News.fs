@@ -24,7 +24,8 @@ type Author =
       Name : string }
 
 type ArticleDetailed =
-    { Details : Article
+    { Id: Guid
+      Details : Article
       Author : Author
       Content : string
       HideAuthor : bool
@@ -43,10 +44,11 @@ module Queries =
                         (article.Name, article.Headline, article.ImageUrl, article.Published, 
                          (article.Author.FirstName, article.Author.MiddleName, 
                           article.Author.LastName), article.Author.UrlName, article.Content, 
-                         article.GameId, article.HideAuthor)
+                         article.GameId, article.HideAuthor, article.Id)
             }
-            |> Seq.map (fun (name, headline, image, published, authorName, authorUrlName, content, gameId, hideAuthor) -> 
-                   { Details =
+            |> Seq.map (fun (name, headline, image, published, authorName, authorUrlName, content, gameId, hideAuthor, id) -> 
+                   { Id = id
+                     Details =
                          { Name = name
                            Headline = headline
                            Image = image

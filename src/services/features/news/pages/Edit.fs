@@ -1,5 +1,6 @@
 module MyTeam.News.Pages.Edit
 
+open System
 open Server
 open Giraffe
 open Giraffe.GiraffeViewEngine
@@ -21,7 +22,7 @@ open MyTeam.Views.BaseComponents
 let private editView (ctx: HttpContext) (club: Club) user name (article: ArticleModel) published validationErrors =
     let db = ctx.Database
     let cloudinarySettings = ctx.GetService<IOptions<CloudinarySettings>>()
-    let latestGames = Queries.listRecentGames db club.Id published
+    let latestGames = Queries.listRecentGames db club.Id article.Id published
 
     [
         mtMain [] [
@@ -33,6 +34,7 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                         img [ _src <| Components.image ctx article.ImageUrl ] 
                         ]
                     input [ _name "imageUrl"; _type "hidden"; _value article.ImageUrl]
+                    input [ _name "id"; _type "hidden"; _value <| string article.Id]
 
                     div [ _class "form-file-upload-wrapper btn btn-default" ] [ 
                         input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]
@@ -132,7 +134,7 @@ let view (club: Club) user name (ctx: HttpContext) =
     | None -> NotFound
     | Some article ->    
 
-        ({ 
+        ({  Id = article.Id
             IsMatchReport = article.GameId.IsSome
             GameId = article.GameId
             Headline = article.Details.Headline
@@ -177,7 +179,7 @@ let editPost (club: Club) (user: User) name (ctx: HttpContext) =
 
 
 let create (club: Club) user (ctx: HttpContext) =    
-    ({ 
+    ({  Id = Guid.Empty
         IsMatchReport = false
         GameId = None
         Headline = ""

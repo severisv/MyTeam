@@ -1,5 +1,6 @@
 module MyTeam.News.Queries
 
+open System
 open Shared.Domain
 open MyTeam.News
 open MyTeam
@@ -51,13 +52,16 @@ let listArticles : ListArticles =
         }
 
 
-let listRecentGames : ListRecentGames = 
-    fun db clubId date ->
+let listRecentGames (db: Database) clubId articleId (date: DateTime) =
         let (ClubId clubId) = clubId
         let fourteenDaysBefore = date.AddDays(-14.0)
         query {
                 for g in db.Games do
-                where (g.ClubId = clubId && g.DateTime <= date && g.DateTime >= fourteenDaysBefore)
+                where (g.ClubId = clubId &&
+                       g.DateTime <= date &&
+                       g.DateTime >= fourteenDaysBefore &&
+                       (g.Report = null || g.Report.Id = articleId))
+                sortBy (g.DateTime)
                 select (g.Id, g.Team.ShortName, g.Opponent)
             }
             |> Seq.map(fun (id, name, opponent) 

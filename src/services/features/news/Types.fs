@@ -22,15 +22,16 @@ type PagedList<'a> =  {
 
 
 type Game = {
-    Id: System.Guid
+    Id: Guid
     Name: string
 }
 
 [<CLIMutable>]
 type ArticleModel = {
+    Id: Guid
     IsMatchReport: bool
     HideAuthor: bool
-    GameId: System.Guid option
+    GameId: Guid option
     Headline: string
     Content: string
     ImageUrl: string
@@ -40,9 +41,6 @@ type ArticleModel = {
 type ListArticles = Database -> ClubId -> PaginationOptions -> PagedList<Article>
 
 type GetClubDescription = Database -> ClubId -> string option
-
-type ListRecentGames = Database -> ClubId -> DateTime -> Game list
-
 type UpdateArticle = Database -> ClubId -> ArticleName -> ArticleModel -> HttpResult<unit> 
 type CreateArticle = Database -> ClubId -> User -> ArticleModel -> HttpResult<ArticleName> 
 
