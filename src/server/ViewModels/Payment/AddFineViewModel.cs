@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyTeam.Models.Dto;
-using MyTeam;
-using MyTeam.ViewModels.RemedyRate;
 
 namespace MyTeam.ViewModels.Payment
 {

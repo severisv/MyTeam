@@ -2,40 +2,26 @@ module Server.Features.Fines.Api
 
 open MyTeam
 open MyTeam.Models.Domain
+open Shared
 open Shared.Domain
-open Shared.Features.Fines.Add
+open Shared.Features.Fines.List
 open Shared.Features.Fines.Common
-
-let delete (club : Club) fineId (db : Database) =
-    let (ClubId clubId) = club.Id
-    query {
-        for fine in db.Fines do
-            where (fine.Id = fineId && fine.Rate.ClubId = clubId)
-            select fine
-    }    
-    |> Seq.tryHead
-    |> function 
-    | None -> NotFound
-    | Some fine -> 
-        db.Fines.Remove(fine) |> ignore
-        db.SaveChanges() |> ignore
-        OkResult()
-
+open Strings
 
 let listRemedyRates (club: Club) (db: Database) =
     let (ClubId clubId) = club.Id
     query {
         for rate in db.RemedyRates do
             where (rate.ClubId = clubId && rate.IsDeleted = false)
-            select (rate.Id, rate.Name, rate.Rate)
+            select (rate.Id, rate.Name, rate.Rate, rate.Description)
     }
     |> Seq.toList
-    |> List.map(fun (id, name, amount) ->
+    |> List.map(fun (id, name, amount, description) ->
         { Id = id
           Amount = amount
-          Name = name })
+          Name = !!name
+          Description = !!description })
     |> List.sortBy (fun r -> r.Name)
-    |> OkResult
     
     
 let add (club: Club) (ctx: HttpContext) (model: AddFine) =
@@ -60,3 +46,47 @@ let add (club: Club) (ctx: HttpContext) (model: AddFine) =
          db.SaveChanges() |> ignore
          OkResult { model with Id = Some fine.Id }
     | None -> Unauthorized
+    
+let delete (club : Club) fineId (db : Database) =
+    let (ClubId clubId) = club.Id
+    query {
+        for fine in db.Fines do
+            where (fine.Id = fineId && fine.Rate.ClubId = clubId)
+            select fine
+    }    
+    |> Seq.tryHead
+    |> function 
+    | None -> NotFound
+    | Some fine -> 
+        db.Fines.Remove(fine) |> ignore
+        db.SaveChanges() |> ignore
+        OkResult()
+
+let addRemedyRate (club: Club) (ctx: HttpContext) (model: RemedyRate) =
+    let db = ctx.Database
+    let (ClubId clubId) = club.Id
+  
+    let rate = RemedyRate(Name = model.Name,
+                          Description = model.Description,
+                          Rate = model.Amount,
+                          ClubId = clubId)
+    
+    db.RemedyRates.Add(rate) |> ignore
+    db.SaveChanges() |> ignore
+    OkResult { model with Id = rate.Id }
+    
+let deleteRemedyRate (club : Club) fineId (db : Database) =
+    let (ClubId clubId) = club.Id
+    query {
+        for rate in db.RemedyRates do
+            where (rate.Id = fineId && rate.ClubId = clubId)
+            select rate
+    }    
+    |> Seq.tryHead
+    |> function 
+    | None -> NotFound
+    | Some rate -> 
+        db.RemedyRates.Remove(rate) |> ignore
+        db.SaveChanges() |> ignore
+        OkResult()
+

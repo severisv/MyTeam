@@ -13,7 +13,7 @@ open Shared.Components.Tables
 open Shared.Components.Datepicker
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.Add
+open Shared.Features.Fines.List
 open Client.Util
 open Shared.Domain
 open System
@@ -73,7 +73,7 @@ let addFine openLink onAdd onDelete =
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting
                                                           av spillere. Prøv å laste siden på nytt" }) }
-                                        Http.get "/api/fines/remedyrates" Decode.Auto.fromString<RemedyRate list>
+                                        Http.get "/api/remedyrates" Decode.Auto.fromString<RemedyRate list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
                                                         { state with Rates = result; Form = { state.Form with RateId = result |> List.map(fun r -> r.Id) |> List.tryHead } })                                                                                   
                                                     OnError = fun _ -> setState (fun state props ->

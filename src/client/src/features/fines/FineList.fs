@@ -3,6 +3,7 @@ module Client.Fines.List
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Client.Components
+open Fable.Import
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
@@ -31,21 +32,22 @@ let handleDeleted setState fineId =
                             |> List.filter (fun fine -> fineId <> fine.Id) })
 
 let handleAdded year selectedMember setState fine =
-    let add fine = setState (fun (state : State) props ->
+    match (year, selectedMember) with
+    | (Year year, _) when year <> fine.Issued.Year -> ()
+    | (_, Member memberId) when memberId <> fine.Member.Id -> ()
+    | _ ->
+        setState (fun (state: State) _ ->
                     { state with
                         Fines = state.Fines
                                 |> List.append [fine]
                                 |> List.sortByDescending (fun fine -> fine.Issued) })
-    match (year, selectedMember) with
-    | (Year year, _) when year <> fine.Issued.Year -> ()
-    | (_, Member memberId) when memberId <> fine.Member.Id -> ()
-    | _ -> add fine
 
 let element props children =
         komponent<ListModel, State>
              props
-             { Fines = props.Fines }
-             None
+             { Fines = [] }
+             (Some { ComponentDidMount = fun (props, state, setState)  ->
+                 setState(fun state props -> { state with Fines = props.Fines  })})
              (fun (props, state, setState) ->
                 let year = props.Year
                 let selectedMember = props.SelectedMember
@@ -106,10 +108,11 @@ let element props children =
                                                                           SubmitButton.render
                                                                             (fun o ->
                                                                             { o with
-                                                                                Text = str "Ja"
+                                                                                ButtonStyle = Danger
+                                                                                Text = str "Slett"
                                                                                 Endpoint = SubmitButton.Delete <| sprintf "/api/fines/%O" fine.Id
                                                                                 OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState fine.Id)) })
-                                                                          btn [ Lg; OnClick !> handleClose ] [ str "Nei" ]
+                                                                          btn [ Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]
                                                                   ]
                                                             }

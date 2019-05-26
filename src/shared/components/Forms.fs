@@ -4,6 +4,8 @@ open Shared.Components.Base
 open Shared.Components.Datepicker
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
+open Fable.Import
+open Fable.Import
 open Shared.Util.Html
 open Shared.Util.ReactHelpers
 
@@ -47,22 +49,34 @@ type InputProps =
     | Validation of Result<unit, string> list
     interface IHTMLProp
 
+type IsTouched =
+    | IsTouched of bool
+    interface IHTMLProp
+
 let textInput (attr: IHTMLProp list) =
     komponent<IHTMLProp list, InputState>
          attr
          { IsTouched = false }
          None
-         (fun (props, state, setState) ->
+         (fun (attr, state, setState) ->
 
-            let props =
+            let isTouched =
+                attr
+                |> List.tryFind (fun p -> p :? IsTouched)
+                |> Option.map (fun p -> p :?> IsTouched)       
+                |> function
+                | Some (IsTouched isTouched) -> isTouched
+                | _ -> state.IsTouched
+                
+            let validation =
                 attr
                 |> List.tryFind (fun p -> p :? InputProps)
-                |> Option.map (fun p -> p :?> InputProps)
+                |> Option.map (fun p -> p :?> InputProps)       
                 
             let (isValid, validationMessage) =
-                props
+                validation
                 |> function
-                | Some(Validation e) when state.IsTouched
+                | Some(Validation e) when isTouched
                      -> e
                         |> List.map (function | Ok () -> (true, None) | Error m -> false, Some m)
                         |> List.reduce (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc)
@@ -70,6 +84,8 @@ let textInput (attr: IHTMLProp list) =
             
             fragment [] [
                  input (attr
+                   |> List.filter (fun p -> not <| p:? InputProps)
+                   |> List.filter (fun p -> not <| p:? IsTouched)
                    |> mergeClasses [OnBlur (fun _ -> setState (fun state props -> { state with IsTouched = true }))
                                     Class <| sprintf "form-control input-isValid--%b" isValid
                                     Type "text" ])

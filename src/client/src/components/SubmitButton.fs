@@ -68,8 +68,7 @@ type SubmitButton<'a>(props) =
             | (400, Some onError, _) ->
                   let! validationErrors = res.json<ValidationError array>()
                   this.setState (fun state props -> Default)
-                  let result = validationErrors
-                               |> Array.toList
+                  let result = validationErrors |> Array.toList
                   props.OnError.Value(ValidationError result)
 
             | (_, _, false) ->

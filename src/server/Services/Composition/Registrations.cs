@@ -11,7 +11,6 @@ namespace MyTeam.Services.Composition
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddTransient<IPlayerService, PlayerService>();
-            services.AddTransient<IRemedyRateService, RemedyRateService>();
             services.AddTransient<IFineService, FineService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IPaymentService, PaymentService>();

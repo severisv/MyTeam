@@ -16,6 +16,7 @@ type RemedyRate = {
     Id: Guid
     Amount: int
     Name: string
+    Description: string
 }
 
 type Fine = {

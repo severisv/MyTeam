@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyTeam.Models.Dto;
 using MyTeam.ViewModels.Payment;
-using MyTeam.ViewModels.RemedyRate;
 
 namespace MyTeam.ViewModels.Fine
 {

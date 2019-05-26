@@ -64,6 +64,7 @@
     <Compile Include="features\fines\FineApi.fs" />
     <Compile Include="features\fines\FineSummary.fs" />
     <Compile Include="features\fines\FineList.fs" />
+    <Compile Include="features\fines\RemedyRates.fs" />
     <Compile Include="features/game/Types.fs" />
     <Compile Include="features/game/Queries.fs" />
     <Compile Include="features/game/Persistence.fs" />

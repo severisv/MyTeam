@@ -10,6 +10,7 @@ open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Server.Features
 open Microsoft.AspNetCore.Hosting
+open Shared.Features
 open Shared.Domain.Members
 open Common
 open Results
@@ -107,24 +108,35 @@ module App =
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user => fun user ->
-                                            choose [                                                
-                                                GET >=> choose [    
-                                                    route "/lagliste" >=> (Members.Pages.List.view club user None |> htmlGet)
-                                                    routef "/lagliste/%s" <| fun status -> Members.Pages.List.view club user (Some status) |> htmlGet
-                                                    route "/oppmote/registrer" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
-                                                        >=> (Attendance.Pages.Register.view club user None |> htmlGet)
-                                                    routef "/oppmote/registrer/%O" <| fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
-                                                                                                    >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
-                                                    route "/oppmote" >=> (Attendance.Pages.Show.view club user None |> htmlGet)
-                                                    routef "/oppmote/%s" <| fun year -> Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
-                                                    route "/boter/vis" >=> (Fines.List.view club user None Shared.Features.Fines.Common.AllMembers |> htmlGet)
-                                                    routef "/boter/vis/%s/%O" <| fun (year, memberId) -> Fines.List.view club user (year |> Some) (Shared.Features.Fines.Common.Member memberId) |> htmlGet
-                                                    routef "/boter/vis/%s" <| fun year -> Fines.List.view club user (year |> Some) Shared.Features.Fines.Common.AllMembers |> htmlGet
-                                                    route "/boter/oversikt" >=> (Fines.Summary.view club user None |> htmlGet)
-                                                    routef "/boter/oversikt/%s" <| fun year -> Fines.Summary.view club user (year |> Some) |> htmlGet
-                                                ]                    
-                                            ]
-                                        )    
+                                choose [                                                
+                                    GET >=> choose [    
+                                        route "/lagliste" >=>
+                                            (Members.Pages.List.view club user None |> htmlGet)
+                                        routef "/lagliste/%s" <| fun status ->
+                                            Members.Pages.List.view club user (Some status) |> htmlGet
+                                        route "/oppmote/registrer" >=> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
+                                            >=> (Attendance.Pages.Register.view club user None |> htmlGet)
+                                        routef "/oppmote/registrer/%O" <| fun eventId -> mustBeInRole [Role.Admin; Role.Trener; Role.Oppmøte] 
+                                                                                        >=> (Attendance.Pages.Register.view club user (Some eventId) |> htmlGet)                                                       
+                                        route "/oppmote" >=>
+                                            (Attendance.Pages.Show.view club user None |> htmlGet)
+                                        routef "/oppmote/%s" <| fun year ->
+                                            Attendance.Pages.Show.view club user (Some <| Strings.toLower year) |> htmlGet
+                                        route "/boter/vis" >=>
+                                            (Fines.List.view club user None Fines.Common.AllMembers |> htmlGet)
+                                        routef "/boter/vis/%s/%O" <| fun (year, memberId) ->
+                                            Fines.List.view club user (year |> Some) (Fines.Common.Member memberId) |> htmlGet
+                                        routef "/boter/vis/%s" <| fun year ->
+                                            Fines.List.view club user (year |> Some) Fines.Common.AllMembers |> htmlGet
+                                        route "/boter/satser" >=>
+                                            (Fines.RemedyRates.view club user |> htmlGet)                                  
+                                        route "/boter/oversikt" >=>
+                                            (Fines.Summary.view club user None |> htmlGet)
+                                        routef "/boter/oversikt/%s" <| fun year ->
+                                            Fines.Summary.view club user (year |> Some) |> htmlGet
+                                    ]                    
+                                ]
+                            )    
                     route "/admin" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
                     route "/admin/spillerinvitasjon" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     
@@ -186,10 +198,6 @@ module App =
                         ]
                     subRoute "/api/fines"
                         <| choose [
-                            GET >=>
-                                choose [
-                                    route "/remedyrates" >=> (Fines.Api.listRemedyRates club |> jsonGet)
-                                ]
                             POST >=> 
                                 mustBeInRole [Role.Botsjef] >=> choose [
                                     route "" >=> (Fines.Api.add club |> jsonPost)
@@ -198,6 +206,21 @@ module App =
                             DELETE >=> 
                                 mustBeInRole [Role.Botsjef] >=> choose [ 
                                     routef "/%O" (Fines.Api.delete club >> jsonGet)                                     
+                                ]                                  
+                        ]
+                    subRoute "/api/remedyrates"
+                        <| choose [
+                            GET >=>
+                                choose [
+                                    route "" >=> (Fines.Api.listRemedyRates club >> OkResult |> jsonGet)
+                                ]
+                            POST >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [
+                                    route "" >=> (Fines.Api.addRemedyRate club |> jsonPost)                                
+                            ]
+                            DELETE >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [ 
+                                    routef "/%O" (Fines.Api.deleteRemedyRate club >> jsonGet)                                     
                                 ]                                  
                         ]
                     subRoute "/api/tables"
