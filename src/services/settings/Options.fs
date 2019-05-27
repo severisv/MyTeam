@@ -22,6 +22,11 @@ type CloudinarySettings() =
     member val DefaultMember = Unchecked.defaultof<string> with get, set
     member val DefaultArticle = Unchecked.defaultof<string> with get, set
 
+type AssetHashes() =
+    member val FableJs = Unchecked.defaultof<string> with get, set
+    member val MainJs = Unchecked.defaultof<string> with get, set
+    member val LibJs = Unchecked.defaultof<string> with get, set
+    member val MainCss = Unchecked.defaultof<string> with get, set
 
 [<AutoOpen>]
 module Options =

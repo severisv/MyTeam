@@ -63,6 +63,7 @@ namespace MyTeam
             services.Configure<CloudinarySettings>(Configuration.GetSection("Integration:Cloudinary"));
             services.Configure<FacebookOptions>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<AssetHashes>(Configuration.GetSection("AssetHashes"));
 
             services.AddLocalization();
             services.AddMvc(setup => { setup.ConfigureFilters(); });

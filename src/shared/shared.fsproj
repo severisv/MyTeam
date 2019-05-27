@@ -20,7 +20,7 @@
     <Compile Include="components/Icons.fs" />
     <Compile Include="components/Input.fs" />
     <Compile Include="components/Labels.fs" />
-    <Compile Include="components/Layout.fs" />
+    <Compile Include="components\LayoutComponents.fs" />
     <Compile Include="components/Links.fs" />
     <Compile Include="components/Alerts.fs" />
     <Compile Include="components\Datepicker.fs" />

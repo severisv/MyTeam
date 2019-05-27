@@ -7,6 +7,7 @@ open Shared
 open Shared.Domain.Members
 open Shared.Components
 open Microsoft.Extensions.Hosting
+open Microsoft.Extensions.Options
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
 
@@ -32,7 +33,8 @@ module Pages =
     let layout club (user : Option<User>) getOptions (ctx : HttpContext) content =
 
         let isProduction = ctx.GetService<IHostingEnvironment>().IsProduction()
-
+        let assetHashes = ctx.GetService<IOptions<AssetHashes>>().Value
+             
         let o = getOptions ({ Title = ""
                               MetaTitle = ""
                               MetaDescription = ""
@@ -51,7 +53,7 @@ module Pages =
                 title [] [ encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
                 link [ _rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
                 link [ _rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
-                link [ _rel "stylesheet"; _href "/compiled/site.bundle.css?v25" ]
+                link [ _rel "stylesheet"; _href <| sprintf "/compiled/site.bundle.css?v%s" assetHashes.MainCss ]
                 isProduction =? (Analytics.script, empty)
             ]
             body [] ([
@@ -122,9 +124,9 @@ module Pages =
                     div [ _id "main-container"; _class "container" ]
                         content
 
-                    script [ _src "/compiled/lib/lib.bundle.js?v25" ] []
-                    script [ _src "/compiled/app.js?v25" ] []
-                    script [ _src "/compiled/client/main.js?v25" ] []
+                    script [ _src <| sprintf "/compiled/lib/lib.bundle.js?v%s" assetHashes.LibJs ] []
+                    script [ _src <| sprintf "/compiled/app.js?v%s" assetHashes.MainJs ] []
+                    script [ _src <| sprintf "/compiled/client/main.js?v%s" assetHashes.FableJs ] []
             ] @ o.Scripts)
         ]
 
