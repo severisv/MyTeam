@@ -218,6 +218,10 @@ module App =
                                 mustBeInRole [Role.Botsjef] >=> choose [
                                     route "" >=> (Fines.Api.addRemedyRate club |> jsonPost)                                
                             ]
+                            PUT >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [
+                                    route "" >=> (Fines.Api.updateRemedyRate club |> jsonPost)                                
+                            ]
                             DELETE >=> 
                                 mustBeInRole [Role.Botsjef] >=> choose [ 
                                     routef "/%O" (Fines.Api.deleteRemedyRate club >> jsonGet)                                     

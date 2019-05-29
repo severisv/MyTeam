@@ -12,9 +12,9 @@ open Fable.Core.JsInterop
 open Thoth.Json
 open Shared.Components.Base
 
-let postRecord2<'T> (url : string) (record : 'T) (properties : RequestProperties list) =
+let sendRecord2<'T> method (url : string) (record : 'T) (properties : RequestProperties list) =
     let defaultProps =
-        [ RequestProperties.Method HttpMethod.POST
+        [ RequestProperties.Method method
        ; requestHeaders [ ContentType "application/json"; Custom ("json-mode", "fable") ]
        ; RequestProperties.Body !^(Encode.Auto.toString (0, record)) ]
 
@@ -22,6 +22,7 @@ let postRecord2<'T> (url : string) (record : 'T) (properties : RequestProperties
     GlobalFetch.fetch (RequestInfo.Url url, requestProps init)
 
 type Endpoint<'a> =
+    | Put of string * 'a option
     | Post of string * 'a option
     | Delete of string
 
@@ -61,8 +62,9 @@ type SubmitButton<'a>(props) =
         this.setState (fun _ _ -> Posting)
         promise {
             let! res = match props.Endpoint with
-                       | Post(url, payload) -> postRecord2 url payload []
-                       | Delete url -> fetch url [ Method HttpMethod.DELETE ]
+                       | Post(url, payload) -> sendRecord2 HttpMethod.POST url payload []
+                       | Put(url, payload) -> sendRecord2 HttpMethod.PUT url payload []
+                       | Delete url -> fetch url [Method HttpMethod.DELETE ]
 
             match (res.Status, props.OnError, res.Ok) with
             | (400, Some onError, _) ->

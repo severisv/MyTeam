@@ -17,7 +17,6 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
      
      let years = getYears db club.Id
      let year = getSelectedYear year years
-
          
      let fines =
          match year with

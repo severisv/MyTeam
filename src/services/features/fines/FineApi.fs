@@ -75,6 +75,26 @@ let addRemedyRate (club: Club) (ctx: HttpContext) (model: RemedyRate) =
     db.SaveChanges() |> ignore
     OkResult { model with Id = rate.Id }
     
+let updateRemedyRate (club: Club) (ctx: HttpContext) (model: RemedyRate) =
+    let db = ctx.Database
+    let (ClubId clubId) = club.Id
+    query {
+        for rate in db.RemedyRates do
+        where (rate.Id = model.Id && rate.ClubId = clubId)
+        select rate
+    }
+    |> Seq.tryHead
+    |> function
+        | Some rate ->
+            rate.Description <- model.Description
+            rate.Name <- model.Name
+            rate.Rate <- model.Amount
+            db.SaveChanges() |> ignore
+            OkResult model 
+        | None -> NotFound
+    
+
+    
 let deleteRemedyRate (club : Club) fineId (db : Database) =
     let (ClubId clubId) = club.Id
     query {

@@ -20,6 +20,7 @@
     <Compile Include="features/AddPlayers.fs" />
     <Compile Include="features\fines\Add.fs" />
     <Compile Include="features\fines\AddRemedyRate.fs" />
+    <Compile Include="features\fines\EditRemedyRate.fs" />
     <Compile Include="features\fines\FineList.fs" />
     <Compile Include="features\fines\RemedyRates.fs" />
     <Compile Include="features\gameplan\Formation.fs" />

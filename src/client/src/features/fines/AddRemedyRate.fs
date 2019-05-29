@@ -59,7 +59,7 @@ let addRemedyRate openButton onAdd onDelete =
                         let colNoBorder attr = col ([Attr (Style [BorderBottom "0"]); NoSort] |> List.append attr) []
                                                                         
                         fragment [] [
-                            h4 [] [ str "Registrer bøter" ]                            
+                            h4 [] [ str "Legg til bøtesatser" ]                            
                             table []
                                     [colNoBorder [Attr (Class "green"); Attr (Style [PaddingLeft 0])]
                                      colNoBorder []

@@ -34,6 +34,14 @@ let handleAdded setState remedyRate =
                                 |> List.append [remedyRate]
                                 |> List.sortBy (fun remedyRate -> remedyRate.Name) })
 
+let handleEdited setState (remedyRate: RemedyRate) =
+        setState (fun (state: State) _ ->
+                    { state with
+                        Rates = state.Rates
+                                |> List.filter (fun rate -> rate.Id <> remedyRate.Id)
+                                |> List.append [remedyRate]
+                                |> List.sortBy (fun remedyRate -> remedyRate.Name) })
+
 let element props children =
         komponent<RemedyRatesModel, State>
              props
@@ -61,20 +69,24 @@ let element props children =
                                   col [] [str "Navn"]
                                   col [] [str "Beskrivelse"]
                                   col [NoSort] [str "Sats"]
-                                  col [NoSort; Align Center; ExcludeWhen(not <| props.User.IsInRole [ Role.Botsjef ]) ] []
+                                  col [NoSort; NoPadding; ExcludeWhen(not <| props.User.IsInRole [Role.Botsjef]) ] []
+                                  col [NoSort; NoPadding; ExcludeWhen(not <| props.User.IsInRole [Role.Botsjef]) ] []
                                 ]
                                 (rates |> List.map (fun rate ->
                                                     tableRow [] [
                                                         str rate.Name
                                                         str rate.Description
                                                         currency [] rate.Amount
+                                                        EditRemedyRate.editRemedyRate
+                                                            (fun handleOpen -> linkButton handleOpen [Icons.edit ""])
+                                                            (handleEdited setState) rate
                                                         Modal.render
-                                                            { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.delete ]
+                                                            { OpenButton = fun handleOpen -> linkButton handleOpen [Icons.delete]
                                                               Content =
                                                                 fun handleClose ->
                                                                     div [] [
                                                                       h4 [] [ str <| sprintf "Er du sikker på at du vil slette '%s'?" rate.Name ]
-                                                                      div [ Class "text-center" ] [
+                                                                      div [Class "text-center"] [
                                                                           br []
                                                                           SubmitButton.render
                                                                             (fun o ->
@@ -83,17 +95,17 @@ let element props children =
                                                                                 Text = str "Slett"
                                                                                 Endpoint = SubmitButton.Delete <| sprintf "/api/remedyrates/%O" rate.Id
                                                                                 OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState rate.Id)) })
-                                                                          btn [ Lg; OnClick !> handleClose ] [ str "Avbryt" ]
+                                                                          btn [Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]
                                                                   ]
-                                                            }
+                                                            }                                                       
                                                     ]))                            
                         ]
                     ]
                     sidebar [] [
                         props.User.IsInRole [ Role.Botsjef ] &?
                                     block [] [
-                                        navListBase [ Header <| str "Botsjef" ] [
+                                        navListBase [Header <| str "Botsjef" ] [
                                             AddRemedyRate.addRemedyRate
                                                 (fun handleOpen -> linkButton handleOpen [Icons.add ""; whitespace; str "Legg til satser" ])
                                                 (handleAdded setState) (handleDeleted setState)
