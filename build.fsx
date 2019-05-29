@@ -17,6 +17,7 @@ open Fake.Core.TargetOperators
 open Fake.DotNet
 open Fake.Core.Globbing.Operators
 open Fake.Azure
+open System
 
 
 let appName = "myteam"
@@ -83,6 +84,34 @@ Target.create "Publish" <| fun _ ->
           } |> dotnetOptions) 
         webDir
 
+Target.create "Write-Asset-Hashes" <| fun _ ->
+
+    let calculateFileHash path =
+        use hashImp = System.Security.Cryptography.HashAlgorithm.Create("MD5")
+        use stream = System.IO.File.OpenRead path
+        let hash = hashImp.ComputeHash stream 
+        BitConverter.ToString(hash).Replace("-", String.Empty)   
+    
+    let writeToAppsettings scriptName hash =
+        let configValue = sprintf "\"%s\": \"%s\"" scriptName       
+        !!(sprintf "%s/**/%s" publishDirectory "appsettings.json")
+        |> Seq.iter (fun appsettings ->
+            let text = System.IO.File.ReadAllText appsettings
+            System.IO.File.WriteAllText(appsettings, text.Replace(configValue "", configValue hash)))
+        
+        
+    [ ("MainCss", "site.bundle.css")
+      ("LibJs", "lib.bundle.js")
+      ("FableJs" , "app.js")
+      ("MainJs", "main.js") ]
+    |> List.iter (fun (scriptName, fileName) ->        
+        !!(sprintf "%s/**/%s" publishDirectory fileName)
+        |> Seq.iter (fun path ->
+            calculateFileHash path
+            |> writeToAppsettings scriptName
+            ))
+       
+
 Target.create "Create-Artifact" <| fun _ ->       
     Directory.ensure artifactsDirectory
     !! (sprintf "%s/**/*.*" publishDirectory)
@@ -113,8 +142,9 @@ Target.create "Deploy" <| fun _ ->
 ==> "Build-backend"
 ==> "Migrate-database"
 ==> "Publish"
+==> "Write-Asset-Hashes"
 
-"Publish"
+"Write-Asset-Hashes"
 ==> "Create-Artifact"
 ==> "Deploy"
 
