@@ -57,10 +57,6 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
              | AllMembers -> true)
          |> List.sortByDescending (fun fine -> fine.Issued)
         
-            
-     let isSelected year selectedMember =
-        (=) (createUrl year selectedMember) 
-        
      [
       Client.view listView {
                 Members = members

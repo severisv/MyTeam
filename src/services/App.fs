@@ -128,6 +128,12 @@ module App =
                                             Fines.List.view club user (year |> Some) (Fines.Common.Member memberId) |> htmlGet
                                         routef "/boter/vis/%s" <| fun year ->
                                             Fines.List.view club user (year |> Some) Fines.Common.AllMembers |> htmlGet
+                                        route "/boter/innbetalinger" >=>
+                                            (Fines.Payments.view club user None Fines.Common.AllMembers |> htmlGet)
+                                        routef "/boter/innbetalinger/%s/%O" <| fun (year, memberId) ->
+                                            Fines.Payments.view club user (year |> Some) (Fines.Common.Member memberId) |> htmlGet
+                                        routef "/boter/innbetalinger/%s" <| fun year ->
+                                            Fines.Payments.view club user (year |> Some) Fines.Common.AllMembers |> htmlGet
                                         route "/boter/satser" >=>
                                             (Fines.RemedyRates.view club user |> htmlGet)                                  
                                         route "/boter/oversikt" >=>
@@ -206,6 +212,21 @@ module App =
                             DELETE >=> 
                                 mustBeInRole [Role.Botsjef] >=> choose [ 
                                     routef "/%O" (Fines.Api.delete club >> jsonGet)                                     
+                                ]                                  
+                        ]
+                    subRoute "/api/payments"
+                        <| choose [
+                            POST >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [
+                                    route "" >=> (Fines.Api.addPayment club |> jsonPost)                                
+                            ]
+                            PUT >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [
+                                    route "/information" >=> (Fines.Api.setPaymentInformation club |> jsonPost)
+                            ]
+                            DELETE >=> 
+                                mustBeInRole [Role.Botsjef] >=> choose [ 
+                                    routef "/%O" (Fines.Api.deletePayment club >> jsonGet)                                     
                                 ]                                  
                         ]
                     subRoute "/api/remedyrates"

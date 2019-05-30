@@ -11,5 +11,6 @@ module EntryPoint =
         Admin.AddPlayers.element |> ignore
         Fines.List.element |> ignore
         Fines.RemedyRates.element |> ignore
+        Fines.Payments.element |> ignore
     ] 
     |> ignore

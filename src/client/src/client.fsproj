@@ -19,9 +19,11 @@
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features/AddPlayers.fs" />
     <Compile Include="features\fines\Add.fs" />
+    <Compile Include="features\fines\AddPayment.fs" />
     <Compile Include="features\fines\AddRemedyRate.fs" />
     <Compile Include="features\fines\EditRemedyRate.fs" />
     <Compile Include="features\fines\FineList.fs" />
+    <Compile Include="features\fines\Payments.fs" />
     <Compile Include="features\fines\RemedyRates.fs" />
     <Compile Include="features\gameplan\Formation.fs" />
     <Compile Include="features\gameplan\GamePlan.fs" />

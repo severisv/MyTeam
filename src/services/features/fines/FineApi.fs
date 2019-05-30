@@ -3,9 +3,11 @@ module Server.Features.Fines.Api
 open MyTeam
 open MyTeam.Models.Domain
 open Shared
+open Shared.Components.Input
 open Shared.Domain
 open Shared.Features.Fines.List
 open Shared.Features.Fines.Common
+open Shared.Features.Fines.Payments
 open Strings
 
 let listRemedyRates (club: Club) (db: Database) =
@@ -39,7 +41,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddFine) =
          let fine = Fine(MemberId = model.MemberId,
                          RemedyRateId = model.RateId,
                          Amount = model.Amount,
-                         Issued = System.DateTime.Now,
+                         Issued = model.Date,
                          Comment = model.Comment,
                          RateName = model.RateName)
          db.Fines.Add(fine) |> ignore
@@ -110,3 +112,56 @@ let deleteRemedyRate (club : Club) fineId (db : Database) =
         db.SaveChanges() |> ignore
         OkResult()
 
+
+
+let addPayment (club: Club) (ctx: HttpContext) (model: AddPayment) =
+    let db = ctx.Database
+    let (ClubId clubId) = club.Id
+    query {
+        for memb in db.Members do
+        where (clubId = memb.ClubId && memb.Id = model.MemberId)
+        select (memb.Id)
+    }
+    |> Seq.toList
+    |> List.tryHead
+    |> function
+    | Some _ ->
+         let payment = Payment(MemberId = model.MemberId,
+                               Amount = model.Amount,
+                               TimeStamp = model.Date,
+                               Comment = model.Comment,
+                               ClubId = clubId)
+         db.Payments.Add(payment) |> ignore
+         db.SaveChanges() |> ignore
+         OkResult { model with Id = Some payment.Id }
+    | None -> Unauthorized
+    
+let deletePayment (club : Club) paymentId (db : Database) =
+    let (ClubId clubId) = club.Id
+    query {
+        for payment in db.Payments do
+            where (payment.Id = paymentId && payment.ClubId = clubId)
+            select payment
+    }    
+    |> Seq.tryHead
+    |> function 
+    | None -> NotFound
+    | Some payment -> 
+        db.Payments.Remove(payment) |> ignore
+        db.SaveChanges() |> ignore
+        OkResult()
+        
+
+let setPaymentInformation (club: Club) (ctx: HttpContext) (model: StringPayload) =
+    let (ClubId clubId) = club.Id
+    let db = ctx.Database
+    let paymentInformation =
+         query {
+             for pi in db.PaymentInformation do
+                 where (pi.ClubId = clubId)
+                 select pi
+         } |> Seq.tryHead
+           |> Option.defaultValue (PaymentInformation(ClubId = clubId))
+    paymentInformation.Info <- model.Value
+    db.SaveChanges() |> ignore
+    OkResult()
