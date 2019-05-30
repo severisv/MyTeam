@@ -18,6 +18,11 @@
   <ItemGroup>
     <Folder Include="ViewModels\RemedyRate" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Payment\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Payment\_Add.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Payment\_Show.cshtml" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 
 </Project>

@@ -46,7 +46,7 @@ let fineNav (user : User) (currentPath : string) =
        ] @ (if user.IsInRole [Role.Botsjef] then
                 [ { Text = " Innbetalinger"
                     ShortText = " Innbetalinger"
-                    Url = "/intern/innbetalinger"
+                    Url = "/intern/boter/innbetalinger"
                     Icon = Some (Icons.list "") } ]
             else []
                 )) (currentPath.Contains)

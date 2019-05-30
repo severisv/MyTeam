@@ -1,13 +1,12 @@
-module Client.Fines.List
+module Client.Fines.Payments
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Client.Components
-open Fable.Import
+open Client.Components.Textarea
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
-open Shared.Components
 open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Layout
@@ -16,42 +15,42 @@ open Shared.Components.Tables
 open Shared.Components.Currency
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.List
+open Shared.Features.Fines.Payments
 
 type State = {
-    Fines : Fine list
+    Payments : Payment list
  }
 
 let isSelected year selectedMember =
     (=) (createUrl year selectedMember)
 
-let handleDeleted setState fineId =
+let handleDeleted setState paymentId =
         setState (fun (state : State) props ->
                 { state with
-                    Fines = state.Fines
-                            |> List.filter (fun fine -> fineId <> fine.Id) })
+                    Payments = state.Payments
+                            |> List.filter (fun payment -> paymentId <> payment.Id) })
 
-let handleAdded year selectedMember setState fine =
+let handleAdded year selectedMember setState (payment: Payment) =
     match (year, selectedMember) with
-    | (Year year, _) when year <> fine.Issued.Year -> ()
-    | (_, Member memberId) when memberId <> fine.Member.Id -> ()
+    | (Year year, _) when year <> payment.Date.Year -> ()
+    | (_, Member memberId) when memberId <> payment.Member.Id -> ()
     | _ ->
         setState (fun (state: State) _ ->
                     { state with
-                        Fines = state.Fines
-                                |> List.append [fine]
-                                |> List.sortByDescending (fun fine -> fine.Issued) })
+                        Payments = state.Payments
+                                |> List.append [payment]
+                                |> List.sortByDescending (fun fine -> fine.Date) })
 
 let element props children =
-        komponent<ListModel, State>
+        komponent<PaymentsModel, State>
              props
-             { Fines = [] }
+             { Payments = [] }
              (Some { ComponentDidMount = fun (props, state, setState)  ->
-                 setState(fun state props -> { state with Fines = props.Fines  })})
+                 setState(fun state props -> { state with Payments = props.Payments  })})
              (fun (props, state, setState) ->
                 let year = props.Year
                 let selectedMember = props.SelectedMember
-                let fines = state.Fines
+                let fines = state.Payments
                 fragment [] [
                     mtMain [] [
                         block []
@@ -61,9 +60,10 @@ let element props children =
                             props.User.IsInRole [Role.Botsjef] &?
                                 fragment [] [
                                     div [Class "clearfix hidden-lg hidden-md u-margin-bottom"] [
-                                        Add.addFine
-                                            (fun handleOpen -> btn [OnClick handleOpen; Primary; Class "pull-right"] [ Icons.add ""; whitespace; str "Registrer bøter" ])
-                                            (handleAdded year selectedMember setState) (handleDeleted setState)]]       
+                                        AddPayment.element
+                                            (fun handleOpen -> btn [OnClick handleOpen; Primary; Class "pull-right"] [ Icons.add ""; whitespace; str "Registrer innbetalinger" ])
+                                            (handleAdded year selectedMember setState) (handleDeleted setState)
+                                    ]]       
                             
                             selectNav []
                                 ({ Items = props.Members |> List.map (fun m -> {  Text = string m.Name
@@ -79,30 +79,31 @@ let element props children =
                             table []
                                 [ col [ CellType Image; NoSort ] []
                                   col [ NoSort ] []
-                                  col [ NoSort ] []
                                   col [ NoSort; Align Center ] [ Icons.fine "Beløp" ]
-                                  col [ NoSort; Align Center ] [ Icons.calendar "Utstedt dato" ]
+                                  col [ NoSort; Align Center ] [ Icons.calendar "Dato" ]
                                   col [ NoSort; Align Center; ExcludeWhen(not <| props.User.IsInRole [ Role.Botsjef ]) ] []
                                 ]
-                                (fines |> List.map (fun fine ->
-                                                    let playerLink = a [ Href <| createUrl props.Year (Member fine.Member.Id) ]
+                                (fines |> List.map (fun payment ->
+                                                    let playerLink = a [ Href <| createUrl props.Year (Member payment.Member.Id) ]
                                                     tableRow [] [
                                                         playerLink [ img [ Src <| Image.getMember props.ImageOptions
                                                                                       (fun o -> { o with Height = Some 50
                                                                                                          Width = Some 50 })
-                                                                                      fine.Member.Image fine.Member.FacebookId ] ]
-                                                        playerLink [ str fine.Member.Name ]
-                                                        fragment [] [str fine.Description
-                                                                     Strings.hasValue fine.Comment &?
-                                                                        Base.tooltip fine.Comment [Style [MarginLeft "0.5em"]] [Icons.infoCircle ""]]
-                                                        currency [] fine.Amount
-                                                        fine.Issued |> (if props.Year = AllYears then Date.formatLong else Date.formatShort) |> str
+                                                                                      payment.Member.Image payment.Member.FacebookId ] ]
+                                                        fragment [] [playerLink [ str payment.Member.Name ]
+                                                                     Strings.hasValue payment.Comment &?
+                                                                        Base.tooltip payment.Comment [Style [MarginLeft "0.5em"]] [Icons.infoCircle ""]]
+                                                        currency [] payment.Amount
+                                                        payment.Date |> (if props.Year = AllYears then Date.formatLong else Date.formatShort) |> str
                                                         Modal.render
                                                             { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.delete ]
                                                               Content =
                                                                 fun handleClose ->
                                                                     div [] [
-                                                                      h4 [] [ str <| sprintf "Er du sikker på at du vil slette '%s' til %s?" fine.Description fine.Member.FullName ]
+                                                                      h4 [] [ str <| sprintf "Er du sikker på at du vil slette %i,- fra %s (%s) ?"
+                                                                                         payment.Amount
+                                                                                         payment.Member.FullName
+                                                                                         (Date.formatLong payment.Date)]
                                                                       div [ Class "text-center" ] [
                                                                           br []
                                                                           SubmitButton.render
@@ -110,8 +111,8 @@ let element props children =
                                                                             { o with
                                                                                 ButtonStyle = Danger
                                                                                 Text = str "Slett"
-                                                                                Endpoint = SubmitButton.Delete <| sprintf "/api/fines/%O" fine.Id
-                                                                                OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState fine.Id)) })
+                                                                                Endpoint = SubmitButton.Delete <| sprintf "/api/payments/%O" payment.Id
+                                                                                OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState payment.Id)) })
                                                                           btn [ Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]
                                                                   ]
@@ -126,10 +127,14 @@ let element props children =
                         props.User.IsInRole [ Role.Botsjef ] &?
                                     block [] [
                                         navListBase [ Header <| str "Botsjef" ] [
-                                            Add.addFine
-                                                (fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                            AddPayment.element
+                                                (fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Registrer betalinger" ])
                                                 (handleAdded year selectedMember setState) (handleDeleted setState)
                                         ]
+                                        hr []
+                                        h5 [] [str "Betalingsinformasjon"]
+                                        Textarea.render { Value = props.PaymentInformation; Url = "/api/payments/information"  }
+
                                     ]
                         props.Years.Length > 0 &?
                             block [] [
@@ -146,4 +151,4 @@ let element props children =
 
         )
 
-render Decode.Auto.fromString<ListModel> listView element
+render Decode.Auto.fromString<PaymentsModel> paymentsView element
