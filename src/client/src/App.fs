@@ -14,3 +14,5 @@ module EntryPoint =
         Fines.Payments.element |> ignore
     ] 
     |> ignore
+
+    Fable.Import.Browser.console.log "hei"
