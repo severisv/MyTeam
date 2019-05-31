@@ -102,8 +102,8 @@ Target.create "Write-Asset-Hashes" <| fun _ ->
         
     [ ("MainCss", "site.bundle.css")
       ("LibJs", "lib.bundle.js")
-      ("FableJs" , "app.js")
-      ("MainJs", "main.js") ]
+      ("FableJs" , "main.js")
+      ("MainJs", "app.js") ]
     |> List.iter (fun (scriptName, fileName) ->        
         !!(sprintf "%s/**/%s" publishDirectory fileName)
         |> Seq.iter (fun path ->
