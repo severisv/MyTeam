@@ -36,7 +36,6 @@
     <Compile Include="features\fines\Fines.fs" />
     <Compile Include="features\fines\FineList.fs" />
     <Compile Include="features\fines\Payments.fs" />
-    <Compile Include="features\fines\RemedyRates.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

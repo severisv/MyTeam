@@ -13,8 +13,6 @@ let createUrl year memberId =
                         | AllMembers -> ""            
         sprintf "/intern/boter/vis/%s%s" year memberId
 
-
-
 type ListModel = {
     ImageOptions: CloudinaryOptions
     Fines: Fine list
@@ -36,5 +34,3 @@ type AddFine = {
     Amount: int
     Comment: string
 }
-
-let listView = "list-fines"

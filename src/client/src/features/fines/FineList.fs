@@ -18,6 +18,7 @@ open Shared.Domain.Members
 open Shared.Features.Fines.Common
 open Shared.Features.Fines.List
 
+
 type State = {
     Fines : Fine list
  }
@@ -42,6 +43,7 @@ let handleAdded year selectedMember setState fine =
                                 |> List.append [fine]
                                 |> List.sortByDescending (fun fine -> fine.Issued) })
 
+let containerId = "list-fines"
 let element props children =
         komponent<ListModel, State>
              props
@@ -143,6 +145,8 @@ let element props children =
 
 
 
-        )
+        )             
 
-render Decode.Auto.fromString<ListModel> listView element
+hydrate containerId Decode.Auto.fromString<ListModel> element
+
+

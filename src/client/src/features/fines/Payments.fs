@@ -150,4 +150,4 @@ let element props children =
 
         )
 
-render Decode.Auto.fromString<PaymentsModel> paymentsView element
+hydrate paymentsView Decode.Auto.fromString<PaymentsModel> element

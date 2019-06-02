@@ -9,7 +9,7 @@ open Fable.Core
 let whitespace = str " "
 let empty = str ""
 
-[<Emit("jQuery('.' + $0).popover({ trigger: 'hover' })")>]
+[<Emit("jQuery('#' + $0).popover({ trigger: 'hover' })")>]
 let apply (id: System.Guid): unit = failwith "JS only"
 
 type State = {
@@ -21,7 +21,8 @@ let tooltip message attr children =
         (Some { ComponentDidMount = fun (_,state,_) -> apply(state.Id) })
         (fun (_,state,_) ->
              a (Html.mergeClasses
-                         [ Class <| string state.Id
+                         [ Id <| string state.Id
+                           Class "mt-popover"
                            Href "javascript:void(0);"
                            HTMLAttr.Custom("data-container", "body")
                            HTMLAttr.Custom("data-content", message)

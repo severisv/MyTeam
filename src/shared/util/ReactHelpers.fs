@@ -4,11 +4,12 @@ open Fable.Import
 open Fable.Import.React
 open Fable.Helpers.React
 open Shared
+open Fable.Core
+open JsInterop   
 
 let render deserializeFn id comp =
     Browser.document.getElementById id
     |> fun node ->
-
         if not <| isNull node then
             node.getAttribute (Interop.modelAttributeName)
             |> deserializeFn
@@ -17,7 +18,15 @@ let render deserializeFn id comp =
              | Error e -> failwithf "Json deserialization failed: %O" e
 
 
-
+let hydrate elementId deserializeFn comp =
+    Browser.document.getElementById elementId
+    |> fun node ->
+        if not <| isNull node then 
+            !!Browser.window?__INIT_STATE__     
+            |> deserializeFn
+            |> function
+             | Ok model -> ReactDom.hydrate (comp model [], node)
+             | Error e -> failwithf "Json deserialization failed: %O" e
 
 type OutProps<'Props, 'State> =
     'Props * 'State * (('State -> 'Props -> 'State) -> unit)

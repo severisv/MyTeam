@@ -27,7 +27,7 @@ type Textarea(props) =
                              IsTouched = false
                              IsPosting = false })
     
-    let mutable timeout = Browser.window.setTimeout (ignore, 0, [])
+    let mutable timeout = 0.0
     
     member this.debounce fn wait =
         Browser.window.clearTimeout timeout

@@ -6,7 +6,6 @@ open Client.Components
 open Client.Fines
 open Shared.Util.ReactHelpers
 open Thoth.Json
-open Shared
 open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Layout
@@ -15,7 +14,6 @@ open Shared.Components.Tables
 open Shared.Components.Currency
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.RemedyRates
 
 type State = {
     Rates : RemedyRate list
@@ -42,6 +40,13 @@ let handleEdited setState (remedyRate: RemedyRate) =
                                 |> List.append [remedyRate]
                                 |> List.sortBy (fun remedyRate -> remedyRate.Name) })
 
+type RemedyRatesModel = {
+    Rates: RemedyRate list
+    Path: string
+    User: User
+}
+
+let containerId = "remedyrates"
 let element props children =
         komponent<RemedyRatesModel, State>
              props
@@ -112,4 +117,4 @@ let element props children =
                     ]
                 ])
 
-render Decode.Auto.fromString<RemedyRatesModel> ratesView element
+hydrate containerId Decode.Auto.fromString<RemedyRatesModel> element
