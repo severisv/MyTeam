@@ -45,9 +45,8 @@ let handleAdded year selectedMember setState fine =
 let element props children =
         komponent<ListModel, State>
              props
-             { Fines = [] }
-             (Some { ComponentDidMount = fun (props, state, setState)  ->
-                 setState(fun state props -> { state with Fines = props.Fines  })})
+             { Fines = props.Fines }
+             None
              (fun (props, state, setState) ->
                 let year = props.Year
                 let selectedMember = props.SelectedMember

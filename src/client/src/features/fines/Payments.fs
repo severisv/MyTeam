@@ -44,9 +44,8 @@ let handleAdded year selectedMember setState (payment: Payment) =
 let element props children =
         komponent<PaymentsModel, State>
              props
-             { Payments = [] }
-             (Some { ComponentDidMount = fun (props, state, setState)  ->
-                 setState(fun state props -> { state with Payments = props.Payments  })})
+             { Payments = props.Payments }
+             None
              (fun (props, state, setState) ->
                 let year = props.Year
                 let selectedMember = props.SelectedMember

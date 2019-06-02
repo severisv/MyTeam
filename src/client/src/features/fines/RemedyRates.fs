@@ -45,9 +45,8 @@ let handleEdited setState (remedyRate: RemedyRate) =
 let element props children =
         komponent<RemedyRatesModel, State>
              props
-             { Rates = [] }
-             (Some { ComponentDidMount = fun (props, state, setState)  ->
-                 setState(fun state props -> { state with Rates = props.Rates  })})
+             { Rates = props.Rates }
+             None
              (fun (props, state, setState) ->
               
                 let rates = state.Rates
