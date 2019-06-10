@@ -91,8 +91,14 @@ export default class ShowGame extends React.Component {
   handleSubmit = () => {
     const state = this.state
 
+    function parseType(index) {
+      if (index == 0) return 'Mål'
+      if (index == 1) return 'Gult kort'
+      return 'Rødt kort'
+    }
+    
     const form = {
-      Type: state.type,
+      Type: parseType(state.type),
       PlayerId: state.playerId,
       PlayerName: state.playerName,
       GameId: state.gameId,

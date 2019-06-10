@@ -13,20 +13,25 @@ open System
 type GameEventId = Guid
 
 type GameEventType =
-    | ``Mål`` = 0
-    | ``Gult kort`` = 1
-    | ``Rødt kort`` = 2
+    | ``Mål``
+    | ``Gult kort``
+    | ``Rødt kort``
 
-[<CLIMutable>]
 type GameEvent =
     { Id : GameEventId
       Type : GameEventType
       PlayerId : PlayerId option
       AssistedById : PlayerId option }
+    
+[<CLIMutable>]
+type GameEventForm =
+    { Type : string
+      PlayerId : PlayerId option
+      AssistedById : PlayerId option }
 
 type Get = ClubId -> GameId -> Database -> HttpResult<GameEvent list>
 
-type Add = ClubId -> GameId -> HttpContext -> GameEvent -> HttpResult<GameEvent>
+type Add = ClubId -> GameId -> HttpContext -> GameEventForm -> HttpResult<GameEvent>
 
 type Delete = ClubId -> (GameId * GameEventId) -> Database -> HttpResult<unit>
 
@@ -48,28 +53,32 @@ let get : Get =
                 for ge in db.GameEvents do
                     where (ge.GameId = gameId)
                     sortBy (ge.CreatedDate)
-                    select (ge.Id, gameId, ge.PlayerId, ge.AssistedById, ge.Type)
+                    select (ge.Id, ge.PlayerId, ge.AssistedById, ge.Type)
             }
             |> Seq.toList
-            |> List.map (fun (id, gameId, playerId, assistedById, eventType) -> 
+            |> List.map (fun (id, playerId, assistedById, eventType) -> 
                    { Id = id
                      PlayerId = playerId |> toOption
                      AssistedById = assistedById |> toOption
-                     Type = enum<GameEventType> (int eventType) })
+                     Type = match eventType with
+                            | Models.Enums.GameEventType.Goal -> Mål 
+                            | Models.Enums.GameEventType.YellowCard -> ``Gult kort`` 
+                            | _ -> ``Rødt kort`` })
             |> OkResult
 
 let add : Add =
-    let cardDoesNotHaveAssist _ model =
+    let cardDoesNotHaveAssist _ (model: GameEvent) =
         if model.Type <> GameEventType.Mål && model.AssistedById.IsSome then 
             Error "Kort kan ikke ha assist"
         else Ok()
     
-    let isNotAssistedBySelf _ model =
+    let isNotAssistedBySelf _ (model: GameEvent) =
         if model.PlayerId.IsSome && model.PlayerId = model.AssistedById then 
             Error "Man kan ikke gi assist til seg selv"
         else Ok()
     
-    fun clubId gameId (ctx : HttpContext) model -> 
+    fun clubId gameId (ctx : HttpContext) (model: GameEventForm) ->
+        let model: GameEvent = { Id = Guid.Empty; Type = Enums.fromString model.Type; PlayerId = model.PlayerId; AssistedById = model.AssistedById }
         let db = ctx.Database
         let (ClubId clubId) = clubId
         query { 
@@ -81,7 +90,7 @@ let add : Add =
         |> function 
         | None -> NotFound
         | Some c when c <> clubId -> Unauthorized
-        | Some _ -> 
+        | Some _ ->
             validate [ <@ model @> >- [ cardDoesNotHaveAssist ]
                        <@ model @> >- [ isNotAssistedBySelf ]
                        <@ model.Type @> >- [ isRequired ] ]
@@ -92,7 +101,10 @@ let add : Add =
                 ge.GameId <- gameId
                 ge.PlayerId <- (model.PlayerId |> toNullable)
                 ge.AssistedById <- (model.AssistedById |> toNullable)
-                ge.Type <- enum<Models.Enums.GameEventType> (int model.Type)
+                ge.Type <- match model.Type with
+                            | Mål -> Models.Enums.GameEventType.Goal
+                            | ``Gult kort`` -> Models.Enums.GameEventType.YellowCard
+                            | ``Rødt kort`` -> Models.Enums.GameEventType.RedCard
                 ge.CreatedDate <- DateTime.Now
                 db.GameEvents.Add ge  |> ignore
                 db.SaveChanges() |> ignore
