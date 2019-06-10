@@ -114,7 +114,6 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
                                         Items = 
                                             [
                                                 { Text = [ !!(Icons.add ""); encodedText " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
-                                                { Text = [ !!(Icons.refresh ""); encodedText " Oppdatering av term." ]; Url = sprintf "/sesong/oppdater/%s/%i" selectedTeam.ShortName selectedYear }
                                             ]                            
                                         Footer = None
                                         IsSelected = never

@@ -1,6 +1,8 @@
 module MyTeam.Members.Pages.RequestAccess
 
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React
+open Fable.React.Props
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
@@ -21,7 +23,7 @@ type RequestAccessForm =
       Etternavn : string }
 
 let internal inputRow name value (validationErrors : ValidationError list) =
-    formRow [ Horizontal 2 ] [ Fable.Helpers.React.str name ] 
+    formRow [ Horizontal 2 ] [ Helpers.str name ] 
         [ textInput [ Name name
                       Value value ]
           validationMessage (validationErrors
@@ -61,15 +63,15 @@ let internal view model validationErrors (club : Club) (user : User option)
                            !!(form [ Horizontal 2
                                      Action "/blimed"
                                      Method "POST" ] 
-                                  [ Fable.Helpers.React.input [ Name "FacebookId"
-                                                                Type "hidden"
-                                                                Value model.FacebookId ]
+                                  [ Standard.input [ Name "FacebookId"
+                                                     Type "hidden"
+                                                     Value model.FacebookId ]
                                     inputRow "Fornavn" model.Fornavn validationErrors
                                     inputRow "Mellomnavn" model.Mellomnavn validationErrors
                                     inputRow "Etternavn" model.Etternavn validationErrors
                                     
                                     formRow [ Horizontal 2 ] [] 
-                                        [ btn [ Primary ] [ Fable.Helpers.React.str "Send" ] ] ]) ]
+                                        [ btn [ Primary ] [ Helpers.str "Send" ] ] ]) ]
                      | (true, None) -> 
                          [ h4 [ _class "text-left" ] [ encodedText "Forespørselen din er mottatt" ]
                            

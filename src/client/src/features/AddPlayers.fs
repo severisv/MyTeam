@@ -1,7 +1,7 @@
 module Client.Admin.AddPlayers
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
@@ -11,6 +11,7 @@ open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Components.Forms
 open Shared.Features.Admin.AddPlayers
+open Thoth.Json
 
 let defaultForm = {
     ``E-postadresse`` = ""
@@ -81,7 +82,7 @@ let element props children =
                                                Size = Normal
                                                Text = str "Legg til"
                                                SubmittedText = "Lagt til"
-                                               Endpoint = SubmitButton.Post ("/api/members", Some request)
+                                               Endpoint = SubmitButton.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, request)))
                                          })
                             ]
                         ))  
@@ -130,7 +131,7 @@ let element props children =
                                                Size = Normal
                                                Text = str "Legg til"
                                                SubmittedText = "Lagt til"
-                                               Endpoint = SubmitButton.Post ("/api/members", Some state.Player)
+                                               Endpoint = SubmitButton.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, state.Player)))
                                                OnSubmit = Some <| !> (onSubmitForm setState)
                                                OnError = Some <| onFormError setState
                                          })

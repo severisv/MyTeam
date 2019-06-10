@@ -1,9 +1,9 @@
 module Client.Table.Edit
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
+open Fable.React
 open Client.Components
 open Shared.Components
 open Shared.Components.Base
@@ -58,7 +58,7 @@ type EditTable(props) =
                                                     Text = str "Ja" 
                                                     SubmittedText = "Slettet"
                                                     Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
-                                                    OnSubmit = Some !> Browser.location.reload })
+                                                    OnSubmit = Some !> Browser.Dom.window.location.reload })
                                               btn [Lg; OnClick !> handleClose ] [str "Nei"]
                                           ]
                                       ]

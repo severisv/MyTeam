@@ -1,11 +1,12 @@
 module Client.Components.Textarea
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Browser
+open Fable.Core
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
+open Fetch.Types
+open Client.Util
 open Shared.Components
 open Shared.Components.Input
 open Shared.Components.Base
@@ -30,8 +31,8 @@ type Textarea(props) =
     let mutable timeout = 0.0
     
     member this.debounce fn wait =
-        Browser.window.clearTimeout timeout
-        timeout <- Browser.window.setTimeout (fn, wait, [])
+        Browser.Dom.window.clearTimeout timeout
+        timeout <- Browser.Dom.window.setTimeout (fn, wait, [])
     
     override this.render() =
         let handleChange value =
@@ -44,13 +45,13 @@ type Textarea(props) =
                                  IsPosting = true })
                 promise { 
                     let payload : StringPayload = { Value = value }
-                    let! res = putRecord props.Url payload []
+                    let! res = Http.sendRecord HttpMethod.PUT props.Url payload []
                     if not res.Ok then 
                         failwithf "Received %O from server: %O" res.Status res.StatusText
                     this.setState (fun state props -> { state with IsPosting = false })
                 }
                 |> Promise.catch (fun e -> 
-                       Browser.console.error <| sprintf "%O" e
+                       Dom.console.error(sprintf "%O" e)
                        this.setState (fun state props -> 
                            { state with Error = true
                                         IsPosting = false }))

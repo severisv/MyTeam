@@ -9,7 +9,7 @@ open Shared.Domain.Members
 open MyTeam.Views
 open Attendance.Queries
 open MyTeam.Attendance
-open Fable.Helpers.React.Props
+open Fable.React.Props
 
 
 let view (club : Club) (user : User) year (ctx : HttpContext) =
@@ -40,7 +40,7 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
                    (div [ _class "clearfix u-margin-bottom " ] [
                         !!(buttonLink registerAttendanceUrl Primary ButtonSize.Normal [ Class "pull-right hidden-lg hidden-md" ] [
                             Icons.icon (fa "check-square-o") ""
-                            Fable.Helpers.React.str " Registrer oppmøte"
+                            Fable.React.Helpers.str " Registrer oppmøte"
                          ])
                     ],
                     emptyText))

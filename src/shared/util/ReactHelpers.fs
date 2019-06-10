@@ -1,14 +1,13 @@
 module Shared.Util.ReactHelpers
 
 open Fable.Import
-open Fable.Import.React
-open Fable.Helpers.React
+open Fable.React
 open Shared
 open Fable.Core
 open JsInterop   
 
 let render deserializeFn id comp =
-    Browser.document.getElementById id
+    Browser.Dom.document.getElementById id
     |> fun node ->
         if not <| isNull node then
             node.getAttribute (Interop.modelAttributeName)
@@ -19,10 +18,10 @@ let render deserializeFn id comp =
 
 
 let hydrate elementId deserializeFn comp =
-    Browser.document.getElementById elementId
+    Browser.Dom.document.getElementById elementId
     |> fun node ->
         if not <| isNull node then 
-            !!Browser.window?__INIT_STATE__     
+            !!Browser.Dom.window?__INIT_STATE__     
             |> deserializeFn
             |> function
              | Ok model -> ReactDom.hydrate (comp model [], node)

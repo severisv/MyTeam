@@ -2,9 +2,8 @@ module Shared.Components.Tables
 
 open Shared
 open Shared.Util
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import.React
+open Fable.React
+open Fable.React.Props
 open Shared.Components.Base
 
 type TableProperty =

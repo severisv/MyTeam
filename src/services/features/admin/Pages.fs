@@ -11,8 +11,8 @@ open Shared.Domain
 let index club user ctx =
     [ mtMain [] 
           [ block [] [ div [ _id "manage-players"
-                             attr "data-statuses" (Enums.getValues<Status>() |> Json.serialize)
-                             attr "data-roles" (Enums.getValues<Role>() |> Json.serialize) ] [] ] ]
+                             attr "data-statuses" (Enums.getValues<Status>() |> List.map string |> Json.serialize)
+                             attr "data-roles" (Enums.getValues<Role>() |> List.map string |>Json.serialize) ] [] ] ]
       Admin.coachMenu ]
     |> layout club user (fun o -> { o with Title = "Administrer spillere" }) ctx
     |> OkResult

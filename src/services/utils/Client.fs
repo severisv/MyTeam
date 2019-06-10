@@ -17,6 +17,6 @@ let view2 containerId comp model =
                     (model |> Json.fableSerialize)) ]
     
         div [_id containerId] [
-            rawText <| Fable.Helpers.ReactServer.renderToString (comp model [])         
+            rawText <| Fable.ReactServer.renderToString (comp model [])         
         ]
     ]

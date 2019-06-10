@@ -1,7 +1,7 @@
 module Client.Fines.Add
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
@@ -183,13 +183,15 @@ let addFine openLink onAdd onDelete =
                                                   Size = ButtonSize.Normal
                                                   Text = str "Legg til"
                                                   Endpoint = SubmitButton.Post (sprintf "/api/fines",
-                                                                                Some {  Id = None
-                                                                                        MemberId = state.Form.MemberId.Value
-                                                                                        Date = state.Form.Date.Value
-                                                                                        RateId = state.Form.RateId.Value
-                                                                                        RateName = getRateName state
-                                                                                        Amount = getAmount state
-                                                                                        Comment = state.Form.Comment })
+                                                                                Some (fun () ->
+                                                                                     Encode.Auto.toString(0,
+                                                                                         {  Id = None
+                                                                                            MemberId = state.Form.MemberId.Value
+                                                                                            Date = state.Form.Date.Value
+                                                                                            RateId = state.Form.RateId.Value
+                                                                                            RateName = getRateName state
+                                                                                            Amount = getAmount state
+                                                                                            Comment = state.Form.Comment })))
                                                   OnSubmit = Some (fun res ->
                                                                         Decode.Auto.fromString<AddFine> res
                                                                         |> function

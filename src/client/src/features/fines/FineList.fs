@@ -1,7 +1,7 @@
 module Client.Fines.List
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Fable.Import
 open Shared.Util.ReactHelpers

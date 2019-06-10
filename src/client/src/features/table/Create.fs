@@ -1,9 +1,10 @@
 module Client.Table.Create
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Browser
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
+open Fable.React
 open Shared
 open Client.Components
 open Shared.Components
@@ -54,7 +55,7 @@ type CreateTable(props) =
                                               SubmittedText = "Lagt til"
                                               Endpoint = SubmitButton.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
                                               IsDisabled = not <| isValid state.Year
-                                              OnSubmit = Some <| fun _ -> Browser.location.replace(sprintf "/tabell/%s/%i" props.Team state.Year.Value) })                       
+                                              OnSubmit = Some <| fun _ -> Dom.window.location.replace(sprintf "/tabell/%s/%i" props.Team state.Year.Value) })                       
                         btn [ OnClick !> handleClose ] [ str "Avbryt" ]                      
                   ]
             }                                                             

@@ -17,7 +17,7 @@ let setStatus : SetStatus =
                     where (m.Id = memberId)
                     select m }
             |> Seq.head
-        memb.Status <- (int status)
+        memb.Status <- statusToInt status
         db.SaveChanges() |> ignore
         UserId memb.UserName
 
@@ -27,10 +27,10 @@ let toggleRole : ToggleRole =
             if roleList |> List.contains role then roleList |> List.filter (fun r -> r <> role)
             else roleList |> List.append [ role ]
 
-        let members = Queries.members db clubId
+        let members = Queries.members db clubId    
 
         let memb =
-            query { for m in db.Members do
+            query { for m in members do
                     where (m.Id = memberId)
                     select m }
             |> Seq.head

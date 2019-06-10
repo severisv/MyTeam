@@ -19,7 +19,7 @@ type MemberDetails =
 let toRoleList (roleString : string) =
     if not <| isNull roleString && roleString.Length > 0 then 
         roleString.Split [| ',' |]
-        |> Seq.map (Enums.parse<Role>)
+        |> Seq.map Enums.fromString<Role>
         |> Seq.toList
     else []
 
@@ -41,7 +41,7 @@ let selectMembers =
                  LastName = !!lastName
                  UrlName = !!urlName
                  Image = !!imageFull
-                 Status = enum<PlayerStatus> status })
+                 Status = statusFromInt status })
         |> Seq.sortBy (fun p -> p.FirstName)
 
 
@@ -66,7 +66,7 @@ let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
                         LastName = !!lastName
                         Image = !!image
                         UrlName = !!urlName
-                        Status = int status |> enum<PlayerStatus> })
+                        Status = statusFromInt status})
                  Teams = teamIds                   
                  Roles = rolesString |> toRoleList })
         |> Seq.toList

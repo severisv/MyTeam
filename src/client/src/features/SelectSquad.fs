@@ -1,9 +1,8 @@
 module Client.SelectSquad
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import.React
-open Fable.PowerPack
+open Fable.React
+open Fable.React.Props
+open Fable.React
 open Shared
 open Client.Components
 open Shared.Components
@@ -81,7 +80,7 @@ type SelectSquad(props) =
                                           ]
                                       str m.Name
                                     ]
-                                  span [Style [Display "flex"; JustifyContent "flex-end"; AlignItems "center"] ] [
+                                  span [Style [Display DisplayOptions.Flex; JustifyContent "flex-end"; AlignItems AlignItemsOptions.Center] ] [
                                         s => fun s ->
                                             Strings.hasValue s.Message &?
                                                 tooltip s.Message [ Class "registerSquad-messageIcon" ] [

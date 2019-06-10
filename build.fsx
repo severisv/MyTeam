@@ -51,14 +51,8 @@ Target.create "Copy-client-libs" <| fun _ ->
 
 Target.create "Build-frontend" <| fun _ ->
     Npm.run "build" npmOptions
-    DotNet.exec 
-        (fun o ->  
-          { o with  
-              WorkingDirectory = clientDir + "/src"
-          } |> dotnetOptions) 
-         "fable webpack -- -p --config config/webpack.prod.js" ""
-          |> fun result ->
-                if not result.OK then failwithf "Step failed: %O" result.Errors   
+    Npm.run "build" (fun p -> { p with WorkingDirectory = clientDir })
+   
 
 Target.create "Restore-backend" <| fun _ ->       
     DotNet.restore dotnetOptions webDir

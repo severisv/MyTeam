@@ -41,7 +41,7 @@ module Queries =
                                LastName = lastName
                                UrlName = urlName
                                Image = image    
-                               Status = enum<PlayerStatus> status    
+                               Status = statusFromInt status    
                             }
                         }
                 

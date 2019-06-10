@@ -1,11 +1,10 @@
 module Client.GamePlan.View
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Browser.Types
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
+open Fetch.Types
 open Shared
 open Client.Components
 open Shared.Components
@@ -18,6 +17,10 @@ open Shared.Components.Input
 open Thoth.Json
 open Shared.Util
 open Client.GamePlan.Formation
+open Client.Util
+
+
+
 
 type Time = int
 type LineupId = System.Guid
@@ -43,14 +46,14 @@ type State =
 let save setState gameId (lineups: GamePlanState) = 
     let url = sprintf "/api/games/%O/gameplan" gameId
     promise { 
-        let! res = postRecord url lineups []
+        let! res = Http.sendRecord HttpMethod.POST url lineups []
         if not res.Ok then failwithf "Received %O from server: %O" res.Status res.StatusText
         setState(fun state props ->
                    { state with 
                       ErrorMessage = None
                    }) }
     |> Promise.catch(fun e -> 
-           Browser.console.error <| sprintf "%O" e
+           Browser.Dom.console.error(sprintf "%O" e)
            setState(fun state props ->
                    { state with 
                       ErrorMessage = Some "Tilkoblingsproblemer, endringene blir ikke lagret"
@@ -140,7 +143,7 @@ let setFormation setState save formation =
                })  
  
 let handleFocus (e: FocusEvent) = 
-        let target = e.target :?> Browser.HTMLInputElement
+        let target = e.target :?> HTMLInputElement
         target.select()
 
 type GamePlan(props) =
@@ -252,7 +255,7 @@ type GamePlan(props) =
                     ]
                     br []
                     br []
-                    div [Style [TextAlign "right"]] [
+                    div [Style [TextAlign TextAlignOptions.Right]] [
                         radio setFormation
                             ((match props.Formation with
                              | Sjuer _ -> [ThreeTwoOne; TwoThreeOne] |> List.map Sjuer

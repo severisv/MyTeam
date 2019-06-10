@@ -1,11 +1,10 @@
 module Client.Components.Checkbox
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Client.Util
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
+open Fetch.Types
 open Shared.Components
 open Shared.Components.Input
 open Shared.Components.Base
@@ -32,14 +31,13 @@ type Checkbox(props) =
             props.OnChange isSelected
             this.setState(fun state props -> { state with Error = false })
             promise { 
-                let! res = postRecord props.Url { value = isSelected } []
+                let! res = Http.sendRecord HttpMethod.POST props.Url { value = isSelected } []
                 if not res.Ok then failwithf "Received %O from server: %O" res.Status res.StatusText
-                let! value = res.json<CheckboxPayload>()
                 this.setState(fun state props -> { state with CurrentValue = isSelected })
                 props.OnChange isSelected
             }
             |> Promise.catch(fun e -> 
-                   Browser.console.error <| sprintf "%O" e
+                   Browser.Dom.console.error(sprintf "%O" e)
                    this.setState(fun state props -> { state with Error = true })
                    props.OnChange state.CurrentValue)
             |> Promise.start

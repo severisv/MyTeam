@@ -2,10 +2,8 @@ module Shared.Components.Forms
 
 open Shared.Components.Base
 open Shared.Components.Datepicker
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import
-open Fable.Import
+open Fable.React
+open Fable.React.Props
 open Shared.Util.Html
 open Shared.Util.ReactHelpers
 

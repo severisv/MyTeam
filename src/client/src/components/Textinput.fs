@@ -1,14 +1,13 @@
 module Client.Components.Textinput
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
 open Shared.Components
 open Shared.Components.Input
 open Shared.Components.Base
+open Client.Util
+open Fetch.Types
 
 type State =
     { IsPosting : bool
@@ -28,11 +27,11 @@ type Textinput(props) =
                              IsTouched = false
                              IsPosting = false })
     
-    let mutable timeout = Browser.window.setTimeout (ignore, 0, [])
+    let mutable timeout = Browser.Dom.window.setTimeout (ignore, 0, [])
     
     member this.debounce fn wait =
-        Browser.window.clearTimeout timeout
-        timeout <- Browser.window.setTimeout (fn, wait, [])
+        Browser.Dom.window.clearTimeout timeout
+        timeout <- Browser.Dom.window.setTimeout (fn, wait, [])
     
     override this.render() =
         let props = this.props
@@ -45,14 +44,14 @@ type Textinput(props) =
                                  IsPosting = true })
                 promise { 
                     let payload : StringPayload = { Value = value }
-                    let! res = putRecord props.Url payload []
+                    let! res = Http.sendRecord HttpMethod.PUT props.Url payload []
                     if not res.Ok then 
                         failwithf "Received %O from server: %O" res.Status res.StatusText
                     this.setState (fun state props -> { state with IsPosting = false })
                     props.OnChange value
                 }
                 |> Promise.catch (fun e -> 
-                       Browser.console.error <| sprintf "%O" e
+                       Browser.Dom.console.error(sprintf "%O" e)
                        this.setState (fun state props -> 
                            { state with Error = true
                                         IsPosting = false }))

@@ -1,8 +1,8 @@
 module Client.Fines.EditRemedyRate
 
 open System
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Fable.Import
 open Shared.Util.ReactHelpers
@@ -92,10 +92,12 @@ let editRemedyRate openButton onEdit rate =
                                                   Size = ButtonSize.Normal
                                                   Text = str "Lagre"
                                                   Endpoint = SubmitButton.Put (sprintf "/api/remedyrates",
-                                                                                Some { rate with 
-                                                                                           Name = state.Form.Name
-                                                                                           Description = state.Form.Description
-                                                                                           Amount = state.Form.Amount |> Number.tryParse |> Option.defaultValue 0 })
+                                                                               Some (fun () ->
+                                                                                    Encode.Auto.toString(0, 
+                                                                                        { rate with 
+                                                                                               Name = state.Form.Name
+                                                                                               Description = state.Form.Description
+                                                                                               Amount = state.Form.Amount |> Number.tryParse |> Option.defaultValue 0 })))
                                                   OnSubmit = Some (fun res ->
                                                                         Decode.Auto.fromString<RemedyRate> res
                                                                         |> function

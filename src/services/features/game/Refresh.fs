@@ -42,7 +42,7 @@ let run next (ctx: HttpContext)  =
                 isLike team.Name
 
             let existingGames = 
-                let serieKamp = (GameType.Seriekamp |> int |> Nullable)
+                let serieKamp = (Events.gameTypeToInt GameType.Seriekamp |> Nullable)
                 query {
                     for game in db.Games do
                     where (
@@ -90,9 +90,9 @@ let run next (ctx: HttpContext)  =
                                                     Opponent = opponent,
                                                     TeamId = season.TeamId,
                                                     EventTeams = et,
-                                                    Type = int EventType.Kamp,
+                                                    Type = Events.eventTypeToInt EventType.Kamp,
                                                     ClubId = team.ClubId,
-                                                    GameType = (GameType.Seriekamp |> int |> Nullable)
+                                                    GameType = ((Events.gameTypeToInt GameType.Seriekamp) |> Nullable)
                                                 )
                                             db.Games.Add(g) |> ignore
                                             g                                            

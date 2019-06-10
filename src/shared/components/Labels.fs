@@ -1,7 +1,7 @@
 module Shared.Components.Labels
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 let error =
     span [ Class "label label-danger"

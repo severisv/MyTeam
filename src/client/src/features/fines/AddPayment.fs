@@ -1,7 +1,7 @@
 module Client.Fines.AddPayment
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
@@ -152,11 +152,13 @@ let element openLink onAdd onDelete =
                                                   Size = ButtonSize.Normal
                                                   Text = str "Legg til"
                                                   Endpoint = SubmitButton.Post (sprintf "/api/payments",
-                                                                                Some {  Id = None
-                                                                                        MemberId = state.Form.MemberId.Value
-                                                                                        Date = state.Form.Date.Value
-                                                                                        Amount = Number.tryParse state.Form.Amount |> Option.defaultValue 0
-                                                                                        Comment = state.Form.Comment })
+                                                                                Some (fun () ->
+                                                                                        Encode.Auto.toString(0,
+                                                                                         {  Id = None
+                                                                                            MemberId = state.Form.MemberId.Value
+                                                                                            Date = state.Form.Date.Value
+                                                                                            Amount = Number.tryParse state.Form.Amount |> Option.defaultValue 0
+                                                                                            Comment = state.Form.Comment })))
                                                   OnSubmit = Some (fun res ->
                                                                         Decode.Auto.fromString<AddPayment> res
                                                                         |> function

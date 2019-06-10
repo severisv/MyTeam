@@ -1,7 +1,7 @@
 module Shared.Components.Icons
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Shared.Domain
 
 type IconSize =
@@ -44,7 +44,6 @@ let gameType (gameType : GameType) =
         | GameType.Norgesmesterskapet -> "flaticon-football42"
         | GameType.Kretsmesterskapet -> "flaticon-football33"
         | GameType.``OBOS Cup`` -> "flaticon-trophy4"
-        | _ -> fa "trophy"
     icon className (string gameType)
 
 let add = icon <| fa "plus"

@@ -1,9 +1,10 @@
 module Shared.Components.Datepicker
 
 open Fable.Core.JsInterop
+open Fable
 open Fable.Core
 open Fable.Import
-open Fable.Helpers.React.Props
+open Fable.React.Props
 open Shared.Util
 open Shared.Util.ReactHelpers
 open Shared
@@ -16,7 +17,7 @@ type DateChangeHandler =
         | OnDateChange of (System.DateTime option -> unit)
         interface IHTMLProp
    
-let DatePicker: React.ComponentClass<obj> = importDefault "react-datepicker"
+let DatePicker: React.ReactElementType<obj> = importDefault "react-datepicker"
 let setDefaultLocale: string -> unit = import "setDefaultLocale" "react-datepicker"
 let no: obj = importDefault "date-fns/locale/nb";
 
@@ -46,7 +47,8 @@ let datePicker (props : IHTMLProp list) =
         { Value = value }
         None
         (fun (props, state, setState) ->                
-            Fable.Helpers.React.from DatePicker
+            React.ReactElementType.create                                 
+                                     DatePicker
                                      (props
                                      |> Html.mergeClasses
                                                    [Type "text"

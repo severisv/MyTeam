@@ -1,29 +1,17 @@
 module Client.Components.SubmitButton
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import
-open Fable.Import.React
-open Fable.PowerPack
-open Fable.PowerPack.Fetch
+open Browser
+open Fable.React
+open Fable.React.Props
+open Fetch
 open Shared.Components
 open Shared
-open Fable.Core.JsInterop
-open Thoth.Json
 open Shared.Components.Base
-
-let sendRecord2<'T> method (url : string) (record : 'T) (properties : RequestProperties list) =
-    let defaultProps =
-        [ RequestProperties.Method method
-       ; requestHeaders [ ContentType "application/json"; Custom ("json-mode", "fable") ]
-       ; RequestProperties.Body !^(Encode.Auto.toString (0, record)) ]
-
-    let init = List.append defaultProps properties
-    GlobalFetch.fetch (RequestInfo.Url url, requestProps init)
+open Client.Util
 
 type Endpoint<'a> =
-    | Put of string * 'a option
-    | Post of string * 'a option
+    | Put of string * (unit -> string) option
+    | Post of string * (unit -> string) option
     | Delete of string
 
 type SubmitButtonState =
@@ -39,7 +27,7 @@ type SubmitError =
 type SubmitButtonProps<'a> =
     { Size : ButtonSize
       IsSubmitted : bool
-      Text : React.ReactElement
+      Text : ReactElement
       ButtonStyle : ButtonType
       SubmittedText : string
       Endpoint : Endpoint<'a>
@@ -62,8 +50,8 @@ type SubmitButton<'a>(props) =
         this.setState (fun _ _ -> Posting)
         promise {
             let! res = match props.Endpoint with
-                       | Post(url, payload) -> sendRecord2 HttpMethod.POST url payload []
-                       | Put(url, payload) -> sendRecord2 HttpMethod.PUT url payload []
+                       | Post(url, payload) -> Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "")) []
+                       | Put(url, payload) -> Http.send HttpMethod.PUT url (payload |> Option.defaultValue (fun () -> "")) []
                        | Delete url -> fetch url [Method HttpMethod.DELETE ]
 
             match (res.Status, props.OnError, res.Ok) with
@@ -86,7 +74,7 @@ type SubmitButton<'a>(props) =
                 | None -> this.setState (fun state props -> Submitted)
         }
         |> Promise.catch (fun e ->
-               Browser.console.error <| sprintf "%O" e
+               Dom.console.error (sprintf "%O" e)
                match props.OnError with
                | Some onError ->
                    this.setState (fun _ _ -> Error)

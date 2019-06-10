@@ -1,9 +1,9 @@
 module Client.Components.Modal
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import
-open Fable.Import.React
+open Browser.Types
+open Fable
+open Fable.React
+open Fable.React.Props
 open Shared.Components
 open Shared.Components.Base
 
@@ -12,7 +12,7 @@ type State =
     { IsVisible : bool }
 
 type Props =
-    { OpenButton : (React.MouseEvent -> unit) -> React.ReactElement
+    { OpenButton : (MouseEvent -> unit) -> React.ReactElement
       Content : (unit -> unit) -> React.ReactElement }
 
 let openModal setState _ = setState (fun state props -> { state with IsVisible = true })

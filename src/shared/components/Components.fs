@@ -1,7 +1,7 @@
 module Shared.Components.Base
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Shared.Util
 open ReactHelpers
 open Fable.Core

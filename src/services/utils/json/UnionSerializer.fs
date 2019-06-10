@@ -30,13 +30,15 @@ type IdiomaticDuConverter() =
         let unionType = value.GetType()
         let case, fields = FSharpValue.GetUnionFields(value, unionType)
         let allCasesHaveValues = unionCases |> Seq.forall (fun c -> c.GetFields() |> Seq.length > 0)
+        let noCasesHaveValues = unionCases |> Seq.forall (fun c -> c.GetFields() |> Seq.length = 0)
 
-        match unionCases.Length, fields, allCasesHaveValues with
-        | 2, [||], false -> writer.WriteNull()
-        | 1, [| singleValue |], _
-        | 2, [| singleValue |], false -> (serializer, writer) |> writeValue singleValue
-        | 1, fields, _
-        | 2, fields, false -> 
+        match unionCases.Length, fields, allCasesHaveValues, noCasesHaveValues with
+        | 2, [||], false, _ -> writer.WriteNull()
+        | 1, [| singleValue |], _, _
+        | 2, [| singleValue |], false, _ -> (serializer, writer) |> writeValue singleValue
+        | _, _, false, true -> (serializer, writer) |> writeValue (string value)
+        | 1, fields, _, _
+        | 2, fields, false, _ -> 
             writer.WriteStartObject()
             (serializer, writer) |> writeProperties fields
             writer.WriteEndObject()

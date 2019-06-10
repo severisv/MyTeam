@@ -1,7 +1,7 @@
 module Client.Fines.Payments
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
 open Client.Components.Textarea
 open Shared.Util.ReactHelpers

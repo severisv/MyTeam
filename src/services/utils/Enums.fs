@@ -3,9 +3,10 @@ module MyTeam.Enums
 open System
 
 let getValues<'T>() =
-    Enum.GetValues(typeof<'T>)
-    |> Seq.cast<'T>
-    |> Seq.toList
+    let cases = FSharp.Reflection.FSharpType.GetUnionCases(typeof<'T>)
+    [ for c in cases do 
+         yield FSharp.Reflection.FSharpValue.MakeUnion(c, [| |]) :?> 'T
+    ]
 
 let tryParse<'T> value : Result<'T, string> =
     if not (String.IsNullOrEmpty value) then 
@@ -28,3 +29,11 @@ let toNullableInt (v : Option<'T> when 'T :> Enum) =
     | Some x when Enum.IsDefined(typeof<'T>, x) -> 
         Nullable(LanguagePrimitives.EnumToValue(x))
     | _ -> Nullable()
+
+
+open Microsoft.FSharp.Reflection
+
+let fromString<'a> (s:string) =
+    match FSharpType.GetUnionCases typeof<'a> |> Array.filter (fun case -> case.Name = s) with
+    |[|case|] -> FSharpValue.MakeUnion(case,[||]) :?> 'a
+    |_ -> failwithf "Ugyldig verdi for Enum %s: '%s'" typeof<'a>.FullName s

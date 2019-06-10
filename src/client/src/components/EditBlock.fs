@@ -1,17 +1,13 @@
 module Client.Components.EditBlock
 
-open Fable.Helpers.React
-open Fable.Import
-open Fable.Import.React
+open Fable.React
 open Shared.Components
-
-
 
 type State =
     { IsInEditMode : bool }
 
 type Props =
-    { Render : bool -> React.ReactElement }
+    { Render : bool -> ReactElement }
 
 let toggleEditMode setState _ =
     setState (fun state props -> { state with IsInEditMode = not state.IsInEditMode })

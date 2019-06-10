@@ -18,18 +18,18 @@ let list clubId db =
     |> OkResult
 
 [<CLIMutable>]
-type SetStatus = { Status : Status }
+type SetStatus = { Status : string }
 let setStatus clubId id next (ctx : HttpContext) =
         let model = ctx.BindJson<SetStatus>()
-        Persistence.setStatus ctx.Database clubId id model.Status
+        Persistence.setStatus ctx.Database clubId id (Enums.fromString model.Status)
         |> Tenant.clearUserCache ctx clubId
         next ctx
 
 [<CLIMutable>]
-type ToggleRole = { Role : Role }
+type ToggleRole = { Role : string }
 let toggleRole clubId id next (ctx : HttpContext) =
         let model = ctx.BindJson<ToggleRole>()
-        Persistence.toggleRole ctx.Database clubId id model.Role
+        Persistence.toggleRole ctx.Database clubId id (Enums.fromString model.Role)
         |> Tenant.clearUserCache ctx clubId
         next ctx
 

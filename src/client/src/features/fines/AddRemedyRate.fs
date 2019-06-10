@@ -1,10 +1,9 @@
 module Client.Fines.AddRemedyRate
 
 open System
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Client.Components
-open Fable.Import
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared.Validation
@@ -128,10 +127,12 @@ let addRemedyRate openButton onAdd onDelete =
                                                   Size = ButtonSize.Normal
                                                   Text = str "Legg til"
                                                   Endpoint = SubmitButton.Post (sprintf "/api/remedyrates",
-                                                                                Some { Id = Guid.Empty
-                                                                                       Name = state.Form.Name
-                                                                                       Description = state.Form.Description
-                                                                                       Amount = state.Form.Amount |> Number.tryParse |> Option.defaultValue 0 })
+                                                                                Some (fun () ->
+                                                                                        Encode.Auto.toString(0, 
+                                                                                         { Id = Guid.Empty
+                                                                                           Name = state.Form.Name
+                                                                                           Description = state.Form.Description
+                                                                                           Amount = state.Form.Amount |> Number.tryParse |> Option.defaultValue 0 })))
                                                   OnSubmit = Some (fun res ->
                                                                         Decode.Auto.fromString<RemedyRate> res
                                                                         |> function

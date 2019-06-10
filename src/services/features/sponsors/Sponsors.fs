@@ -1,5 +1,6 @@
 module MyTeam.Sponsors
 
+open Fable.React
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
@@ -8,7 +9,7 @@ open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Views
-open Fable.Helpers.React.Props
+open Fable.React.Props
 open MyTeam.Views.BaseComponents
 
 type Sponsors = string
@@ -56,7 +57,7 @@ let edit (club : Club) (user : User option) (ctx : HttpContext) =
                                      _class "form-control tinymce"
                                      _placeholder "Innhold" ] [ rawText sponsors ] 
                         br []
-                        !!(btn [Primary; ButtonSize.Normal; Type "submit"] [Fable.Helpers.React.str "Lagre"])
+                        !!(btn [Primary; ButtonSize.Normal; Type "submit"] [Helpers.str "Lagre"])
                       ] ]
         ]
         |> layout club user (fun o -> { o with Title = "Støttespillere"; Scripts = MyTeam.News.Pages.Components.tinyMceScripts }) ctx

@@ -38,7 +38,7 @@ let getGame: GetGame =
                         AwayScore = awayScore |> toOption
                         DateTime = dateTime
                         Location = location
-                        Type = enum<GameType> (gameType.Value)
+                        Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
@@ -76,7 +76,7 @@ let listGames: ListGames =
                         AwayScore = awayScore |> toOption
                         DateTime = dateTime
                         Location = location
-                        Type = enum<GameType> (gameType.Value)
+                        Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
@@ -98,7 +98,7 @@ let getRecentAttendance : GetRecentAttendance =
                 for et in db.EventTeams do
                 where (
                     et.TeamId = teamId &&
-                    et.Event.Type = (int EventType.Trening) &&
+                    et.Event.Type = (Events.eventTypeToInt EventType.Trening) &&
                     et.Event.DateTime <= now &&
                     et.Event.DateTime >= periodStart &&
                     et.Event.Voluntary = false
