@@ -35,7 +35,7 @@ export default class ShowGame extends React.Component {
           ...player.details,
           teamIds: player.teams,
           roles: player.roles,
-        })),
+        }))
       })
       this.setState({
         addPlayerId: this.getPlayersNotInSquad()[0].id,
@@ -161,13 +161,15 @@ export default class ShowGame extends React.Component {
   }
 
   getPlayerName = playerId => {
-    const squad = this.state.players.filter(player => player.id == playerId)
-    if (squad.length > 0) return squad[0].firstName
+    if (this.state.players.length <= 0) return ''
+    const player = this.state.players.find(player => player.id == playerId)
+    if (player) return player.firstName
     return 'Selvmål'
   }
   getPlayerShortName = playerId => {
-    const squad = this.state.players.filter(player => player.id == playerId)
-    if (squad.length > 0) return `${squad[0].firstName} ${squad[0].lastName}`
+    if (this.state.players.length <= 0) return ''
+    const player = this.state.players.find(player => player.id == playerId)
+    if (player) return `${player.firstName} ${player.lastName}`
     return 'Selvmål'
   }
   getPlayerUrlName = playerId => {
