@@ -1,10 +1,8 @@
 module MyTeam.Events.Api
 
 open MyTeam
-open Shared
 open Shared.Domain
 open MyTeam.Models
-open MyTeam.Models.Domain
 open Shared.Components.Input
 
 type EventId = Guid
@@ -31,4 +29,4 @@ let setDescription clubId eventId (ctx : HttpContext) (model: StringPayload) =
         else
             event.Description <- model.Value
             db.SaveChanges() |> ignore
-            OkResult()
+            OkResult None
