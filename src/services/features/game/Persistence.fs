@@ -41,8 +41,8 @@ module Persistence =
                     OkResult model
 
 
-    let publishSquad: PublishSquad = 
-        fun db clubId gameId ->
+    let publishSquad = 
+        fun (db: Database) clubId gameId ->
             let (ClubId clubId) = clubId
 
             db.Games 
@@ -51,7 +51,7 @@ module Persistence =
                 | Some a ->
                     a.IsPublished <- true
                     db.SaveChanges() |> ignore
-                    OkResult ()
+                    OkResult None
 
                 | None ->
                     NotFound

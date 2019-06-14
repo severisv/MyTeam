@@ -45,8 +45,6 @@ type Year = int
 type GetRecentAttendance = Database -> TeamId -> TeamAttendance list
 type GetSquad = Database -> GameId -> Member list
 type SelectPlayer = Database -> ClubId -> GameId -> MemberId -> CheckboxPayload -> HttpResult<CheckboxPayload>
-type PublishSquad = Database -> ClubId -> GameId -> HttpResult<unit>
-
 type GetGame = Database -> ClubId -> GameId -> Game option
 type ListGameYears = Database -> TeamId -> Year list
 type ListGames = Database -> TeamId -> Year -> Game list
