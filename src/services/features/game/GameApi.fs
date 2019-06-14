@@ -53,8 +53,9 @@ module Api =
     let publishSquad = 
         fun clubId gameId (ctx:HttpContext) _ ->
             Persistence.publishSquad ctx.Database clubId gameId
-            |> Results.map (fun _ -> 
+            |> Results.map (fun r -> 
                                 Notifications.clearCache ctx clubId
+                                r
                             )
 
 
