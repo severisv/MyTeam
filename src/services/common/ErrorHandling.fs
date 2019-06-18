@@ -41,9 +41,13 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
 
 let logNotFound next (ctx: HttpContext) =
 
-    if  not <| String.IsNullOrEmpty(ctx.Request.Headers.["Referer"] |> string) 
+    if  not <| String.IsNullOrEmpty(ctx.Request.Headers.["Referer"] |> string)
         &&
-        ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com"; "Lynt.cz"; "DotBot" ]
+        ["http://wamkam.no" ]
+        |> Seq.exists (ctx.Request.Headers.["Referer"] |> string |> contains)
+        |> not 
+        &&
+        ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com"; "Lynt.cz"; "DotBot"; "uptimebot" ]
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not 
         && 
