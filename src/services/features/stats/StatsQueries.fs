@@ -94,8 +94,8 @@ module StatsQueries =
                        
             query {
                  for p in result do
-                 sortByDescending p.Games
-                 thenByDescending (p.Goals + p.Assists)
+                 sortByDescending (match selectedYear with | AllYears -> p.Games | _ ->  (p.Goals + p.Assists))
+                 thenByDescending (match selectedYear with | Year _ -> p.Games | _ ->  (p.Goals + p.Assists))
                  thenByDescending p.YellowCards
                  thenByDescending p.RedCards
              } |> Seq.toList    
