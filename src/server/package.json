@@ -32,7 +32,7 @@
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
-    "gulp-uglify": "^1.5.1",
+    "gulp-uglify": "^3.0.2",
     "jquery": "^3.4.0",
     "jquery.cloudinary": "1.0.25",
     "less": "^3.8.1",
