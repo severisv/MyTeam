@@ -47,6 +47,11 @@ Target.create "Restore-frontend" <| fun _ ->
 
 
 Target.create "Copy-client-libs" <| fun _ ->
+    Shell.copyDir
+        (sprintf "%s/wwwroot/compiled/lib/tinymce" webDir)
+        (sprintf "%s/node_modules/tinymce" webDir)
+        (fun _ -> true)
+        
     Npm.run "copy-libs" npmOptions
 
 Target.create "Build-frontend" <| fun _ ->

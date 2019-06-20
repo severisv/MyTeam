@@ -112,7 +112,7 @@ let cloudinaryScripts (options: CloudinarySettings) =
     let signature = Sha1.hashStringForUTF8String queryString
 
     [
-        script [_src "/compiled/lib/cloudinary.bundle.js" ][]
+        script [_src "/cloudinary.bundle.js" ][]
         script [] [
 
             rawText 

@@ -1,6 +1,6 @@
 ﻿@using System.Threading.Tasks
 @model MyTeam.ViewModels.Shared.CloudinaryConfiguration
-<script src="~/compiled/lib/cloudinary.bundle.js"></script>
+<script src="~/cloudinary.bundle.js"></script>
 <script>
 
     $.cloudinary.config({ cloud_name: '@Model.CloudName', api_key: '@Model.ApiKey', signature: '@Model.Signature' });
