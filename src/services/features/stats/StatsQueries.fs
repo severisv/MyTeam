@@ -78,8 +78,7 @@ module StatsQueries =
                     select (p.Id, p.FacebookId, p.FirstName, p.LastName, p.ImageFull, p.UrlName)
                 } |> Seq.toList
                   |> List.map (fun (id, facebookId, firstName, lastName, imageFull, urlName) ->
-                            {
-                                FacebookId = facebookId
+                            {   FacebookId = facebookId
                                 FirstName = firstName
                                 LastName = lastName
                                 UrlName = urlName                                  
@@ -88,9 +87,7 @@ module StatsQueries =
                                 Assists = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.Goal && ge.AssistedById = Nullable id) |> Seq.length
                                 YellowCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.YellowCard && ge.PlayerId = Nullable id) |> Seq.length
                                 RedCards = gameEvents |> List.filter (fun ge -> ge.Type = GameEventType.RedCard && ge.PlayerId = Nullable id) |> Seq.length
-                                Image = imageFull
-                            }
-                   )
+                                Image = imageFull })
                        
             query {
                  for p in result do
