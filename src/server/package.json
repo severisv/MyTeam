@@ -33,7 +33,7 @@
     "react-datepicker": "^0.60.2",
     "react-dom": "15.6.2",
     "tinymce": "4.4.0",
-    "typescript": "^2.6.2",
+    "typescript": "^3.5.2",
     "webpack": "^3.12.0",
     "whatwg-fetch": "^2.0.3",
     "wildcards-entry-webpack-plugin": "^2.1.0"
