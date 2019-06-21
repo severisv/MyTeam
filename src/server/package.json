@@ -8,13 +8,6 @@
     "watch-fable": "cd ../client/src && dotnet fable webpack -- -w --config config/webpack.dev.js",
     "copy-libs": "webpack -p --config webpack.lib.config.js"
   },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.5.1"
-  },
   "dependencies": {
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^6.26.3",
@@ -36,12 +29,12 @@
     "moment": "^2.24.0",
     "natives": "^1.1.6",
     "path": "^0.12.7",
-    "react": "15.2.1",
+    "react": "15.6.2",
     "react-datepicker": "^0.60.2",
-    "react-dom": "15.2.1",
+    "react-dom": "15.6.2",
     "tinymce": "4.4.0",
     "typescript": "^2.6.2",
-    "webpack": "^3.10.0",
+    "webpack": "^3.12.0",
     "whatwg-fetch": "^2.0.3",
     "wildcards-entry-webpack-plugin": "^2.1.0"
   }
