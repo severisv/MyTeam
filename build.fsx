@@ -121,14 +121,13 @@ Target.create "Deploy" <| fun _ ->
     let username = Environment.environVar "DEPLOY_ENV_NAME"
     let password = Environment.environVar "DEPLOY_PWD"
 
-    Kudu.zipDeploy ({ 
-                    Url = System.Uri <| sprintf "https://%s.scm.azurewebsites.net/" username
-                    UserName = username
-                    Password = password
-                    PackageLocation = artifact
-                  }) 
+    Kudu.zipDeploy ({ Url = System.Uri <| sprintf "https://%s.scm.azurewebsites.net/" username
+                      UserName = username
+                      Password = password
+                      PackageLocation = artifact }) 
 
 
+Target.create "Dev" ignore
 
 "Clean"
 ==> "Restore-frontend"
@@ -146,5 +145,11 @@ Target.create "Deploy" <| fun _ ->
 "Write-Asset-Hashes"
 ==> "Create-Artifact"
 ==> "Deploy"
+
+"Build-frontend"
+==> "Dev"
+
+"Migrate-database"
+==> "Dev"
 
 Target.runOrDefault "Deploy"
