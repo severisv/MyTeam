@@ -9,7 +9,7 @@
     "copy-libs": "webpack -p --config webpack.lib.config.js"
   },
   "dependencies": {
-    "awesome-typescript-loader": "^4.0.1",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
