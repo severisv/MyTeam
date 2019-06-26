@@ -1,7 +1,6 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Wildcards = require('wildcards-entry-webpack-plugin')
-const { CheckerPlugin } = require('awesome-typescript-loader')
 
 module.exports = {
   entry: Wildcards.entry('./client/scripts/views/**/*.js', {
@@ -20,11 +19,6 @@ module.exports = {
 
   module: {
     loaders: [
-      {
-        test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
-        exclude: /node_modules/,
-      },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
@@ -68,20 +62,19 @@ module.exports = {
             options: {
               hash: 'sha512',
               digest: 'hex',
-              name: 'fonts/[name].[ext]',
+              name: 'fonts/[name].[ext]'
             },
           },
         ],
       },
-    ],
+    ]
   },
 
   plugins: [
     new Wildcards(),
-    new CheckerPlugin(),
     new ExtractTextPlugin({
       filename: 'site.bundle.css',
-      allChunks: false,
-    }),
-  ],
+      allChunks: false
+    })
+  ]
 }

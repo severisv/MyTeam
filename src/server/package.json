@@ -9,7 +9,6 @@
     "copy-libs": "webpack -p --config webpack.lib.config.js"
   },
   "dependencies": {
-    "awesome-typescript-loader": "^4.0.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -33,7 +32,6 @@
     "react-datepicker": "^0.60.2",
     "react-dom": "15.6.2",
     "tinymce": "5.0.9",
-    "typescript": "^3.5.2",
     "webpack": "^3.12.0",
     "whatwg-fetch": "^3.0.0",
     "wildcards-entry-webpack-plugin": "^2.1.0"
