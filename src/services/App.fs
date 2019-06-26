@@ -164,6 +164,7 @@ module App =
                         <| choose [ 
                             GET >=> choose [ 
                                 route "" >=> (Members.Api.list club.Id |> jsonGet)
+                                route "/compact" >=> (Members.Api.listCompact club.Id |> jsonGet)
                             ]
                             PUT >=> 
                                 mustBeInRole [Role.Admin; Role.Trener] >=> 

@@ -17,6 +17,12 @@ let list clubId db =
     Members.list db clubId
     |> OkResult
 
+let listCompact clubId (db: Database) =
+    let (ClubId clubId) = clubId
+    Members.selectMembers (db.Members.Where(fun m -> m.ClubId = clubId))
+    |> OkResult
+
+
 [<CLIMutable>]
 type SetStatus = { Status : string }
 let setStatus clubId id next (ctx : HttpContext) =

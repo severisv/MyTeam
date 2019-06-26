@@ -29,13 +29,9 @@ export default class ShowGame extends React.Component {
         loadingEvents: false,
       })
     })
-    get('/api/members').then(players => {
+    get('/api/members/compact').then(players => {
       this.setState({
-        players: players.map(player => ({
-          ...player.details,
-          teamIds: player.teams,
-          roles: player.roles,
-        }))
+        players: players
       })
       this.setState({
         addPlayerId: this.getPlayersNotInSquad()[0].id,
