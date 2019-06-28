@@ -23,13 +23,11 @@ type Modal(props) =
     do base.setInitState ({ IsVisible = false })
     override this.render() =
         let state = this.state
-        let opena = openModal this.setState
         fragment [] [ this.props.OpenButton <| openModal this.setState
                       (if state.IsVisible then 
                            div [ Class "modal" ] 
                                [ div [ Class "modal-overlay"
-                                       OnClick <| closeModal this.setState ] []
-                                 
+                                       OnClick <| closeModal this.setState ] []                                 
                                  div [ Class "modal-wrapper" ] 
                                      [ div [ Class "modal-window" ] 
                                            [ closeButton <| closeModal this.setState

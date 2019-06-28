@@ -17,7 +17,6 @@ global.applyScopedJsComponents = function (selector) {
   $.tablesorter.defaults.sortInitialOrder = 'desc'
   $scope.find('table.tablesorter').tablesorter()
   $scope.find('a.mt-popover').popover({ trigger: 'hover' })
-  applyConfirmDialogListeners($scope)
   applyActiveLinkSwapper($scope)
   applyAjaxLinkActions($scope)
   applySelectLinkListeners($scope)
@@ -67,21 +66,6 @@ function applySlideDownMenuListeners() {
     subMenu.slideUp(ANIMATION_DURATON)
     element.data('isFocused', false)
     setTimeout(() => {}, ANIMATION_DURATON)
-  })
-}
-
-// Confirm dialog
-function applyConfirmDialogListeners($scope) {
-  $scope.find('a.confirm-dialog').click(function (e) {
-    e.preventDefault()
-    const element = $(this)
-    const message = element.attr('data-message')
-
-    bootbox.confirm(message, (result) => {
-      if (result === true) {
-        window.location = element.attr('href')
-      }
-    })
   })
 }
 

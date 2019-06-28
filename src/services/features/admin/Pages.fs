@@ -41,7 +41,7 @@ let invitePlayers club user (ctx: HttpContext) =
     
     [
       mtMain [_class "mt-main--narrow"] [
-        Client.view clientView { MemberRequests = memberRequests; ImageOptions = Images.getOptions ctx }
+        Client.viewOld clientView { MemberRequests = memberRequests; ImageOptions = Images.getOptions ctx }
       ]
       Admin.coachMenu ]
     |> layout club user (fun o -> { o with Title = "Inviter spillere" }) ctx

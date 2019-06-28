@@ -56,8 +56,8 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
              | Member memberId -> m.Member.Id = memberId
              | AllMembers -> true)
          |> List.sortByDescending (fun fine -> fine.Issued)
-        
-     Client.view2
+     
+     [ Client.view
             Client.Fines.List.containerId
             Client.Fines.List.element
             {
@@ -68,7 +68,6 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
                 Years = years
                 Fines = fines
                 ImageOptions = Images.getOptions ctx
-                Year = year }
-     
+                Year = year } ]
      |> layout club (Some user) (fun o -> { o with Title = "Bøter" }) ctx
      |> OkResult

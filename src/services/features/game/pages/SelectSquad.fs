@@ -63,7 +63,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
         let recentAttendance = Queries.getRecentAttendance db game.TeamId
         
         [
-            Client.view clientView 
+            Client.viewOld clientView 
                         {
                             Game = game
                             Signups = signups

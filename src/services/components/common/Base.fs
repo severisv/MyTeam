@@ -10,6 +10,8 @@ module BaseComponents =
     let whitespace = rawText "&nbsp;"
 
     let _empty = attr "" ""
+    
+    let fragment = renderHtmlNodes >> rawText
 
     let antiforgeryToken ctx =
         let token = Antiforgery.getToken ctx

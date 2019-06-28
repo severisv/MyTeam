@@ -4,7 +4,6 @@ open System
 open Server
 open Giraffe
 open Giraffe.GiraffeViewEngine
-open Shared.Components
 open MyTeam
 open Shared
 open MyTeam.Validation
@@ -17,13 +16,13 @@ open MyTeam.Views
 open Microsoft.Extensions.Options
 open Server.Common.News
 open MyTeam.Views.BaseComponents
+open Client.News.DeleteArticle
 
-
-let private editView (ctx: HttpContext) (club: Club) user name (article: ArticleModel) published validationErrors =
+let private editView (ctx: HttpContext) (club: Club) user (name: string option) (article: ArticleModel) published validationErrors =
     let db = ctx.Database
     let cloudinarySettings = ctx.GetService<IOptions<CloudinarySettings>>()
     let latestGames = Queries.listRecentGames db club.Id article.Id published
-
+    
     [
         mtMain [] [
             block [] [
@@ -37,16 +36,8 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
                     input [ _name "id"; _type "hidden"; _value <| string article.Id]
 
                     div [ _class "form-file-upload-wrapper btn btn-default" ] [ 
-                        input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]
-                      ]
-                    name |> Option.map (fun name -> 
-                                                a [ _class "btn btn-danger pull-right confirm-dialog"
-                                                    _href <| sprintf "/nyheter/slett/%s" name
-                                                    attr "data-message" "Er du sikker på at du vil slette artikkelen?" ][ 
-                                                    !!Icons.delete
-                                                  ])
-                         |> Option.defaultValue empty                                    
-                    
+                        input [ _name "file"; _type "file"; _class "cloudinary-fileupload pull-left"; attr "data-cloudinary-field" "imageUrl" ]]
+                    Client.view "delete-article-modal" deleteArticle { Name = name; Title = article.Headline }             
                     div [ _class "clearfix" ] []
                     br [] 
                     ul [ _class "text-danger" ] 
@@ -118,10 +109,10 @@ let private editView (ctx: HttpContext) (club: Club) user name (article: Article
         ]    
     ]
     |> layout club (Some user) (fun o -> { o with 
-                                            Title = name |> Option.map(fun _ -> "Rediger artikkel") |> Option.defaultValue "Skriv ny artikkel"
-                                            Scripts = Components.tinyMceScripts @ Components.cloudinaryScripts cloudinarySettings.Value
-                                    }
-                        ) ctx
+                                            Title = name |> Option.map(fun _ -> "Rediger artikkel")
+                                                         |> Option.defaultValue "Skriv ny artikkel"
+                                            Scripts = Components.tinyMceScripts @
+                                                      Components.cloudinaryScripts cloudinarySettings.Value }) ctx
     |> OkResult
 
 
@@ -157,10 +148,8 @@ let editPost (club: Club) (user: User) name (ctx: HttpContext) =
         } 
     
     validate
-        [        
-           <@ form.Headline @> >- [isRequired]
-           <@ form.Content @> >- [isRequired]
-        ]
+        [ <@ form.Headline @> >- [isRequired]
+          <@ form.Content @> >- [isRequired]]
     |> function
     | Ok () -> 
         Persistence.saveArticle db club.Id name form
@@ -219,10 +208,7 @@ let createPost (club: Club) (user: User) (ctx: HttpContext) =
                 editView ctx club user None article published validationErrors
 
 let delete (club: Club) name (ctx: HttpContext) =
-    
-    let db = ctx.Database
-        
-    Persistence.deleteArticle db club.Id name
+    Persistence.deleteArticle ctx.Database club.Id name
     |> Results.bind (fun _ -> Redirect "/")
             
 

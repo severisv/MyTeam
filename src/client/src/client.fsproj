@@ -27,6 +27,7 @@
     <Compile Include="features\fines\RemedyRates.fs" />
     <Compile Include="features\gameplan\Formation.fs" />
     <Compile Include="features\gameplan\GamePlan.fs" />
+    <Compile Include="features\news\DeleteArticle.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

@@ -63,7 +63,7 @@ module Table =
                                 div [] [
                                     (if (user |> Option.map (fun (user: User) -> user.IsInRole [Role.Admin])
                                               |> Option.defaultValue false) then
-                                        Client.view editView 
+                                        Client.viewOld editView 
                                                     { Title = t.Title
                                                       Team = selectedTeam.ShortName
                                                       Year = selectedYear
@@ -112,7 +112,7 @@ module Table =
                                 block [] [
                                         ul [_class "nav nav-list"] [ 
                                             li [_class "nav-header"] [encodedText "Admin"]
-                                            li [] [Client.view createView { Team = selectedTeam.ShortName }] 
+                                            li [] [Client.viewOld createView { Team = selectedTeam.ShortName }] 
                                         ]
                                 ]       
                             else empty)                                                

@@ -10,11 +10,11 @@ let view (club : Club) (user : User) (ctx : HttpContext) =
     let db = ctx.Database     
     let rates = Api.listRemedyRates club db
     
-    Client.view2
+    [ Client.view
         containerId
         element
         { Rates = rates
           Path = ctx.Request.Path.Value
-          User = user }
+          User = user }]
     |> layout club (Some user) (fun o -> { o with Title = "Bøtesatser" }) ctx
     |> OkResult

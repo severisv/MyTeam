@@ -56,6 +56,6 @@ let view (club : Club) (user : User) gameId (ctx : HttpContext) =
                           not <| user.IsInRole [Role.Trener]
                           -> NotFound
     | Some model -> 
-        [ Client.view clientView model ]
+        [ Client.viewOld clientView model ]
         |> layout club (Some user) (fun o -> { o with Title = "Bytteplan" }) ctx
         |> OkResult

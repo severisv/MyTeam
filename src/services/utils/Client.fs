@@ -4,11 +4,12 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 
-let view id model =
+let viewOld id model =
     div [ _id id
           attr Interop.modelAttributeName (model |> Json.fableSerialize) ] []
 
-let view2 containerId comp model =
+let view containerId comp model =
+
     [
         script []
             [ rawText (sprintf """
@@ -20,3 +21,5 @@ let view2 containerId comp model =
             rawText <| Fable.ReactServer.renderToString (comp model [])         
         ]
     ]
+    |> renderHtmlNodes
+    |> rawText

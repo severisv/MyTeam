@@ -74,7 +74,7 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
          } |> Seq.tryHead
            |> Option.defaultValue ""
      
-     Client.view2
+     [ Client.view
            paymentsView           
            Client.Fines.Payments.element
              {
@@ -86,7 +86,6 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
                 Payments = payments
                 ImageOptions = Images.getOptions ctx
                 Year = year
-                PaymentInformation = paymentInformation }
-     
+                PaymentInformation = paymentInformation }]     
      |> layout club (Some user) (fun o -> { o with Title = "Innbetalinger" }) ctx
      |> OkResult

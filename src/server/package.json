@@ -1,6 +1,5 @@
 {
-  "name": "myteam",
-  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "webpack -p",
     "build-fable": "cd ../client/src && dotnet fable webpack -- -p --config config/webpack.prod.js",
@@ -16,7 +15,6 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "bootbox": "^5.1.3",
     "bootstrap": "^3.3.6",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
