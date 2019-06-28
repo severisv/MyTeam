@@ -1,11 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack --mode production",
     "build-fable": "cd ../client/src && dotnet fable webpack -- -p --config config/webpack.prod.js",
-    "watch": "webpack -w",
+    "watch": "webpack -w --mode development",
     "watch-fable": "cd ../client/src && dotnet fable webpack -- -w --config config/webpack.dev.js",
-    "copy-libs": "webpack -p --config webpack.lib.config.js"
+    "copy-libs": "webpack --mode production --config webpack.lib.config.js"
   },
   "dependencies": {
     "babel-core": "^6.26.3",
@@ -16,22 +16,22 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.6",
-    "css-loader": "^0.28.11",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^2.0.0",
+    "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.7.0",
     "moment": "^2.24.0",
     "natives": "^1.1.6",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "path": "^0.12.7",
     "react": "15.6.2",
     "react-datepicker": "^0.60.2",
     "react-dom": "15.6.2",
     "tinymce": "4.4.0",
-    "webpack": "^3.12.0",
-    "whatwg-fetch": "^3.0.0",
-    "wildcards-entry-webpack-plugin": "^2.1.0"
+    "webpack": "^4.35.0",
+    "whatwg-fetch": "^3.0.0"
   }
 }

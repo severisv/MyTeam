@@ -51,9 +51,9 @@ module Pages =
                 meta [ _title <| club.ShortName + (Strings.hasValue o.Title =? (" - " + o.Title, "")) ]
                 Strings.hasValue o.MetaDescription =? (meta [ _name "description"; _content o.MetaDescription ], emptyText)
                 title [] [ encodedText (o.MetaTitle =?? (sprintf "%s - %s" club.Name o.Title)) ]
+                link [ _rel "stylesheet"; _href <| sprintf "/compiled/site.bundle.css?v%s" assetHashes.MainCss ]
                 link [ _rel "icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
                 link [ _rel "apple-touch-icon"; _type "image/png"; _href <| getImage id (club.Favicon =?? club.Logo) ]
-                link [ _rel "stylesheet"; _href <| sprintf "/compiled/site.bundle.css?v%s" assetHashes.MainCss ]
                 isProduction =? (Analytics.script, empty)
             ]
             body [] ([

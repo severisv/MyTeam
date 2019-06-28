@@ -1,11 +1,12 @@
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const Wildcards = require('wildcards-entry-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  entry: Wildcards.entry('./client/scripts/views/**/*.js', {
-    app: ['babel-polyfill', 'whatwg-fetch', './client/scripts/app.js'],
-  }),
+  entry: {
+    app: ['babel-polyfill', 'whatwg-fetch', './client/scripts/app.js',  './client/scripts/views/listEvents.js']
+  },
 
   output: {
     path: path.resolve('./wwwroot/compiled'),
@@ -18,7 +19,7 @@ module.exports = {
   devtool: 'source-map',
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
@@ -26,20 +27,16 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: { sourceMap: true, minimize: true },
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {    
+              hmr: process.env.NODE_ENV === 'development'
             },
-            {
-              loader: 'less-loader',
-              options: {
-                options: { sourceMap: true },
-              },
-            },
-          ],
-        }),
+          },
+          'css-loader',
+          { loader: 'less-loader', options: { sourceMap: true }}
+        ]
       },
       {
         test: /\.(jpg|png|svg)$/,
@@ -69,12 +66,12 @@ module.exports = {
       },
     ]
   },
-
   plugins: [
-    new Wildcards(),
-    new ExtractTextPlugin({
-      filename: 'site.bundle.css',
-      allChunks: false
+    new MiniCssExtractPlugin({
+      filename: 'site.bundle.css'
     })
-  ]
+  ],
+  optimization: {
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+  }
 }
