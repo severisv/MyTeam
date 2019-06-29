@@ -9,7 +9,7 @@ open MyTeam.Common.Features
 open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Games
-open Shared.Features.Games.SelectSquad
+open Client.Games.SelectSquad
 open MyTeam.Views.BaseComponents
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =

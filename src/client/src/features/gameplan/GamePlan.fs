@@ -11,15 +11,31 @@ open Shared.Components
 open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
-open Shared.Features.Games.GamePlan
 open Shared.Domain.Members
 open Shared.Components.Input
 open Thoth.Json
 open Shared.Util
 open Client.GamePlan.Formation
 open Client.Util
+open System
+open Shared.Image
+open Fable.React.Props
 
 
+
+type Model = {
+    GameId: Guid
+    Team: string
+    Opponent: string
+    GamePlanIsPublished: bool
+    GamePlan: string option
+    Players: Member list
+    ImageOptions: CloudinaryOptions
+    Formation: Formations
+}
+
+let clientView = "gameplan"
+let modelAttribute = "model"
 
 
 type Time = int

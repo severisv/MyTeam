@@ -6,8 +6,7 @@ open Shared.Domain
 open MyTeam.Common.Features.Members
 open System.Linq
 open System
-open Shared.Features.Games.SelectSquad
-
+open Client.Games.SelectSquad
 
 let getSquad : GetSquad = 
     fun db gameId ->
@@ -29,8 +28,7 @@ let getGame: GetGame =
                     select (game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
                  }
                  |> Seq.map (fun (name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->
-                    {
-                        Id = gameId
+                    {   Id = gameId
                         IsHomeTeam = isHomeTeam
                         HomeTeam = isHomeTeam =? (name, opponent)
                         AwayTeam = isHomeTeam =? (opponent, name)
@@ -40,9 +38,7 @@ let getGame: GetGame =
                         Location = location
                         Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
-                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
-                    }                    
-                 )
+                        MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)  })
                  |> Seq.tryHead
 
 

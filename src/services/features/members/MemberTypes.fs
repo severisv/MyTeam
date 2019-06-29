@@ -1,12 +1,10 @@
 namespace MyTeam.Members
 
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
-open System
 open MyTeam.Common.Features.Members
-open Shared.Features.Admin.AddPlayers
+open Client.Admin.AddPlayers
 
 type ListMembersDetailed = Database -> ClubId -> MemberDetails list
 type SetStatus = Database -> ClubId -> MemberId -> PlayerStatus -> UserId

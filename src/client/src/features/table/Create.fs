@@ -9,10 +9,14 @@ open Shared
 open Client.Components
 open Shared.Components
 open Shared.Components.Forms
-open Shared.Features.Table.Table
 open Shared.Components.Base
 open Thoth.Json
 open Shared.Util
+
+type CreateModel = {
+    Team: string
+}
+let createView = "create-table"
 
 type State =
     { Year : int option }

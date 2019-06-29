@@ -14,6 +14,9 @@ open Shared.Components.Tables
 open Shared.Components.Currency
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
+open System
+open Shared.Image
+
 
 type State = {
     Rates : RemedyRate list

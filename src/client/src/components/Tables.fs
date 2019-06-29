@@ -4,7 +4,6 @@ open Shared
 open Shared.Util
 open Fable.React
 open Fable.React.Props
-open Shared.Components.Base
 
 type TableProperty =
     | Attribute of IHTMLProp

@@ -5,7 +5,7 @@ open Shared.Domain.Members
 open MyTeam.Common.Features
 open MyTeam
 open Shared
-open Shared.Features.Admin.AddPlayers
+open Client.Admin.AddPlayers
 open System.Linq
 open Shared.Validation
 open MyTeam.Validation

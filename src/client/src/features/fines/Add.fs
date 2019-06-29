@@ -13,7 +13,6 @@ open Shared.Components.Tables
 open Shared.Components.Datepicker
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.List
 open Client.Util
 open Shared.Domain
 open System
@@ -24,6 +23,17 @@ type AddFineForm = {
     Date: DateTime option
     RateId: Guid option
     ExtraRate: string
+    Comment: string
+}
+
+[<CLIMutable>]
+type AddFine = {
+    Id: Guid option
+    MemberId: Guid
+    Date: DateTime
+    RateId: Guid
+    RateName: string
+    Amount: int
     Comment: string
 }
 

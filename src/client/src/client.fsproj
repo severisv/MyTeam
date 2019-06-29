@@ -1,23 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>FableApp</RootNamespace>
+    <RootNamespace>Client</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\shared\shared.fsproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="util\Http.fs" />
-    <Compile Include="components/CheckBox.fs" />
-    <Compile Include="components/Textarea.fs" />
-    <Compile Include="components/Textinput.fs" />
-    <Compile Include="components/SubmitButton.fs" />
-    <Compile Include="components/EditBlock.fs" />
-    <Compile Include="components/Modal.fs" />
-    <Compile Include="features/SelectSquad.fs" />
+    <Compile Include="util\Strings.fs" />
+    <Compile Include="util\Date.fs" />
+    <Compile Include="util\Html.fs" />
+    <Compile Include="util\Image.fs" />
+    <Compile Include="util\Interop.fs" />
+    <Compile Include="util\Number.fs" />
+    <Compile Include="util\Validation.fs" />
+    <Compile Include="util\ReactHelpers.fs" />
+    <Compile Include="domain\Club.fs" />
+    <Compile Include="domain\Events.fs" />
+    <Compile Include="domain\Members.fs" />
+    <Compile Include="components\Buttons.fs" />
+    <Compile Include="components\Collapsible.fs" />
+    <Compile Include="components\Components.fs" />
+    <Compile Include="components\Icons.fs" />
+    <Compile Include="components\Input.fs" />
+    <Compile Include="components\Labels.fs" />
+    <Compile Include="components\LayoutComponents.fs" />
+    <Compile Include="components\Links.fs" />
+    <Compile Include="components\Alerts.fs" />
+    <Compile Include="components\Datepicker.fs" />
+    <Compile Include="components\Forms.fs" />
+    <Compile Include="components\Tables.fs" />
+    <Compile Include="components\Currency.fs" />
+    <Compile Include="components\Tabs.fs" />
+    <Compile Include="components\Navlist.fs" />
+    <Compile Include="components\client\Modal.fs" />
+    <Compile Include="components\client\CheckBox.fs" />
+    <Compile Include="components\client\Textarea.fs" />
+    <Compile Include="components\client\Textinput.fs" />
+    <Compile Include="components\client\SubmitButton.fs" />
+    <Compile Include="components\client\EditBlock.fs" />
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
-    <Compile Include="features/AddPlayers.fs" />
+    <Compile Include="features\fines\Fines.fs" />
     <Compile Include="features\fines\Add.fs" />
     <Compile Include="features\fines\AddPayment.fs" />
     <Compile Include="features\fines\AddRemedyRate.fs" />
@@ -28,6 +50,8 @@
     <Compile Include="features\gameplan\Formation.fs" />
     <Compile Include="features\gameplan\GamePlan.fs" />
     <Compile Include="features\news\DeleteArticle.fs" />
+    <Compile Include="features\games\SelectSquad.fs" />
+    <Compile Include="features\admin\AddPlayers.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

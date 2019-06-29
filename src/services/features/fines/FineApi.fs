@@ -5,9 +5,9 @@ open MyTeam.Models.Domain
 open Shared
 open Shared.Components.Input
 open Shared.Domain
-open Shared.Features.Fines.List
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.Payments
+open Client.Fines.Add
+open Client.Fines.AddPayment
 open Strings
 
 let listRemedyRates (club: Club) (db: Database) =

@@ -1,5 +1,8 @@
-module Client.SelectSquad
+module Client.Games.SelectSquad
 
+open System
+open Shared.Domain.Members
+open Shared.Image
 open Fable.React
 open Fable.React.Props
 open Fable.React
@@ -9,10 +12,48 @@ open Shared.Components
 open Shared.Domain
 open Shared.Components.Base
 open Shared.Components.Layout
-open Shared.Features.Games.SelectSquad
 open Shared.Util
 open Shared.Domain.Members
 open Thoth.Json
+
+type Signup = {
+        MemberId: Guid
+        IsAttending: bool
+        Message: string        
+    }
+    
+type TeamAttendance = {
+    MemberId: MemberId
+    AttendancePercentage: int
+}
+
+type Player = MemberWithTeamsAndRoles * Signup option
+
+type Squad = {
+    MemberIds: Guid list
+    IsPublished: bool
+}
+
+type GameDetailed = {
+    Id: Guid
+    Date: DateTime
+    Location: string
+    Description: string
+    Squad: Squad
+    TeamId: Guid
+}
+
+
+type Model = {
+    Game: GameDetailed
+    ImageOptions: CloudinaryOptions
+    Signups: Signup list
+    Members: MemberWithTeamsAndRoles list
+    RecentAttendance: TeamAttendance list
+}
+
+let clientView = "select-squad"
+let modelAttribute = "model"
 
 
 type Category =

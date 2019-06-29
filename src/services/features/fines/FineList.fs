@@ -6,7 +6,7 @@ open Shared.Domain.Members
 open MyTeam
 open Common
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.List
+open Client.Fines.List
 open Shared.Strings
 
 

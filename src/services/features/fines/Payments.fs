@@ -7,7 +7,8 @@ open MyTeam
 open Common
 open Shared
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.Payments
+open Client.Fines.Payments
+open Client.Fines.AddPayment
 open Strings
 
 let view (club : Club) (user : User) (year : string option) (selectedMember: SelectedMember) (ctx : HttpContext) =

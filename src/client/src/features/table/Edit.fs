@@ -3,15 +3,25 @@ module Client.Table.Edit
 open Fable.React
 open Fable.React.Props
 open Fable.Import
-open Fable.React
 open Client.Components
 open Shared.Components
 open Shared.Components.Base
-open Shared.Features.Table.Table
 open Shared.Components.Forms
 open Thoth.Json
 open Shared.Util
 
+type EditModel = {
+    Title: string
+    Team: string
+    Year: int
+    AutoUpdateTable: bool
+    SourceUrl: string
+    AutoUpdateFixtures: bool
+    FixtureSourceUrl: string
+}
+
+let editView = "edit-table"
+let modelAttribute = "model"
 
 type State =
     { Title : string

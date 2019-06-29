@@ -12,11 +12,27 @@ open Shared.Components.Forms
 open Shared.Components.Tables
 open Shared.Components.Datepicker
 open Shared.Domain.Members
-open Shared.Features.Fines.Payments
 open Client.Util
 open Shared.Domain
 open System
 open Shared
+
+[<CLIMutable>]
+type AddPayment = {
+    Id: Guid option
+    MemberId: Guid
+    Date: DateTime
+    Amount: int
+    Comment: string
+}
+
+type Payment = {
+    Id: Guid
+    Member: Member
+    Comment: string
+    Amount: int
+    Date: DateTime
+ }
 
 type AddPaymentForm = {
     MemberId: Guid option

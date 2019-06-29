@@ -4,7 +4,7 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Domain.Members
-open Shared.Features.Admin.AddPlayers
+open Client.Admin.AddPlayers
 open MyTeam.Views
 open Shared.Domain
 

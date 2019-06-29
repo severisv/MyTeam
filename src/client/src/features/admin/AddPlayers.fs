@@ -10,8 +10,25 @@ open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Components.Forms
-open Shared.Features.Admin.AddPlayers
 open Thoth.Json
+open Shared.Image
+
+[<CLIMutable>]
+type AddMemberForm = {
+    FacebookId: string 
+    ``E-postadresse``: string 
+    Fornavn: string
+    Mellomnavn: string
+    Etternavn: string
+}
+
+type Model = {
+    ImageOptions: CloudinaryOptions
+    MemberRequests: AddMemberForm list
+}
+
+let clientView = "addplayers"
+let modelAttribute = "model"
 
 let defaultForm = {
     ``E-postadresse`` = ""

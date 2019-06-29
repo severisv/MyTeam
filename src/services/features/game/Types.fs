@@ -2,12 +2,11 @@ namespace MyTeam.Games
 
 open System
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open Shared.Domain.Events
 open Shared.Components.Input
-open Shared.Features.Games.SelectSquad
+open Client.Games.SelectSquad
 
 type Outcome = 
     | Seier

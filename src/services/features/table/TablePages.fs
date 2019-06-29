@@ -7,7 +7,8 @@ open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.Views
 open Shared.Components
-open Shared.Features.Table.Table
+open Client.Table.Create
+open Client.Table.Edit
 open System
 open MyTeam.Views.BaseComponents
 

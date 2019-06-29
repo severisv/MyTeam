@@ -15,7 +15,37 @@ open Shared.Components.Tables
 open Shared.Components.Currency
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open Shared.Features.Fines.Payments
+open System
+open Shared.Image
+open Client.Fines.AddPayment
+
+let createUrl year memberId =
+        let year = match year with
+                    | AllYears -> "total"
+                    | Year year -> string year
+        let memberId = match memberId with
+                        | Member id -> sprintf "/%O" id
+                        | AllMembers -> ""            
+        sprintf "/intern/boter/innbetalinger/%s%s" year memberId
+
+
+
+
+type PaymentsModel = {
+    ImageOptions: CloudinaryOptions
+    Payments: Payment list
+    Year: SelectedYear
+    SelectedMember: SelectedMember
+    User: User
+    Path: string
+    Years: int list
+    Members: Member list
+    PaymentInformation: string
+}
+
+
+let paymentsView = "list-payments"
+
 
 type State = {
     Payments : Payment list
@@ -144,10 +174,6 @@ let element props children =
                                            IsSelected = isSelected year selectedMember })
                             ]
                     ]
-                ]
-
-
-
-        )
+                ])
 
 hydrate paymentsView Decode.Auto.fromString<PaymentsModel> element

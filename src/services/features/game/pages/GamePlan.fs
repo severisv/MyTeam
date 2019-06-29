@@ -5,7 +5,8 @@ open Shared
 open MyTeam.Common.Features
 open Shared.Domain
 open Shared.Domain.Members
-open Shared.Features.Games.GamePlan
+open Client.GamePlan.Formation
+open Client.GamePlan.View
 open System
 open System.Linq
 
