@@ -9,7 +9,6 @@ open System
 
 let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn =
     let db = ctx.Database
-    let (ClubId clubId) = club.Id
     club.Teams
     |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
     |> function 
@@ -29,7 +28,7 @@ let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn 
         |> fun season -> 
             updateFn season
             db.SaveChanges() |> ignore
-            OkResult()
+            OkResult None
 
 
 let create club teamNameYear ctx _ =
@@ -51,7 +50,6 @@ let setAutoUpdateFixtures club teamNameYear ctx (model : CheckboxPayload) =
     update club teamNameYear ctx (fun season -> season.AutoUpdateFixtures <- model.value)
 
 let delete (club : Club) (teamName, year) (db : Database) =
-    let (ClubId clubId) = club.Id
     club.Teams
     |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
     |> function 

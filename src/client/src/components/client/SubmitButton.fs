@@ -8,6 +8,7 @@ open Shared.Components
 open Shared
 open Shared.Components.Base
 open Client.Util
+open Shared.Util.ReactHelpers
 
 type Endpoint<'a> =
     | Put of string * (unit -> string) option
@@ -25,88 +26,95 @@ type SubmitError =
     | ValidationError of ValidationError list
 
 type SubmitButtonProps<'a> =
-    { Size : ButtonSize
-      IsSubmitted : bool
+    { IsSubmitted : bool
       Text : ReactElement
       ButtonStyle : ButtonType
+      Size : ButtonSize
       SubmittedText : string
       Endpoint : Endpoint<'a>
       IsDisabled : bool
       OnError : (SubmitError -> unit) option
       OnSubmit : (string -> unit) option }
-
    
+
 let defaultButton size buttonStyle attr content = btn ([ buttonStyle; size ] @ attr) content
 
-type SubmitButton<'a>(props) =
-    inherit Component<SubmitButtonProps<'a>, SubmitButtonState>(props)
 
-    do
-        base.setInitState (if props.IsSubmitted then Submitted
-                           else Default)
+let internal handleClick props setState _ =
+    setState (fun _ _ -> Posting)
+    promise {
+        let! res = match props.Endpoint with
+                   | Post(url, payload) -> Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "")) []
+                   | Put(url, payload) -> Http.send HttpMethod.PUT url (payload |> Option.defaultValue (fun () -> "")) []
+                   | Delete url -> fetch url [Method HttpMethod.DELETE ]
 
-    member this.handleClick _ =
-        let props = this.props
-        this.setState (fun _ _ -> Posting)
-        promise {
-            let! res = match props.Endpoint with
-                       | Post(url, payload) -> Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "")) []
-                       | Put(url, payload) -> Http.send HttpMethod.PUT url (payload |> Option.defaultValue (fun () -> "")) []
-                       | Delete url -> fetch url [Method HttpMethod.DELETE ]
+        match (res.Status, props.OnError, res.Ok) with
+        | (400, Some onError, _) ->
+              let! validationErrors = res.json<ValidationError array>()
+              setState (fun state props -> Default)
+              let result = validationErrors |> Array.toList
+              props.OnError.Value(ValidationError result)
 
-            match (res.Status, props.OnError, res.Ok) with
-            | (400, Some onError, _) ->
-                  let! validationErrors = res.json<ValidationError array>()
-                  this.setState (fun state props -> Default)
-                  let result = validationErrors |> Array.toList
-                  props.OnError.Value(ValidationError result)
+        | (_, _, false) ->
+            printf "%i" res.Status
+            failwithf "Received %O from server: %O" res.Status res.StatusText
 
-            | (_, _, false) ->
-                printf "%i" res.Status
-                failwithf "Received %O from server: %O" res.Status res.StatusText
+        | (_, _, true) ->
+            match props.OnSubmit with
+            | Some onSubmit ->
+                let! result = res.text()
+                onSubmit result
+                setState (fun state props -> Default)
 
-            | (_, _, true) ->
-                match props.OnSubmit with
-                | Some onSubmit ->
-                    this.setState (fun state props -> Default)
-                    let! result = res.text()
-                    onSubmit(result)
-                | None -> this.setState (fun state props -> Submitted)
-        }
-        |> Promise.catch (fun e ->
-               Dom.console.error (sprintf "%O" e)
-               match props.OnError with
-               | Some onError ->
-                   this.setState (fun _ _ -> Error)
-                   onError (Exception e.Message)
-               | None -> this.setState (fun _ _ -> Error))
-        |> Promise.start
+            | None -> setState (fun state props -> Submitted)
+    }
+    |> Promise.catch (fun e ->
+           Dom.console.error (sprintf "%O" e)
+           match props.OnError with
+           | Some onError ->
+               setState (fun _ _ -> Error)
+               onError (Exception e.Message)
+           | None -> setState (fun _ _ -> Error))
+    |> Promise.start
 
-    override this.render() =                
-        let props = this.props
-        let state = this.state
-        let handleClick = this.handleClick
-        let defaultButton = defaultButton props.Size props.ButtonStyle
-        match state with
-        | Submitted ->
-            btn [ Success
-                  props.Size
-                  Class "disabled" ] [Icons.checkCircle
+
+
+
+let render2 props
+            (sendElement: IHTMLProp list -> ReactElement seq -> ReactElement)
+            (submittedElement: IHTMLProp list -> ReactElement seq -> ReactElement)  =   
+    
+    komponent<SubmitButtonProps<'a>, SubmitButtonState>
+        props
+        (if props.IsSubmitted then Submitted else Default)
+        None
+        (fun (props, state, setState) ->
+            
+            let handleClick = handleClick props setState
+            match state with
+            | Submitted ->
+                    submittedElement [Class "disabled"]
+                                     [Icons.checkCircle
                                       whitespace
                                       str props.SubmittedText]
-        | Posting -> defaultButton [ Class "disabled" ] [ Icons.spinner ]
-        | Error ->
-            fragment [] [ defaultButton [ OnClick handleClick ] [ props.Text ]
-                          Labels.error ]
-        | Default when props.IsDisabled -> defaultButton [ Class "disabled" ] [ props.Text ]
-        | Default -> defaultButton [ OnClick handleClick ] [ props.Text ]
+            | Posting -> sendElement [Class "disabled" ] [Icons.spinner]
+            | Error ->
+                fragment [] [ sendElement [ OnClick handleClick ] [props.Text]
+                              Labels.error ]
+            | Default when props.IsDisabled -> sendElement [Class "disabled" ] [props.Text]
+            | Default -> sendElement [OnClick handleClick ] [props.Text])
+        
+let render getProps =
+     let props = (getProps { Size = Lg
+                             IsSubmitted = false
+                             Text = str ""
+                             SubmittedText = ""
+                             ButtonStyle = Primary
+                             Endpoint = Post("", None)
+                             IsDisabled = false
+                             OnError = None
+                             OnSubmit = None })
+     let defaultButton = defaultButton props.Size props.ButtonStyle
 
-let render getProps = ofType<SubmitButton<'a>, _, _> (getProps { Size = Lg
-                                                                 IsSubmitted = false
-                                                                 Text = str ""
-                                                                 ButtonStyle = Primary
-                                                                 SubmittedText = ""
-                                                                 Endpoint = Post("", None)
-                                                                 IsDisabled = false
-                                                                 OnError = None
-                                                                 OnSubmit = None }) []
+     render2 props defaultButton (fun attr -> btn ([Success;props.Size] @ attr))
+        
