@@ -9,12 +9,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="settings/Options.fs" />
-    <Compile Include="utils/common/Database.fs" />
-    <Compile Include="utils/common/GiraffeHelpers.fs" />
-    <Compile Include="utils/common/Helpers.fs" />
-    <Compile Include="utils/common/String.fs" />
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />
+    <Compile Include="utils\Database.fs" />
+    <Compile Include="utils\GiraffeHelpers.fs" />
+    <Compile Include="utils\Helpers.fs" />
+    <Compile Include="utils\String.fs" />
     <Compile Include="utils/AntiForgery.fs" />
     <Compile Include="utils/Enums.fs" />
     <Compile Include="utils/Html.fs" />
@@ -29,9 +29,9 @@
     <Compile Include="utils/Logger.fs" />
     <Compile Include="utils/Client.fs" />
     <Compile Include="utils/Email.fs" />
-    <Compile Include="components/common/Base.fs" />
-    <Compile Include="components/common/Icons.fs" />
-    <Compile Include="components\common\LayoutComponents.fs" />
+    <Compile Include="components\Base.fs" />
+    <Compile Include="components\Icons.fs" />
+    <Compile Include="components\LayoutComponents.fs" />
     <Compile Include="components/Ajax.fs" />
     <Compile Include="components/Collapsible.fs" />
     <Compile Include="components/Navlist.fs" />
