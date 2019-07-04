@@ -342,12 +342,12 @@ type GamePlan(props) =
                     )
                     div [ Class "text-center" ] [
                         br []
-                        SubmitButton.render 
+                        Send.sendElement 
                             (fun o -> { o with 
-                                          IsSubmitted = model.GamePlanIsPublished
-                                          Text = str "Publiser"
-                                          SubmittedText = "Publisert"
-                                          Endpoint = SubmitButton.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, None) })
+                                          IsSent = model.GamePlanIsPublished
+                                          SendElement = btn, [Lg], [str "Publiser"]
+                                          SentElement = btn, [Lg;Success], [str "Publisert"]                         
+                                          Endpoint = Send.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, None) })
                     ]                   
                 ]
                 )                                  

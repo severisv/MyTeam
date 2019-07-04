@@ -135,12 +135,12 @@ let element props children =
                                                                                          (Date.formatLong payment.Date)]
                                                                       div [ Class "text-center" ] [
                                                                           br []
-                                                                          SubmitButton.render
+                                                                          Send.sendElement
                                                                             (fun o ->
                                                                             { o with
-                                                                                ButtonStyle = Danger
-                                                                                Text = str "Slett"
-                                                                                Endpoint = SubmitButton.Delete <| sprintf "/api/payments/%O" payment.Id
+                                                                                SendElement = btn, [Lg;Danger], [str "Slett"]
+                                                                                SentElement = btn, [Lg], [str "Slettet"]          
+                                                                                Endpoint = Send.Delete <| sprintf "/api/payments/%O" payment.Id
                                                                                 OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState payment.Id)) })
                                                                           btn [ Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]

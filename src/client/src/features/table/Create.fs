@@ -51,13 +51,12 @@ type CreateTable(props) =
                                 [textInput [ OnChange (fun e -> handleYearChange e.Value)
                                              Value (state.Year |> Option.map (string) |> Option.defaultValue "" |> str) ]]
                             
-                        SubmitButton.render 
+                        Send.sendElement 
                                         (fun o -> 
                                         { o with
-                                              Size = Normal
-                                              Text = str "Legg til" 
-                                              SubmittedText = "Lagt til"
-                                              Endpoint = SubmitButton.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
+                                              SendElement = btn, [ButtonSize.Normal;Primary], [str "Legg til"]
+                                              SentElement = btn, [ButtonSize.Normal;Success], [str "Lagt til"]            
+                                              Endpoint = Send.Post (sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
                                               IsDisabled = not <| isValid state.Year
                                               OnSubmit = Some <| fun _ -> Dom.window.location.replace(sprintf "/tabell/%s/%i" props.Team state.Year.Value) })                       
                         btn [ OnClick !> handleClose ] [ str "Avbryt" ]                      

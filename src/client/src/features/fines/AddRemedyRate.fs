@@ -72,13 +72,12 @@ let addRemedyRate openButton onAdd onDelete =
                                                             str <| rate.Name
                                                             str (rate.Description |> Strings.truncate 18)
                                                             Currency.currency [] rate.Amount
-                                                            (SubmitButton.render
+                                                            (Send.sendElement
                                                                 (fun o ->
                                                                     { o with
-                                                                        Text = Icons.delete
-                                                                        ButtonStyle = Danger
-                                                                        Size = Sm
-                                                                        Endpoint = SubmitButton.Delete <| sprintf "/api/remedyrates/%O" rate.Id
+                                                                        SendElement = linkButton2, [], [Icons.delete]
+                                                                        SentElement = linkButton2, [], []
+                                                                        Endpoint = Send.Delete <| sprintf "/api/remedyrates/%O" rate.Id
                                                                         OnSubmit = Some (fun _ ->
                                                                             setState (fun state props ->
                                                                                 { state with AddedRates = state.AddedRates
@@ -120,13 +119,13 @@ let addRemedyRate openButton onAdd onDelete =
 
                                 
                                 formRow [Horizontal 3] [] [
-                                    SubmitButton.render
+                                    Send.sendElement
                                         (fun o ->
                                             { o with
                                                   IsDisabled = validation |> Map.toList |>  List.exists (function | (_, Error e) -> true | _ -> false)
-                                                  Size = ButtonSize.Normal
-                                                  Text = str "Legg til"
-                                                  Endpoint = SubmitButton.Post (sprintf "/api/remedyrates",
+                                                  SendElement = btn, [ButtonSize.Normal;Primary], [str "Legg til"]
+                                                  SentElement = btn, [ButtonSize.Normal;Success], []            
+                                                  Endpoint = Send.Post (sprintf "/api/remedyrates",
                                                                                 Some (fun () ->
                                                                                         Encode.Auto.toString(0, 
                                                                                          { Id = Guid.Empty

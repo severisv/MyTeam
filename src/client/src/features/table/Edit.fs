@@ -58,16 +58,12 @@ type EditTable(props) =
                                           h4 [] [str <| sprintf "Er du sikker på at du vil slette tabellen for %s %i?" props.Team props.Year] 
                                           div [Class "text-center"] [
                                               br []
-                                              SubmitButton.render 
+                                              Send.sendElement 
                                                 (fun o -> 
                                                 { o with
-                                                    IsSubmitted = false
-                                                    IsDisabled = false
-                                                    Size = Lg
-                                                    ButtonStyle = Danger
-                                                    Text = str "Ja" 
-                                                    SubmittedText = "Slettet"
-                                                    Endpoint = SubmitButton.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
+                                                    SendElement = btn, [Lg;Danger], [str "Slett"]
+                                                    SentElement = btn, [Lg], [str "Slettet"]            
+                                                    Endpoint = Send.Delete <| sprintf "/api/tables/%s/%i" props.Team props.Year
                                                     OnSubmit = Some !> Browser.Dom.window.location.reload })
                                               btn [Lg; OnClick !> handleClose ] [str "Nei"]
                                           ]

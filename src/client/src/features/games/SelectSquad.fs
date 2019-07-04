@@ -193,12 +193,12 @@ type SelectSquad(props) =
                                           [ Textarea.render { Value = game.Description
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
 
-                                      SubmitButton.render
+                                      Send.sendElement
                                         (fun o -> { o with
-                                                      IsSubmitted = game.Squad.IsPublished
-                                                      Text = str "Publiser tropp"
-                                                      SubmittedText = "Publisert"
-                                                      Endpoint = SubmitButton.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
+                                                      IsSent = game.Squad.IsPublished
+                                                      SendElement = btn, [Lg], [str "Publiser tropp"]
+                                                      SentElement = btn, [Lg; Success], [str "Publisert"]            
+                                                      Endpoint = Send.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
                                     ] ] ] ] ]
 
 

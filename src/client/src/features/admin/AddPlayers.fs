@@ -6,12 +6,12 @@ open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
-open Shared.Components
-open Shared.Components.Base
-open Shared.Components.Layout
-open Shared.Components.Forms
-open Thoth.Json
 open Shared.Image
+open Shared.Components
+open Base
+open Layout
+open Forms
+open Send
 
 [<CLIMutable>]
 type AddMemberForm = {
@@ -47,11 +47,11 @@ type State = {
 
 let onFormError setState =
         function
-        | SubmitButton.ValidationError e ->
+        | Send.ValidationError e ->
               let errors = e |> List.collect (fun e -> e.Errors)
               setState (fun state props -> { state with Errors = errors; SuccessMessage = None })
 
-        | SubmitButton.Exception e ->
+        | Send.Exception e ->
             let errors = [e]
             setState (fun state props -> { state with Errors = errors; SuccessMessage = None })
 
@@ -93,14 +93,13 @@ let element props children =
                                                      "" request.FacebookId ]
                                     str (sprintf "%s %s %s" request.Fornavn request.Mellomnavn request.Etternavn) 
                                     ]
-                                SubmitButton.render
-                                         (fun o ->
-                                         { o with
-                                               Size = Normal
-                                               Text = str "Legg til"
-                                               SubmittedText = "Lagt til"
-                                               Endpoint = SubmitButton.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, request)))
-                                         })
+                                sendElement
+                                     (fun o ->
+                                     { o with
+                                           SendElement = btn, [Normal;Primary], [str "Legg til"]
+                                           SentElement = btn, [Normal;Success], [str "Lagt til"]                         
+                                           Endpoint = Send.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, request)))
+                                     })
                             ]
                         ))  
                                     
@@ -141,20 +140,16 @@ let element props children =
 
                          formRow [ Horizontal 2 ]
                                  []
-                                 [
-                                     SubmitButton.render
+                                 [ Send.sendElement
                                          (fun o ->
                                          { o with
-                                               Size = Normal
-                                               Text = str "Legg til"
-                                               SubmittedText = "Lagt til"
-                                               Endpoint = SubmitButton.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, state.Player)))
+                                               SendElement = btn, [Normal;Primary], [str "Legg til"]
+                                               SentElement = btn, [Normal;Success], [str "Lagt til"]                         
+                                               Endpoint = Send.Post ("/api/members", Some (fun () -> Encode.Auto.toString(0, state.Player)))
                                                OnSubmit = Some <| !> (onSubmitForm setState)
                                                OnError = Some <| onFormError setState
-                                         })
-                                 ]
-
-                   ]
+                                         })]
+                     ]
                  ]
                  
         )

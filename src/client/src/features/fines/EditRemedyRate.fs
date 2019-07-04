@@ -85,13 +85,13 @@ let editRemedyRate openButton onEdit rate =
 
                                 
                                 formRow [Horizontal 3] [] [
-                                    SubmitButton.render
+                                    Send.sendElement
                                         (fun o ->
                                             { o with
                                                   IsDisabled = validation |> Map.toList |>  List.exists (function | (_, Error e) -> true | _ -> false)
-                                                  Size = ButtonSize.Normal
-                                                  Text = str "Lagre"
-                                                  Endpoint = SubmitButton.Put (sprintf "/api/remedyrates",
+                                                  SendElement = btn, [ButtonSize.Normal], [str "Lagre"]
+                                                  SentElement = btn, [ButtonSize.Normal; Success], []                                                  
+                                                  Endpoint = Send.Put (sprintf "/api/remedyrates",
                                                                                Some (fun () ->
                                                                                     Encode.Auto.toString(0, 
                                                                                         { rate with 

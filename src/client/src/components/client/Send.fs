@@ -1,4 +1,4 @@
-module Client.Components.SubmitButton
+module Client.Components.Send
 
 open Browser
 open Fable.React
@@ -15,25 +15,25 @@ type Endpoint<'a> =
     | Post of string * (unit -> string) option
     | Delete of string
 
-type SubmitButtonState =
+type SendState =
     | Default
     | Submitted
-    | Posting
+    | Sending
     | Error
 
-type SubmitError =
+type SendError =
     | Exception of string
     | ValidationError of ValidationError list
+        
+type ReactComponent = IHTMLProp list -> ReactElement list -> ReactElement
 
-type SubmitButtonProps<'a> =
-    { IsSubmitted : bool
-      Text : ReactElement
-      ButtonStyle : ButtonType
-      Size : ButtonSize
-      SubmittedText : string
+type SendProps<'a> =
+    { IsSent : bool
+      SendElement : ReactComponent * IHTMLProp list * ReactElement list
+      SentElement : ReactComponent * IHTMLProp list * ReactElement list
       Endpoint : Endpoint<'a>
       IsDisabled : bool
-      OnError : (SubmitError -> unit) option
+      OnError : (SendError -> unit) option
       OnSubmit : (string -> unit) option }
    
 
@@ -41,7 +41,7 @@ let defaultButton size buttonStyle attr content = btn ([ buttonStyle; size ] @ a
 
 
 let internal handleClick props setState _ =
-    setState (fun _ _ -> Posting)
+    setState (fun _ _ -> Sending)
     promise {
         let! res = match props.Endpoint with
                    | Post(url, payload) -> Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "")) []
@@ -80,41 +80,33 @@ let internal handleClick props setState _ =
 
 
 
-let render2 props
-            (sendElement: IHTMLProp list -> ReactElement seq -> ReactElement)
-            (submittedElement: IHTMLProp list -> ReactElement seq -> ReactElement)  =   
+let sendElement getProps =
+    let props =  getProps { IsSent = false
+                            Endpoint = Post("", None)
+                            IsDisabled = false
+                            OnError = None
+                            OnSubmit = None
+                            SendElement = btn, [Primary;Lg], []
+                            SentElement = btn, [Success;Lg], []}
     
-    komponent<SubmitButtonProps<'a>, SubmitButtonState>
+    let sendElement, sendAttr, sendChildren = props.SendElement
+    let sentElement, sentAttr, sentChildren = props.SentElement
+    
+    komponent<SendProps<'a>, SendState>
         props
-        (if props.IsSubmitted then Submitted else Default)
+        (if props.IsSent then Submitted else Default)
         None
         (fun (props, state, setState) ->
             
             let handleClick = handleClick props setState
             match state with
             | Submitted ->
-                    submittedElement [Class "disabled"]
-                                     [Icons.checkCircle
-                                      whitespace
-                                      str props.SubmittedText]
-            | Posting -> sendElement [Class "disabled" ] [Icons.spinner]
+                    sentElement ([Class "disabled"] @ sentAttr)
+                                ([Icons.checkCircle; whitespace ] @ sentChildren)
+            | Sending -> sendElement ([Class "disabled" ] @ sendAttr) [Icons.spinner]
             | Error ->
-                fragment [] [ sendElement [ OnClick handleClick ] [props.Text]
+                fragment [] [ sendElement ([OnClick handleClick] @ sendAttr) sendChildren
                               Labels.error ]
-            | Default when props.IsDisabled -> sendElement [Class "disabled" ] [props.Text]
-            | Default -> sendElement [OnClick handleClick ] [props.Text])
-        
-let render getProps =
-     let props = (getProps { Size = Lg
-                             IsSubmitted = false
-                             Text = str ""
-                             SubmittedText = ""
-                             ButtonStyle = Primary
-                             Endpoint = Post("", None)
-                             IsDisabled = false
-                             OnError = None
-                             OnSubmit = None })
-     let defaultButton = defaultButton props.Size props.ButtonStyle
-
-     render2 props defaultButton (fun attr -> btn ([Success;props.Size] @ attr))
+            | Default when props.IsDisabled -> sendElement ([Class "disabled" ] @ sendAttr) sendChildren
+            | Default -> sendElement ([OnClick handleClick ] @ sendAttr) sendChildren)
         

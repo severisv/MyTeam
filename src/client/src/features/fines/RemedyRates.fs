@@ -95,12 +95,12 @@ let element props children =
                                                                       h4 [] [ str <| sprintf "Er du sikker på at du vil slette '%s'?" rate.Name ]
                                                                       div [Class "text-center"] [
                                                                           br []
-                                                                          SubmitButton.render
+                                                                          Send.sendElement
                                                                             (fun o ->
                                                                             { o with
-                                                                                ButtonStyle = Danger
-                                                                                Text = str "Slett"
-                                                                                Endpoint = SubmitButton.Delete <| sprintf "/api/remedyrates/%O" rate.Id
+                                                                                SendElement = btn, [Danger;Lg], [str "Slett"]
+                                                                                SentElement = span, [], []                         
+                                                                                Endpoint = Send.Delete <| sprintf "/api/remedyrates/%O" rate.Id
                                                                                 OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState rate.Id)) })
                                                                           btn [Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]

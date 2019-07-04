@@ -35,7 +35,7 @@
     <Compile Include="components\client\CheckBox.fs" />
     <Compile Include="components\client\Textarea.fs" />
     <Compile Include="components\client\Textinput.fs" />
-    <Compile Include="components\client\SubmitButton.fs" />
+    <Compile Include="components\client\Send.fs" />
     <Compile Include="components\client\EditBlock.fs" />
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />

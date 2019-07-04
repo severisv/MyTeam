@@ -127,12 +127,12 @@ let element props children =
                                                                       h4 [] [ str <| sprintf "Er du sikker på at du vil slette '%s' til %s?" fine.Description fine.Member.FullName ]
                                                                       div [ Class "text-center" ] [
                                                                           br []
-                                                                          SubmitButton.render
+                                                                          Send.sendElement
                                                                             (fun o ->
                                                                             { o with
-                                                                                ButtonStyle = Danger
-                                                                                Text = str "Slett"
-                                                                                Endpoint = SubmitButton.Delete <| sprintf "/api/fines/%O" fine.Id
+                                                                                SendElement = btn, [Danger; Lg], [str "Slett"]
+                                                                                SentElement = span, [], []
+                                                                                Endpoint = Send.Delete <| sprintf "/api/fines/%O" fine.Id
                                                                                 OnSubmit = Some (!> handleClose >> (fun _ -> handleDeleted setState fine.Id)) })
                                                                           btn [ Lg; OnClick !> handleClose ] [ str "Avbryt" ]
                                                                       ]

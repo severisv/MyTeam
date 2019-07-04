@@ -109,13 +109,12 @@ let element openLink onAdd onDelete =
                                                             str <| playerName payment.MemberId 
                                                             Currency.currency [] payment.Amount
                                                             str (payment.Date |> Date.formatLong)
-                                                            (SubmitButton.render
+                                                            (Send.sendElement
                                                                 (fun o ->
                                                                     { o with
-                                                                        Text = Icons.delete
-                                                                        ButtonStyle = Danger
-                                                                        Size = Sm
-                                                                        Endpoint = SubmitButton.Delete <| sprintf "/api/payments/%O" payment.Id
+                                                                        SendElement = linkButton2, [], [Icons.delete]
+                                                                        SentElement = linkButton2, [], []
+                                                                        Endpoint = Send.Delete <| sprintf "/api/payments/%O" payment.Id
                                                                         OnSubmit = Some (fun _ ->
                                                                             setState (fun state props ->
                                                                                 { state with AddedPayments = state.AddedPayments
@@ -161,13 +160,13 @@ let element openLink onAdd onDelete =
                                                     Value state.Form.Comment ] ]
                                 
                                 formRow [Horizontal 3] [] [
-                                    SubmitButton.render
+                                    Send.sendElement
                                         (fun o ->
                                             { o with
                                                   IsDisabled = validation |> Map.toList |>  List.exists (function | (_, Error e) -> true | _ -> false)
-                                                  Size = ButtonSize.Normal
-                                                  Text = str "Legg til"
-                                                  Endpoint = SubmitButton.Post (sprintf "/api/payments",
+                                                  SendElement = btn, [ButtonSize.Normal;Primary], [str "Legg til"]
+                                                  SentElement = btn, [ButtonSize.Normal;Success], []            
+                                                  Endpoint = Send.Post (sprintf "/api/payments",
                                                                                 Some (fun () ->
                                                                                         Encode.Auto.toString(0,
                                                                                          {  Id = None
