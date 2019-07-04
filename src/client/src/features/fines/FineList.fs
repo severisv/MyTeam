@@ -8,7 +8,7 @@ open Shared.Util.ReactHelpers
 open Thoth.Json
 open Shared
 open Shared.Components
-open Shared.Components
+open Shared.Components.Links
 open Shared.Components.Base
 open Shared.Components.Layout
 open Shared.Components.Nav

@@ -12,6 +12,7 @@ open Shared.Components.Layout
 open Shared.Components.Nav
 open Shared.Components.Tables
 open Shared.Components.Currency
+open Shared.Components.Links
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
 open System

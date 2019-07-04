@@ -8,6 +8,7 @@ open Shared.Components
 open Shared
 open Shared.Components.Base
 open Client.Util
+open Shared.Util
 open Shared.Util.ReactHelpers
 
 type Endpoint<'a> =
@@ -65,7 +66,6 @@ let internal handleClick props setState _ =
                 let! result = res.text()
                 onSubmit result
                 setState (fun state props -> Default)
-
             | None -> setState (fun state props -> Submitted)
     }
     |> Promise.catch (fun e ->
@@ -101,12 +101,12 @@ let sendElement getProps =
             let handleClick = handleClick props setState
             match state with
             | Submitted ->
-                    sentElement ([Class "disabled"] @ sentAttr)
+                    sentElement (Html.mergeClasses [Class "disabled"] sentAttr)
                                 ([Icons.checkCircle; whitespace ] @ sentChildren)
             | Sending -> sendElement ([Class "disabled" ] @ sendAttr) [Icons.spinner]
             | Error ->
-                fragment [] [ sendElement ([OnClick handleClick] @ sendAttr) sendChildren
+                fragment [] [ sendElement (Html.mergeClasses [OnClick handleClick] sendAttr) sendChildren
                               Labels.error ]
-            | Default when props.IsDisabled -> sendElement ([Class "disabled" ] @ sendAttr) sendChildren
-            | Default -> sendElement ([OnClick handleClick ] @ sendAttr) sendChildren)
+            | Default when props.IsDisabled -> sendElement (Html.mergeClasses [Class "disabled" ] sendAttr) sendChildren
+            | Default -> sendElement (Html.mergeClasses [OnClick handleClick ] sendAttr) sendChildren)
         

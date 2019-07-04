@@ -10,6 +10,7 @@ open MyTeam.Views
 open Shared.Domain.Members
 open System
 open Shared.Components
+open Shared.Components.Links
 open MyTeam.Views.BaseComponents
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =

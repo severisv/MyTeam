@@ -11,6 +11,7 @@ open Shared.Components
 open Shared.Components.Base
 open Shared.Components.Forms
 open Shared.Components.Tables
+open Shared.Components.Links
 open Shared.Features.Fines.Common
 open Shared
 

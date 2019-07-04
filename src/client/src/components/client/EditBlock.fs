@@ -1,7 +1,7 @@
 module Client.Components.EditBlock
 
 open Fable.React
-open Shared.Components
+open Shared.Components.Links
 
 type State =
     { IsInEditMode : bool }

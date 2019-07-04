@@ -2,6 +2,7 @@ namespace MyTeam.Attendance.Pages
 
 open Giraffe.GiraffeViewEngine
 open Shared.Components
+open Links
 open MyTeam
 open Shared
 open Shared.Domain

@@ -60,8 +60,7 @@ let view (club : Club) (user : User) (year : string option) (selectedMember: Sel
      [ Client.view
             Client.Fines.List.containerId
             Client.Fines.List.element
-            {
-                Members = members
+            {   Members = members
                 SelectedMember = selectedMember
                 User = user
                 Path = ctx.Request.Path.Value

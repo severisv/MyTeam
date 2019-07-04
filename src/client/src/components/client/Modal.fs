@@ -4,7 +4,7 @@ open Browser.Types
 open Fable
 open Fable.React
 open Fable.React.Props
-open Shared.Components
+open Shared.Components.Links
 open Shared.Components.Base
 
 

@@ -10,6 +10,7 @@ open Client.Components
 open Shared.Components
 open Shared.Components.Forms
 open Shared.Components.Base
+open Shared.Components.Links
 open Thoth.Json
 open Shared.Util
 

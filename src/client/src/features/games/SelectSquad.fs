@@ -15,6 +15,7 @@ open Shared.Components.Layout
 open Shared.Util
 open Shared.Domain.Members
 open Thoth.Json
+open Links
 
 type Signup = {
         MemberId: Guid
