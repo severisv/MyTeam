@@ -34,7 +34,6 @@
     <Compile Include="components\LayoutComponents.fs" />
     <Compile Include="components/Ajax.fs" />
     <Compile Include="components/Collapsible.fs" />
-    <Compile Include="components/Navlist.fs" />
     <Compile Include="components/Table.fs" />
     <Compile Include="common/features/*.fs" />
     <Compile Include="common/Clubs.fs" />

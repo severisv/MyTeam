@@ -10,6 +10,7 @@ open MyTeam.Views
 open System
 open MyTeam.Stats
 open Shared.Components
+open Shared.Components.Nav
 open MyTeam.Views.BaseComponents
 
 module Pages =   
@@ -87,10 +88,10 @@ module Pages =
                                                 ])                           
                                 isSelected)
                             
-                        navListMobile
-                            ({  Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
-                                Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
-                                IsSelected = isSelected })
+                        !!(navListMobile
+                            {  Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                               Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
+                               IsSelected = isSelected })
                         hr []
                         br []                     
                         table [Striped;TableProperty.Attribute <| _class "stats-table"] 
@@ -122,15 +123,12 @@ module Pages =
                     (
                     sidebar [] [
                         block [] [
-                            navList ({ 
-                                        Header = "Sesonger"
-                                        Items = years |> List.map (fun year  -> { Text = [encodedText <| string year]; Url = statsUrl selectedTeam (Year year) }                                                                   )  
-                                        Footer = Some <| { Text = [encodedText "Total"]; Url = statsUrl selectedTeam AllYears }                                                               
-                                        IsSelected = isSelected                                                               
-                                   })
-                        ]
-                    ]                                   
-                    , emptyText))        
+                            !!(navList {Header = "Sesonger"
+                                        Items = years |> List.map (fun year  -> { Text = [Fable.React.Helpers.str <| string year]
+                                                                                  Url = statsUrl selectedTeam (Year year) }                                                                   )  
+                                        Footer = Some <| { Text = [Fable.React.Helpers.str "Total"]; Url = statsUrl selectedTeam AllYears }                                                               
+                                        IsSelected = isSelected })]
+                    ], emptyText))        
             ] 
             |> layout club user (fun o -> { o with Title = "Statistikk"}) ctx
             |> OkResult

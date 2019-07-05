@@ -7,6 +7,7 @@ open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.Views
 open Shared.Components
+open Shared.Components.Nav
 open Client.Table.Create
 open Client.Table.Edit
 open System
@@ -53,8 +54,8 @@ module Table =
                                                   Url = tableUrl team selectedYear }))                           
                             isSelected)            
                    
-                        navListMobile
-                            ({ Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
+                        !!(navListMobile
+                             { Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
                                Footer = None                                                               
                                IsSelected = isSelected })
                         hr []
@@ -118,11 +119,11 @@ module Table =
                                     
                     (if years.Length > 0 then                                
                         block [] [
-                            navList ({ Header = "Sesonger"
-                                       Items = years |> List.map (fun year  -> { Text = [encodedText <| string year] 
-                                                                                 Url = tableUrl selectedTeam year }                                                                   )  
-                                       Footer = None                                                               
-                                       IsSelected = isSelected })
+                            !!(navList { Header = "Sesonger"
+                                         Items = years |> List.map (fun year  -> { Text = [Fable.React.Helpers.str <| string year] 
+                                                                                   Url = tableUrl selectedTeam year }                                                                   )  
+                                         Footer = None                                                               
+                                         IsSelected = isSelected })
                         ]                                                             
                         else emptyText)        
                     ]

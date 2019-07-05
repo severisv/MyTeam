@@ -2,8 +2,8 @@ module MyTeam.Attendance.Pages.Show
 
 open Giraffe.GiraffeViewEngine
 open Shared.Components
+open Shared.Components.Nav
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.Views
@@ -70,20 +70,19 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
         sidebar [] [
             (user.IsInRole [ Role.Admin; Role.Trener; Role.Oppmøte ] =?
                (block [] [
-                    navList ({
+                    !!(navList ({
                                 Header = "Adminmeny"
-                                Items = [ { Text = [ icon (fa "check-square-o") ""; encodedText " Registrer oppmøte" ]; Url = registerAttendanceUrl } ]
+                                Items = [ { Text = [ Icons.icon (fa "check-square-o") ""; Fable.React.Helpers.str " Registrer oppmøte" ]; Url = registerAttendanceUrl } ]
                                 IsSelected = fun _ -> false
-                                Footer = None
-                            })
+                                Footer = None }))
                    ]
                 , emptyText))
             (years.Length > 0 =?
                 (block [] [
-                    navList ({  Header = "Sesonger"
-                                Items = years |> List.map (fun year -> { Text = [ encodedText <| string year ]; Url = attendanceUrl (Year year) })
-                                Footer = Some <| { Text = [ encodedText "Total" ]; Url = attendanceUrl AllYears }
-                                IsSelected = isSelected })
+                    !!(navList ({   Header = "Sesonger"
+                                    Items = years |> List.map (fun year -> { Text = [ Fable.React.Helpers.str <| string year ]; Url = attendanceUrl (Year year) })
+                                    Footer = Some <| { Text = [ Fable.React.Helpers.str "Total" ]; Url = attendanceUrl AllYears }
+                                    IsSelected = isSelected }))
                 ]
                , emptyText))
         ]

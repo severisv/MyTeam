@@ -5,11 +5,11 @@ open System.Linq
 open Giraffe.GiraffeViewEngine
 open Shared.Domain
 open Shared.Domain.Members
-open Shared
 open MyTeam
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
 open Shared.Components
+open Shared.Components.Nav
 open Shared.Features.Fines
 open Currency
 open Common
@@ -131,11 +131,11 @@ let view (club : Club) (user : User) (year : string option) (ctx : HttpContext) 
                 [ !!(fineNav user ctx.Request.Path.Value) ]
 
             block [] [
-                navListMobile
+                !!(navListMobile
                     ({ Items = years |> List.map (fun year -> { Text = string year
                                                                 Url = createUrl <| Year year })
                        Footer = Some <| { Text = "Total"; Url = createUrl AllYears }
-                       IsSelected = isSelected })
+                       IsSelected = isSelected }))
 
                 remainingForUser => fun amount ->
                     div [ _class "fine-userDue" ]
@@ -178,12 +178,11 @@ let view (club : Club) (user : User) (year : string option) (ctx : HttpContext) 
         (years.Length > 0 =?
             (sidebar [] [
                 block [] [
-                    navList ({ Header = "Sesonger"
-                               Items = years |> List.map (fun year -> { Text = [ encodedText <| string year ]
-                                                                        Url = createUrl <| Year year })
-                               Footer = Some <| { Text = [ encodedText "Total" ]; Url = createUrl AllYears }
-                               IsSelected = isSelected })
-                ]
+                    !!(navList ({  Header = "Sesonger"
+                                   Items = years |> List.map (fun year -> { Text = [ Fable.React.Helpers.str <| string year ]
+                                                                            Url = createUrl <| Year year })
+                                   Footer = Some <| { Text = [ Fable.React.Helpers.str "Total" ]; Url = createUrl AllYears }
+                                   IsSelected = isSelected }))                ]
             ]
             , emptyText))
      ]

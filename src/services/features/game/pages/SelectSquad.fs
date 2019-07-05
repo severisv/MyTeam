@@ -8,6 +8,7 @@ open MyTeam.Views
 open MyTeam.Common.Features
 open Shared.Domain.Members
 open Shared.Components
+open Shared.Components.Nav
 open MyTeam.Games
 open Client.Games.SelectSquad
 open MyTeam.Views.BaseComponents
@@ -77,17 +78,14 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                     fun user -> 
                         if user.IsInRole [Role.Admin;Role.Trener] then
                             block [] [ 
-                                navList 
-                                    {
-                                        Header = "Adminmeny"
+                                !!(navList 
+                                    {   Header = "Adminmeny"
                                         Items = 
-                                            [
-                                                { Text = [ !!(Icons.add ""); encodedText " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
-                                            ]                            
+                                            [ { Text = [ Icons.add ""
+                                                         Fable.React.Helpers.str " Legg til kamp" ]
+                                                Url = "/intern/arrangement/ny?type=Kamp" }]                            
                                         Footer = None
-                                        IsSelected = never
-                                    }    
-                            ]
+                                        IsSelected = never })]
                         else empty                        
             ]
         ]

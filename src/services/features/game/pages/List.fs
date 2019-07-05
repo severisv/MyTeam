@@ -8,6 +8,7 @@ open MyTeam.Games
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
 open Shared.Components
+open Shared.Components.Nav
 open System
 open Shared.Domain.Members
 open Fable.React.Props
@@ -51,10 +52,10 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
                                                   Url = listGamesUrl team.ShortName selectedYear } ))                        
                             isSelected)
                             
-                    navListMobile
+                    !!(navListMobile
                         ({  Items = years |> List.map (fun year  -> { Text = string year; Url = listGamesUrl selectedTeam.ShortName year }                                                                   )  
                             Footer = None                                                               
-                            IsSelected = isSelected })
+                            IsSelected = isSelected }))
                     hr []
 
                     (if games.Length < 1 then
@@ -109,34 +110,26 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
                     fun user -> 
                         if user.IsInRole [Role.Admin;Role.Trener] then
                             block [] [ 
-                                navList 
-                                    {
-                                        Header = "Adminmeny"
+                                !!(navList 
+                                    {   Header = "Adminmeny"
                                         Items = 
                                             [
-                                                { Text = [ !!(Icons.add ""); encodedText " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
+                                                { Text = [ Icons.add ""; Fable.React.Helpers.str " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }
                                             ]                            
                                         Footer = None
-                                        IsSelected = never
-                                    }    
+                                        IsSelected = never })
                             ]
                         else empty                        
                 block [ ] [
-                    navList 
-                        { 
-                            Header = "Sesonger"
+                    !!(navList 
+                        {   Header = "Sesonger"
                             Items = years |> List.map (fun year  -> 
-                                                        { 
-                                                            Text = [(string >> encodedText) year] 
-                                                            Url = listGamesUrl selectedTeam.ShortName year 
-                                                        })  
+                                                        {   Text = [(string >> Fable.React.Helpers.str) year] 
+                                                            Url = listGamesUrl selectedTeam.ShortName year })  
                             Footer = None                                                              
-                            IsSelected = isSelected                                                              
-                        }                                  
-                    ]                    
-                    
-                
-            ]
+                            IsSelected = isSelected })     
+                    ]
+                ]
         ]
         |> layout club user (fun o -> { o with Title = "Kamper" }) ctx
         |> OkResult

@@ -101,16 +101,16 @@ module Register =
             sidebar [] [
                 (previousTrainings.Length > 0 =?
                     (block [] [
-                        navList ({
+                        !!(Nav.navList ({
                                     Header = "Siste treninger"
                                     Items = previousTrainings
                                             |> List.map (fun training ->
-                                                            { Text = [ icon (fa "calendar") ""; whitespace; encodedText <| (training.Date.ToString ("ddd d MMMM")) ];
-                                                              Url = registerAttendanceUrl (Some training) }
-                                                        )
+                                                            { Text = [ Icons.calendar ""
+                                                                       Base.whitespace
+                                                                       Fable.React.Helpers.str <| (training.Date.ToString "ddd d MMMM") ]
+                                                              Url = registerAttendanceUrl (Some training) })
                                     Footer = None
-                                    IsSelected = isSelected
-                               })
+                                    IsSelected = isSelected }))
                     ]
                    , emptyText))
             ]
