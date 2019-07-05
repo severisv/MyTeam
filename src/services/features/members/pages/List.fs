@@ -1,15 +1,14 @@
 module MyTeam.Members.Pages.List
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open Shared
 open MyTeam.Attendance
 open MyTeam.Common.Features.Members
 open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.Members
 open MyTeam.Views
+open Shared
 
 let view (club : Club) (user : User) status (ctx : HttpContext) =
     let status =
@@ -27,12 +26,12 @@ let view (club : Club) (user : User) status (ctx : HttpContext) =
     let isSelected = (equals <| memberListUrl (status |> toLowerString))
     [ mtMain [] 
           [ block [] 
-                [ tabs [] ([ Status.Aktiv; Status.Veteran; Status.Inaktiv ]
+                [ !!(Components.Tabs.tabs [] ([ Status.Aktiv; Status.Veteran; Status.Inaktiv ]
                            |> List.map (fun status -> 
                                   { Text = status |> string
                                     ShortText = status |> string
                                     Url = memberListUrl (string status |> toLower)
-                                    Icon = Some <| playerStatusIcon status })) isSelected
+                                    Icon = Some <| Shared.Components.Icons.playerStatusIcon status })) isSelected)
                   br []
                   
                   table [] [ col [ NoSort

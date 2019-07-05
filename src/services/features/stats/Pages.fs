@@ -1,6 +1,5 @@
 namespace MyTeam.Stats
 
-open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
@@ -74,19 +73,19 @@ module Pages =
             [
                 mtMain [] [
                     block [] [
-                        tabs [_class "team-nav"] 
-                             ((club.Teams 
-                             |> List.map (fun team  -> 
-                                                {   Text = team.Name
-                                                    ShortText = team.ShortName
-                                                    Icon = Some <| !!(Icons.team "")
-                                                    Url = statsUrl (Team team) selectedYear  }
-                                        )) @ [  {   Text = "Samlet"
-                                                    ShortText = "Samlet"
-                                                    Icon = None
-                                                    Url = statsUrl (All club.Teams) selectedYear }
-                                            ])                           
-                            isSelected
+                        !!(Tabs.tabs [Fable.React.Props.Class "team-nav"] 
+                                 ((club.Teams 
+                                 |> List.map (fun team  -> 
+                                                    {   Text = team.Name
+                                                        ShortText = team.ShortName
+                                                        Icon = Some <| Icons.team ""
+                                                        Url = statsUrl (Team team) selectedYear  }
+                                            )) @ [  {   Text = "Samlet"
+                                                        ShortText = "Samlet"
+                                                        Icon = None
+                                                        Url = statsUrl (All club.Teams) selectedYear }
+                                                ])                           
+                                isSelected)
                             
                         navListMobile
                             ({  Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  

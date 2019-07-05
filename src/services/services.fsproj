@@ -37,7 +37,6 @@
     <Compile Include="components/Navlist.fs" />
     <Compile Include="components/Scripts.fs" />
     <Compile Include="components/Table.fs" />
-    <Compile Include="components/Tabs.fs" />
     <Compile Include="common/features/*.fs" />
     <Compile Include="common/Clubs.fs" />
     <Compile Include="common/Users.fs" />

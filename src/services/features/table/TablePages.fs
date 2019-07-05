@@ -11,7 +11,7 @@ open Client.Table.Create
 open Client.Table.Edit
 open System
 open MyTeam.Views.BaseComponents
-
+open Fable.React.Props
 
 module Table =   
     let view (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =
@@ -35,8 +35,7 @@ module Table =
                 | None -> years |> List.tryHead
                 | Some y when isNumber y -> Number.parse y |> Some
                 | _ -> None 
-                |> Option.defaultValue DateTime.Now.Year    
-                
+                |> Option.defaultValue DateTime.Now.Year                    
             
             let t = Queries.getTable db selectedTeam.Id selectedYear 
           
@@ -46,14 +45,13 @@ module Table =
             [
                 mtMain [] [
                     block [] [                                
-                        tabs [_class "team-nav"] 
+                        !!(Tabs.tabs [Class "team-nav"] 
                             (club.Teams |> List.map (fun team  -> 
                                                 { Text = team.Name
                                                   ShortText = team.ShortName
-                                                  Icon = Some <| !!(Icons.team "")
-                                                  Url = tableUrl team selectedYear }
-                                        ))                           
-                            isSelected            
+                                                  Icon = Some <| Icons.team ""
+                                                  Url = tableUrl team selectedYear }))                           
+                            isSelected)            
                    
                         navListMobile
                             ({ Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  

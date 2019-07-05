@@ -10,6 +10,7 @@ open MyTeam.Views.BaseComponents
 open Shared.Components
 open System
 open Shared.Domain.Members
+open Fable.React.Props
 
 let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ctx: HttpContext) =
 
@@ -41,14 +42,14 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
         [
             mtMain [] [
                 block [] [
-                    tabs [_class "team-nav"] 
+                    !!(Tabs.tabs [Class "team-nav"] 
                             (club.Teams 
                             |> List.map (fun team  -> 
                                                 { Text = team.Name
                                                   ShortText = team.ShortName
-                                                  Icon = Some !!(Icons.team "")
+                                                  Icon = Some (Icons.team "")
                                                   Url = listGamesUrl team.ShortName selectedYear } ))                        
-                            isSelected
+                            isSelected)
                             
                     navListMobile
                         ({  Items = years |> List.map (fun year  -> { Text = string year; Url = listGamesUrl selectedTeam.ShortName year }                                                                   )  
