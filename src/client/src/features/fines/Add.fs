@@ -61,7 +61,7 @@ let getAmount state =
         (Number.tryParse state.Form.ExtraRate |> Option.defaultValue 0) 
 
 let addFine openLink onAdd onDelete =
-    Modal.render
+    Modal.modal
         { OpenButton = openLink
           Content =
             fun handleClose ->

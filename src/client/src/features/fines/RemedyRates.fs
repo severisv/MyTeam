@@ -88,7 +88,7 @@ let element props children =
                                                         EditRemedyRate.editRemedyRate
                                                             (fun handleOpen -> linkButton handleOpen [Icons.edit ""])
                                                             (handleEdited setState) rate
-                                                        Modal.render
+                                                        Modal.modal
                                                             { OpenButton = fun handleOpen -> linkButton handleOpen [Icons.delete]
                                                               Content =
                                                                 fun handleClose ->

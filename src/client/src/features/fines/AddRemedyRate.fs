@@ -35,7 +35,7 @@ type AddFineState = {
 
 
 let addRemedyRate openButton onAdd onDelete =
-    Modal.render
+    Modal.modal
         { OpenButton = openButton
           Content =
             fun handleClose ->

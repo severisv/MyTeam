@@ -41,7 +41,7 @@ type CreateTable(props) =
             | None when not <| Strings.hasValue value -> this.setState (fun state props -> { state with Year = None })
             | None -> ()
              
-        Modal.render 
+        Modal.modal 
             { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Legg til sesong" ]
               Content = 
                 fun handleClose ->

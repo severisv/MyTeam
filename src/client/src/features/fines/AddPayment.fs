@@ -51,7 +51,7 @@ type AddPaymentState = {
 }
 
 let element openLink onAdd onDelete =
-    Modal.render
+    Modal.modal
         { OpenButton = openLink
           Content =
             fun handleClose ->

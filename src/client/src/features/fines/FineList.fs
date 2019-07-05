@@ -119,7 +119,7 @@ let element props children =
                                                                         Base.tooltip fine.Comment [Style [MarginLeft "0.5em"]] [Icons.infoCircle ""]]
                                                         currency [] fine.Amount
                                                         fine.Issued |> (if props.Year = AllYears then Date.formatLong else Date.formatShort) |> str
-                                                        Modal.render
+                                                        Modal.modal
                                                             { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.delete ]
                                                               Content =
                                                                 fun handleClose ->

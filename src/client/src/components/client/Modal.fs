@@ -6,7 +6,7 @@ open Fable.React
 open Fable.React.Props
 open Shared.Components.Links
 open Shared.Components.Base
-
+open Shared.Util
 
 type State =
     { IsVisible : bool }
@@ -18,20 +18,21 @@ type Props =
 let openModal setState _ = setState (fun state props -> { state with IsVisible = true })
 let closeModal setState _ = setState (fun state props -> { state with IsVisible = false })
 
-type Modal(props) =
-    inherit Component<Props, State>(props)
-    do base.setInitState ({ IsVisible = false })
-    override this.render() =
-        let state = this.state
-        fragment [] [ this.props.OpenButton <| openModal this.setState
-                      (if state.IsVisible then 
-                           div [ Class "modal" ] 
-                               [ div [ Class "modal-overlay"
-                                       OnClick <| closeModal this.setState ] []                                 
-                                 div [ Class "modal-wrapper" ] 
-                                     [ div [ Class "modal-window" ] 
-                                           [ closeButton <| closeModal this.setState
-                                             props.Content <| closeModal this.setState ] ] ]
-                       else empty) ]
-
-let render model = ofType<Modal, _, _> model []
+let modal props = 
+    ReactHelpers.komponent<Props,State>
+        props
+        { IsVisible = false }
+        None
+        (fun (props, state, setState) ->                        
+            fragment [] [ props.OpenButton <| openModal setState
+                          (if state.IsVisible then 
+                               div [ Class "modal" ] 
+                                   [ div [ Class "modal-overlay"
+                                           OnClick <| closeModal setState ] []                                 
+                                     div [ Class "modal-wrapper" ] 
+                                         [ div [ Class "modal-window" ] 
+                                               [ closeButton <| closeModal setState
+                                                 props.Content <| closeModal setState ] ] ]
+                           else empty) ]
+        )
+        

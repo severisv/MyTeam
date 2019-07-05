@@ -29,7 +29,7 @@ type EditRateState = {
 
 
 let editRemedyRate openButton onEdit rate =
-    Modal.render
+    Modal.modal
         { OpenButton = openButton
           Content =
             fun handleClose ->

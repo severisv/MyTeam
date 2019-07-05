@@ -50,7 +50,7 @@ type EditTable(props) =
                 div [] [
                     isInEditMode &?  
                         fragment [] [
-                            Modal.render 
+                            Modal.modal 
                                 { OpenButton = fun handleOpen -> btn [ Danger; OnClick handleOpen; Class "pull-right" ] [ Icons.delete ]
                                   Content = 
                                     fun handleClose ->

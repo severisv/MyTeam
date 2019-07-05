@@ -14,7 +14,7 @@ type Model = {
 let deleteArticle model children =
     model.Name
     |> Option.map (fun name -> 
-        Modal.render
+        Modal.modal
             { OpenButton = fun handleOpen ->
                 btn [Danger; ButtonSize.Normal; Class "pull-right"; OnClick (fun e -> e.preventDefault(); handleOpen(e))]
                     [Icons.delete]
