@@ -42,7 +42,7 @@ type CreateTable(props) =
             | None -> ()
              
         Modal.modal 
-            { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Legg til sesong" ]
+            { OpenButton = fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.add ""; whitespace; str "Legg til sesong" ]
               Content = 
                 fun handleClose ->
                     form [] [ 

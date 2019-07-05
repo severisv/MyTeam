@@ -38,7 +38,7 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
             block [] [
                 (user.IsInRole [ Role.Admin; Role.Trener; Role.Oppmøte ] =?
                    (div [ _class "clearfix u-margin-bottom " ] [
-                        !!(buttonLink registerAttendanceUrl Primary ButtonSize.Normal [ Class "pull-right hidden-lg hidden-md" ] [
+                        !!(btnAnchor registerAttendanceUrl Primary ButtonSize.Normal [ Class "pull-right hidden-lg hidden-md" ] [
                             Icons.icon (fa "check-square-o") ""
                             Fable.React.Helpers.str " Registrer oppmøte"
                          ])

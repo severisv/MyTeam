@@ -1,6 +1,7 @@
 module MyTeam.Games.Pages.Show
 
 open Giraffe.GiraffeViewEngine
+open Fable.React.Props
 open MyTeam
 open Shared
 open Server
@@ -34,7 +35,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                 div [ _class "mt-container" ] [  
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then
-                                 !!(editLink <| sprintf "/intern/arrangement/endre/%O" game.Id)
+                                 !!(editAnchor [Href <| sprintf "/intern/arrangement/endre/%O" game.Id])
                             else empty     
                     
                     user => fun user -> 

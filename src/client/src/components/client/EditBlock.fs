@@ -1,6 +1,7 @@
 module Client.Components.EditBlock
 
 open Fable.React
+open Fable.React.Props
 open Shared.Components.Links
 
 type State =
@@ -18,8 +19,8 @@ type EditBlock(props) =
     override this.render() =
         let toggleEditMode = toggleEditMode this.setState
         let state = this.state
-        fragment [] [ (if state.IsInEditMode then closeButton toggleEditMode
-                       else editButton toggleEditMode)
+        fragment [] [ (if state.IsInEditMode then closeButton [OnClick toggleEditMode]
+                       else editButton [OnClick toggleEditMode])
                       this.props.Render(this.state.IsInEditMode) ]
 
 let render model = ofType<EditBlock, _, _> model []

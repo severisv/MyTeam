@@ -24,7 +24,7 @@ let deleteArticle model children =
                       h4 [] [ str <| sprintf "Er du sikker på at du vil slette '%s'?" model.Title ]
                       div [ Class "text-center" ] [
                           br []
-                          buttonLink (sprintf "/nyheter/slett/%O" model.Name) Danger Lg [] [str "Slett"]
+                          btnAnchor (sprintf "/nyheter/slett/%O" model.Name) Danger Lg [] [str "Slett"]
                           btn [Lg; OnClick <| fun _ -> handleClose()] [str "Avbryt"]
                       ]
                 ]

@@ -120,7 +120,7 @@ let element props children =
                                                         currency [] fine.Amount
                                                         fine.Issued |> (if props.Year = AllYears then Date.formatLong else Date.formatShort) |> str
                                                         Modal.modal
-                                                            { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.delete ]
+                                                            { OpenButton = fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.delete ]
                                                               Content =
                                                                 fun handleClose ->
                                                                     div [] [
@@ -149,7 +149,7 @@ let element props children =
                                     block [] [
                                         navListBase [ Header <| str "Botsjef" ] [
                                             Add.addFine
-                                                (fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                                (fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.add ""; whitespace; str "Registrer bøter" ])
                                                 (handleAdded year selectedMember setState) (handleDeleted setState)
                                         ]
                                     ]

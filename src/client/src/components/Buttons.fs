@@ -22,14 +22,13 @@ module Buttons =
         interface IHTMLProp
 
     
-    let buttonLink href (buttonType : ButtonType) (size : ButtonSize) attributes children =
-        a 
-            (Html.mergeClasses 
-                 [ Href href                   
-                   Class 
-                   <| sprintf "btn btn-%s btn-%s" (Strings.toLower buttonType) 
-                          (Strings.toLower size) ] attributes) children
-    
+    let btnAnchor href (buttonType : ButtonType) (size : ButtonSize) attributes children =
+        a (Html.mergeClasses 
+             [ Href href                   
+               Class 
+               <| sprintf "btn btn-%s btn-%s" (Strings.toLower buttonType) 
+                      (Strings.toLower size) ] attributes) children
+
 
     let btn (props : IHTMLProp list) children =
         let buttonType = props

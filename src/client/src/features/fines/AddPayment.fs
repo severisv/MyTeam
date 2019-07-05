@@ -113,8 +113,8 @@ let element openLink onAdd onDelete =
                                                             (Send.sendElement
                                                                 (fun o ->
                                                                     { o with
-                                                                        SendElement = linkButton2, [], [Icons.delete]
-                                                                        SentElement = linkButton2, [], []
+                                                                        SendElement = linkButton, [], [Icons.delete]
+                                                                        SentElement = linkButton, [], []
                                                                         Endpoint = Send.Delete <| sprintf "/api/payments/%O" payment.Id
                                                                         OnSubmit = Some (fun _ ->
                                                                             setState (fun state props ->

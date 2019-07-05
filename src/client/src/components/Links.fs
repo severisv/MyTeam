@@ -4,21 +4,14 @@ open Fable.React
 open Fable.React.Props
 open Shared.Util
 
-let editLink href =
-    a [ Href href
-        Class "edit-link pull-right" ] [ Icons.edit "Rediger" ]
+let editAnchor attr =
+    a (attr |> Html.mergeClasses [Class "edit-link pull-right" ]) [ Icons.edit "Rediger" ]
 
-let linkButton onClick children =
-    button [ OnClick onClick
-             Class "link" ] children
-
-let linkButton2 attr  =
+let linkButton attr  =
     button (attr |> Html.mergeClasses [Class "link" ])
 
-let editButton onClick =
-    button [ OnClick onClick
-             Class "edit-link pull-right" ] [ Icons.edit "Rediger" ]
+let editButton attr =
+    button (attr |> Html.mergeClasses [ Class "edit-link pull-right" ]) [ Icons.edit "Rediger" ]
 
-let closeButton onClick =
-    button [ OnClick onClick
-             Class "edit-link pull-right" ] [ Icons.close ]
+let closeButton attr =
+    button (attr |> Html.mergeClasses [Class "edit-link pull-right" ]) [ Icons.close ]

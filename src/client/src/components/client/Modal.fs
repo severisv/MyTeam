@@ -31,7 +31,7 @@ let modal props =
                                            OnClick <| closeModal setState ] []                                 
                                      div [ Class "modal-wrapper" ] 
                                          [ div [ Class "modal-window" ] 
-                                               [ closeButton <| closeModal setState
+                                               [ closeButton [OnClick <| closeModal setState]
                                                  props.Content <| closeModal setState ] ] ]
                            else empty) ]
         )

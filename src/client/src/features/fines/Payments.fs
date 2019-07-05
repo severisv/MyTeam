@@ -126,7 +126,7 @@ let element props children =
                                                         currency [] payment.Amount
                                                         payment.Date |> (if props.Year = AllYears then Date.formatLong else Date.formatShort) |> str
                                                         Modal.modal
-                                                            { OpenButton = fun handleOpen -> linkButton handleOpen [ Icons.delete ]
+                                                            { OpenButton = fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.delete ]
                                                               Content =
                                                                 fun handleClose ->
                                                                     div [] [
@@ -158,7 +158,7 @@ let element props children =
                                     block [] [
                                         navListBase [ Header <| str "Botsjef" ] [
                                             AddPayment.element
-                                                (fun handleOpen -> linkButton handleOpen [ Icons.add ""; whitespace; str "Registrer betalinger" ])
+                                                (fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.add ""; whitespace; str "Registrer betalinger" ])
                                                 (handleAdded year selectedMember setState) (handleDeleted setState)
                                         ]
                                         hr []

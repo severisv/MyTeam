@@ -1,6 +1,7 @@
 namespace MyTeam.Attendance.Pages
 
 open Giraffe.GiraffeViewEngine
+open Fable.React.Props
 open Shared.Components
 open Links
 open MyTeam
@@ -46,7 +47,7 @@ module Register =
         let getImage = Images.getMember ctx
 
         let editEventLink eventId =
-            !!(editLink <| sprintf "/intern/arrangement/endre/%s" (string eventId))
+            !!(editAnchor [Href <| sprintf "/intern/arrangement/endre/%s" (string eventId)])
 
         let registerAttendancePlayerList header (players : PlayerAttendance list) (selectedEvent : Event) isCollapsed =
             collapsible

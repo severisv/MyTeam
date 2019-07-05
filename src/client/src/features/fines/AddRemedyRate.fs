@@ -76,8 +76,8 @@ let addRemedyRate openButton onAdd onDelete =
                                                             (Send.sendElement
                                                                 (fun o ->
                                                                     { o with
-                                                                        SendElement = linkButton2, [], [Icons.delete]
-                                                                        SentElement = linkButton2, [], []
+                                                                        SendElement = linkButton, [], [Icons.delete]
+                                                                        SentElement = linkButton, [], []
                                                                         Endpoint = Send.Delete <| sprintf "/api/remedyrates/%O" rate.Id
                                                                         OnSubmit = Some (fun _ ->
                                                                             setState (fun state props ->

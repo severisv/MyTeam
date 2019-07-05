@@ -86,10 +86,10 @@ let element props children =
                                                         str rate.Description
                                                         currency [] rate.Amount
                                                         EditRemedyRate.editRemedyRate
-                                                            (fun handleOpen -> linkButton handleOpen [Icons.edit ""])
+                                                            (fun handleOpen -> linkButton [OnClick handleOpen] [Icons.edit ""])
                                                             (handleEdited setState) rate
                                                         Modal.modal
-                                                            { OpenButton = fun handleOpen -> linkButton handleOpen [Icons.delete]
+                                                            { OpenButton = fun handleOpen -> linkButton [OnClick handleOpen] [Icons.delete]
                                                               Content =
                                                                 fun handleClose ->
                                                                     div [] [
@@ -115,7 +115,7 @@ let element props children =
                                     block [] [
                                         navListBase [Header <| str "Botsjef" ] [
                                             AddRemedyRate.addRemedyRate
-                                                (fun handleOpen -> linkButton handleOpen [Icons.add ""; whitespace; str "Legg til satser" ])
+                                                (fun handleOpen -> linkButton [OnClick handleOpen] [Icons.add ""; whitespace; str "Legg til satser" ])
                                                 (handleAdded setState) (handleDeleted setState)
                                         ]]                       
                     ]
