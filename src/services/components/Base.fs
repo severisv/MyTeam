@@ -2,15 +2,12 @@ namespace MyTeam.Views
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open Shared
 
 module BaseComponents =
-
+    
     let empty = rawText ""
     let whitespace = rawText "&nbsp;"
-
     let _empty = attr "" ""
-    
     let fragment = renderHtmlNodes >> rawText
 
     let antiforgeryToken ctx =
