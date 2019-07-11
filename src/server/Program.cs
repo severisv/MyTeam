@@ -30,13 +30,7 @@ namespace MyTeam
                     logging.AddConsole();
                     logging.AddDebug();
                     logging.AddApplicationInsights(hostingContext.Configuration["ApplicationInsights:InstrumentationKey"] ?? "");
-                    logging.AddSlack(options =>
-                    {
-                        options.WebhookUrl =
-                            "https://hooks.slack.com/services/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";
-                        options.LogLevel = hostingContext.HostingEnvironment.IsDevelopment() ? LogLevel.None : LogLevel.Information;
-                        options.Channel = "#myteam";
-                    });
+                    logging.AddSlack();
                 })
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
