@@ -30,10 +30,14 @@ let toNullableInt (v : Option<'T> when 'T :> Enum) =
         Nullable(LanguagePrimitives.EnumToValue(x))
     | _ -> Nullable()
 
-
 open Microsoft.FSharp.Reflection
 
 let fromString<'a> (s:string) =
-    match FSharpType.GetUnionCases typeof<'a> |> Array.filter (fun case -> case.Name = s) with
+    match FSharpType.GetUnionCases typeof<'a> |> Array.filter (fun case -> case.Name.ToLowerInvariant() = s.ToLowerInvariant()) with
     |[|case|] -> FSharpValue.MakeUnion(case,[||]) :?> 'a
     |_ -> failwithf "Ugyldig verdi for Enum %s: '%s'" typeof<'a>.FullName s
+
+
+let tryFromString<'a> s =
+    try Ok <| fromString<'a> s
+    with e -> Error <| e.Message

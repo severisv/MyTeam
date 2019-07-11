@@ -14,8 +14,8 @@ let view (club : Club) (user : User) status (ctx : HttpContext) =
     let status =
         match status with
         | Some s -> 
-            Enums.tryParse<Status> s
-            |> function 
+            Enums.tryFromString<Status> s
+            |> function
             | Ok s -> s
             | Error _ -> Status.Aktiv
         | None -> Status.Aktiv
