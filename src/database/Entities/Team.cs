@@ -10,7 +10,7 @@ namespace MyTeam.Models.Domain
     public enum Formasjon
     {
         FireFireTo = 442,
-        FireTreTre = 442,
+        FireTreTre = 433,
         TreToEn = 321,
         ToTreEn = 231,
     }

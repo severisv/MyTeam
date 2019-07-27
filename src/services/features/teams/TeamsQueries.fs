@@ -1,7 +1,6 @@
 namespace MyTeam.Teams
 
 open MyTeam
-open Shared
 open Shared.Domain
 
 module Queries =
@@ -12,12 +11,13 @@ module Queries =
             query {
                 for t in db.Teams do
                     where (t.ClubId = clubId)
-                    select (t.Id, t.ShortName, t.Name)  }
+                    select (t.Id, t.ShortName, t.Name, t.Formation)  }
             |> Seq.toList            
-            |> List.map(fun (id, shortName, name) -> 
+            |> List.map(fun (id, shortName, name, formation) -> 
                             {   Id = id
                                 ShortName = shortName
-                                Name = name  })
+                                Name = name
+                                LeagueType = formation |> Clubs.asLeagueType  })
             |> List.sortBy(fun t -> t.ShortName)
 
 

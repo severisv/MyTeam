@@ -20,10 +20,12 @@ module Pages =
 
         match selectedTeamShortName with
         | None -> club.Teams |> List.tryHead |> Option.map(Team)
-        | Some s when (s |> toLower) = "samlet" -> All club.Teams |> Some
+        | Some s when (s |> toLower) = "samlet" -> Elleven (club.Teams |> List.filter (fun t -> t.LeagueType = Ellever)) |> Some
+        | Some s when (s |> toLower) = "ellever" -> Elleven (club.Teams |> List.filter (fun t -> t.LeagueType = Ellever)) |> Some
+        | Some s when (s |> toLower) = "syver" -> Seven (club.Teams |> List.filter (fun t -> t.LeagueType = Syver)) |> Some
         | Some s -> club.Teams 
                     |> List.tryFind (fun t -> t.ShortName |> toLower = (s |> toLower))
-                    |> Option.map(Team)
+                    |> Option.map Team
         |> function
         | None -> NotFound
         | Some selectedTeam ->
@@ -31,7 +33,8 @@ module Pages =
             let teamIds = 
                 match selectedTeam with
                 | Team t -> [t.Id]
-                | All teams -> teams |> List.map (fun t -> t.Id)            
+                | Seven teams -> teams |> List.map (fun t -> t.Id)            
+                | Elleven teams -> teams |> List.map (fun t -> t.Id)            
 
             let treningskamp = (Nullable <| int GameType.Treningskamp)
             let years =
@@ -52,12 +55,12 @@ module Pages =
                 | Some y when y |> isNumber -> Year <| Number.parse y
                 | Some y -> failwithf "Valgt år kan ikke være %s" y
 
-
             let stats = StatsQueries.get db selectedTeam selectedYear 
                            
             let statsUrl team year = 
                 let team = match team with 
-                           | All _ -> "samlet"
+                           | Seven _ -> "syver"
+                           | Elleven _ -> "ellever"
                            | Team t -> t.ShortName 
                 let year = match year with
                            | AllYears _ -> "total"
@@ -65,11 +68,15 @@ module Pages =
                 
                 sprintf "/statistikk/%s/%s" team year       
 
-
             let isSelected url = 
                 statsUrl selectedTeam selectedYear = url      
 
             let getImage = Images.getMember ctx
+            
+            let leagueTypes =
+                club.Teams
+                |> List.map (fun team -> team.LeagueType)
+                |> List.distinct
           
             [
                 mtMain [] [
@@ -81,11 +88,17 @@ module Pages =
                                                         ShortText = team.ShortName
                                                         Icon = Some <| Icons.team ""
                                                         Url = statsUrl (Team team) selectedYear  }
-                                            )) @ [  {   Text = "Samlet"
-                                                        ShortText = "Samlet"
-                                                        Icon = None
-                                                        Url = statsUrl (All club.Teams) selectedYear }
-                                                ])                           
+                                            )) @ (leagueTypes
+                                                |> List.map (fun leagueType ->
+                                                               let text = if leagueTypes.Length > 1 then string leagueType
+                                                                          else "Samlet"
+                                                               { Text = text
+                                                                 ShortText = text
+                                                                 Icon = None
+                                                                 Url = statsUrl (match leagueType with
+                                                                                 | Syver -> Seven []
+                                                                                 | Ellever -> Elleven []
+                                                                                 ) selectedYear })))                           
                                 isSelected)
                             
                         !!(navListMobile

@@ -8,12 +8,12 @@ module StatsQueries =
 
     let get : GetStats =
         fun db selectedTeam selectedYear ->
-                                 
-
+                              
             let teamIds = 
                 let teams = match selectedTeam with
                             | Team t -> [t]
-                            | All teams -> teams
+                            | Seven teams -> teams
+                            | Elleven teams -> teams
 
                 teams |> Seq.map (fun t -> t.Id)                  
                                 

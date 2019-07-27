@@ -1,16 +1,15 @@
 namespace MyTeam.Stats
 
 open MyTeam
-open Shared
 open Shared.Domain
-open System
 
 type SelectedYear = 
     | AllYears
     | Year of int
 
 type SelectedTeam =
-    | All of Team list
+    | Seven of Team list
+    | Elleven of Team list
     | Team of Team
 
 

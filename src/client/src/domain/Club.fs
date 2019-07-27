@@ -4,10 +4,15 @@ open System
 
 type TeamId = Guid
 
+type LeagueType =
+    | Syver
+    | Ellever
+
 type Team = {
         Id: TeamId
         ShortName: string
         Name: string
+        LeagueType: LeagueType
 }
 
 type ClubIdentifier = ClubIdentifier of string
