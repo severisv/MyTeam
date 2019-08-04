@@ -197,7 +197,7 @@ type SelectSquad(props) =
                                       Send.sendElement
                                         (fun o -> { o with
                                                       IsSent = game.Squad.IsPublished
-                                                      SendElement = btn, [Lg], [str "Publiser tropp"]
+                                                      SendElement = btn, [Lg; Primary], [str "Publiser tropp"]
                                                       SentElement = btn, [Lg; Success], [str "Publisert"]            
                                                       Endpoint = Send.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })
                                     ] ] ] ] ]

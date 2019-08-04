@@ -345,7 +345,7 @@ type GamePlan(props) =
                         Send.sendElement 
                             (fun o -> { o with 
                                           IsSent = model.GamePlanIsPublished
-                                          SendElement = btn, [Lg], [str "Publiser"]
+                                          SendElement = btn, [Lg;Primary], [str "Publiser"]
                                           SentElement = btn, [Lg;Success], [str "Publisert"]                         
                                           Endpoint = Send.Post (sprintf "/api/games/%O/gameplan/publish" model.GameId, None) })
                     ]                   
