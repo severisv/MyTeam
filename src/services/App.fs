@@ -110,6 +110,8 @@ module App =
                             (user => fun user ->
                                 choose [                                                
                                     GET >=> choose [    
+                                        route "/asd" >=>
+                                            (Events.List.view club user |> htmlGet)
                                         route "/lagliste" >=>
                                             (Members.Pages.List.view club user None |> htmlGet)
                                         routef "/lagliste/%s" <| fun status ->
@@ -159,6 +161,10 @@ module App =
                         (choose [
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                                 routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
+                            PUT >=> (user => fun user -> 
+                                routef "/%O/signup" (Events.Api.signup club.Id user >> jsonPost))
+                            PUT >=> (user => fun user -> 
+                                routef "/%O/signup/message" (Events.Api.signupMessage club.Id user >> jsonPost))
                         ])
                     subRoute "/api/members" 
                         <| choose [ 

@@ -18,7 +18,8 @@ type TextareaState =
 
 type TextareaProps =
     { Value : string
-      Url : string }
+      Url : string
+      Placeholder: string option }
 
 type Textarea(props) =
     inherit Component<TextareaProps, TextareaState>(props)
@@ -58,7 +59,7 @@ type Textarea(props) =
                 |> Promise.start) 750
         div [ Class "input-textarea" ] [ textarea 
                                              [ Class "form-control"
-                                               Placeholder "Beskjed til spillerne"
+                                               Placeholder (props.Placeholder |> Option.defaultValue "")
                                                DefaultValue props.Value
                                                OnChange(fun input -> handleChange input.Value) ] []
                                          (match this.state with

@@ -57,6 +57,7 @@
     <Compile Include="features/attendance/pages/Register.fs" />
     <Compile Include="features/attendance/pages/Show.fs" />
     <Compile Include="features/events/EventsApi.fs" />
+    <Compile Include="features\events\EventsList.fs" />
     <Compile Include="features\fines\Fines.fs" />
     <Compile Include="features\fines\FineApi.fs" />
     <Compile Include="features\fines\FineSummary.fs" />

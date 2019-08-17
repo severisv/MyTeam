@@ -29,7 +29,10 @@ type SendError =
 type ReactComponent = IHTMLProp list -> ReactElement list -> ReactElement
 
 type SendProps<'a> =
-    { IsSent : bool
+    { IsSent : bool option
+      SentClass: string option
+      Spinner: ReactElement list option
+      SentIndicator: ReactElement list option
       SendElement : ReactComponent * IHTMLProp list * ReactElement list
       SentElement : ReactComponent * IHTMLProp list * ReactElement list
       Endpoint : Endpoint<'a>
@@ -81,7 +84,10 @@ let internal handleClick props setState _ =
 
 
 let sendElement getProps =
-    let props =  getProps { IsSent = false
+    let props =  getProps { IsSent = None
+                            SentIndicator = Some [Icons.checkCircle; whitespace]
+                            SentClass = Some "disabled"
+                            Spinner = Some [Icons.spinner]
                             Endpoint = Post("", None)
                             IsDisabled = false
                             OnError = None
@@ -94,16 +100,23 @@ let sendElement getProps =
     
     komponent<SendProps<'a>, SendState>
         props
-        (if props.IsSent then Submitted else Default)
+        Default
         None
         (fun (props, state, setState) ->
             
             let handleClick = handleClick props setState
+            
+            let state =
+                match (state, props.IsSent) with
+                | (Default, Some true) -> Submitted
+                | (Submitted, Some false) -> Submitted
+                | _ -> state
+                    
             match state with
             | Submitted ->
-                    sentElement (Html.mergeClasses [Class "disabled"] sentAttr)
-                                ([Icons.checkCircle; whitespace ] @ sentChildren)
-            | Sending -> sendElement ([Class "disabled" ] @ sendAttr) [Icons.spinner]
+                    sentElement (Html.mergeClasses [Class (props.SentClass |> Option.defaultValue "")] sentAttr)
+                                ((props.SentIndicator |> Option.defaultValue [empty]) @ sentChildren)
+            | Sending -> sendElement ([Class "disabled" ] @ sendAttr) (props.Spinner |> Option.defaultValue sendChildren)
             | Error ->
                 fragment [] [ sendElement (Html.mergeClasses [OnClick handleClick] sendAttr) sendChildren
                               Labels.error ]

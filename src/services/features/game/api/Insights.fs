@@ -36,7 +36,7 @@ let get (club : Domain.Club) (teamName, year) (db : Database) =
         query { 
             for game in db.Games do
                 where
-                    (game.TeamId = team.Id && game.DateTime.Year = year && game.DateTime < now 
+                    (game.TeamId.Value = team.Id && game.DateTime.Year = year && game.DateTime < now 
                      && game.GameType <> Nullable(0))
                 leftOuterJoin ge in db.EventAttendances on (game.Id = ge.EventId) into result
                 for ge in result do

@@ -43,6 +43,8 @@
 
 .event-signupButtons {
     margin-left: 16.66%;
+  
+    .btn { margin-right: 0.5em;}
 }
 
 
@@ -54,6 +56,28 @@
       .r-under-xxs({
         margin-left:1em;
     });
+
+  a.collapse-link {
+    margin-bottom: 0;
+    text-align: left;
+    font-size: 1.2em;
+    font-family: @fontRegular;
+    display: flex;
+    
+    &.collapsed:before {
+      left: -1.4em;
+    } 
+    &:before {
+      left: -1.5em;
+    }
+  }
+
+  li a.mt-popover {
+    margin-left: 1em;
+    font-size: 0.8em;
+    vertical-align: 0.2em;
+  }
+  
 
 }
 
@@ -91,54 +115,12 @@
     text-align: left;
 }
 
-.attendee-links.attendee-links--game a{
-            font-family: @fontBold;
-            font-size: 1.6em;
-
-
-        }
-
 .attendee-links {
+  
+  
     a {
 
         font-size: 1.2em;
-
-
-        span:first-child {
-
-            &:before {
-                margin-top: -0.1em;
-                 margin-left: -1.6em;
-                .r-under-xs({margin-left: -1.4em;});
-                .r-under-xxs({
-                    margin-left: -1.3em;
-                    font-size:0.7em;
-                    margin-top:0.25em;
-});
-                position: absolute;
-                content: "\f078";
-                font-family: FontAwesome;
-            }
-        }
-
-
-
-        &.collapsed {
-            span:first-child:before {
-                margin-top: 0;
-                margin-left: -1.4em;
-                .r-under-xs({margin-left: -1.2em;});
-                .r-under-xxs({
-                    margin-left: -1.1em;
-                    font-size:0.7em;
-                    margin-top: 0.35em;
-
-});
-                content: "\f054";
-                font-family: FontAwesome;
-            }
-        }
-
         &:focus {
             text-decoration: none;
         }
@@ -153,13 +135,6 @@
     font-size: 1.1em;
 
 }
-
-.event-attendees.game ul li {
-    font-size: 1.3em;
-    line-height: 1.6em;
-
-}
-
 
 .event-attendees .attendee {
     color: @black-faded;
@@ -279,13 +254,6 @@ select.event-teamSelect {
         vertical-align: 1.8em;
     }
 }
-
-.event-signupMessageIcon {
-    font-size: 0.8em;
-    vertical-align: 0.2em;
-
-}
-
 
 
 .event-editButtons {

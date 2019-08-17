@@ -36,7 +36,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                     Date = date
                     Location = location
                     Description = description =?? ""
-                    TeamId = teamId
+                    TeamId = teamId.Value
                     Squad = {
                                 IsPublished = squadIsPublished
                                 MemberIds = attendees 

@@ -16,6 +16,9 @@ namespace MyTeam.Models.Domain
     {
         [Required]
         public Guid ClubId { get; set; }
+        
+        public Guid? TeamId { get; set; }
+        public virtual Team Team { get; set; }
         [Required]
         public int Type { get; set; }
         public int? GameType { get; set; }

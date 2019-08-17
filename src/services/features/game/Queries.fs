@@ -47,7 +47,7 @@ let listGameYears: ListGameYears =
     fun db teamId ->
         query {
             for game in db.Games do
-            where (game.TeamId = teamId)
+            where (game.TeamId = Nullable teamId)
             select game.DateTime.Year
             distinct
         }
@@ -59,7 +59,7 @@ let listGames: ListGames =
     fun db teamId year ->
                 query {
                     for game in db.Games do
-                    where (game.TeamId = teamId && game.DateTime.Year = year)
+                    where (game.TeamId = Nullable teamId && game.DateTime.Year = year)
                     select (game.Id, game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
                  }
                  |> Seq.map (fun (id, name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->

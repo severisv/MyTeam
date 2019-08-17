@@ -230,14 +230,14 @@ namespace MyTeam.Services.Domain
 
             var now = DateTime.Now;
             var games = _dbContext.Games.Where(
-                          g => teamIds.Contains(g.TeamId) &&
+                          g => teamIds.Contains(g.TeamId.Value) &&
                           g.GameTypeValue != GameType.Treningskamp &&
                           g.DateTime < now
                           && g.Attendees.Any(a => a.MemberId == playerId && a.IsSelected)
                           )
                 .Select(g => new GameAttendanceViewModel
                 {
-                    TeamId = g.TeamId,
+                    TeamId = g.TeamId.Value,
                     DateTime = g.DateTime
                 }).ToList();
 

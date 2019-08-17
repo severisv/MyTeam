@@ -11,5 +11,6 @@ module EntryPoint =
       Fines.List.element |> ignore
       Fines.RemedyRates.element |> ignore
       Fines.Payments.element |> ignore
+      Events.List.element |> ignore
       News.DeleteArticle.deleteArticle |> ignore ] 
     |> ignore
