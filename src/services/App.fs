@@ -56,7 +56,8 @@ module App =
                         <|  choose [                                                
                                 GET >=> choose [    
                                     route "" >=> (Games.Pages.List.view club user None None |> htmlGet)
-                                    routef "/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                                    routef "/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                                    routef "/vis/%O" (fun (gameId: System.Guid) -> redirectTo true (sprintf "/kamper/%O" gameId))
                                     routef "/%O/resultat" <| fun gameId -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
                                     routef "/%O/laguttak" <| fun gameId -> 
@@ -92,18 +93,13 @@ module App =
                     route "/om" >=> GET >=> (About.show club user |> htmlGet)        
                     route "/om/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
-                            choose  [
-                                        GET >=> (About.edit club user |> htmlGet)                   
-                                        POST >=> (About.editPost club user |> htmlGet)                   
-                                    ]                    
+                            choose  [ GET >=> (About.edit club user |> htmlGet)                   
+                                      POST >=> (About.editPost club user |> htmlGet) ]                    
                     route "/støttespillere" >=> GET >=> (Sponsors.show club user |> htmlGet)        
                     route "/støttespillere/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
-                            choose  [
-                                        GET >=> (Sponsors.edit club user |> htmlGet)                   
-                                        POST >=> (Sponsors.editPost club user |> htmlGet)                   
-                                    ]
-                    
+                            choose  [ GET >=> (Sponsors.edit club user |> htmlGet)                   
+                                      POST >=> (Sponsors.editPost club user |> htmlGet) ]                    
                        
                     subRoute "/intern" 
                         mustBeMember >=>

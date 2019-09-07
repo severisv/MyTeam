@@ -57,11 +57,15 @@ let internal updateAttendance clubId (user: User) eventId (ctx : HttpContext) up
             |> function
             | Some ea ->
                 ea
-            | None -> EventAttendance(MemberId = user.Id,
-                                      EventId = eventId)
+            | None ->
+                let ea =
+                    EventAttendance(
+                      MemberId = user.Id,
+                      EventId = eventId)
+                db.EventAttendances.Add ea |> ignore
+                ea
             |> fun ea ->
                 updateFn ea
-                db.EventAttendances.Attach ea |> ignore
                 db.SaveChanges() |> ignore
                 OkResult None
                 

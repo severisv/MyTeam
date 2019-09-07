@@ -64,7 +64,7 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
                       div [ _class "table gamesTable table--striped" ]  
                             (games 
                             |> List.map (fun game ->
-                                a [ _class "games-showGameLink"; _href <| sprintf "/kamper/vis/%O" game.Id ] [ 
+                                a [ _class "games-showGameLink"; _href <| sprintf "/kamper/%O" game.Id ] [ 
                                     span [ _class "hidden-xs gameType" ][ 
                                         !!(Icons.gameType game.Type)
                                     ]

@@ -23,7 +23,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
         [
             mtMain [] [
                     block [ _class "registerResult" ] [
-                        a [ _href <| sprintf "/kamper/vis/%O" game.Id; _class "pull-right"; _title "Vis kamp" ] [ 
+                        a [ _href <| sprintf "/kamper/%O" game.Id; _class "pull-right"; _title "Vis kamp" ] [ 
                             !!(Icons.arrowLeft "")
                             span [ _class "hidden-xxs" ] [ encodedText "Tilbake" ]
                         ]                                

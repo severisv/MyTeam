@@ -28,7 +28,7 @@ let view (club: Club) (user: User option) name (ctx: HttpContext) =
                         (article.GameId 
                           |> Option.map (fun gameId ->
                                 a [ 
-                                    _href <| sprintf "/kamper/vis/%O" gameId
+                                    _href <| sprintf "/kamper/%O" gameId
                                     _class "pull-right u-font-normal" 
                                   ]
                                   [ 

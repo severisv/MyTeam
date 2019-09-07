@@ -203,7 +203,7 @@ let element props children =
                                                                                       Some <| fun () ->  Encode.Auto.toString(0, { IsAttending = true })) })
                                                       sendElement (fun o ->
                                                                     { o with
-                                                                       IsSent = Some <| not userIsAttending
+                                                                       IsSent = Some <| (not userIsAttending && userAttendance.IsSome)
                                                                        SentClass = None
                                                                        Spinner = None
                                                                        SentIndicator = None
@@ -291,8 +291,6 @@ let element props children =
                                                                                         ]
                                                                                         (user.IsInRole [Role.Trener] && Strings.hasValue ea.Message)
                                                                                             &? tooltip ea.Message [] [Icons.comment]
-
-                                                                                        
                                                                                     ]))
                                                                         ] ]
                                                             ]
@@ -301,7 +299,7 @@ let element props children =
                                              ] ] ]
                                     ]))
                         ]
-                    ]
+                    ]                    
                     sidebar [] []
                 ]
 
