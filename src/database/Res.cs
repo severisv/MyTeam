@@ -22,7 +22,7 @@ namespace MyTeam.Resources
         public const string ConfirmDelete = "Er du sikker på at du vil slette?";
         public const string Create = "Opprett";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
-        public const string CoachMenu = "Adminmeny";
+        public const string CoachMenu = "Admin";
         public const string Description = "Beskrivelse";
         public const string Date = "Dato";
         public const string Delete = "Slett";

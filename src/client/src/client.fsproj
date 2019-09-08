@@ -37,6 +37,7 @@
     <Compile Include="components\client\Textinput.fs" />
     <Compile Include="components\client\Send.fs" />
     <Compile Include="components\client\EditBlock.fs" />
+    <Compile Include="features\common\Admin.fs" />
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features\fines\Fines.fs" />

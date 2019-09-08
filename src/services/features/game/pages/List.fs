@@ -111,7 +111,7 @@ let view (club: Club) (user: User option) selectedTeamShortName selectedYear (ct
                         if user.IsInRole [Role.Admin;Role.Trener] then
                             block [] [ 
                                 !!(navList 
-                                    {   Header = "Adminmeny"
+                                    {   Header = "Admin"
                                         Items = 
                                             [
                                                 { Text = [ Icons.add ""; Fable.React.Helpers.str " Legg til kamp" ]; Url = "/intern/arrangement/ny?type=Kamp" }

@@ -1,5 +1,6 @@
 namespace MyTeam
 
+open Client.Features.Common
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
@@ -14,7 +15,7 @@ open MyTeam.Views.BaseComponents
 [<AutoOpen>]
 module Pages =
 
-    let coachMenuItems = Views.Admin.coachMenuItems
+    let coachMenuItems = Admin.coachMenuItems
 
 
     let internalMenuItems =
@@ -95,8 +96,8 @@ module Pages =
                                             ] @ (user.IsInRole [ Role.Admin; Role.Trener ] =?
                                                     ([
                                                         hr [ _class "visible-xs submenu-divider" ]
-                                                        ul [ _class "nav navbar-nav submenu visible-xs adminMenu" ]
-                                                            coachMenuItems
+                                                        (!!(Fable.React.Standard.ul [ Fable.React.Props.Class "nav navbar-nav submenu visible-xs adminMenu" ]
+                                                           coachMenuItems))
                                                         ], [])))
 
                                             ) []

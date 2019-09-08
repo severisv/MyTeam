@@ -41,7 +41,6 @@
     <Compile Include="common/Tenant.fs" />
     <Compile Include="common/News.fs" />
     <Compile Include="common/Notifications.fs" />
-    <Compile Include="common/views/partials/Admin.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />
     <Compile Include="common/views/partials/Login.fs" />
     <Compile Include="common/views/partials/Notifications.fs" />
