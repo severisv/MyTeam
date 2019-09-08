@@ -11,8 +11,10 @@ open Shared.Components.Layout
 open Shared.Components.Tabs
 open Shared.Components
 open Send
+open Shared.Components
 open Shared.Components.Icons
 open Shared.Components.Base
+open Shared.Components.Nav
 open Shared.Domain
 open Shared.Domain.Members
 open System
@@ -300,7 +302,14 @@ let element props children =
                                     ]))
                         ]
                     ]                    
-                    sidebar [] []
+                    sidebar [] [
+                        user.IsInRole [Admin;Trener] &?
+                            block [] [
+                                navListBase [ Header <| str "Admin" ] [
+                                            a [Href "/intern/arrangement/ny"] [Icons.add "";whitespace;str "Opprett trening"]
+                                           ]
+                            ]
+                    ]
                 ]
 
 
