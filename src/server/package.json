@@ -22,7 +22,7 @@
     "jquery": "^3.4.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "mini-css-extract-plugin": "^0.8.0",
+    "mini-css-extract-plugin": "^0.8.2",
     "moment": "^2.24.0",
     "natives": "^1.1.6",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
