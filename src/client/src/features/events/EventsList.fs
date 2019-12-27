@@ -223,13 +223,14 @@ let element props children =
                                                               fr [] [
                                                                   a [ Title "Beskjed til trenerne"
                                                                       Class <| sprintf "event-addMessage %s" (if state.Value then "active" else "")
-                                                                      OnClick (fun _ -> setState(fun state props -> { state with Value = not state.Value }))
+                                                                      OnClick (fun e -> Browser.Dom.console.log(state); setState(fun state props -> { state with Value = not state.Value }))
                                                                   ] [Icons.comment]
                                                                   br []
-                                                                  div [Class <| sprintf "event-message %s" (if state.Value then "" else "hidden")] [
-                                                                      Textarea.render { Placeholder = Some "Beskjed til trenerne"
-                                                                                        Url = sprintf "/api/events/%O/signup/message" event.Id
-                                                                                        Value = userAttendance |> Option.map(fun ea -> ea.Message) |> Option.defaultValue ""}
+                                                                  state.Value &?
+                                                                      div [Class "event-message"] [
+                                                                          Textarea.render { Placeholder = Some "Beskjed til trenerne"
+                                                                                            Url = sprintf "/api/events/%O/signup/message" event.Id
+                                                                                            Value = userAttendance |> Option.map(fun ea -> ea.Message) |> Option.defaultValue ""}
                                                               ]]
                                                         )
                                                     ])
