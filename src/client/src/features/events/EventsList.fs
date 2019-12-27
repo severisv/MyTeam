@@ -52,10 +52,12 @@ type Event = {
     Signups: Attendee list
  }
 
+type Period = Upcoming | Previous
 
 type Model = {
     User: User
     Events: Event list
+    Period: Period
  }
 
 type Signup = {
@@ -67,6 +69,12 @@ type State = {
 }
 
 type BoolState = { Value: bool }
+
+
+let createUrl =
+    function
+    | Upcoming -> "/intern"
+    | Previous -> "/intern/arrangementer/tidligere"
 
 let containerId = "list-events"
 let element props children =
@@ -86,13 +94,13 @@ let element props children =
                                   tabs []
                                        [{ Text = " Kommende"
                                           ShortText = " Kommende"
-                                          Url = "/intern"
+                                          Url = createUrl Upcoming
                                           Icon = Some(Icons.calendar "") }
                                         { Text = " Tidligere"
                                           ShortText = " Tidligere"
-                                          Url = "/intern/arrangementer/tidligere"
+                                          Url = createUrl Previous
                                           Icon = Some(Icons.previous "") } ]
-                                       ((=) "/intern")
+                                       ((=) (createUrl props.Period))
                               ]
                           ]
                           fr [] 

@@ -62,7 +62,7 @@
         {
             <hr class="visible-xs submenu-divider" />
             <ul class="nav navbar-nav submenu visible-xs">
-                <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
+                <li><a href="/intern"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
                 <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a href="/intern/boter/oversikt"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a href="/intern/lagliste"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>
@@ -90,7 +90,7 @@
         @if (Context.UserIsMember())
         {
             <ul id="submenu-internal" class="nav navbar-nav submenu slide-down-child  hidden-xs collapse">
-                <li><a asp-controller="event" asp-action="index"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
+                <li><a href="/intern"><i class="@Icons.Signup"></i> @Res.Signup</a></li>
                 <li><a href="/intern/oppmote"><i class="@Icons.Attendance"></i> @Res.Attendance</a></li>
                 <li><a href="/intern/boter/oversikt"><i class="@Icons.Fine"></i> Bøter</a></li>
                 <li><a href="/intern/lagliste"><i class="@Icons.SquadList"></i> @Res.SquadList</a></li>

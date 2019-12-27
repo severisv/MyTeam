@@ -6,7 +6,6 @@ using MyTeam.Models.Domain;
 using MyTeam.Models.Enums;
 using MyTeam.ViewModels.Events;
 using Microsoft.EntityFrameworkCore;
-using MyTeam.Models.General;
 using MyTeam.Services.Application;
 
 namespace MyTeam.Services.Domain
@@ -27,92 +26,8 @@ namespace MyTeam.Services.Domain
         {
             return _dbContext.Events.Single(e => e.Id == id);
         }
+   
 
-        public PagedList<EventViewModel> GetUpcoming(EventType type, Guid clubId, IEnumerable<Guid> teamIds, bool showAll = false)
-        {
-            var now = DateTime.Now;
-            var query = _dbContext.Events
-                .Where(t => t.ClubId == clubId)
-                .Where(t => type == EventType.Alle || t.Type == type.ToInt())
-                .Where(t => t.DateTime >= now)
-                .Include(t => t.EventTeams)
-                .ToList();
-
-            if (!showAll)
-                query = query.Where(t => t.SignupHasOpened() || (t.Type == EventType.Kamp.ToInt() && t.GameTypeValue == GameType.Treningskamp)).ToList();
-
-
-            var result = query
-                .OrderBy(e => e.DateTime)
-                .Select(e =>
-                new EventViewModel(
-                    e.ClubId, e.EventTeams.Select(et => et.TeamId).ToList(),
-                    e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
-                )).ToList();
-
-            result = result.Where(r => r.TeamIds.ContainsAny(teamIds) || r.GameType == GameType.Treningskamp).ToList();
-
-            return new PagedList<EventViewModel>(result, 0, 0, result.Count);
-        }
-
-
-        public PagedList<EventViewModel> GetPrevious(IEnumerable<Guid> teamIds, EventType type, int page)
-        {
-            var pageSize = 10;
-            var skip = pageSize * (page - 1);
-
-            var queryable = GetPastEvents(type, teamIds);
-
-            var totalCount = queryable.Count();
-
-            var result = queryable.Skip(skip).Take(pageSize)
-                .Include(t => t.EventTeams)
-                .ToList();
-
-            var resultViewModels = result.Select(e =>
-                new EventViewModel(
-                    e.ClubId, e.EventTeams.Select(et => et.TeamId),
-                    e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
-                )).ToList();
-
-            return new PagedList<EventViewModel>(resultViewModels, skip, pageSize, totalCount);
-        }
-
-        private IOrderedQueryable<Event> GetPastEvents(EventType type, IEnumerable<Guid> teamIds)
-        {
-            var now = DateTime.Now;
-            return _dbContext.Events
-                .Where(t => t.EventTeams.Any(et => teamIds.Contains(et.TeamId)))
-                .Where(t => type == EventType.Alle || t.Type == type.ToInt())
-                .Where(t => t.DateTime < now)
-                .OrderByDescending(e => e.DateTime);
-
-        }
-
-        public AttendeeViewModel SetAttendance(Guid eventId, Guid memberId, bool isAttending, Guid clubId)
-        {
-            var attendance = _dbContext.EventAttendances.FirstOrDefault(e => e.EventId == eventId && e.MemberId == memberId);
-            if (attendance != null)
-            {
-                attendance.IsAttending = isAttending;
-            }
-            else
-            {
-                attendance = new EventAttendance
-                {
-                    EventId = eventId,
-                    MemberId = memberId,
-                    IsAttending = isAttending,
-                };
-                _dbContext.EventAttendances.Add(attendance);
-            }
-            _dbContext.SaveChanges();
-            _cacheHelper.ClearNotificationCacheByMemberId(clubId, memberId);
-
-            return _dbContext.Members.Where(p => p.Id == memberId)
-                    .Select(p => new AttendeeViewModel(memberId, eventId, attendance.SignupMessage, isAttending, attendance.DidAttend, attendance.IsSelected,
-                                new AttendeePlayerViewModel(memberId, p.FirstName, p.LastName, p.UserName, p.UrlName, (PlayerStatus)p.Status))).First();
-        }
 
         public void Add(Guid clubId, params Event[] events)
         {
@@ -201,34 +116,7 @@ namespace MyTeam.Services.Domain
 
             }).ToList();
         }
-
-        public void SignupMessage(Guid eventId, Guid memberId, string message)
-        {
-            var attendance = _dbContext.EventAttendances.SingleOrDefault(a => a.EventId == eventId && a.MemberId == memberId);
-
-            if (attendance == null)
-            {
-                attendance = new EventAttendance
-                {
-                    Id = Guid.NewGuid(),
-                    EventId = eventId,
-                    MemberId = memberId
-                };
-                _dbContext.EventAttendances.Add(attendance);
-            }
-
-            attendance.SignupMessage = message;
-            _dbContext.SaveChanges();
-        }
-
-        public SignupDetailsViewModel GetSignupDetailsViewModel(Guid eventId)
-            => _dbContext.Events.Where(e => e.Id == eventId)
-                .Select(e =>
-                    new SignupDetailsViewModel(
-                        e.EventTeams.Select(et => et.TeamId).ToList(),
-                        e.Attendees.Select(a => new AttendeeViewModel(a.MemberId, eventId, a.SignupMessage, a.IsAttending, a.DidAttend, a.IsSelected,
-                        new AttendeePlayerViewModel(a.MemberId, a.Member.FirstName, a.Member.LastName, a.Member.UserName, a.Member.UrlName, (PlayerStatus)a.Member.Status))).ToList(),
-                        e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Voluntary, e.IsPublished)).First();
+       
 
     }
 }

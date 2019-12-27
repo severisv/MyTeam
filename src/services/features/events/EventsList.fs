@@ -9,43 +9,54 @@ open Shared
 open System.Linq
 open Strings
 
-let view (club : Club) (user : User) (ctx : HttpContext) =
+let internal view (period: Period) (club : Club) (user : User) (ctx : HttpContext) =
      let db = ctx.Database
      let (ClubId clubId) = club.Id
      let now = DateTime.Now
      let inTwoHours = now.AddHours -2.0
      let in14Days = now.AddDays 14.0
+     
      let events =
-         query {
-             for event in db.Events do             
-             where (event.ClubId = clubId &&
-                    event.DateTime >= inTwoHours &&
-                    (event.GameType = Nullable(int Models.Enums.GameType.Treningskamp) || event.DateTime < in14Days) 
-                    )
-             
-             groupJoin ea in db.EventAttendances 
-               on (event.Id = ea.EventId) into attendances
-            
-             for ea in attendances.DefaultIfEmpty() do
-             
-             select ({|Id = event.Id
-                       Description = !!event.Description
-                       DateTime = event.DateTime
-                       Location = event.Location
-                       Type = event.Type
-                       GameType = event.GameType
-                       Opponent = event.Opponent
-                       TeamId = event.TeamId
-                       SquadIsPublished = event.IsPublished
-                     |}, {| FirstName = ea.Member.FirstName
-                            LastName = ea.Member.LastName
-                            UrlName = ea.Member.UrlName
-                            Message = !!ea.SignupMessage
-                            Id = Nullable ea.MemberId
-                            IsAttending = ea.IsAttending
-                            IsSelected = Nullable ea.IsSelected |}
-                     )
-         }
+         (match period with
+         | Upcoming ->
+              query {
+                 for event in db.Events do             
+                 where (event.ClubId = clubId &&
+                        event.DateTime >= inTwoHours &&
+                        (event.GameType = Nullable(int Models.Enums.GameType.Treningskamp) || event.DateTime < in14Days) 
+                        )
+             }
+         | Previous ->
+             query {
+                 for event in db.Events do             
+                 where (event.ClubId = clubId && event.DateTime < inTwoHours)
+             })     
+         |> fun events ->
+             query {
+                 for event in events do             
+                 groupJoin ea in db.EventAttendances 
+                   on (event.Id = ea.EventId) into attendances
+                
+                 for ea in attendances.DefaultIfEmpty() do
+                 
+                 select ({|Id = event.Id
+                           Description = !!event.Description
+                           DateTime = event.DateTime
+                           Location = event.Location
+                           Type = event.Type
+                           GameType = event.GameType
+                           Opponent = event.Opponent
+                           TeamId = event.TeamId
+                           SquadIsPublished = event.IsPublished
+                         |}, {| FirstName = ea.Member.FirstName
+                                LastName = ea.Member.LastName
+                                UrlName = ea.Member.UrlName
+                                Message = !!ea.SignupMessage
+                                Id = Nullable ea.MemberId
+                                IsAttending = ea.IsAttending
+                                IsSelected = Nullable ea.IsSelected |}
+                         )
+             }
          |> Seq.toList
          |> List.groupBy (fun (e, _) -> e)
          
@@ -108,12 +119,15 @@ let view (club : Club) (user : User) (ctx : HttpContext) =
                      | _ -> Training) })
          |> List.sortBy (fun e -> e.DateTime)
 
-         
      
      [ Client.view
             containerId
             element
             { Events = events
-              User = user } ]
+              User = user
+              Period = period } ]
      |> layout club (Some user) (fun o -> { o with Title = "Påmelding" }) ctx
      |> OkResult
+
+let upcoming (club : Club) (user : User) (ctx : HttpContext) = view Upcoming club user ctx
+let previous (club : Club) (user : User) (ctx : HttpContext) = view Previous club user ctx

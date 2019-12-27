@@ -106,8 +106,12 @@ module App =
                             (user => fun user ->
                                 choose [                                                
                                     GET >=> choose [    
-                                        route "/asd" >=>
-                                            (Events.List.view club user |> htmlGet)
+                                        route "" >=>
+                                            (Events.List.upcoming club user |> htmlGet)
+                                        
+                                        route "/arrangementer" >=> redirectTo true "/intern"
+                                        route "/arrangementer/tidligere" >=>
+                                            (Events.List.previous club user |> htmlGet)
                                         route "/lagliste" >=>
                                             (Members.Pages.List.view club user None |> htmlGet)
                                         routef "/lagliste/%s" <| fun status ->
