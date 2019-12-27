@@ -2,6 +2,7 @@
 @using MyTeam
 @model MyTeam.ViewModels.Player.ShowPlayerViewModel
 
+<div class="row">
 <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
     <img src="@Context.Cloudinary().MemberImage(Model.ImageFull, Model.FacebookId, 400)" />
 </div>
@@ -24,6 +25,7 @@
         }
     </table>
     <div class="ajax-load" href="@Url.Action("GetStats", "Player", new {playerId = Model.Id})" ></div>
+</div>
 </div>
 
 
