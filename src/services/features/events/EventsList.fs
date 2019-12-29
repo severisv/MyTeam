@@ -4,6 +4,7 @@ open System
 open Shared.Domain
 open Shared.Domain.Members
 open MyTeam
+open Client.Events
 open Client.Events.List
 open Shared
 open System.Linq

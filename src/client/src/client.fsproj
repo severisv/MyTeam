@@ -53,6 +53,8 @@
     <Compile Include="features\news\DeleteArticle.fs" />
     <Compile Include="features\games\SelectSquad.fs" />
     <Compile Include="features\admin\AddPlayers.fs" />
+    <Compile Include="features\events\Types.fs" />
+    <Compile Include="features\events\SignupButtons.fs" />
     <Compile Include="features\events\EventsList.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

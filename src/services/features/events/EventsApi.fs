@@ -7,6 +7,7 @@ open MyTeam.Models
 open MyTeam.Models.Domain
 open Shared.Components.Input
 open Shared.Domain.Members
+open Client.Events
 
 type EventId = Guid
 
@@ -70,7 +71,7 @@ let internal updateAttendance clubId (user: User) eventId (ctx : HttpContext) up
                 OkResult None
                 
 
-let signup clubId (user: User) eventId (ctx : HttpContext) (model: Client.Events.List.Signup) =
+let signup clubId (user: User) eventId (ctx : HttpContext) (model: Signup) =
     updateAttendance clubId user eventId ctx (fun ea ->
                                                     ea.IsAttending <- Nullable model.IsAttending)
 

@@ -1,7 +1,6 @@
 module Client.Events.List
 
 open Client.Components
-open Client.Components.Textarea
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Fable.React
@@ -10,49 +9,12 @@ open Shared
 open Shared.Components.Layout
 open Shared.Components.Tabs
 open Shared.Components
-open Send
-open Shared.Components
 open Shared.Components.Icons
 open Shared.Components.Base
 open Shared.Components.Nav
-open Shared.Domain
 open Shared.Domain.Members
 open System
-
-type Attendee = {
-    Id: Guid
-    FirstName: string
-    LastName: string
-    UrlName: string
-    IsAttending: bool
-    Message: string
-}
-
-type Game = {
-    Team: string
-    Opponent: string
-    Type: GameType
-    SquadIsPublished: bool
-    Squad: Attendee list
-}
-
-
-type Details =
-    | Game of Game
-    | Training
-
-type Event = {
-    Id: Guid
-    Type: EventType
-    DateTime: DateTime
-    Location: string
-    Description: string
-    Details: Details
-    TeamIds: Guid list
-    Signups: Attendee list
- }
-
-type Period = Upcoming | Previous
+open Client.Events
 
 type Model = {
     User: User
@@ -60,21 +22,31 @@ type Model = {
     Period: Period
  }
 
-type Signup = {
-    IsAttending: bool
-}
-
 type State = {
     Signups: Map<Guid, Attendee list>
 }
-
-type BoolState = { Value: bool }
-
 
 let createUrl =
     function
     | Upcoming -> "/intern"
     | Previous -> "/intern/arrangementer/tidligere"
+
+
+
+let attendeeLink (user: User) (ea: Attendee) =
+    li [ ] [
+        a [ Class "attendee underline"
+            Href <| sprintf "/spillere/vis/%s" ea.UrlName ] [
+            Icons.user ""
+            whitespace
+            span [ ] [ str ea.FirstName ]
+            whitespace
+            span [ Class "hidden-xs" ] [ str ea.LastName ]
+            span [ Class "hidden-sm hidden-md hidden-lg" ] [ str <| string ea.LastName.[0]]
+        ]
+        (user.IsInRole [Role.Trener] && Strings.hasValue ea.Message) &?
+            tooltip ea.Message [] [Icons.comment]
+        ]
 
 let containerId = "list-events"
 let element props children =
@@ -110,10 +82,7 @@ let element props children =
                                     let signups = state.Signups.[event.Id]
                                     let attending = signups |> List.filter (fun ea -> ea.IsAttending)
                                     let notAttending = signups |> List.filter (fun ea -> not ea.IsAttending)
-                                    let userAttendance = signups |> List.tryFind (fun ea -> ea.Id = user.Id)
-                                    let userIsAttending =
-                                            userAttendance |> Option.map(fun ea -> ea.IsAttending)
-                                                           |> Option.defaultValue false
+                                    let userAttendance = signups |> List.tryFind (fun ea -> ea.Id = user.Id)                                 
                                                                        
                                     let handleSignup isAttending _ =
                                         setState (fun state props ->
@@ -193,93 +162,19 @@ let element props children =
                                           ]
                                       div
                                         [ Class <| sprintf "event-signup--%s" (string event.Type |> Strings.toLower) ]
-                                        [ div []
-                                            [
-                                              div [Class "clearfix"] []
-                                              (match event.Details with
-                                               | Game game when game.SquadIsPublished -> empty
-                                               | _ ->
-                                                  div [Class "event-signupButtons" ]
-                                                    [ sendElement (fun o ->
-                                                                    { o with
-                                                                       IsSent = Some userIsAttending
-                                                                       SentClass = None
-                                                                       SentIndicator = None
-                                                                       Spinner = None
-                                                                       OnSubmit = Some <| handleSignup true
-                                                                       SendElement = btn, [Lg], [str "Stiller"] 
-                                                                       SentElement = btn, [Success;Lg], [str "Stiller"]
-                                                                       Endpoint = Put(sprintf "/api/events/%O/signup" event.Id,
-                                                                                      Some <| fun () ->  Encode.Auto.toString(0, { IsAttending = true })) })
-                                                      sendElement (fun o ->
-                                                                    { o with
-                                                                       IsSent = Some <| (not userIsAttending && userAttendance.IsSome)
-                                                                       SentClass = None
-                                                                       Spinner = None
-                                                                       SentIndicator = None
-                                                                       OnSubmit = Some <| handleSignup false
-                                                                       SendElement = btn, [Lg], [str "Kan ikke"] 
-                                                                       SentElement = btn, [Danger;Lg], [str "Kan ikke"]
-                                                                       Endpoint = Put(sprintf "/api/events/%O/signup" event.Id,
-                                                                                      Some <| fun () ->  Encode.Auto.toString(0, { IsAttending = false })) })
-                                                      
-                                                      komponent<unit, BoolState>
-                                                          ()
-                                                          { Value = false}
-                                                          None
-                                                          (fun (props, state, setState) ->
-                                                              fr [] [
-                                                                  a [ Title "Beskjed til trenerne"
-                                                                      Class <| sprintf "event-addMessage %s" (if state.Value then "active" else "")
-                                                                      OnClick (fun e -> Browser.Dom.console.log(state); setState(fun state props -> { state with Value = not state.Value }))
-                                                                  ] [Icons.comment]
-                                                                  br []
-                                                                  state.Value &?
-                                                                      div [Class "event-message"] [
-                                                                          Textarea.render { Placeholder = Some "Beskjed til trenerne"
-                                                                                            Url = sprintf "/api/events/%O/signup/message" event.Id
-                                                                                            Value = userAttendance |> Option.map(fun ea -> ea.Message) |> Option.defaultValue ""}
-                                                              ]]
-                                                        )
-                                                    ])
-                                              br [ ]
-                                              div [ Class "event-signup-listplayers" ] [
-                                                (match (event.Details) with
-                                                | Training ->
-                                                    
-                                                    let attendeeLink (ea: Attendee) =
-                                                        li [ ] [
-                                                            a [ Class "attendee underline"
-                                                                Href <| sprintf "/spillere/vis/%s" ea.UrlName ] [
-                                                                Icons.user ""
-                                                                whitespace
-                                                                span [ ] [ str ea.FirstName ]
-                                                                whitespace
-                                                                span [ Class "hidden-xs" ] [ str ea.LastName ]
-                                                                span [ Class "hidden-sm hidden-md hidden-lg" ] [ str <| string ea.LastName.[0]]
-                                                            ]
-                                                            (user.IsInRole [Role.Trener] && Strings.hasValue ea.Message) &?
-                                                                tooltip ea.Message [] [Icons.comment]
-                                                            ]
-                                                    
-                                                    Collapsible.collapsible Collapsed [
-                                                          span [Class "flex-2" ]
-                                                            [str <| sprintf "Kommer (%i)" attending.Length]
-                                                          span [ Class "flex-2" ]
-                                                            [str <| sprintf "Kan ikke (%i)" notAttending.Length]
-                                                          span [Class "flex-1 pull-right hidden-xs" ] [
-                                                              whitespace
-                                                          ]
-                                                        ] [
-                                                          hr [Class "sm"]
-                                                          div [Class "flex event-attendees "]
-                                                            [ ul [ Class "list-unstyled flex-2" ]
-                                                                    (attending |> List.map attendeeLink)
-                                                              ul [ Class "list-unstyled flex-2" ]
-                                                                    (notAttending |> List.map attendeeLink)
-                                                              div [ Class "flex-1 hidden-xs" ][ whitespace ] ] 
-                                                           ]
-                                                    | Game game when game.SquadIsPublished ->
+                                          (match (event.Details, props.Period) with
+                                              
+                                               | (Game game, Upcoming) when not game.SquadIsPublished ->
+                                                  [
+                                                    div [Class "clearfix"] []
+                                                    SignupButtons.element { EventId = event.Id
+                                                                            UserAttendance = userAttendance
+                                                                            HandleSignup = handleSignup }
+                                                  ]
+                                                  
+                                               | (Game game, _)  -> [
+                                                   div [Class "clearfix"] []
+                                                   div [Class "event-signup-listplayers"; Style [MarginTop "1em"]] [
                                                         Collapsible.collapsible Open [
                                                                 str <| sprintf "Tropp (%O)" game.Squad.Length
                                                             ]
@@ -305,10 +200,41 @@ let element props children =
                                                                                     ]))
                                                                         ] ]
                                                             ]
-                                                    | _ -> div [] []
-                                                    )   
-                                             ] ] ]
-                                    ]))
+                                                        ]
+                                                   ]   
+ 
+                                               | (Training, Upcoming) ->
+                                                  [
+                                                    div [Class "clearfix"] []
+                                                    SignupButtons.element { EventId = event.Id
+                                                                            UserAttendance = userAttendance
+                                                                            HandleSignup = handleSignup }
+                                                    br [ ]
+                                                    div [ Class "event-signup-listplayers" ] [
+                                                        Collapsible.collapsible Collapsed [
+                                                          span [Class "flex-2" ]
+                                                            [str <| sprintf "Kommer (%i)" attending.Length]
+                                                          span [ Class "flex-2" ]
+                                                            [str <| sprintf "Kan ikke (%i)" notAttending.Length]
+                                                          span [Class "flex-1 pull-right hidden-xs" ] [
+                                                              whitespace
+                                                          ]
+                                                        ] [
+                                                          hr [Class "sm"]
+                                                          div [Class "flex event-attendees "]
+                                                            [ ul [ Class "list-unstyled flex-2" ]
+                                                                    (attending |> List.map (attendeeLink user))
+                                                              ul [ Class "list-unstyled flex-2" ]
+                                                                    (notAttending |> List.map (attendeeLink user))
+                                                              div [ Class "flex-1 hidden-xs" ][ whitespace ] ] 
+                                                           ]
+                                                        ]
+                                                  ]
+                                               | (_, _) -> [ empty ] 
+                                          )
+                                        
+                                        ]
+                                    ))
                         ]
                     ]                    
                     sidebar [] [
