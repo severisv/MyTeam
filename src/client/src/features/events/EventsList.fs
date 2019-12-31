@@ -137,10 +137,19 @@ let element props children =
                                     fragment [] [   
                                       hr []
                                       div [ Class "show-upcoming-event" ]
-                                            [ div [ Class "event-editButtons" ] [
-                                                  props.User.IsInRole [Role.Trener;Role.Admin] &?
-                                                    Links.editAnchor [ Href <| sprintf "/intern/arrangement/endre/%O" event.Id ]
-                                              ]
+                                            [ div [ Class "event-editButtons" ] 
+                                                  ([ props.User.IsInRole [Role.Trener;Role.Admin] &?
+                                                        Links.editAnchor [Href <| sprintf "/intern/arrangement/endre/%O" event.Id ] ] @
+                                                   (match (event.Details, props.Period) with
+                                                    | (Game game, _) when user.IsInRole [Trener] -> [
+                                                        a [Class "edit-link pull-right"; Href <| sprintf "/kamper/%O/bytteplan" event.Id] [Icons.gamePlan]
+                                                        a [Class "edit-link pull-right"; Href <| sprintf "/kamper/%O/laguttak"  event.Id] [Icons.teamSelection]
+                                                        ]
+                                                    | (Game game, _) -> []
+                                                    | (Training, _) -> []
+                                                    )
+                                                 )
+                                              
                                               div [ Id <| sprintf "event-%O" event.Id
                                                     Class "hashlink-anchor" ] []
                                               div [ Class "show-event-container" ] [
