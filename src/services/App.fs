@@ -18,6 +18,7 @@ open Authorization
 open PipelineHelpers
     
 module App =
+    
 
     let webApp =
         removeTrailingSlash >=>
@@ -107,8 +108,7 @@ module App =
                                 choose [                                                
                                     GET >=> choose [    
                                         route "" >=>
-                                            (Events.List.upcoming club user |> htmlGet)
-                                        
+                                            (Events.List.upcoming club user |> htmlGet)                                        
                                         route "/arrangementer" >=> redirectTo true "/intern"
                                         route "/arrangementer/tidligere" >=>
                                             (Events.List.previous club user |> htmlGet)
@@ -159,6 +159,9 @@ module App =
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
                     subRoute "/api/events"                    
                         (choose [
+                            GET >=> mustBeMember >=> route "/upcoming" >=>
+                                (user => fun user ->
+                                        Events.Api.listEvents club user (Client.Events.Upcoming Client.Events.Rest) |> jsonGet)                                
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                                 routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
                             PUT >=> (user => fun user -> 

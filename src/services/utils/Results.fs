@@ -8,3 +8,12 @@ type HttpResult<'a> =
     | ValidationErrors of list<ValidationError>
     | Unauthorized
     | NotFound
+
+module HttpResult =
+    let map fn =
+        function
+        | OkResult a -> OkResult <| fn a
+        | Redirect s -> Redirect s
+        | ValidationErrors e -> ValidationErrors e
+        | Unauthorized -> Unauthorized
+        | NotFound -> NotFound

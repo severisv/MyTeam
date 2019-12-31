@@ -9,6 +9,7 @@ type Attendee = {
     LastName: string
     UrlName: string
     IsAttending: bool
+    DidAttend: bool
     Message: string
 }
 
@@ -25,6 +26,8 @@ type Details =
     | Game of Game
     | Training
 
+
+
 type Event = {
     Id: Guid
     Type: EventType
@@ -34,12 +37,24 @@ type Event = {
     Details: Details
     TeamIds: Guid list
     Signups: Attendee list
- }
+ } 
 
-type Period = Upcoming | Previous
+    
 
-
+type SubPeriod = NearFuture | Rest
+type YearPeriod = int option
+type Period = Upcoming of SubPeriod | Previous of YearPeriod
 type Signup = {
     IsAttending: bool
 }
 
+
+module Event =
+    let allowedSignupDays = 14.0
+    
+    let signupHasOpened e = 
+        let isTreningskamp =
+            match e.Details with
+                | Game game -> game.Type = Treningskamp
+                | _ -> false
+        isTreningskamp || e.DateTime <= DateTime.Now.AddDays 14.0
