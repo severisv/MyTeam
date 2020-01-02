@@ -38,6 +38,7 @@ let setDescription clubId eventId (ctx : HttpContext) (model: StringPayload) =
 
 
 let internal updateAttendance clubId (user: User) eventId (ctx : HttpContext) updateFn =
+    
     let db = ctx.Database
     let (ClubId clubId) = clubId
 
@@ -139,6 +140,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                            GameType = event.GameType
                            Opponent = event.Opponent
                            TeamId = event.TeamId
+                           GamePlanIsPublished = event.GamePlanIsPublished
                            SquadIsPublished = event.IsPublished
                          |}, {| FirstName = ea.Member.FirstName
                                 LastName = ea.Member.LastName
@@ -178,7 +180,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                         [e.TeamId.Value]
                      else
                         teamIds |> List.filter(fun (eventId, _) -> eventId = e.Id)
-                                |> List.map (fun (_, teamId) -> teamId)
+                                |> List.map (fun (_, teamId) -> teamId)                    
            Signups = attendees
                        |> List.map(fun (_, a) ->
                            { FirstName = a.FirstName
@@ -199,6 +201,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                            Opponent = e.Opponent
                            Type = Events.gameTypeFromInt e.GameType.Value
                            SquadIsPublished = e.SquadIsPublished
+                           GamePlanIsPublished = if e.GamePlanIsPublished.HasValue then e.GamePlanIsPublished.Value else false
                            Squad = attendees
                                    |> List.filter (fun (_,a) -> a.IsSelected.Value)
                                    |> List.map(fun (_, a) ->
@@ -213,8 +216,9 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                  | _ -> Training) })
      |> List.filter(fun e ->
          user.PlaysForTeam e.TeamIds || match e.Details with
-                                         | Game game -> game.SquadIsPublished || user.IsInRole [Admin;Trener]
-                                         | _ -> false)
+                                         | _ when user.IsInRole [Admin;Trener] -> true
+                                         | Game game -> game.SquadIsPublished
+                                         | Training -> false)
      |> fun events ->
          match period with
          | Upcoming _ -> events |> List.sortBy (fun e -> e.DateTime)

@@ -59,15 +59,6 @@ namespace MyTeam.Models.Domain
 
         public bool IsPublished { get; set; }
         public bool IsHomeTeam { get; set; }
-
-        public bool IsAttending(ClaimsPrincipal user) => Attending?.Any(a => a.UserName == user.Identity.Name) == true;
-
-        public bool IsNotAttending(ClaimsPrincipal user) => NotAttending?.Any(a => a.UserName == user.Identity.Name) == true;
-
-        public bool SignupHasOpened()
-        {
-            if (Type.FromInt() == EventType.Diverse) return true;
-            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
-        }
+        
     }
 }

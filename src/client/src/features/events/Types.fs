@@ -1,5 +1,6 @@
 namespace Client.Events
 
+open Client.GamePlan.View
 open Shared.Domain
 open System
 
@@ -18,6 +19,7 @@ type Game = {
     Opponent: string
     Type: GameType
     SquadIsPublished: bool
+    GamePlanIsPublished: bool
     Squad: Attendee list
 }
 
@@ -51,6 +53,7 @@ type Signup = {
 
 module Event =
     let allowedSignupDays = 14.0
+    let allowedSignoffHours = 2.0
     
     let signupHasOpened e = 
         let isTreningskamp =

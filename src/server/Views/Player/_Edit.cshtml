@@ -1,10 +1,11 @@
 ﻿@using System.Threading.Tasks
 @using MyTeam
 @model MyTeam.ViewModels.Player.EditPlayerViewModel
+<div class="row">
 <form asp-controller="Player" asp-action="Edit" method="post" class="ajax-form form-horizontal" role="form"
       data-ajax-update="#show-players"
       mt-pushstate="@Model.Fullname">
-    <div class="col-sm-6 col-md-6 col-lg-6 picture-frame">
+    <div class="col-sm-6 col-md-6 col-lg-6 picture-frame" >
         <div class="cloudinary-preview editPlayer-image ">
             <img div src="@Context.Cloudinary().MemberImage(Model.ImageFull, Model.FacebookId, 400)"/>
         </div>
@@ -12,11 +13,11 @@
 
             <input name="file" type="file"
                    class="btn btn-default cloudinary-fileupload pull-left" data-cloudinary-field="ImageFull"/>
-            </div>
-            <div class="clearfix"></div>
-
         </div>
-    <div class="col-sm-6 col-md-6 col-lg-6 player-info">
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 player-info" style="padding-right: 30px">
         <input asp-for="PlayerId" type="hidden" />
         <input asp-for="ImageFull" type="hidden" />
         <input asp-for="UrlName" type="hidden" />
@@ -80,8 +81,9 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">@Res.Save</button>
         </div>
+    </div>
+</form>
 </div>
-    </form>
 
 @if (Context.Request.IsAjaxRequest())
 {

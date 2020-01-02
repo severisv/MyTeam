@@ -3,6 +3,7 @@ module Client.Events.SignupButtons
 open Client.Components
 open Client.Events
 open Client.Components.Textarea
+open Fable.Import
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Fable.React
@@ -14,7 +15,7 @@ open System
 
 type Props = {
     HandleSignup: bool -> string -> unit
-    EventId: Guid
+    Event: Event
     UserAttendance: Attendee option
 }
 
@@ -27,10 +28,11 @@ let element props =
                 userAttendance |> Option.map(fun ea -> ea.IsAttending)
                                |> Option.defaultValue false
 
-    let event = {| Id = props.EventId |}
+    let event = props.Event
     
     div [Class "event-signupButtons" ]
-        [ sendElement (fun o ->
+        [
+          sendElement (fun o ->
                         { o with
                            IsSent = Some userIsAttending
                            SentClass = None
@@ -47,6 +49,7 @@ let element props =
                            SentClass = None
                            Spinner = None
                            SentIndicator = None
+                           IsDisabled = props.UserAttendance.IsSome && event.DateTime.ToUniversalTime() <= DateTime.UtcNow.AddHours Event.allowedSignoffHours
                            OnSubmit = Some <| props.HandleSignup false
                            SendElement = btn, [Lg], [str "Kan ikke"] 
                            SentElement = btn, [Danger;Lg], [str "Kan ikke"]

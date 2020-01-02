@@ -162,12 +162,12 @@ module App =
                             GET >=> mustBeMember >=> route "/upcoming" >=>
                                 (user => fun user ->
                                         Events.Api.listEvents club user (Client.Events.Upcoming Client.Events.Rest) |> jsonGet)                                
-                            PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
-                                routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
                             PUT >=> (user => fun user -> 
                                 routef "/%O/signup" (Events.Api.signup club.Id user >> jsonPost))
                             PUT >=> (user => fun user -> 
                                 routef "/%O/signup/message" (Events.Api.signupMessage club.Id user >> jsonPost))
+                            PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
+                                routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
                         ])
                     subRoute "/api/members" 
                         <| choose [ 

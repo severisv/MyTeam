@@ -138,26 +138,32 @@ let element props children =
                                       hr []
                                       div [ Class "show-upcoming-event" ]
                                             [ div [ Class "event-editButtons" ] 
-                                                  ([ props.User.IsInRole [Role.Trener;Role.Admin] &?
+                                                  ([ props.User.IsInRole [Trener; Admin] &?
                                                         Links.editAnchor [Href <| sprintf "/intern/arrangement/endre/%O" event.Id ] ] @
                                                    (match (event.Details, props.Period) with
                                                     | (Game game, _) when user.IsInRole [Trener] -> [
                                                         a [Class "edit-link pull-right"; Href <| sprintf "/kamper/%O/bytteplan" event.Id] [Icons.gamePlan]
                                                         a [Class "edit-link pull-right"; Href <| sprintf "/kamper/%O/laguttak"  event.Id] [Icons.teamSelection]
                                                         ]
+                                                    | (Game game, _) when game.GamePlanIsPublished -> [
+                                                        a [Class "edit-link pull-right"; Href <| sprintf "/kamper/%O/bytteplan" event.Id] [Icons.gamePlan]
+                                                        ]    
                                                     | (Game game, _) -> []
+                                                    | (Training, Previous _) when user.IsInRole [Admin; Trener; Oppmøte] -> [
+                                                        a [Class "edit-link pull-right"; Href <| sprintf "/intern/oppmote/registrer/%O" event.Id] [Icons.attendance "Registrer oppmøte"]
+                                                        ]
                                                     | (Training, _) -> []
                                                     )
                                                  )
-                                              
+                                       
+                                                     
                                               div [ Id <| sprintf "event-%O" event.Id
                                                     Class "hashlink-anchor" ] []
                                               div [ Class "show-event-container" ] [
                                                 div [ Class "event-col-1 event-icon" ] [
                                                     div [] [
-                                                        a [ Href <| sprintf "#event-%O" event.Id ] [
-                                                            Icons.eventIcon event.Type IconSize.Normal
-                                                          ]
+                                                        a [Href <| sprintf "#event-%O" event.Id ] [
+                                                           Icons.eventIcon event.Type IconSize.Normal]
                                                         ]
                                                 ] 
                                                 div [ Class "event-col-2" ] [
@@ -203,7 +209,7 @@ let element props children =
                                                | (Game game, Upcoming _) when not game.SquadIsPublished ->
                                                   [
                                                     user.PlaysForTeam event.TeamIds &?
-                                                        SignupButtons.element { EventId = event.Id
+                                                        SignupButtons.element { Event = event
                                                                                 UserAttendance = userAttendance
                                                                                 HandleSignup = handleSignup }
                                                     
@@ -239,7 +245,7 @@ let element props children =
  
                                                | (Training, Upcoming _) ->
                                                   [
-                                                    SignupButtons.element { EventId = event.Id
+                                                    SignupButtons.element { Event = event
                                                                             UserAttendance = userAttendance
                                                                             HandleSignup = handleSignup }
                                                     br [ ]
