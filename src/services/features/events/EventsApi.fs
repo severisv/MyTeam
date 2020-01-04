@@ -85,6 +85,19 @@ let signupMessage clubId (user: User) eventId (ctx : HttpContext) (model: String
 
 
 
+type DbEvent =
+    {Id: Guid
+     Description: string
+     DateTime: DateTime
+     Location :string
+     Type: int
+     GameType: Nullable<int>
+     Opponent: string
+     TeamId: Nullable<Guid>
+     GamePlanIsPublished: Nullable<bool>
+     SquadIsPublished: bool
+    }
+
 let listEvents (club: Club) (user: User) period (db: Database) =
      let (ClubId clubId) = club.Id
      let now = DateTime.Now
@@ -132,7 +145,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                 
                  for ea in attendances.DefaultIfEmpty() do
                  
-                 select ({|Id = event.Id
+                 select ({ Id = event.Id
                            Description = !!event.Description
                            DateTime = event.DateTime
                            Location = event.Location
@@ -142,7 +155,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                            TeamId = event.TeamId
                            GamePlanIsPublished = event.GamePlanIsPublished
                            SquadIsPublished = event.IsPublished
-                         |}, {| FirstName = ea.Member.FirstName
+                          }, {| FirstName = ea.Member.FirstName
                                 LastName = ea.Member.LastName
                                 UrlName = ea.Member.UrlName
                                 Message = !!ea.SignupMessage
