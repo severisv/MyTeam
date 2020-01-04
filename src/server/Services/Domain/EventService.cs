@@ -98,25 +98,5 @@ namespace MyTeam.Services.Domain
                     e.Id, e.Type.FromInt(), e.GameTypeValue, e.DateTime, e.Location, e.Headline, e.Description, e.Opponent, e.Voluntary, e.IsPublished, e.IsHomeTeam, e.GamePlanIsPublished
                         )).First();
 
-
-
-        public IEnumerable<SimpleEventViewModel> GetPreviousSimpleEvents(EventType type, Guid clubId, int take)
-        {
-            var now = DateTime.Now;
-            var query = _dbContext.Events
-                .Where(t => t.ClubId == clubId)
-                .Where(t => t.Type == type.ToInt())
-                .Where(t => t.DateTime < now)
-                .OrderByDescending(e => e.DateTime);
-
-            return query.Take(15).Select(e => new SimpleEventViewModel
-            {
-                Id = e.Id,
-                DateTime = e.DateTime
-
-            }).ToList();
-        }
-       
-
     }
 }
