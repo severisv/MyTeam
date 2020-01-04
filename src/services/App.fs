@@ -111,7 +111,10 @@ module App =
                                             (Events.List.upcoming club user |> htmlGet)                                        
                                         route "/arrangementer" >=> redirectTo true "/intern"
                                         route "/arrangementer/tidligere" >=>
-                                            (Events.List.previous club user |> htmlGet)
+                                            (Events.List.previous club user None |> htmlGet)
+                                        routef "/arrangementer/tidligere/%i"
+                                            ((fun year -> Events.List.previous club user (Some year)) >> htmlGet)
+                                             
                                         route "/lagliste" >=>
                                             (Members.Pages.List.view club user None |> htmlGet)
                                         routef "/lagliste/%s" <| fun status ->

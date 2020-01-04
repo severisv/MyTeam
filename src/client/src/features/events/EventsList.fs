@@ -21,7 +21,8 @@ type Model = {
     User: User
     Events: Event list
     Period: Period
- }
+    Years: int list
+}
 
 type FetchMoreState =
     | Unfetched
@@ -81,6 +82,15 @@ let element props children =
              None
              (fun (_, state, setState) ->
                 let user = props.User
+                
+                let isSelected (url: string) =
+                    match props.Period with
+                    | Previous None when url.Contains (props.Years
+                                                       |> List.tryHead
+                                                       |> Option.map string
+                                                       |> Option.defaultValue "") -> true
+                    | _ -> url = (createUrl props.Period)
+
                 fragment [] [
                     mtMain [] [
                         block [] [
@@ -95,8 +105,12 @@ let element props children =
                                           ShortText = " Tidligere"
                                           Url = createUrl (Previous None)
                                           Icon = Some(Icons.previous "") } ]
-                                       ((=) (createUrl props.Period))
+                                       (fun url -> match props.Period with | Previous _ -> url.Contains "tidligere" | Upcoming _ -> url.Contains "tidligere" |> not)
                               ]
+                              navListMobile
+                                 { Items = props.Years |> List.map (fun year  -> { Text = string year; Url = createUrl (Previous <| Some year)})  
+                                   Footer = None                                                               
+                                   IsSelected = isSelected }
                           ]
                           fr [] 
                               (state.Events
@@ -307,7 +321,16 @@ let element props children =
                         ]
                       
                     ]                    
-                    sidebar [] [
+                    sidebar [] [                        
+                        props.Years.Length > 0 &?                                 
+                        block [] [
+                            navList
+                                 {
+                                   Header = "Sesonger"
+                                   Items = props.Years |> List.map (fun year  -> { Text = [str <| string year]; Url = createUrl (Previous <| Some year)})  
+                                   Footer = None                                                               
+                                   IsSelected = isSelected}
+                            ]   
                         user.IsInRole [Admin;Trener] &?
                             block [] [
                                 navListBase [ Header <| str "Admin" ] [
