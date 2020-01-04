@@ -208,8 +208,7 @@ let element props children =
                                                                          whitespace
                                                                          str <| string game.Type
                                                                      ]
-                                                                     game.SquadIsPublished &?
-                                                                        str event.Description
+                                                                     str event.Description
                                                                  ]
                                                           | _ -> str event.Description)
                                                     ] ]
@@ -334,7 +333,8 @@ let element props children =
                         user.IsInRole [Admin;Trener] &?
                             block [] [
                                 navListBase [ Header <| str "Admin" ] [
-                                            a [Href "/intern/arrangement/ny"] [Icons.add "";whitespace;str "Opprett trening"]
+                                            a [Href "/intern/arrangement/ny"] [Icons.add "";whitespace;str "Legg til trening"]
+                                            a [Href "/intern/arrangement/ny?type=kamp"] [Icons.add "";whitespace;str "Legg til kamp"]
                                            ]
                             ]
                     ]
