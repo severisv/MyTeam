@@ -33,16 +33,14 @@ let run next (ctx: HttpContext)  =
             let table = html.Tables.Table1.Rows
                         |> Array.filter (fun row -> row.Plass |> Number.isNumber)
                         |> Array.map (fun row -> 
-                                            {
-                                                Team = row.Lag
+                                            {   Team = row.Lag
                                                 Position = row.Plass |> int
                                                 Points = row.Poeng
                                                 GoalsFor = row.``Total - Mål`` |> Strings.split [|'-'|] |> List.head |> Strings.trim |> int
                                                 GoalsAgainst = row.``Total - Mål`` |> Strings.split [|'-'|] |> List.last |> Strings.trim |> int
                                                 Wins = row.``Total - V``
                                                 Draws = row.``Total - U``
-                                                Losses = row.``Total - T``
-                                            }
+                                                Losses = row.``Total - T`` }
 
                             )   
             season.TableJson <- Json.fableSerialize table 

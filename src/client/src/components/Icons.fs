@@ -47,6 +47,7 @@ let gameType (gameType : GameType) =
     icon className (string gameType)
 
 let add = icon <| fa "plus"
+let addCircle = icon <| fa "plus-circle"
 let assist = icon <| "flaticon-football119"
 let arrowLeft = icon <| fa "arrow-left"
 let arrowRight = icon <| fa "arrow-right"
@@ -83,6 +84,7 @@ let signup = icon <| fa "calendar"
 let squadList = icon <| fa "users"
 let spinner = icon (fa "spinner fa-spin") ""
 let team = icon <| "flaticon-football43"
+let teamSelection = icon "flaticon-football133" "Laguttak"
 let training = icon <| "flaticon-couple40"
 let trophy = icon <| fa "trophy"
 let time = icon <| fa "clock-o"

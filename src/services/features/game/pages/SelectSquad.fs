@@ -36,7 +36,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                     Date = date
                     Location = location
                     Description = description =?? ""
-                    TeamId = teamId
+                    TeamId = teamId.Value
                     Squad = {
                                 IsPublished = squadIsPublished
                                 MemberIds = attendees 
@@ -79,7 +79,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                         if user.IsInRole [Role.Admin;Role.Trener] then
                             block [] [ 
                                 !!(navList 
-                                    {   Header = "Adminmeny"
+                                    {   Header = "Admin"
                                         Items = 
                                             [ { Text = [ Icons.add ""
                                                          Fable.React.Helpers.str " Legg til kamp" ]

@@ -28,73 +28,7 @@ namespace MyTeam.Services.Domain
             _dbContext = dbContext;
         }
 
-        public JsonResponseMessage Add(string clubId, string facebookId, string firstName, string middleName, string lastName, string emailAddress)
-        {
-            var existingPlayer = string.IsNullOrWhiteSpace(facebookId) ?
-                _dbContext.Members.FirstOrDefault(p => p.UserName == emailAddress) :
-                _dbContext.Members.FirstOrDefault(p => p.FacebookId == facebookId);
-
-
-            if (!string.IsNullOrWhiteSpace(facebookId) && string.IsNullOrWhiteSpace(emailAddress))
-            {
-                var correspondingUserLogin = _dbContext.UserLogins.FirstOrDefault(u => u.ProviderKey == facebookId);
-                if (correspondingUserLogin != null)
-                {
-                    emailAddress = _dbContext.Users.Single(u => u.Id == correspondingUserLogin.UserId).Email;
-                }
-            }
-
-
-            if (existingPlayer == null)
-            {
-                var club = _dbContext.Clubs.Single(c => c.ClubIdentifier == clubId);
-
-                var player = new Member
-                {
-                    FacebookId = facebookId,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    UserName = emailAddress,
-                    ClubId = club.Id,
-                    MiddleName = middleName,
-                    UrlName = GetUrlName(club.Id, firstName, middleName, lastName)
-                };
-
-                _dbContext.Members.Add(player);
-                _dbContext.SaveChanges();
-
-                var message = string.IsNullOrWhiteSpace(facebookId)
-                    ? $"{Res.Player} {Res.Added.ToLower()}"
-                    : "facebookAdd";
-
-                return JsonResponse.Success(message);
-            }
-            return JsonResponse.ValidationFailed($"{Res.Player} {Res.IsAlready.ToLower()} {Res.Added.ToLower()}");
-        }
-
-        private string GetUrlName(Guid clubId, string firstName, string middleName, string lastName)
-        {
-            var middle = !string.IsNullOrWhiteSpace(middleName) ? "-" + middleName.ToLower() : "";
-            var urlName = $"{firstName.ToLower()}{middle}-{lastName.ToLower()}";
-
-            var result = urlName.Replace(" ", "-").ToLower();
-            result = result.Replace("�", "O");
-            result = result.Replace("�", "o");
-            result = result.Replace("�", "ae");
-            result = result.Replace("�", "Ae");
-            result = result.Replace("�", "Aa");
-            result = result.Replace("�", "aa");
-            result = result.Replace("�", "e");
-            result = result.Replace("�", "e");
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            result = rgx.Replace(result, "");
-            while (_dbContext.Members.Any(m => m.ClubId == clubId && m.UrlName == result))
-            {
-                result += "-1";
-            }
-            return result;
-        }
-
+      
         public void EditPlayer(EditPlayerViewModel model, Guid clubId)
         {
             var player = _dbContext.Members.Single(p => p.Id == model.PlayerId);
@@ -125,40 +59,7 @@ namespace MyTeam.Services.Domain
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<SimplePlayerDto> GetDto(Guid clubId, PlayerStatus? status = null, bool includeCoaches = false)
-        {
-            var query =
-                _dbContext.Members.Where(p => p.ClubId == clubId)
-                    .Where(p => p.Status != (int)PlayerStatus.Sluttet);
-
-            if (includeCoaches != true) query = query.Where(p => p.Status != (int)PlayerStatus.Trener);
-
-            if (status != null) query = query.Where(p => p.Status == (int)status);
-
-            var players = query
-                .Select(p => new SimplePlayerDto
-                {
-                    Id = p.Id,
-                    FacebookId = p.FacebookId,
-                    FirstName = p.FirstName,
-                    MiddleName = p.MiddleName,
-                    LastName = p.LastName,
-                    Status = (PlayerStatus)p.Status,
-                    ImageFull = p.ImageFull,
-                    UrlName = p.UrlName
-                }).ToList().OrderBy(p => p.Name);
-
-            var playerIds = players.Select(p => p.Id);
-            var memberTeams = _dbContext.MemberTeams.Where(mt => playerIds.Contains(mt.MemberId)).ToList();
-            foreach (var player in players)
-            {
-                player.TeamIds = memberTeams.Where(mt => mt.MemberId == player.Id).Select(mt => mt.TeamId).ToList();
-            }
-            return players;
-
-        }
-
-
+      
         public ShowPlayerViewModel GetSingle(Guid clubId, string name)
         {
             var query = _dbContext.Members.Where(p => p.UrlName == name.ToLower() && p.ClubId == clubId);
@@ -230,14 +131,14 @@ namespace MyTeam.Services.Domain
 
             var now = DateTime.Now;
             var games = _dbContext.Games.Where(
-                          g => teamIds.Contains(g.TeamId) &&
+                          g => teamIds.Contains(g.TeamId.Value) &&
                           g.GameTypeValue != GameType.Treningskamp &&
                           g.DateTime < now
                           && g.Attendees.Any(a => a.MemberId == playerId && a.IsSelected)
                           )
                 .Select(g => new GameAttendanceViewModel
                 {
-                    TeamId = g.TeamId,
+                    TeamId = g.TeamId.Value,
                     DateTime = g.DateTime
                 }).ToList();
 

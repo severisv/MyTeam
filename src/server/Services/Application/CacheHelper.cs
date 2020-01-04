@@ -12,7 +12,7 @@ namespace MyTeam.Services.Application
     public class CacheHelper : ICacheHelper
     {
         private readonly MemoryCacheEntryOptions _cacheOptions =
-            new MemoryCacheEntryOptions { SlidingExpiration = new TimeSpan(0, 0, 15, 0) };
+            new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5.0) };
 
         public IMemoryCache Cache { get; set; }
         private readonly ApplicationDbContext _dbContext;

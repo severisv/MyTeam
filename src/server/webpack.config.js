@@ -5,7 +5,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ['babel-polyfill', 'whatwg-fetch', './client/scripts/app.js',  './client/scripts/views/listEvents.js']
+    app: ['babel-polyfill', 'whatwg-fetch', './client/scripts/app.js']
   },
 
   output: {

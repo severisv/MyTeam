@@ -216,3 +216,4 @@ dist
 artifacts
 paket-files
 .idea
+.ionide/symbolCache.db

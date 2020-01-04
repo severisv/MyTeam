@@ -20,7 +20,7 @@ let adminMenu (user: User option) =
             Some <| block [] [ 
                         ul [ _class "nav nav-list" ] [ 
                             li [ _class "nav-header" ] [ 
-                                encodedText "Adminmeny" ]
+                                encodedText "Admin" ]
                             li [][ 
                                 a [ _href "/nyheter/ny" ][ 
                                     i [ _class "fa fa-plus" ] [] 

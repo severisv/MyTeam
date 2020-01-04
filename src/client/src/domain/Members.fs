@@ -84,6 +84,7 @@ module Members =
     with
         member user.Name = sprintf "%s %s" user.FirstName user.LastName
         member user.IsInRole roles = user.Roles |> List.exists (fun role -> roles |> List.contains (role))
+        member user.PlaysForTeam teamIds = teamIds |> List.exists (fun teamId -> user.TeamIds |> List.contains teamId) 
 
 
 

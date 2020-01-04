@@ -55,7 +55,7 @@ module Table =
                             isSelected)            
                    
                         !!(navListMobile
-                             { Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year}                                                                   )  
+                             { Items = years |> List.map (fun year  -> { Text = string year; Url = tableUrl selectedTeam year})  
                                Footer = None                                                               
                                IsSelected = isSelected })
                         hr []

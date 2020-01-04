@@ -7,11 +7,8 @@ namespace MyTeam.Resources
     public class Res
     {
 
-        public const string Attending = "Kommer";
         public const string Attendance = "Oppmøte";
-        public const string AssistCount = "Assists";
         public const string Add = "Legg til";
-        public const string Added = "Lagt til";
         public const string AdminPage = "Admin";
         public const string Active = "Aktive";
         public static string ActivePlayers => $"{Active} {Players}";
@@ -22,7 +19,7 @@ namespace MyTeam.Resources
         public const string ConfirmDelete = "Er du sikker på at du vil slette?";
         public const string Create = "Opprett";
         public static string CreateEvent => $"{Create} { Event.ToLower()}";
-        public const string CoachMenu = "Adminmeny";
+        public const string CoachMenu = "Admin";
         public const string Description = "Beskrivelse";
         public const string Date = "Dato";
         public const string Delete = "Slett";
@@ -35,16 +32,10 @@ namespace MyTeam.Resources
         public const string FieldRequired = "Feltet er obligatorisk";
         public const string Goal = "Mål";
         public const string Games = "Kamper";
-        public const string GameCount = "Kamper";
-        public const string GoalCount = "Mål";
         public const string About = "Om klubben";
         public const string HomeGround = "Hjemme";
         public const string Internal = "Intern";
-        public const string IsAttending = "Stiller";
-        public const string IsAlready = "Er allerede";
         public const string IsRequired = "Er obligatorisk";
-        public const string IsNotAttending = "Kan ikke";
-        public const string InvalidInput = "Ugyldig input";
         public const string Logout = "Logg ut";
         public const string Login = "Logg inn";
 
@@ -54,7 +45,6 @@ namespace MyTeam.Resources
         public const string ManagePlayers = "Administrer spillere";
         public const string Mandatory = "Tellende oppmøte";
         public const string MandatoryExplaination = "Tellende oppmøte betyr at treningen teller med på oppmøtestatistikken";
-        public const string Name = "Navn";
 
 
         public const string Table = "Tabell";
@@ -76,13 +66,9 @@ namespace MyTeam.Resources
         public static string Stats = "Statistikk";
 
         public const string Saved = "Lagret";
-        public const string Season = "Sesong";
         public const string Signup = "Påmelding";
 
-        public static string SignoffClosed = $"Man kan ikke melde seg av arrangementer senere enn {Settings.Config.AllowedSignoffHours} timer før de begynner";
         public const string Submenu = "Undermeny";
-        public const string Upcoming = "Kommende";
-        public const string Previous = "Tidligere";
         public const string Players = "Spillere";
         public const string Save = "Lagre";
         public const string SquadList = "Lagliste";

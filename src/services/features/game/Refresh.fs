@@ -46,7 +46,7 @@ let run next (ctx: HttpContext)  =
                 query {
                     for game in db.Games do
                     where (
-                           game.TeamId = season.TeamId &&
+                           game.TeamId = Nullable season.TeamId &&
                            game.DateTime >= season.StartDate &&
                            game.DateTime <= season.EndDate &&
                            game.GameType = serieKamp
@@ -88,7 +88,7 @@ let run next (ctx: HttpContext)  =
                                                 Models.Domain.Game(
                                                     IsHomeTeam = isHomeTeam,
                                                     Opponent = opponent,
-                                                    TeamId = season.TeamId,
+                                                    TeamId = Nullable season.TeamId,
                                                     EventTeams = et,
                                                     Type = Events.eventTypeToInt EventType.Kamp,
                                                     ClubId = team.ClubId,
@@ -98,13 +98,13 @@ let run next (ctx: HttpContext)  =
                                             g                                            
 
                                     let time = row.Tid 
-                                                       |> string 
-                                                       |> Strings.trim
-                                                       |> Strings.split [|'.'|] 
-                                                       |> List.map float
-                                                       |> function 
-                                                       | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
-                                                       | r -> failwithf "Klarte ikke parse tid: %O" r
+                                               |> string 
+                                               |> Strings.trim
+                                               |> Strings.split [|'.'|] 
+                                               |> List.map float
+                                               |> function 
+                                               | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
+                                               | r -> failwithf "Klarte ikke parse tid: %O" r
                                                                                    
                                     game.DateTime <- (date.Date.Add time)
                                     game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            

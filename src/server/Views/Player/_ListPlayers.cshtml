@@ -2,6 +2,7 @@
 @model MyTeam.ViewModels.Player.ShowPlayersViewModel
 
 
+    <div  class="row">
 
 @foreach (var player in Model.Players)
 {
@@ -15,6 +16,7 @@
         </a>
     </div>
 }
+    </div>
 
 @if (!Model.Players.Any())
 {

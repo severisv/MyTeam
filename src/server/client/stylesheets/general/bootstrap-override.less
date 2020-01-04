@@ -311,6 +311,7 @@ a {
     color: @white;
     background-color: @greenLight;
 
+    &:focus,
     &:hover {
         background-color: darken(@greenLight, 5);
         border-color: darken(@greenLight, 5);
@@ -331,7 +332,8 @@ a {
 .btn-danger {
     color: @white;
     background-color: @redLight;
-
+   
+    &:focus,
     &:hover {
         background-color: darken(@redLight, 5);
         border-color: darken(@redLight, 5);

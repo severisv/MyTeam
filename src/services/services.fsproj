@@ -41,7 +41,6 @@
     <Compile Include="common/Tenant.fs" />
     <Compile Include="common/News.fs" />
     <Compile Include="common/Notifications.fs" />
-    <Compile Include="common/views/partials/Admin.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />
     <Compile Include="common/views/partials/Login.fs" />
     <Compile Include="common/views/partials/Notifications.fs" />
@@ -57,6 +56,7 @@
     <Compile Include="features/attendance/pages/Register.fs" />
     <Compile Include="features/attendance/pages/Show.fs" />
     <Compile Include="features/events/EventsApi.fs" />
+    <Compile Include="features\events\EventsList.fs" />
     <Compile Include="features\fines\Fines.fs" />
     <Compile Include="features\fines\FineApi.fs" />
     <Compile Include="features\fines\FineSummary.fs" />

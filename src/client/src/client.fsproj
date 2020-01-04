@@ -37,6 +37,7 @@
     <Compile Include="components\client\Textinput.fs" />
     <Compile Include="components\client\Send.fs" />
     <Compile Include="components\client\EditBlock.fs" />
+    <Compile Include="features\common\Admin.fs" />
     <Compile Include="features/table/Edit.fs" />
     <Compile Include="features/table/Create.fs" />
     <Compile Include="features\fines\Fines.fs" />
@@ -52,6 +53,9 @@
     <Compile Include="features\news\DeleteArticle.fs" />
     <Compile Include="features\games\SelectSquad.fs" />
     <Compile Include="features\admin\AddPlayers.fs" />
+    <Compile Include="features\events\Types.fs" />
+    <Compile Include="features\events\SignupButtons.fs" />
+    <Compile Include="features\events\EventsList.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />

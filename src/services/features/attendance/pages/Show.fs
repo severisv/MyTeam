@@ -71,7 +71,7 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
             (user.IsInRole [ Role.Admin; Role.Trener; Role.Oppmøte ] =?
                (block [] [
                     !!(navList ({
-                                Header = "Adminmeny"
+                                Header = "Admin"
                                 Items = [ { Text = [ Icons.icon (fa "check-square-o") ""; Fable.React.Helpers.str " Registrer oppmøte" ]; Url = registerAttendanceUrl } ]
                                 IsSelected = fun _ -> false
                                 Footer = None }))

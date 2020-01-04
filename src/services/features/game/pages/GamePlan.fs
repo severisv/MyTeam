@@ -34,7 +34,7 @@ let view (club : Club) (user : User) gameId (ctx : HttpContext) =
     |> Seq.map(fun (opponent, gamePlan, gamePlanIsPublished, teamId, formation, attendees) -> 
            ({ GameId = gameId
               Team = club.Teams 
-                     |> Seq.find(fun t -> t.Id = teamId) 
+                     |> Seq.find(fun t -> t.Id = teamId.Value) 
                      |> fun t -> t.ShortName
               Opponent = opponent
               GamePlanIsPublished = (gamePlanIsPublished = Nullable(true))

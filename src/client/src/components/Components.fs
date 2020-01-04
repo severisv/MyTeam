@@ -8,6 +8,7 @@ open Fable.Core
 
 let whitespace = str " "
 let empty = str ""
+let fr = fragment
 
 [<Emit("jQuery('#' + $0).popover({ trigger: 'hover' })")>]
 let apply (id: System.Guid): unit = failwith "JS only"

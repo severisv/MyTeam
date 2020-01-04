@@ -48,19 +48,8 @@ namespace MyTeam.ViewModels.Events
 
         }
 
-
-        public bool IsGame => Type == EventType.Kamp;
-        public bool IsTraining => Type == EventType.Trening;
-        public bool IsCustom => Type == EventType.Diverse;
         public bool IsPublished { get; }
-
-
-        public bool SignupHasOpened()
-        {
-            if (Type == EventType.Diverse) return true;
-            if (Type == EventType.Kamp && GameType == Models.Enums.GameType.Treningskamp) return true;
-            return DateTime.Date - DateTime.Now.Date < new TimeSpan(Settings.Config.AllowedSignupDays, 0, 0, 0, 0);
-        }
+     
 
         public CurrentTeam Team(IEnumerable<CurrentTeam> teams)
         {

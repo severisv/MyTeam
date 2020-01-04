@@ -18,6 +18,7 @@ open Authorization
 open PipelineHelpers
     
 module App =
+    
 
     let webApp =
         removeTrailingSlash >=>
@@ -56,7 +57,8 @@ module App =
                         <|  choose [                                                
                                 GET >=> choose [    
                                     route "" >=> (Games.Pages.List.view club user None None |> htmlGet)
-                                    routef "/vis/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                                    routef "/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
+                                    routef "/vis/%O" (fun (gameId: System.Guid) -> redirectTo true (sprintf "/kamper/%O" gameId))
                                     routef "/%O/resultat" <| fun gameId -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> (Games.Pages.Result.view club user gameId |> htmlGet) 
                                     routef "/%O/laguttak" <| fun gameId -> 
@@ -92,24 +94,27 @@ module App =
                     route "/om" >=> GET >=> (About.show club user |> htmlGet)        
                     route "/om/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
-                            choose  [
-                                        GET >=> (About.edit club user |> htmlGet)                   
-                                        POST >=> (About.editPost club user |> htmlGet)                   
-                                    ]                    
+                            choose  [ GET >=> (About.edit club user |> htmlGet)                   
+                                      POST >=> (About.editPost club user |> htmlGet) ]                    
                     route "/støttespillere" >=> GET >=> (Sponsors.show club user |> htmlGet)        
                     route "/støttespillere/endre" >=> 
                         mustBeInRole [Role.Admin] >=> 
-                            choose  [
-                                        GET >=> (Sponsors.edit club user |> htmlGet)                   
-                                        POST >=> (Sponsors.editPost club user |> htmlGet)                   
-                                    ]
-                    
+                            choose  [ GET >=> (Sponsors.edit club user |> htmlGet)                   
+                                      POST >=> (Sponsors.editPost club user |> htmlGet) ]                    
                        
                     subRoute "/intern" 
                         mustBeMember >=>
                             (user => fun user ->
                                 choose [                                                
                                     GET >=> choose [    
+                                        route "" >=>
+                                            (Events.List.upcoming club user |> htmlGet)                                        
+                                        route "/arrangementer" >=> redirectTo true "/intern"
+                                        route "/arrangementer/tidligere" >=>
+                                            (Events.List.previous club user None |> htmlGet)
+                                        routef "/arrangementer/tidligere/%i"
+                                            ((fun year -> Events.List.previous club user (Some year)) >> htmlGet)
+                                             
                                         route "/lagliste" >=>
                                             (Members.Pages.List.view club user None |> htmlGet)
                                         routef "/lagliste/%s" <| fun status ->
@@ -157,6 +162,13 @@ module App =
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
                     subRoute "/api/events"                    
                         (choose [
+                            GET >=> mustBeMember >=> route "/upcoming" >=>
+                                (user => fun user ->
+                                        Events.Api.listEvents club user (Client.Events.Upcoming Client.Events.Rest) |> jsonGet)                                
+                            PUT >=> (user => fun user -> 
+                                routef "/%O/signup" (Events.Api.signup club.Id user >> jsonPost))
+                            PUT >=> (user => fun user -> 
+                                routef "/%O/signup/message" (Events.Api.signupMessage club.Id user >> jsonPost))
                             PUT >=> mustBeInRole [Role.Admin; Role.Trener] >=> 
                                 routef "/%O/description" (Events.Api.setDescription club.Id >> jsonPost)
                         ])

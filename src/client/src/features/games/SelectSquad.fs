@@ -192,11 +192,12 @@ type SelectSquad(props) =
                                 div [ Class "registerSquad-publish" ]
                                     [ div [ Class "registerSquad-messageWrapper" ]
                                           [ Textarea.render { Value = game.Description
+                                                              Placeholder = Some "Beskjed til spillerne"
                                                               Url = sprintf "/api/events/%O/description" game.Id } ]
 
                                       Send.sendElement
                                         (fun o -> { o with
-                                                      IsSent = game.Squad.IsPublished
+                                                      IsSent = Some game.Squad.IsPublished
                                                       SendElement = btn, [Lg; Primary], [str "Publiser tropp"]
                                                       SentElement = btn, [Lg; Success], [str "Publisert"]            
                                                       Endpoint = Send.Post (sprintf "/api/games/%O/squad/publish" game.Id, None) })

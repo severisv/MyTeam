@@ -9,7 +9,7 @@
 
 <div class="mt-main">
     <div class="mt-container">
-        <div class="col-md-12 no-padding ">
+        <div>
             <ul class="nav nav-pills mt-justified">
                 <li class="@(ViewBag.Local != true ?  "active" : "")"><a onClick="window.mt.showElement('#facebook-login'); mt.hideElement('#mt-login');"><i class="fa fa-facebook"></i> Med Facebook</a></li>
                 <li class="@(ViewBag.Local == true ?  "active" : "")"><a onClick="window.mt.showElement('#mt-login'); mt.hideElement('#facebook-login');"><i class="fa fa-user"></i>&nbsp;Med lokal brukerkonto</a></li>
@@ -17,14 +17,14 @@
         </div>
         <div class="clearfix"></div>
         <hr />
-        <div id="facebook-login" class="col-md-12 no-padding" style="@(ViewBag.Local == true ?  "display: none;" : "")">
+        <div id="facebook-login" style="@(ViewBag.Local == true ?  "display: none;" : "")">
             <section>
                 @{
                     var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
                     <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                         <div>
-                            <div class="col-xs-12 login--providerLogin">
+                            <div class="login--providerLogin">
                                 @foreach (var provider in loginProviders)
                                 {
                                     <button type="submit" class="btn btn-default btn-lg" name="provider" value="@provider.Name" title="Logg inn med din @provider.DisplayName-konto"><i class="fa fa-facebook"></i> Logg inn med Facebook</button>
@@ -38,10 +38,10 @@
             </section>
         </div>
         <div>
-            <div id="mt-login" class="col-md-12" style="@(ViewBag.Local != true ?  "display: none;" : "")">
+            <div id="mt-login" style="@(ViewBag.Local != true ?  "display: none;" : "")">
                 <section>
                     <form asp-controller="Account" asp-action="Login" asp-route-local="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="col-md-offset-2 col-md-10"><div asp-validation-summary="All" class="text-danger"></div></div>
                         <div class="form-group">
                             <label asp-for="Email" class="col-md-2 control-label"></label>
                             <div class="col-md-10">

@@ -40,8 +40,7 @@ let get (ctx : HttpContext) (club: Club) (user : User) =
                 |> List.map (fun (id, _) -> id)
                 |> List.distinct
             query { 
-                for e in eventIds do
-                    select e
+                for e in eventIds do select e
             }
         
         let attendances =

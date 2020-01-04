@@ -163,7 +163,9 @@ let element props children =
                                         ]
                                         hr []
                                         h5 [] [str "Betalingsinformasjon"]
-                                        Textarea.render { Value = props.PaymentInformation; Url = "/api/payments/information"  }
+                                        Textarea.render { Value = props.PaymentInformation
+                                                          Url = "/api/payments/information"
+                                                          Placeholder = Some "Betales med Vipps til ....."  }
 
                                     ]
                         props.Years.Length > 0 &?

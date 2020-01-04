@@ -40,7 +40,7 @@ module Pages =
             let years =
                 query {
                     for game in db.Games do
-                    where (teamIds.Contains(game.TeamId) 
+                    where (teamIds.Contains(game.TeamId.Value) 
                           && game.GameType <> treningskamp)
                     select (game.DateTime.Year)
                     distinct
