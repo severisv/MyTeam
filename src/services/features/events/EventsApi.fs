@@ -82,27 +82,11 @@ let signupMessage clubId (user: User) eventId (ctx : HttpContext) (model: String
                                                     ea.SignupMessage <- model.Value 
                                              )
     
-
-
-
-type DbEvent =
-    {Id: Guid
-     Description: string
-     DateTime: DateTime
-     Location :string
-     Type: int
-     GameType: Nullable<int>
-     Opponent: string
-     TeamId: Nullable<Guid>
-     GamePlanIsPublished: Nullable<bool>
-     SquadIsPublished: bool
-    }
-
 let listEvents (club: Club) (user: User) period (db: Database) =
      let (ClubId clubId) = club.Id
      let now = DateTime.Now
      let inTwoHours = now.AddHours -2.0
-     let in14Days = now.AddDays Event.allowedSignupDays
+     let in14Days = now.AddDays Event.allowedSignupDays     
      
      let events =
          (match period with
@@ -138,35 +122,37 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                  where (event.ClubId = clubId && event.DateTime < inTwoHours && event.DateTime.Year = year)
              })     
          |> fun events ->
+             
              query {
                  for event in events do             
-                 groupJoin ea in db.EventAttendances 
-                   on (event.Id = ea.EventId) into attendances
+                 groupJoin ea in db.EventAttendances
+                   on (event.Id = ea.EventId)
+                   into attendances
                 
                  for ea in attendances.DefaultIfEmpty() do
                  
-                 select ({ Id = event.Id
-                           Description = !!event.Description
-                           DateTime = event.DateTime
-                           Location = event.Location
-                           Type = event.Type
-                           GameType = event.GameType
-                           Opponent = event.Opponent
-                           TeamId = event.TeamId
-                           GamePlanIsPublished = event.GamePlanIsPublished
-                           SquadIsPublished = event.IsPublished
-                          }, {| FirstName = ea.Member.FirstName
-                                LastName = ea.Member.LastName
-                                UrlName = ea.Member.UrlName
-                                Message = !!ea.SignupMessage
-                                Id = Nullable ea.MemberId
-                                IsAttending = ea.IsAttending
-                                IsSelected = Nullable ea.IsSelected
-                                DidAttend = Nullable ea.DidAttend |}
+                 select ({| Id = event.Id
+                            Description = !!event.Description
+                            DateTime = event.DateTime
+                            Location = event.Location
+                            EventType = event.Type
+                            GameType = event.GameType
+                            Opponent = event.Opponent
+                            TeamId = event.TeamId
+                            GamePlanIsPublished = event.GamePlanIsPublished
+                            SquadIsPublished = event.IsPublished
+                          |}, {| FirstName = ea.Member.FirstName
+                                 LastName = ea.Member.LastName
+                                 UrlName = ea.Member.UrlName
+                                 Message = !!ea.SignupMessage
+                                 Id = Nullable ea.MemberId
+                                 IsAttending = ea.IsAttending
+                                 IsSelected = Nullable ea.IsSelected
+                                 DidAttend = Nullable ea.DidAttend |}
                          )
              }
          |> Seq.toList
-         |> List.groupBy (fun (e, _) -> e)
+         |> List.groupBy (fun (e, _) -> e)       
          
      let eventIds = query { for (e, _) in events do
                             select e.Id }
@@ -176,10 +162,10 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                  where (eventIds.Contains(et.EventId))
                  select (et.EventId, et.TeamId)
          } |> Seq.toList
-         
+
      events
      |> List.map (fun (e, attendees) ->
-         let eventType = e.Type |> Events.eventTypeFromInt
+         let eventType = e.EventType |> Events.eventTypeFromInt
          let attendees = attendees
                         |> List.filter (fun (_, a) -> a.Id.HasValue)
                         |> List.sortBy (fun (_, a) -> a.FirstName)
