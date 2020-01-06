@@ -34,6 +34,7 @@ type Event = {
     Id: Guid
     Type: EventType
     DateTime: DateTime
+    TimeString: string
     Location: string
     Description: string
     Details: Details

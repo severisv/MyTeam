@@ -38,6 +38,7 @@ type Squad = {
 type GameDetailed = {
     Id: Guid
     Date: DateTime
+    TimeString: string
     Location: string
     Description: string
     Squad: Squad
@@ -163,9 +164,10 @@ type SelectSquad(props) =
                                                                span [ Class "no-wrap" ] [ whitespace
                                                                                           Icons.time ""
                                                                                           whitespace
-                                                                                          game.Date
-                                                                                          |> Date.formatTime
-                                                                                          |> str ] ]
+                                                                                          game.TimeString
+                                                                                       //   |> Date.formatTime
+                                                                                          |> str
+                                                                                           ] ]
                                                          p [] [ Icons.mapMarker ""
                                                                 whitespace
                                                                 str game.Location ] ] ]

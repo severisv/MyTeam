@@ -188,7 +188,8 @@ let element props children =
                                                     p [] [
                                                       Icons.time ""
                                                       whitespace
-                                                      str <| Date.formatTime event.DateTime ]
+                                                      //str <| Date.formatTime event.DateTime
+                                                      str event.TimeString]
                                                     p [] [
                                                         Icons.mapMarker ""
                                                         whitespace

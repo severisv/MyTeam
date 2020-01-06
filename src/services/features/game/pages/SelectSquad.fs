@@ -34,6 +34,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                 ({
                     Id = gameId
                     Date = date
+                    TimeString = Shared.Date.formatTime date
                     Location = location
                     Description = description =?? ""
                     TeamId = teamId.Value

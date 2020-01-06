@@ -187,6 +187,7 @@ let listEvents (club: Club) (user: User) period (db: Database) =
          { Id = e.Id
            Description = e.Description
            DateTime = e.DateTime
+           TimeString = Shared.Date.formatTime e.DateTime
            Location = e.Location
            Type = eventType
            TeamIds = if e.TeamId.HasValue then
