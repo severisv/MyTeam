@@ -64,13 +64,16 @@ namespace MyTeam
             services.Configure<FacebookOptions>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AssetHashes>(Configuration.GetSection("AssetHashes"));
+            services.AddApplicationInsightsTelemetry();
 
             services.AddLocalization();
-            services.AddMvc(setup => { setup.ConfigureFilters(); });
+            services.AddControllersWithViews(setup => { setup.ConfigureFilters(); });
             App.addGiraffe(services);
             App.registerJsonSerializers(services);
 
             services.RegisterDependencies();
+            
+            
 
         }
 
@@ -95,12 +98,12 @@ namespace MyTeam
                 SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
                 SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
             });
-
-            app.UseMvc(routes =>
+            
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=News}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
             App.useGiraffe(app);

@@ -15,6 +15,7 @@ let private key clubId =
     let (ClubId clubId) = clubId
     sprintf "notifications-%O" clubId
 
+
 let get (ctx : HttpContext) (club: Club) (user : User) =
     let (ClubId clubId) = club.Id
     let db = ctx.Database
@@ -35,13 +36,10 @@ let get (ctx : HttpContext) (club: Club) (user : User) =
             |> List.distinct
         
         let eventIds =
-            let eventIds =
                 events
                 |> List.map (fun (id, _) -> id)
                 |> List.distinct
-            query { 
-                for e in eventIds do select e
-            }
+          
         
         let attendances =
             query { 

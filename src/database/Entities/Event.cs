@@ -12,18 +12,19 @@ namespace MyTeam.Models.Domain
 
 
 
-    public class Event : Entity, IEvent
+    public class Event
     {
-        [Required]
+        public Guid Id { get; set; }
+
         public Guid ClubId { get; set; }
         
         public Guid? TeamId { get; set; }
         public virtual Team Team { get; set; }
-        [Required]
         public int Type { get; set; }
         public int? GameType { get; set; }
         [NotMapped]
-        public GameType? GameTypeValue
+        [Obsolete]
+        public virtual GameType? GameTypeValue
         {
             get { return (GameType?)GameType; }
             set { GameType = (int?)value; }
@@ -34,7 +35,7 @@ namespace MyTeam.Models.Domain
         [Required]
         public string Location { get; set; }
         public string Headline { get; set; }
-        public string Description { get; set; }
+        public string  Description { get; set; }
 
         public string Opponent { get; set; }
         public bool Voluntary { get; set; }
@@ -45,20 +46,16 @@ namespace MyTeam.Models.Domain
 
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<EventAttendance> Attendees { get; set; }
-        [NotMapped]
-        public virtual IEnumerable<Member> Attending => Attendees?.Where(a => a.IsAttending == true).Select(a => a.Member);
-        [NotMapped]
-        public virtual IEnumerable<Member> NotAttending => Attendees?.Where(a => a.IsAttending == false).Select(a => a.Member);
-
-        [NotMapped]
-        public bool IsGame => Type == EventType.Kamp.ToInt();
-        [NotMapped]
-        public bool IsTraining => Type == EventType.Trening.ToInt();
-        [NotMapped]
-        public bool IsCustom => Type == EventType.Diverse.ToInt();
 
         public bool IsPublished { get; set; }
         public bool IsHomeTeam { get; set; }
+        
+        public int? HomeScore { get; set; }
+        public int? AwayScore { get; set; }
+        public string GamePlan { get; set; }
+        public string GamePlanState { get; set; }
+        public virtual Article Report { get; set; }
+        public virtual ICollection<GameEvent> GameEvents { get; set; }
         
     }
 }

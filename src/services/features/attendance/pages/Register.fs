@@ -24,6 +24,7 @@ module Register =
 
         let getTraining =
             getTraining db
+            
 
         let model =
             let getModel (training : Event) =
@@ -31,7 +32,10 @@ module Register =
                 (training, players)
 
             match trainingId with
-            | Some trainingId -> getTraining trainingId |> getModel |> Some
+            | Some trainingId ->
+                match getTraining trainingId with
+                | Some training -> getModel training |> Some
+                | None -> None
             | None -> previousTrainings
                       |> List.tryHead
                       |> Option.map getModel
@@ -71,49 +75,52 @@ module Register =
                             ))
                         ]
                 ]
-        [
-            mtMain [ _class "mt-main--narrow register-attendance" ] [
-                block []
-                        (model
-                        |> Option.fold (fun _ (training, players) ->
-                            [
-                                editEventLink training.Id
-                                div [ _class "attendance-event" ] [
-                                    !!(Icons.eventIcon EventType.Trening Icons.ExtraLarge)
-                                    div [ _class "faded" ] [
-                                        p [] [
-                                            icon (fa "calendar") ""
-                                            whitespace
-                                            encodedText <| (training.Date.ToString("ddd d MMMM"))
-                                        ]
-                                        p [] [ icon (fa "map-marker") ""
-                                               encodedText training.Location ] ]
-                                ]
-                                registerAttendancePlayerList "Påmeldte spillere" players.Attending training Open
-                                br []
-                                registerAttendancePlayerList "Øvrige aktive" players.OthersActive training Collapsed
-                                br []
-                                registerAttendancePlayerList "Øvrige inaktive" players.OthersInactive training Collapsed
-                            ])
-                            [ emptyText ]
-                            )
+        
+        match model with
+        | Some model ->
+                
+            [
+                mtMain [ _class "mt-main--narrow register-attendance" ] [
+                    block []
+                            (model
+                            |> fun (training, players) ->
+                                [
+                                    editEventLink training.Id
+                                    div [ _class "attendance-event" ] [
+                                        !!(Icons.eventIcon EventType.Trening Icons.ExtraLarge)
+                                        div [ _class "faded" ] [
+                                            p [] [
+                                                icon (fa "calendar") ""
+                                                whitespace
+                                                encodedText <| (training.Date.ToString("ddd d MMMM"))
+                                            ]
+                                            p [] [ icon (fa "map-marker") ""
+                                                   encodedText training.Location ] ]
+                                    ]
+                                    registerAttendancePlayerList "Påmeldte spillere" players.Attending training Open
+                                    br []
+                                    registerAttendancePlayerList "Øvrige aktive" players.OthersActive training Collapsed
+                                    br []
+                                    registerAttendancePlayerList "Øvrige inaktive" players.OthersInactive training Collapsed
+                                ])                            
+                ]
+                sidebar [] [
+                    (previousTrainings.Length > 0 =?
+                        (block [] [
+                            !!(Nav.navList ({
+                                        Header = "Siste treninger"
+                                        Items = previousTrainings
+                                                |> List.map (fun training ->
+                                                                { Text = [ Icons.calendar ""
+                                                                           Base.whitespace
+                                                                           Fable.React.Helpers.str <| (training.Date.ToString "ddd d MMMM") ]
+                                                                  Url = registerAttendanceUrl (Some training) })
+                                        Footer = None
+                                        IsSelected = isSelected }))
+                        ]
+                       , emptyText))
+                ]
             ]
-            sidebar [] [
-                (previousTrainings.Length > 0 =?
-                    (block [] [
-                        !!(Nav.navList ({
-                                    Header = "Siste treninger"
-                                    Items = previousTrainings
-                                            |> List.map (fun training ->
-                                                            { Text = [ Icons.calendar ""
-                                                                       Base.whitespace
-                                                                       Fable.React.Helpers.str <| (training.Date.ToString "ddd d MMMM") ]
-                                                              Url = registerAttendanceUrl (Some training) })
-                                    Footer = None
-                                    IsSelected = isSelected }))
-                    ]
-                   , emptyText))
-            ]
-        ]
-        |> layout club (Some user) (fun o -> { o with Title = "Registrer oppmøte" }) ctx
-        |> OkResult
+            |> layout club (Some user) (fun o -> { o with Title = "Registrer oppmøte" }) ctx
+            |> OkResult
+        | None -> NotFound

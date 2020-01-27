@@ -1,10 +1,7 @@
 Sendgrid
 SlackLogger
+Giraffe
 System.Net.Http
-Microsoft.AspNetCore
-Microsoft.AspNetCore.StaticFiles
-Microsoft.AspNetCore.Mvc
 Microsoft.AspNetCore.Authentication.Facebook
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
-Microsoft.Extensions.Logging.ApplicationInsights
 Microsoft.ApplicationInsights.AspNetCore

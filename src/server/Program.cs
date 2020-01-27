@@ -33,7 +33,6 @@ namespace MyTeam
                     logging.AddSlack();
                 })
                 .UseStartup<Startup>()
-                .UseApplicationInsights()
                 .Build();
             
             host.Run();

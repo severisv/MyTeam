@@ -17,12 +17,14 @@ let get : Get =
     fun ctx clubId -> 
         let (ClubIdentifier clubId) = clubId
         let db = ctx.Database
+        
+        let teams = query { for t in db.Teams do select t } |> Seq.toList
 
         let clubs =
                 query {
                     for club in db.Clubs do
                     where (club.ClubIdentifier = clubId)
-                    join team in db.Teams on (club.Id = team.ClubId)
+                    join team in teams on (club.Id = team.ClubId)
                     select ({| Id = club.Id
                                ClubIdentifier = club.ClubIdentifier
                                ShortName = club.ShortName

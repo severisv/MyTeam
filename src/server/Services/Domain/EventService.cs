@@ -63,7 +63,7 @@ namespace MyTeam.Services.Domain
 
             if (ev.Type.FromInt() == EventType.Kamp)
             {
-                ((Game)ev).TeamId = model.TeamIds.Single();
+                (ev).TeamId = model.TeamIds.Single();
             }
 
             foreach (var id in model.TeamIds)

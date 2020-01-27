@@ -20,7 +20,7 @@ open PipelineHelpers
 module App =
     
 
-    let webApp =
+    let (webApp: HttpHandler) =
         removeTrailingSlash >=>
         fun next ctx ->
             let (club, user) = Tenant.get ctx
@@ -290,13 +290,12 @@ module App =
 
             
     let useGiraffe (app : IApplicationBuilder)  =
-            let env = app.ApplicationServices.GetService<IHostingEnvironment>()
-            if env.IsDevelopment() then
-                app.UseDeveloperExceptionPage() |> ignore
-                app.UseGiraffe webApp
-            else 
-                app.UseGiraffeErrorHandler(ErrorHandling.errorHandler)
-                   .UseGiraffe webApp
+        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
+        if env.EnvironmentName = "Development" then
+            app.UseDeveloperExceptionPage() |> ignore
+            app.UseGiraffe webApp
+        else 
+            app.UseGiraffeErrorHandler(ErrorHandling.errorHandler).UseGiraffe webApp
 
     let addGiraffe (services : IServiceCollection)  =
         services.AddGiraffe() |> ignore
@@ -308,5 +307,7 @@ module App =
         settings.Converters.Add(IdiomaticDuConverter())
         settings.Converters.Add(StringEnumConverter())
         services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(settings)) |> ignore
+
+
 
 

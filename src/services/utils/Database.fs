@@ -10,3 +10,4 @@ module DatabaseExtensions =
         member ctx.ConnectionString = getConnectionString ctx
         member ctx.Database = ctx.GetService<Database>()
                     
+                    

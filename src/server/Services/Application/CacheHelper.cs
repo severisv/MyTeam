@@ -30,6 +30,7 @@ namespace MyTeam.Services.Application
 
         public PlayerDto GetPlayerFromUser(string username, Guid clubId)
         {
+
             if (string.IsNullOrWhiteSpace(username)) return null;
 
             var key = GetMemberKey(clubId, username);
@@ -47,7 +48,7 @@ namespace MyTeam.Services.Application
 
             member = _dbContext.Members
                 .Where(p => clubId == p.ClubId && p.UserName == username)
-                .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName, p.ImageFull, p.FacebookId, p.Roles, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
+                .Select(p => new PlayerDto(p.Id, p.FirstName, p.UrlName, p.ImageFull, p.FacebookId, p.RolesString, p.MemberTeams.Select(mt => mt.TeamId).ToArray(), p.ProfileIsConfirmed)).FirstOrDefault();
 
             if (member != null)
             {

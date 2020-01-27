@@ -27,7 +27,6 @@ namespace MyTeam.Models.Domain
 
         [Required]
         public int Status { get; set; }
-        public string[] Roles => string.IsNullOrWhiteSpace(RolesString) ? new string[0] : RolesString.Split(',');
 
         [DataType(DataType.Date)]
         [Display(Name = Res.BirthDate)]
@@ -41,13 +40,8 @@ namespace MyTeam.Models.Domain
         public string Phone { get; set; }
 
         public string ImageFull { get; set; }
-        [NotMapped]
-        public string Image => ImageFull;
         public bool ProfileIsConfirmed { get; set; }
-
-        [NotMapped]
-        public string Name => $"{FirstName} {LastName}";
-
+       
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<EventAttendance> EventAttendances { get; set; }

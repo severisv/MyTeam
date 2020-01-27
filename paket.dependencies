@@ -6,23 +6,16 @@ nuget Fable.Fetch
 nuget Fable.Promise
 nuget Fable.React
 nuget Fable.JsonConverter
-nuget Microsoft.Extensions.Logging.ApplicationInsights
+nuget Microsoft.ApplicationInsights.AspNetCore 2.8
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator
 nuget FSharp.Data
 nuget Giraffe
-nuget Microsoft.ApplicationInsights.AspNetCore
-nuget Microsoft.AspNetCore.Antiforgery 
 nuget Microsoft.AspNetCore.Authentication.Facebook
 nuget Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
-nuget Microsoft.AspNetCore.Hosting 
-nuget Microsoft.AspNetCore.Identity 
 nuget Microsoft.AspNetCore.Identity.EntityFrameworkCore
-nuget Microsoft.AspNetCore
-nuget Microsoft.AspNetCore.StaticFiles
-nuget Microsoft.AspNetCore.Mvc
-nuget Microsoft.EntityFrameworkCore 
+nuget Microsoft.EntityFrameworkCore
 nuget Microsoft.EntityFrameworkCore.SqlServer 
 nuget Microsoft.EntityFrameworkCore.Tools 
 nuget Microsoft.Extensions.Caching.Abstractions 

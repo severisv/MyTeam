@@ -77,7 +77,7 @@ let run next (ctx: HttpContext)  =
                                         |> List.tryFind (fun game -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
                                         |> function
                                         | Some existingGame -> 
-                                            db.Games.Attach(existingGame) |> ignore
+                                            db.Events.Attach(existingGame) |> ignore
                                             existingGame
                                         | None ->
                                                                              
@@ -85,7 +85,7 @@ let run next (ctx: HttpContext)  =
                                             et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
 
                                             let g = 
-                                                Models.Domain.Game(
+                                                Models.Domain.Event(
                                                     IsHomeTeam = isHomeTeam,
                                                     Opponent = opponent,
                                                     TeamId = Nullable season.TeamId,
@@ -94,7 +94,7 @@ let run next (ctx: HttpContext)  =
                                                     ClubId = team.ClubId,
                                                     GameType = ((Events.gameTypeToInt GameType.Seriekamp) |> Nullable)
                                                 )
-                                            db.Games.Add(g) |> ignore
+                                            db.Events.Add(g) |> ignore
                                             g                                            
 
                                     let time = row.Tid 
