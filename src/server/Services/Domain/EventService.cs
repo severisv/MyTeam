@@ -66,27 +66,32 @@ namespace MyTeam.Services.Domain
                 (ev).TeamId = model.TeamIds.Single();
             }
 
-            foreach (var id in model.TeamIds)
+            else
             {
-                if (ev.EventTeams.All(e => e.TeamId != id))
+                foreach (var id in model.TeamIds)
                 {
-                    ev.EventTeams.Add(new EventTeam
+                    if (ev.EventTeams.All(e => e.TeamId != id))
                     {
-                        Id = Guid.NewGuid(),
-                        TeamId = id,
-                        EventId = model.EventId.Value
-                    });
+                        _dbContext.EventTeams.Add(new EventTeam
+                        {
+                            Id = Guid.NewGuid(),
+                            TeamId = id,
+                            EventId = model.EventId.Value
+                        });
+                    }
                 }
-            }
-            _dbContext.SaveChanges();
-            foreach (var eventTeam in ev.EventTeams)
-            {
-
-                if (model.TeamIds.All(tid => eventTeam.TeamId != tid))
+                _dbContext.SaveChanges();     
+                foreach (var eventTeam in ev.EventTeams)
                 {
-                    _dbContext.EventTeams.Remove(eventTeam);
+
+                    if (model.TeamIds.All(tid => eventTeam.TeamId != tid))
+                    {
+                        _dbContext.EventTeams.Remove(eventTeam);
+                    }
                 }
             }
+           
+            
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCache(clubId);
         }

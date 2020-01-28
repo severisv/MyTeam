@@ -69,7 +69,6 @@ namespace MyTeam.ViewModels.Events
 
         public IEnumerable<EventType> EventTypes => Enum.GetValues(typeof(EventType)).Cast<EventType>().Where(e => e != EventType.Alle);
         public Guid? EventId { get; set; }
-        public Guid ClubId { get; set; }
 
         [Display(Name = Res.HomeGround)]
         public bool IsHomeTeam { get; set; }
@@ -89,7 +88,6 @@ namespace MyTeam.ViewModels.Events
             var opponent = ev.Opponent;
             var voluntary = ev.Voluntary;
 
-            ClubId = ev.ClubId;
             Type = ev.Type;
             Date = ev.DateTime.Date.ToNoFull();
             Time = ev.DateTime.TimeOfDay.ToNo();
@@ -200,7 +198,6 @@ namespace MyTeam.ViewModels.Events
             } : new Event();
 
             ev.Id = eventId;
-            ev.ClubId = ClubId;
             ev.Location = Location;
             ev.Type = Type.ToInt();
             ev.DateTime = date + Time.AsTime().Value;

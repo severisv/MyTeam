@@ -1,5 +1,6 @@
 module MyTeam.Members.Persistence
 
+open System
 open Microsoft.EntityFrameworkCore
 open MyTeam
 open Shared
@@ -58,7 +59,10 @@ let toggleTeam : ToggleTeam =
         |> function
         | Some m -> db.Remove(m) |> ignore
         | None ->
-            let memberTeam = MemberTeam()
-            memberTeam.TeamId <- teamId
-            memb.MemberTeams.Add(memberTeam)
+            let memberTeam = MemberTeam(
+                                       Id = Guid.NewGuid(),
+                                       TeamId = teamId,
+                                       MemberId = memberId
+                                       )
+            db.MemberTeams.Add(memberTeam) |> ignore
         db.SaveChanges() |> ignore

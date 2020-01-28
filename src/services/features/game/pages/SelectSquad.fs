@@ -14,6 +14,7 @@ open Client.Games.SelectSquad
 open MyTeam.Views.BaseComponents
 open System.Linq
 
+
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
     
@@ -31,7 +32,9 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
     |> Seq.toList
     |> List.groupBy(fun (game,_) -> game)
     |> List.map (fun ((gameId, date, location, description, squadIsPublished, teamId), attendees) ->
-               let attendees = attendees |> List.map(fun (_, a) -> a)    
+               let attendees = attendees
+                               |> List.map(fun (_, a) -> a)
+                               |> List.filter (isNull >> not)
                ({
                     Id = gameId
                     Date = date
