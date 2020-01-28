@@ -33,7 +33,7 @@ module Pages =
 
     let layout club (user : Option<User>) getOptions (ctx : HttpContext) content =
 
-        let isProduction = ctx.GetService<IHostingEnvironment>().IsProduction()
+        let isProduction = ctx.GetService<IHostEnvironment>().IsProduction()
         let assetHashes = ctx.GetService<IOptions<AssetHashes>>().Value
              
         let o = getOptions ({ Title = ""

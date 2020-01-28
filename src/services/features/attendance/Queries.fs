@@ -15,12 +15,15 @@ module Queries =
         fun db clubId year ->
             let (ClubId clubId) = clubId
 
-            let years = 
+            let trening = (int EventType.Trening)
+            let kamp = (int EventType.Kamp)
+            let years =
+                 
                    query {
                             for e in db.EventAttendances do
                             where (                
                                     e.Event.ClubId = clubId &&
-                                    (e.Event.Type = (int EventType.Trening) || e.Event.Type = (int EventType.Kamp))
+                                    (e.Event.Type =  trening || e.Event.Type = kamp)
                                   )
                             select e.Event.DateTime.Year
                             distinct
@@ -59,7 +62,7 @@ module Queries =
                             where (
                                     a.Event.ClubId = clubId &&
                                     a.Event.DateTime < inOneHour &&
-                                    (a.Event.Type = (int EventType.Trening) || a.Event.Type = (int EventType.Kamp)) &&
+                                    (a.Event.Type = trening || a.Event.Type = kamp) &&
                                     a.Event.Voluntary <> true
                                 )
                             select (a, a.Event.Type)
@@ -67,11 +70,12 @@ module Queries =
                         |> Seq.toList
 
 
-                let playerIds = (attendances |> Seq.map (fun (a,_) -> a.MemberId) |> Seq.distinct)
+                let playerIds = (attendances |> List.map (fun (a,_) -> a.MemberId) |> List.distinct)
+                let trener = (int PlayerStatus.Trener)
                 let players = 
                     query {
                         for p in db.Members do
-                        where (playerIds.Contains p.Id && p.Status <> (int PlayerStatus.Trener))
+                        where (playerIds.Contains p.Id && p.Status <> trener)
                     } 
                     |> selectMembers
                     |> Seq.map 
@@ -137,7 +141,7 @@ module Queries =
         fun db eventId ->
             db.Events.Where(fun e -> e.Id = eventId)
             |> selectEvents
-            |> Seq.head
+            |> Seq.tryHead
                  
     let getPlayers: GetPlayers =
         fun db clubId eventId ->

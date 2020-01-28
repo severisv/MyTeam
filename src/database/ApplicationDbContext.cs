@@ -1,12 +1,12 @@
-﻿using System.IO;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyTeam.Models.Domain;
 using Newtonsoft.Json;
-using MyTeam;
+using MyTeam.Models.Enums;
 
 namespace MyTeam.Models
 {
@@ -16,7 +16,8 @@ namespace MyTeam.Models
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<Game> Games { get; set; }
+
+        [NotMapped] public virtual IQueryable<Event> Games => Events.Where(ev => ev.Type == (int) EventType.Kamp);
         public DbSet<GameEvent> GameEvents { get; set; }
         public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
@@ -44,7 +45,6 @@ namespace MyTeam.Models
             builder.Entity<Club>().ToTable("Club");
             builder.Entity<Comment>().ToTable("Comment");
             builder.Entity<Event>().ToTable("Event");
-            builder.Entity<Game>().ToTable("Game");
             builder.Entity<GameEvent>().ToTable("GameEvent");
             builder.Entity<EventTeam>().ToTable("EventTeam");
             builder.Entity<EventAttendance>().ToTable("EventAttendance");
@@ -80,11 +80,6 @@ namespace MyTeam.Models
                 .HasForeignKey(c => c.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Team>()
-                .HasMany(e => e.Games)
-                .WithOne(c => c.Team)
-                .HasForeignKey(c => c.TeamId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<GameEvent>()
                 .HasOne(e => e.Player)

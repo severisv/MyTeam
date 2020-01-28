@@ -73,7 +73,7 @@ let view (club : Club) (user : User) (year : string option) (ctx : HttpContext) 
             filterBy year >> List.sumBy (fun a -> a.Amount)
 
      let fines =
-         let memberIds = allFines |> Seq.map (fun a -> a.MemberId)
+         let memberIds = allFines |> List.map (fun a -> a.MemberId)
 
          let members =
              query {

@@ -10,12 +10,11 @@ module StatsQueries =
         fun db selectedTeam selectedYear ->
                               
             let teamIds = 
-                let teams = match selectedTeam with
-                            | Team t -> [t]
-                            | Seven teams -> teams
-                            | Elleven teams -> teams
-
-                teams |> Seq.map (fun t -> t.Id)                  
+               match selectedTeam with
+               | Team t -> [t]
+               | Seven teams -> teams
+               | Elleven teams -> teams
+               |> List.map (fun t -> t.Id)                  
                                 
             
             let treningskamp = Nullable <| int GameType.Treningskamp
@@ -28,8 +27,7 @@ module StatsQueries =
                         query { 
                             for game in db.Games do
                             where (teamIds.Contains(game.TeamId.Value) && game.GameType <> treningskamp && game.DateTime < now)
-                            leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
-                            for ea in result do 
+                            join ea in db.EventAttendances on (game.Id = ea.EventId)
                             where ea.IsSelected 
                             select ea.MemberId
                         }     
@@ -37,8 +35,7 @@ module StatsQueries =
                         query { 
                             for game in db.Games do
                             where (teamIds.Contains(game.TeamId.Value) && game.GameType <> treningskamp && year = game.DateTime.Year  && game.DateTime < now)
-                            leftOuterJoin ea in db.EventAttendances on (game.Id = ea.EventId) into result
-                            for ea in result do
+                            join ea in db.EventAttendances on (game.Id = ea.EventId)
                             where ea.IsSelected 
                             select ea.MemberId
                         }
@@ -51,16 +48,14 @@ module StatsQueries =
                         query { 
                             for game in db.Games do
                             where (teamIds.Contains(game.TeamId.Value) && game.GameType <> treningskamp)
-                            leftOuterJoin ge in db.GameEvents on (game.Id = ge.GameId) into result
-                            for ge in result do 
+                            join ge in db.GameEvents on (game.Id = ge.GameId)
                             select ge
                         }     
                 | Year year ->  
                         query { 
                             for game in db.Games do
                             where (teamIds.Contains(game.TeamId.Value) && game.GameType <> treningskamp && year = game.DateTime.Year)
-                            leftOuterJoin ge in db.GameEvents on (game.Id = ge.GameId) into result
-                            for ge in result do
+                            join ge in db.GameEvents on (game.Id = ge.GameId)
                             select ge
                         }
                 |> Seq.toList             

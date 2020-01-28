@@ -12,26 +12,30 @@ open Shared.Components.Nav
 open MyTeam.Games
 open Client.Games.SelectSquad
 open MyTeam.Views.BaseComponents
+open System.Linq
+
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
+    
+        
     let db = ctx.Database
-
     let (ClubId clubId) = club.Id 
+
     query {
         for game in db.Games do
         where (game.Id = gameId && game.ClubId = clubId)
-        select (gameId, game.DateTime, game.Location, game.Description, game.IsPublished, game.TeamId)
+        groupJoin a in db.EventAttendances on (game.Id = a.EventId) into group
+        for a in group.DefaultIfEmpty() do
+        select ((game.Id, game.DateTime, game.Location, game.Description, game.IsPublished, game.TeamId), a)
     }
     |> Seq.toList
-    |> List.map (fun (gameId, date, location, description, squadIsPublished, teamId) ->
-                let attendees =
-                    query {
-                        for a in db.EventAttendances do
-                            where (a.EventId = gameId)
-                            select a }
-                    |> Seq.toList
-                ({
+    |> List.groupBy(fun (game,_) -> game)
+    |> List.map (fun ((gameId, date, location, description, squadIsPublished, teamId), attendees) ->
+               let attendees = attendees
+                               |> List.map(fun (_, a) -> a)
+                               |> List.filter (isNull >> not)
+               ({
                     Id = gameId
                     Date = date
                     TimeString = Shared.Date.formatTime date
@@ -44,7 +48,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                             |> List.filter(fun a -> a.IsSelected)
                                             |> List.map(fun m -> m.MemberId) |> Seq.toList }
                 }, 
-                attendees 
+                (attendees 
                 |> List.map (fun a ->
                                 if a.IsAttending.HasValue then
                                     Some {
@@ -54,7 +58,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                     }
                                 else None)
                 |> List.choose id
-                )                    
+                ))                    
         )
     |> Seq.tryHead
     |> function

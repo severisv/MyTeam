@@ -14,7 +14,7 @@ namespace MyTeam.Models.Domain
         public GameEventType Type { get; set; }
         public virtual Member AssistedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public virtual Game Game { get; set; }
+        public virtual Event Game { get; set; }
         public virtual Member Player { get; set; }
 
       }
