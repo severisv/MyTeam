@@ -5,3 +5,4 @@ System.Net.Http
 Microsoft.AspNetCore.Authentication.Facebook
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 Microsoft.ApplicationInsights.AspNetCore
+Microsoft.AspNetCore.AzureAppServices.HostingStartup

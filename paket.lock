@@ -145,6 +145,11 @@ NUGET
       Microsoft.AspNetCore.Metadata (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 3.1.1) - restriction: >= netstandard2.0
+    Microsoft.AspNetCore.AzureAppServices.HostingStartup (3.1.1)
+      Microsoft.AspNetCore.AzureAppServicesIntegration (>= 3.1.1) - restriction: >= netcoreapp3.1
+      Microsoft.Extensions.Configuration.EnvironmentVariables (>= 3.1.1) - restriction: >= netcoreapp3.1
+    Microsoft.AspNetCore.AzureAppServicesIntegration (3.1.1) - restriction: >= netcoreapp3.1
+      Microsoft.Extensions.Logging.AzureAppServices (>= 3.1.1) - restriction: >= netcoreapp3.1
     Microsoft.AspNetCore.Cryptography.Internal (3.1.1) - restriction: || (&& (>= net461) (>= netstandard2.0)) (&& (< netcoreapp3.0) (>= netstandard2.0)) (>= netstandard2.1)
     Microsoft.AspNetCore.Cryptography.KeyDerivation (3.1.1) - restriction: >= netstandard2.1
       Microsoft.AspNetCore.Cryptography.Internal (>= 3.1.1) - restriction: >= netstandard2.0
@@ -278,18 +283,18 @@ NUGET
       Microsoft.Extensions.DependencyInjection.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 3.1.1) - restriction: >= netstandard2.0
-    Microsoft.Extensions.Configuration (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6) (>= netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0))
+    Microsoft.Extensions.Configuration (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6) (>= netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0)) (>= netcoreapp3.1)
       Microsoft.Extensions.Configuration.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.Configuration.Abstractions (3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Primitives (>= 3.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.Configuration.Binder (3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Configuration (>= 3.1.1) - restriction: >= netstandard2.0
-    Microsoft.Extensions.Configuration.EnvironmentVariables (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6) (>= netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0))
+    Microsoft.Extensions.Configuration.EnvironmentVariables (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6) (>= netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0)) (>= netcoreapp3.1)
       Microsoft.Extensions.Configuration (>= 3.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.Configuration.FileExtensions (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6) (>= netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (&& (>= net46) (>= netstandard2.0))
       Microsoft.Extensions.Configuration (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.FileProviders.Physical (>= 3.1.1) - restriction: >= netstandard2.0
-    Microsoft.Extensions.Configuration.Json (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6) (< netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (>= net46)
+    Microsoft.Extensions.Configuration.Json (3.1.1) - restriction: || (&& (>= net451) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6) (< netstandard2.0)) (&& (< net451) (>= netstandard2.0)) (>= net46) (>= netcoreapp3.1)
       Microsoft.Extensions.Configuration (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Configuration.FileExtensions (>= 3.1.1) - restriction: >= netstandard2.0
       System.Text.Json (>= 4.7) - restriction: && (< netcoreapp3.1) (>= netstandard2.0)
@@ -329,11 +334,26 @@ NUGET
     Microsoft.Extensions.Logging.ApplicationInsights (2.12) - restriction: && (< net451) (>= netstandard2.0)
       Microsoft.ApplicationInsights (>= 2.12) - restriction: >= netstandard2.0
       Microsoft.Extensions.Logging (>= 2.1) - restriction: >= netstandard2.0
+    Microsoft.Extensions.Logging.AzureAppServices (3.1.1) - restriction: >= netcoreapp3.1
+      Microsoft.Extensions.Configuration.EnvironmentVariables (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Configuration.Json (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Logging (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Logging.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Logging.Configuration (>= 3.1.1) - restriction: >= netstandard2.0
+      System.ValueTuple (>= 4.5) - restriction: >= netstandard2.0
+    Microsoft.Extensions.Logging.Configuration (3.1.1) - restriction: >= netcoreapp3.1
+      Microsoft.Extensions.Logging (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Options.ConfigurationExtensions (>= 3.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.ObjectPool (3.1.1) - restriction: || (&& (>= net461) (>= netstandard2.0)) (&& (< netcoreapp3.0) (>= netstandard2.0))
     Microsoft.Extensions.Options (3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.DependencyInjection.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
       Microsoft.Extensions.Primitives (>= 3.1.1) - restriction: >= netstandard2.0
       System.ComponentModel.Annotations (>= 4.7) - restriction: && (< netcoreapp3.1) (>= netstandard2.0)
+    Microsoft.Extensions.Options.ConfigurationExtensions (3.1.1) - restriction: >= netcoreapp3.1
+      Microsoft.Extensions.Configuration.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Configuration.Binder (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.DependencyInjection.Abstractions (>= 3.1.1) - restriction: >= netstandard2.0
+      Microsoft.Extensions.Options (>= 3.1.1) - restriction: >= netstandard2.0
     Microsoft.Extensions.PlatformAbstractions (1.1) - restriction: || (&& (< net45) (>= netstandard1.6) (< netstandard2.0)) (&& (< net45) (>= netstandard2.0))
       NETStandard.Library (>= 1.6.1) - restriction: || (>= net451) (>= netstandard1.3)
       System.Reflection.TypeExtensions (>= 4.3) - restriction: && (< net451) (>= netstandard1.3)
