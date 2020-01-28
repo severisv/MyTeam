@@ -6,7 +6,7 @@
     "watch": "webpack -w --mode development",
     "watch-fable": "cd ../client/src && dotnet fable webpack -- -w --config config/webpack.dev.js",
     "copy-libs": "webpack --mode production --config webpack.lib.config.js && copyfiles -u 2 node_modules/tinymce/**/* wwwroot/compiled/lib/tinymce"
-    },
+  },
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
