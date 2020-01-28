@@ -5,5 +5,5 @@ node -v
 
 if exist setdeploycredentials.cmd (call setdeploycredentials.cmd)
 dotnet --version
-dotnet tool install Paket
+dotnet tool restore
 fake run build.fsx --parallel 3 %*
