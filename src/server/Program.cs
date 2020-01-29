@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SlackLogger;
 
@@ -10,10 +11,16 @@ namespace MyTeam
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
+            var host = new HostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseKestrel(serverOptions =>
+                        {
+                        })
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
+                })
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     // Set up configuration sources.
@@ -32,7 +39,6 @@ namespace MyTeam
                     logging.AddApplicationInsights(hostingContext.Configuration["ApplicationInsights:InstrumentationKey"] ?? "");
                     logging.AddSlack();
                 })
-                .UseStartup<Startup>()
                 .Build();
             
             host.Run();
