@@ -31,6 +31,10 @@ namespace MyTeam.Services.Domain
 
         public void Add(Guid clubId, params Event[] events)
         {
+            foreach (var @event in events)
+            {
+                @event.ClubId = clubId;
+            }
             _dbContext.Events.AddRange(events);
             _dbContext.SaveChanges();
             _cacheHelper.ClearNotificationCache(clubId);
