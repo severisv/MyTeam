@@ -80,7 +80,6 @@ Target.create "Publish" <| fun _ ->
         (fun o ->  
           { o with  
               OutputPath = Some publishDirectory
-              Framework = Some "x64"
           } |> dotnetOptions) 
         webDir
 
