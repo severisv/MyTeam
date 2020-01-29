@@ -13,14 +13,6 @@ namespace MyTeam
         {
             var host = new HostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseKestrel(serverOptions =>
-                        {
-                        })
-                        .UseIISIntegration()
-                        .UseStartup<Startup>();
-                })
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     // Set up configuration sources.
@@ -38,6 +30,12 @@ namespace MyTeam
                     logging.AddDebug();
                     logging.AddApplicationInsights(hostingContext.Configuration["ApplicationInsights:InstrumentationKey"] ?? "");
                     logging.AddSlack();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
                 })
                 .Build();
             
