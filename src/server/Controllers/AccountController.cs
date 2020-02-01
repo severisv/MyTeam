@@ -52,7 +52,7 @@ namespace MyTeam.Controllers
         [Route("innlogging")]
         public IActionResult Login(string returnUrl = null)
         {
-            if (returnUrl?.Contains("Finnlogging") == true) return NotFound();
+            if (returnUrl?.Contains("returnUrl") == true) return NotFound();
     
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["Title"] = Res.Login;
@@ -109,7 +109,7 @@ namespace MyTeam.Controllers
         [Route("ny")]
         public IActionResult Register(string returnUrl = null)
         {
-            if (returnUrl?.Contains("Finnlogging") == true) return NotFound();
+            if (returnUrl?.Contains("returnUrl") == true) return NotFound();
             ViewData["ReturnUrl"] = returnUrl;
             var model = new RegisterViewModel();
             return View(model);
