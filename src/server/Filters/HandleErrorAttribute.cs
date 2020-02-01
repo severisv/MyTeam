@@ -12,9 +12,9 @@ namespace MyTeam.Filters
        
         public override void OnException(ExceptionContext context)
         {
-            var env = context.HttpContext.RequestServices.GetService<IHostingEnvironment>();
+            var env = context.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
 
-            if (!env.IsDevelopment())
+            if (env.EnvironmentName != "Development")
             {
                 var request = context.HttpContext.Request;
                 var logger = context.HttpContext.RequestServices.GetService<ILogger<HandleErrorAttribute>>();
