@@ -52,6 +52,8 @@ namespace MyTeam.Controllers
         [Route("innlogging")]
         public IActionResult Login(string returnUrl = null)
         {
+            if (returnUrl?.Contains("Finnlogging") == true) return NotFound();
+    
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["Title"] = Res.Login;
             var model = new LoginViewModel();
@@ -66,6 +68,7 @@ namespace MyTeam.Controllers
         [Route("innlogging")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null, bool local = false)
         {
+            
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["Local"] = local;
             if (ModelState.IsValid)
