@@ -109,6 +109,7 @@ namespace MyTeam.Controllers
         [Route("ny")]
         public IActionResult Register(string returnUrl = null)
         {
+            if (returnUrl?.Contains("Finnlogging") == true) return NotFound();
             ViewData["ReturnUrl"] = returnUrl;
             var model = new RegisterViewModel();
             return View(model);
