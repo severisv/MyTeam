@@ -6,16 +6,17 @@ open Shared.Domain
 open MyTeam.Models
 open Shared.Components.Input
 open System
+open System.Linq
 
 let internal update (club : Club) (teamName, year) (ctx : HttpContext) updateFn =
     let db = ctx.Database
     club.Teams
-    |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
+    |> List.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
     |> function 
     | None -> NotFound
     | Some team -> 
-        db.Seasons
-        |> Seq.tryFind (fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        db.Seasons.Where(fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        |> Seq.tryHead 
         |> function 
         | None -> 
             let season =
@@ -51,12 +52,12 @@ let setAutoUpdateFixtures club teamNameYear ctx (model : CheckboxPayload) =
 
 let delete (club : Club) (teamName, year) (db : Database) =
     club.Teams
-    |> Seq.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
+    |> List.tryFind (fun t -> (t.ShortName |> Strings.toLower) = (teamName |> toLower))
     |> function 
     | None -> NotFound
     | Some team -> 
-        db.Seasons
-        |> Seq.tryFind (fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        db.Seasons.Where(fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        |> Seq.tryHead 
         |> function 
         | None -> NotFound
         | Some season -> 

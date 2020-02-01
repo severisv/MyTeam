@@ -14,6 +14,7 @@ open MyTeam.Validation
 open Shared.Validation
 open MyTeam.Views
 open Microsoft.Extensions.Logging
+open System.Linq
 
 [<CLIMutable>]
 type RequestAccessForm =
@@ -83,8 +84,8 @@ let internal view model validationErrors (club : Club) (user : User option)
 
 let get (club : Club) user (ctx : HttpContext) =
     let (ClubId clubId) = club.Id
-    ctx.Database.MemberRequests
-    |> Seq.tryFind (fun mr -> mr.ClubId = clubId && mr.Email = ctx.User.Identity.Name)
+    ctx.Database.MemberRequests.Where(fun mr -> mr.ClubId = clubId && mr.Email = ctx.User.Identity.Name)
+    |> Seq.tryHead 
     |> function 
     | Some _ -> view None [] club user ctx
     | None -> 

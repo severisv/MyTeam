@@ -10,6 +10,7 @@ open Shared.Domain.Members
 open MyTeam.Views
 open Fable.React.Props
 open MyTeam.Views.BaseComponents
+open System.Linq
 
 
 type About = string
@@ -70,8 +71,8 @@ let editPost (club: Club) user (ctx: HttpContext) =
     let db = ctx.Database 
     let (ClubId clubId) = club.Id
     let form = ctx.BindForm<Shared.Components.Input.StringPayload>()
-    db.Clubs
-    |> Seq.tryFind (fun c -> c.Id = clubId)
+    db.Clubs.Where(fun c -> c.Id = clubId)
+    |> Seq.tryHead
     |> function 
     | Some c -> 
         c.About <- form.Value

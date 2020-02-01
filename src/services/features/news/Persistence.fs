@@ -4,16 +4,15 @@ open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.News
 open MyTeam
-open Shared
 open System
-open Server.Common.News
+open System.Linq
 
 let saveArticle : UpdateArticle =
     fun db clubId articleName model ->
         let (ClubId clubId) = clubId
 
-        db.Articles
-        |> Seq.tryFind (fun a -> a.ClubId = clubId && a.Name = articleName)
+        db.Articles.Where (fun a -> a.ClubId = clubId && a.Name = articleName)
+        |> Seq.tryHead
         |> function
         | Some a -> 
               a.Headline <- model.Headline
@@ -33,7 +32,7 @@ let createArticle : CreateArticle =
 
         let articleName = 
 
-            let rgx = new Text.RegularExpressions.Regex("[^a-zA-Z0-9 -]")
+            let rgx = Text.RegularExpressions.Regex("[^a-zA-Z0-9 -]")
 
             let rec appendNumberIfTaken name =
                 let isTaken n =
@@ -70,8 +69,8 @@ let deleteArticle : DeleteArticle =
     fun db clubId articleName ->
         let (ClubId clubId) = clubId
 
-        db.Articles
-        |> Seq.tryFind (fun a -> a.ClubId = clubId && a.Name = articleName)
+        db.Articles.Where(fun a -> a.ClubId = clubId && a.Name = articleName)
+        |> Seq.tryHead 
         |> function
         | Some a -> 
               db.Remove(a) |> ignore    

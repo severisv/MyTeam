@@ -4,7 +4,7 @@ open MyTeam
 open Shared.Domain
 open MyTeam.Models.Domain
 open System
-
+open System.Linq
 module Persistence =
 
     let selectPlayer: SelectPlayer = 
@@ -45,8 +45,8 @@ module Persistence =
         fun (db: Database) clubId gameId ->
             let (ClubId clubId) = clubId
 
-            db.Games 
-            |> Seq.tryFind (fun e -> e.Id = gameId && e.ClubId = clubId)    
+            db.Games.Where (fun e -> e.Id = gameId && e.ClubId = clubId)
+            |> Seq.tryHead
             |> function
                 | Some a ->
                     a.IsPublished <- true

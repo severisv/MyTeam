@@ -9,7 +9,7 @@ open Shared.Domain.Events
 open MyTeam.Validation
 open Shared.Validation
 open System
-
+open System.Linq
 type GameEventId = Guid
 
 type GameEventType =
@@ -116,7 +116,8 @@ let delete : Delete =
     fun clubId (gameId, gameEventId) (db : Database) -> 
         let (ClubId clubId) = clubId
         db.GameEvents.Include(fun ge -> ge.Game)
-        |> Seq.tryFind (fun ge -> ge.Id = gameEventId && ge.GameId = gameId)
+            .Where(fun ge -> ge.Id = gameEventId && ge.GameId = gameId)
+        |> Seq.tryHead
         |> function 
         | None -> NotFound
         | Some gameEvent when gameEvent.Game.ClubId <> clubId -> Unauthorized

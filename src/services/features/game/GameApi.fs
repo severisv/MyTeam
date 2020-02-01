@@ -11,9 +11,8 @@ open Giraffe
 module Api =
 
     let internal updateGame clubId gameId (db: Database) updateGame  =
-        let (ClubId id) = clubId
-        db.Games.Where(fun p -> p.ClubId = id)
-          |> Seq.tryFind(fun g -> g.Id = gameId)
+        db.Games.Where(fun g -> g.Id = gameId)
+          |> Seq.tryHead
           |> function
            | Some game when (ClubId game.ClubId) <> clubId -> Unauthorized
            | Some game -> 

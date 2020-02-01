@@ -58,11 +58,11 @@ let add clubId (ctx : HttpContext) model =
                         Ok()
                     else
                        (if form.FacebookId.HasValue then
-                            members |> Seq.tryFind (fun m -> m.FacebookId = form.FacebookId)
+                            members.Where(fun m -> m.FacebookId = form.FacebookId) |> Seq.tryHead
                         else None)
                         |> function
                          | Some user -> Some user
-                         | None -> members |> Seq.tryFind (fun m -> m.UserName = form.``E-postadresse``)
+                         | None -> members.Where(fun m -> m.UserName = form.``E-postadresse``) |> Seq.tryHead
                         |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
                         |> Option.defaultValue (Ok())
 
@@ -109,8 +109,8 @@ let add clubId (ctx : HttpContext) model =
                                                 )
                                         ) ) |> ignore
 
-                     db.MemberRequests
-                     |> Seq.tryFind (fun mr -> mr.ClubId = clubId && mr.Email = form.``E-postadresse``)
+                     db.MemberRequests.Where (fun mr -> mr.ClubId = clubId && mr.Email = form.``E-postadresse``)
+                     |> Seq.tryHead
                      |> Option.map (fun mr ->
                          Email.send ctx.RequestServices
                              mr.Email

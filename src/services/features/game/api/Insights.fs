@@ -28,7 +28,7 @@ let private calculateAverageAge dateTime attendees =
 
 let get (club : Domain.Club) (teamName, year) (db : Database) =
     club.Teams
-    |> Seq.tryFind(fun t -> t.ShortName.ToLower() = (toLower teamName))
+    |> List.tryFind(fun t -> t.ShortName.ToLower() = (toLower teamName))
     |> function 
     | None -> NotFound
     | Some team -> 

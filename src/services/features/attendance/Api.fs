@@ -59,8 +59,8 @@ let registerVictory =
         |> function
             | None -> Unauthorized
             | Some eventId ->
-                db.EventAttendances
-                |> Seq.tryFind (fun e -> e.EventId = eventId && e.MemberId = playerId)
+                db.EventAttendances.Where(fun e -> e.EventId = eventId && e.MemberId = playerId)
+                |> Seq.tryHead
                 |> function
                     | Some attendance ->
                         attendance.WonTraining <- model.value
