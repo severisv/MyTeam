@@ -12,6 +12,5 @@ namespace MyTeam.Services.Application
         void ClearCache(Guid? clubId, string email);
         MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds);
         void ClearNotificationCache(Guid clubId);
-        void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId);
     }
 }

@@ -18,6 +18,8 @@
 else
 {
     <ul id="login-wrapper" class="nav navbar-nav navbar-right navbar-topRight--item">
-        <li><a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Html.Raw(Context.Request.Path + Context.Request.QueryString)" ><i class="fa fa-sign-in"></i></a></li>
+        <li><a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Html.Raw(
+                                                                                    System.Net.WebUtility.UrlDecode(Context.Request.Path + Context.Request.QueryString)?.Split("returnUrl=").LastOrDefault()
+                                                                                    )" ><i class="fa fa-sign-in"></i></a></li>
     </ul>
 }

@@ -162,20 +162,6 @@ namespace MyTeam.Services.Application
             Cache.Remove("notifications-" + clubId.ToString());
         }
 
-        public void ClearNotificationCacheByMemberId(Guid clubId, Guid memberId)
-        {
-            var key = NotificationKey(clubId);
-
-            object cachedValue;
-            Cache.TryGetValue(key, out cachedValue);
-
-            var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
-            if (notifications != null)
-            {
-                notifications[memberId] = null;
-            }
-            Cache.Set(key, notifications);
-            Cache.Remove("notifications-" + clubId.ToString());
-        }
+       
     }
 }
