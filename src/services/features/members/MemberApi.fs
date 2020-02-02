@@ -62,7 +62,9 @@ let add clubId (ctx : HttpContext) model =
                         else None)
                         |> function
                          | Some user -> Some user
-                         | None -> members.Where(fun m -> m.UserName = form.``E-postadresse``) |> Seq.tryHead
+                         | None ->
+                             let email = form.``E-postadresse``
+                             members.Where(fun m -> m.UserName = email) |> Seq.tryHead
                         |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
                         |> Option.defaultValue (Ok())
 
@@ -94,6 +96,7 @@ let add clubId (ctx : HttpContext) model =
                            <@ form.Etternavn @> >- [ isRequired ] ]
                 |> function
                  | Ok() ->
+                     let email = form.``E-postadresse``
                      let (ClubId clubId) = clubId
                      db.Members.Add (
                             Member ( ClubId = clubId,
@@ -101,7 +104,7 @@ let add clubId (ctx : HttpContext) model =
                                      MiddleName = form.Mellomnavn,
                                      LastName = form.Etternavn,
                                      FacebookId = form.FacebookId,
-                                     UserName = form.``E-postadresse``,
+                                     UserName = email,
                                      UrlName = urlName form,
                                      MemberTeams = System.Linq.Enumerable.ToList (
                                                     club.Teams
@@ -109,7 +112,7 @@ let add clubId (ctx : HttpContext) model =
                                                 )
                                         ) ) |> ignore
 
-                     db.MemberRequests.Where (fun mr -> mr.ClubId = clubId && mr.Email = form.``E-postadresse``)
+                     db.MemberRequests.Where (fun mr -> mr.ClubId = clubId && mr.Email = email)
                      |> Seq.tryHead
                      |> Option.map (fun mr ->
                          Email.send ctx.RequestServices
@@ -122,7 +125,7 @@ let add clubId (ctx : HttpContext) model =
                      |> ignore
 
                      db.SaveChanges() |> ignore
-                     Tenant.clearUserCache ctx club.Id (UserId form.``E-postadresse``)                   
+                     Tenant.clearUserCache ctx club.Id (UserId email)                   
                      OkResult()
                  | Error e -> ValidationErrors e
 
