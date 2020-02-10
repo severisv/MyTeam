@@ -21,7 +21,7 @@
     "file-loader": "^4.2.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.0",
-    "less": "^3.10.3",
+    "less": "^3.11.0",
     "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.9.0",
     "moment": "^2.24.0",
