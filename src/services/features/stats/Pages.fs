@@ -84,15 +84,15 @@ module Pages =
                         !!(Tabs.tabs [Fable.React.Props.Class "team-nav"] 
                                  ((club.Teams 
                                  |> List.map (fun team  -> 
-                                                    {   Text = team.Name
+                                                    {   Text = team.ShortName
                                                         ShortText = team.ShortName
                                                         Icon = Some <| Icons.team ""
                                                         Url = statsUrl (Team team) selectedYear  }
                                             )) @ (leagueTypes
                                                 |> List.map (fun leagueType ->
-                                                               let text = if leagueTypes.Length > 1 then string leagueType
+                                                               let text = if leagueTypes.Length > 1 then (match leagueType with | Syver -> "7'er" | Ellever -> "11'er")
                                                                           else "Samlet"
-                                                               { Text = text
+                                                               { Text = sprintf "Samlet %s" text
                                                                  ShortText = text
                                                                  Icon = None
                                                                  Url = statsUrl (match leagueType with
@@ -100,7 +100,6 @@ module Pages =
                                                                                  | Ellever -> Elleven []
                                                                                  ) selectedYear })))                           
                                 isSelected)
-                            
                         !!(navListMobile
                             {  Items = years |> List.map (fun year  -> { Text = string year; Url = statsUrl selectedTeam (Year year) }                                                                   )  
                                Footer = Some <| { Text = "Total"; Url = statsUrl selectedTeam AllYears }                                                               
