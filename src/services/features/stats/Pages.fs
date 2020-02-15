@@ -80,8 +80,8 @@ module Pages =
           
             [
                 mtMain [] [
-                    block [] [
-                        !!(Tabs.tabs [Fable.React.Props.Class "team-nav"] 
+                    block [_class "stats"] [
+                        !!(Tabs.tabs [Fable.React.Props.Class "team-nav stats-nav"] 
                                  ((club.Teams 
                                  |> List.map (fun team  -> 
                                                     {   Text = team.ShortName
