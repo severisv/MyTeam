@@ -16,7 +16,7 @@ type Tab = {
 let tabs attributes (items: Tab list) (isSelected: (string -> bool)) =
     if items.Length > 1 then
         div attributes [
-            ul [Class "nav nav-pills mt-justified"] 
+            ul [Class "nav nav-pills"] 
                 (items 
                  |> List.map (fun t -> 
                                 li [Class (if isSelected t.Url then "active" else "")] [
