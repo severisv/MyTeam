@@ -49,7 +49,7 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
                             col [ CellType Image; NoSort ] []
                             col [] [ encodedText "Spiller" ]
                             col [ Align Center ] [ !!(Icons.training "Trening"); headerSpan [ encodedText " Trening" ] ]
-                            col [ Align Center ] [ !!(Icons.award "Treninger vunnet"); headerSpan [ encodedText " Treningsseiere" ] ]
+           //                 col [ Align Center ] [ !!(Icons.award "Treninger vunnet"); headerSpan [ encodedText " Treningsseiere" ] ]
                             col [ Align Center ] [ !!(Icons.game "Kamp"); headerSpan [ encodedText " Kamp" ] ]
                             col [ Align Center ] [ !!(Icons.warning); headerSpan [ encodedText " Ikke møtt" ] ]
                         ]
@@ -59,7 +59,7 @@ let view (club : Club) (user : User) year (ctx : HttpContext) =
                                                playerLink [ img [ _src <| getImage (fun o -> { o with Height = Some 50; Width = Some 50 }) player.Image player.FacebookId ] ]
                                                playerLink [ encodedText player.Name ]
                                                encodedText <| string attendance.Trainings
-                                               encodedText <| string attendance.TrainingVictories
+                     //                          encodedText <| string attendance.TrainingVictories
                                                encodedText <| string attendance.Games
                                                encodedText <| string attendance.NoShows
                                             ]

@@ -67,8 +67,8 @@ module Register =
                                                                                   Width = Some 50 }) p.Image p.FacebookId ]
                                         encodedText p.Name
                                         ]
-                                    ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O/victory" selectedEvent.Id p.Id) didWin
-                                        |> withClass "register-trainingVictory"
+                 //                   ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O/victory" selectedEvent.Id p.Id) didWin
+                 //                       |> withClass "register-trainingVictory"
                                     ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O" selectedEvent.Id p.Id) didAttend
                                     ajaxSuccessIndicator
                                 ]
