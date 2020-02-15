@@ -119,7 +119,7 @@ let element props children =
                                     let signups = state.Signups.TryFind(event.Id) |> Option.defaultValue []
                                     let attending = signups |> List.filter (fun ea -> ea.IsAttending)
                                     let notAttending = signups |> List.filter (fun ea -> not ea.IsAttending)
-                                    let didAttend = signups |> List.filter (fun ea -> not ea.DidAttend)
+                                    let didAttend = signups |> List.filter (fun ea -> ea.DidAttend)
                                     let userAttendance = signups |> List.tryFind (fun ea -> ea.Id = user.Id)                                 
                                                                        
                                     let handleSignup isAttending _ =
@@ -229,7 +229,7 @@ let element props children =
                                                     
                                                   ]                                          
                                                | (Game game, _)  -> [
-                                                   div [Class "event-signup-listplayers"; Style [MarginTop "0.9em"]] [
+                                                   div [Class "event-signup-listplayers"] [
                                                         Collapsible.collapsible (props.Period |> function | Upcoming _ -> Open | Previous _ -> Collapsed) [
                                                                 str <| sprintf "Tropp (%O)" game.Squad.Length
                                                             ]
@@ -261,8 +261,7 @@ let element props children =
                                                   [
                                                     SignupButtons.element { Event = event
                                                                             UserAttendance = userAttendance
-                                                                            HandleSignup = handleSignup }
-                                                    br [ ]
+                                                                            HandleSignup = handleSignup }                                                     
                                                     div [ Class "event-signup-listplayers" ] [
                                                         Collapsible.collapsible Collapsed [
                                                           span [Class "flex-2" ]
@@ -291,7 +290,8 @@ let element props children =
                                                             [str <| sprintf "Oppmøte (%i)" didAttend.Length] 
                                                         ] [
                                                           div [Class "event-attendees "]
-                                                            [ ul [ Class "list-unstyled flex-2" ]
+                                                            [ hr [Class "sm"]
+                                                              ul [ Class "list-unstyled flex-2" ]
                                                             (didAttend |> List.map (attendeeLink user))
                                                              ]
                                                            ]
