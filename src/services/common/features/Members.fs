@@ -51,8 +51,9 @@ let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
         query {
             for m in db.Members do
             where (m.ClubId = clubId)
-            join eventTeam in db.MemberTeams on (m.Id = eventTeam.MemberId)
-            select ((m.Id, m.FacebookId, m.FirstName, m.MiddleName, m.LastName, m.ImageFull, m.UrlName, m.Status, m.RolesString), eventTeam.TeamId)
+            groupJoin memberTeam in db.MemberTeams on (m.Id = memberTeam.MemberId) into result
+            for mt in result.DefaultIfEmpty() do 
+            select ((m.Id, m.FacebookId, m.FirstName, m.MiddleName, m.LastName, m.ImageFull, m.UrlName, m.Status, m.RolesString), mt.TeamId)
         }
         |> Seq.toList
         |> List.groupBy (fun (m, _) -> m)
@@ -67,7 +68,7 @@ let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
                         Image = !!image
                         UrlName = !!urlName
                         Status = statusFromInt status})
-                 Teams = teamIds                   
+                 Teams = teamIds |> List.filter((=) Guid.Empty >> not)                   
                  Roles = rolesString |> toRoleList })
         |> Seq.toList
         |> List.sortBy (fun p -> p.Details.FirstName)
