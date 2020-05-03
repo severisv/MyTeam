@@ -108,6 +108,18 @@ let selectInput attr options =
                                     option [Value o.Value] [str o.Name]
         ))
     
+let checkboxInput attr lbl value onChange  =
+    label (attr |> mergeClasses [Class "control-label input-form-checkbox"])           
+          (lbl @ [
+            input [ Class "form-control"
+                    Type "checkbox"
+                    Checked value
+                    OnChange(fun input -> onChange input.Checked) ]]
+        )   
+               
+        
+    
+    
 
 let validationMessage messages =
     span [Class "text-danger"] (messages |> List.map str)

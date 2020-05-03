@@ -20,7 +20,17 @@ let jsonResult next ctx =
     | Redirect url -> (redirectTo false (System.Uri.EscapeUriString url)) next ctx
 
 let jsonPost<'a, 'b> (fn : HttpContext -> 'a -> HttpResult<'b>) next (ctx : HttpContext) =
-    let payload = ctx.BindJson<'a>()
+    let payload = 
+        match ctx.TryGetRequestHeader "json-mode" with
+            | Some "fable" ->
+                    let task = ctx.ReadBodyFromRequestAsync()
+                    let body = task.ConfigureAwait(false).GetAwaiter().GetResult()
+                    Json.fableDeserialize<'a>(body)
+                    |> function
+                    | Ok result -> result
+                    | Error e -> failwith e
+            | _ -> ctx.BindJson<'a>()
+        
     fn ctx payload |> jsonResult next ctx
 
 let jsonGet<'a> (fn : Database -> HttpResult<'a>) next (ctx : HttpContext) =

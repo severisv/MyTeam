@@ -23,3 +23,19 @@ let view containerId comp model =
     ]
     |> renderHtmlNodes
     |> rawText
+
+let view2 containerId comp model =
+
+    [
+        script []
+            [ rawText (sprintf """
+                    var __INIT_STATE__ = '%s'
+                    """
+                    (model |> Json.fableSerialize)) ]
+    
+        div [_id containerId] [
+            rawText <| Fable.ReactServer.renderToString (comp (model) )         
+        ]
+    ]
+    |> renderHtmlNodes
+    |> rawText

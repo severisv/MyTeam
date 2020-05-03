@@ -71,6 +71,7 @@
     <Compile Include="features/game/GameApi.fs" />
     <Compile Include="features/game/pages/Show.fs" />
     <Compile Include="features/game/pages/List.fs" />
+    <Compile Include="features\game\pages\Add.fs" />
     <Compile Include="features/game/pages/Result.fs" />
     <Compile Include="features/game/pages/SelectSquad.fs" />
     <Compile Include="features/game/pages/GamePlan.fs" />

@@ -106,7 +106,7 @@ let add clubId (ctx : HttpContext) model =
                                      FacebookId = form.FacebookId,
                                      UserName = email,
                                      UrlName = urlName form,
-                                     MemberTeams = System.Linq.Enumerable.ToList (
+                                     MemberTeams = Enumerable.ToList (
                                                     club.Teams
                                                     |> Seq.map (fun team -> MemberTeam(TeamId = team.Id))
                                                 )
