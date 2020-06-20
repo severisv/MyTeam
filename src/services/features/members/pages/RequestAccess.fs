@@ -100,7 +100,7 @@ let post (club : Club) (user : User option) form (ctx : HttpContext) =
     form
     |> function 
     | Ok form -> 
-        validate [ <@ form.Fornavn @> >- [ isRequired
+        combine  [ <@ form.Fornavn @> >- [ isRequired
                                            minLength 2
                                            maxLength 50 ]
                    <@ form.Mellomnavn @> >- [ maxLength 50 ]

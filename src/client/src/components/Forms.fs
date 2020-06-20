@@ -70,14 +70,16 @@ let textInput (attr: IHTMLProp list) =
                 attr
                 |> List.tryFind (fun p -> p :? InputProps)
                 |> Option.map (fun p -> p :?> InputProps)       
-                
+              
+
             let (isValid, validationMessage) =
                 validation
                 |> function
                 | Some(Validation e) when isTouched
-                     -> e
+                     -> 
+                        e
                         |> List.map (function | Ok () -> (true, None) | Error m -> false, Some m)
-                        |> List.reduce (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc)
+                        |> List.fold (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc) (true, None)
                 | _ -> true, None
             
             fragment [] [

@@ -46,7 +46,7 @@ namespace MyTeam.Controllers
                 TeamIds = new List<Guid>()
             };
 
-            ViewBag.Title = Res.CreateEvent;
+            ViewBag.Title = "Ny trening";
 
             return View(model);
         }
@@ -56,7 +56,7 @@ namespace MyTeam.Controllers
         [Route("arrangement/ny")]
         public IActionResult Create(CreateEventViewModel model)
         {
-            ViewBag.Title = Res.CreateEvent;
+            ViewBag.Title = "Ny trening";
 
             if (ModelState.IsValid)
             {

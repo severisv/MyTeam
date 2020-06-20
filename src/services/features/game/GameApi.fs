@@ -67,7 +67,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddGame) =
     let game =
         Models.Domain.Event(
               ClubId = clubId,                
-              DateTime = model.Date + model.Time, 
+              DateTime = model.Date.Date + model.Time, 
               Opponent = model.Opponent,            
               Location = model.Location,
               TeamId = Nullable model.Team, 

@@ -35,6 +35,6 @@ let view (club: Club) user (ctx: HttpContext) =
         ]
         !!Client.Features.Common.Admin.coachMenu
     ]
-    |> layout club user (fun o -> { o with Title = "Legg til kamp" }) ctx
+    |> layout club user (fun o -> { o with Title = "Ny kamp" }) ctx
     |> OkResult
 

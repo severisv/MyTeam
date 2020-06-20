@@ -6,10 +6,12 @@ type ValidationError =
     { Name : string
       Errors : string list }
 
-
 module Validation =
     type ValidationFn<'T> = string -> 'T -> Result<unit, string>
 
+    let validate name value validationFns =
+        validationFns
+        |> List.map (fun fn -> fn name value)
 
     let private validateString fn value =
         let str = string value
@@ -17,7 +19,7 @@ module Validation =
             Ok()
         else fn str
 
-    let validate errors =
+    let combine errors =
         let errors = errors |> List.filter (fun e -> e.Errors |> (List.isEmpty >> not))
         if errors |> Seq.isEmpty then
             Ok()
@@ -53,7 +55,14 @@ module Validation =
             if str |> Number.isNumber |> not then
                 Error <| sprintf "%s må være et heltall" name
             else Ok()
-            
+
+    let isTimeString name =
+        validateString <| fun value ->
+            Date.tryParseTime value
+            |> Option.map (fun _ -> Ok())
+            |> Option.defaultValue (Error <| sprintf "%s må være et klokkeslett" name)
+
+
     let isSome name (value: 'a option) =
         if value.IsSome then Ok()
         else Error <| sprintf "%s må være et valgt" name

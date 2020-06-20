@@ -147,7 +147,7 @@ let editPost (club: Club) (user: User) name (ctx: HttpContext) =
                 HideAuthor = (string ctx.Request.Form.["HideAuthor"]) = "on" // Workaround
         } 
     
-    validate
+    combine
         [ <@ form.Headline @> >- [isRequired]
           <@ form.Content @> >- [isRequired]]
     |> function
@@ -190,7 +190,7 @@ let createPost (club: Club) (user: User) (ctx: HttpContext) =
                 HideAuthor = (string ctx.Request.Form.["HideAuthor"]) = "on" // Workaround
         } 
 
-    validate
+    combine
         [        
            <@ form.Headline @> >- [isRequired]
            <@ form.Content @> >- [isRequired]
