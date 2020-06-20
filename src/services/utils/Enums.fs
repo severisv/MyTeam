@@ -1,6 +1,8 @@
 module MyTeam.Enums
 
 open System
+open Microsoft.FSharp.Reflection
+
 
 let getValues<'T>() =
     let cases = FSharp.Reflection.FSharpType.GetUnionCases(typeof<'T>)
@@ -30,7 +32,6 @@ let toNullableInt (v : Option<'T> when 'T :> Enum) =
         Nullable(LanguagePrimitives.EnumToValue(x))
     | _ -> Nullable()
 
-open Microsoft.FSharp.Reflection
 
 let fromString<'a> (s:string) =
     match FSharpType.GetUnionCases typeof<'a> |> Array.filter (fun case -> case.Name.ToLowerInvariant() = s.ToLowerInvariant()) with

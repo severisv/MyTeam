@@ -70,14 +70,16 @@ let textInput (attr: IHTMLProp list) =
                 attr
                 |> List.tryFind (fun p -> p :? InputProps)
                 |> Option.map (fun p -> p :?> InputProps)       
-                
+              
+
             let (isValid, validationMessage) =
                 validation
                 |> function
                 | Some(Validation e) when isTouched
-                     -> e
+                     -> 
+                        e
                         |> List.map (function | Ok () -> (true, None) | Error m -> false, Some m)
-                        |> List.reduce (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc)
+                        |> List.fold (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc) (true, None)
                 | _ -> true, None
             
             fragment [] [
@@ -107,6 +109,18 @@ let selectInput attr options =
            (options |> List.map(fun o ->
                                     option [Value o.Value] [str o.Name]
         ))
+    
+let checkboxInput attr lbl value onChange  =
+    label (attr |> mergeClasses [Class "control-label input-form-checkbox"])           
+          (lbl @ [
+            input [ Class "form-control"
+                    Type "checkbox"
+                    Checked value
+                    OnChange(fun input -> onChange input.Checked) ]]
+        )   
+               
+        
+    
     
 
 let validationMessage messages =

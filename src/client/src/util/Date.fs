@@ -33,3 +33,7 @@ let formatTime (datetime: DateTime) =
 let tryParse (dateString: string) =
     let couldParse, parsedDate = System.DateTime.TryParse dateString
     if couldParse then Some parsedDate else None
+
+let tryParseTime (timeString: string) =
+    let couldParse, parsedTime = System.TimeSpan.TryParse timeString
+    if couldParse then Some parsedTime else None

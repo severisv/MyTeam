@@ -10,17 +10,6 @@
     <div class="clearfix"></div>
     <br/>
 }
-else
-{
-    <ul class="nav nav-pills mt-justified">
-        @foreach (EventType type in Model.EventTypes)
-        {
-            <li class="@(type == Model.Type ? "active":"")"><a asp-route-type="@type"><span mt-eventtype="@type"></span></a></li>
-
-        }
-    </ul>
-    <br />
-}
 
 <form asp-action="Create" method="post" class="form-horizontal createEventForm" role="form">
     <input asp-for="Type" type="hidden" />
@@ -54,8 +43,6 @@ else
     <div class="col-sm-6 col-xs-12">
         @Html.Partial("_TrainingForm")
         @Html.Partial("_GameForm")
-        @Html.Partial("_CustomEventForm")
-
         <div class="form-group">
             <label mt-for="Description" mt-icon="file-text-o" class="col-xs-2 control-label"></label>
             <div class="col-xs-10">

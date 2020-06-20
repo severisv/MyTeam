@@ -335,7 +335,7 @@ let element props children =
                             block [] [
                                 navListBase [ Header <| str "Admin" ] [
                                             a [Href "/intern/arrangement/ny"] [Icons.add "";whitespace;str "Legg til trening"]
-                                            a [Href "/intern/arrangement/ny?type=kamp"] [Icons.add "";whitespace;str "Legg til kamp"]
+                                            a [Href "/kamper/ny"] [Icons.add "";whitespace;str "Legg til kamp"]
                                            ]
                             ]
                     ]

@@ -55,7 +55,7 @@ module App =
                             
                     subRoute "/kamper"             
                         <|  choose [                                                
-                                GET >=> choose [    
+                                GET >=> choose [
                                     route "" >=> (Games.Pages.List.view club user None None |> htmlGet)
                                     routef "/%O" <| fun gameId -> Games.Pages.Show.view club user gameId |> htmlGet 
                                     routef "/vis/%O" (fun (gameId: System.Guid) -> redirectTo true (sprintf "/kamper/%O" gameId))
@@ -65,9 +65,12 @@ module App =
                                         mustBeInRole [Role.Trener] >=> (Games.Pages.SelectSquad.view club user gameId |> htmlGet) 
                                     routef "/%O/bytteplan" <| fun gameId -> 
                                         user => fun user -> (Games.Pages.GamePlan.view club user gameId |> htmlGet) 
-                                    routef "/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet         
-                                    routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet 
+                                    routef "/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet
+                                    route "/ny"  >=> mustBeInRole [Role.Admin; Role.Trener] >=>
+                                                        (Games.Pages.Add.view club user |> htmlGet)
+                                    routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
                                 ]
+                               
                             ]                                                                                                                                                                                                                       
                     subRoute "/tabell"   
                         <| choose [
@@ -213,7 +216,9 @@ module App =
                                     routef "/%O/squad/publish" (Games.Api.publishSquad club.Id >> jsonPost)                           
                                     routef "/%O/gameplan" (Games.Api.setGamePlan club.Id)
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
-                                ]                     
+                                ]
+                                mustBeInRole [Role.Admin; Role.Trener] >=> route "" >=> (Games.Api.add club |> jsonPost)
+
                         ]
                     subRoute "/api/fines"
                         <| choose [

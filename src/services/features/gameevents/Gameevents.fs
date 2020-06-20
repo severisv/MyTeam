@@ -88,10 +88,11 @@ let add : Add =
         }
         |> Seq.tryHead
         |> function 
+
         | None -> NotFound
         | Some c when c <> clubId -> Unauthorized
         | Some _ ->
-            validate [ <@ model @> >- [ cardDoesNotHaveAssist ]
+            combine  [ <@ model @> >- [ cardDoesNotHaveAssist ]
                        <@ model @> >- [ isNotAssistedBySelf ]
                        <@ model.Type @> >- [ isRequired ] ]
             |> function 

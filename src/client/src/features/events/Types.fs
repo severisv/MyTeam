@@ -59,6 +59,6 @@ module Event =
     let signupHasOpened e = 
         let isTreningskamp =
             match e.Details with
-                | Game game -> game.Type = Treningskamp
+                | Game game -> game.Type = GameType.Treningskamp
                 | _ -> false
         isTreningskamp || e.DateTime <= DateTime.Now.AddDays 14.0

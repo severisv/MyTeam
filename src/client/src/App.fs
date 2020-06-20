@@ -3,6 +3,7 @@ namespace Client
 module EntryPoint =
     
     [ Games.SelectSquad.element |> ignore
+      Features.Games.Add.element    |> ignore
       GamePlan.View.element |> ignore
       Table.Edit.element |> ignore
       Table.Create.element |> ignore
@@ -14,3 +15,4 @@ module EntryPoint =
       Events.List.element |> ignore
       News.DeleteArticle.deleteArticle |> ignore ] 
     |> ignore
+    
