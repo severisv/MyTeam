@@ -35,7 +35,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                 div [ _class "mt-container" ] [  
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then
-                                 !!(editAnchor [Href <| sprintf "/intern/arrangement/endre/%O" game.Id])
+                                 !!(editAnchor [Href <| sprintf  "/kamper/%O/endre" game.Id])
                             else empty     
                     
                     user => fun user -> 

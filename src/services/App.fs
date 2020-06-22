@@ -68,6 +68,10 @@ module App =
                                     routef "/%s/%i" <| fun (teamName, year) -> Games.Pages.List.view club user (Some teamName) (Some year) |> htmlGet
                                     route "/ny"  >=> mustBeInRole [Role.Admin; Role.Trener] >=>
                                                         (Games.Pages.Add.view club user |> htmlGet)
+                                    routef "/%O/endre"  
+                                            (fun gameId -> 
+                                                mustBeInRole [Role.Admin; Role.Trener] >=> 
+                                                    (Games.Pages.Edit.view club user gameId |> htmlGet))            
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
                                 ]
                                

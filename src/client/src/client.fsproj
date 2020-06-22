@@ -17,6 +17,7 @@
     <Compile Include="domain/Club.fs" />
     <Compile Include="domain/Events.fs" />
     <Compile Include="domain/Members.fs" />
+    <Compile Include="domain/Games.fs" />
     <Compile Include="components/Buttons.fs" />
     <Compile Include="components/Collapsible.fs" />
     <Compile Include="components/Components.fs" />
@@ -53,7 +54,7 @@
     <Compile Include="features/gameplan/GamePlan.fs" />
     <Compile Include="features/news/DeleteArticle.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
-    <Compile Include="features/games/AddGame.fs" />
+    <Compile Include="features/games/GameForm.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
     <Compile Include="features/events/Types.fs" />
     <Compile Include="features/events/SignupButtons.fs" />

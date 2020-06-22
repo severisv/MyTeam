@@ -25,17 +25,18 @@ let getGame: GetGame =
                 query {
                     for game in db.Games do
                     where (game.Id = gameId && game.ClubId = clubId)
-                    select (game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
+                    select (game.Team.Name, game.Team.Id, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name, game.Description)
                  }
-                 |> Seq.map (fun (name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->
+                 |> Seq.map (fun (name, teamId, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName, description) ->
                     {   Id = gameId
+                        Team = { Id = teamId; Name = name }
                         IsHomeTeam = isHomeTeam
-                        HomeTeam = isHomeTeam =? (name, opponent)
-                        AwayTeam = isHomeTeam =? (opponent, name)
+                        Opponent = opponent
                         HomeScore = homeScore |> toOption
                         AwayScore = awayScore |> toOption
                         DateTime = dateTime
                         Location = location
+                        Description = description
                         Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)  })
@@ -60,18 +61,19 @@ let listGames: ListGames =
                 query {
                     for game in db.Games do
                     where (game.TeamId = Nullable teamId && game.DateTime.Year = year)
-                    select (game.Id, game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name)
+                    select (game.Id, game.Team.Name, game.IsHomeTeam, game.Opponent, game.HomeScore, game.AwayScore, game.DateTime, game.Location, game.GameType, game.GamePlanIsPublished, game.Report.Name, game.Description)
                  }
-                 |> Seq.map (fun (id, name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName) ->
+                 |> Seq.map (fun (id, name, isHomeTeam, opponent, homeScore, awayScore, dateTime, location, gameType, gamePlanIsPublished, matchReportName, description) ->
                     {
                         Id = id
+                        Team = { Id = teamId; Name = name }
                         IsHomeTeam = isHomeTeam
-                        HomeTeam = isHomeTeam =? (name, opponent)
-                        AwayTeam = isHomeTeam =? (opponent, name)
+                        Opponent = opponent
                         HomeScore = homeScore |> toOption
                         AwayScore = awayScore |> toOption
                         DateTime = dateTime
                         Location = location
+                        Description = description
                         Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)

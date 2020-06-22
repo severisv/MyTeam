@@ -1,8 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Server</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\client\src\client.fsproj" />
@@ -12,10 +11,10 @@
     <Compile Include="settings/Options.fs" />
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />
-    <Compile Include="utils\Database.fs" />
-    <Compile Include="utils\GiraffeHelpers.fs" />
-    <Compile Include="utils\Helpers.fs" />
-    <Compile Include="utils\String.fs" />
+    <Compile Include="utils/Database.fs" />
+    <Compile Include="utils/GiraffeHelpers.fs" />
+    <Compile Include="utils/Helpers.fs" />
+    <Compile Include="utils/String.fs" />
     <Compile Include="utils/AntiForgery.fs" />
     <Compile Include="utils/Enums.fs" />
     <Compile Include="utils/Html.fs" />
@@ -30,9 +29,9 @@
     <Compile Include="utils/Logger.fs" />
     <Compile Include="utils/Client.fs" />
     <Compile Include="utils/Email.fs" />
-    <Compile Include="components\Base.fs" />
-    <Compile Include="components\Icons.fs" />
-    <Compile Include="components\LayoutComponents.fs" />
+    <Compile Include="components/Base.fs" />
+    <Compile Include="components/Icons.fs" />
+    <Compile Include="components/LayoutComponents.fs" />
     <Compile Include="components/Ajax.fs" />
     <Compile Include="components/Collapsible.fs" />
     <Compile Include="components/Table.fs" />
@@ -45,7 +44,7 @@
     <Compile Include="common/views/partials/Analytics.fs" />
     <Compile Include="common/views/partials/Login.fs" />
     <Compile Include="common/views/partials/Notifications.fs" />
-    <Compile Include="common\views\Layout.fs" />
+    <Compile Include="common/views/Layout.fs" />
     <Compile Include="common/views/Error.fs" />
     <Compile Include="common/ErrorHandling.fs" />
     <Compile Include="common/Results.fs" />
@@ -57,13 +56,13 @@
     <Compile Include="features/attendance/pages/Register.fs" />
     <Compile Include="features/attendance/pages/Show.fs" />
     <Compile Include="features/events/EventsApi.fs" />
-    <Compile Include="features\events\EventsList.fs" />
-    <Compile Include="features\fines\Fines.fs" />
-    <Compile Include="features\fines\FineApi.fs" />
-    <Compile Include="features\fines\FineSummary.fs" />
-    <Compile Include="features\fines\FineList.fs" />
-    <Compile Include="features\fines\Payments.fs" />
-    <Compile Include="features\fines\RemedyRates.fs" />
+    <Compile Include="features/events/EventsList.fs" />
+    <Compile Include="features/fines/Fines.fs" />
+    <Compile Include="features/fines/FineApi.fs" />
+    <Compile Include="features/fines/FineSummary.fs" />
+    <Compile Include="features/fines/FineList.fs" />
+    <Compile Include="features/fines/Payments.fs" />
+    <Compile Include="features/fines/RemedyRates.fs" />
     <Compile Include="features/game/Types.fs" />
     <Compile Include="features/game/Queries.fs" />
     <Compile Include="features/game/Persistence.fs" />
@@ -71,28 +70,29 @@
     <Compile Include="features/game/GameApi.fs" />
     <Compile Include="features/game/pages/Show.fs" />
     <Compile Include="features/game/pages/List.fs" />
-    <Compile Include="features\game\pages\Add.fs" />
+    <Compile Include="features/game/pages/Add.fs" />
+    <Compile Include="features/game/pages/Edit.fs" />
     <Compile Include="features/game/pages/Result.fs" />
     <Compile Include="features/game/pages/SelectSquad.fs" />
     <Compile Include="features/game/pages/GamePlan.fs" />
     <Compile Include="features/game/Refresh.fs" />
     <Compile Include="features/gameevents/Gameevents.fs" />
-    <Compile Include="features\members\MemberTypes.fs" />
+    <Compile Include="features/members/MemberTypes.fs" />
     <Compile Include="features/members/Queries.fs" />
-    <Compile Include="features\members\MemberPersistence.fs" />
-    <Compile Include="features\members\MemberApi.fs" />
+    <Compile Include="features/members/MemberPersistence.fs" />
+    <Compile Include="features/members/MemberApi.fs" />
     <Compile Include="features/members/pages/List.fs" />
     <Compile Include="features/members/pages/RequestAccess.fs" />
     <Compile Include="features/stats/Types.fs" />
-    <Compile Include="features\stats\StatsQueries.fs" />
+    <Compile Include="features/stats/StatsQueries.fs" />
     <Compile Include="features/stats/Pages.fs" />
     <Compile Include="features/table/Types.fs" />
     <Compile Include="features/table/Queries.fs" />
-    <Compile Include="features\table\TablePages.fs" />
+    <Compile Include="features/table/TablePages.fs" />
     <Compile Include="features/table/Refresh.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />
-    <Compile Include="features\teams\TeamsQueries.fs" />
+    <Compile Include="features/teams/TeamsQueries.fs" />
     <Compile Include="features/teams/Api.fs" />
     <Compile Include="features/news/Types.fs" />
     <Compile Include="features/news/Queries.fs" />

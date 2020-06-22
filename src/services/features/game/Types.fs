@@ -8,37 +8,6 @@ open Shared.Domain.Events
 open Shared.Components.Input
 open Client.Games.SelectSquad
 
-type Outcome = 
-    | Seier
-    | Tap
-    | Uavgjort
-
-type Game = {
-    Id: Guid
-    GamePlanIsPublished: bool
-    IsHomeTeam:bool
-    HomeTeam: string
-    AwayTeam: string
-    HomeScore: int option
-    AwayScore: int option
-    DateTime: DateTime
-    Location: string
-    Type: GameType
-    MatchReportName: string option
-} with
-    member g.LocationShort = g.Location |> replace " kunstgress" ""
-    member g.Outcome = 
-            match (g.HomeScore, g.AwayScore) with
-            | (Some homeScore, Some awayScore) ->                
-                homeScore - awayScore
-                |> fun score ->
-                    if score > 0 then g.IsHomeTeam =? (Seier, Tap)
-                    else if score < 0 then (not g.IsHomeTeam) =? (Seier, Tap)
-                    else Uavgjort
-                |> Some                
-                        
-            | _ -> None            
-
 type Year = int
 
 type GetRecentAttendance = Database -> TeamId -> TeamAttendance list

@@ -1,4 +1,4 @@
-module Client.Features.Games.Add
+module Client.Features.Games.Form
 
 
 open Client.Components
@@ -17,7 +17,6 @@ open Shared.Validation
 open System
 open Thoth.Json
 
-
 type State =
     { Opponent: string
       Date: DateTime option
@@ -28,9 +27,11 @@ type State =
       Description: string
       IsHomeGame: bool }
 
+
 type Props =
     { Teams: Team list
-      GameTypes: GameType list }
+      GameTypes: GameType list
+      Game: Game option }
 
 [<CLIMutable>]
 type AddGame =
@@ -45,21 +46,34 @@ type AddGame =
       IsHomeGame: bool }
 
 
+let containerId = "game-form"
+
 let element =
     FunctionComponent.Of(fun (props: Props) ->
         let state =
             Hooks.useState<State>
-                { Date = None
-                  Opponent = ""
-                  Time = ""
-                  Location = ""
-                  Team =
-                      props.Teams
-                      |> List.map (fun t -> t.Id)
-                      |> List.head
-                  GameType = props.GameTypes |> List.head
-                  Description = ""
-                  IsHomeGame = true }
+                (props.Game
+                 |> Option.map (fun game ->
+                     { Date = Some game.DateTime.Date
+                       Opponent = game.Opponent
+                       Time = Date.formatTime game.DateTime
+                       Location = game.Location
+                       Team = game.Team.Id
+                       GameType = game.Type
+                       Description = game.Description
+                       IsHomeGame = game.IsHomeTeam })
+                 |> Option.defaultValue
+                     { Date = None
+                       Opponent = ""
+                       Time = ""
+                       Location = ""
+                       Team =
+                           props.Teams
+                           |> List.map (fun t -> t.Id)
+                           |> List.head
+                       GameType = props.GameTypes |> List.head
+                       Description = ""
+                       IsHomeGame = true })
 
         let errorState = Hooks.useState<string option> None
 
@@ -68,10 +82,10 @@ let element =
 
         let validation =
             Map
-                [ "Date", validate "Dato" state.Date [isSome ]
-                  "Opponent", validate "Motstander" state.Opponent [isRequired ]
-                  "Time", validate "Klokkeslett" state.Time [isRequired;isTimeString]
-                  "Location", validate "Sted" state.Location [isRequired]]
+                [ "Date", validate "Dato" state.Date [ isSome ]
+                  "Opponent", validate "Motstander" state.Opponent [ isRequired ]
+                  "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
+                  "Location", validate "Sted" state.Location [ isRequired ] ]
 
         fragment []
             [ errorState.current => Alerts.danger
@@ -91,7 +105,7 @@ let element =
 
                     formRow [ Horizontal 3 ] [ Icons.users "Motstander" ]
                         [ textInput
-                            [ Validation validation.["Opponent"] 
+                            [ Validation validation.["Opponent"]
                               OnChange(fun e ->
                                   let value = e.Value
                                   setFormValue (fun form -> { form with Opponent = value }))
@@ -143,7 +157,7 @@ let element =
                               Placeholder "Oppmøte 20 minutter før"
                               Value state.Description ] ]
 
-               
+
 
                     formRow [ Horizontal 3 ] []
                         [ Send.sendElement (fun o ->
@@ -152,7 +166,7 @@ let element =
                                       validation
                                       |> Map.toList
                                       |> List.map (fun (_, v) -> v)
-                                      |> List.concat                                      
+                                      |> List.concat
                                       |> List.exists (function
                                           | Error e -> true
                                           | _ -> false)
@@ -178,9 +192,10 @@ let element =
                                           Decode.Auto.fromString<AddGame> res
                                           |> function
                                           | Ok game ->
-                                              Browser.Dom.window.location.replace <| sprintf "/kamper/%O" game.Id
+                                              Browser.Dom.window.location.replace
+                                              <| sprintf "/kamper/%O" game.Id
                                               ()
 
                                           | Error e -> errorState.update (Some e)) }) ] ] ])
 
-hydrate2 "add-game" Decode.Auto.fromString<Props> element
+hydrate2 containerId Decode.Auto.fromString<Props> element

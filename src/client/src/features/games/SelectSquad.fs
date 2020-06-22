@@ -146,7 +146,7 @@ type SelectSquad(props) =
 
         mtMain []
             [ block []
-                  [ editAnchor [Href <| sprintf "/intern/arrangement/endre/%O" game.Id ]
+                  [ editAnchor [Href <| sprintf "/kamper/%O/endre" game.Id ]
                     a [ Href <| sprintf "/kamper/%O/bytteplan" game.Id
                         Class "registerSquad-gameplan-link pull-right"
                         Title "Bytteplan" ] [ Icons.gamePlan ]

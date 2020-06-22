@@ -7,8 +7,7 @@ open Shared
 open System
 open System.Linq
 open Giraffe
-open Client.Features.Games.Add
-
+open Client.Features.Games.Form
 
 let internal updateGame clubId gameId (db: Database) updateGame =
     db.Games.Where(fun g -> g.Id = gameId)
