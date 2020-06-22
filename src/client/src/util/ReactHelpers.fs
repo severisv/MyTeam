@@ -26,7 +26,7 @@ let hydrate elementId deserializeFn comp =
              | Ok model -> ReactDom.hydrate (comp model [], node)
              | Error e -> failwithf "Json deserialization failed: %O" e
 
-let hydrate2 elementId deserializeFn (comp: FunctionComponent<'a>) =
+let hydrate2 elementId deserializeFn comp =
         #if FABLE_COMPILER
         Browser.Dom.document.getElementById elementId
         |> fun node ->
