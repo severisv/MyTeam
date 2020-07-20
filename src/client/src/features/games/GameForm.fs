@@ -16,6 +16,7 @@ open Shared.Util.ReactHelpers
 open Shared.Validation
 open System
 open Thoth.Json
+open Shared.Components.Links
 
 type State =
     { Opponent: string
@@ -47,6 +48,7 @@ type AddGame =
 
 
 let containerId = "game-form"
+
 
 let element =
     FunctionComponent.Of(fun (props: Props) ->
@@ -87,12 +89,45 @@ let element =
                   "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
                   "Location", validate "Sted" state.Location [ isRequired ] ]
 
+        let formLayout = Horizontal 2          
+
         fragment []
-            [ errorState.current => Alerts.danger
-              form [ Horizontal 3 ]
+            [ props.Game
+              => fun game ->
+                  Modal.modal
+                      { OpenButton =
+                            fun handleOpen ->
+                                div
+                                    [ ClassName "clearfix"
+                                      Style [ MarginBottom "1em" ] ]
+                                    [ btn
+                                        [ ClassName "pull-right"
+                                          Danger
+                                          OnClick handleOpen ] [ Icons.delete ] ]
+                        Content =
+                            fun handleClose ->
+                                div []
+                                    [ h4 []
+                                          [ str
+                                            <| sprintf "Er du sikker på at du vil slette '%s'?" game.Name ]
+                                      div [ Class "text-center" ]
+                                          [ br []
+                                            Send.sendElement (fun o ->
+                                                { o with
+                                                      SendElement = btn, [ Danger; Lg ], [ str "Slett" ]
+                                                      SentElement = span, [], []
+                                                      Endpoint = Send.Delete <| sprintf "/api/games/%O" game.Id
+                                                      OnSubmit =
+                                                          Some
+                                                              (!>handleClose
+                                                               >> (fun _ ->
+                                                                   Browser.Dom.window.location.replace "/intern")) })
+                                            btn [ Lg; OnClick !>handleClose ] [ str "Avbryt" ] ] ] }
+              errorState.current => Alerts.danger
+              form [ formLayout ]
                   [ div [ Class "form-group" ]
-                        [ label [ Class "control-label col-sm-3" ] [ Icons.team "Lag" ]
-                          div [ Class "col-sm-6" ]
+                        [ label [ Class "control-label col-sm-2" ] [ Icons.team "Lag" ]
+                          div [ Class "col-sm-7" ]
                               [ selectInput
                                   [ OnChange(fun e ->
                                       let id = e.Value
@@ -103,7 +138,7 @@ let element =
                               setFormValue (fun form -> { form with IsHomeGame = value })) ]
 
 
-                    formRow [ Horizontal 3 ] [ Icons.users "Motstander" ]
+                    formRow [ formLayout ] [ Icons.users "Motstander" ]
                         [ textInput
                             [ Validation validation.["Opponent"]
                               OnChange(fun e ->
@@ -112,12 +147,12 @@ let element =
                               Placeholder "Mercantile SFK"
                               Value state.Opponent ] ]
 
-                    formRow [ Horizontal 3 ] [ Icons.calendar "Dato" ]
+                    formRow [ formLayout ] [ Icons.calendar "Dato" ]
                         [ dateInput
                             [ Validation validation.["Date"]
                               Value state.Date
                               OnDateChange(fun date -> setFormValue (fun form -> { form with Date = date })) ] ]
-                    formRow [ Horizontal 3 ] [ Icons.clock ]
+                    formRow [ formLayout ] [ Icons.clock ]
                         [ textInput
                             [ Validation validation.["Time"]
                               OnChange(fun e ->
@@ -126,7 +161,7 @@ let element =
                               Placeholder "18:30"
                               Value state.Time ] ]
 
-                    formRow [ Horizontal 3 ] [ Icons.mapMarker "Sted" ]
+                    formRow [ formLayout] [ Icons.mapMarker "Sted" ]
                         [ textInput
                             [ Validation validation.["Location"]
                               OnChange(fun e ->
@@ -135,7 +170,7 @@ let element =
                               Placeholder "Ekeberg 2"
                               Value state.Location ] ]
 
-                    formRow [ Horizontal 3 ] [ Icons.trophy "Turnering" ]
+                    formRow [ formLayout ] [ Icons.trophy "Turnering" ]
                         [ selectInput
                             [ OnChange(fun e ->
                                 let s = e.Value
@@ -148,7 +183,7 @@ let element =
 
 
 
-                    formRow [ Horizontal 3 ] [ Icons.description ]
+                    formRow [ formLayout ] [ Icons.description ]
                         [ textInput
                             [ Validation []
                               OnChange(fun e ->
@@ -159,7 +194,7 @@ let element =
 
 
 
-                    formRow [ Horizontal 3 ] []
+                    formRow [ formLayout; Style [MarginBottom 0] ] []
                         [ Send.sendElement (fun o ->
                             { o with
                                   IsDisabled =
@@ -173,20 +208,38 @@ let element =
                                   SendElement = btn, [ ButtonSize.Normal; Primary ], [ str "Lagre" ]
                                   SentElement = btn, [ ButtonSize.Normal; Success ], [ str "Lagret" ]
                                   Endpoint =
-                                      Send.Post
-                                          (sprintf "/api/games",
-                                           Some(fun () ->
-                                               Encode.Auto.toString
-                                                   (0,
-                                                    { Id = None
-                                                      Opponent = state.Opponent
-                                                      Date = state.Date.Value
-                                                      Time = (Date.tryParseTime state.Time).Value
-                                                      Location = state.Location
-                                                      Team = state.Team
-                                                      GameType = state.GameType
-                                                      Description = state.Description
-                                                      IsHomeGame = state.IsHomeGame })))
+                                      match props.Game with
+                                      | Some game ->
+                                          Send.Put
+                                              (sprintf "/api/games/%O" game.Id, 
+                                               Some(fun () ->
+                                                   Encode.Auto.toString
+                                                       (0,
+                                                        { Id = Some game.Id
+                                                          Opponent = state.Opponent
+                                                          Date = state.Date.Value
+                                                          Time = (Date.tryParseTime state.Time).Value
+                                                          Location = state.Location
+                                                          Team = state.Team
+                                                          GameType = state.GameType
+                                                          Description = state.Description
+                                                          IsHomeGame = state.IsHomeGame })))
+                                      | None ->
+                                          Send.Post
+                                              (sprintf "/api/games",
+                                               Some(fun () ->
+                                                   Encode.Auto.toString
+                                                       (0,
+                                                        { Id = None
+                                                          Opponent = state.Opponent
+                                                          Date = state.Date.Value
+                                                          Time = (Date.tryParseTime state.Time).Value
+                                                          Location = state.Location
+                                                          Team = state.Team
+                                                          GameType = state.GameType
+                                                          Description = state.Description
+                                                          IsHomeGame = state.IsHomeGame })))
+
                                   OnSubmit =
                                       Some(fun res ->
                                           Decode.Auto.fromString<AddGame> res

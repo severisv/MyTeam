@@ -60,8 +60,7 @@ module Validation =
         validateString <| fun value ->
             Date.tryParseTime value
             |> Option.map (fun _ -> Ok())
-            |> Option.defaultValue (Error <| sprintf "%s må være et klokkeslett" name)
-
+            |> Option.defaultValue (Error <| sprintf "%s må være et gyldig tidspunkt (f.eks. 14:30)" name)
 
     let isSome name (value: 'a option) =
         if value.IsSome then Ok()

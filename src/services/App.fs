@@ -222,6 +222,10 @@ module App =
                                     routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                 ]
                                 mustBeInRole [Role.Admin; Role.Trener] >=> route "" >=> (Games.Api.add club |> jsonPost)
+                            PUT >=>                                
+                                mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.update club >> jsonPost)
+                            DELETE >=>                                
+                                mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.delete club >> jsonGet)    
 
                         ]
                     subRoute "/api/fines"

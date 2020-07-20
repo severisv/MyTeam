@@ -3,6 +3,7 @@ module MyTeam.Games.Queries
 open MyTeam
 open Shared
 open Shared.Domain
+open Shared.Strings
 open MyTeam.Common.Features.Members
 open System.Linq
 open System
@@ -31,12 +32,12 @@ let getGame: GetGame =
                     {   Id = gameId
                         Team = { Id = teamId; Name = name }
                         IsHomeTeam = isHomeTeam
-                        Opponent = opponent
+                        Opponent = !!opponent
                         HomeScore = homeScore |> toOption
                         AwayScore = awayScore |> toOption
                         DateTime = dateTime
-                        Location = location
-                        Description = description
+                        Location = !!location
+                        Description = !!description
                         Type = Events.gameTypeFromInt gameType.Value
                         GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)  })

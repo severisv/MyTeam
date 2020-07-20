@@ -26,6 +26,7 @@ type Game =
     member g.HomeTeam = if g.IsHomeTeam then g.Team.Name else g.Opponent
     member g.AwayTeam = if g.IsHomeTeam then g.Opponent else g.Team.Name
     member g.LocationShort = g.Location |> Shared.Strings.replace " kunstgress" ""
+    member g.Name = sprintf "%s - %s" g.HomeTeam g.AwayTeam
 
     member g.Outcome =
         match (g.HomeScore, g.AwayScore) with

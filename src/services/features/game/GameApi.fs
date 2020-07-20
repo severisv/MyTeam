@@ -64,17 +64,35 @@ let add (club: Club) (ctx: HttpContext) (model: AddGame) =
     let (ClubId clubId) = club.Id
 
     let game =
-        Models.Domain.Event(
-              ClubId = clubId,                
-              DateTime = model.Date.Date + model.Time, 
-              Opponent = model.Opponent,            
-              Location = model.Location,
-              TeamId = Nullable model.Team, 
-              GameType = Nullable (Events.gameTypeToInt model.GameType),
-              Type = Events.eventTypeToInt Kamp,
-              Description = model.Description,
-              IsHomeTeam = model.IsHomeGame)   
+        Models.Domain.Event
+            (ClubId = clubId,
+             DateTime = model.Date.Date + model.Time,
+             Opponent = model.Opponent,
+             Location = model.Location,
+             TeamId = Nullable model.Team,
+             GameType = Nullable(Events.gameTypeToInt model.GameType),
+             Type = Events.eventTypeToInt Kamp,
+             Description = model.Description,
+             IsHomeTeam = model.IsHomeGame)
 
     db.Events.Add(game) |> ignore
     db.SaveChanges() |> ignore
-    OkResult { model with Id = Some game.Id; Date = game.DateTime }
+    OkResult
+        { model with
+              Id = Some game.Id
+              Date = game.DateTime }
+
+let update (club: Club) gameId (ctx: HttpContext) (model: AddGame) =
+    updateGame club.Id gameId ctx.Database (fun game ->
+        game.Opponent <- model.Opponent
+        game.DateTime <- model.Date.Date + model.Time
+        game.Location <- model.Location
+        game.TeamId <- Nullable model.Team
+        game.GameType <- Nullable(Events.gameTypeToInt model.GameType)
+        game.Description <- model.Description
+        game.IsHomeTeam <- model.IsHomeGame) 
+        |> HttpResult.map (fun _ -> model)
+        
+
+let delete (club: Club) gameId db =
+    updateGame club.Id gameId db (db.Remove >> ignore)
