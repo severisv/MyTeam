@@ -18,8 +18,7 @@ let view (club: Club) user gameId (ctx: HttpContext) =
                     [ Client.view2 Client.Features.Games.Form.containerId Client.Features.Games.Form.element
                           { Teams = club.Teams
                             GameTypes = Enums.getValues<GameType> ()
-                            Game = Some game } ] ]
-          !!Client.Features.Common.Admin.coachMenu ]
+                            Game = Some game } ] ] ]
         |> layout club user (fun o -> { o with Title = "Endre kamp" }) ctx
         |> OkResult
     | None -> NotFound

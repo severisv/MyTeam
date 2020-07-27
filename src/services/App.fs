@@ -75,7 +75,18 @@ module App =
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
                                 ]
                                
-                            ]                                                                                                                                                                                                                       
+                            ]       
+                    subRoute "/treninger"             
+                        <|  choose [                                                
+                                GET >=> choose [                       
+                                    route "/ny"  >=> mustBeInRole [Role.Admin; Role.Trener] >=>
+                                                        (Trainings.Pages.Add.view club user |> htmlGet)
+                                    routef "/%O/endre"  
+                                            (fun trainingId -> 
+                                                mustBeInRole [Role.Admin; Role.Trener] >=> 
+                                                    (Trainings.Pages.Edit.view club user trainingId |> htmlGet))            
+                                ]                               
+                            ]                                                                                                                                                                                                                                                                                                                                           
                     subRoute "/tabell"   
                         <| choose [
                             GET >=> choose [
@@ -228,6 +239,15 @@ module App =
                                 mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.delete club >> jsonGet)    
 
                         ]
+                    subRoute "/api/trainings"
+                        <| choose [ POST >=>                          
+                                        mustBeInRole [Role.Admin; Role.Trener] >=> route "" >=> (Trainings.Api.add club |> jsonPost)
+                                    PUT >=>                                
+                                        mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.update club >> jsonPost)
+                                    DELETE >=>                                
+                                        mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.delete club >> jsonGet)    
+
+                        ]    
                     subRoute "/api/fines"
                         <| choose [
                             POST >=> 

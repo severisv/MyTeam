@@ -1,20 +1,40 @@
 module MyTeam.Admin.Pages
 
 open Client.Admin.AddPlayers
-open Client.Features.Common
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Views
 open Shared.Domain
 open Shared.Domain.Members
+open Shared.Components
+
+
+let internal coachMenu children =
+    sidebar []
+        [ block []
+              [ ul [ _class "nav nav-list adminMenu" ]
+                    ([ li [ _class "nav-header" ] [ str "Admin" ] ]
+                     @ children) ] ]
+
+
 
 let index club user ctx =
     [ mtMain []
-          [ block [] [ div [ _id "manage-players"
-                             attr "data-statuses" (Enums.getValues<Status>() |> List.map string |> Json.serialize)
-                             attr "data-roles" (Enums.getValues<Role>() |> List.map string |> Json.serialize) ] [] ] ]
-      !!Admin.coachMenu ]
-    |> layout club user (fun o -> { o with Title = "Administrer spillere" }) ctx
+          [ block []
+                [ div
+                    [ _id "manage-players"
+                      attr "data-statuses"
+                          (Enums.getValues<Status> ()
+                           |> List.map string
+                           |> Json.serialize)
+                      attr "data-roles"
+                          (Enums.getValues<Role> ()
+                           |> List.map string
+                           |> Json.serialize) ] [] ] ]
+      (coachMenu [ li [] [ a [ _href "/admin/spillerinvitasjon" ] [ !!(Icons.add ""); str "Legg til spiller" ] ] ]) ]
+    |> layout club user (fun o ->
+           { o with
+                 Title = "Administrer spillere" }) ctx
     |> OkResult
 
 let invitePlayers (club: Club) user (ctx: HttpContext) =
@@ -25,8 +45,8 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
     let memberRequests =
         query {
             for request in db.MemberRequests do
-            where (request.ClubId = clubId)
-            select (request.FirstName, request.MiddleName, request.LastName, request.Email, request.FacebookId)
+                where (request.ClubId = clubId)
+                select (request.FirstName, request.MiddleName, request.LastName, request.Email, request.FacebookId)
         }
         |> Seq.toList
         |> List.map (fun (fornavn, mellomnavn, etternavn, epost, facebookId) ->
@@ -36,10 +56,10 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
               ``E-postadresse`` = epost
               FacebookId = facebookId })
 
-    [
-      mtMain [ _class "mt-main--narrow" ] [
-        Client.viewOld clientView { MemberRequests = memberRequests; ImageOptions = Images.getOptions ctx }
-      ]
-      !!Admin.coachMenu ]
+    [ mtMain [ _class "mt-main--narrow" ]
+          [ Client.viewOld clientView
+                { MemberRequests = memberRequests
+                  ImageOptions = Images.getOptions ctx } ]
+      (coachMenu [ li [] [ a [ _href "/admin" ] [ !!(Icons.users ""); str "Administrer spillere" ] ] ]) ]
     |> layout club user (fun o -> { o with Title = "Inviter spillere" }) ctx
     |> OkResult

@@ -1,6 +1,7 @@
 module Shared.Date
 
 open System
+open Shared
 
 let format (datetime: DateTime) =
 #if FABLE_COMPILER
@@ -55,16 +56,13 @@ let tryParse (dateString: string) =
     let couldParse, parsedDate = System.DateTime.TryParse dateString
     if couldParse then Some parsedDate else None
 
-let tryParseTime (timeString: string) =
-    try
-        timeString.Split(':')
-        |> Array.toList
-        |> List.map int
-        |> function
-        | [ hours; minutes ] when hours
-                                  >= 0
-                                  && hours <= 23
-                                  && minutes >= 0
-                                  && minutes <= 60 -> TimeSpan(int hours, int minutes, 0) |> Some
-        | _ -> None
-    with _ -> None
+let tryParseTime timeString =
+    Strings.split ':' timeString
+    |> List.map Number.tryParse
+    |> function
+    | [ Some hours; Some minutes ] when hours
+                                        >= 0
+                                        && hours <= 23
+                                        && minutes >= 0
+                                        && minutes <= 60 -> TimeSpan(hours, minutes, 0) |> Some
+    | _ -> None

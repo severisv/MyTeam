@@ -10,7 +10,6 @@ let viewOld id model =
           attr Interop.modelAttributeName (model |> Json.fableSerialize) ] []
 
 let view containerId comp model =
-
     [ script []
           [ rawText
               (sprintf """
@@ -27,7 +26,6 @@ let view containerId comp model =
     |> rawText
 
 let view2 containerId comp model =
-
     [ script []
         [ rawText
               (sprintf """
