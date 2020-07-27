@@ -51,16 +51,13 @@ let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTrainin
         game.Description <- model.Description        
 
         let db = ctx.Database
-
         let eventTeams = 
             db.EventTeams.Where(fun e -> e.EventId = trainingId)
             |> Seq.toList
 
-        let removedTeams = 
-            eventTeams
-            |> List.filter (fun e -> model.Teams |> List.contains e.TeamId |> not)
-        
-        removedTeams |> List.iter (db.Remove >> ignore)
+        eventTeams
+        |> List.filter (fun e -> model.Teams |> List.contains e.TeamId |> not)
+        |> List.iter (db.Remove >> ignore)    
 
         let addedTeams = 
             (model.Teams 
