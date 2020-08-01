@@ -33,8 +33,10 @@ let add (club: Club) (ctx: HttpContext) (model: AddOrUpdateTraining) =
              Location = model.Location,
              Type = Events.eventTypeToInt Trening,
              Description = model.Description,
-             EventTeams = (model.Teams |> List.map(fun teamId -> Models.Domain.EventTeam(TeamId = teamId)) |> List.toArray)
-             )
+             EventTeams =
+                 (model.Teams
+                  |> List.map (fun teamId -> Models.Domain.EventTeam(TeamId = teamId))
+                  |> List.toArray))
 
     db.Events.Add(training) |> ignore
     db.SaveChanges() |> ignore
@@ -48,28 +50,31 @@ let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTrainin
 
         game.DateTime <- model.Date.Date + model.Time
         game.Location <- model.Location
-        game.Description <- model.Description        
+        game.Description <- model.Description
 
         let db = ctx.Database
-        let eventTeams = 
+
+        let eventTeams =
             db.EventTeams.Where(fun e -> e.EventId = trainingId)
             |> Seq.toList
 
         eventTeams
         |> List.filter (fun e -> model.Teams |> List.contains e.TeamId |> not)
-        |> List.iter (db.Remove >> ignore)    
+        |> List.iter (db.Remove >> ignore)
 
-        let addedTeams = 
-            (model.Teams 
-            |> List.filter (fun teamId -> eventTeams |> List.exists (fun t -> t.TeamId = teamId) |> not)
-            |> List.map(fun teamId -> Models.Domain.EventTeam(TeamId = teamId, EventId = trainingId)) |> List.toArray)
+        let addedTeams =
+            (model.Teams
+             |> List.filter (fun teamId ->
+                 eventTeams
+                 |> List.exists (fun t -> t.TeamId = teamId)
+                 |> not)
+             |> List.map (fun teamId -> Models.Domain.EventTeam(TeamId = teamId, EventId = trainingId))
+             |> List.toArray)
 
-        db.EventTeams.AddRange(addedTeams) |> ignore    
+        db.EventTeams.AddRange(addedTeams) |> ignore)
+    |> HttpResult.map (fun _ -> model)
 
-        )
-        |> HttpResult.map (fun _ -> model)
 
-        
 
 let delete (club: Club) trainingId db =
     updateGame club.Id trainingId db (db.Remove >> ignore)

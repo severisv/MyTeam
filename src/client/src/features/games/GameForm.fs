@@ -129,7 +129,8 @@ let element =
                         [ label [ Class "control-label col-sm-2" ] [ Icons.team "Lag" ]
                           div [ Class "col-sm-7" ]
                               [ selectInput
-                                  [ OnChange(fun e ->
+                                  [   Value state.Team
+                                      OnChange(fun e ->
                                       let id = e.Value
                                       setFormValue (fun form -> { form with Team = Guid.Parse id })) ]
                                     (props.Teams

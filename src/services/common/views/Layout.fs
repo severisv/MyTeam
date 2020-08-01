@@ -112,7 +112,7 @@ module Pages =
                                               li [] [ a [ _href "/kamper" ] [ encodedText "Kamper" ] ]
                                               li [] [ a [ _href "/tabell" ] [ encodedText "Tabell" ] ]
                                               li [] [ a [ _href "/statistikk" ] [ encodedText "Statistikk" ] ]
-                                              li [] [ a [ _href "/om" ] [ encodedText "Om klubben" ] ]
+                                              li [] [ a [ _href "/om" ] [ encodedText "Om"; span [_class "hidden-sm"] [encodedText " klubben"] ] ]
                                               user
                                               |> Option.fold (fun _ _ ->
                                                   li []

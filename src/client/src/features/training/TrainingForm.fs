@@ -109,15 +109,13 @@ let element =
                                             btn [ Lg; OnClick !>handleClose ] [ str "Avbryt" ] ] ] }
               errorState.current => Alerts.danger
               form [ formLayout ]
-                  [ div [ Class "form-group" ]
-                        [ label [ Class "control-label col-sm-2" ] [ Icons.team "Lag" ]
-                          div [ Class "col-sm-7" ]
-                              [ selectInput
-                                  [ OnChange(fun e ->
-                                      let id = e.Value
-                                      setFormValue (fun form -> { form with Teams = [ Guid.Parse id ] })) ]
-                                    (props.Teams
-                                     |> List.map (fun p -> { Name = p.Name; Value = p.Id })) ] ]
+                  [ formRow [ formLayout ] [ Icons.team "Lag" ]
+                        [ multiSelect
+                            { OnChange = (fun teams -> setFormValue (fun form -> { form with Teams = teams }))
+                              Options =
+                                  (props.Teams
+                                   |> List.map (fun p -> { Name = p.Name; Value = p.Id }))
+                              Values = state.Teams } ]
 
 
                     formRow [ formLayout ] [ Icons.calendar "Dato" ]
