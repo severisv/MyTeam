@@ -236,7 +236,7 @@ module App =
                             PUT >=>                                
                                 mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.update club >> jsonPost)
                             DELETE >=>                                
-                                mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.delete club >> jsonGet)    
+                                mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Games.Api.delete club >> jsonGet2)    
 
                         ]
                     subRoute "/api/trainings"
@@ -245,7 +245,7 @@ module App =
                                     PUT >=>                                
                                         mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.update club >> jsonPost)
                                     DELETE >=>                                
-                                        mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.delete club >> jsonGet)    
+                                        mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.delete club >> jsonGet2)    
 
                         ]    
                     subRoute "/api/fines"

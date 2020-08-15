@@ -36,6 +36,9 @@ let jsonPost<'a, 'b> (fn : HttpContext -> 'a -> HttpResult<'b>) next (ctx : Http
 let jsonGet<'a> (fn : Database -> HttpResult<'a>) next (ctx : HttpContext) =
     fn ctx.Database |> jsonResult next ctx
 
+let jsonGet2<'a> (fn : HttpContext -> HttpResult<'a>) next (ctx : HttpContext) =
+    fn ctx |> jsonResult next ctx    
+
 let htmlResult next ctx =
     function 
     | OkResult result -> htmlView result next ctx
