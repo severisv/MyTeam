@@ -100,7 +100,7 @@ let run next (ctx: HttpContext)  =
                                     let time = row.Tid 
                                                |> string 
                                                |> Strings.trim
-                                               |> Strings.split [|'.'|] 
+                                               |> Strings.split '.'
                                                |> List.map float
                                                |> function 
                                                | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿
+using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.Settings;
@@ -11,7 +12,6 @@ namespace MyTeam.Services.Composition
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddTransient<IPlayerService, PlayerService>();
-            services.AddTransient<IEventService, EventService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
             services.AddTransient<Cloudinary>();
             services.AddTransient<EmailSender>();

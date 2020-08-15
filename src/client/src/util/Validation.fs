@@ -67,6 +67,10 @@ module Validation =
         else Error <| sprintf "%s må være et valgt" name
             
 
-
+    let dateIsAfter ((startName, start): string * DateTime option) name (value: DateTime option) =
+        match (start, value) with
+        | (Some start, Some value) -> if start < value then Ok() else Error <| sprintf "%s må etter %s" name startName
+        |_ -> Ok()
+    
 
 

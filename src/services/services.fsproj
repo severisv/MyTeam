@@ -103,6 +103,10 @@
     <Compile Include="features/news/pages/Edit.fs" />
     <Compile Include="features/about/About.fs" />
     <Compile Include="features/sponsors/Sponsors.fs" />
+    <Compile Include="features/trainings/Queries.fs" />
+    <Compile Include="features/trainings/TrainingApi.fs" />
+    <Compile Include="features/trainings/pages/Edit.fs" />
+    <Compile Include="features/trainings/pages/Add.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -179,7 +179,7 @@ let element props children =
                                                           [ Href
                                                             <| (match event.Type with
                                                                 | Domain.Kamp -> sprintf "/kamper/%O/endre"
-                                                                | _ -> sprintf "/intern/arrangement/endre/%O") event.Id ] ]
+                                                                | _ -> sprintf "/treninger/%O/endre") event.Id ] ]
                                                     @ (match (event.Details, props.Period) with
                                                        | (Game game, _) when user.IsInRole [ Trener ] ->
                                                            [ a
@@ -349,14 +349,14 @@ let element props children =
                     user.IsInRole [ Admin; Trener ]
                     &? block []
                            [ navListBase [ Header <| str "Admin" ]
-                                 [ a [ Href "/intern/arrangement/ny" ]
+                                 [ a [ Href "/treninger/ny" ]
                                        [ Icons.add ""
                                          whitespace
-                                         str "Legg til trening" ]
+                                         str "Ny trening" ]
                                    a [ Href "/kamper/ny" ]
                                        [ Icons.add ""
                                          whitespace
-                                         str "Legg til kamp" ] ] ] ] ]
+                                         str "Ny kamp" ] ] ] ] ]
 
 
         )

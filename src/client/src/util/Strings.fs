@@ -5,8 +5,9 @@ open System.Text.RegularExpressions
 
 let hasValue s = not <| String.IsNullOrWhiteSpace s
 let toLower (a: obj) = (string a).ToLower()
-let split separator (str: string) = str.Split(separator) |> Array.toList
+let split separator (str: string) = str.Split([|separator|]) |> Array.toList
 let trim (str: string) = str.Trim()
+let trimChars chars (str: string)  = str.Trim(chars |> List.toArray)
 let removeAllWhitespaces (s: string) = Regex.Replace(s, @"\s+", "")
 let removeDoubleWhitespaces (s: string) = Regex.Replace(s, "[ ]{2,}", " ")
 let contains otherString (str: string) = str.Contains(otherString)

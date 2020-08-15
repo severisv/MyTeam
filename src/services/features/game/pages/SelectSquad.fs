@@ -87,7 +87,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                     {   Header = "Admin"
                                         Items = 
                                             [ { Text = [ Icons.add ""
-                                                         Fable.React.Helpers.str " Legg til kamp" ]
+                                                         Fable.React.Helpers.str " Ny kamp" ]
                                                 Url = "/kamper/ny" }]                            
                                         Footer = None
                                         IsSelected = never })]
