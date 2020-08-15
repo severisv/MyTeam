@@ -154,14 +154,6 @@ namespace MyTeam.Services.Application
             Cache.Set(NotificationKey(clubId), notifications, _cacheOptions);
 
             return memberNotification;
-        }
-
-        public void ClearNotificationCache(Guid clubId)
-        {
-            Cache.Set<Dictionary<Guid, MemberNotification>>(clubId.ToString(), null);
-            Cache.Remove("notifications-" + clubId.ToString());
-        }
-
-       
+        }       
     }
 }
