@@ -22,28 +22,29 @@ let internal updateGame clubId trainingId (db: Database) updateFn =
 
 
 
-let add (club: Club) (ctx: HttpContext) (model: AddOrUpdateTraining) =
+let add (club: Club) (ctx: HttpContext) (model: AddOrUpdateTraining list) =
     let db = ctx.Database
     let (ClubId clubId) = club.Id
 
-    let training =
-        Models.Domain.Event
-            (ClubId = clubId,
-             DateTime = model.Date.Date + model.Time,
-             Location = model.Location,
-             Type = Events.eventTypeToInt Trening,
-             Description = model.Description,
-             EventTeams =
-                 (model.Teams
-                  |> List.map (fun teamId -> Models.Domain.EventTeam(TeamId = teamId))
-                  |> List.toArray))
+    let trainings =
+        model
+        |> List.map (fun model -> 
+            Models.Domain.Event
+                (ClubId = clubId,
+                 DateTime = model.Date.Date + model.Time,
+                 Location = model.Location,
+                 Type = Events.eventTypeToInt Trening,
+                 Description = model.Description,
+                 EventTeams =
+                     (model.Teams
+                      |> List.map (fun teamId -> Models.Domain.EventTeam(TeamId = teamId))
+                      |> List.toArray))
+        )
 
-    db.Events.Add(training) |> ignore
+    db.Events.AddRange(trainings) |> ignore
     db.SaveChanges() |> ignore
     OkResult
-        { model with
-              Id = Some training.Id
-              Date = training.DateTime }
+       ()
 
 let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTraining) =
     updateGame club.Id trainingId ctx.Database (fun game ->

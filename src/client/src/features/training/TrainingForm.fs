@@ -94,7 +94,10 @@ let element =
             Map [ "Date", validate "Dato" state.Date [ isSome ]
                   "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
                   "UntilDate",
-                  validate "Til dato" recurringState.current.Until [ dateIsAfter ("dato for treningen", state.Date) ]
+                  validate
+                      "Til dato"
+                      (if recurringState.current.IsRecurring then recurringState.current.Until else None)
+                      [ dateIsAfter ("dato for treningen", state.Date) ]
                   "Location", validate "Sted" state.Location [ isRequired ] ]
 
         let formLayout = Horizontal 2
@@ -200,6 +203,7 @@ let element =
                     recurringState.current.IsRecurring
                     &? div [ Class "col-sm-9" ] [
                         dateInput [ Value recurringState.current.Until
+                                    Validation validation.["UntilDate"]
                                     OnDateChange(handleRecurringUntilChange state.Date) ]
                        ]
                    ]
@@ -210,12 +214,17 @@ let element =
                             []
                                (recurringState.current.Dates
                                 |> List.map (fun date ->
-                                    div [Style [Display DisplayOptions.Flex; JustifyContent "space-between"; FontSize "1.25em"; LineHeight "2em"]] [
+                                    div [ Style [ Display DisplayOptions.Flex
+                                                  JustifyContent "space-between"
+                                                  FontSize "1.25em"
+                                                  LineHeight "2em" ] ] [
                                         div [] [
-                                          span [Style [MarginRight "0.8em"]] [Icons.training ""]
-                                          str <| Date.format date
+                                            span [ Style [ MarginRight "0.8em" ] ] [
+                                                Icons.training ""
+                                            ]
+                                            str <| Date.format date
                                         ]
-                              
+
                                         linkButton [ OnClick
                                                      <| fun _ ->
                                                          recurringState.update (fun state ->
@@ -261,22 +270,19 @@ let element =
                                            Some(fun () ->
                                                Encode.Auto.toString
                                                    (0,
-                                                    { Id = None
-                                                      Date = state.Date.Value
-                                                      Time = (Date.tryParseTime state.Time).Value
-                                                      Location = state.Location
-                                                      Teams = state.Teams
-                                                      Description = state.Description })))
+                                                    match recurringState.current with
+                                                    | { Dates = dates; IsRecurring = true } when not dates.IsEmpty ->
+                                                        dates
+                                                    | _ -> [ state.Date.Value ]
+                                                    |> List.map (fun date ->
+                                                        { Id = None
+                                                          Date = date
+                                                          Time = (Date.tryParseTime state.Time).Value
+                                                          Location = state.Location
+                                                          Teams = state.Teams
+                                                          Description = state.Description }))))
 
-                              OnSubmit =
-                                  Some(fun res ->
-                                      Decode.Auto.fromString<AddOrUpdateTraining> res
-                                      |> function
-                                      | Ok _ ->
-                                          Browser.Dom.window.location.replace "/intern"
-                                          ()
-
-                                      | Error e -> errorState.update (Some e)) }) ]
+                              OnSubmit = Some(fun _ -> Browser.Dom.window.location.replace "/intern") }) ]
             ]
         ])
 

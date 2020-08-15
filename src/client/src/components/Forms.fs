@@ -33,7 +33,8 @@ let form (props: IHTMLProp list) children =
              [ Class
                  (match horizontal with
                   | Some (Horizontal h) -> "form-horizontal"
-                  | _ -> "") ]) children
+                  | _ -> "") ])
+        children
 
 let formRow (props: IHTMLProp list) lbl input =
     let horizontal =
@@ -41,20 +42,24 @@ let formRow (props: IHTMLProp list) lbl input =
         |> List.tryFind (fun p -> p :? FormProps)
         |> Option.map (fun p -> p :?> FormProps)
 
-    div (props |> mergeClasses [ Class "form-group" ])
+    div
+        (props |> mergeClasses [ Class "form-group" ])
         [ label
             [ Class
-              <| sprintf "control-label %s"
+              <| sprintf
+                  "control-label %s"
                      (horizontal
                       |> function
                       | Some (Horizontal h) -> sprintf "col-sm-%i" h
-                      | None -> "") ] lbl
+                      | None -> "") ]
+              lbl
           div
               [ Class
                   (horizontal
                    |> function
                    | Some (Horizontal h) -> sprintf "col-sm-%i" (12 - h)
-                   | None -> "") ] input ]
+                   | None -> "") ]
+              input ]
 
 type InputState = { IsTouched: bool }
 
@@ -62,55 +67,98 @@ type InputProps =
     | Validation of Result<unit, string> list
     interface IHTMLProp
 
-type IsTouched =
+type IsTouchedProps =
     | IsTouched of bool
     interface IHTMLProp
+
+let validationMessage2 (isValid, message) =
+    not isValid
+    &? (message
+        => fun message ->
+            span [ Class "input-validation-message" ] [
+                str message
+            ])
+
+let (|IsInputPropsAttr|_|) (attr: IHTMLProp) =
+    match attr with
+    | :? InputProps as a -> Some a
+    | _ -> None
+
+let (|IsIsTouchedProps|_|) (attr: IHTMLProp) =
+    match attr with
+    | :? IsTouchedProps as a -> Some a
+    | _ -> None
+
+
+let internal distillValidation validation isTouched =
+    match (validation, isTouched) with
+    | (Some e, true) when isTouched ->
+        e
+        |> List.map (function
+            | Ok () -> (true, None)
+            | Error m -> false, Some m)
+        |> List.fold (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc) (true, None)
+    | _ -> true, None
 
 let textInput (attr: IHTMLProp list) =
     komponent<IHTMLProp list, InputState> attr { IsTouched = false } None (fun (attr, state, setState) ->
 
         let isTouched =
             attr
-            |> List.tryFind (fun p -> p :? IsTouched)
-            |> Option.map (fun p -> p :?> IsTouched)
-            |> function
-            | Some (IsTouched isTouched) -> isTouched
-            | _ -> state.IsTouched
+            |> List.tryPick (function
+                | IsIsTouchedProps (IsTouched v) -> Some v
+                | _ -> Some state.IsTouched)
+            |> Option.defaultValue state.IsTouched
 
         let validation =
             attr
-            |> List.tryFind (fun p -> p :? InputProps)
-            |> Option.map (fun p -> p :?> InputProps)
+            |> List.tryPick (function
+                | IsInputPropsAttr (Validation v) -> Some v
+                | _ -> None)
 
 
-        let (isValid, validationMessage) =
-            validation
-            |> function
-            | Some (Validation e) when isTouched ->
-                e
-                |> List.map (function
-                    | Ok () -> (true, None)
-                    | Error m -> false, Some m)
-                |> List.fold (fun acc (isValid, m) -> if not isValid then (isValid, m) else acc) (true, None)
-            | _ -> true, None
 
-        fragment []
-            [ input
+        let (isValid, vMessage) = distillValidation validation isTouched
+
+        fragment [] [
+            input
                 (attr
                  |> List.filter (fun p -> not <| p :? InputProps)
-                 |> List.filter (fun p -> not <| p :? IsTouched)
-                 |> mergeClasses
-                     [ OnBlur(fun _ -> setState (fun state props -> { state with IsTouched = true }))
-                       Class
-                       <| sprintf "form-control input-isValid--%b" isValid
-                       Type "text" ])
-              not isValid
-              &? (validationMessage
-                  => fun validationMessage -> span [ Class "input-validation-message" ] [ str validationMessage ]) ])
+                 |> mergeClasses [ OnBlur(fun _ -> setState (fun state props -> { state with IsTouched = true }))
+                                   Class
+                                   <| sprintf "form-control input-isValid--%b" isValid
+                                   Type "text" ])
+            validationMessage2 (isValid, vMessage)
+        ])
 
 
 let dateInput attr =
-    datePicker (attr |> mergeClasses [ Class "form-control" ])
+
+    let isTouchedState = Hooks.useState false
+
+    let isTouched =
+        attr
+        |> List.tryPick (function
+            | IsIsTouchedProps (IsTouched v) -> Some v
+            | _ -> Some isTouchedState.current)
+        |> Option.defaultValue isTouchedState.current
+
+    let validation =
+        attr
+        |> List.tryPick (function
+            | IsInputPropsAttr (Validation v) -> Some v
+            | _ -> None)
+
+
+    let (isValid, vMessage) = distillValidation validation isTouched
+    fragment [] [
+        datePicker
+            (attr
+             |> mergeClasses [ Class "form-control"
+                               OnBlur(fun _ -> isTouchedState.update (fun _ -> true)) ])
+        validationMessage2 (isValid, vMessage)
+    ]
+
 
 type SelectOption<'a> = { Name: string; Value: 'a }
 
@@ -121,12 +169,14 @@ let selectInput (attr: IHTMLProp list) options =
             | IsHTMLAttr (Value v) -> Some v
             | _ -> None)
 
-    select (attr |> mergeClasses [ Class "form-control" ])
+    select
+        (attr |> mergeClasses [ Class "form-control" ])
         (options
          |> List.map (fun o ->
-             option
-                 [ Value o.Value
-                   Selected(selectedValue = Some o.Value) ] [ str o.Name ]))
+             option [ Value o.Value
+                      Selected(selectedValue = Some o.Value) ] [
+                 str o.Name
+             ]))
 
 
 [<Emit("Array.from($0)")>]
@@ -137,36 +187,38 @@ type MultiSelectProps<'a> =
       Values: 'a list
       OnChange: 'a list -> unit }
 
-let multiSelect<'a when 'a: equality> (props: MultiSelectProps<'a>) =    
-        select
-            (mergeClasses
-                [ Class "form-control"
-                  OnChange(fun e ->
-                      let options = e.target?selectedOptions |> asArray
-                      props.OnChange
-                          (props.Options
-                           |> List.map (fun o -> o.Value)
-                           |> List.filter (fun value ->
-                               options
-                               |> Array.exists (fun (o: Browser.Types.HTMLOptionElement) -> o.value = value.ToString())))
+let multiSelect<'a when 'a: equality> (props: MultiSelectProps<'a>) =
+    select
+        (mergeClasses [ Class "form-control"
+                        OnChange(fun e ->
+                            let options = e.target?selectedOptions |> asArray
+                            props.OnChange
+                                (props.Options
+                                 |> List.map (fun o -> o.Value)
+                                 |> List.filter (fun value ->
+                                     options
+                                     |> Array.exists (fun (o: Browser.Types.HTMLOptionElement) ->
+                                         o.value = value.ToString())))
 
 
-                      ) ] [ Multiple true ])
-            (props.Options
-             |> List.map (fun o ->
-                 option
-                     [ Value o.Value
-                       Selected(props.Values |> List.contains o.Value) ] [ str o.Name ]))
+                            ) ] [
+            Multiple true
+         ])
+        (props.Options
+         |> List.map (fun o ->
+             option [ Value o.Value
+                      Selected(props.Values |> List.contains o.Value) ] [
+                 str o.Name
+             ]))
 
 let checkboxInput attr lbl value onChange =
     label
         (attr
          |> mergeClasses [ Class "control-label input-form-checkbox" ])
-        ([ input
-            [ Class "form-control"
-              Type "checkbox"
-              Checked value
-              OnChange(fun input -> onChange input.Checked) ] ]
+        ([ input [ Class "form-control"
+                   Type "checkbox"
+                   Checked value
+                   OnChange(fun input -> onChange input.Checked) ] ]
          @ lbl)
 
 
