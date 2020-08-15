@@ -276,7 +276,7 @@ let element =
                                                     | _ -> [ state.Date.Value ]
                                                     |> List.map (fun date ->
                                                         { Id = None
-                                                          Date = date
+                                                          Date = date.ToLocalTime()
                                                           Time = (Date.tryParseTime state.Time).Value
                                                           Location = state.Location
                                                           Teams = state.Teams

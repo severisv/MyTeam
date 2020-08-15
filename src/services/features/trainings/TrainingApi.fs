@@ -1,12 +1,8 @@
 module MyTeam.Trainings.Api
 
-open Server
 open Shared.Domain
 open MyTeam
-open Shared
-open System
 open System.Linq
-open Giraffe
 open Client.Features.Trainings.Form
 
 
@@ -28,28 +24,27 @@ let add (club: Club) (ctx: HttpContext) (model: AddOrUpdateTraining list) =
 
     let trainings =
         model
-        |> List.map (fun model -> 
+        |> List.map (fun model ->
             Models.Domain.Event
                 (ClubId = clubId,
-                 DateTime = model.Date.Date + model.Time,
+                 DateTime = model.Date.ToLocalTime().Date
+                 + model.Time,
                  Location = model.Location,
                  Type = Events.eventTypeToInt Trening,
                  Description = model.Description,
                  EventTeams =
                      (model.Teams
                       |> List.map (fun teamId -> Models.Domain.EventTeam(TeamId = teamId))
-                      |> List.toArray))
-        )
+                      |> List.toArray)))
 
     db.Events.AddRange(trainings) |> ignore
     db.SaveChanges() |> ignore
-    OkResult
-       ()
+    OkResult()
 
 let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTraining) =
     updateGame club.Id trainingId ctx.Database (fun game ->
 
-        game.DateTime <- model.Date.Date + model.Time
+        game.DateTime <- model.Date.ToLocalTime().Date + model.Time
         game.Location <- model.Location
         game.Description <- model.Description
 

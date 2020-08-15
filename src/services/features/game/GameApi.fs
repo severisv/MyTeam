@@ -66,7 +66,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddGame) =
     let game =
         Models.Domain.Event
             (ClubId = clubId,
-             DateTime = model.Date.Date + model.Time,
+             DateTime = model.Date.ToLocalTime().Date + model.Time,
              Opponent = model.Opponent,
              Location = model.Location,
              TeamId = Nullable model.Team,
@@ -85,7 +85,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddGame) =
 let update (club: Club) gameId (ctx: HttpContext) (model: AddGame) =
     updateGame club.Id gameId ctx.Database (fun game ->
         game.Opponent <- model.Opponent
-        game.DateTime <- model.Date.Date + model.Time
+        game.DateTime <- model.Date.ToLocalTime().Date + model.Time
         game.Location <- model.Location
         game.TeamId <- Nullable model.Team
         game.GameType <- Nullable(Events.gameTypeToInt model.GameType)
