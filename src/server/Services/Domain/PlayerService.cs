@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyTeam.Models;
 using MyTeam.Models.Domain;
-using MyTeam.Models.Dto;
 using MyTeam.Models.Enums;
-using MyTeam.Models.Structs;
-using MyTeam.Resources;
 using MyTeam.Services.Application;
 using MyTeam.ViewModels.Game;
 using MyTeam.ViewModels.Player;

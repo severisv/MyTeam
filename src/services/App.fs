@@ -73,9 +73,16 @@ module App =
                                                 mustBeInRole [Role.Admin; Role.Trener] >=> 
                                                     (Games.Pages.Edit.view club user gameId |> htmlGet))            
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
+                                ]                               
+                            ]       
+                    subRoute "/spillere2"             
+                        <|  choose [                                                
+                                GET >=> choose [
+                                    route "" >=> (Players.Pages.List.view club user "" |> htmlGet)                                  
+                                    routef "/%s" <| fun status -> Players.Pages.List.view club user status |> htmlGet 
                                 ]
                                
-                            ]       
+                            ]               
                     subRoute "/treninger"             
                         <|  choose [                                                
                                 GET >=> choose [                       

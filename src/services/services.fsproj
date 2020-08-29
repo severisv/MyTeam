@@ -76,6 +76,7 @@
     <Compile Include="features/game/pages/SelectSquad.fs" />
     <Compile Include="features/game/pages/GamePlan.fs" />
     <Compile Include="features/game/Refresh.fs" />
+    <Compile Include="features/players/pages/List.fs" />
     <Compile Include="features/gameevents/Gameevents.fs" />
     <Compile Include="features/members/MemberTypes.fs" />
     <Compile Include="features/members/Queries.fs" />

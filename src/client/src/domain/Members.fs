@@ -10,12 +10,8 @@ type PlayerStatus =
     | Trener
     | Sluttet
 
-
-module Members =
-
-    type Status = PlayerStatus
-
-    let statusFromInt =
+module PlayerStatus =
+    let fromInt =
         function
          | 0 -> Aktiv
          | 1 -> Inaktiv
@@ -23,21 +19,25 @@ module Members =
          | 3 -> Trener
          | _ -> Sluttet
 
-    let statusToInt =
+    let toInt =
         function
          | Aktiv -> 0
          | Inaktiv -> 1
          | Veteran -> 2
          | Trener -> 3
          | Sluttet -> 4
-  
+
+module Members =
+
+    type Status = PlayerStatus
+
     let fullName (firstName, middleName, lastName) =
         if Strings.hasValue middleName then
             sprintf "%s %s %s" firstName middleName lastName
         else
             sprintf "%s %s" firstName lastName
 
-    type MemberId = System.Guid
+    type MemberId = Guid
     type PlayerId = MemberId
     type UserId = UserId of string
 

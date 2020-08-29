@@ -1,10 +1,8 @@
 module MyTeam.Common.Features.Members
 
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
-open Microsoft.EntityFrameworkCore
 open System.Linq
 open System
 open Shared.Strings
@@ -41,7 +39,7 @@ let selectMembers =
                  LastName = !!lastName
                  UrlName = !!urlName
                  Image = !!imageFull
-                 Status = statusFromInt status })
+                 Status = PlayerStatus.fromInt status })
         |> Seq.sortBy (fun p -> p.FirstName)
 
 
@@ -67,7 +65,7 @@ let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
                         LastName = !!lastName
                         Image = !!image
                         UrlName = !!urlName
-                        Status = statusFromInt status})
+                        Status = PlayerStatus.fromInt status})
                  Teams = teamIds |> List.filter((=) Guid.Empty >> not)                   
                  Roles = rolesString |> toRoleList })
         |> Seq.toList
