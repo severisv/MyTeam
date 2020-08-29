@@ -132,33 +132,35 @@ let textInput (attr: IHTMLProp list) =
         ])
 
 
-let dateInput attr =
+let dateInput =
 
-    let isTouchedState = Hooks.useState false
-
-    let isTouched =
-        attr
-        |> List.tryPick (function
-            | IsIsTouchedProps (IsTouched v) -> Some v
-            | _ -> Some isTouchedState.current)
-        |> Option.defaultValue isTouchedState.current
-
-    let validation =
-        attr
-        |> List.tryPick (function
-            | IsInputPropsAttr (Validation v) -> Some v
-            | _ -> None)
+    FunctionComponent.Of(fun (attr: IHTMLProp list) ->
 
 
-    let (isValid, vMessage) = distillValidation validation isTouched
-    fragment [] [
-        datePicker
-            (attr
-             |> mergeClasses [ Class "form-control"
-                               OnBlur(fun _ -> isTouchedState.update (fun _ -> true)) ])
-        validationMessage2 (isValid, vMessage)
-    ]
+        let isTouchedState = Hooks.useState false
 
+        let isTouched =
+            attr
+            |> List.tryPick (function
+                | IsIsTouchedProps (IsTouched v) -> Some v
+                | _ -> Some isTouchedState.current)
+            |> Option.defaultValue isTouchedState.current
+
+        let validation =
+            attr
+            |> List.tryPick (function
+                | IsInputPropsAttr (Validation v) -> Some v
+                | _ -> None)
+
+
+        let (isValid, vMessage) = distillValidation validation isTouched
+        fragment [] [
+            datePicker
+                (attr
+                 |> mergeClasses [ Class "form-control"
+                                   OnBlur(fun _ -> isTouchedState.update (fun _ -> true)) ])
+            validationMessage2 (isValid, vMessage)
+        ])
 
 type SelectOption<'a> = { Name: string; Value: 'a }
 
