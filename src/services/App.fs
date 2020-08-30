@@ -79,7 +79,8 @@ module App =
                         <|  choose [                                                
                                 GET >=> choose [
                                     route "" >=> (Players.Pages.List.view club user "" |> htmlGet)                                  
-                                    routef "/%s" <| fun status -> Players.Pages.List.view club user status |> htmlGet 
+                                    routef "/vis/%s" (Players.Pages.Show.view club user >> htmlGet) 
+                                    routef "/%s" (Players.Pages.List.view club user >> htmlGet) 
                                 ]
                                
                             ]               

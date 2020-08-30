@@ -4,14 +4,9 @@ open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Domain
-open MyTeam.Games
 open MyTeam.Views
-open MyTeam.Views.BaseComponents
-open Shared.Components
 open Shared.Components.Nav
-open System
 open Shared.Domain.Members
-open Fable.React.Props
 open System.Linq
 
 
@@ -90,7 +85,7 @@ let view (club: Club) user status (ctx: HttpContext) =
                             { Text = [ (string >> Fable.React.Helpers.str) player.Name ]
                               Url = showPlayerUrl player.UrlName })
                     Footer = None
-                    IsSelected = fun _ -> false })
+                    IsSelected = never })
           ]
       ] ]
     |> layout club user (fun o -> { o with Title = "Aktive spillere" }) ctx
