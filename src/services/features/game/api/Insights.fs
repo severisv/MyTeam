@@ -20,7 +20,7 @@ type Player =
 let private calculateAverageAge dateTime attendees =
     let ages =
         attendees
-        |> Seq.map((fun a -> a.BirthDate) >> toOption)
+        |> Seq.map((fun a -> a.BirthDate) >> fromNullable)
         |> Seq.choose id
         |> Seq.map(fun birthDate -> (dateTime - birthDate).TotalDays / 365.25)
         |> Seq.toList
@@ -61,12 +61,12 @@ let get (club : Domain.Club) (teamName, year) (db : Database) =
                
                let mf =
                    isHomeTeam =? (homeScore, awayScore)
-                   |> toOption
+                   |> fromNullable
                    |> Option.defaultValue 0
                
                let mm =
                    isHomeTeam =? (awayScore, homeScore)
-                   |> toOption
+                   |> fromNullable
                    |> Option.defaultValue 0
                
                { Motstander = opponent

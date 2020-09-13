@@ -67,7 +67,7 @@ let view (club: Club) user status (ctx: HttpContext) =
       sidebar [] [
           block [] [
               !!(navList
-                  { Header = "Undermeny"
+                  { Header = "Spillerkategori"
                     Items =
                         [ { Text = [ (string >> Fable.React.Helpers.str) "Aktive spillere" ]
                             Url = listPlayersUrl Aktiv }

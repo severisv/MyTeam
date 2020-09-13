@@ -58,7 +58,7 @@ module Queries =
                            Name = authorName |> Members.fullName }
                      HideAuthor = hideAuthor                       
                      Content = content
-                     GameId = gameId |> toOption })
+                     GameId = gameId |> fromNullable })
             |> Seq.tryHead
 
 module Components =

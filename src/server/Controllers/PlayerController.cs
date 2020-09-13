@@ -12,7 +12,6 @@ using NotFoundResult = MyTeam.Extensions.Mvc.NotFoundResult;
 
 namespace MyTeam.Controllers
 {
-    [Route("spillere")]
     public class PlayerController : BaseController
     {
         private readonly IPlayerService _playerService;
@@ -23,45 +22,7 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("")]
-        public IActionResult List(PlayerStatus type = PlayerStatus.Aktiv)
-        {
-            var players = _playerService.GetPlayers(type, Club.Id);
-
-            var model = new ShowPlayersViewModel(players, type);
-
-            ViewBag.PageName = Res.PlayersOfType(type);
-
-            return View("List", model);
-        }
-
-        [Route("vis/{name?}")]
-        public IActionResult Show(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name)) return new NotFoundResult(HttpContext);
-
-            Guid playerId;
-            if (Guid.TryParse(name, out playerId))
-            {
-                var player = _playerService.GetSingle(playerId);
-                return RedirectToAction("Show", new { name = player.UrlName });
-            }
-
-            var selectedPlayer = _playerService.GetSingle(Club.Id, name);
-            if (selectedPlayer == null) return new NotFoundResult(HttpContext);
-
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("_Show", selectedPlayer);
-            }
-
-            var players = _playerService.GetPlayers(selectedPlayer.Status, Club.Id);
-            var model = new ShowPlayersViewModel(players, selectedPlayer.Status, selectedPlayer);
-            return View("Show", model);
-        }
-
-
-        [Route("stats")]
+        [Route("spillere/stats")]
         public IActionResult GetStats(Guid playerId)
         {
             var model = _playerService.GetStats(playerId, Club.TeamIds);
@@ -69,7 +30,7 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("endre")]
+        [Route("spillere/endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId, bool filterRedirect = false)
         {
@@ -92,14 +53,14 @@ namespace MyTeam.Controllers
 
         [HttpPost]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
-        [Route("endre")]
+        [Route("spillere/endre")]
         public IActionResult Edit(EditPlayerViewModel model)
         {
             if (ModelState.IsValid)
             {
                 _playerService.EditPlayer(model, Club.Id);
                 Alert(AlertType.Success, "Profil lagret");
-                return Show(model.UrlName);
+                return Redirect($"/spillere/vis/{model.UrlName}");
 
             }
             return PartialView("_Edit", model);

@@ -75,7 +75,7 @@ module App =
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
                                 ]                               
                             ]       
-                    subRoute "/spillere2"             
+                    subRoute "/spillere"             
                         <|  choose [                                                
                                 GET >=> choose [
                                     route "" >=> (Players.Pages.List.view club user "" |> htmlGet)                                  

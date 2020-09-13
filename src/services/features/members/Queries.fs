@@ -26,7 +26,7 @@ module Queries =
                 |> List.map (fun (id, firstName, middleName, lastName, facebookId,
                                   urlName, image, status, birthDate, phone, email) ->
                         {
-                           BirthDate = (birthDate |> toOption)
+                           BirthDate = (birthDate |> fromNullable)
                            Phone = phone
                            Email = email 
                            Details = 

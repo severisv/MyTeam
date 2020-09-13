@@ -23,15 +23,31 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
 
     let urlName = urlName |> Strings.toLower
 
-    (db.Members.Where(fun m -> m.ClubId = clubId && m.UrlName = urlName))
-    |> Common.Features.Members.selectMembers
+    let (!!!) = Strings.defaultValue
+    db.Members.Where(fun m -> m.ClubId = clubId && m.UrlName = urlName)
     |> Seq.toList
+    |> List.map (fun p ->
+        {| Id = p.Id
+           FacebookId = !!!p.FacebookId
+           FirstName = !!!p.FirstName
+           MiddleName = !!!p.MiddleName
+           LastName = !!!p.LastName
+           FullName = sprintf "%s %s %s" p.FirstName p.MiddleName p.LastName
+           UrlName = !!!p.UrlName
+           Image = !!!p.ImageFull
+           Status = PlayerStatus.fromInt p.Status
+           Positions = !!!p.PositionsString |> Strings.split ',' |> String.concat ", "
+           StartDate = p.StartDate |> Option.fromNullable
+           BirthDate = p.BirthDate |> Option.fromNullable
+           Email = !!!p.UserName
+           Phone = !!!p.Phone |})
     |> List.tryHead
     |> HttpResult.fromOption (fun player ->
 
 
         let players =
             let statusInt = (player.Status |> PlayerStatus.toInt)
+
             (db.Members.Where(fun m -> m.ClubId = clubId && m.Status = statusInt))
             |> Common.Features.Members.selectMembers
             |> Seq.toList
@@ -47,14 +63,22 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
 
         let editPlayerUrl =
             Strings.toLower
-            >> sprintf "/spillere/vis/%s/endre"
+            // >> sprintf "/spillere/vis/%s/endre"
+            >> sprintf "/spillere/endre?playerId=%O"
+
+        let tableRow lbl value =
+            tr [] [
+                td [] [ label [] [ encodedText lbl ] ]
+                td [ _class "playerStats--value" ] [
+                    value
+                ]
+            ]
 
         [ mtMain [] [
             block [] [
                 div [ _class "row" ] [
                     div [ _class "col-sm-6 col-md-6 col-lg-6 picture-frame" ] [
-                        img
-                            [ _src
+                        img [ _src
                               <| Images.getMember ctx (fun o -> { o with Width = Some 400 }) player.Image
                                      player.FacebookId ]
                     ]
@@ -63,61 +87,43 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                          | Some user when (user.Id = player.Id
                                            || user.IsInRole [ Trener; Admin ]) ->
                              !!(editAnchor [ Class "edit-player-link "
-                                             Href <| editPlayerUrl player.UrlName ])
+                                             Href <| editPlayerUrl player.Id ])
                          | _ -> fragment [])
 
                         Giraffe.GiraffeViewEngine.table [ _class "table" ] [
                             tbody [] [
-                                tr [] [
-                                    td [] [
-                                        label [] [ encodedText "Posisjon" ]
-                                    ]
-                                    td [ _class "playerStats--value" ] [
-                                        encodedText "Midtstopper"
-                                    ]
-                                ]
-                                tr [] [
-                                    td [] [
-                                        label [] [
-                                            encodedText "Signerte for klubben"
-                                        ]
-                                    ]
-                                    td [ _class "playerStats--value" ] [
-                                        encodedText "2016"
-                                    ]
-                                ]
-                                tr [] [
-                                    td [] [
-                                        label [] [ encodedText "Født" ]
-                                    ]
-                                    td [ _class "playerStats--value" ] [
-                                        encodedText "07.04.1995"
-                                    ]
-                                ]
-                                tr [] [
-                                    td [] [
-                                        label [] [ encodedText "E-post" ]
-                                    ]
-                                    td [ _class "playerStats--value" ] [
-                                        a [ _href "mailto:einar.solheim@weika.no" ] [
-                                            encodedText "einar.solheim@weika.no"
-                                        ]
-                                    ]
-                                ]
-                                tr [] [
-                                    td [] [
-                                        label [] [ encodedText "Telefon" ]
-                                    ]
-                                    td [ _class "playerStats--value" ] [
-                                        a [ _href "tel:94863773" ] [
-                                            encodedText "94863773"
-                                        ]
-                                    ]
-                                ]
+                                tableRow "Posisjon" (encodedText player.Positions)
+                                tableRow
+                                    "Signerte for klubben"
+                                    (player.StartDate
+                                     |> Option.map (fun b -> string b.Year)
+                                     |> Option.defaultValue ""
+                                     |> encodedText)
+                                tableRow
+                                    "Født"
+                                    (player.BirthDate
+                                     |> Option.map (fun b -> string b.Year)
+                                     |> Option.defaultValue ""
+                                     |> encodedText)
+
+                                user
+                                => fun _ ->
+                                    tableRow
+                                        "E-post"
+                                        (a [ _href <| sprintf "mailto:%s" player.Email] [
+                                            encodedText player.Email
+                                         ])
+                                user
+                                => fun _ ->
+                                    tableRow
+                                        "Telefonnummer"
+                                        (a [ _href <| sprintf "tel:%s" player.Phone ] [
+                                            encodedText player.Phone
+                                         ])
                             ]
                         ]
                         div [ _class "ajax-load"
-                              _href "/spillere/stats?playerId=395b37b4-e957-4543-80b5-aad42108523d" ] [
+                              _href (sprintf "/spillere/stats?playerId=%O" player.Id) ] [
                             div [ _class "playerStats" ] []
                         ]
                     ]
@@ -128,7 +134,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
           sidebar [] [
               block [] [
                   !!(navList
-                      { Header = "Undermeny"
+                      { Header = "Spillerkategori"
                         Items =
                             [ { Text = [ (string >> Fable.React.Helpers.str) "Aktive spillere" ]
                                 Url = listPlayersUrl Aktiv }
