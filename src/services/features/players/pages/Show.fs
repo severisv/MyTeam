@@ -14,6 +14,7 @@ open Shared.Domain.Members
 open Fable.React.Props
 open System.Linq
 open Shared.Components.Links
+open Client.Features.Players
 
 
 let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
@@ -122,10 +123,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                                          ])
                             ]
                         ]
-                        div [ _class "ajax-load"
-                              _href (sprintf "/spillere/stats?playerId=%O" player.Id) ] [
-                            div [ _class "playerStats" ] []
-                        ]
+                        (Client.view2 Stats.containerId Stats.element { PlayerId = player.Id})
                     ]
                 ]
             ]

@@ -12,10 +12,6 @@ open System
 open System.Linq
 type GameEventId = Guid
 
-type GameEventType =
-    | ``Mål``
-    | ``Gult kort``
-    | ``Rødt kort``
 
 type GameEvent =
     { Id : GameEventId

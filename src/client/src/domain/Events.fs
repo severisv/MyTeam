@@ -16,6 +16,14 @@ type GameType =
     | Kretsmesterskapet
     | ``OBOS Cup``
 
+module GameType =
+    let toInt =
+        function
+         | Treningskamp -> 0
+         | Seriekamp -> 1
+         | Norgesmesterskapet -> 2
+         | Kretsmesterskapet -> 3
+         | ``OBOS Cup`` -> 4
 
 module Events =
         

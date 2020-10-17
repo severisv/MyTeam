@@ -88,5 +88,5 @@ let view (club: Club) user status (ctx: HttpContext) =
                     IsSelected = never })
           ]
       ] ]
-    |> layout club user (fun o -> { o with Title = "Aktive spillere" }) ctx
+    |> layout club user (fun o -> { o with Title = pageHeader }) ctx
     |> OkResult

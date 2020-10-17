@@ -158,6 +158,7 @@ namespace MyTeam.Services.Domain
                 new EventList
                 {
                     Key = key,
+                    
                     Items = byTeamAndYear.Where(k => k.Key.TeamId == key.TeamId && k.Key.Year == key.Year).SelectMany(g => g.ToList()).ToList()
                 }
             );

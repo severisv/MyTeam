@@ -302,6 +302,15 @@ module App =
                                     routef "/%O" (Fines.Api.deleteRemedyRate club >> jsonGet)                                     
                                 ]                                  
                         ]
+                    subRoute "/api/stats"
+                        <| choose [
+                            GET >=>
+                                choose [
+                                    routef "/player/%O" (Stats.Api.listAllPlayerStats club >> jsonGet)
+                                ]                          
+                        ]
+
+
                     subRoute "/api/tables"
                         <| choose [                                                                
                             GET >=>  choose [

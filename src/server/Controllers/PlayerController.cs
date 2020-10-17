@@ -34,6 +34,7 @@ namespace MyTeam.Controllers
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId, bool filterRedirect = false)
         {
+        
             if (filterRedirect)
                 Alert(AlertType.Info, "Vennligst fullfør spillerprofilen din");
 
