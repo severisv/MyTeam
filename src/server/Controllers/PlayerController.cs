@@ -22,14 +22,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [Route("spillere/stats")]
-        public IActionResult GetStats(Guid playerId)
-        {
-            var model = _playerService.GetStats(playerId, Club.TeamIds);
-            return PartialView("_GetStats", model);
-        }
-
-
         [Route("spillere/endre")]
         [RequireMember(true, Roles.Admin, Roles.Coach)]
         public IActionResult Edit(Guid playerId, bool filterRedirect = false)
