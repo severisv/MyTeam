@@ -36,6 +36,7 @@ module App =
                         <|  choose [                                                
                                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (redirectTo true <| sprintf "/%i/%i" skip take)                         
                                     routef "/vis/%s" <| fun name -> GET >=> (News.Pages.Show.view club user name |> htmlGet)                      
+                                    route "/vis" >=> (News.Pages.Show.redirectFromOldUrl club user)                                                          
                                     routef "/endre/%s" <| fun name -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                             choose  [
