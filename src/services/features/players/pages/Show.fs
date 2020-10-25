@@ -15,6 +15,7 @@ open Fable.React.Props
 open System.Linq
 open Shared.Components.Links
 open Client.Features.Players
+open Common
 
 
 let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
@@ -53,19 +54,9 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
             |> Common.Features.Members.selectMembers
             |> Seq.toList
 
-
-        let listPlayersUrl =
-            function
-            | Aktiv -> sprintf "/spillere"
-            | status -> sprintf "/spillere/%O" status
-
-        let showPlayerUrl =
-            Strings.toLower >> sprintf "/spillere/vis/%s"
-
         let editPlayerUrl =
             Strings.toLower
-            // >> sprintf "/spillere/vis/%s/endre"
-            >> sprintf "/spillere/endre?playerId=%O"
+            >> sprintf "/spillere/vis/%s/endre"
 
         let tableRow lbl value =
             tr [] [
@@ -80,7 +71,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                 div [ _class "row" ] [
                     div [ _class "col-sm-6 col-md-6 col-lg-6 picture-frame" ] [
                         img [ _src
-                              <| Images.getMember ctx (fun o -> { o with Width = Some 400 }) player.Image
+                              <| Images.getMember ctx (fun o -> { o with Width = Some 1024 }) player.Image
                                      player.FacebookId ]
                     ]
                     div [ _class "col-sm-6 col-md-6 col-lg-6 player-info" ] [
@@ -128,32 +119,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                 ]
             ]
           ]
-
-          sidebar [] [
-              block [] [
-                  !!(navList
-                      { Header = "Spillerkategori"
-                        Items =
-                            [ { Text = [ (string >> Fable.React.Helpers.str) "Aktive spillere" ]
-                                Url = listPlayersUrl Aktiv }
-                              { Text = [ (string >> Fable.React.Helpers.str) "Hall of Fame" ]
-                                Url = listPlayersUrl Veteran } ]
-                        Footer = None
-                        IsSelected = never })
-              ]
-              block [] [
-                  !!(navList
-                      { Header =
-                            match player.Status with
-                            | Veteran -> "Hall of Fame"
-                            | status -> sprintf "%Oe Spillere" status
-                        Items =
-                            players
-                            |> List.map (fun player ->
-                                { Text = [ (string >> Fable.React.Helpers.str) player.Name ]
-                                  Url = showPlayerUrl player.UrlName })
-                        Footer = None
-                        IsSelected = (=) (showPlayerUrl player.UrlName) })
-              ]
-          ] ]
+          sidebar player.Status players player.UrlName
+          
+        ]
         |> layout club user (fun o -> { o with Title = player.FullName }) ctx)

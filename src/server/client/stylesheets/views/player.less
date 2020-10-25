@@ -74,8 +74,14 @@
 
 
 .player-info table.table {
+    label {
+        font-family: @fontLight;
+    }
     tr:first-of-type {
-        td { border-top: 0;}
+        td { 
+            border-top: 0;
+          
+        }
         }
     }
 
@@ -125,9 +131,12 @@ td.playerStats--value {
 }
 
 .playerStats-year {
+    text-align: left;
+    font-family: @fontRegular;
     position: relative;
-    font-size: 1em;
+    font-size: 1.4rem;
     margin-left: 0.5em;
+    margin-top: 1em;
     border-bottom: 1px solid rgba(0,0,0,.05);
     padding-bottom: 0.25em;
 }
@@ -151,19 +160,14 @@ td.playerStats--value {
     }
 }
 
-#show-players {
-    min-height: 22em;
-}
 
 .playerStats a {
-
-    display: block;
-
+margin-bottom: 0;
     &:after {
         position: absolute;
         right: 0.5em;
         bottom: 0.5em;
-        font-size: 0.75em;       
+        font-size: 0.5em;       
         content: "\f077";
         font-family: FontAwesome;
     }
@@ -172,6 +176,10 @@ td.playerStats--value {
         content: "\f078";
         font-family: FontAwesome;
     }
+    &:before {
+        display: none;
+    }
+
 
     &:focus {
         text-decoration: none;

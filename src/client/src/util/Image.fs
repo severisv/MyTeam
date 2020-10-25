@@ -64,7 +64,7 @@ module Image =
         let defaultMember options getProps =
             let imageUrl =
                 if hasValue options.DefaultMember then options.DefaultMember
-                else "image/upload/v1448559418/default_player_dnwac0.gif"
+                else "image/upload/v1603632562/undraw_junior_soccer_6sop_eylk33.png"
             get options getProps imageUrl
         
         let isComplete(url : string) = url
