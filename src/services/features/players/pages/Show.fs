@@ -56,7 +56,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
 
         let editPlayerUrl =
             Strings.toLower
-            >> sprintf "/spillere/vis/%s/endre"
+            >> sprintf "/spillere/endre/%s"
 
         let tableRow lbl value =
             tr [] [
@@ -79,10 +79,10 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                          | Some user when (user.Id = player.Id
                                            || user.IsInRole [ Trener; Admin ]) ->
                              !!(editAnchor [ Class "edit-player-link "
-                                             Href <| editPlayerUrl player.Id ])
+                                             Href <| editPlayerUrl player.UrlName ])
                          | _ -> fragment [])
 
-                        Giraffe.GiraffeViewEngine.table [ _class "table" ] [
+                        table [ _class "table" ] [
                             tbody [] [
                                 tableRow "Posisjon" (encodedText player.Positions)
                                 tableRow

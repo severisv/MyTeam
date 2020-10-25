@@ -81,6 +81,7 @@ module App =
                                 GET >=> choose [
                                     route "" >=> (Players.Pages.List.view club user "" |> htmlGet)                                  
                                     routef "/vis/%s" (Players.Pages.Show.view club user >> htmlGet) 
+                                    routef "/endre/%s" (Players.Pages.Edit.view club user >> htmlGet) 
                                     routef "/%s" (Players.Pages.List.view club user >> htmlGet) 
                                 ]
                                

@@ -71,7 +71,7 @@ module.exports = React.createClass({
         </div>
       )
     })
-    const editPlayerHref = `/spillere/endre?playerId=${player.id}`
+    const editPlayerHref = `/spillere/endre/${player.urlName}`
     return (
       <div className="row list-player">
         <div className="col-sm-3 mp-name">{player.fullName}</div>

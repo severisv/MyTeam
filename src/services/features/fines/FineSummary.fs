@@ -13,6 +13,7 @@ open Shared.Components.Nav
 open Shared.Features.Fines
 open Currency
 open Common
+open TableModule
 
 
 type Summary = {

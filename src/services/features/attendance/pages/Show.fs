@@ -10,6 +10,7 @@ open MyTeam.Views
 open Attendance.Queries
 open MyTeam.Attendance
 open Fable.React.Props
+open TableModule
 
 
 let view (club : Club) (user : User) year (ctx : HttpContext) =

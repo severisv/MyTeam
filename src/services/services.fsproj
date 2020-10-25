@@ -12,6 +12,7 @@
     <Compile Include="utils/json/OptionSerializer.fs" />
     <Compile Include="utils/json/UnionSerializer.fs" />
     <Compile Include="utils/Database.fs" />
+    <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/GiraffeHelpers.fs" />
     <Compile Include="utils/Helpers.fs" />
     <Compile Include="utils/String.fs" />
@@ -25,7 +26,6 @@
     <Compile Include="utils/Request.fs" />
     <Compile Include="utils/Results.fs" />
     <Compile Include="utils/Validation.fs" />
-    <Compile Include="utils/Sha1.fs" />
     <Compile Include="utils/Logger.fs" />
     <Compile Include="utils/Client.fs" />
     <Compile Include="utils/Email.fs" />
@@ -79,6 +79,7 @@
     <Compile Include="features/players/pages/Common.fs" />
     <Compile Include="features/players/pages/List.fs" />
     <Compile Include="features/players/pages/Show.fs" />
+    <Compile Include="features/players/pages/Edit.fs" />
     <Compile Include="features/gameevents/Gameevents.fs" />
     <Compile Include="features/members/MemberTypes.fs" />
     <Compile Include="features/members/Queries.fs" />

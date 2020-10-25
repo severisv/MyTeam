@@ -112,7 +112,7 @@ let private editView (ctx: HttpContext) (club: Club) user (name: string option) 
                                             Title = name |> Option.map(fun _ -> "Rediger artikkel")
                                                          |> Option.defaultValue "Skriv ny artikkel"
                                             Scripts = Components.tinyMceScripts @
-                                                      Components.cloudinaryScripts cloudinarySettings.Value }) ctx
+                                                      Images.uploadScripts cloudinarySettings.Value }) ctx
     |> OkResult
 
 

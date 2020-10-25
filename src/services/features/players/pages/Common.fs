@@ -1,20 +1,12 @@
 module MyTeam.Players.Pages.Common
 
-open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
 open Shared.Domain
-open MyTeam.Games
 open MyTeam.Views
-open MyTeam.Views.BaseComponents
 open Shared.Components
 open Shared.Components.Nav
-open System
 open Shared.Domain.Members
-open Fable.React.Props
-open System.Linq
-open Shared.Components.Links
-open Client.Features.Players
 
 
 let listPlayersUrl =

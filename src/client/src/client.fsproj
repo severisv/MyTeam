@@ -61,6 +61,7 @@
     <Compile Include="features/events/EventsList.fs" />
     <Compile Include="features/training/TrainingForm.fs" />
     <Compile Include="features/players/PlayerStats.fs" />
+    <Compile Include="features/players/PlayerForm.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />
