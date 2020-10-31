@@ -258,6 +258,18 @@ module App =
                                         mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.delete club >> jsonGet2)    
 
                         ]    
+                    subRoute "/api/players"
+                          <| choose [ PUT
+                                      >=> routef "/%O" (fun playerId ->
+                                              ((authorizeUser (fun __ ->
+                                                  match user with
+                                                  | Some u when u.Id = playerId -> true
+                                                  | Some u -> u.IsInRole [ Role.Admin; Role.Trener ]
+                                                  | None -> false) accessDenied)
+                                               >=> (Players.Api.update club playerId |> jsonPost)))
+                                  
+
+                        ]        
                     subRoute "/api/fines"
                         <| choose [
                             POST >=> 

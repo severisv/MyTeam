@@ -28,12 +28,12 @@ type Props =
       BirthDate: DateTime option
       StartDate: DateTime option
       Phone: string
+      UrlName: string
       Image: string }
 
 [<CLIMutable>]
 type EditPlayer =
-    { Id: Guid
-      FirstName: string
+    { FirstName: string
       MiddleName: string
       LastName: string
       Positions: string list
@@ -136,9 +136,8 @@ let element =
                                         setFormValue (fun form -> { form with Phone = value }))
                                     Placeholder "12345678"
                                     Value state.Phone ] ]                                    
-                  formRow
-                        [ Style [ MarginBottom 0 ] ]
-                        []
+                  div
+                        [ ]
                         [ Send.sendElement (fun o ->
                             { o with
                                   IsDisabled =
@@ -158,8 +157,7 @@ let element =
                                                Some(fun () ->
                                                    Encode.Auto.toString
                                                        (0,
-                                                        { Id = state.Id
-                                                          FirstName = state.FirstName
+                                                        { FirstName = state.FirstName
                                                           MiddleName = state.MiddleName
                                                           LastName = state.LastName
                                                           Positions = state.Positions
@@ -170,7 +168,7 @@ let element =
                                                         })))
                                     
 
-                                  OnSubmit = Some(fun _ -> Browser.Dom.window.location.replace "/intern") }) ]                  
+                                  OnSubmit = Some(fun _ -> Browser.Dom.window.location.replace <| sprintf "/spillere/vis/%s" props.UrlName) }) ]                  
                                      ]
                 
         ])

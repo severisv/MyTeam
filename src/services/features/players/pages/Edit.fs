@@ -82,7 +82,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                                           StartDate = player.StartDate
                                           Phone = player.Phone
                                           Image = player.Image                                                         
-                                                                    } 
+                                          UrlName = player.UrlName } 
                     ]
                 ]
             ]

@@ -4,7 +4,6 @@ open MyTeam
 open Shared
 open Shared.Domain.Members
 open Shared.Domain
-open MyTeam.Users
 
 type Get = HttpContext -> Option<Club> * Option<User>
 type ClearUserCache = HttpContext -> ClubId -> UserId -> unit
@@ -34,7 +33,8 @@ let get : Get =
         if hostNameArray.Length > 1 then
             Some(ClubIdentifier hostNameArray.[0])
         else
-            None                
+            Some <| ClubIdentifier "wamkam"
+            // None                
 
     fun ctx ->
         let club = 
