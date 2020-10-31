@@ -67,8 +67,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                                     _type "file"
                                     _class "btn btn-default cloudinary-fileupload pull-left"
                                     attr "data-cloudinary-field" "ImageFull" ]
-        
-                        ]
+                                ]                        
                         div [ _class "clearfix" ] []
                     ]
                     div [ _class "col-sm-6 col-md-6 col-lg-6 player-info" ] [
