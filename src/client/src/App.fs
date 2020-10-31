@@ -5,6 +5,8 @@ module EntryPoint =
     [ Games.SelectSquad.element |> ignore
       Features.Games.Form.element    |> ignore
       Features.Trainings.Form.element    |> ignore
+      Features.Players.Form.element    |> ignore
+      Features.Players.Stats.element    |> ignore
       GamePlan.View.element |> ignore
       Table.Edit.element |> ignore
       Table.Create.element |> ignore

@@ -12,10 +12,6 @@ open System
 open System.Linq
 type GameEventId = Guid
 
-type GameEventType =
-    | ``Mål``
-    | ``Gult kort``
-    | ``Rødt kort``
 
 type GameEvent =
     { Id : GameEventId
@@ -58,8 +54,8 @@ let get : Get =
             |> Seq.toList
             |> List.map (fun (id, playerId, assistedById, eventType) -> 
                    { Id = id
-                     PlayerId = playerId |> toOption
-                     AssistedById = assistedById |> toOption
+                     PlayerId = playerId |> fromNullable
+                     AssistedById = assistedById |> fromNullable
                      Type = match eventType with
                             | Models.Enums.GameEventType.Goal -> Mål 
                             | Models.Enums.GameEventType.YellowCard -> ``Gult kort`` 

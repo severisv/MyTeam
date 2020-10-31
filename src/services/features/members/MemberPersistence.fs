@@ -18,7 +18,7 @@ let setStatus : SetStatus =
                     where (m.Id = memberId)
                     select m }
             |> Seq.head
-        memb.Status <- statusToInt status
+        memb.Status <- PlayerStatus.toInt status
         db.SaveChanges() |> ignore
         UserId memb.UserName
 

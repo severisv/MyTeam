@@ -32,6 +32,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
         [
             mtMain [] [      
+            
                 div [ _class "mt-container" ] [  
                     user => fun user -> 
                             if user.IsInRole [Role.Admin;Role.Trener] then

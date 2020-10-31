@@ -1,13 +1,10 @@
 namespace MyTeam.Members
 
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open MyTeam.Common.Features.Members
-open Microsoft.EntityFrameworkCore
 open System.Linq
-open MyTeam.Common.Features.Members
 
 
 module Queries =
@@ -29,7 +26,7 @@ module Queries =
                 |> List.map (fun (id, firstName, middleName, lastName, facebookId,
                                   urlName, image, status, birthDate, phone, email) ->
                         {
-                           BirthDate = (birthDate |> toOption)
+                           BirthDate = (birthDate |> fromNullable)
                            Phone = phone
                            Email = email 
                            Details = 
@@ -41,7 +38,7 @@ module Queries =
                                LastName = lastName
                                UrlName = urlName
                                Image = image    
-                               Status = statusFromInt status    
+                               Status = PlayerStatus.fromInt status    
                             }
                         }
                 

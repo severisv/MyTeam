@@ -12,6 +12,7 @@ open MyTeam.Stats
 open Shared.Components
 open Shared.Components.Nav
 open MyTeam.Views.BaseComponents
+open TableModule
 
 module Pages =   
     let index (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =

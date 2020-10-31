@@ -17,3 +17,8 @@ module HttpResult =
         | ValidationErrors e -> ValidationErrors e
         | Unauthorized -> Unauthorized
         | NotFound -> NotFound
+
+    let fromOption fn =
+        function 
+        | Some r -> OkResult <| fn r 
+        | None -> NotFound   

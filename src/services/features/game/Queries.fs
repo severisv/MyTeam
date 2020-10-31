@@ -33,13 +33,13 @@ let getGame: GetGame =
                         Team = { Id = teamId; Name = name }
                         IsHomeTeam = isHomeTeam
                         Opponent = !!opponent
-                        HomeScore = homeScore |> toOption
-                        AwayScore = awayScore |> toOption
+                        HomeScore = homeScore |> fromNullable
+                        AwayScore = awayScore |> fromNullable
                         DateTime = dateTime
                         Location = !!location
                         Description = !!description
                         Type = Events.gameTypeFromInt gameType.Value
-                        GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
+                        GamePlanIsPublished = gamePlanIsPublished |> fromNullable |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)  })
                  |> Seq.tryHead
 
@@ -70,13 +70,13 @@ let listGames: ListGames =
                         Team = { Id = teamId; Name = name }
                         IsHomeTeam = isHomeTeam
                         Opponent = opponent
-                        HomeScore = homeScore |> toOption
-                        AwayScore = awayScore |> toOption
+                        HomeScore = homeScore |> fromNullable
+                        AwayScore = awayScore |> fromNullable
                         DateTime = dateTime
                         Location = location
                         Description = description
                         Type = Events.gameTypeFromInt gameType.Value
-                        GamePlanIsPublished = gamePlanIsPublished |> toOption |> Option.defaultValue false
+                        GamePlanIsPublished = gamePlanIsPublished |> fromNullable |> Option.defaultValue false
                         MatchReportName = (Strings.hasValue matchReportName) =? (Some matchReportName, None)
                     }                    
                  )

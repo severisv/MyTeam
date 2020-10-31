@@ -36,6 +36,7 @@ module App =
                         <|  choose [                                                
                                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (redirectTo true <| sprintf "/%i/%i" skip take)                         
                                     routef "/vis/%s" <| fun name -> GET >=> (News.Pages.Show.view club user name |> htmlGet)                      
+                                    route "/vis" >=> (News.Pages.Show.redirectFromOldUrl club user)                                                          
                                     routef "/endre/%s" <| fun name -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                             choose  [
@@ -73,9 +74,18 @@ module App =
                                                 mustBeInRole [Role.Admin; Role.Trener] >=> 
                                                     (Games.Pages.Edit.view club user gameId |> htmlGet))            
                                     routef "/%s" <| fun teamName -> Games.Pages.List.view club user (Some teamName) None |> htmlGet
+                                ]                               
+                            ]       
+                    subRoute "/spillere"             
+                        <|  choose [                                                
+                                GET >=> choose [
+                                    route "" >=> (Players.Pages.List.view club user "" |> htmlGet)                                  
+                                    routef "/vis/%s" (Players.Pages.Show.view club user >> htmlGet) 
+                                    routef "/endre/%s" (Players.Pages.Edit.view club user >> htmlGet) 
+                                    routef "/%s" (Players.Pages.List.view club user >> htmlGet) 
                                 ]
                                
-                            ]       
+                            ]               
                     subRoute "/treninger"             
                         <|  choose [                                                
                                 GET >=> choose [                       
@@ -248,6 +258,18 @@ module App =
                                         mustBeInRole [Role.Admin; Role.Trener] >=> routef "/%O" (Trainings.Api.delete club >> jsonGet2)    
 
                         ]    
+                    subRoute "/api/players"
+                          <| choose [ PUT
+                                      >=> routef "/%O" (fun playerId ->
+                                              ((authorizeUser (fun __ ->
+                                                  match user with
+                                                  | Some u when u.Id = playerId -> true
+                                                  | Some u -> u.IsInRole [ Role.Admin; Role.Trener ]
+                                                  | None -> false) accessDenied)
+                                               >=> (Players.Api.update club playerId |> jsonPost)))
+                                  
+
+                        ]        
                     subRoute "/api/fines"
                         <| choose [
                             POST >=> 
@@ -294,6 +316,15 @@ module App =
                                     routef "/%O" (Fines.Api.deleteRemedyRate club >> jsonGet)                                     
                                 ]                                  
                         ]
+                    subRoute "/api/stats"
+                        <| choose [
+                            GET >=>
+                                choose [
+                                    routef "/player/%O" (Stats.Api.listAllPlayerStats club >> jsonGet)
+                                ]                          
+                        ]
+
+
                     subRoute "/api/tables"
                         <| choose [                                                                
                             GET >=>  choose [

@@ -9,6 +9,7 @@ open Shared.Domain.Members
 open MyTeam.Members
 open MyTeam.Views
 open Shared
+open TableModule
 
 let view (club : Club) (user : User) status (ctx : HttpContext) =
     let status =

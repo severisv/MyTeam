@@ -54,7 +54,8 @@ let formatTime (datetime: DateTime) =
 
 let tryParse (dateString: string) =
     let couldParse, parsedDate = System.DateTime.TryParse dateString
-    if couldParse then Some parsedDate else None
+    if couldParse then Some parsedDate
+     else None
 
 let tryParseTime timeString =
     Strings.split ':' timeString

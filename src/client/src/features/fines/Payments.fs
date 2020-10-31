@@ -16,9 +16,9 @@ open Shared.Components.Currency
 open Shared.Components.Links
 open Shared.Domain.Members
 open Shared.Features.Fines.Common
-open System
 open Shared.Image
 open Client.Fines.AddPayment
+
 
 let createUrl year memberId =
         let year = match year with

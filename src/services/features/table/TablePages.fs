@@ -13,6 +13,7 @@ open Client.Table.Edit
 open System
 open MyTeam.Views.BaseComponents
 open Fable.React.Props
+open TableModule
 
 module Table =   
     let view (club: Club) user selectedTeamShortName selectedYear (ctx: HttpContext) =

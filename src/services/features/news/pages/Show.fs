@@ -10,6 +10,28 @@ open MyTeam.News
 open MyTeam.News.Pages
 open Server.Common.News
 open Server
+open Giraffe
+open System.Linq
+open System
+
+let tryParseGuid (s: string) = 
+    match Guid.TryParse s with
+        | true, i -> Some i
+        | _ -> None
+
+let redirectFromOldUrl club user =
+    fun next (ctx: HttpContext) ->
+            ctx.TryGetQueryStringValue "articleId" 
+            |> Option.bind tryParseGuid
+            |> Option.bind (fun articleId ->
+                ctx.Database.Articles.Where(fun a -> articleId = a.Id).Select(fun a -> a.Name)
+                |> Seq.tryHead
+            )
+            |> function
+            | Some articleName ->                     
+                    redirectTo true (sprintf "/nyheter/vis/%s" articleName) next ctx 
+            | _ -> (setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user) next ctx
+
 
 let view (club: Club) (user: User option) name (ctx: HttpContext) =
 

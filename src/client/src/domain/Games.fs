@@ -23,9 +23,16 @@ type Game =
       Description: string
       Type: GameType
       MatchReportName: string option }
-    member g.HomeTeam = if g.IsHomeTeam then g.Team.Name else g.Opponent
-    member g.AwayTeam = if g.IsHomeTeam then g.Opponent else g.Team.Name
-    member g.LocationShort = g.Location |> Shared.Strings.replace " kunstgress" ""
+    member g.HomeTeam =
+        if g.IsHomeTeam then g.Team.Name else g.Opponent
+
+    member g.AwayTeam =
+        if g.IsHomeTeam then g.Opponent else g.Team.Name
+
+    member g.LocationShort =
+        g.Location
+        |> Shared.Strings.replace " kunstgress" ""
+
     member g.Name = sprintf "%s - %s" g.HomeTeam g.AwayTeam
 
     member g.Outcome =
@@ -43,3 +50,16 @@ type Game =
             |> Some
 
         | _ -> None
+
+type GameEventType =
+    | Mål
+    | ``Gult kort``
+    | ``Rødt kort``
+
+module GameEventType =
+    let fromInt =
+        function
+        | 0 -> Mål
+        | 1 -> ``Gult kort``
+        | 2 -> ``Rødt kort``
+        | i -> failwithf "Invalid GameEventType %i" i
