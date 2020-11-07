@@ -30,7 +30,7 @@
     "react": "15.6.2",
     "react-dom": "15.6.2",
     "tinymce": "4.4.0",
-    "webpack": "^4.41.6",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.11",
     "whatwg-fetch": "^3.0.0"
   }
