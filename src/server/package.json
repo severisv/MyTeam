@@ -27,7 +27,7 @@
     "natives": "^1.1.6",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "path": "^0.12.7",
-    "react": "15.6.2",
+    "react": "15.7.0",
     "react-dom": "15.6.2",
     "tinymce": "4.4.0",
     "webpack": "^4.41.6",
