@@ -1,5 +1,4 @@
 ﻿import ajax from './ajaxHelpers'
-import Datepicker from './reactComponents/Shared/Datepicker.jsx'
 
 
 import ReactDOM from 'react-dom'
@@ -13,16 +12,12 @@ global.ReactDOM = ReactDOM
 
 global.applyScopedJsComponents = function (selector) {
   const $scope = $(selector)
-  applyDatepickers($scope)
   $.tablesorter.defaults.sortInitialOrder = 'desc'
   $scope.find('table.tablesorter').tablesorter()
   $scope.find('a.mt-popover').popover({ trigger: 'hover' })
   applyActiveLinkSwapper($scope)
-  applyAjaxLinkActions($scope)
   applySelectLinkListeners($scope)
-  applyMtAnchorListeners($scope)
   ajax.applyFormUpdateListener($scope)
-  ajax.applyLoadListener($scope)
   ajax.applyAjaxLinkListeners($scope)
 }
 
@@ -32,12 +27,6 @@ global.applyJsComponents = function () {
 
   this.applyScopedJsComponents($(document))
   applySlideDownMenuListeners()
-
-  $(window).on('popstate', (e) => {
-    if (e.originalEvent.state == 'ajax-action') {
-      location.reload()
-    }
-  })
 
   applyBrowserCheck()
 
@@ -80,14 +69,6 @@ function applyActiveLinkSwapper($scope) {
 }
 
 // Active links
-function applyAjaxLinkActions($scope) {
-  $scope.find('a[mt-pushstate]').on('click', function () {
-    const $el = $(this)
-    if ($el.attr('mt-pushstate')) {
-      layout.pushState($el.attr('href'), $el.attr('mt-pushstate'))
-    }
-  })
-}
 
 function applySelectLinkListeners($scope) {
   $scope.find('.linkSelect').on('change', function () {
@@ -96,23 +77,7 @@ function applySelectLinkListeners($scope) {
   })
 }
 
-function applyMtAnchorListeners($scope) {
-  $scope.find('.mt-anchor').on('click', function () {
-    const url = $(this).data('href')
-    window.location = url
-  })
-}
 
-function applyDatepickers($scope) {
-  $scope.find('.datepicker').each((i, element) => {
-    const $el = $(element)
-    const datepickerElement = React.createElement(Datepicker, {
-      value: $el.data('value'),
-      name: $el.attr('id'),
-    })
-    ReactDOM.render(datepickerElement, element)
-  })
-}
 
 function applyBrowserCheck() {
   if (isIEOrEdge()) {

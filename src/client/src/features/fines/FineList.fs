@@ -84,7 +84,7 @@ let element props children =
                                 fragment [] [
                                     div [Class "clearfix hidden-lg hidden-md u-margin-bottom"] [
                                         Add.addFine
-                                            (fun handleOpen -> btn [OnClick handleOpen; Primary; Class "pull-right"] [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                            (fun handleOpen -> btn [OnClick handleOpen; Primary; Class "pull-right"] [ Icons.add ""; whitespace; str "Ny bot" ])
                                             (handleAdded year selectedMember setState) (handleDeleted setState)]]       
                             
                             selectNav []
@@ -149,7 +149,7 @@ let element props children =
                                     block [] [
                                         navListBase [ Header <| str "Botsjef" ] [
                                             Add.addFine
-                                                (fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.add ""; whitespace; str "Registrer bøter" ])
+                                                (fun handleOpen -> linkButton [OnClick handleOpen] [ Icons.add ""; whitespace; str "Ny bot" ])
                                                 (handleAdded year selectedMember setState) (handleDeleted setState)
                                         ]
                                     ]
