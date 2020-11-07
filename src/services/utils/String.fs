@@ -19,7 +19,7 @@ module StringExtensions =
 
         let isNumber (s: string) = s |> Seq.forall Char.IsDigit
 
-        let toLowerString = string >> Strings.toLower
+        let toLowerString a = (string >> Strings.toLower) a
 
         let isNullOrEmpty a = 
             String.IsNullOrEmpty(a) 

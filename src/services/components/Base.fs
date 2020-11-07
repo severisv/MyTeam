@@ -14,7 +14,7 @@ module BaseComponents =
         let token = Antiforgery.getToken ctx
         input [_name "__RequestVerificationToken";_value token;_type "hidden" ]
 
-    let number = string >> encodedText
+    let number a = string >> encodedText <| a
     let (=>) optn fn =
         optn
         |> Option.map fn
