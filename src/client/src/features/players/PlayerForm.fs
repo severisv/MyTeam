@@ -60,8 +60,8 @@ let element =
         let validation =
             Map [ "FirstName", validate "Fornavn" state.FirstName [ isRequired ]
                   "LastName", validate "Etternavn" state.LastName [ isRequired ]                  
-                  "BirthDate", validate "Til dato" state.BirthDate [ isRequired ]
-                  "StartDate", validate "Signert dato" state.BirthDate [ isRequired ]
+                  "BirthDate", validate "Til dato" state.BirthDate [ isSome ]
+                  "StartDate", validate "Signert dato" state.StartDate [ isSome ]
                   "Phone", validate "Telefonnummer" state.Phone [ isRequired ] ]
 
         let label text = label [] [ str text ]
