@@ -187,31 +187,45 @@ let internal asArray (a: obj): 'a array = failwith "JS Only"
 type MultiSelectProps<'a> =
     { Options: SelectOption<'a> list
       Values: 'a list
-      OnChange: 'a list -> unit }
-
-let multiSelect<'a when 'a: equality> (props: MultiSelectProps<'a>) =
-    select
-        (mergeClasses [ Class "form-control"
-                        OnChange(fun e ->
-                            let options = e.target?selectedOptions |> asArray
-                            props.OnChange
-                                (props.Options
-                                 |> List.map (fun o -> o.Value)
-                                 |> List.filter (fun value ->
-                                     options
-                                     |> Array.exists (fun (o: Browser.Types.HTMLOptionElement) ->
-                                         o.value = value.ToString())))
+      OnChange: 'a list -> unit
+      Validation: Result<unit, string> list }
 
 
-                            ) ] [
-            Multiple true
-         ])
-        (props.Options
-         |> List.map (fun o ->
-             option [ Value o.Value
-                      Selected(props.Values |> List.contains o.Value) ] [
-                 str o.Name
-             ]))
+
+let multiSelect<'a when 'a: equality> =
+    FunctionComponent.Of(fun (props: MultiSelectProps<'a>) ->
+
+        let isTouchedState = Hooks.useState false
+        let isTouched = isTouchedState.current
+
+        let (isValid, vMessage) = distillValidation (Some props.Validation) isTouched
+        fr [] [        
+            select
+                (mergeClasses [ Class "form-control"
+                                OnChange(fun e ->
+                                    let options = e.target?selectedOptions |> asArray
+                                    isTouchedState.update (fun _ -> true)
+                                    props.OnChange
+                                        (props.Options
+                                         |> List.map (fun o -> o.Value)
+                                         |> List.filter (fun value ->
+                                             options
+                                             |> Array.exists (fun (o: Browser.Types.HTMLOptionElement) ->
+                                                 o.value = value.ToString())))
+
+
+                                    ) ] [
+                    Multiple true
+                 ])
+                (props.Options
+                 |> List.map (fun o ->
+                     option [ Value o.Value
+                              Selected(props.Values |> List.contains o.Value) ] [
+                         str o.Name
+                     ]))
+            validationMessage2 (isValid, vMessage)
+        ]
+    )
 
 let checkboxInput attr lbl value onChange =
     label

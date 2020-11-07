@@ -93,6 +93,7 @@ let element =
         let validation =
             Map [ "Date", validate "Dato" state.Date [ isSome ]
                   "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
+                  "Teams", validate "Lag" state.Teams [ hasMinimumLength 1 ]
                   "UntilDate",
                   validate
                       "Til dato"
@@ -151,7 +152,8 @@ let element =
                           Options =
                               (props.Teams
                                |> List.map (fun p -> { Name = p.Name; Value = p.Id }))
-                          Values = state.Teams } ]
+                          Values = state.Teams
+                          Validation = validation.["Teams"] } ]
 
 
                 formRow

@@ -87,3 +87,10 @@ module Validation =
         | _ -> Ok()
 
 
+    let hasMinimumLength minLength =
+        fun name (list: 'a list) ->
+            if list.Length >= minLength then
+                Ok()
+            else
+                Error
+                <| sprintf "Velg minst én %s" (Strings.toLower name)

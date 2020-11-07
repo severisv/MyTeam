@@ -5,7 +5,8 @@ open MyTeam
 open System.Linq
 open Client.Features.Players.Form
 open System
-
+open Shared.Domain.Members
+open Server.Common
 
 let internal updatePlayer clubId playerId (db: Database) updateFn =
     db.Members.Where(fun t -> t.Id = playerId)
@@ -14,7 +15,8 @@ let internal updatePlayer clubId playerId (db: Database) updateFn =
     | Some player when (ClubId player.ClubId) <> clubId -> Unauthorized
     | Some player ->
         updateFn player
-        db.SaveChanges() |> OkResult
+        db.SaveChanges() |> ignore
+        OkResult player
     | None -> NotFound
 
 
@@ -31,7 +33,9 @@ let update (club: Club) trainingId (ctx: HttpContext) (model: EditPlayer) =
         player.ImageFull <- model.Image
         player.FirstName <- model.FirstName
         player.MiddleName <- model.MiddleName
-        player.LastName <- model.LastName        
-    )
+        player.LastName <- model.LastName)
 
-    |> HttpResult.map (fun _ -> model)
+
+    |> HttpResult.map (fun player ->
+        Tenant.clearUserCache ctx club.Id (UserId player.UserName)
+        model)

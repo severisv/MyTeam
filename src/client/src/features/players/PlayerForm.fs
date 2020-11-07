@@ -60,8 +60,9 @@ let element =
         let validation =
             Map [ "FirstName", validate "Fornavn" state.FirstName [ isRequired ]
                   "LastName", validate "Etternavn" state.LastName [ isRequired ]                  
-                  "BirthDate", validate "Til dato" state.BirthDate [ isSome ]
+                  "BirthDate", validate "Fødselsdato" state.BirthDate [ isSome ]
                   "StartDate", validate "Signert dato" state.StartDate [ isSome ]
+                  "Positions", validate "Posisjon" state.Positions [ hasMinimumLength 1 ]
                   "Phone", validate "Telefonnummer" state.Phone [ isRequired ] ]
 
         let label text = label [] [ str text ]
@@ -112,7 +113,8 @@ let element =
                             Options =
                                 (["Målvakt";"Back";"Midtstopper";"Midtbane";"Ving";"Spiss"]
                                  |> List.map (fun p -> { Name = p; Value = p }))
-                            Values = props.Positions } ]
+                            Values = props.Positions
+                            Validation = validation.["Positions"] } ]
 
                   formRow
                       [  ]
@@ -148,10 +150,10 @@ let element =
                                       |> List.exists (function
                                           | Error e -> true
                                           | _ -> false)
-                                  SendElement = btn, [ Normal; Primary ], [ str "Lagre" ]
+                                  SendElement = btn, [ Normal; Primary ], [
+                                       str "Lagre" ]
                                   SentElement = btn, [ Normal; Success ], [ str "Lagret" ]
-                                  Endpoint =
-                                     
+                                  Endpoint =                                     
                                           Send.Put
                                               (sprintf "/api/players/%O" props.Id,
                                                Some(fun () ->

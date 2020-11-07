@@ -2,8 +2,6 @@ module Server.Authorization
 
 open Giraffe
 open MyTeam
-open Shared
-open MyTeam.Users
 open Shared.Domain.Members
 open Common
 
@@ -26,8 +24,6 @@ let accessDenied =
             ) ) 
             next ctx
 
-let mustBeMember = 
-    fun next ctx -> requiresAuthentication accessDenied next ctx
 
 let mustBeInRole (user: Option<User>) (roles: Role list) =
     authorizeUser  (fun __ ->

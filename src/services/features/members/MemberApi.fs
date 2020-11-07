@@ -13,6 +13,7 @@ open MyTeam.Models.Domain
 open Services.Utils
 open Server.Common
 
+
 let list clubId db = Members.list db clubId |> OkResult
 
 let listCompact clubId (db: Database) =
@@ -82,6 +83,7 @@ let add clubId (ctx: HttpContext) model =
 
                 sprintf "%s%s%s-%s" form.Fornavn (form.Mellomnavn |> isNullOrEmpty =? ("", "-")) form.Mellomnavn
                     form.Etternavn
+                |> Strings.toLower   
                 |> replace "Ø" "O"
                 |> replace "ø" "o"
                 |> replace "æ" "ae"

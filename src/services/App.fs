@@ -19,15 +19,18 @@ open PipelineHelpers
     
 module App =
     
-
     let (webApp: HttpHandler) =
         removeTrailingSlash >=>
         fun next ctx ->
             let (club, user) = Tenant.get ctx
             let mustBeInRole = mustBeInRole user
-
-            match club with
-            | Some club ->
+            let urlIncludes (str: string) = (Strings.toLower >> ctx.Request.Path.ToString().Contains) str
+            match (club, user) with
+            | (Some _, Some user) when not user.ProfileIsConfirmed && 
+                                       not <| urlIncludes "spillere/endre" &&
+                                       not <| urlIncludes "api" ->
+                redirectTo false (sprintf "/spillere/endre/%s" user.UrlName) next ctx  
+            | (Some club, _) ->
                 choose [
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
                     route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
@@ -131,7 +134,6 @@ module App =
                                       POST >=> (Sponsors.editPost club user |> htmlGet) ]                    
                        
                     subRoute "/intern" 
-                        mustBeMember >=>
                             (user => fun user ->
                                 choose [                                                
                                     GET >=> choose [    
@@ -190,7 +192,7 @@ module App =
                     route "/api/teams" >=> (Teams.Api.list club.Id |> jsonGet)
                     subRoute "/api/events"                    
                         (choose [
-                            GET >=> mustBeMember >=> route "/upcoming" >=>
+                            GET >=> route "/upcoming" >=>
                                 (user => fun user ->
                                         Events.Api.listEvents club user (Client.Events.Upcoming Client.Events.Rest) |> jsonGet)                                
                             PUT >=> (user => fun user -> 
@@ -349,7 +351,7 @@ module App =
                         ]                                                                                                                                                                                                                                           
                     setStatusCode 404 >=> ErrorHandling.logNotFound >=> Views.Error.notFound club user
                    ] next ctx
-            | None ->
+            | (None, _) ->
                 (setStatusCode 404 >=> ErrorHandling.logNotFound >=> text "404") next ctx
 
             

@@ -38,6 +38,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
            Positions =
                !!!p.PositionsString
                |> Strings.split ','
+               |> List.filter Strings.hasValue
            StartDate = p.StartDate |> Option.fromNullable
            BirthDate = p.BirthDate |> Option.fromNullable
            Email = !!!p.UserName

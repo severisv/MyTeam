@@ -59,5 +59,4 @@ let get : Get =
 let clearUserCache : ClearUserCache = 
     fun ctx clubId userId -> 
         Cache.clear ctx (memberKey clubId userId)
-        Cache.clear ctx ("old-" + (memberKey clubId userId))
             
