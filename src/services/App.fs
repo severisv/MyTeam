@@ -32,6 +32,10 @@ module App =
                 redirectTo false (sprintf "/spillere/endre/%s" user.UrlName) next ctx  
             | (Some club, _) ->
                 choose [
+                    subRoute "/kontoz"             
+                        <|  choose [                                     
+                                    route "/innlogging" >=> (Account.Login.view club user |> htmlGet)    
+                            ] 
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
                     route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                        
@@ -55,8 +59,7 @@ module App =
                                     routef "/slett/%s" <| fun name -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                                         GET >=> (News.Pages.Edit.delete club name |> htmlGet)       
-                            ] 
-                            
+                            ]                             
                     subRoute "/kamper"             
                         <|  choose [                                                
                                 GET >=> choose [

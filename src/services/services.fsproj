@@ -49,6 +49,7 @@
     <Compile Include="common/ErrorHandling.fs" />
     <Compile Include="common/Results.fs" />
     <Compile Include="common/Authorization.fs" />
+    <Compile Include="features/account/Login.fs" />
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />
     <Compile Include="features/attendance/Queries.fs" />

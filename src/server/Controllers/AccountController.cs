@@ -45,20 +45,6 @@ namespace MyTeam.Controllers
             _playerService = playerService;
         }
 
-        //
-        // GET: /Account/Login
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("innlogging")]
-        public IActionResult Login(string returnUrl = null)
-        {
-            if (returnUrl?.Contains("returnUrl") == true) HttpContext.Abort();
-    
-            ViewData["ReturnUrl"] = returnUrl;
-            ViewData["Title"] = Res.Login;
-            var model = new LoginViewModel();
-            return View(model);
-        }
 
         //
         // POST: /Account/Login
@@ -82,11 +68,7 @@ namespace MyTeam.Controllers
                     _logger.LogDebug(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                }
-                if (result.IsLockedOut)
+                                if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
                     return View("Lockout");
@@ -213,11 +195,7 @@ namespace MyTeam.Controllers
                                     info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
 
                 return RedirectToLocal(returnUrl);
-            }
-            if (result.RequiresTwoFactor)
-            {
-                return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl });
-            }
+            }          
             if (result.IsLockedOut)
             {
                 return View("Lockout");
@@ -392,105 +370,9 @@ namespace MyTeam.Controllers
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
-        }
+        }       
 
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("kode/send")]
-        public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
-        {
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(user);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("kode/send")]
-        public async Task<IActionResult> SendCode(SendCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-
-            // Generate the token and send it
-            var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                return View("Error");
-            }
-
-            var message = "Your security code is: " + code;
-            if (model.SelectedProvider == "Email")
-            {
-                await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
-            }
-
-            return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-        }
-
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("kode/verifiser")]
-        public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
-        {
-            // Require that the user has already logged in via username/password or external login
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("kode/verifiser")]
-        public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // The following code protects for brute force attacks against the two factor codes.
-            // If a user enters incorrect codes for a specified amount of time then the user account
-            // will be locked out for a specified amount of time.
-            var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
-            if (result.Succeeded)
-            {
-                return RedirectToLocal(model.ReturnUrl);
-            }
-            if (result.IsLockedOut)
-            {
-                _logger.LogWarning(7, "User account locked out.");
-                return View("Lockout");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid code.");
-                return View(model);
-            }
-        }
-
+        
         #region Helpers
 
         private void AddErrors(IdentityResult result)
