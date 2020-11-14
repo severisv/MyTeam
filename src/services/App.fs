@@ -34,7 +34,9 @@ module App =
                 choose [
                     subRoute "/kontoz"             
                         <|  choose [                                     
-                                    route "/innlogging" >=> (Account.Login.view club user |> htmlGet)    
+                                    GET >=> route "/innlogging" >=> (Account.Login.view None [] club user |> htmlGet)    
+                                    POST >=> route "/innlogging" >=> Antiforgery.validate >=> (Account.Login.post club user |> htmlPost)
+
                             ] 
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
                     route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   

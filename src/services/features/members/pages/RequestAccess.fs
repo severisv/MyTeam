@@ -33,7 +33,6 @@ let internal inputRow name value (validationErrors : ValidationError list) =
 
 let internal view model validationErrors (club : Club) (user : User option) 
     (ctx : HttpContext) =
-    let db = ctx.Database
     user
     |> function 
     | Some _ -> Redirect "/intern"
@@ -52,7 +51,7 @@ let internal view model validationErrors (club : Club) (user : User option)
                                                                  
                                                                  a 
                                                                      [ _href 
-                                                                           "konto/innlogging?returnUrl=/blimed" ] 
+                                                                           "kontoz/innlogging?returnUrl=/blimed" ] 
                                                                      [ encodedText "logge inn" ]
                                                                  encodedText "." ] ] ]
                      | (true, Some model) -> 

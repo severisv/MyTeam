@@ -3,6 +3,8 @@ module MyTeam.Account.Login
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
+open Shared.Validation
+open MyTeam.Validation
 open Shared.Components
 open MyTeam.Views
 open MyTeam.Views.BaseComponents
@@ -12,9 +14,22 @@ open Server
 open Giraffe
 open System.Linq
 open System
+open Fable.React.Props
+open Microsoft.AspNetCore.Identity
+open MyTeam.Models
+open Server.Common
+open Microsoft.Extensions.Logging
 
 
-let view (club: Club) (user: User option) (ctx: HttpContext) =
+
+[<CLIMutable>]
+type LoginForm =
+    { Epost: string
+      Passord: string
+      HuskMeg: string option }
+
+
+let view model (errors: ValidationError list) (club: Club) (user: User option) (ctx: HttpContext) =
 
     let returnUrl = ctx.TryGetQueryStringValue "returnUrl"
 
@@ -29,7 +44,15 @@ let view (club: Club) (user: User option) (ctx: HttpContext) =
              |> Option.map (sprintf "?returnurl=%s")
              |> Option.defaultValue "")
 
-        [ mtMain [ _class "mt-main--narrow"; _id "mt-login" ] [
+
+        let validationMessage name =
+            Forms.validationMessage
+                (errors
+                 |> List.filter (fun ve -> ve.Name = name)
+                 |> List.collect (fun ve -> ve.Errors))
+
+        [ mtMain [ _class "mt-main--narrow"
+                   _id "mt-login" ] [
             block [] [
                 form [ _method "post"
                        _class "form-horizontal"
@@ -39,16 +62,14 @@ let view (club: Club) (user: User option) (ctx: HttpContext) =
                         div [ _class "login--providerLogin text-center" ] [
                             br []
                             br []
-                            !!(btn [ 
-                                     Fable.React.Props.Name "provider"
-                                     Fable.React.Props.Value "Facebook"
-                                     Fable.React.Props.Type "submit"
+                            !!(btn [ Name "provider"
+                                     Value "Facebook"
+                                     Type "submit"
                                      Primary
                                      Lg ] [
-                                 Icons.facebook ""
-                                 Fable.React.Helpers.str " Logg inn med Facebook"
-                            ])
-                          
+                                Icons.facebook ""
+                                Fable.React.Helpers.str " Logg inn med Facebook"
+                               ])
                         ]
                     ]
                     antiforgeryToken ctx
@@ -58,74 +79,54 @@ let view (club: Club) (user: User option) (ctx: HttpContext) =
                 hr []
                 br []
                 br []
-                h4 [] [str "Logg inn med lokal brukerkonto"]
+                h4 [] [
+                    str "Logg inn med lokal brukerkonto"
+                ]
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf
-                           "/konto/innlogging%s"
-                              returnUrl
+                       <| sprintf "/kontoz/innlogging%s" returnUrl
                        attr "" "novalidate" ] [
-                    div [ _class "col-md-offset-2 col-md-10" ] [
-                        div [ _class "text-danger validation-summary-valid"
-                              attr "data-valmsg-summary" "true" ] [
-                            ul [] [ li [] [] ]
-                        ]
-                    ]
-                    div [ _class "form-group" ] [
-                        label [ _class "col-md-2 control-label" ] [
-                            str "E-post"
-                        ]
-                        div [ _class "col-md-10" ] [
-                            input [ _class "form-control"
-                                    _type "email"                                   
-                                    _id "Email"
-                                    _name "Email"
-                                    _value ""
-                                    attr "autocomplete" "off" ]
-                            span [ _class "text-danger field-validation-valid"
-                                   attr "valmsg-for" "Email"
-                                   attr "valmsg-replace" "true" ] []
-                        ]
-                    ]
-                    div [ _class "form-group" ] [
-                        label [ _class "col-md-2 control-label" ] [
-                            str "Passord"
-                        ]
-                        div [ _class "col-md-10" ] [
-                            input [ _class "form-control"
-                                    _type "password"                                
-                                    _id "Password"
-                                    _name "Password"
-                                    attr "autocomplete" "off" ]
-                            span [ _class "text-danger field-validation-valid"
-                                   attr "valmsg-for" "Password"
-                                   attr "valmsg-replace" "true" ] []
-                        ]
-                    ]
-                    div [ _class "form-group" ] [
-                        div [ _class "col-md-offset-2 col-xs-offset-0 col-md-10" ] [
-                            div [ _class "checkbox" ] [
-                                input [ _type "checkbox"                                     
-                                        _id "RememberMe"
-                                        _name "RememberMe"
-                                        _value "true" ]
-                                label [attr "for" "RememberMe"] [ str "Husk meg" ]
-                            ]
-                        ]
-                    ]
-                    antiforgeryToken ctx
+                    !!(Forms.formRow [ Forms.Horizontal 2 ] [] [ validationMessage "" ])
+                    !!(Forms.formRow
+                        [ Forms.Horizontal 2 ]
+                           [ Fable.React.Helpers.str "E-post" ]
+                           [ Forms.textInput [ Name "Epost"
+                                               Value
+                                                   ((model
+                                                     |> Option.map (fun model -> model.Epost)
+                                                     |> Option.defaultValue ""))
+                                               AutoComplete "off" ]
+                             validationMessage "Epost" ])
+                    !!(Forms.formRow
+                        [ Forms.Horizontal 2 ]
+                           [ Fable.React.Helpers.str "Passord" ]
+                           [ Forms.textInput [ Type "password"
+                                               Name "Passord"
+                                               Value ""
+                                               AutoComplete "off" ]
+                             validationMessage "Passord" ]
 
-                    div [ _class "form-group" ] [
-                        div [ _class "col-md-offset-2 col-md-10" ] [
-                            !!(btn [ Fable.React.Props.Type "submit"
-                                     Primary
-                                     Lg ] [
-                                 Fable.React.Helpers.str "Logg in"
-                            ])
-                        ]
-                    ]
-                       ]
+                    )
+                    !!(Forms.formRow
+                        [ Forms.Horizontal 2 ]
+                           []
+                           [ Forms.checkboxInput
+                               [ Name "HuskMeg" ]
+                                 [ Fable.React.Helpers.str "Husk meg" ]
+                                 (model
+                                  |> Option.map (fun model -> model.HuskMeg.IsSome)
+                                  |> Option.defaultValue true)
+                                 ignore ])
+
+                    antiforgeryToken ctx
+                    !!(Forms.formRow
+                        [ Forms.Horizontal 2 ]
+                           []
+                           [ btn [ Type "submit"; Primary ] [
+                               Fable.React.Helpers.str "Logg in"
+                             ] ])
+                ]
                 br []
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
                     a [ _href <| sprintf "/konto/ny%s" returnUrl ] [
@@ -133,12 +134,11 @@ let view (club: Club) (user: User option) (ctx: HttpContext) =
                     ]
                 ]
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
-                    a [ _href <| sprintf "/konto/passord/glemt%s" returnUrl ] [
+                    a [ _href
+                        <| sprintf "/konto/passord/glemt%s" returnUrl ] [
                         str "Glemt passordet?"
                     ]
                 ]
-                    
-                
             ]
           ] ]
         |> layout club user (fun o ->
@@ -146,3 +146,68 @@ let view (club: Club) (user: User option) (ctx: HttpContext) =
                      Title = "Logg inn"
                      Scripts = [] }) ctx
         |> OkResult
+
+
+
+let post (club: Club) (user: User option) form (ctx: HttpContext) =
+    let returnUrl = ctx.TryGetQueryStringValue "returnUrl"
+    let logger = Logger.get ctx.RequestServices
+
+
+    form
+    |> function
+    | Ok form ->
+        combine [ <@ form.Epost @> >- [ isRequired; isValidEmail ]
+                  <@ form.Passord @> >- [ isRequired ] ]
+        |> function
+        | Ok _ ->
+
+
+            let signInManager =
+                ctx.GetService<SignInManager<ApplicationUser>>()
+
+
+            let result =
+                async {
+                    return! (signInManager.PasswordSignInAsync(form.Epost, form.Passord, form.HuskMeg.IsSome, false))
+                            |> Async.AwaitTask
+                }
+                |> Async.RunSynchronously
+
+
+            match (result.Succeeded, result.IsLockedOut) with
+            | (true, _) ->
+                Tenant.clearUserCache ctx club.Id (UserId form.Epost)
+                logger.LogDebug(EventId(), "User logged in.")
+
+                Redirect(returnUrl |> Option.defaultValue "/")
+
+            | (_, true) ->
+                logger.LogWarning(EventId(), "User account locked out.")
+
+                [ mtMain [] [
+                    block [] [
+                        h2 [] [
+                            encodedText "Denne kontoen har blitt låst"
+                        ]
+                    ]
+                  ] ]
+                |> layout club user (fun o ->
+                       { o with
+                             Title = "Logg inn"
+                             Scripts = [] }) ctx
+                |> OkResult
+
+            | (_, _) ->
+                view
+                    (Some form)
+                    [ { Name = ""
+                        Errors = [ "Brukernavn og passord stemmer ikke overens" ] } ]
+                    club
+                    user
+                    ctx
+
+
+
+        | Error e -> view (Some form) e club user ctx
+    | Error e -> failwith e

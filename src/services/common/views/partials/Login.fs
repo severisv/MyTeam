@@ -25,7 +25,7 @@ module Login =
         else
             ul [_id "login-wrapper"; _class "nav navbar-nav navbar-right navbar-topRight--item" ] [
                 li [] [
-                    a [_href <| sprintf "/konto/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
+                    a [_href <| sprintf "/kontoz/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
                         icon <| fa "sign-in" <| "Logg inn"
                     ]
                 ]
