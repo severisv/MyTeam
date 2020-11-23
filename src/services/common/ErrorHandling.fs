@@ -2,12 +2,10 @@ module Server.ErrorHandling
 
 open Giraffe
 open MyTeam
-open Shared
 open Shared.Domain.Members
 open System
 open Common
 open Microsoft.Extensions.Logging
-open Microsoft.AspNetCore.Hosting
 
 let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger) =
         clearResponse
@@ -51,7 +49,7 @@ let logNotFound next (ctx: HttpContext) =
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not 
         && 
-        [".php"; "apple-touch"; "favicon.ico"; "index.php"]
+        [".php"; "apple-touch"; "favicon.ico"; "index.php";"/wp/"]
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             

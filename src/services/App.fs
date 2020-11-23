@@ -18,7 +18,7 @@ open Authorization
 open PipelineHelpers
     
 module App =
-    
+
     let (webApp: HttpHandler) =
         removeTrailingSlash >=>
         fun next ctx ->
@@ -36,6 +36,8 @@ module App =
                         <|  choose [                                     
                                     GET >=> route "/innlogging" >=> (Account.Login.view None [] club user |> htmlGet)    
                                     POST >=> route "/innlogging" >=> Antiforgery.validate >=> (Account.Login.post club user |> htmlPost)
+                                    POST >=> route "/innlogging/ekstern" >=> Antiforgery.validate >=> (Account.Login.external ctx)
+                                    GET >=> route "/innlogging/ekstern" >=> (Account.Login.externalCallback club user |> htmlGet)
 
                             ] 
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    

@@ -15,6 +15,7 @@ using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using System;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 
 namespace MyTeam.Controllers
 {
@@ -154,63 +155,10 @@ namespace MyTeam.Controllers
         {
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Facebook", $"/kontoz/innlogging/ekstern?returnUrl={returnUrl}");
+            return new ChallengeResult("Facebook",   properties);
         }
-
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("innlogging/ekstern/callback")]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
-        {
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                return RedirectToAction(nameof(Login));
-            }
-
-            // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
-            if (result.Succeeded)
-            {
-                _logger.LogDebug(5, "User logged in with {Name} provider.", info.LoginProvider);
-
-                var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-
-                await _signInManager.SignInAsync(user, isPersistent: true);
-                if (!info.Principal.Claims.Any(c => c.Type == "facebookFirstName"))
-                    await _userManager.AddClaimAsync(user,
-                    new Claim("facebookFirstName",
-                           info.Principal.Claims.First(c => c.Type == ClaimTypes.GivenName).Value));
-
-                if (!info.Principal.Claims.Any(c => c.Type == "facebookLastName"))
-                    await _userManager.AddClaimAsync(user,
-                        new Claim("facebookLastName",
-                                    info.Principal.Claims.First(c => c.Type == ClaimTypes.Surname).Value));
-
-                if (!info.Principal.Claims.Any(c => c.Type == "facebookId"))
-                    await _userManager.AddClaimAsync(user,
-                        new Claim("facebookId",
-                                    info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value));
-
-                return RedirectToLocal(returnUrl);
-            }          
-            if (result.IsLockedOut)
-            {
-                return View("Lockout");
-            }
-            else
-            {
-                // If the user does not have an account, then ask the user to create an account.
-                ViewData["ReturnUrl"] = returnUrl;
-                ViewData["LoginProvider"] = info.LoginProvider;
-                var idClaim = info.Principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
-                ViewData["FacebookId"] = idClaim.Value;
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
-            }
-        }
+           
 
 
         [HttpPost]

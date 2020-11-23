@@ -19,6 +19,9 @@ open Microsoft.AspNetCore.Identity
 open MyTeam.Models
 open Server.Common
 open Microsoft.Extensions.Logging
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open System.Security.Claims
+open System.Threading.Tasks
 
 
 
@@ -73,7 +76,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                         ]
                     ]
                     antiforgeryToken ctx
-                ]
+                ]               
                 br []
                 br []
                 hr []
@@ -211,3 +214,93 @@ let post (club: Club) (user: User option) form (ctx: HttpContext) =
 
         | Error e -> view (Some form) e club user ctx
     | Error e -> failwith e
+
+
+let external (ctx: HttpContext) =
+    let provider = "Facebook"
+
+    let returnUrl =
+        (ctx.TryGetQueryStringValue "returnUrl"
+         |> Option.map (sprintf "?returnurl=%s")
+         |> Option.defaultValue "")
+
+    let signInManager =
+        ctx.GetService<SignInManager<ApplicationUser>>()
+
+    let properties =
+        signInManager.ConfigureExternalAuthenticationProperties
+            (provider, sprintf "/kontoz/innlogging/ekstern%s" returnUrl)
+
+    challenge provider
+
+
+
+
+
+let externalCallback club user (ctx: HttpContext) =
+    task {
+        let log = Logger.get ctx.RequestServices
+
+        let returnUrl =
+            ctx.TryGetQueryStringValue "returnUrl"
+            |> Option.defaultValue "/"
+
+        let signInManager =
+            ctx.GetService<SignInManager<ApplicationUser>>()
+
+        let userManager =
+            ctx.GetService<UserManager<ApplicationUser>>()
+
+
+        let! info = signInManager.GetExternalLoginInfoAsync()
+
+
+        if isNull info then       
+            return Redirect "/kontoz/innlogging"
+        else
+
+            // Sign in the user with this external login provider if the user already has a login.
+            let! result = signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true)
+
+            if result.Succeeded then
+                log.LogDebug(EventId(), "User logged in with {Name} provider.", info.LoginProvider)
+
+
+                let! user = userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey)
+
+                do! signInManager.SignInAsync(user, true)
+
+                let addClaim name claimType =
+                    match (info.Principal.Claims
+                           |> Seq.toList
+                           |> List.tryFind (fun c -> c.Type = name),
+                           info.Principal.Claims
+                           |> Seq.toList
+                           |> List.tryFind (fun c -> c.Type = claimType)) with
+                    | (None, Some claim) ->
+                        task {
+                            let! _ = userManager.AddClaimAsync(user, Claim(name, claim.Value))
+                            ()
+                        }
+                    | (_, _) -> task { () }
+
+                do! addClaim "facebookFirstName" ClaimTypes.GivenName
+
+                do! addClaim "facebookLastName" ClaimTypes.Surname
+                do! addClaim "facebookId" ClaimTypes.NameIdentifier
+                
+                return Redirect returnUrl
+
+            else if result.IsLockedOut then
+                return [ encodedText "Lockout" ]
+                       |> layout club user (fun o -> { o with Title = "Lockout" }) ctx
+                       |> OkResult
+
+            else
+                return Redirect "/innlogging/ekstern/bekreftelse"
+
+
+
+    }
+    |> Async.AwaitTask
+    |> Async.RunSynchronously
