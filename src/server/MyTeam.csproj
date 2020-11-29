@@ -19,6 +19,10 @@
     <_ContentIncludedByDefault Remove="Views\Payment\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Payment\_Add.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Payment\_Show.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Notifications\_Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Components\NotificationButton\_NotificationButton.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Scripts\_TwitterFeed.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Components\CloudinaryScripts\_CloudinaryScripts.cshtml" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -107,53 +107,6 @@ namespace MyTeam.Services.Application
             Cache.Remove(key);
         }
 
-        public MemberNotification GetNotifications(Guid memberId, Guid clubId, IEnumerable<Guid> teamIds)
-        {
-
-            object cachedValue;
-            Cache.TryGetValue(NotificationKey(clubId), out cachedValue);
-
-            var notifications = cachedValue as Dictionary<Guid, MemberNotification>;
-            if (notifications != null)
-            {
-                var result = notifications.TryGet(memberId);
-                if (result != null) return result;
-            }
-            else
-            {
-                notifications = new Dictionary<Guid, MemberNotification>();
-            }
-
-            var now = DateTime.Now;
-            var inFourDays = now.AddDays(4);
-            var events = _dbContext.Events.Where(
-                    e => e.ClubId == clubId &&
-                    e.DateTime < inFourDays &&
-                    (e.DateTime > now) &&
-                    !e.IsPublished
-                    )
-                    .Select(e => e.Id).ToList();
-
-            var ids = _dbContext.EventTeams.Where(et => events.Contains(et.EventId) && teamIds.Contains(et.TeamId)).Select(et => et.EventId).ToList().Distinct();
-
-
-            var count = ids.Count();
-            var answeredEvents = _dbContext.EventAttendances.Where(a => a.MemberId == memberId && ids.Contains(a.EventId)).Select(ea => ea.EventId).ToList();
-            var answeredCount = answeredEvents.Count();
-            var unansweredEventIds = ids.Where(i => !answeredEvents.Contains(i)).Distinct();
-
-
-            var memberNotification = new MemberNotification
-            {
-                UnansweredEvents = count - answeredCount,
-                UnansweredEventIds = unansweredEventIds
-            };
-
-            notifications[memberId] = memberNotification;
-
-            Cache.Set(NotificationKey(clubId), notifications, _cacheOptions);
-
-            return memberNotification;
-        }       
+      
     }
 }

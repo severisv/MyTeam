@@ -49,44 +49,7 @@ namespace MyTeam.Controllers
         }
 
 
-        //
-        // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("innlogging")]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null, bool local = false)
-        {
-            
-            ViewData["ReturnUrl"] = returnUrl;
-            ViewData["Local"] = local;
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, model.Email);
-                    _logger.LogDebug(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
-                }
-                                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Ugyldig innlogginsforsøk.");
-                    return View(model);
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
+      
         //
         // GET: /Account/Register
         [HttpGet]

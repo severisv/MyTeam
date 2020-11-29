@@ -13,7 +13,6 @@ namespace MyTeam.Services.Composition
         {
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<ICacheHelper, CacheHelper>();
-            services.AddTransient<Cloudinary>();
             services.AddTransient<EmailSender>();
         }
     }
