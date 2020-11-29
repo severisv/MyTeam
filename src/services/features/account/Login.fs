@@ -12,8 +12,6 @@ open Shared.Domain
 open Shared.Domain.Members
 open Server
 open Giraffe
-open System.Linq
-open System
 open Fable.React.Props
 open Microsoft.AspNetCore.Identity
 open MyTeam.Models
@@ -21,7 +19,7 @@ open Server.Common
 open Microsoft.Extensions.Logging
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open System.Security.Claims
-open System.Threading.Tasks
+open Microsoft.AspNetCore.Authentication
 
 
 
@@ -60,7 +58,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf "/konto/innlogging/ekstern%s" returnUrl ] [
+                       <| sprintf "/kontoz/innlogging/ekstern%s" returnUrl ] [
                     div [] [
                         div [ _class "login--providerLogin text-center" ] [
                             br []
@@ -76,7 +74,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                         ]
                     ]
                     antiforgeryToken ctx
-                ]               
+                ]   
                 br []
                 br []
                 hr []
@@ -216,23 +214,27 @@ let post (club: Club) (user: User option) form (ctx: HttpContext) =
     | Error e -> failwith e
 
 
-let external (ctx: HttpContext) =
-    let provider = "Facebook"
 
-    let returnUrl =
-        (ctx.TryGetQueryStringValue "returnUrl"
-         |> Option.map (sprintf "?returnurl=%s")
-         |> Option.defaultValue "")
+let external : HttpHandler =
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        task {
+            let provider = "Facebook"
 
-    let signInManager =
-        ctx.GetService<SignInManager<ApplicationUser>>()
+            let returnUrl =
+                (ctx.TryGetQueryStringValue "returnUrl"
+                 |> Option.map (sprintf "?returnurl=%s")
+                 |> Option.defaultValue "")
 
-    let properties =
-        signInManager.ConfigureExternalAuthenticationProperties
-            (provider, sprintf "/kontoz/innlogging/ekstern%s" returnUrl)
-
-    challenge provider
-
+            let items =
+                System.Collections.Generic.Dictionary<string, string>()
+            
+            items.Add("LoginProvider", provider)
+                
+            let props = AuthenticationProperties(items, RedirectUri = (sprintf "/kontoz/innlogging/ekstern%s" returnUrl))
+            
+            do! ctx.ChallengeAsync(provider, props)
+            return! next ctx
+        }
 
 
 
@@ -263,6 +265,7 @@ let externalCallback club user (ctx: HttpContext) =
             let! result = signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true)
 
             if result.Succeeded then
+
                 log.LogDebug(EventId(), "User logged in with {Name} provider.", info.LoginProvider)
 
 

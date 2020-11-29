@@ -14,8 +14,10 @@ using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MyTeam.Controllers
 {
@@ -146,19 +148,6 @@ namespace MyTeam.Controllers
             _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, HttpContext.User.Identity.Name);
             return RedirectToLocal(returnUrl);
         }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("innlogging/ekstern")]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
-        {
-            // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Facebook", $"/kontoz/innlogging/ekstern?returnUrl={returnUrl}");
-            return new ChallengeResult("Facebook",   properties);
-        }
-           
 
 
         [HttpPost]
