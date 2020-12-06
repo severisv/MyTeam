@@ -307,3 +307,26 @@ let externalCallback club user (ctx: HttpContext) =
     }
     |> Async.AwaitTask
     |> Async.RunSynchronously
+
+
+
+let logOut (club: Club) user (ctx: HttpContext ) =
+        task {
+            
+            let log = Logger.get ctx.RequestServices
+
+            let returnUrl =
+                ctx.TryGetQueryStringValue "returnUrl"
+                |> Option.defaultValue "/"
+
+            let signInManager = ctx.GetService<SignInManager<ApplicationUser>>()
+            do! signInManager.SignOutAsync()
+            log.LogDebug(EventId(4), "User logged out.");
+            
+            Tenant.clearUserCache ctx club.Id (UserId ctx.User.Identity.Name)
+
+            
+            return Redirect returnUrl
+        }
+        |> Async.AwaitTask
+        |> Async.RunSynchronously

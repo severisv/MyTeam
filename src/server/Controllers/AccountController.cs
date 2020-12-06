@@ -101,16 +101,6 @@ namespace MyTeam.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("utlogging")]
-        public async Task<IActionResult> LogOff(string returnUrl = null)
-        {
-            await _signInManager.SignOutAsync();
-            _logger.LogDebug(4, "User logged out.");
-            _cacheHelper.ClearCache(HttpContext.GetClub()?.Id, HttpContext.User.Identity.Name);
-            return RedirectToLocal(returnUrl);
-        }
 
 
         [HttpPost]

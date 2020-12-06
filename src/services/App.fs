@@ -36,6 +36,7 @@ module App =
                         <|  choose [                                     
                                     GET >=> route "/innlogging" >=> (Account.Login.view None [] club user |> htmlGet)    
                                     POST >=> route "/innlogging" >=> Antiforgery.validate >=> (Account.Login.post club user |> htmlPost)
+                                    POST >=> route "/utlogging" >=> Antiforgery.validate >=> (Account.Login.logOut club user |> htmlGet)
                                     POST >=> route "/innlogging/ekstern" >=> Antiforgery.validate >=> Account.Login.external
                                     GET >=> route "/innlogging/ekstern" >=> (Account.Login.externalCallback club user |> htmlGet)
 
