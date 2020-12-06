@@ -130,7 +130,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 ]
                 br []
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
-                    a [ _href <| sprintf "/konto/ny%s" returnUrl ] [
+                    a [ _href <| sprintf "/kontoz/ny%s" returnUrl ] [
                         str "Registrer ny bruker"
                     ]
                 ]

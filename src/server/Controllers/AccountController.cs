@@ -4,20 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
-using MyTeam.Resources;
 using Services.Utils;
 using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
-using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace MyTeam.Controllers
 {
@@ -30,77 +24,20 @@ namespace MyTeam.Controllers
         private readonly EmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly IPlayerService _playerService;
-        private readonly ICacheHelper _cacheHelper;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             EmailSender emailSender,
             ILoggerFactory loggerFactory,
-            IPlayerService playerService,
-            ICacheHelper cacheHelper)
+            IPlayerService playerService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _cacheHelper = cacheHelper;
             _playerService = playerService;
         }
-
-
-      
-        //
-        // GET: /Account/Register
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("ny")]
-        public IActionResult Register(string returnUrl = null)
-        {
-            if (returnUrl?.Contains("returnUrl") == true) HttpContext.Abort();
-            ViewData["ReturnUrl"] = returnUrl;
-            var model = new RegisterViewModel();
-            return View(model);
-        }
-
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("ny")]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = "/")
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    try
-                    {
-                        await _emailSender.SendEmailAsync(model.Email, "Bekreft din konto",
-                        "Bekreft kontoen din ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Klarte ikke sende e-post ved oppretting av konto");
-                    }
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    return Redirect(returnUrl);
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-
 
 
         [HttpPost]
@@ -150,24 +87,7 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("epost/bekreft")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
+     
 
         [HttpGet]
         [AllowAnonymous]
