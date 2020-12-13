@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using MyTeam.Models;
 
-using MyTeam.Services.Application;
 
 namespace MyTeam.Services.Domain
 {
@@ -10,11 +9,9 @@ namespace MyTeam.Services.Domain
     class PlayerService : IPlayerService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ICacheHelper _cacheHelper;
 
-        public PlayerService(ApplicationDbContext dbContext, ICacheHelper cacheHelper)
+        public PlayerService(ApplicationDbContext dbContext)
         {
-            _cacheHelper = cacheHelper;
             _dbContext = dbContext;
         }  
        

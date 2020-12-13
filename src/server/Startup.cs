@@ -8,13 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Models;
-using MyTeam.Services.Composition;
-using MyTeam.Settings;
 using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Logging;
 using Server;
+using Services.Utils;
 
 namespace MyTeam
 {
@@ -30,17 +28,16 @@ namespace MyTeam
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
-            {
-                o.Password.RequireDigit = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 7;
-            })
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 7;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -51,7 +48,6 @@ namespace MyTeam
                         o.Cookie.Name = "_myt";
                         o.SlidingExpiration = true;
                     }
-
                 )
                 .AddFacebook(o =>
                 {
@@ -64,16 +60,11 @@ namespace MyTeam
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AssetHashes>(Configuration.GetSection("AssetHashes"));
             services.AddApplicationInsightsTelemetry();
-
             services.AddLocalization();
-            services.AddControllersWithViews(setup => { setup.ConfigureFilters(); });
+            services.AddControllersWithViews(setup => { setup.Filters.Add(new HandleErrorAttribute()); });
             App.addGiraffe(services);
             App.registerJsonSerializers(services);
-
-            services.RegisterDependencies();
-            
-            
-
+            services.AddTransient<EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +72,7 @@ namespace MyTeam
         {
             app.LogStart();
 
-            if (env.EnvironmentName == "Development"|| env.EnvironmentName == "staging")
+            if (env.EnvironmentName == "Development" || env.EnvironmentName == "staging")
             {
                 app.UseDatabaseErrorPage();
             }
@@ -94,19 +85,15 @@ namespace MyTeam
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("nb-NO"),
-                SupportedCultures = new List<CultureInfo> { new CultureInfo("nb-NO") },
-                SupportedUICultures = new List<CultureInfo> { new CultureInfo("nb-NO") }
+                SupportedCultures = new List<CultureInfo> {new CultureInfo("nb-NO")},
+                SupportedUICultures = new List<CultureInfo> {new CultureInfo("nb-NO")}
             });
-            
+
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             App.useGiraffe(app);
-
         }
     }
 }

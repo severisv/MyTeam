@@ -16,7 +16,6 @@ window.ajax = ajax
 window.checkbox = require('./checkbox')
 
 window.global = global
-window.mt = require('./myteam')
 
 const render = (Component, target) => {
   const element = document.getElementById(target)

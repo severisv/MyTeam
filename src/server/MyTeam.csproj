@@ -23,6 +23,25 @@
     <_ContentIncludedByDefault Remove="Views\Shared\Components\NotificationButton\_NotificationButton.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Scripts\_TwitterFeed.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Components\CloudinaryScripts\_CloudinaryScripts.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Components\PageHeader\_PageHeader.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\InvalidInput.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\NotFound.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\Unauthorized.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Error.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_ErrorSummary.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_InvalidInput.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_LoginPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_NotFound.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Pager.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Unauthorized.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_UserInfo.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Composition" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

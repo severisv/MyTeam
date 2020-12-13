@@ -24,10 +24,8 @@ global.applyScopedJsComponents = function (selector) {
 global.applyJsComponents = function () {
   const timestamp = new Date()
   const start = timestamp.getMilliseconds()
-
   this.applyScopedJsComponents($(document))
   applySlideDownMenuListeners()
-
   applyBrowserCheck()
 
   console.log(`global.js: ${new Date().getMilliseconds() - start}ms`)
