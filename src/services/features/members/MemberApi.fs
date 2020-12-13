@@ -1,3 +1,4 @@
+
 module MyTeam.Members.Api
 
 open Shared.Domain
@@ -127,6 +128,7 @@ let add clubId (ctx: HttpContext) model =
                     Email.send ctx.RequestServices mr.Email "Du er lagt til som spiller"
                         (sprintf "Du er nå lagt til som spiller i %s!\nDu kan melde deg på kamper og treninger på http://wamkam.no/intern"
                              club.Name)
+                    |> Async.AwaitTask
                     |> Async.RunSynchronously
                     db.MemberRequests.Remove mr)
                 |> ignore

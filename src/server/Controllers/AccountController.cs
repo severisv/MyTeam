@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyTeam.Models;
-using Services.Utils;
-using MyTeam.Services.Application;
 using MyTeam.Services.Domain;
 using MyTeam.ViewModels.Account;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -21,20 +19,17 @@ namespace MyTeam.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly EmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly IPlayerService _playerService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            EmailSender emailSender,
             ILoggerFactory loggerFactory,
             IPlayerService playerService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _playerService = playerService;
         }
@@ -87,102 +82,7 @@ namespace MyTeam.Controllers
             return View(model);
         }
 
-     
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("passord/glemt")]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("passord/glemt")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null) //|| !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // Send an email with this link
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = user.Email }, protocol: HttpContext.Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Nullstill passord",
-                   "Du kan nullstille passordet ditt ved å trykke <a href=\"" + callbackUrl + "\">her</a>");
-                return View("ForgotPasswordConfirmation");
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("passord/bekreft")]
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("passord/nullstill")]
-        public IActionResult ResetPassword(string code = null, string email = "")
-        {
-            var model = new ResetPasswordViewModel
-            {
-                Code = code,
-                Email = email
-            };
-            return code == null ? View("Error") : View(model);
-        }
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Route("passord/nullstill")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-            }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-            }
-            AddErrors(result);
-            return View();
-        }
-
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("passord/nullstill/bekreft")]
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }       
-
-        
         #region Helpers
 
         private void AddErrors(IdentityResult result)

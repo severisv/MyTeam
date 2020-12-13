@@ -136,7 +136,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 ]
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
                     a [ _href
-                        <| sprintf "/konto/passord/glemt%s" returnUrl ] [
+                        <| sprintf "/kontoz/glemt-passord%s" returnUrl ] [
                         str "Glemt passordet?"
                     ]
                 ]

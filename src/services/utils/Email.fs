@@ -1,21 +1,21 @@
 namespace Services.Utils
 
 open System
-open System.Threading.Tasks
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open SendGrid
 open SendGrid.Helpers.Mail
 open MyTeam
-open Shared
+open FSharp.Control.Tasks.V2.ContextInsensitive
+
 
 
 module Email =
 
     let send (serviceProvider : IServiceProvider) emailAddress subject message =
 
-        async {
+        task {
             let apiKey = serviceProvider.GetService<IConfiguration>().["Integration:SendGrid:Key"]
             let logger = Logger.get serviceProvider
     
@@ -30,8 +30,9 @@ module Email =
                       htmlContent = message )
     
             let! response = client.SendEmailAsync message
-                            |> Async.AwaitTask
-    
+            let! content = response.Body.ReadAsStringAsync()
+            if (int response.StatusCode) >= 300 then failwithf "Feil ved sending av e-post: (%O) %s" response.StatusCode content 
+               
             logger.LogInformation (sprintf "Sender e-post til %s. Status: %i. Message: %O" emailAddress (int response.StatusCode) message)
         }       
        
@@ -39,4 +40,3 @@ module Email =
 type EmailSender(serviceProvider) =
     member x.SendEmailAsync(email, subject, message) =
         Email.send serviceProvider email subject message
-        |> Async.StartAsTask
