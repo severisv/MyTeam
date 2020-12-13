@@ -18,7 +18,7 @@ open Authorization
 open PipelineHelpers
     
 module App =
-    
+
     let (webApp: HttpHandler) =
         removeTrailingSlash >=>
         fun next ctx ->
@@ -32,6 +32,20 @@ module App =
                 redirectTo false (sprintf "/spillere/endre/%s" user.UrlName) next ctx  
             | (Some club, _) ->
                 choose [
+                    subRoute "/kontoz"             
+                        <|  choose [                                     
+                                    GET >=> route "/innlogging" >=> (Account.Login.view None [] club user |> htmlGet)    
+                                    POST >=> route "/innlogging" >=> Antiforgery.validate >=> (Account.Login.post club user |> htmlPost)
+                                    POST >=> route "/utlogging" >=> Antiforgery.validate >=> (Account.Login.logOut club user |> htmlGet)
+                                    POST >=> route "/innlogging/ekstern" >=> Antiforgery.validate >=> Account.Login.external
+                                    GET >=> route "/innlogging/ekstern" >=> (Account.Login.externalCallback club user |> htmlGet)
+                                    GET >=> route "/ny" >=> (Account.Signup.view None [] club user |> htmlGet)    
+                                    POST >=> route "/ny" >=> Antiforgery.validate >=> (Account.Signup.post club user |> htmlPost)
+                                    GET >=> route "/glemt-passord" >=> (Account.ResetPassword.view None [] club user |> htmlGet)
+                                    POST >=> Antiforgery.validate >=> route "/glemt-passord" >=> (Account.ResetPassword.post club user |> htmlPost)
+                                    GET >=> route "/nullstill-passord" >=> (Account.ResetPassword.confirmView None [] club user |> htmlGet)
+                                    POST >=> Antiforgery.validate >=> route "/nullstill-passord" >=> (Account.ResetPassword.confirmPost club user |> htmlPost)
+                                    ] 
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
                     route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                        
@@ -55,8 +69,7 @@ module App =
                                     routef "/slett/%s" <| fun name -> 
                                         mustBeInRole [Role.Admin; Role.Trener; Role.Skribent] >=> 
                                                         GET >=> (News.Pages.Edit.delete club name |> htmlGet)       
-                            ] 
-                            
+                            ]                             
                     subRoute "/kamper"             
                         <|  choose [                                                
                                 GET >=> choose [

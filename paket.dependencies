@@ -6,7 +6,7 @@ nuget Fable.Fetch
 nuget Fable.Promise
 nuget Fable.React
 nuget Fable.JsonConverter
-nuget Microsoft.ApplicationInsights.AspNetCore 2.8
+nuget Microsoft.ApplicationInsights.AspNetCore
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator

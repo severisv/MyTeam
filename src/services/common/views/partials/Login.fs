@@ -12,7 +12,7 @@ module Login =
 
     let loginPartial (ctx: HttpContext) =
         if ctx.User.Identity.IsAuthenticated then
-            form [_action <| sprintf "/konto/utlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString);_method "POST";_id "logoutForm";_class "navbar-topRight--item navbar-right signout-form"] [
+            form [_action <| sprintf "/kontoz/utlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString);_method "POST";_id "logoutForm";_class "navbar-topRight--item navbar-right signout-form"] [
                 antiforgeryToken ctx
                 ul [_class "nav navbar-nav navbar-right"] [
                     li [] [
@@ -25,7 +25,7 @@ module Login =
         else
             ul [_id "login-wrapper"; _class "nav navbar-nav navbar-right navbar-topRight--item" ] [
                 li [] [
-                    a [_href <| sprintf "/konto/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
+                    a [_href <| sprintf "/kontoz/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
                         icon <| fa "sign-in" <| "Logg inn"
                     ]
                 ]

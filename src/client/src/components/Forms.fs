@@ -116,7 +116,12 @@ let textInput (attr: IHTMLProp list) =
                 | IsInputPropsAttr (Validation v) -> Some v
                 | _ -> None)
 
-
+        let tp =
+            attr
+            |> List.tryPick (function
+                | IsHTMLAttr (Type t) -> Some t
+                | _ -> None)
+            |> Option.defaultValue "text"    
 
         let (isValid, vMessage) = distillValidation validation isTouched
 
@@ -127,7 +132,7 @@ let textInput (attr: IHTMLProp list) =
                  |> mergeClasses [ OnBlur(fun _ -> setState (fun state props -> { state with IsTouched = true }))
                                    Class
                                    <| sprintf "form-control input-isValid--%b" isValid
-                                   Type "text" ])
+                                   Type tp ])
             validationMessage2 (isValid, vMessage)
         ])
 
@@ -228,15 +233,22 @@ let multiSelect<'a when 'a: equality> =
     )
 
 let checkboxInput attr lbl value onChange =
+    let name =
+        attr
+        |> List.tryPick (function
+            | IsHTMLAttr (Name n) -> Some n
+            | _ -> None)
+        |> Option.defaultValue ""    
     label
         (attr
          |> mergeClasses [ Class "control-label input-form-checkbox" ])
         ([ input [ Class "form-control"
                    Type "checkbox"
                    Checked value
+                   Name name
                    OnChange(fun input -> onChange input.Checked) ] ]
          @ lbl)
 
 
 let validationMessage messages =
-    span [ Class "text-danger" ] (messages |> List.map str)
+    span [ Class "input-validation-message" ] (messages |> List.map str)

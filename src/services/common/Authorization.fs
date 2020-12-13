@@ -10,7 +10,7 @@ let accessDenied =
     fun next (ctx: HttpContext) ->
         (if not ctx.User.Identity.IsAuthenticated then
             redirectTo false 
-            <| sprintf "/konto/innlogging?returnUrl=%s" (Request.fullPath ctx)
+            <| sprintf "/kontoz/innlogging?returnUrl=%s" (Request.fullPath ctx)
         else            
             setStatusCode 403 >=> 
             (Tenant.get ctx 
