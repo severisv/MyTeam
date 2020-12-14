@@ -81,7 +81,8 @@ Target.create "Publish" <| fun _ ->
         (fun o ->  
           { o with  
               OutputPath = Some publishDirectory
-              SelfContained = Some true
+            //   SelfContained = Some true
+            //   Runtime = Some "win-x86"
           } |> dotnetOptions) 
         webDir
 
