@@ -5,6 +5,7 @@
     <AssemblyName>MyTeam</AssemblyName>
     <PackageId>MyTeam</PackageId>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*">

@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>Server</RootNamespace>
     <TargetFramework>net50</TargetFramework>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\client\src\client.fsproj" />
