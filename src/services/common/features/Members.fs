@@ -6,6 +6,7 @@ open Shared.Domain.Members
 open System.Linq
 open System
 open Shared.Strings
+open Microsoft.EntityFrameworkCore
 
 type MemberDetails =
     { Details : Member
@@ -46,27 +47,22 @@ let selectMembers =
 let list : Database -> ClubId -> MemberWithTeamsAndRoles list =
     fun db clubId -> 
         let (ClubId clubId) = clubId
-        query {
-            for m in db.Members do
-            where (m.ClubId = clubId)
-            groupJoin memberTeam in db.MemberTeams on (m.Id = memberTeam.MemberId) into result
-            for mt in result.DefaultIfEmpty() do 
-            select ((m.Id, m.FacebookId, m.FirstName, m.MiddleName, m.LastName, m.ImageFull, m.UrlName, m.Status, m.RolesString), mt.TeamId)
-        }
+        
+        db.Members.Include(fun m -> m.MemberTeams)
+            .Where(fun m -> m.ClubId = clubId)
+            .ToList()
         |> Seq.toList
-        |> List.groupBy (fun (m, _) -> m)
-        |> List.map(fun (key, values) -> (key, values |> List.map(fun (m, teamId) -> teamId)))
-        |> List.map (fun ((id, facebookId, firstName, middleName, lastName, image, urlName, status, rolesString), teamIds) -> 
+        |> List.map (fun m -> 
                { Details =
-                     ({ Id = id
-                        FacebookId = !!facebookId
-                        FirstName = !!firstName
-                        MiddleName = !!middleName
-                        LastName = !!lastName
-                        Image = !!image
-                        UrlName = !!urlName
-                        Status = PlayerStatus.fromInt status})
-                 Teams = teamIds |> List.filter((=) Guid.Empty >> not)                   
-                 Roles = rolesString |> toRoleList })
+                     ({ Id = m.Id
+                        FacebookId = !!m.FacebookId
+                        FirstName = !!m.FirstName
+                        MiddleName = !!m.MiddleName
+                        LastName = !!m.LastName
+                        Image = !!m.ImageFull
+                        UrlName = !!m.UrlName
+                        Status = PlayerStatus.fromInt m.Status})
+                 Teams = m.MemberTeams |> Seq.toList |> List.map(fun mt -> mt.TeamId) |> List.filter((=) Guid.Empty >> not)                   
+                 Roles = m.RolesString |> toRoleList })
         |> Seq.toList
         |> List.sortBy (fun p -> p.Details.FirstName)

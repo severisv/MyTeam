@@ -39,6 +39,7 @@ module App =
                                     POST >=> route "/utlogging" >=> Antiforgery.validate >=> (Account.Login.logOut club user |> htmlGet)
                                     POST >=> route "/innlogging/ekstern" >=> Antiforgery.validate >=> Account.Login.external
                                     GET >=> route "/innlogging/ekstern" >=> (Account.Login.externalCallback club user |> htmlGet)
+                                    POST >=> route "/innlogging/ekstern/ny" >=> Antiforgery.validate >=> (Account.Login.signupExternal club user |> htmlPost)
                                     GET >=> route "/ny" >=> (Account.Signup.view None [] club user |> htmlGet)    
                                     POST >=> route "/ny" >=> Antiforgery.validate >=> (Account.Signup.post club user |> htmlPost)
                                     GET >=> route "/glemt-passord" >=> (Account.ResetPassword.view None [] club user |> htmlGet)

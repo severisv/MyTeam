@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTeam.Models;
-using MyTeam.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Server;
@@ -61,7 +60,7 @@ namespace MyTeam
             services.Configure<AssetHashes>(Configuration.GetSection("AssetHashes"));
             services.AddApplicationInsightsTelemetry();
             services.AddLocalization();
-            services.AddControllersWithViews(setup => { setup.Filters.Add(new HandleErrorAttribute()); });
+            services.AddControllersWithViews();
             App.addGiraffe(services);
             App.registerJsonSerializers(services);
             services.AddTransient<EmailSender>();
@@ -70,8 +69,6 @@ namespace MyTeam
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.LogStart();
-
             if (env.EnvironmentName == "Development" || env.EnvironmentName == "staging")
             {
                 app.UseDatabaseErrorPage();

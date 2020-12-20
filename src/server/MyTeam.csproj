@@ -40,9 +40,9 @@
     <_ContentIncludedByDefault Remove="Views\Shared\_Unauthorized.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_UserInfo.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Composition" />
+    <_ContentIncludedByDefault Remove="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\ExternalLoginFailure.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\Lockout.cshtml" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
