@@ -4,6 +4,7 @@ open System
 open System.IO
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
+open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open SlackLogger
 open Microsoft.AspNetCore.Builder;
@@ -95,13 +96,13 @@ let configureApp (app: IApplicationBuilder) =
 
 
 
-let configureAppsettings (ctx: WebHostBuilderContext) (config: IConfigurationBuilder) =
+let configureAppsettings (ctx: HostBuilderContext) (config: IConfigurationBuilder) =
     config.SetBasePath(ctx.HostingEnvironment.ContentRootPath).AddJsonFile("appsettings.json")
           .AddJsonFile(sprintf "appsettings.%s.json" ctx.HostingEnvironment.EnvironmentName, true, true)
           .AddEnvironmentVariables()
     |> ignore
 
-let configureLogging (ctx: WebHostBuilderContext) (logging: ILoggingBuilder) =
+let configureLogging (ctx: HostBuilderContext) (logging: ILoggingBuilder) =
     logging.AddConfiguration(ctx.Configuration.GetSection("Logging")).AddConsole().AddDebug().AddSlack()
     |> ignore
 
@@ -109,14 +110,16 @@ let configureLogging (ctx: WebHostBuilderContext) (logging: ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-        WebHostBuilder()
-            .UseKestrel()
+        HostBuilder()
             .UseContentRoot(Directory.GetCurrentDirectory())
-            .ConfigureAppConfiguration(Action<WebHostBuilderContext, IConfigurationBuilder> configureAppsettings)
+            .ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureAppsettings)
             .ConfigureServices(configureServices)
             .ConfigureLogging(configureLogging)
-            .Configure(configureApp)
-            .UseIISIntegration()
+            .ConfigureWebHostDefaults(fun webBuilder ->
+                webBuilder.UseIISIntegration()
+                        .Configure(configureApp)
+                        |> ignore
+                )
             .Build()
             .Run()
         
