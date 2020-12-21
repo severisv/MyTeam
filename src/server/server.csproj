@@ -2,10 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net50</TargetFramework>
-    <AssemblyName>MyTeam</AssemblyName>
     <PackageId>MyTeam</PackageId>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <RootNamespace>MyTeam</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*">

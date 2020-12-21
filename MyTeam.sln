@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D3A2C93-C7CB-4979-B884-B3477B079ADF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTeam", "src\server\MyTeam.csproj", "{C203951D-C1C6-4F39-B416-1749EF3FB1DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "src\server\server.csproj", "{C203951D-C1C6-4F39-B416-1749EF3FB1DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "src\database\Migrations.csproj", "{97BAA5AB-A0E1-4920-A260-69451BA3B8DD}"
 EndProject
