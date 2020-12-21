@@ -5,7 +5,7 @@
     <PackageId>MyTeam</PackageId>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-    <RootNamespace>MyTeam</RootNamespace>
+    <RootNamespace>Server</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*">
@@ -13,10 +13,119 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\services\services.fsproj" />
     <ProjectReference Include="..\database\Migrations.csproj" />
+    <ProjectReference Include="..\client\src\client.fsproj" />
   </ItemGroup>
   <ItemGroup>
+  <Compile Include="settings/Options.fs" />
+    <Compile Include="utils/json/OptionSerializer.fs" />
+    <Compile Include="utils/json/UnionSerializer.fs" />
+    <Compile Include="utils/Database.fs" />
+    <Compile Include="utils/Sha1.fs" />
+    <Compile Include="utils/GiraffeHelpers.fs" />
+    <Compile Include="utils/Helpers.fs" />
+    <Compile Include="utils/String.fs" />
+    <Compile Include="utils/AntiForgery.fs" />
+    <Compile Include="utils/Enums.fs" />
+    <Compile Include="utils/Html.fs" />
+    <Compile Include="utils/Images.fs" />
+    <Compile Include="utils/Json.fs" />
+    <Compile Include="utils/MemoryCache.fs" />
+    <Compile Include="utils/Option.fs" />
+    <Compile Include="utils/Request.fs" />
+    <Compile Include="utils/Results.fs" />
+    <Compile Include="utils/Validation.fs" />
+    <Compile Include="utils/Logger.fs" />
+    <Compile Include="utils/Client.fs" />
+    <Compile Include="utils/Email.fs" />
+    <Compile Include="components/Base.fs" />
+    <Compile Include="components/Icons.fs" />
+    <Compile Include="components/LayoutComponents.fs" />
+    <Compile Include="components/Ajax.fs" />
+    <Compile Include="components/Collapsible.fs" />
+    <Compile Include="components/Table.fs" />
+    <Compile Include="common/features/*.fs" />
+    <Compile Include="common/Clubs.fs" />
+    <Compile Include="common/Users.fs" />
+    <Compile Include="common/Tenant.fs" />
+    <Compile Include="common/News.fs" />
+    <Compile Include="common/Notifications.fs" />
+    <Compile Include="common/views/partials/Analytics.fs" />
+    <Compile Include="common/views/partials/Login.fs" />
+    <Compile Include="common/views/partials/Notifications.fs" />
+    <Compile Include="common/views/Layout.fs" />
+    <Compile Include="common/views/Error.fs" />
+    <Compile Include="common/ErrorHandling.fs" />
+    <Compile Include="common/Results.fs" />
+    <Compile Include="common/Authorization.fs" />
+    <Compile Include="features/account/Login.fs" />
+    <Compile Include="features\account\Signup.fs" />
+    <Compile Include="features\account\ResetPassword.fs" />
+    <Compile Include="features/admin/Pages.fs" />
+    <Compile Include="features/attendance/Types.fs" />
+    <Compile Include="features/attendance/Queries.fs" />
+    <Compile Include="features/attendance/Api.fs" />
+    <Compile Include="features/attendance/pages/Register.fs" />
+    <Compile Include="features/attendance/pages/Show.fs" />
+    <Compile Include="features/events/EventsApi.fs" />
+    <Compile Include="features/events/EventsList.fs" />
+    <Compile Include="features/fines/Fines.fs" />
+    <Compile Include="features/fines/FineApi.fs" />
+    <Compile Include="features/fines/FineSummary.fs" />
+    <Compile Include="features/fines/FineList.fs" />
+    <Compile Include="features/fines/Payments.fs" />
+    <Compile Include="features/fines/RemedyRates.fs" />
+    <Compile Include="features/game/Types.fs" />
+    <Compile Include="features/game/Queries.fs" />
+    <Compile Include="features/game/Persistence.fs" />
+    <Compile Include="features/game/api/Insights.fs" />
+    <Compile Include="features/game/GameApi.fs" />
+    <Compile Include="features/game/pages/Show.fs" />
+    <Compile Include="features/game/pages/List.fs" />
+    <Compile Include="features/game/pages/Add.fs" />
+    <Compile Include="features/game/pages/Edit.fs" />
+    <Compile Include="features/game/pages/Result.fs" />
+    <Compile Include="features/game/pages/SelectSquad.fs" />
+    <Compile Include="features/game/pages/GamePlan.fs" />
+    <Compile Include="features/game/Refresh.fs" />
+    <Compile Include="features/players/PlayerApi.fs" />
+    <Compile Include="features/players/pages/Common.fs" />
+    <Compile Include="features/players/pages/List.fs" />
+    <Compile Include="features/players/pages/Show.fs" />
+    <Compile Include="features/players/pages/Edit.fs" />
+    <Compile Include="features/gameevents/Gameevents.fs" />
+    <Compile Include="features/members/MemberTypes.fs" />
+    <Compile Include="features/members/Queries.fs" />
+    <Compile Include="features/members/MemberPersistence.fs" />
+    <Compile Include="features/members/MemberApi.fs" />
+    <Compile Include="features/members/pages/List.fs" />
+    <Compile Include="features/members/pages/RequestAccess.fs" />
+    <Compile Include="features/stats/Types.fs" />
+    <Compile Include="features/stats/StatsQueries.fs" />
+    <Compile Include="features/stats/Pages.fs" />
+    <Compile Include="features/stats/Api.fs" />
+    <Compile Include="features/table/Types.fs" />
+    <Compile Include="features/table/Queries.fs" />
+    <Compile Include="features/table/TablePages.fs" />
+    <Compile Include="features/table/Refresh.fs" />
+    <Compile Include="features/table/Api.fs" />
+    <Compile Include="features/teams/Types.fs" />
+    <Compile Include="features/teams/TeamsQueries.fs" />
+    <Compile Include="features/teams/Api.fs" />
+    <Compile Include="features/news/Types.fs" />
+    <Compile Include="features/news/Queries.fs" />
+    <Compile Include="features/news/Persistence.fs" />
+    <Compile Include="features/news/pages/Components.fs" />
+    <Compile Include="features/news/pages/Index.fs" />
+    <Compile Include="features/news/pages/Show.fs" />
+    <Compile Include="features/news/pages/Edit.fs" />
+    <Compile Include="features/about/About.fs" />
+    <Compile Include="features/sponsors/Sponsors.fs" />
+    <Compile Include="features/trainings/Queries.fs" />
+    <Compile Include="features/trainings/TrainingApi.fs" />
+    <Compile Include="features/trainings/pages/Edit.fs" />
+    <Compile Include="features/trainings/pages/Add.fs" />
+    <Compile Include="App.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

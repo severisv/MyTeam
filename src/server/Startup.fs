@@ -37,8 +37,7 @@ let configureServices (services: IServiceCollection) =
                     o.SlidingExpiration <- true;
                 
             )
-            .AddFacebook(fun o ->
-            
+            .AddFacebook(fun o ->            
                 o.AppId <- configuration.["Authentication:Facebook:AppId"];
                 o.AppSecret <- configuration.["Authentication:Facebook:AppSecret"];
             ) |> ignore

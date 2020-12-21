@@ -1,7 +1,12 @@
-Sendgrid
-SlackLogger
+FSharp.Core
+FSharp.Data
+FSharp.Quotations.Evaluator
 Giraffe
-System.Net.Http
+Microsoft.ApplicationInsights.AspNetCore
 Microsoft.AspNetCore.Authentication.Facebook
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
-Microsoft.ApplicationInsights.AspNetCore
+Microsoft.Extensions.Caching.Abstractions
+Sendgrid
+SlackLogger
+System.Net.Http
+Thoth.Json.Net
