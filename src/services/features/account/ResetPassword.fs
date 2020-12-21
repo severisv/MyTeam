@@ -35,7 +35,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
         block [] [
             form [ _method "post"
                    _class "form-horizontal"
-                   _action "/kontoz/glemt-passord"
+                   _action "/konto/glemt-passord"
                    attr "" "novalidate" ] [
                 !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
                 !!(Forms.formRow
@@ -95,7 +95,7 @@ let post (club: Club) (user: User option) form (ctx: HttpContext) =
 
                     let callbackUrl =
                         sprintf
-                            "%s://%s/kontoz/nullstill-passord?code=%s&email=%s"
+                            "%s://%s/konto/nullstill-passord?code=%s&email=%s"
                             ctx.Request.Scheme
                             (ctx.Request.Host.ToString())
                             (HttpUtility.UrlEncode(code))
@@ -162,7 +162,7 @@ let confirmView (model: ConfirmResetForm option)
                 h4 [] [ str "Nytt passord" ]
                 form [ _method "post"
                        _class "form-horizontal"
-                       _action "/kontoz/nullstill-passord"
+                       _action "/konto/nullstill-passord"
                        attr "" "novalidate" ] [
                     
                     input [_name "E-post";_value email;_type "hidden" ]
@@ -239,7 +239,7 @@ let confirmPost (club: Club) (user: User option) form (ctx: HttpContext) =
                                      br []
                                      p [] [
                                          encodedText "Passordet ditt er nullstilt. "
-                                         a [ _href "/kontoz/innlogging" ] [
+                                         a [ _href "/konto/innlogging" ] [
                                              encodedText "Logg inn"
                                          ]
                                      ]

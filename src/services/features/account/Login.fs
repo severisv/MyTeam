@@ -59,7 +59,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf "/kontoz/innlogging/ekstern%s" returnUrl ] [
+                       <| sprintf "/konto/innlogging/ekstern%s" returnUrl ] [
                     div [] [
                         div [ _class "login--providerLogin text-center" ] [
                             br []
@@ -87,7 +87,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf "/kontoz/innlogging%s" returnUrl
+                       <| sprintf "/konto/innlogging%s" returnUrl
                        attr "" "novalidate" ] [
                     !!(Forms.formRow [ Forms.Horizontal 2 ] [] [ validationMessage "" ])
                     !!(Forms.formRow
@@ -131,13 +131,13 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 ]
                 br []
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
-                    a [ _href <| sprintf "/kontoz/ny%s" returnUrl ] [
+                    a [ _href <| sprintf "/konto/ny%s" returnUrl ] [
                         str "Registrer ny bruker"
                     ]
                 ]
                 p [ _class "col-md-offset-2 col-sm-offset-0" ] [
                     a [ _href
-                        <| sprintf "/kontoz/glemt-passord%s" returnUrl ] [
+                        <| sprintf "/konto/glemt-passord%s" returnUrl ] [
                         str "Glemt passordet?"
                     ]
                 ]
@@ -231,7 +231,7 @@ let external : HttpHandler =
             
             items.Add("LoginProvider", provider)
                 
-            let props = AuthenticationProperties(items, RedirectUri = (sprintf "/kontoz/innlogging/ekstern%s" returnUrl))
+            let props = AuthenticationProperties(items, RedirectUri = (sprintf "/konto/innlogging/ekstern%s" returnUrl))
             
             do! ctx.ChallengeAsync(provider, props)
             return! next ctx
@@ -271,7 +271,7 @@ let signupExternalView model (errors: ValidationError list) (club: Club) (user: 
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf "/kontoz/innlogging/ekstern/ny%s" returnUrl
+                       <| sprintf "/konto/innlogging/ekstern/ny%s" returnUrl
                        attr "" "novalidate" ] [
                     !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
                     !!(Forms.formRow
@@ -339,7 +339,7 @@ let signupExternal (club: Club) (user: User option) form (ctx: HttpContext) =
                 let! info = signInManager.GetExternalLoginInfoAsync()
 
                 if isNull info then       
-                    return Redirect "/kontoz/innlogging"
+                    return Redirect "/konto/innlogging"
                 else
                                                
                     let au =
@@ -414,7 +414,7 @@ let externalCallback club user (ctx: HttpContext) =
 
 
         if isNull info then       
-            return Redirect "/kontoz/innlogging"
+            return Redirect "/konto/innlogging"
         else
 
             // Sign in the user with this external login provider if the user already has a login.

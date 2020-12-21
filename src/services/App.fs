@@ -32,7 +32,7 @@ module App =
                 redirectTo false (sprintf "/spillere/endre/%s" user.UrlName) next ctx  
             | (Some club, _) ->
                 choose [
-                    subRoute "/kontoz"             
+                    subRoute "/konto"             
                         <|  choose [                                     
                                     GET >=> route "/innlogging" >=> (Account.Login.view None [] club user |> htmlGet)    
                                     POST >=> route "/innlogging" >=> Antiforgery.validate >=> (Account.Login.post club user |> htmlPost)

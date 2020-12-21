@@ -51,7 +51,7 @@ let internal view model validationErrors (club : Club) (user : User option)
                                                                  
                                                                  a 
                                                                      [ _href 
-                                                                           "kontoz/innlogging?returnUrl=/blimed" ] 
+                                                                           "konto/innlogging?returnUrl=/blimed" ] 
                                                                      [ encodedText "logge inn" ]
                                                                  encodedText "." ] ] ]
                      | (true, Some model) -> 

@@ -53,7 +53,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                 form [ _method "post"
                        _class "form-horizontal"
                        _action
-                       <| sprintf "/kontoz/ny%s" returnUrl
+                       <| sprintf "/konto/ny%s" returnUrl
                        attr "" "novalidate" ] [
                     !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
                     !!(Forms.formRow

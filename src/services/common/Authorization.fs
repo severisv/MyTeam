@@ -10,13 +10,13 @@ let accessDenied =
     fun next (ctx: HttpContext) ->
         (if not ctx.User.Identity.IsAuthenticated then
             redirectTo false 
-            <| sprintf "/kontoz/innlogging?returnUrl=%s" (Request.fullPath ctx)
+            <| sprintf "/konto/innlogging?returnUrl=%s" (Request.fullPath ctx)
         else            
             setStatusCode 403 >=> 
             (Tenant.get ctx 
                 |> function
                 | (Some club, user) -> 
-                    if Request.isJson ctx then 
+                    if Request.isJson ctx then  
                         json ["403 unauthorized"]
                     else 
                         Views.Error.unauthorized club user
