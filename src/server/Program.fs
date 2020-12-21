@@ -116,6 +116,7 @@ let main _ =
             .ConfigureServices(configureServices)
             .ConfigureLogging(configureLogging)
             .Configure(configureApp)
+            .UseIISIntegration()
             .Build()
             .Run()
         
