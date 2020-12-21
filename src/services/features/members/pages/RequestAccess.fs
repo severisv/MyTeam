@@ -37,7 +37,7 @@ let internal view model validationErrors (club : Club) (user : User option)
     |> function 
     | Some _ -> Redirect "/intern"
     | None -> 
-        [ mtMain [] 
+        [ mtMain [_class "mt-main--narrow"] 
               [ block [] 
                     (match (ctx.User.Identity.IsAuthenticated, model) with
                      | (false, _) -> 

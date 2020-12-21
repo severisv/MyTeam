@@ -31,3 +31,6 @@ let mustBeInRole (user: Option<User>) (roles: Role list) =
                                 | Some u -> u.IsInRole roles                                   
                                 | None -> false
                         ) accessDenied
+    
+let mustBeAuthenticated = 
+    fun next ctx -> requiresAuthentication accessDenied next ctx    

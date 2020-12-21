@@ -147,7 +147,8 @@ module App =
                             choose  [ GET >=> (Sponsors.edit club user |> htmlGet)                   
                                       POST >=> (Sponsors.editPost club user |> htmlGet) ]                    
                        
-                    subRoute "/intern" 
+                    subRoute "/intern"
+                            mustBeAuthenticated >=>
                             (user => fun user ->
                                 choose [                                                
                                     GET >=> choose [    
@@ -192,8 +193,8 @@ module App =
                                     ]                    
                                 ]
                             )    
-                    route "/admin" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
-                    route "/admin/spillerinvitasjon" >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
+                    route "/admin" >=> mustBeAuthenticated >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.index club user |> htmlGet)
+                    route "/admin/spillerinvitasjon" >=> mustBeAuthenticated >=> GET >=> mustBeInRole [Role.Admin; Role.Trener]  >=> (Admin.Pages.invitePlayers club user |> htmlGet)
                     
                     subRoute "/api/attendance"                            
                            <| choose [ 
