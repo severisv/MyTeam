@@ -3,11 +3,6 @@ namespace Server
 open MyTeam
 open Shared
 open Giraffe
-open Giraffe.Serialization
-open Microsoft.AspNetCore.Builder
-open Microsoft.Extensions.DependencyInjection
-open Newtonsoft.Json
-open Newtonsoft.Json.Converters
 open Server.Features
 open Microsoft.AspNetCore.Hosting
 open Shared.Features
@@ -370,25 +365,5 @@ module App =
                 (setStatusCode 404 >=> ErrorHandling.logNotFound >=> text "404") next ctx
 
             
-    let useGiraffe (app : IApplicationBuilder)  =
-        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
-        if env.EnvironmentName = "Development" then
-            app.UseDeveloperExceptionPage() |> ignore
-            app.UseGiraffe webApp
-        else 
-            app.UseGiraffeErrorHandler(ErrorHandling.errorHandler).UseGiraffe webApp
-
-    let addGiraffe (services : IServiceCollection)  =
-        services.AddGiraffe() |> ignore
-
-    let registerJsonSerializers (services : IServiceCollection)  =
-        let settings = JsonSerializerSettings ()
-        settings.ContractResolver <- Serialization.CamelCasePropertyNamesContractResolver()   
-        settings.Converters.Add(OptionConverter())
-        settings.Converters.Add(IdiomaticDuConverter())
-        settings.Converters.Add(StringEnumConverter())
-        services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(settings)) |> ignore
-
-
-
-
+      
+  
