@@ -111,7 +111,6 @@ let configureLogging (ctx: WebHostBuilderContext) (logging: ILoggingBuilder) =
 let main _ =
         WebHostBuilder()
             .UseKestrel()
-            .UseIISIntegration()
             .UseContentRoot(Directory.GetCurrentDirectory())
             .ConfigureAppConfiguration(Action<WebHostBuilderContext, IConfigurationBuilder> configureAppsettings)
             .ConfigureServices(configureServices)
