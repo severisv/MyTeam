@@ -408,39 +408,27 @@ let externalCallback club user (ctx: HttpContext) =
 
         let userManager =
             ctx.GetService<UserManager<ApplicationUser>>()
-
-
+            
         let! info = signInManager.GetExternalLoginInfoAsync()
-
 
         if isNull info then       
             return Redirect "/konto/innlogging"
         else
 
-            // Sign in the user with this external login provider if the user already has a login.
-            let! result = signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true)
+            let! au = userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey)
 
-            if result.Succeeded then
+            if not <| isNull au then
 
                 log.LogDebug(EventId(), "User logged in with {Name} provider.", info.LoginProvider)
 
-
-                let! user = userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey)
-
-                do! signInManager.SignInAsync(user, true)
+                do! signInManager.SignInAsync(au, true)
      
-                let addClaim = addClaim info userManager user   
+                let addClaim = addClaim info userManager au   
                 do! addClaim "facebookFirstName" ClaimTypes.GivenName
                 do! addClaim "facebookLastName" ClaimTypes.Surname
                 do! addClaim "facebookId" ClaimTypes.NameIdentifier
                 
                 return Redirect returnUrl
-
-            else if result.IsLockedOut then
-                return [ encodedText "Lockout" ]
-                       |> layout club user (fun o -> { o with Title = "Lockout" }) ctx
-                       |> OkResult
-
             else
                 return signupExternalView None [] club user ctx
 
