@@ -85,13 +85,9 @@ let add clubId (ctx: HttpContext) model =
                 sprintf "%s%s%s-%s" form.Fornavn (form.Mellomnavn |> isNullOrEmpty =? ("", "-")) form.Mellomnavn
                     form.Etternavn
                 |> Strings.toLower   
-                |> replace "Ø" "O"
                 |> replace "ø" "o"
                 |> replace "æ" "ae"
-                |> replace "Æ" "Ae"
-                |> replace "Å" "Aa"
                 |> replace "å" "aa"
-                |> replace "É" "e"
                 |> replace "é" "e"
                 |> regexReplace "[^a-zA-Z0-9 -]" ""
                 |> addNumberIfTaken
