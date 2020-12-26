@@ -74,10 +74,6 @@ let configureServices (services: IServiceCollection) =
 
 let configureApp (app: IApplicationBuilder) =
         let env = app.ApplicationServices.GetService<IWebHostEnvironment>()        
-        
-        if (env.EnvironmentName = "Development" || env.EnvironmentName = "staging") then        
-            app.UseDatabaseErrorPage() |> ignore
-        
 
         let dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
         dbContext.Database.Migrate();
