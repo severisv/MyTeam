@@ -1,76 +1,81 @@
 module MyTeam.Notifications
 
 open MyTeam
-open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open System
 open System.Linq
 
 type NotificationsModel =
-    { UnansweredEventIds : Guid list }
+    { UnansweredEventIds: Guid list }
     member m.UnansweredEvents = m.UnansweredEventIds.Length
 
-let private key clubId =
+let private eventsKey clubId =
     let (ClubId clubId) = clubId
     sprintf "notifications-%O" clubId
 
+let private userAttendancesKey clubId userId =
+    let (ClubId clubId) = clubId
+    sprintf "notifications-%O-%O" clubId userId
 
-let get (ctx : HttpContext) (club: Club) (user : User) =
+let get (ctx: HttpContext) (club: Club) (user: User) =
     let (ClubId clubId) = club.Id
     let db = ctx.Database
     let now = DateTime.Now
     let inFourDays = now.AddDays(4.0)
-    
-    let getEventsAndAttendances() =
-        let events =
-            query { 
-                for e in db.Events do
-                    where 
-                        (e.ClubId = clubId && e.DateTime < inFourDays && e.DateTime > now 
-                         && not e.IsPublished)
-                    join eventTeam in db.EventTeams on (e.Id = eventTeam.EventId)
-                    select (e.Id, eventTeam.TeamId)
-            }
-            |> Seq.toList
-            |> List.distinct
-        
+
+    let getEvents () =
+        db.Events.Where(fun e ->
+          (e.ClubId = clubId
+           && e.DateTime < inFourDays
+           && e.DateTime > now
+           && not e.IsPublished)).Select(fun e -> (e.Id, e.TeamId, e.EventTeams.Select(fun et -> et.TeamId)))
+        |> Seq.toList
+        |> List.map (function
+            | (eventId, Value teamId, _) ->
+                {| EventId = eventId
+                   TeamIds = [ teamId ] |}
+            | (eventId, _, teamIds) ->
+                {| EventId = eventId
+                   TeamIds = teamIds |> Seq.toList |}
+
+            )
+        |> List.distinct
+
+    let events =
+        Cache.get ctx (eventsKey club.Id) getEvents
+
+
+    let getUserAttendances () =
         let eventIds =
-                events
-                |> List.map (fun (id, _) -> id)
-                |> List.distinct
-          
-        
-        let attendances =
-            query { 
-                for attendance in db.EventAttendances do
-                    where (eventIds.Contains(attendance.EventId))
-                    select (attendance.EventId, attendance.MemberId)
-            }
-            |> Seq.toList
-        
-        (events, attendances)
-    
-    let (events, attendances) = Cache.get ctx (key club.Id) getEventsAndAttendances
-    
+            events
+            |> List.map (fun e -> e.EventId)
+            |> List.distinct
+
+        db.EventAttendances.Where(fun ea ->
+          ea.MemberId = user.Id
+          && eventIds.Contains(ea.EventId)).Select(fun ea -> ea.EventId)
+        |> Seq.toList
+        |> List.distinct
+
+    let attendances =
+        Cache.get ctx (eventsKey club.Id) getUserAttendances
+
+
     let userEvents =
         events
-        |> List.filter (fun (_, teamId) -> user.TeamIds |> List.contains teamId)
-        |> List.map (fun (eventId, _) -> eventId)
+        |> List.filter (fun e ->
+            e.TeamIds
+            |> List.exists (fun id -> (user.TeamIds |> List.contains id)))
+        |> List.map (fun e -> e.EventId)
         |> List.distinct
-    
-    let userAttendances =
-        attendances
-        |> List.filter (fun (_, memberId) -> memberId = user.Id)
-        |> List.map (fun (eventId, _) -> eventId)
-    
+
     let unansweredEventIds =
         userEvents
-        |> List.filter (fun eventId -> not (userAttendances |> List.contains eventId))
+        |> List.filter (fun eventId -> not (attendances |> List.contains eventId))
         |> List.distinct
-    
+
     { UnansweredEventIds = unansweredEventIds }
 
-let clearCache ctx clubId =
-    Cache.clear ctx (key clubId)
-    Cache.clear ctx ("old-" + (key clubId))
+let clearCacheForClub ctx clubId = Cache.clear ctx (eventsKey clubId)
+let clearCacheForUser ctx clubId (user: User) = Cache.clear ctx (userAttendancesKey clubId user.Id)

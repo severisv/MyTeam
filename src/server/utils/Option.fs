@@ -17,3 +17,6 @@ module Option =
         function 
         | None -> ""
         | Some x -> x.ToString()
+    
+    let (|Null|Value|) (x: _ Nullable) =
+        if x.HasValue then Value x.Value else Null

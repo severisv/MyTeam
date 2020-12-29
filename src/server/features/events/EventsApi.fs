@@ -12,9 +12,7 @@ open System.Linq
 
 type EventId = Guid
 
-type Event =
-    { Id: EventId
-      Description: string }
+type Event = { Id: EventId; Description: string }
 
 let setDescription clubId eventId (ctx: HttpContext) (model: StringPayload) =
     let db = ctx.Database
@@ -61,11 +59,11 @@ let internal updateAttendance clubId (user: User) eventId (ctx: HttpContext) upd
             }
             |> Seq.tryHead
             |> function
-            | Some ea ->
-                ea
+            | Some ea -> ea
             | None ->
                 let ea =
                     MyTeam.Models.Domain.EventAttendance(MemberId = user.Id, EventId = eventId)
+
                 db.EventAttendances.Add ea |> ignore
                 ea
             |> fun ea ->
@@ -76,6 +74,9 @@ let internal updateAttendance clubId (user: User) eventId (ctx: HttpContext) upd
 
 let signup clubId (user: User) eventId (ctx: HttpContext) (model: Signup) =
     updateAttendance clubId user eventId ctx (fun ea -> ea.IsAttending <- Nullable model.IsAttending)
+    |> HttpResult.map (fun result ->
+        Notifications.clearCacheForUser ctx clubId user
+        result)
 
 let signupMessage clubId (user: User) eventId (ctx: HttpContext) (model: StringPayload) =
     updateAttendance clubId user eventId ctx (fun ea -> ea.SignupMessage <- model.Value)
@@ -105,7 +106,8 @@ type DbM =
       IsSelected: Nullable<bool>
       DidAttend: Nullable<bool> }
 
-let treningskamp = Nullable(int Models.Enums.GameType.Treningskamp)
+let treningskamp =
+    Nullable(int Models.Enums.GameType.Treningskamp)
 
 
 let listEvents (club: Club) (user: User) period (db: Database) =
@@ -120,20 +122,28 @@ let listEvents (club: Club) (user: User) period (db: Database) =
              query {
                  for event in db.Events do
                      where
-                         (event.ClubId = clubId && event.DateTime >= inTwoHours
-                          && (event.GameType = treningskamp || event.DateTime < in14Days))
+                         (event.ClubId = clubId
+                          && event.DateTime >= inTwoHours
+                          && (event.GameType = treningskamp
+                              || event.DateTime < in14Days))
              }
          | Upcoming Rest ->
              query {
                  for event in db.Events do
                      where
-                         (event.ClubId = clubId && event.DateTime >= inTwoHours
-                          && (event.GameType <> treningskamp && event.DateTime >= in14Days))
+                         (event.ClubId = clubId
+                          && event.DateTime >= inTwoHours
+                          && (event.GameType
+                              <> treningskamp
+                              && event.DateTime >= in14Days))
              }
-         | Previous(Some year) ->
+         | Previous (Some year) ->
              query {
                  for event in db.Events do
-                     where (event.ClubId = clubId && event.DateTime < inTwoHours && event.DateTime.Year = year)
+                     where
+                         (event.ClubId = clubId
+                          && event.DateTime < inTwoHours
+                          && event.DateTime.Year = year)
              }
          | Previous None ->
              let year =
@@ -149,36 +159,39 @@ let listEvents (club: Club) (user: User) period (db: Database) =
 
              query {
                  for event in db.Events do
-                     where (event.ClubId = clubId && event.DateTime < inTwoHours && event.DateTime.Year = year)
+                     where
+                         (event.ClubId = clubId
+                          && event.DateTime < inTwoHours
+                          && event.DateTime.Year = year)
              })
         |> fun events ->
             query {
                 for event in events do
                     groupJoin ea in db.EventAttendances on (event.Id = ea.EventId) into group
                     for ea in group.DefaultIfEmpty() do
-                    select
-                        ({ Id = event.Id
-                           Description = event.Description
-                           DateTime = event.DateTime
-                           Location = event.Location
-                           Type = event.Type
-                           GameType = event.GameType
-                           Opponent = event.Opponent
-                           TeamId = event.TeamId
-                           GamePlanIsPublished = event.GamePlanIsPublished
-                           SquadIsPublished = event.IsPublished },
-                         { FirstName = ea.Member.FirstName
-                           LastName = ea.Member.LastName
-                           UrlName = ea.Member.UrlName
-                           Message = ea.SignupMessage
-                           Id = Nullable ea.MemberId
-                           IsAttending = ea.IsAttending
-                           IsSelected = Nullable ea.IsSelected
-                           DidAttend = Nullable ea.DidAttend })
+                        select
+                            ({ Id = event.Id
+                               Description = event.Description
+                               DateTime = event.DateTime
+                               Location = event.Location
+                               Type = event.Type
+                               GameType = event.GameType
+                               Opponent = event.Opponent
+                               TeamId = event.TeamId
+                               GamePlanIsPublished = event.GamePlanIsPublished
+                               SquadIsPublished = event.IsPublished },
+                             { FirstName = ea.Member.FirstName
+                               LastName = ea.Member.LastName
+                               UrlName = ea.Member.UrlName
+                               Message = ea.SignupMessage
+                               Id = Nullable ea.MemberId
+                               IsAttending = ea.IsAttending
+                               IsSelected = Nullable ea.IsSelected
+                               DidAttend = Nullable ea.DidAttend })
             }
         |> Seq.toList
         |> List.groupBy (fun (e, _) -> e)
-      
+
     let eventIds = events |> List.map (fun (e, _) -> e.Id)
 
     let teamIds =
@@ -219,12 +232,8 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                     UrlName = a.UrlName
                     Id = a.Id.Value
                     Message = !!a.Message
-                    IsAttending =
-                        if a.IsAttending.HasValue then a.IsAttending.Value
-                        else false
-                    DidAttend =
-                        if a.DidAttend.HasValue then a.DidAttend.Value
-                        else false })
+                    IsAttending = if a.IsAttending.HasValue then a.IsAttending.Value else false
+                    DidAttend = if a.DidAttend.HasValue then a.DidAttend.Value else false })
           Details =
               (match eventType with
                | Kamp ->
@@ -233,14 +242,14 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                        |> List.tryFind (fun t -> Nullable t.Id = e.TeamId)
                        |> Option.map (fun t -> t.ShortName)
                        |> Option.defaultValue ""
+
                    Game
                        { Team = teamName
                          Opponent = e.Opponent
                          Type = Events.gameTypeFromInt e.GameType.Value
                          SquadIsPublished = e.SquadIsPublished
                          GamePlanIsPublished =
-                             if e.GamePlanIsPublished.HasValue then e.GamePlanIsPublished.Value
-                             else false
+                             if e.GamePlanIsPublished.HasValue then e.GamePlanIsPublished.Value else false
                          Squad =
                              attendees
                              |> List.filter (fun (_, a) -> a.IsSelected.Value)
@@ -252,14 +261,17 @@ let listEvents (club: Club) (user: User) period (db: Database) =
                                    Message = !!a.Message
                                    IsAttending = if a.IsAttending.HasValue then a.IsAttending.Value else false
                                    DidAttend = if a.DidAttend.HasValue then a.DidAttend.Value else false }) }
-                       | _ -> Training) })
+               | _ -> Training) })
     |> List.filter (fun e ->
-        user.PlaysForTeam e.TeamIds || match e.Details with
-                                       | _ when user.IsInRole [ Admin; Trener ] -> true
-                                       | Game game -> game.SquadIsPublished
-                                       | Training -> false)
+        user.PlaysForTeam e.TeamIds
+        || match e.Details with
+           | _ when user.IsInRole [ Admin; Trener ] -> true
+           | Game game -> game.SquadIsPublished
+           | Training -> false)
     |> fun events ->
         match period with
         | Upcoming _ -> events |> List.sortBy (fun e -> e.DateTime)
-        | Previous _ -> events |> List.sortByDescending (fun e -> e.DateTime)
+        | Previous _ ->
+            events
+            |> List.sortByDescending (fun e -> e.DateTime)
     |> OkResult

@@ -53,7 +53,7 @@ let publishSquad =
     fun clubId gameId (ctx: HttpContext) _ ->
         Persistence.publishSquad ctx.Database clubId gameId
         |> Results.map (fun r ->
-            Notifications.clearCache ctx clubId
+            Notifications.clearCacheForClub ctx clubId
             r)
 
 
@@ -77,7 +77,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddGame) =
 
     db.Events.Add(game) |> ignore
     db.SaveChanges() |> ignore
-    Notifications.clearCache ctx club.Id
+    Notifications.clearCacheForClub ctx club.Id
     OkResult
         { model with
               Id = Some game.Id
@@ -92,12 +92,12 @@ let update (club: Club) gameId (ctx: HttpContext) (model: AddGame) =
         game.GameType <- Nullable(Events.gameTypeToInt model.GameType)
         game.Description <- model.Description
         game.IsHomeTeam <- model.IsHomeGame
-        Notifications.clearCache ctx club.Id
+        Notifications.clearCacheForClub ctx club.Id
         ) 
         |> HttpResult.map (fun _ -> model)
         
 
 let delete (club: Club) gameId ctx =
-    Notifications.clearCache ctx club.Id
+    Notifications.clearCacheForClub ctx club.Id
     let db = ctx.Database
     updateGame club.Id gameId db (db.Remove >> ignore)

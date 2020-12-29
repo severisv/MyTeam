@@ -39,7 +39,7 @@ let add (club: Club) (ctx: HttpContext) (model: AddOrUpdateTraining list) =
 
     db.Events.AddRange(trainings) |> ignore
     db.SaveChanges() |> ignore
-    Notifications.clearCache ctx club.Id
+    Notifications.clearCacheForClub ctx club.Id
     OkResult()
 
 let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTraining) =
@@ -69,7 +69,7 @@ let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTrainin
              |> List.toArray)
 
         db.EventTeams.AddRange(addedTeams) |> ignore
-        Notifications.clearCache ctx club.Id
+        Notifications.clearCacheForClub ctx club.Id
     )
 
     |> HttpResult.map (fun _ -> model)
@@ -77,6 +77,6 @@ let update (club: Club) trainingId (ctx: HttpContext) (model: AddOrUpdateTrainin
 
 
 let delete (club: Club) trainingId ctx =
-    Notifications.clearCache ctx club.Id
+    Notifications.clearCacheForClub ctx club.Id
     let db = ctx.Database
     updateGame club.Id trainingId db (db.Remove >> ignore)
