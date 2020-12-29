@@ -154,7 +154,8 @@ module App =
                                             (Events.List.previous club user None |> htmlGet)
                                         routef "/arrangementer/tidligere/%i"
                                             ((fun year -> Events.List.previous club user (Some year)) >> htmlGet)
-                                             
+                                        route "/arrangementer/varsler" >=>
+                                               (Views.NotificationViews.notificationPartial club user |> htmlGet)     
                                         route "/lagliste" >=>
                                             (Members.Pages.List.view club user None |> htmlGet)
                                         routef "/lagliste/%s" <| fun status ->

@@ -1,9 +1,11 @@
+
 namespace MyTeam
 
 open Giraffe
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open Shared
+open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
 open Microsoft.Extensions.Hosting
@@ -38,7 +40,7 @@ module Pages =
           MetaDescription: string
           Scripts: XmlNode list }
 
-    let layout club (user: Option<User>) getOptions (ctx: HttpContext) content =
+    let layout (club: Club) (user: Option<User>) getOptions (ctx: HttpContext) content =
 
         let isProduction =
             ctx.GetService<IHostEnvironment>().IsProduction()
@@ -53,8 +55,6 @@ module Pages =
                    MetaDescription = ""
                    Scripts = [] })
 
-        let notifications = notifications ctx club
-        let loginPartial = userPartial ctx notifications
         let getImage = Images.get ctx
 
         html [ _lang "nb-no" ]
@@ -135,7 +135,7 @@ module Pages =
                                                      [])))
 
                                              ) []))
-                                 loginPartial user
+                                 userPartial club user ctx
                                  user
                                  |> Option.fold (fun _ user ->
                                      ul

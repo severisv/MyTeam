@@ -1,6 +1,5 @@
 module Client.Events.List
 
-open Client.Components
 open Shared.Util.ReactHelpers
 open Thoth.Json
 open Fable.React
@@ -169,6 +168,7 @@ let element props children =
                                                      state.Signups
                                                      |> Map.map (fun eventId attendees ->
                                                          if eventId = event.Id then modifiedAttendees else attendees) })
+                                       Ajax.update "notification-button" "/intern/arrangementer/varsler"
 
                                    fragment []
                                        [ hr []

@@ -12,7 +12,6 @@ import ajax from './ajaxHelpers'
 import global from './global'
 
 window.ajax = ajax
-
 window.checkbox = require('./checkbox')
 
 window.global = global

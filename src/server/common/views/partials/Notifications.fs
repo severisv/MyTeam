@@ -2,21 +2,15 @@ namespace MyTeam.Views
 
 open Giraffe.GiraffeViewEngine
 open MyTeam
-open Shared
 open Shared.Domain.Members
 open Shared.Components
 open MyTeam.Views.BaseComponents
 
-
-[<AutoOpen>]
 module NotificationViews =
-
-    let notifications (ctx: HttpContext) club (user: User) =
-
+    
+    let internal content ctx club user =
         let model = Notifications.get ctx club user
-        
-        ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] [
-            (if model.UnansweredEvents > 0 then            
+        (if model.UnansweredEvents > 0 then            
                 li [_class "dropdown" ] [ 
                     button [_class "dropdown-toggle btn btn-warning"; attr "data-toggle" "dropdown" ] [
                         icon <| fa "bell-o" <| ""
@@ -36,5 +30,12 @@ module NotificationViews =
                     ]
                 ]
              else emptyText)
+    
+    let notifications club (user: User) (ctx: HttpContext) =        
+        ul [_id "notification-button";_class "notification-button nav navbar-nav navbar-right navbar-topRight--item"] [
+            content ctx club user
         ]
 
+    let notificationPartial club (user: User) (ctx: HttpContext) =
+        content ctx club user
+        |> OkResult
