@@ -51,8 +51,8 @@
     <Compile Include="common/News.fs" />
     <Compile Include="common/Notifications.fs" />
     <Compile Include="common/views/partials/Analytics.fs" />
+    <Compile Include="common\views\partials\Notifications.fs" />
     <Compile Include="common/views/partials/Login.fs" />
-    <Compile Include="common/views/partials/Notifications.fs" />
     <Compile Include="common/views/Layout.fs" />
     <Compile Include="common/views/Error.fs" />
     <Compile Include="common/ErrorHandling.fs" />
