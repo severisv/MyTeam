@@ -43,7 +43,8 @@ module App =
                                     POST >=> Antiforgery.validate >=> route "/nullstill-passord" >=> (Account.ResetPassword.confirmPost club user |> htmlPost)
                                     ] 
                     route "/404" >=> setStatusCode 404 >=> Views.Error.notFound club user    
-                    route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)   
+                    route "/personvern" >=> (About.privacy club user |> htmlGet)          
+                    route "/" >=> GET >=> (News.Pages.Index.view club user id |> htmlGet)       
                     routef "/%i/%i" <| fun (skip, take) -> GET >=> (News.Pages.Index.view club user (fun o -> { o with Skip = skip; Take = take }) |> htmlGet)                        
                     subRoute "/nyheter"             
                         <|  choose [                                                
