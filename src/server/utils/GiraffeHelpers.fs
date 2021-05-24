@@ -48,7 +48,7 @@ module PipelineHelpers =
     let removeTrailingSlash next (ctx: HttpContext) =
         let path = ctx.Request.Path.Value
         if path.EndsWith("/") && path.Length > 1 then
-            redirectTo true (sprintf "%s%s" (path.Remove(path.Length-1)) ctx.Request.QueryString.Value) next ctx
+            redirectTo true $"%s{path.Remove(path.Length-1)}%s{ctx.Request.QueryString.Value}" next ctx
         else         
             next ctx
 

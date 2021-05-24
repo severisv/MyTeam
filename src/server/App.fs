@@ -24,7 +24,7 @@ module App =
             | (Some _, Some user) when not user.ProfileIsConfirmed && 
                                        not <| urlIncludes "spillere/endre" &&
                                        not <| urlIncludes "api" ->
-                redirectTo false (sprintf "/spillere/endre/%s" user.UrlName) next ctx  
+                redirectTo false $"/spillere/endre/%s{user.UrlName}" next ctx  
             | (Some club, _) ->
                 choose [
                     subRoute "/konto"             

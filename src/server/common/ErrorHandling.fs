@@ -38,18 +38,14 @@ let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger
 
 
 let logNotFound next (ctx: HttpContext) =
-
     if  not <| String.IsNullOrEmpty(ctx.Request.Headers.["Referer"] |> string)
-        &&
-        ["http://wamkam.no" ]
-        |> Seq.exists (ctx.Request.Headers.["Referer"] |> string |> contains)
-        |> not 
+        && ctx.Request.IsHttps
         &&
         ["crawler"; "bingbot"; "Googlebot"; "SemrushBot"; "Dataprovider.com"; "Lynt.cz"; "DotBot"; "uptimebot" ]
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not 
         && 
-        [".php"; "apple-touch"; "favicon.ico"; "index.php";"/wp/"]
+        [".php"; "apple-touch"; "favicon.ico"; "index.php";"wp"; "cms";"/dev";"/tmp"]
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             
@@ -61,7 +57,7 @@ let logNotFound next (ctx: HttpContext) =
                                         (ctx.Request.Headers 
                                         |> Seq.filter (fun kv -> not <| kv.Key.ToLower().Contains "cookie")
                                         |> Seq.map (fun keyValue -> 
-                                            sprintf "%s: %s" keyValue.Key (string keyValue.Value)
+                                            $"%s{keyValue.Key}: %s{string keyValue.Value}"
                                         )
                                         |> String.concat ",\n  ")
                                      )
