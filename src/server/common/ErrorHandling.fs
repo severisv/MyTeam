@@ -49,7 +49,7 @@ let logNotFound next (ctx: HttpContext) =
         |> Seq.exists (ctx.Request.Headers.["Referer"] |> string |> contains)
         |> not 
         && 
-        [".php"; "apple-touch"; "favicon.ico"; "index.php";"wp"; "cms";"/dev";"/tmp"]
+        [".php"; "apple-touch"; "favicon.ico"; "index.php";"wp"; "cms";"/dev";"/tmp";".txt";".zip"]
         |> Seq.exists (ctx.Request.Path |> string |> contains)
         |> not           
             then             
