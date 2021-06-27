@@ -48,7 +48,8 @@ let internal handleClick props setState _ =
     setState (fun _ _ -> Sending)
     promise {
         let! res = match props.Endpoint with
-                   | Post(url, payload) -> Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "")) []
+                   | Post(url, payload) ->
+                       Http.send HttpMethod.POST url (payload |> Option.defaultValue (fun () -> "{}")) []
                    | Put(url, payload) -> Http.send HttpMethod.PUT url (payload |> Option.defaultValue (fun () -> "")) []
                    | Delete url -> fetch url [Method HttpMethod.DELETE ]
 

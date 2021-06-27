@@ -21,7 +21,7 @@ let notFound club user next ctx =
 let serverError club user next ctx =
     ([ block [] 
            [ errorMessage !!(Icons.injury "") 
-                 " Auda... det oppstod en feil. Vi har meldt fra til de det gjelder." ] ]
+                 " Auda... det oppstod en feil. Vi er på saken." ] ]
      |> layout club user (fun o -> { o with Title = "500" }) ctx
      |> htmlView) next ctx
 

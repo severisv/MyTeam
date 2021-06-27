@@ -31,9 +31,9 @@ module Email =
     
             let! response = client.SendEmailAsync message
             let! content = response.Body.ReadAsStringAsync()
-            if (int response.StatusCode) >= 300 then failwithf "Feil ved sending av e-post: (%O) %s" response.StatusCode content 
+            if (int response.StatusCode) >= 300 then failwithf $"Feil ved sending av e-post: ({response.StatusCode}) %s{content}" 
                
-            logger.LogInformation (sprintf "Sender e-post til %s. Status: %i. Message: %O" emailAddress (int response.StatusCode) message)
+            logger.LogInformation $"Sender e-post til %s{emailAddress}. Status: %i{int response.StatusCode}. Message: {message}"
         }       
        
        
