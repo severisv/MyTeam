@@ -65,10 +65,12 @@ let run next (ctx: HttpContext)  =
                                 let opponent = if isHomeTeam then row.Bortelag else row.Hjemmelag 
                                                |> Strings.removeDoubleWhitespaces  
                                 
-                                let date = (row.Dato |> DateTime.Parse)
+                                let date =
+                                    try row.Dato.Split "." |> fun v -> DateTime(int v.[2], int v.[1], int v.[0])
+                                    with _ -> failwith $"Klarte ikke parse dato for kamp: {row}. Season: {season}"
                                 
                                 if date < season.StartDate || date > season.EndDate then
-                                    logger.LogWarning(sprintf "Prøver å legge til kamp som ikke er for gjeldende sesong. SeasonId %O Rad: %O" season.Id row)
+                                    logger.LogWarning $"Prøver å legge til kamp som ikke er for gjeldende sesong. SeasonId {season.Id} Rad: {row}"
                                     ()
 
                                 else
@@ -81,7 +83,7 @@ let run next (ctx: HttpContext)  =
                                             existingGame
                                         | None ->
                                                                              
-                                            let et = new System.Collections.Generic.List<Models.Domain.EventTeam>()
+                                            let et = List<Models.Domain.EventTeam>()
                                             et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
 
                                             let g = 
@@ -104,7 +106,7 @@ let run next (ctx: HttpContext)  =
                                                |> List.map float
                                                |> function 
                                                | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
-                                               | r -> failwithf "Klarte ikke parse tid: %O" r
+                                               | r -> failwithf $"Klarte ikke parse tid: {r}"
                                                                                    
                                     game.DateTime <- (date.Date.Add time)
                                     game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            
@@ -117,9 +119,7 @@ let run next (ctx: HttpContext)  =
         with
             | ex ->  
                 logger.LogError(EventId(), ex, 
-                                sprintf "Klarte ikke scrape kamper. SeasonId: %O  Url: %s" 
-                                            season.Id
-                                            season.FixturesSourceUrl
+                                $"Klarte ikke scrape kamper. SeasonId: {season.Id}  Url: %s{season.FixturesSourceUrl}"
                                 )                        
                 Error ()                            
     )
@@ -127,6 +127,6 @@ let run next (ctx: HttpContext)  =
         let success = res |> Seq.filter (function | Ok _ -> true | Error _ -> false)
                           |> Seq.toList                                                
                                             
-        text (sprintf "Parset %i sesonger" success.Length) next ctx
+        text $"Parset %i{success.Length} sesonger" next ctx
     
 
