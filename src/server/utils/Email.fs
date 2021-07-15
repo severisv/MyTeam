@@ -7,36 +7,41 @@ open Microsoft.Extensions.DependencyInjection
 open SendGrid
 open SendGrid.Helpers.Mail
 open MyTeam
-open FSharp.Control.Tasks.V2.ContextInsensitive
+open FSharp.Control.Tasks
 
 
 
 module Email =
 
-    let send (serviceProvider : IServiceProvider) emailAddress subject message =
+    let send (serviceProvider: IServiceProvider) emailAddress subject message =
 
         task {
-            let apiKey = serviceProvider.GetService<IConfiguration>().["Integration:SendGrid:Key"]
+            let apiKey =
+                serviceProvider.GetService<IConfiguration>().["Integration:SendGrid:Key"]
+
             let logger = Logger.get serviceProvider
-    
-            let client = SendGridClient(apiKey);
-    
+
+            let client = SendGridClient(apiKey)
+
             let message =
-                MailHelper.CreateSingleEmail
-                    ( from = EmailAddress("noreply@wamkam.no", "Wam-Kam FK"),
-                      ``to`` = EmailAddress emailAddress,
-                      subject = subject,
-                      plainTextContent = "",
-                      htmlContent = message )
-    
+                MailHelper.CreateSingleEmail(
+                    from = EmailAddress("noreply@wamkam.no", "Wam-Kam FK"),
+                    ``to`` = EmailAddress emailAddress,
+                    subject = subject,
+                    plainTextContent = "",
+                    htmlContent = message
+                )
+
             let! response = client.SendEmailAsync message
             let! content = response.Body.ReadAsStringAsync()
-            if (int response.StatusCode) >= 300 then failwithf $"Feil ved sending av e-post: ({response.StatusCode}) %s{content}" 
-               
+
+            if (int response.StatusCode) >= 300 then
+                failwithf $"Feil ved sending av e-post: ({response.StatusCode}) %s{content}"
+
             logger.LogInformation $"Sender e-post til %s{emailAddress}. Status: %i{int response.StatusCode}. Message: {message}"
-        }       
-       
-       
+        }
+
+
 type EmailSender(serviceProvider) =
     member x.SendEmailAsync(email, subject, message) =
         Email.send serviceProvider email subject message

@@ -1,7 +1,7 @@
 module MyTeam.Account.ResetPassword
 
 open System.Web
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 open MyTeam
 open Services.Utils
 open Shared
@@ -16,7 +16,7 @@ open Giraffe
 open Fable.React.Props
 open Microsoft.AspNetCore.Identity
 open MyTeam.Models
-open FSharp.Control.Tasks.V2.ContextInsensitive
+open FSharp.Control.Tasks
 
 
 [<CLIMutable>]
@@ -26,37 +26,39 @@ type ResetForm = { ``E-post``: string }
 let view model (errors: ValidationError list) (club: Club) (user: User option) (ctx: HttpContext) =
 
     let validationMessage name =
-        Forms.validationMessage
-            (errors
-             |> List.filter (fun ve -> ve.Name = name)
-             |> List.collect (fun ve -> ve.Errors))
+        Forms.validationMessage (
+            errors
+            |> List.filter (fun ve -> ve.Name = name)
+            |> List.collect (fun ve -> ve.Errors)
+        )
 
     [ mtMain [ _class "mt-main--narrow" ] [
-        block [] [
-            form [ _method "post"
-                   _class "form-horizontal"
-                   _action "/konto/glemt-passord"
-                   attr "" "novalidate" ] [
-                !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
-                !!(Forms.formRow
-                    [ Forms.Horizontal 3 ]
-                       [ Fable.React.Helpers.str "E-post" ]
-                       [ Forms.textInput [ Name "E-post"
-                                           Value
-                                               ((model
-                                                 |> Option.map (fun model -> model.``E-post``)
-                                                 |> Option.defaultValue "")) ]
-                         validationMessage "E-post" ])
+          block [] [
+              form [ _method "post"
+                     _class "form-horizontal"
+                     _action "/konto/glemt-passord"
+                     attr "" "novalidate" ] [
+                  !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
+                  !!(Forms.formRow
+                      [ Forms.Horizontal 3 ]
+                      [ Fable.React.Helpers.str "E-post" ]
+                      [ Forms.textInput [ Name "E-post"
+                                          Value(
+                                              (model
+                                               |> Option.map (fun model -> model.``E-post``)
+                                               |> Option.defaultValue "")
+                                          ) ]
+                        validationMessage "E-post" ])
 
-                antiforgeryToken ctx
-                !!(Forms.formRow
-                    [ Forms.Horizontal 3 ]
-                       []
-                       [ btn [ Type "submit"; Primary ] [
-                           Fable.React.Helpers.str "Nullstill passord"
-                         ] ])
-            ]
-        ]
+                  antiforgeryToken ctx
+                  !!(Forms.formRow
+                      [ Forms.Horizontal 3 ]
+                      []
+                      [ btn [ Type "submit"; Primary ] [
+                            Fable.React.Helpers.str "Nullstill passord"
+                        ] ])
+              ]
+          ]
       ] ]
     |> layout club user (fun o -> { o with Title = "Glemt passord" }) ctx
     |> OkResult
@@ -66,66 +68,69 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
 let post (club: Club) (user: User option) form (ctx: HttpContext) =
     form
     |> function
-    | Ok form ->
-        combine
-            [ <@ form.``E-post`` @>
-              >- [ isRequired; isValidEmail ] ]
-        |> function
-        | Ok _ ->
+        | Ok form ->
+            combine [ <@ form.``E-post`` @>
+                      >- [ isRequired; isValidEmail ] ]
+            |> function
+                | Ok _ ->
 
-            let userManager =
-                ctx.GetService<UserManager<ApplicationUser>>()
-
-
-            let sendMail = Email.send ctx.RequestServices
-
-            task {
-                let! account = userManager.FindByNameAsync(form.``E-post``)
-
-                if isNull account then
-                    return view
-                               (Some form)
-                               [ { Name = ""
-                                   Errors = [ sprintf "Finner ikke ikke noen bruker for %s" form.``E-post`` ] } ]
-                               club
-                               user
-                               ctx
-                else
-                    let! code = userManager.GeneratePasswordResetTokenAsync account
-
-                    let callbackUrl =
-                        sprintf
-                            "%s://%s/konto/nullstill-passord?code=%s&email=%s"
-                            ctx.Request.Scheme
-                            (ctx.Request.Host.ToString())
-                            (HttpUtility.UrlEncode(code))
-                            (HttpUtility.UrlEncode(account.Email))
+                    let userManager =
+                        ctx.GetService<UserManager<ApplicationUser>>()
 
 
-                    do! sendMail
-                            form.``E-post``
-                            "Nullstill passord"
-                            ("Du kan nullstille passordet ditt ved å trykke <a href=\""
-                             + callbackUrl
-                             + "\">her</a>")
+                    let sendMail = Email.send ctx.RequestServices
 
-                    return [ mtMain [] [
-                                 block [] [
-                                     br []
-                                     p [] [
-                                         !!(Icons.check)
-                                         encodedText " En e-post med instruksjoner om nullstilling av passord er sent"
-                                     ]
-                                 ]
-                             ] ]
-                           |> layout club user (fun o -> { o with Title = "Glemt passord" }) ctx
-                           |> OkResult
-            }
-            |> Async.AwaitTask
-            |> Async.RunSynchronously
-        | Error e -> view (Some form) e club user ctx
+                    task {
+                        let! account = userManager.FindByNameAsync(form.``E-post``)
 
-    | Error e -> failwith e
+                        if isNull account then
+                            return
+                                view
+                                    (Some form)
+                                    [ { Name = ""
+                                        Errors = [ sprintf "Finner ikke ikke noen bruker for %s" form.``E-post`` ] } ]
+                                    club
+                                    user
+                                    ctx
+                        else
+                            let! code = userManager.GeneratePasswordResetTokenAsync account
+
+                            let callbackUrl =
+                                sprintf
+                                    "%s://%s/konto/nullstill-passord?code=%s&email=%s"
+                                    ctx.Request.Scheme
+                                    (ctx.Request.Host.ToString())
+                                    (HttpUtility.UrlEncode(code))
+                                    (HttpUtility.UrlEncode(account.Email))
+
+
+                            do!
+                                sendMail
+                                    form.``E-post``
+                                    "Nullstill passord"
+                                    ("Du kan nullstille passordet ditt ved å trykke <a href=\""
+                                     + callbackUrl
+                                     + "\">her</a>")
+
+                            return
+                                [ mtMain [] [
+                                      block [] [
+                                          br []
+                                          p [] [
+                                              !!(Icons.check)
+                                              encodedText
+                                                  " En e-post med instruksjoner om nullstilling av passord er sent"
+                                          ]
+                                      ]
+                                  ] ]
+                                |> layout club user (fun o -> { o with Title = "Glemt passord" }) ctx
+                                |> OkResult
+                    }
+                    |> Async.AwaitTask
+                    |> Async.RunSynchronously
+                | Error e -> view (Some form) e club user ctx
+
+        | Error e -> failwith e
 
 
 
@@ -137,12 +142,13 @@ type ConfirmResetForm =
       Code: string }
 
 
-let confirmView (model: ConfirmResetForm option)
-                (errors: ValidationError list)
-                (club: Club)
-                (user: User option)
-                (ctx: HttpContext)
-                =
+let confirmView
+    (model: ConfirmResetForm option)
+    (errors: ValidationError list)
+    (club: Club)
+    (user: User option)
+    (ctx: HttpContext)
+    =
 
     let code, email =
         match model with
@@ -152,50 +158,55 @@ let confirmView (model: ConfirmResetForm option)
     match (code, email) with
     | (Some code, Some email) ->
         let validationMessage name =
-            Forms.validationMessage
-                (errors
-                 |> List.filter (fun ve -> ve.Name = name)
-                 |> List.collect (fun ve -> ve.Errors))
+            Forms.validationMessage (
+                errors
+                |> List.filter (fun ve -> ve.Name = name)
+                |> List.collect (fun ve -> ve.Errors)
+            )
 
         [ mtMain [ _class "mt-main--narrow" ] [
-            block [] [
-                h4 [] [ str "Nytt passord" ]
-                form [ _method "post"
-                       _class "form-horizontal"
-                       _action "/konto/nullstill-passord"
-                       attr "" "novalidate" ] [
-                    
-                    input [_name "E-post";_value email;_type "hidden" ]
-                    input [_name "Code";_value code;_type "hidden" ]                    
-                    !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
-                    !!(Forms.formRow
-                        [ Forms.Horizontal 3 ]
-                           [ Fable.React.Helpers.str "Passord" ]
-                           [ Forms.textInput [ Type "password"
-                                               Name "Passord"
-                                               Value ""
-                                               AutoComplete "off" ]
-                             validationMessage "Passord" ]
+              block [] [
+                  h4 [] [ str "Nytt passord" ]
+                  form [ _method "post"
+                         _class "form-horizontal"
+                         _action "/konto/nullstill-passord"
+                         attr "" "novalidate" ] [
 
-                    )
-                    !!(Forms.formRow
-                        [ Forms.Horizontal 3 ]
-                           [ Fable.React.Helpers.str "Bekreft passordet" ]
-                           [ Forms.textInput [ Type "password"
-                                               Name "Bekreft passordet"
-                                               Value ""
-                                               AutoComplete "off" ]
-                             validationMessage "Bekreft passordet" ])
+                      input [ _name "E-post"
+                              _value email
+                              _type "hidden" ]
+                      input [ _name "Code"
+                              _value code
+                              _type "hidden" ]
+                      !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
+                      !!(Forms.formRow
+                          [ Forms.Horizontal 3 ]
+                          [ Fable.React.Helpers.str "Passord" ]
+                          [ Forms.textInput [ Type "password"
+                                              Name "Passord"
+                                              Value ""
+                                              AutoComplete "off" ]
+                            validationMessage "Passord" ]
 
-                    antiforgeryToken ctx
-                    !!(Forms.formRow
-                        [ Forms.Horizontal 3 ]
-                           []
-                           [ btn [ Type "submit"; Primary ] [
-                               Fable.React.Helpers.str "Bekreft"
-                             ] ])
-                ]
-            ]
+                      )
+                      !!(Forms.formRow
+                          [ Forms.Horizontal 3 ]
+                          [ Fable.React.Helpers.str "Bekreft passordet" ]
+                          [ Forms.textInput [ Type "password"
+                                              Name "Bekreft passordet"
+                                              Value ""
+                                              AutoComplete "off" ]
+                            validationMessage "Bekreft passordet" ])
+
+                      antiforgeryToken ctx
+                      !!(Forms.formRow
+                          [ Forms.Horizontal 3 ]
+                          []
+                          [ btn [ Type "submit"; Primary ] [
+                                Fable.React.Helpers.str "Bekreft"
+                            ] ])
+                  ]
+              ]
           ] ]
         |> layout club user (fun o -> { o with Title = "Lag nytt passord" }) ctx
         |> OkResult
@@ -207,60 +218,64 @@ let confirmPost (club: Club) (user: User option) form (ctx: HttpContext) =
 
     form
     |> function
-    | Ok form ->
-        combine [ <@ form.``E-post`` @>
-                  >- [ isRequired; isValidEmail ]
-                  <@ form.Passord @> >- [ isRequired; minLength 6 ]
-                  <@ form.``Bekreft passordet`` @> >- [ isRequired ]
-                  <@ form @>
-                  >- [ fun name value ->
-                           if value.Passord = value.``Bekreft passordet``
-                           then Ok()
-                           else Error "Passordene stemmer ikke overrens" ] ]
-        |> function
-        | Ok _ ->
+        | Ok form ->
+            combine [ <@ form.``E-post`` @>
+                      >- [ isRequired; isValidEmail ]
+                      <@ form.Passord @> >- [ isRequired; minLength 6 ]
+                      <@ form.``Bekreft passordet`` @> >- [ isRequired ]
+                      <@ form @>
+                      >- [ fun name value ->
+                               if value.Passord = value.``Bekreft passordet`` then
+                                   Ok()
+                               else
+                                   Error "Passordene stemmer ikke overrens" ] ]
+            |> function
+                | Ok _ ->
 
-            let userManager =
-                ctx.GetService<UserManager<ApplicationUser>>()
+                    let userManager =
+                        ctx.GetService<UserManager<ApplicationUser>>()
 
-            task {
+                    task {
 
-                let! account = userManager.FindByNameAsync(form.``E-post``)
+                        let! account = userManager.FindByNameAsync(form.``E-post``)
 
-                if isNull account
-                then failwithf "Forsøkte å nullstille passord, men fant ikke brukeren: %O" form
+                        if isNull account then
+                            failwithf "Forsøkte å nullstille passord, men fant ikke brukeren: %O" form
 
-                let! result = userManager.ResetPasswordAsync(account, form.Code, form.Passord)
+                        let! result = userManager.ResetPasswordAsync(account, form.Code, form.Passord)
 
-                match result.Succeeded with
-                | true ->
-                    return [ mtMain [] [
-                                 block [] [
-                                     br []
-                                     p [] [
-                                         encodedText "Passordet ditt er nullstilt. "
-                                         a [ _href "/konto/innlogging" ] [
-                                             encodedText "Logg inn"
-                                         ]
-                                     ]
-                                 ]
-                             ] ]
-                           |> layout club user (fun o -> { o with Title = "Passord nullstilt" }) ctx
-                           |> OkResult
-                | false ->
-                    return confirmView
-                               (Some form)
-                               (result.Errors
-                                |> Seq.map (fun e ->
-                                    { Name = ""
-                                      Errors = [ e.Description ] })
-                                |> Seq.toList)
-                               club
-                               user
-                               ctx
-            }
-            |> Async.AwaitTask
-            |> Async.RunSynchronously
-        | Error e -> confirmView (Some form) e club user ctx
+                        match result.Succeeded with
+                        | true ->
+                            return
+                                [ mtMain [] [
+                                      block [] [
+                                          br []
+                                          p [] [
+                                              encodedText "Passordet ditt er nullstilt. "
+                                              a [ _href "/konto/innlogging" ] [
+                                                  encodedText "Logg inn"
+                                              ]
+                                          ]
+                                      ]
+                                  ] ]
+                                |> layout club user (fun o -> { o with Title = "Passord nullstilt" }) ctx
+                                |> OkResult
+                        | false ->
+                            return
+                                confirmView
+                                    (Some form)
+                                    (result.Errors
+                                     |> Seq.map
+                                         (fun e ->
+                                             { Name = ""
+                                               Errors = [ e.Description ] })
+                                     |> Seq.toList)
+                                    club
+                                    user
+                                    ctx
+                    }
+                    |> Async.AwaitTask
+                    |> Async.RunSynchronously
+                | Error e -> confirmView (Some form) e club user ctx
 
-    | Error e -> failwith e
+        | Error e -> failwith e

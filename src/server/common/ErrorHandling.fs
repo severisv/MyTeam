@@ -4,7 +4,7 @@ open Giraffe
 open MyTeam
 open Shared.Domain.Members
 open System
-open Common
+open Server.Common
 open Microsoft.Extensions.Logging
 
 let errorHandler (ex : Exception) (logger : Microsoft.Extensions.Logging.ILogger) =

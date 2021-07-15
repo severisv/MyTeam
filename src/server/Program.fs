@@ -15,7 +15,6 @@ open Microsoft.AspNetCore.Identity;
 open Microsoft.AspNetCore.Authentication.Cookies;
 open Services.Utils;
 open Giraffe
-open Giraffe.Serialization
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 
@@ -66,7 +65,7 @@ let configureServices (services: IServiceCollection) =
         settings.Converters.Add(OptionConverter())
         settings.Converters.Add(IdiomaticDuConverter())
         settings.Converters.Add(StringEnumConverter())
-        services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(settings)) |> ignore
+        services.AddSingleton<Json.ISerializer>(Giraffe.NewtonsoftJson.Serializer(settings)) |> ignore
 
         
         

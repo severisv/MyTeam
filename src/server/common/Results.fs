@@ -2,64 +2,74 @@ module Server.Results
 
 open Giraffe
 open MyTeam
-open Common
+open Server.Common
 
 let json result next (ctx: HttpContext) =
-     match ctx.TryGetRequestHeader "json-mode" with
-            | Some "fable" ->
-                    (setHttpHeader "Content-Type" "application/json" >=>
-                        setBodyFromString (Json.fableSerialize result)) next ctx
-            | _ -> json result next ctx
+    match ctx.TryGetRequestHeader "json-mode" with
+    | Some "fable" ->
+        (setHttpHeader "Content-Type" "application/json"
+         >=> setBodyFromString (Json.fableSerialize result))
+            next
+            ctx
+    | _ -> json result next ctx
 
 let jsonResult next ctx =
-    function 
+    function
     | OkResult result -> json result next ctx
     | ValidationErrors validationErrors -> (setStatusCode 400 >=> json validationErrors) next ctx
     | Unauthorized -> (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx
     | NotFound -> (setStatusCode 404 >=> json ("404")) next ctx
     | Redirect url -> (redirectTo false (System.Uri.EscapeUriString url)) next ctx
 
-let jsonPost<'a, 'b> (fn : HttpContext -> 'a -> HttpResult<'b>) next (ctx : HttpContext) =
-    let payload = 
+let jsonPost<'a, 'b> (fn: HttpContext -> 'a -> HttpResult<'b>) next (ctx: HttpContext) =
+    let payload =
         match ctx.TryGetRequestHeader "json-mode" with
-            | Some "fable" ->
-                    let task = ctx.ReadBodyFromRequestAsync()
-                    let body = task.ConfigureAwait(false).GetAwaiter().GetResult()
-                    Json.fableDeserialize<'a>(body)
-                    |> function
-                    | Ok result -> result
-                    | Error e -> failwith e
-            | _ -> ctx.BindJson<'a>()
-        
+        | Some "fable" ->
+            let task = ctx.ReadBodyFromRequestAsync()
+
+            let body =
+                task
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult()
+
+            Json.fableDeserialize<'a> (body)
+            |> function
+                | Ok result -> result
+                | Error e -> failwith e
+        | _ -> ctx.BindJson<'a>()
+
     fn ctx payload |> jsonResult next ctx
 
-let jsonGet<'a> (fn : Database -> HttpResult<'a>) next (ctx : HttpContext) =
-    fn ctx.Database |> jsonResult next ctx
+let jsonGet<'a> (fn: Database -> HttpResult<'a>) next (ctx: HttpContext) = fn ctx.Database |> jsonResult next ctx
 
-let jsonGet2<'a> (fn : HttpContext -> HttpResult<'a>) next (ctx : HttpContext) =
-    fn ctx |> jsonResult next ctx    
+let jsonGet2<'a> (fn: HttpContext -> HttpResult<'a>) next (ctx: HttpContext) = fn ctx |> jsonResult next ctx
 
 let htmlResult next ctx =
-    function 
+    function
     | OkResult result -> htmlView result next ctx
-    | Unauthorized -> 
-        (setStatusCode 403 >=> (Tenant.get ctx
-                               |> function
-                               | (Some club, user) -> Views.Error.unauthorized club user
-                               | (None, _) -> text "403")) next ctx
-    | NotFound -> 
-        (setStatusCode 404 >=> (Tenant.get ctx
-                               |> function
-                               | (Some club, user) -> Views.Error.notFound club user
-                               | (None, _) -> text "Error")) next ctx
+    | Unauthorized ->
+        (setStatusCode 403
+         >=> (Tenant.get ctx
+              |> function
+                  | (Some club, user) -> Views.Error.unauthorized club user
+                  | (None, _) -> text "403"))
+            next
+            ctx
+    | NotFound ->
+        (setStatusCode 404
+         >=> (Tenant.get ctx
+              |> function
+                  | (Some club, user) -> Views.Error.notFound club user
+                  | (None, _) -> text "Error"))
+            next
+            ctx
     | Redirect url -> redirectTo false (System.Uri.EscapeUriString url) next ctx
     | ValidationErrors _ -> failwith "Ikke implementert"
 
-let htmlGet (fn : HttpContext -> HttpResult<GiraffeViewEngine.XmlNode>) next ctx =
-    fn ctx |> htmlResult next ctx
+let htmlGet (fn: HttpContext -> HttpResult<ViewEngine.HtmlElements.XmlNode>) next ctx = fn ctx |> htmlResult next ctx
 
-let htmlPost<'a> (fn : Result<'a, string> -> HttpContext -> HttpResult<GiraffeViewEngine.XmlNode>) 
-    next (ctx : HttpContext) =
+let htmlPost<'a> (fn: Result<'a, string> -> HttpContext -> HttpResult<ViewEngine.HtmlElements.XmlNode>) next (ctx: HttpContext) =
     let payload = ctx.TryBindForm<'a>()
     fn payload ctx |> htmlResult next ctx
 

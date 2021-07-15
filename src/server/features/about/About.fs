@@ -1,7 +1,7 @@
 module MyTeam.About
 
 open Fable.React
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 open Shared.Components
 open MyTeam
 open Shared
@@ -92,11 +92,11 @@ let editPost (club: Club) user (ctx: HttpContext) =
     db.Clubs.Where(fun c -> c.Id = clubId)
     |> Seq.tryHead
     |> function
-    | Some c ->
-        c.About <- form.Value
-        db.SaveChanges() |> ignore
-        Redirect "/om"
-    | None -> NotFound
+        | Some c ->
+            c.About <- form.Value
+            db.SaveChanges() |> ignore
+            Redirect "/om"
+        | None -> NotFound
 
 
 

@@ -1,11 +1,9 @@
 module MyTeam.Players.Pages.List
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 open MyTeam
-open Shared
 open Shared.Domain
 open MyTeam.Views
-open Shared.Components.Nav
 open Shared.Domain.Members
 open System.Linq
 open Common
