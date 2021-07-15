@@ -16,7 +16,7 @@ open Send
 [<CLIMutable>]
 type AddMemberForm = {
     FacebookId: string 
-    ``E-postadresse``: string 
+    ``E-postadresse``: string
     Fornavn: string
     Mellomnavn: string
     Etternavn: string
@@ -66,16 +66,17 @@ let handleFormChange setState update value =
     setState (fun state props -> { state with Player = update state.Player value })
     
     
-let element props children =
-        komponent<Model, State>
-             props
-             { Player = defaultForm
-               Message = None
-               Errors = []
-               SuccessMessage = None }
-             None
-             (fun (props, state, setState) ->
-
+let element =
+        FunctionComponent.Of(fun (props: Model) ->
+                 
+                 let state = Hooks.useState<State> ( { Player = defaultForm
+                                                       Message = None
+                                                       Errors = []
+                                                       SuccessMessage = None })
+                 
+                 let setState fn = state.update (fun prevState -> fn prevState props)
+                 let state = state.current
+                 
                  let handleFormChange = handleFormChange setState
 
                  block [] [
@@ -154,6 +155,4 @@ let element props children =
                  
         )
 
-render Decode.Auto.fromString<Model> clientView element
-
-
+hydrate2 clientView Decode.Auto.fromString<Model> element

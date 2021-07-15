@@ -1,9 +1,11 @@
 module MyTeam.Admin.Pages
 
+open Client.Admin
 open Client.Admin.AddPlayers
 open Giraffe.GiraffeViewEngine
 open MyTeam
 open MyTeam.Views
+open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
@@ -50,14 +52,14 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
         }
         |> Seq.toList
         |> List.map (fun (fornavn, mellomnavn, etternavn, epost, facebookId) ->
-            { Fornavn = fornavn
-              Etternavn = etternavn
-              Mellomnavn = mellomnavn
-              ``E-postadresse`` = epost
+            { Fornavn = Strings.defaultValue fornavn
+              Etternavn = Strings.defaultValue etternavn
+              Mellomnavn = Strings.defaultValue mellomnavn
+              ``E-postadresse`` = Strings.defaultValue epost
               FacebookId = facebookId })
 
     [ mtMain [ _class "mt-main--narrow" ]
-          [ Client.viewOld clientView
+          [ Client.view2 clientView element
                 { MemberRequests = memberRequests
                   ImageOptions = Images.getOptions ctx } ]
       (coachMenu [ li [] [ a [ _href "/admin" ] [ !!(Icons.users ""); str "Administrer spillere" ] ] ]) ]
