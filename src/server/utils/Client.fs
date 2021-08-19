@@ -17,7 +17,8 @@ let view containerId comp model =
                     """
                 (model
                  |> Json.fableSerialize
-                 |> Strings.replace "\\" "\\\\")
+                 |> Strings.replace "\\" "\\\\"
+                 |> Strings.replace "'" "")
         )
       ]
 
@@ -37,7 +38,8 @@ let view2 containerId comp model =
                     """
                 (model
                  |> Json.fableSerialize
-                 |> Strings.replace "\\" "\\\\")
+                 |> Strings.replace "\\" "\\\\"
+                 |> Strings.replace "'" "")
         )
       ]
 
