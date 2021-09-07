@@ -1,6 +1,8 @@
 module MyTeam.Account.Login
 
 open Giraffe.ViewEngine
+open Microsoft.AspNetCore.Authentication.Cookies
+open Microsoft.AspNetCore.Identity
 open Microsoft.AspNetCore.Identity
 open MyTeam
 open Shared
@@ -39,9 +41,7 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
     | (true, Some returnUrl) when
         returnUrl
         |> Strings.equalsIgnoreCase (string ctx.Request.Path)
-        |> not
-        ->
-        Redirect returnUrl
+        |> not -> Redirect returnUrl
     | (true, _) -> Redirect "/"
     | (_, _) ->
         let returnUrl =
@@ -166,66 +166,70 @@ let post (club: Club) (user: User option) form (ctx: HttpContext) =
 
     form
     |> function
-        | Ok form ->
-            combine [ <@ form.Epost @> >- [ isRequired; isValidEmail ]
-                      <@ form.Passord @> >- [ isRequired ] ]
-            |> function
-                | Ok _ ->
+    | Ok form ->
+        combine [ <@ form.Epost @> >- [ isRequired; isValidEmail ]
+                  <@ form.Passord @> >- [ isRequired ] ]
+        |> function
+        | Ok _ ->
 
 
-                    let signInManager =
-                        ctx.GetService<SignInManager<ApplicationUser>>()
+            let signInManager =
+                ctx.GetService<SignInManager<ApplicationUser>>()
+
+            let result =
+                async {
+                    return!
+                        (signInManager.PasswordSignInAsync(
+                            form.Epost,
+                            form.Passord,
+                            form.HuskMeg.IsSome,
+                            false
+                        ))
+                        |> Async.AwaitTask
+                }
+                |> Async.RunSynchronously
 
 
-                    let result =
-                        async {
-                            return!
-                                (signInManager.PasswordSignInAsync(form.Epost, form.Passord, form.HuskMeg.IsSome, false))
-                                |> Async.AwaitTask
-                        }
-                        |> Async.RunSynchronously
+            match (result.Succeeded, result.IsLockedOut) with
+            | (true, _) ->
+                Tenant.clearUserCache ctx club.Id (UserId form.Epost)
+                logger.LogDebug(EventId(), "User logged in.")
 
+                Redirect(returnUrl |> Option.defaultValue "/")
 
-                    match (result.Succeeded, result.IsLockedOut) with
-                    | (true, _) ->
-                        Tenant.clearUserCache ctx club.Id (UserId form.Epost)
-                        logger.LogDebug(EventId(), "User logged in.")
+            | (_, true) ->
+                logger.LogWarning(EventId(), "User account locked out.")
 
-                        Redirect(returnUrl |> Option.defaultValue "/")
+                [ mtMain [] [
+                      block [] [
+                          h2 [] [
+                              encodedText "Denne kontoen har blitt låst"
+                          ]
+                      ]
+                  ] ]
+                |> layout
+                    club
+                    user
+                    (fun o ->
+                        { o with
+                              Title = "Logg inn"
+                              Scripts = [] })
+                    ctx
+                |> OkResult
 
-                    | (_, true) ->
-                        logger.LogWarning(EventId(), "User account locked out.")
-
-                        [ mtMain [] [
-                              block [] [
-                                  h2 [] [
-                                      encodedText "Denne kontoen har blitt låst"
-                                  ]
-                              ]
-                          ] ]
-                        |> layout
-                            club
-                            user
-                            (fun o ->
-                                { o with
-                                      Title = "Logg inn"
-                                      Scripts = [] })
-                            ctx
-                        |> OkResult
-
-                    | (_, _) ->
-                        view
-                            (Some form)
-                            [ { Name = ""
-                                Errors = [ "Brukernavn og passord stemmer ikke overens" ] } ]
-                            club
-                            user
-                            ctx
+            | (_, _) ->
+                view
+                    (Some form)
+                    [ { Name = ""
+                        Errors = [ "Brukernavn og passord stemmer ikke overens" ] } ]
+                    club
+                    user
+                    ctx
 
 
 
-                | Error e -> view (Some form) e club user ctx
-        | Error e -> failwith e
+        | Error e -> view (Some form) e club user ctx
+    | Error e -> failwith e
 
 
 
@@ -245,7 +249,7 @@ let external : HttpHandler =
             items.Add("LoginProvider", provider)
 
             let props =
-                AuthenticationProperties(items, RedirectUri = (sprintf "/konto/innlogging/ekstern%s" returnUrl))
+                AuthenticationProperties(items, RedirectUri = $"/konto/innlogging/ekstern%s{returnUrl}")
 
             do! ctx.ChallengeAsync(provider, props)
             return! next ctx
@@ -265,9 +269,7 @@ let signupExternalView model (errors: ValidationError list) (club: Club) (user: 
     | (true, Some returnUrl) when
         returnUrl
         |> Strings.equalsIgnoreCase (string ctx.Request.Path)
-        |> not
-        ->
-        Redirect returnUrl
+        |> not -> Redirect returnUrl
     | (true, _) -> Redirect "/"
     | (_, _) ->
         let returnUrl =
@@ -289,7 +291,7 @@ let signupExternalView model (errors: ValidationError list) (club: Club) (user: 
                   form [ _method "post"
                          _class "form-horizontal"
                          _action
-                         <| sprintf "/konto/innlogging/ekstern/ny%s" returnUrl
+                         <| $"/konto/innlogging/ekstern/ny%s{returnUrl}"
                          attr "" "novalidate" ] [
                       !!(Forms.formRow [ Forms.Horizontal 3 ] [] [ validationMessage "" ])
                       !!(Forms.formRow
@@ -346,90 +348,92 @@ let signupExternal (club: Club) (user: User option) form (ctx: HttpContext) =
 
     form
     |> function
-        | Ok form ->
-            combine [ <@ form.``E-post`` @>
-                      >- [ isRequired; isValidEmail ] ]
-            |> function
-                | Ok _ ->
+    | Ok form ->
+        combine [ <@ form.``E-post`` @>
+                  >- [ isRequired; isValidEmail ] ]
+        |> function
+        | Ok _ ->
 
 
-                    let signInManager =
-                        ctx.GetService<SignInManager<ApplicationUser>>()
+            let signInManager =
+                ctx.GetService<SignInManager<ApplicationUser>>()
 
-                    let userManager =
-                        ctx.GetService<UserManager<ApplicationUser>>()
+            let userManager =
+                ctx.GetService<UserManager<ApplicationUser>>()
 
-                    task {
+            task {
 
 
-                        let! info = signInManager.GetExternalLoginInfoAsync()
+                let! info = signInManager.GetExternalLoginInfoAsync()
 
-                        if isNull info then
-                            return Redirect "/konto/innlogging"
+                if isNull info then
+                    return Redirect "/konto/innlogging"
+                else
+
+                    let au =
+                        ApplicationUser(UserName = form.``E-post``, Email = form.``E-post``)
+
+                    let! result = userManager.CreateAsync(au)
+
+                    match result.Succeeded with
+                    | true ->
+                        let! result = userManager.AddLoginAsync(au, info)
+
+                        logger.LogInformation(
+                            EventId(3),
+                            $"User %s{form.``E-post``} created a new account with Facebook."
+                        )
+
+                        let facebookId =
+                            match info.Principal.Claims
+                                  |> Seq.tryFind (fun c -> c.Type = ClaimTypes.NameIdentifier) with
+                            | Some facebookId -> facebookId.Value
+                            | None ->
+                                failwithf
+                                    $"Could't find facebookId when creating account from external. {form.``E-post``}"
+
+                        let db = ctx.Database
+
+                        let player =
+                            db
+                                .Members
+                                .Where(fun p -> p.FacebookId = facebookId)
+                                .FirstOrDefault()
+
+                        if not <| isNull player then
+                            player.UserName <- form.``E-post``
+                            db.SaveChanges() |> ignore
+
+
+                        if result.Succeeded then
+                            let addClaim = addClaim info userManager au
+                            do! addClaim "facebookFirstName" ClaimTypes.GivenName
+                            do! addClaim "facebookLastName" ClaimTypes.Surname
+                            do! addClaim "facebookId" ClaimTypes.NameIdentifier
+
+                            do! signInManager.SignInAsync(au, true, CookieAuthenticationDefaults.AuthenticationScheme)
+
+                            return Redirect(returnUrl |> Option.defaultValue "/")
                         else
-
-                            let au =
-                                ApplicationUser(UserName = form.``E-post``, Email = form.``E-post``)
-
-                            let! result = userManager.CreateAsync(au)
-
-                            match result.Succeeded with
-                            | true ->
-                                let! result = userManager.AddLoginAsync(au, info)
-
-                                logger.LogInformation(
-                                    EventId(3),
-                                    (sprintf "User %s created a new account with Facebook." form.``E-post``)
-                                )
-
-                                let facebookId =
-                                    match info.Principal.Claims
-                                          |> Seq.tryFind (fun c -> c.Type = ClaimTypes.NameIdentifier) with
-                                    | Some facebookId -> facebookId.Value
-                                    | None ->
-                                        failwithf
-                                            "Could't find facebookId when creating account from external. %O"
-                                            form.``E-post``
-
-                                let db = ctx.Database
-
-                                let player =
-                                    db.Members.FirstOrDefault(fun p -> p.FacebookId = facebookId)
-
-                                if not <| isNull player then
-                                    player.UserName <- form.``E-post``
-                                    db.SaveChanges() |> ignore
-
-
-                                if result.Succeeded then
-                                    let addClaim = addClaim info userManager au
-                                    do! addClaim "facebookFirstName" ClaimTypes.GivenName
-                                    do! addClaim "facebookLastName" ClaimTypes.Surname
-                                    do! addClaim "facebookId" ClaimTypes.NameIdentifier
-
-                                    do! signInManager.SignInAsync(au, true)
-
-                                    return Redirect(returnUrl |> Option.defaultValue "/")
-                                else
-                                    return Redirect(returnUrl |> Option.defaultValue "/")
-                            | false ->
-                                return
-                                    signupExternalView
-                                        (Some form)
-                                        (result.Errors
-                                         |> Seq.map
-                                             (fun e ->
-                                                 { Name = ""
-                                                   Errors = [ e.Description ] })
-                                         |> Seq.toList)
-                                        club
-                                        user
-                                        ctx
-                    }
-                    |> Async.AwaitTask
-                    |> Async.RunSynchronously
-                | Error e -> signupExternalView (Some form) e club user ctx
-        | Error e -> failwith e
+                            return Redirect(returnUrl |> Option.defaultValue "/")
+                    | false ->
+                        return
+                            signupExternalView
+                                (Some form)
+                                (result.Errors
+                                 |> Seq.map
+                                     (fun e ->
+                                         { Name = ""
+                                           Errors = [ e.Description ] })
+                                 |> Seq.toList)
+                                club
+                                user
+                                ctx
+            }
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
+        | Error e -> signupExternalView (Some form) e club user ctx
+    | Error e -> failwith e
 
 
 let externalCallback club user (ctx: HttpContext) =
@@ -458,13 +462,7 @@ let externalCallback club user (ctx: HttpContext) =
 
                 log.LogDebug(EventId(), "User logged in with {Name} provider.", info.LoginProvider)
 
-                do! signInManager.SignInAsync(au, true)
-
-                let addClaim = addClaim info userManager au
-                do! addClaim "facebookFirstName" ClaimTypes.GivenName
-                do! addClaim "facebookLastName" ClaimTypes.Surname
-                do! addClaim "facebookId" ClaimTypes.NameIdentifier
-
+                do! signInManager.SignInAsync(au, true, CookieAuthenticationDefaults.AuthenticationScheme)
                 return Redirect returnUrl
             else
                 return signupExternalView None [] club user ctx
