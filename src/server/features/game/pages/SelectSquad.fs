@@ -55,14 +55,9 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
              (attendees
               |> List.map
                   (fun a ->
-                      if a.IsAttending.HasValue then
-                          Some
-                              { MemberId = a.MemberId
-                                IsAttending = a.IsAttending.Value
-                                Message = a.SignupMessage =?? "" }
-                      else
-                          None)
-              |> List.choose id)))
+                      { MemberId = a.MemberId
+                        IsAttending = a.IsAttending |> fromNullable
+                        Message = a.SignupMessage =?? "" }))))
     |> Seq.tryHead
     |> function
         | None -> NotFound
