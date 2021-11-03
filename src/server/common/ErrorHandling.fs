@@ -45,7 +45,7 @@ let logNotFound next (ctx: HttpContext) =
         |> Seq.exists (ctx.Request.Headers.["User-Agent"] |> string |> contains)
         |> not
         &&
-        ["t.co/EEcVe1k3UV" ]
+        ["t.co/EEcVe1k3UV"; "binance.com" ]
         |> Seq.exists (ctx.Request.Headers.["Referer"] |> string |> contains)
         |> not 
         && 
