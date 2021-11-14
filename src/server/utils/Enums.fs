@@ -20,7 +20,7 @@ let tryParse<'T> value : Result<'T, string> =
                      value)
     else Error "Input var en null eller en tom streng"
 
-let parse<'T> value =
+let parse<'T> (value: string) =
     try 
         Enum.Parse(typeof<'T>, value, true) :?> 'T
     with :? ArgumentException -> 
