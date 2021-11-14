@@ -15,7 +15,6 @@ open Fable.React.Props
 open Microsoft.AspNetCore.Identity
 open MyTeam.Models
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
 
 
 [<CLIMutable>]

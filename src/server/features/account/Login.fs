@@ -19,7 +19,6 @@ open Fable.React.Props
 open MyTeam.Models
 open Server.Common
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
 open System.Security.Claims
 open Microsoft.AspNetCore.Authentication
 open System.Linq

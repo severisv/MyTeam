@@ -2,7 +2,6 @@ module MyTeam.Antiforgery
 
 open Microsoft.AspNetCore.Antiforgery
 open Giraffe
-open FSharp.Control.Tasks
 
 
 let getToken (ctx : HttpContext) =

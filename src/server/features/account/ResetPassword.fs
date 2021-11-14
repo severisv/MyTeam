@@ -16,7 +16,6 @@ open Giraffe
 open Fable.React.Props
 open Microsoft.AspNetCore.Identity
 open MyTeam.Models
-open FSharp.Control.Tasks
 
 
 [<CLIMutable>]

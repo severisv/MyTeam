@@ -23,4 +23,3 @@ nuget Microsoft.Extensions.Caching.Abstractions
 nuget Newtonsoft.Json
 nuget Sendgrid
 nuget SlackLogger
-nuget TaskBuilder.fs
