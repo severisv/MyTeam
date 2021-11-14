@@ -6,7 +6,7 @@ environment:
   NUGET_XMLDOC_MODE: skip
 install:
   - ps: Install-Product node $env:node
-  - cmd: cd .. && dotnet tool install fake-cli -g --version 5.15.0 && cd myteam
+  - cmd: cd .. && dotnet tool install fake-cli -g --version 5.20.4 && cd myteam
 assembly_info:
   patch: false
 branches:

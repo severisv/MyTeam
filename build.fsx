@@ -7,7 +7,7 @@
     nuget Fake.JavaScript.Npm
     nuget Fake.Azure.Kudu
     nuget Fake.IO.Zip
-    nuget FSharp.Core 4.6.0.0"
+    nuget FSharp.Core"
 
 #load ".fake/build.fsx/intellisense.fsx"
 
