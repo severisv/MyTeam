@@ -35,7 +35,7 @@ let redirectFromOldUrl club user =
             | Some articleName -> redirectTo true (sprintf "/nyheter/vis/%s" articleName) next ctx
             | _ ->
                 (setStatusCode 404
-                 >=> ErrorHandling.logNotFound
+         //        >=> ErrorHandling.logNotFound
                  >=> Views.Error.notFound club user)
                     next
                     ctx
