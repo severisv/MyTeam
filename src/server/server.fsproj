@@ -4,6 +4,7 @@
     <TargetFramework>net60</TargetFramework>
     <PackageId>MyTeam</PackageId>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <RootNamespace>Server</RootNamespace>
   </PropertyGroup>
