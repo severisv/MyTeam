@@ -4,7 +4,6 @@ FSharp.Quotations.Evaluator
 Giraffe
 Microsoft.ApplicationInsights.AspNetCore
 Microsoft.AspNetCore.Authentication.Facebook
-Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 Microsoft.Extensions.Caching.Abstractions
 Sendgrid
 SlackLogger

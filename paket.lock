@@ -109,8 +109,6 @@ NUGET
     Microsoft.AspNetCore.Cryptography.Internal (6.0) - restriction: >= netstandard2.1
     Microsoft.AspNetCore.Cryptography.KeyDerivation (6.0) - restriction: >= netstandard2.1
       Microsoft.AspNetCore.Cryptography.Internal (>= 6.0) - restriction: || (>= net461) (>= netstandard2.0)
-    Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore (5.0.9)
-      Microsoft.EntityFrameworkCore.Relational (>= 5.0.9) - restriction: >= net5.0
     Microsoft.AspNetCore.Hosting (2.2.7) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Hosting.Abstractions (>= 2.2) - restriction: >= netstandard2.0
       Microsoft.AspNetCore.Http (>= 2.2) - restriction: >= netstandard2.0

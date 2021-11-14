@@ -13,7 +13,6 @@ nuget FSharp.Quotations.Evaluator
 nuget FSharp.Data
 nuget Giraffe
 nuget Microsoft.AspNetCore.Authentication.Facebook
-nuget Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 nuget Microsoft.AspNetCore.Identity.EntityFrameworkCore
 nuget Microsoft.EntityFrameworkCore 5.0.9
 nuget Microsoft.EntityFrameworkCore.Relational 5.0.9
