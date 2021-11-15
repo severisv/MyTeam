@@ -497,13 +497,13 @@ module App =
 
                                        ]
                           setStatusCode 404
-                          >=> ErrorHandling.logNotFound
+                      //    >=> ErrorHandling.logNotFound
                           >=> Views.Error.notFound club user ]
                         next
                         ctx
                 | (None, _) ->
                     (setStatusCode 404
-                     >=> ErrorHandling.logNotFound
+                   //  >=> ErrorHandling.logNotFound
                      >=> text "404")
                         next
                         ctx
