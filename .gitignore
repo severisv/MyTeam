@@ -189,7 +189,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
-#Assets
 src/server/wwwroot/css
 src/server/wwwroot/lib
 src/server/config.json
@@ -209,6 +208,8 @@ src/server/wwwroot/compiled
 setdeploycredentials.cmd
 src/server/appsettings.Development.json
 src/server/appsettings.Production.json
+
+src/client/src/**/*.js
 
 src/MyTeam
 .vs/

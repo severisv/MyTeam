@@ -13,6 +13,18 @@
       "commands": [
         "paket"
       ]
+    },
+    "fantomas-tool": {
+      "version": "4.6.0-alpha-004",
+      "commands": [
+        "fantomas"
+      ]
+    },
+    "fable": {
+      "version": "3.6.0",
+      "commands": [
+        "fable"
+      ]
     }
   }
 }
