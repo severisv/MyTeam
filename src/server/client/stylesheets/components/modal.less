@@ -55,7 +55,7 @@
     height: auto;
     display: flex;
     flex-direction: column; 
-
+    background-color: fade(@blueDarkSubtle, 5);
     
     & > button.edit-link.pull-right {
         position: absolute;
@@ -72,13 +72,13 @@
   .modal-overlay {
     z-index: @modal-z-index;
     display: block;
-    background-color: @light-grey;
+    background: linear-gradient(15deg, darken(@team-primary, 30) 20%, @team-secondary 50%);
     position: fixed;
     top: 0;
     height: 100%;
     left: 0;
     width: 150%;
-    opacity: 0.9;
+    opacity: 0.25;
     filter: alpha(opacity=65);
   }
 
