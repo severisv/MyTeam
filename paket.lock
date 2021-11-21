@@ -17,6 +17,7 @@ NUGET
       System.Security.Cryptography.ProtectedData (>= 4.5) - restriction: >= netstandard2.0
       System.Text.Json (>= 4.6) - restriction: >= netstandard2.0
       System.Threading.Tasks.Extensions (>= 4.5.4) - restriction: >= netstandard2.0
+    Fable.AST (3.1.1) - restriction: >= netstandard2.0
     Fable.Browser.Blob (1.1.4) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
@@ -53,6 +54,14 @@ NUGET
     Fable.React (7.4.2)
       Fable.Browser.Dom (>= 2.4.4) - restriction: >= netstandard2.0
       Fable.Core (>= 3.2.7) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
+    Feliz (1.56)
+      Fable.Core (>= 3.1.5) - restriction: >= netstandard2.0
+      Fable.React (>= 7.4) - restriction: >= netstandard2.0
+      Feliz.CompilerPlugins (>= 1.6) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
+    Feliz.CompilerPlugins (1.6) - restriction: >= netstandard2.0
+      Fable.AST (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     FSharp.Core (6.0.1) - restriction: || (>= net45) (>= netstandard1.6)
     FSharp.Data (4.2.5)
