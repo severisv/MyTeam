@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net60</TargetFramework>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
