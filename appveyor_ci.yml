@@ -12,4 +12,4 @@ services:
 build_script:
   build.cmd --target Build-docker-image
 test: off
-image: Ubuntu2004
+image: Visual Studio 2022
