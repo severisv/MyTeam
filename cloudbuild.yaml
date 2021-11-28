@@ -5,7 +5,7 @@ steps:
   args: ['tool', 'restore']
 
 - id: 'run fake script'
-  waitFor: ['build solution']
+  waitFor: ['restore tools']
   name: mcr.microsoft.com/dotnet/sdk:6.0
   entrypoint: dotnet
   args: ['fake', 'run', 'build.fsx', '--parallel', '3']
