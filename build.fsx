@@ -187,8 +187,4 @@ Target.create "Deploy" <| fun _ -> printf "Deploy"
 ==> "Push-docker-image"
 ==> "Deploy"
 
-"Build-frontend" ==> "Dev"
-
-"Migrate-database" ==> "Dev"
-
 Target.runOrDefault "Deploy"
