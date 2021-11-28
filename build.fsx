@@ -41,6 +41,16 @@ let commitSha =
          result.Result.Output.Trim())
 
 
+
+let (--) cmd values =
+    let result =
+        values
+        |> CreateProcess.fromRawCommand cmd
+        |> Proc.run
+
+    if result.ExitCode <> 0 then
+        failwith $"""{cmd} command failed: {values |> String.concat " "}"""
+
 // Lazily install DotNet SDK in the correct version if not available
 let dotnetCliPath =
     lazy (DotNet.install DotNet.Versions.FromGlobalJson)
@@ -139,34 +149,33 @@ Target.create "Write-Asset-Hashes"
             |> writeToAppsettings scriptName))
 
 
-let docker cmd =
-    let result =
-        cmd
-        |> CreateProcess.fromRawCommand "docker"
-        |> Proc.run
-
-    if result.ExitCode <> 0 then
-        failwith $"""Docker command failed: {cmd |> String.concat " "}"""
 
 Target.create "Build-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
-    docker [ "build"
-             "-t"
-             $"{dockerRepository}:{tag}"
-             "." ]
+    "docker"
+    -- [ "build"
+         "-t"
+         $"{dockerRepository}:{tag}"
+         "." ]
 
 
 Target.create "Push-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
-    docker [ "push"
-             $"{dockerRepository}:{tag}" ]
+    "docker"
+    -- [ "push"; $"{dockerRepository}:{tag}" ]
 
 
-Target.create "Deploy" <| fun _ -> printf "Deploy"
+Target.create "Deploy"
+<| fun _ ->
+    "gcloud"
+    -- [ "run"
+         "services"
+         "replace"
+         "service.yml" ]
 
 
 "Clean"
