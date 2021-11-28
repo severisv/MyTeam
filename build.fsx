@@ -158,7 +158,7 @@ Target.create "Deploy"
     -- [ "run"
          "services"
          "replace"
-         "service.yml" ]
+         "service.yaml" ]
 
 
 "Clean"
