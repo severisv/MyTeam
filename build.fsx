@@ -51,13 +51,6 @@ let (--) cmd values =
     if result.ExitCode <> 0 then
         failwith $"""{cmd} command failed: {values |> String.concat " "}"""
 
-// Lazily install DotNet SDK in the correct version if not available
-let dotnetCliPath =
-    lazy (DotNet.install DotNet.Versions.FromGlobalJson)
-
-let inline dotnetOptions arg =
-    DotNet.Options.lift dotnetCliPath.Value arg
-
 
 Target.create "Clean"
 <| fun _ ->
@@ -70,7 +63,7 @@ let npmOptions =
 Target.create "Restore-frontend"
 <| fun _ ->
     Npm.install npmOptions
-    DotNet.restore dotnetOptions (clientDir + "/src")
+    DotNet.restore id (clientDir + "/src")
     Npm.install (fun p -> { p with WorkingDirectory = clientDir })
 
 
@@ -90,30 +83,20 @@ Target.create "Build-frontend"
 
 
 Target.create "Restore-backend"
-<| fun _ -> DotNet.restore dotnetOptions webDir
+<| fun _ -> DotNet.restore id webDir
 
 Target.create "Migrate-database"
 <| fun _ ->
-    DotNet.exec
-        (fun o ->
-            { o with WorkingDirectory = databaseDirectory }
-            |> dotnetOptions)
-        "ef database update"
-        ""
+    DotNet.exec (fun o -> { o with WorkingDirectory = databaseDirectory }) "ef database update" ""
     |> ignore
 
 
 Target.create "Build-backend"
-<| fun _ -> DotNet.build dotnetOptions webDir
+<| fun _ -> DotNet.build id webDir
 
 
 Target.create "Publish"
-<| fun _ ->
-    DotNet.publish
-        (fun o ->
-            { o with OutputPath = Some publishDirectory }
-            |> dotnetOptions)
-        webDir
+<| fun _ -> DotNet.publish (fun o -> { o with OutputPath = Some publishDirectory }) webDir
 
 Target.create "Write-Asset-Hashes"
 <| fun _ ->
