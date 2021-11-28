@@ -148,7 +148,7 @@ let docker cmd =
     if result.ExitCode <> 0 then
         failwith $"""Docker command failed: {cmd |> String.concat " "}"""
 
-Target.create "Push-docker-image"
+Target.create "Build-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
@@ -157,12 +157,17 @@ Target.create "Push-docker-image"
              $"{dockerRepository}:{tag}"
              "." ]
 
+
+Target.create "Push-docker-image"
+<| fun _ ->
+    let tag = commitSha.Value
+
     docker [ "push"
              $"{dockerRepository}:{tag}" ]
 
+
 Target.create "Deploy" <| fun _ -> printf "Deploy"
 
-Target.create "Dev" ignore
 
 "Clean"
 ==> "Restore-frontend"
@@ -178,6 +183,7 @@ Target.create "Dev" ignore
 ==> "Write-Asset-Hashes"
 
 "Write-Asset-Hashes"
+==> "Build-docker-image"
 ==> "Push-docker-image"
 ==> "Deploy"
 
