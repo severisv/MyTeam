@@ -137,12 +137,6 @@ Target.create "Build-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
-    "gcloud"
-    -- [ "run"
-         "services"
-         "replace"
-         "service.yaml" ]
-
     "docker"
     -- [ "build"
          "-t"
