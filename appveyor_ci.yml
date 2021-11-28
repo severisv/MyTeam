@@ -9,6 +9,8 @@ branches:
   - master
 services:
   - mssql2017
+  - docker
+  - gcloud
 build_script:
   build.cmd --target Build-docker-image
 test: off
