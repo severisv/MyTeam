@@ -17,5 +17,5 @@ services:
 build_script:
   build.cmd --target Build-docker-image
 test: off
-image: Visual Studio 2022
+image: Ubuntu2004
 clone_folder: c:\projects\myteam
