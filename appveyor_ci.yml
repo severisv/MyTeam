@@ -2,8 +2,6 @@ environment:
   version: 1.0.0
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   NUGET_XMLDOC_MODE: skip
-install:
-  - cmd: dotnet tool restore
 assembly_info:
   patch: false
 branches:
