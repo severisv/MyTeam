@@ -4,7 +4,7 @@
     nuget Fake.Core.Process
     nuget Fake.DotNet.Cli
     nuget Fake.JavaScript.Npm
-    nuget FSharp.Core"
+    nuget FSharp.Core 6.0"
 
 #load ".fake/build.fsx/intellisense.fsx"
 
