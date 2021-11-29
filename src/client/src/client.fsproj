@@ -36,7 +36,7 @@
     <Compile Include="components/Tabs.fs" />
     <Compile Include="components/Navlist.fs" />
     <Compile Include="components/client/Modal.fs" />
-    <Compile Include="components/client/CheckBox.fs" />
+    <Compile Include="components/client/Checkbox.fs" />
     <Compile Include="components/client/Textarea.fs" />
     <Compile Include="components/client/Textinput.fs" />
     <Compile Include="components/client/Send.fs" />
