@@ -12,6 +12,6 @@ services:
   - docker
   - gcloud
 build_script:
-  build.cmd --target Build-docker-image
+  build.cmd --target Deploy
 test: off
 image: Visual Studio 2022

@@ -43,6 +43,13 @@ let commitSha =
 
 
 let (--) cmd values =
+    let cmd =
+        ProcessUtils.tryFindFileOnPath cmd
+        |> function
+            | Some cmd -> cmd
+            | None -> failwith $"Couldn't find {cmd} on path"
+
+
     let result =
         values
         |> CreateProcess.fromRawCommand cmd
@@ -54,8 +61,6 @@ let (--) cmd values =
 
 Target.create "Clean"
 <| fun _ ->
-
-    "gcloud.cmd" -- [ "-v" ]
 
     Shell.cleanDirs [ publishDirectory
                       artifactsDirectory ]
@@ -157,7 +162,7 @@ Target.create "Push-docker-image"
 
 Target.create "Deploy"
 <| fun _ ->
-    "gcloud.cmd"
+    "gcloud"
     -- [ "run"
          "services"
          "replace"
