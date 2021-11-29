@@ -4,7 +4,7 @@
     nuget Fake.Core.Process
     nuget Fake.DotNet.Cli
     nuget Fake.JavaScript.Npm
-    nuget FSharp.Core 6.0"
+    nuget FSharp.Core"
 
 #load ".fake/build.fsx/intellisense.fsx"
 
@@ -54,6 +54,9 @@ let (--) cmd values =
 
 Target.create "Clean"
 <| fun _ ->
+
+    "gcloud.cmd" -- [ "-v" ]
+
     Shell.cleanDirs [ publishDirectory
                       artifactsDirectory ]
 
@@ -137,12 +140,6 @@ Target.create "Build-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
-    "gcloud"
-    -- [ "run"
-         "services"
-         "replace"
-         "service.yaml" ]
-
     "docker"
     -- [ "build"
          "-t"
@@ -160,7 +157,7 @@ Target.create "Push-docker-image"
 
 Target.create "Deploy"
 <| fun _ ->
-    "gcloud"
+    "gcloud.cmd"
     -- [ "run"
          "services"
          "replace"
