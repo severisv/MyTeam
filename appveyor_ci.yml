@@ -10,6 +10,6 @@ branches:
 services:
   - mssql2017
 build_script:
-  build.cmd --target Deploy
+  ./build.sh --target Deploy
 test: off
-image: Visual Studio 2022
+image: Ubuntu2004
