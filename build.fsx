@@ -176,6 +176,7 @@ Target.create "Push-docker-image"
 
 Target.create "Deploy"
 <| fun _ ->
+    Shell.copyFile "service.yaml" "service.tmpl.yaml"  
     !!(sprintf "%s" "service.yaml")
         |> Seq.iter (fun serviceYaml ->
             let text = System.IO.File.ReadAllText serviceYaml
