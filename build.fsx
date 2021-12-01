@@ -24,6 +24,7 @@ let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
 let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 
 let gcpProjectName = "breddefotball"
+let gcpRegion = "europe-west1"
 
 let dockerRepository = $"eu.gcr.io/{gcpProjectName}/server"
 let gcloudUsername = "appveyor@breddefotball.iam.gserviceaccount.com"
@@ -175,11 +176,21 @@ Target.create "Push-docker-image"
 
 Target.create "Deploy"
 <| fun _ ->
+    !!(sprintf "%s" "service.yaml")
+        |> Seq.iter (fun serviceYaml ->
+            let text = System.IO.File.ReadAllText serviceYaml
+            System.IO.File.WriteAllText(serviceYaml, text.Replace("{IMAGE_TAG}", commitSha.Value)))
+
     "gcloud"
     -- [ "run"
          "services"
          "replace"
-         "service.yaml" ]
+         "service.yaml"
+         "--project"
+         gcpProjectName
+         "--region"
+         gcpRegion
+         "--quiet" ]
 
 
 "Clean"
