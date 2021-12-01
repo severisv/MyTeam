@@ -26,6 +26,16 @@ let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 let gcpProjectName = "breddefotball"
 
 let dockerRepository = $"eu.gcr.io/{gcpProjectName}/server"
+let gcloudUsername = "appveyor@breddefotball.iam.gserviceaccount.com"
+let gcloudKeyFilename = 
+    lazy (
+        let credentials 
+            = Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
+        let bytes = Convert.FromBase64String(credentials)
+        let fileName = "gcloud.json"
+        File.writeBytes fileName <| bytes
+        fileName
+        )
 
 let commitSha =
     lazy
@@ -155,6 +165,9 @@ Target.create "Build-docker-image"
 Target.create "Push-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
+
+    "gcloud" -- ["auth"; "activate-service-account"; gcloudUsername; $"--key-file={gcloudKeyFilename.Value}";"--quiet"]
+    "gcloud" -- ["auth"; "configure-docker";"--quiet"]
 
     "docker"
     -- [ "push"; $"{dockerRepository}:{tag}" ]
