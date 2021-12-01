@@ -12,4 +12,4 @@ services:
 build_script:
   build.cmd
 test: off
-image: Visual Studio 2022
+image: Ubuntu2004
