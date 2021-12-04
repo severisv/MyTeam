@@ -4,4 +4,5 @@ COPY ./dist /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 ENV TZ="Europe/Oslo"
+ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 CMD dotnet server.dll
