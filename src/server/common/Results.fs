@@ -64,7 +64,7 @@ let htmlResult next ctx =
                   | (None, _) -> text "Error"))
             next
             ctx
-    | Redirect url -> redirectTo false (System.Uri.EscapeUriString url) next ctx
+    | Redirect url -> redirectTo false url next ctx
     | ValidationErrors _ -> failwith "Ikke implementert"
 
 let htmlGet (fn: HttpContext -> HttpResult<ViewEngine.HtmlElements.XmlNode>) next ctx = fn ctx |> htmlResult next ctx
