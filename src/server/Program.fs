@@ -17,8 +17,6 @@ open Services.Utils
 open Giraffe
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
-open Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
-open Microsoft.AspNetCore.DataProtection.Extensions
 open Microsoft.AspNetCore.DataProtection
 
 let configureServices (services: IServiceCollection) =

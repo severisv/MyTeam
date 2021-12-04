@@ -477,8 +477,6 @@ module App =
                           subRoute "/api/tables"
                           <| choose [ GET
                                       >=> choose [ route "/refresh" >=> Table.Refresh.run ]
-                                      GET
-                                      >=> choose [ route "/fetch" >=> Table.TryFetch.run ]
                                       mustBeInRole [ Role.Admin ]
                                       >=> choose [ PUT
                                                    >=> choose [ routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
