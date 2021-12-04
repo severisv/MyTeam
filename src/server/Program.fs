@@ -17,6 +17,9 @@ open Services.Utils
 open Giraffe
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
+open Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
+open Microsoft.AspNetCore.DataProtection.Extensions
+open Microsoft.AspNetCore.DataProtection
 
 let configureServices (services: IServiceCollection) =
     let configuration =
@@ -24,10 +27,9 @@ let configureServices (services: IServiceCollection) =
             .BuildServiceProvider()
             .GetService<IConfiguration>()
 
-    services.AddDbContext<ApplicationDbContext>
-        (fun options ->
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-            |> ignore)
+    services.AddDbContext<ApplicationDbContext> (fun options ->
+        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+        |> ignore)
     |> ignore
 
 
@@ -58,13 +60,16 @@ let configureServices (services: IServiceCollection) =
         .AddDefaultTokenProviders()
     |> ignore
 
+    services
+        .AddDataProtection()
+        .PersistKeysToDbContext<ApplicationDbContext>()
+    |> ignore
 
     services
         .Configure<CloudinarySettings>(configuration.GetSection("Integration:Cloudinary"))
         .Configure<FacebookOptions>(configuration.GetSection("Authentication:Facebook"))
         .Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"))
         .Configure<AssetHashes>(configuration.GetSection("AssetHashes"))
-        .AddApplicationInsightsTelemetry()
     |> ignore
 
 
