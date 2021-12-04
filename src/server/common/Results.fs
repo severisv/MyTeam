@@ -19,7 +19,7 @@ let jsonResult next ctx =
     | ValidationErrors validationErrors -> (setStatusCode 400 >=> json validationErrors) next ctx
     | Unauthorized -> (setStatusCode 403 >=> json ("Ingen tilgang")) next ctx
     | NotFound -> (setStatusCode 404 >=> json ("404")) next ctx
-    | Redirect url -> (redirectTo false (System.Uri.EscapeUriString url)) next ctx
+    | Redirect url -> (redirectTo false url) next ctx
 
 let jsonPost<'a, 'b> (fn: HttpContext -> 'a -> HttpResult<'b>) next (ctx: HttpContext) =
     let payload =
