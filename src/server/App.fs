@@ -167,11 +167,9 @@ module App =
                                                    route "/ny"
                                                    >=> mustBeInRole [ Role.Admin; Role.Trener ]
                                                    >=> (Games.Pages.Add.view club user |> htmlGet)
-                                                   routef
-                                                       "/%O/endre"
-                                                       (fun gameId ->
-                                                           mustBeInRole [ Role.Admin; Role.Trener ]
-                                                           >=> (Games.Pages.Edit.view club user gameId |> htmlGet))
+                                                   routef "/%O/endre" (fun gameId ->
+                                                       mustBeInRole [ Role.Admin; Role.Trener ]
+                                                       >=> (Games.Pages.Edit.view club user gameId |> htmlGet))
                                                    routef "/%s"
                                                    <| fun teamName ->
                                                        Games.Pages.List.view club user (Some teamName) None
@@ -190,12 +188,10 @@ module App =
                                       >=> choose [ route "/ny"
                                                    >=> mustBeInRole [ Role.Admin; Role.Trener ]
                                                    >=> (Trainings.Pages.Add.view club user |> htmlGet)
-                                                   routef
-                                                       "/%O/endre"
-                                                       (fun trainingId ->
-                                                           mustBeInRole [ Role.Admin; Role.Trener ]
-                                                           >=> (Trainings.Pages.Edit.view club user trainingId
-                                                                |> htmlGet)) ] ]
+                                                   routef "/%O/endre" (fun trainingId ->
+                                                       mustBeInRole [ Role.Admin; Role.Trener ]
+                                                       >=> (Trainings.Pages.Edit.view club user trainingId
+                                                            |> htmlGet)) ] ]
                           subRoute "/tabell"
                           <| choose [ GET
                                       >=> choose [ route ""
@@ -423,17 +419,15 @@ module App =
                                        ]
                           subRoute "/api/players"
                           <| choose [ PUT
-                                      >=> routef
-                                              "/%O"
-                                              (fun playerId ->
-                                                  ((authorizeUser
-                                                      (fun __ ->
-                                                          match user with
-                                                          | Some u when u.Id = playerId -> true
-                                                          | Some u -> u.IsInRole [ Role.Admin; Role.Trener ]
-                                                          | None -> false)
-                                                      accessDenied)
-                                                   >=> (Players.Api.update club playerId |> jsonPost)))
+                                      >=> routef "/%O" (fun playerId ->
+                                          ((authorizeUser
+                                              (fun __ ->
+                                                  match user with
+                                                  | Some u when u.Id = playerId -> true
+                                                  | Some u -> u.IsInRole [ Role.Admin; Role.Trener ]
+                                                  | None -> false)
+                                              accessDenied)
+                                           >=> (Players.Api.update club playerId |> jsonPost)))
 
 
                                        ]
@@ -483,6 +477,8 @@ module App =
                           subRoute "/api/tables"
                           <| choose [ GET
                                       >=> choose [ route "/refresh" >=> Table.Refresh.run ]
+                                      GET
+                                      >=> choose [ route "/fetch" >=> Table.TryFetch.run ]
                                       mustBeInRole [ Role.Admin ]
                                       >=> choose [ PUT
                                                    >=> choose [ routef "/%s/%i/title" (Table.Api.setTitle club >> jsonPost)
@@ -497,13 +493,13 @@ module App =
 
                                        ]
                           setStatusCode 404
-                      //    >=> ErrorHandling.logNotFound
+                          //    >=> ErrorHandling.logNotFound
                           >=> Views.Error.notFound club user ]
                         next
                         ctx
                 | (None, _) ->
                     (setStatusCode 404
-                   //  >=> ErrorHandling.logNotFound
+                     //  >=> ErrorHandling.logNotFound
                      >=> text "404")
                         next
                         ctx

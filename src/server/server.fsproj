@@ -60,8 +60,8 @@
     <Compile Include="common/Results.fs" />
     <Compile Include="common/Authorization.fs" />
     <Compile Include="features/account/Login.fs" />
-    <Compile Include="features\account\Signup.fs" />
-    <Compile Include="features\account\ResetPassword.fs" />
+    <Compile Include="features/account/Signup.fs" />
+    <Compile Include="features/account/ResetPassword.fs" />
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />
     <Compile Include="features/attendance/Queries.fs" />
@@ -109,6 +109,7 @@
     <Compile Include="features/table/Queries.fs" />
     <Compile Include="features/table/TablePages.fs" />
     <Compile Include="features/table/Refresh.fs" />
+    <Compile Include="features/table/TryFetch.fs" />
     <Compile Include="features/table/Api.fs" />
     <Compile Include="features/teams/Types.fs" />
     <Compile Include="features/teams/TeamsQueries.fs" />
