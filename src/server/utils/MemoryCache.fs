@@ -8,7 +8,7 @@ open Giraffe
 module Cache =
     let options =
         let options = MemoryCacheEntryOptions()
-        options.AbsoluteExpirationRelativeToNow <- Nullable <| TimeSpan.FromMinutes 5.0
+        options.AbsoluteExpirationRelativeToNow <- Nullable <| TimeSpan.FromHours 1.0
         options
     
     type Key = string
