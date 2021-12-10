@@ -2,10 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net60</TargetFramework>
-    <PackageId>MyTeam</PackageId>
+    <AssemblyName>server</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <RootNamespace>Server</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
@@ -60,8 +60,8 @@
     <Compile Include="common/Results.fs" />
     <Compile Include="common/Authorization.fs" />
     <Compile Include="features/account/Login.fs" />
-    <Compile Include="features\account\Signup.fs" />
-    <Compile Include="features\account\ResetPassword.fs" />
+    <Compile Include="features/account/Signup.fs" />
+    <Compile Include="features/account/ResetPassword.fs" />
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />
     <Compile Include="features/attendance/Queries.fs" />

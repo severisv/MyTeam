@@ -7,17 +7,18 @@ using Microsoft.EntityFrameworkCore.Design;
 using MyTeam.Models.Domain;
 using Newtonsoft.Json;
 using MyTeam.Models.Enums;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace MyTeam.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDataProtectionKeyContext
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Event> Events { get; set; }
 
-        [NotMapped] public virtual IQueryable<Event> Games => Events.Where(ev => ev.Type == (int) EventType.Kamp);
+        [NotMapped] public virtual IQueryable<Event> Games => Events.Where(ev => ev.Type == (int)EventType.Kamp);
         public DbSet<GameEvent> GameEvents { get; set; }
         public DbSet<EventTeam> EventTeams { get; set; }
         public DbSet<EventAttendance> EventAttendances { get; set; }
@@ -30,6 +31,8 @@ namespace MyTeam.Models
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<MemberRequest> MemberRequests { get; set; }
+
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -126,17 +129,19 @@ namespace MyTeam.Models
 
         private static string ReadConnectionStringFromAppsettings()
         {
-            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database","server");
+            var appsettingsPath = $"{Directory.GetCurrentDirectory()}/appsettings.Development.json".Replace("database", "server");
 
-            if (File.Exists(appsettingsPath)) {            
+            if (File.Exists(appsettingsPath))
+            {
                 using (var r = new StreamReader(appsettingsPath))
                 {
                     var appsettingsString = r.ReadToEnd();
                     var appsettings = JsonConvert.DeserializeObject<Appsettings>(appsettingsString);
-                    return appsettings.ConnectionStrings.DefaultConnection;                
+                    return appsettings.ConnectionStrings.DefaultConnection;
                 }
             }
-            else {
+            else
+            {
                 return System.Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
             }
         }

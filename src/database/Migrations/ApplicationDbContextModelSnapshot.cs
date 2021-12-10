@@ -15,29 +15,50 @@ namespace MyTeam.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -47,14 +68,18 @@ namespace MyTeam.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -67,14 +92,18 @@ namespace MyTeam.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -85,14 +114,18 @@ namespace MyTeam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -103,9 +136,11 @@ namespace MyTeam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -116,13 +151,17 @@ namespace MyTeam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -132,49 +171,63 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
@@ -183,28 +236,38 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AuthorId");
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("GameId");
+                    b.Property<Guid?>("GameId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Headline")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("HideAuthor");
+                    b.Property<bool>("HideAuthor")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ImageUrl");
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Published");
+                    b.Property<DateTime>("Published")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -222,27 +285,36 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Club", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("About");
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClubIdentifier")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Favicon");
+                    b.Property<string>("Favicon")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Logo")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sponsors");
+                    b.Property<string>("Sponsors")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -252,21 +324,29 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Comment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ArticleId");
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AuthorFacebookId");
+                    b.Property<string>("AuthorFacebookId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AuthorName");
+                    b.Property<string>("AuthorName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AuthorUserName");
+                    b.Property<string>("AuthorUserName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("MemberId");
+                    b.Property<Guid?>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -280,65 +360,96 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<int?>("AwayScore")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("DateTime");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description");
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("GamePlanIsPublished");
+                    b.Property<string>("GamePlan")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GameType");
+                    b.Property<bool?>("GamePlanIsPublished")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Headline");
+                    b.Property<string>("GamePlanState")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsHomeTeam");
+                    b.Property<int?>("GameType")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsPublished");
+                    b.Property<string>("Headline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HomeScore")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsHomeTeam")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Opponent");
+                    b.Property<string>("Opponent")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TeamId");
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("Voluntary");
+                    b.Property<bool>("Voluntary")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("Event");
+                    b.HasIndex("TeamId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
+                    b.ToTable("Event");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("DidAttend");
+                    b.Property<bool>("DidAttend")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("EventId");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsAttending");
+                    b.Property<bool?>("IsAttending")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsSelected");
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("MemberId");
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SignupMessage");
+                    b.Property<string>("SignupMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("WonTraining");
+                    b.Property<bool>("WonTraining")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -352,11 +463,14 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.EventTeam", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EventId");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TeamId");
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -370,19 +484,26 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Fine", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Comment");
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Issued");
+                    b.Property<DateTime>("Issued")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("MemberId");
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RateName");
+                    b.Property<string>("RateName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RemedyRateId");
+                    b.Property<Guid>("RemedyRateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -396,17 +517,23 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssistedById");
+                    b.Property<Guid?>("AssistedById")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("GameId");
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PlayerId");
+                    b.Property<Guid?>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -422,39 +549,55 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("BirthDate");
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FacebookId");
+                    b.Property<string>("FacebookId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageFull");
+                    b.Property<string>("ImageFull")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PositionsString");
+                    b.Property<string>("PositionsString")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ProfileIsConfirmed");
+                    b.Property<bool>("ProfileIsConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("RolesString");
+                    b.Property<string>("RolesString")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("StartDate");
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("UrlName");
+                    b.Property<string>("UrlName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -467,19 +610,26 @@ namespace MyTeam.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FacebookId");
+                    b.Property<string>("FacebookId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -489,11 +639,14 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.MemberTeam", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MemberId");
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TeamId");
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -507,17 +660,23 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Payment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Comment");
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("MemberId");
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("TimeStamp");
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -531,11 +690,14 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.PaymentInformation", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Info");
+                    b.Property<string>("Info")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -545,17 +707,23 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.RemedyRate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Rate");
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -565,31 +733,44 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AutoUpdateFixtures");
+                    b.Property<bool>("AutoUpdateFixtures")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("AutoUpdateTable");
+                    b.Property<bool>("AutoUpdateTable")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("FixturesSourceUrl");
+                    b.Property<string>("FixturesSourceUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FixturesUpdated");
+                    b.Property<DateTime?>("FixturesUpdated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("TableJson");
+                    b.Property<string>("TableJson")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TableSourceUrl");
+                    b.Property<string>("TableSourceUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TableString");
+                    b.Property<string>("TableString")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TableUpdated");
+                    b.Property<DateTime>("TableUpdated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("TeamId");
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -601,19 +782,25 @@ namespace MyTeam.Migrations
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClubId");
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Formation");
+                    b.Property<int>("Formation")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SortOrder");
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -622,68 +809,55 @@ namespace MyTeam.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
-                {
-                    b.HasBaseType("MyTeam.Models.Domain.Event");
-
-                    b.Property<int?>("AwayScore");
-
-                    b.Property<string>("GamePlan");
-
-                    b.Property<string>("GamePlanState");
-
-                    b.Property<int?>("HomeScore");
-
-                    b.HasIndex("TeamId");
-
-                    b.ToTable("Game");
-
-                    b.HasDiscriminator().HasValue("Game");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyTeam.Models.ApplicationUser")
+                    b.HasOne("MyTeam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyTeam.Models.ApplicationUser")
+                    b.HasOne("MyTeam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("MyTeam.Models.ApplicationUser")
+                    b.HasOne("MyTeam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MyTeam.Models.ApplicationUser")
+                    b.HasOne("MyTeam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
@@ -695,11 +869,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club", "Club")
                         .WithMany()
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("MyTeam.Models.Domain.Game", "Game")
+                    b.HasOne("MyTeam.Models.Domain.Event", "Game")
                         .WithOne("Report")
                         .HasForeignKey("MyTeam.Models.Domain.Article", "GameId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Comment", b =>
@@ -707,11 +888,16 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Article", "Article")
                         .WithMany("Comments")
                         .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany("Comments")
                         .HasForeignKey("MemberId");
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
@@ -719,7 +905,16 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club", "Club")
                         .WithMany("Events")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
+                        .WithMany("Games")
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventAttendance", b =>
@@ -727,12 +922,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Event", "Event")
                         .WithMany("Attendees")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany("EventAttendances")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.EventTeam", b =>
@@ -740,12 +941,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Event", "Event")
                         .WithMany("EventTeams")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Team", "Team")
                         .WithMany("EventTeams")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Fine", b =>
@@ -753,12 +960,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.RemedyRate", "Rate")
                         .WithMany("Fines")
                         .HasForeignKey("RemedyRateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Rate");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.GameEvent", b =>
@@ -768,23 +981,31 @@ namespace MyTeam.Migrations
                         .HasForeignKey("AssistedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MyTeam.Models.Domain.Game", "Game")
+                    b.HasOne("MyTeam.Models.Domain.Event", "Game")
                         .WithMany("GameEvents")
                         .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Member", "Player")
                         .WithMany("GameEvents")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AssistedBy");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Club")
+                    b.HasOne("MyTeam.Models.Domain.Club", null)
                         .WithMany("Members")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.MemberTeam", b =>
@@ -792,12 +1013,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany("MemberTeams")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Team", "Team")
                         .WithMany("MemberTeams")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Payment", b =>
@@ -805,12 +1032,18 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club", "Club")
                         .WithMany()
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTeam.Models.Domain.Member", "Member")
                         .WithMany("Payments")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Season", b =>
@@ -818,7 +1051,10 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Team", "Team")
                         .WithMany("Seasons")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
@@ -826,15 +1062,68 @@ namespace MyTeam.Migrations
                     b.HasOne("MyTeam.Models.Domain.Club", "Club")
                         .WithMany("Teams")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
                 });
 
-            modelBuilder.Entity("MyTeam.Models.Domain.Game", b =>
+            modelBuilder.Entity("MyTeam.Models.Domain.Article", b =>
                 {
-                    b.HasOne("MyTeam.Models.Domain.Team", "Team")
-                        .WithMany("Games")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Club", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Members");
+
+                    b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Event", b =>
+                {
+                    b.Navigation("Attendees");
+
+                    b.Navigation("EventTeams");
+
+                    b.Navigation("GameEvents");
+
+                    b.Navigation("Report");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Member", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Assists");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("EventAttendances");
+
+                    b.Navigation("GameEvents");
+
+                    b.Navigation("MemberTeams");
+
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.RemedyRate", b =>
+                {
+                    b.Navigation("Fines");
+                });
+
+            modelBuilder.Entity("MyTeam.Models.Domain.Team", b =>
+                {
+                    b.Navigation("EventTeams");
+
+                    b.Navigation("Games");
+
+                    b.Navigation("MemberTeams");
+
+                    b.Navigation("Seasons");
                 });
 #pragma warning restore 612, 618
         }

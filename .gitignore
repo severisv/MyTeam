@@ -221,3 +221,5 @@ paket-files
 
 .fake
 .ionide
+gcloud.json
+service.yaml

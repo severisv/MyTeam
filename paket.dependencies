@@ -7,6 +7,7 @@ nuget Fable.Promise
 nuget Fable.JsonConverter
 nuget Feliz
 nuget Microsoft.ApplicationInsights.AspNetCore
+nuget Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator

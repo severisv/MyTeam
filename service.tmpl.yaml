@@ -1,0 +1,57 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: server
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: cloud-console
+        run.googleapis.com/execution-environment: gen1
+        autoscaling.knative.dev/maxScale: '3'
+    spec:
+      containers:
+      - image: eu.gcr.io/breddefotball/server:{IMAGE_TAG}
+        ports:
+        - name: http1
+          containerPort: 8080
+        env:
+        - name: Authentication__Facebook__AppSecret
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Authentication__Facebook__AppSecret
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: ConnectionStrings__DefaultConnection
+        - name: Authentication__Facebook__AppId
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Authentication__Facebook__AppId
+        - name: Integration__SendGrid__Key
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Integration__SendGrid__Key
+        - name: Logging__Slack__WebhookUrl
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Logging__Slack__WebhookUrl
+        - name: Integration__Cloudinary__ApiSecret
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Integration__Cloudinary__ApiSecret
+        - name: Integration__Cloudinary__ApiKey
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: Integration__Cloudinary__ApiKey
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi

@@ -1,12 +1,7 @@
 environment:
   version: 1.0.0
-  matrix:
-    - node: "8"
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   NUGET_XMLDOC_MODE: skip
-install:
-  - ps: Install-Product node $env:node
-  - cmd: cd .. && dotnet tool install fake-cli -g --version 5.20.4 && cd myteam
 assembly_info:
   patch: false
 branches:
@@ -15,7 +10,6 @@ branches:
 services:
   - mssql2017
 build_script:
-  build.cmd
+  ./build.sh
 test: off
-image: Visual Studio 2022
-clone_folder: c:\projects\myteam
+image: Ubuntu2004
