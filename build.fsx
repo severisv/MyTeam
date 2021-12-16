@@ -24,19 +24,28 @@ let artifactsDirectory = __SOURCE_DIRECTORY__ + "/artifacts"
 let databaseDirectory = __SOURCE_DIRECTORY__ + "/src/database"
 
 let gcpProjectName = "breddefotball"
-let gcpRegion = "europe-west1"
+
+let gcpRegion =
+    lazy
+        (Environment.GetEnvironmentVariable "GCLOUD_REGION"
+         |> function
+             | s when not <| String.isNullOrWhiteSpace (s) -> s
+             | _ -> "europe-west1")
 
 let dockerRepository = $"eu.gcr.io/{gcpProjectName}/server"
-let gcloudUsername = "appveyor@breddefotball.iam.gserviceaccount.com"
-let gcloudKeyFilename = 
-    lazy (
-        let credentials 
-            = Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
-        let bytes = Convert.FromBase64String(credentials)
-        let fileName = "gcloud.json"
-        File.writeBytes fileName <| bytes
-        fileName
-        )
+
+let gcloudUsername =
+    "appveyor@breddefotball.iam.gserviceaccount.com"
+
+let gcloudKeyFilename =
+    lazy
+        (let credentials =
+            Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
+
+         let bytes = Convert.FromBase64String(credentials)
+         let fileName = "gcloud.json"
+         File.writeBytes fileName <| bytes
+         fileName)
 
 let commitSha =
     lazy
@@ -72,7 +81,6 @@ let (--) cmd values =
 
 Target.create "Clean"
 <| fun _ ->
-
     Shell.cleanDirs [ publishDirectory
                       artifactsDirectory ]
 
@@ -167,8 +175,17 @@ Target.create "Push-docker-image"
 <| fun _ ->
     let tag = commitSha.Value
 
-    "gcloud" -- ["auth"; "activate-service-account"; gcloudUsername; $"--key-file={gcloudKeyFilename.Value}";"--quiet"]
-    "gcloud" -- ["auth"; "configure-docker";"--quiet"]
+    "gcloud"
+    -- [ "auth"
+         "activate-service-account"
+         gcloudUsername
+         $"--key-file={gcloudKeyFilename.Value}"
+         "--quiet" ]
+
+    "gcloud"
+    -- [ "auth"
+         "configure-docker"
+         "--quiet" ]
 
     "docker"
     -- [ "push"; $"{dockerRepository}:{tag}" ]
@@ -176,11 +193,12 @@ Target.create "Push-docker-image"
 
 Target.create "Deploy"
 <| fun _ ->
-    Shell.copyFile "service.yaml" "service.tmpl.yaml"  
+    Shell.copyFile "service.yaml" "service.tmpl.yaml"
+
     !!(sprintf "%s" "service.yaml")
-        |> Seq.iter (fun serviceYaml ->
-            let text = System.IO.File.ReadAllText serviceYaml
-            System.IO.File.WriteAllText(serviceYaml, text.Replace("{IMAGE_TAG}", commitSha.Value)))
+    |> Seq.iter (fun serviceYaml ->
+        let text = System.IO.File.ReadAllText serviceYaml
+        System.IO.File.WriteAllText(serviceYaml, text.Replace("{IMAGE_TAG}", commitSha.Value)))
 
     "gcloud"
     -- [ "run"
@@ -190,7 +208,7 @@ Target.create "Deploy"
          "--project"
          gcpProjectName
          "--region"
-         gcpRegion
+         gcpRegion.Value
          "--quiet" ]
 
 

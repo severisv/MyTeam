@@ -51,6 +51,11 @@ spec:
             secretKeyRef:
               key: latest
               name: Integration__Cloudinary__ApiKey
+        - name: DataProtection__KmsKeyName
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: DataProtection__KmsKeyName        
         resources:
           limits:
             cpu: 1000m

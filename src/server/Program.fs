@@ -19,7 +19,9 @@ open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Microsoft.AspNetCore.DataProtection
 
-let configureServices (services: IServiceCollection) =
+let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
+    let env = ctx.HostingEnvironment
+
     let configuration =
         services
             .BuildServiceProvider()
@@ -58,10 +60,22 @@ let configureServices (services: IServiceCollection) =
         .AddDefaultTokenProviders()
     |> ignore
 
-    services
-        .AddDataProtection()
-        .PersistKeysToDbContext<ApplicationDbContext>()
-    |> ignore
+
+    if not <| env.IsDevelopment() then
+        services
+            .AddDataProtection()
+            // Store keys in Cloud Storage so that multiple instances
+            // of the web application see the same keys.
+            .PersistKeysToGoogleCloudStorage(
+                "breddefotball_dataprotection",
+                configuration.["DataProtection:Object"]
+            )
+            // Protect the keys with Google KMS for encryption and fine-
+            // grained access control.
+            .ProtectKeysWithGoogleKms(
+                configuration.["DataProtection:KmsKeyName"]
+            )
+        |> ignore
 
     services
         .Configure<CloudinarySettings>(configuration.GetSection("Integration:Cloudinary"))
@@ -135,7 +149,7 @@ let main _ =
     HostBuilder()
         .UseContentRoot(Directory.GetCurrentDirectory())
         .ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureAppsettings)
-        .ConfigureServices(configureServices)
+        .ConfigureServices(Action<HostBuilderContext, IServiceCollection> configureServices)
         .ConfigureLogging(configureLogging)
         .ConfigureWebHostDefaults(fun webBuilder ->
             webBuilder

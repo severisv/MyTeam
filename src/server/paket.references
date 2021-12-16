@@ -9,3 +9,5 @@ Sendgrid
 SlackLogger
 System.Net.Http
 Thoth.Json.Net
+Google.Cloud.AspNetCore.DataProtection.Kms
+Google.Cloud.AspNetCore.DataProtection.Storage
