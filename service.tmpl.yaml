@@ -55,7 +55,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: latest
-              name: DataProtection__KmsKeyName        
+              name: DataProtection__KmsKeyName
         resources:
           limits:
             cpu: 1000m
