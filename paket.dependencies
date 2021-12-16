@@ -6,8 +6,9 @@ nuget Fable.Fetch
 nuget Fable.Promise
 nuget Fable.JsonConverter
 nuget Feliz
+nuget Google.Cloud.AspNetCore.DataProtection.Kms
+nuget Google.Cloud.AspNetCore.DataProtection.Storage
 nuget Microsoft.ApplicationInsights.AspNetCore
-nuget Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
 nuget Thoth.Json
 nuget Thoth.Json.Net
 nuget FSharp.Quotations.Evaluator

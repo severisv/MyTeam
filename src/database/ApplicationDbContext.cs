@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore.Design;
 using MyTeam.Models.Domain;
 using Newtonsoft.Json;
 using MyTeam.Models.Enums;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace MyTeam.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDataProtectionKeyContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Club> Clubs { get; set; }
@@ -32,7 +31,6 @@ namespace MyTeam.Models
         public DbSet<Team> Teams { get; set; }
         public DbSet<MemberRequest> MemberRequests { get; set; }
 
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

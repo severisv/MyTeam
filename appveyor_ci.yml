@@ -10,6 +10,6 @@ branches:
 services:
   - mssql2017
 build_script:
-  ./build.sh --target Build-docker-image
+  ./build.sh --target Deploy
 test: off
 image: Ubuntu2004
