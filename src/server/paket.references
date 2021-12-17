@@ -2,7 +2,6 @@ FSharp.Core
 FSharp.Data
 FSharp.Quotations.Evaluator
 Giraffe
-Microsoft.ApplicationInsights.AspNetCore
 Microsoft.AspNetCore.Authentication.Facebook
 Microsoft.Extensions.Caching.Abstractions
 Sendgrid
