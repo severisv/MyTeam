@@ -4,7 +4,7 @@ open Giraffe.ViewEngine
 open MyTeam
 open Shared
 
-let viewOld id model =
+let comp id model =
     div [ _id id
           attr Interop.modelAttributeName (model |> Json.fableSerialize) ] []
 

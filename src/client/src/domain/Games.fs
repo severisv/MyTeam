@@ -56,6 +56,14 @@ type GameEventType =
     | ``Gult kort``
     | ``Rødt kort``
 
+
+type GameEvent =
+    { Id : Guid
+      Type : GameEventType
+      PlayerId : Guid option
+      AssistedById : Guid option }
+      
+
 module GameEventType =
     let fromInt =
         function

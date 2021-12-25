@@ -13,6 +13,8 @@ open System
 open Shared.Components
 open Shared.Components.Links
 open MyTeam.Views.BaseComponents
+open Client.Features.Games.ListEvents
+
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
@@ -35,17 +37,24 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                   div [ _class "mt-container" ] [
                       user
                       => fun user ->
-                          if user.IsInRole [ Role.Admin
-                                             Role.Trener ] then
-                              !!(editAnchor [ Href <| sprintf "/kamper/%O/endre" game.Id ])
+                          if
+                              user.IsInRole [
+                                  Role.Admin
+                                  Role.Trener
+                              ] then
+                              !!(editAnchor [
+                                  Href <| sprintf "/kamper/%O/endre" game.Id
+                                 ])
                           else
                               empty
 
                       user
                       => fun user ->
-                          if user.IsInRole [ Role.Admin
-                                             Role.Trener
-                                             Role.Skribent ]
+                          if user.IsInRole [
+                              Role.Admin
+                              Role.Trener
+                              Role.Skribent
+                             ]
                              && gameHasPassed then
                               a [ _href <| sprintf "/kamper/%O/resultat" game.Id
                                   _class "edit-link pull-right" ] [
@@ -136,13 +145,10 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                           ]
                       ]
                       gameHasPassed
-                      =? (div [ _id "game-showEvents"
-                                attr "data-game-id" (string game.Id)
-                                attr "data-show-player-url" "/spillere/vis"
-                                attr "data-edit-mode" "false" ] [],
+                      =? (Client.comp listGameEventsId { GameId = game.Id },
+
                           empty)
                   ]
-
                   matchReport
                   => fun matchReport ->
                       block [ _class "u-fade-in-on-enter" ] [

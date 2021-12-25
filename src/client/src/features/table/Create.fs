@@ -14,8 +14,7 @@ open Shared.Components.Links
 open Thoth.Json
 open Shared.Util
 open Feliz
-open Shared
-open Fable.Core
+
 
 
 type CreateModel = { Team: string }
@@ -30,8 +29,7 @@ let isValid =
 
 
 [<ReactComponent>]
-let CreateTable (props: CreateModel) =
-   
+let CreateTable (props: CreateModel) =   
 
         let (state, setState) = React.useState( { Year = None })
 

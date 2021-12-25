@@ -24,5 +24,4 @@ const render = (Component, target) => {
 }
 
 render(ManagePlayers, 'manage-players')
-render(ShowGame, 'game-showEvents')
 render(ShowGame, 'registerResult-addEvent')

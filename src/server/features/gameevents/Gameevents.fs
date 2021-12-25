@@ -12,12 +12,6 @@ open System
 open System.Linq
 type GameEventId = Guid
 
-
-type GameEvent =
-    { Id : GameEventId
-      Type : GameEventType
-      PlayerId : PlayerId option
-      AssistedById : PlayerId option }
     
 [<CLIMutable>]
 type GameEventForm =

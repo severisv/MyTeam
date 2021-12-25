@@ -2,7 +2,8 @@ namespace Client
 
 module EntryPoint =
     
-    [ Games.SelectSquad.element |> ignore
+    [ Features.Games.ListEvents.ListGameEvents |> ignore
+      Games.SelectSquad.element |> ignore
       Features.Games.Form.element    |> ignore
       Features.Trainings.Form.element    |> ignore
       Features.Players.Form.element    |> ignore
