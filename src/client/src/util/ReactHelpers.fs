@@ -16,6 +16,17 @@ let render deserializeFn id comp =
              | Ok model -> ReactDom.render (comp model [], node)
              | Error e -> failwithf "Json deserialization failed: %O" e
 
+
+let render2 deserializeFn id comp =
+    Browser.Dom.document.getElementById id
+            |> fun node ->
+                if not <| isNull node then 
+                    node.getAttribute (Interop.modelAttributeName)
+                    |> deserializeFn
+                    |> function
+                    | Ok model -> ReactDom.render (comp(model), node)
+                    | Error e -> failwithf "Json deserialization failed: %O" e   
+
 let hydrate elementId deserializeFn comp =
     Browser.Dom.document.getElementById elementId
     |> fun node ->

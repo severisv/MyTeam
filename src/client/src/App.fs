@@ -9,8 +9,7 @@ module EntryPoint =
       Features.Players.Stats.element    |> ignore
       GamePlan.View.element |> ignore
       Table.Edit.element |> ignore
-      Table.Create.element |> ignore
-      Table.Create.element |> ignore
+      Table.Create.CreateTable |> ignore
       Admin.AddPlayers.element |> ignore
       Fines.List.element |> ignore
       Fines.RemedyRates.element |> ignore

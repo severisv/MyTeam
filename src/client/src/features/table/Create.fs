@@ -13,6 +13,10 @@ open Shared.Components.Base
 open Shared.Components.Links
 open Thoth.Json
 open Shared.Util
+open Feliz
+open Shared
+open Fable.Core
+
 
 type CreateModel = { Team: string }
 let createView = "create-table"
@@ -21,22 +25,21 @@ type State = { Year: int option }
 
 let isValid =
     function
-    | Some year -> year > 1970 && year < System.DateTime.Now.Year + 1
+    | Some year -> year > 1970 && year < System.DateTime.Now.Year + 2
     | None -> false
 
-type CreateTable(props) =
-    inherit Component<CreateModel, State>(props)
-    do base.setInitState ({ Year = None })
 
-    override this.render() =
-        let props = this.props
-        let state = this.state
+[<ReactComponent>]
+let CreateTable (props: CreateModel) =
+   
+
+        let (state, setState) = React.useState( { Year = None })
 
         let handleYearChange value =
             Number.tryParse value
             |> function
-            | Some n -> this.setState (fun state props -> { state with Year = Some n })
-            | None when not <| Strings.hasValue value -> this.setState (fun state props -> { state with Year = None })
+            | Some n -> setState ({ state with Year = Some n })
+            | None when not <| Strings.hasValue value -> setState ({ state with Year = None })
             | None -> ()
 
         Modal.modal
@@ -66,7 +69,7 @@ type CreateTable(props) =
                               { o with
                                     SendElement = btn, [ ButtonSize.Normal; Primary ], [ str "Legg til" ]
                                     SentElement = btn, [ ButtonSize.Normal; Success ], [ str "Lagt til" ]
-                                    Endpoint = Send.Post(sprintf "/api/tables/%s/%i" props.Team state.Year.Value, None)
+                                    Endpoint = Send.Post(sprintf "/api/tables/%s/%O" props.Team state.Year, None)
                                     IsDisabled = not <| isValid state.Year
                                     OnSubmit =
                                         Some
@@ -78,5 +81,5 @@ type CreateTable(props) =
                           ]
                       ] }
 
-let element = ofType<CreateTable, _, _>
-ReactHelpers.render Decode.Auto.fromString<CreateModel> createView element
+ReactHelpers.render2 Decode.Auto.fromString<CreateModel> createView CreateTable
+
