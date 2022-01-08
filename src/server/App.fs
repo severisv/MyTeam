@@ -89,8 +89,7 @@ module App =
                                                 |> htmlGet))
                                       POST
                                       >=> route "/sletting"
-                                      >=> (Account.RequestDeletion.requestDeletion
-                                           |> jsonPost) ]
+                                      >=> Account.RequestDeletion.requestDeletion ]
                           route "/404"
                           >=> setStatusCode 404
                           >=> Views.Error.notFound club user
