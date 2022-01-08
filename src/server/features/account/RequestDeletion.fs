@@ -15,6 +15,9 @@ open System.IO
 let requestDeletion: HttpHandler = 
     fun next (ctx: HttpContext) ->
 
+            let logger = Logger.get ctx.RequestServices
+
+
             let userId =
                 try
                     let signed_request =
@@ -31,14 +34,15 @@ let requestDeletion: HttpHandler =
 
                     fbUser.user_id
                 with
-                | e -> e.Message.Substring(0, 22)
+                | e -> 
+                    logger.LogError(EventId(),e, "Klarte ikke parse signed_request")
+
+                    Guid.NewGuid() |> string
 
 
-            let logger = Logger.get ctx.RequestServices
 
-
-            let body = new StreamReader(ctx.Request.Body)
-            let body = body.ReadToEndAsync().Result
+            let body = ctx.Request.Form |> Seq.map (fun kv -> $"{kv.Key}={kv.Value}") |> String.concat ","
+          
             
             logger.LogInformation(EventId(3), $"User {userId} requested deletion.")
             logger.LogInformation(EventId(3), body )
