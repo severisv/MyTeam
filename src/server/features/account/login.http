@@ -1,3 +1,7 @@
 
 
 POST https://localhost:5001/konto/sletting
+
+{
+    user_id: "lol2k"
+}
