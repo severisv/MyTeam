@@ -24,7 +24,7 @@ let requestDeletion: HttpHandler =
                     ctx.Request.Form["signed_request"] |> string
 
                 let fbUser =
-                    $"{signed_request.Split('.')[1]}"
+                    $"{signed_request.Split('.')[1]}="
                     |> Convert.FromBase64String
                     |> Encoding.UTF8.GetString
                     |> JsonConvert.DeserializeObject<{| user_id: string |}>
