@@ -22,28 +22,26 @@ module Pages =
           ("/admin", Icons.user "", "Administrer spillere")
           ("/admin/spillerinvitasjon", Icons.add "", "Legg til spiller")
           ("/nyheter/ny", Icons.news "", "Skriv artikkel") ]
-        |> List.map
-            (fun (href, icon, text) ->
-                li [] [
-                    a [ _href href ] [
-                        !!icon
-                        encodedText text
-                    ]
-                ])
+        |> List.map (fun (href, icon, text) ->
+            li [] [
+                a [ _href href ] [
+                    !!icon
+                    encodedText text
+                ]
+            ])
 
     let internal internalMenuItems =
         [ ("/intern", Icons.signup "", "Påmelding")
           ("/intern/oppmote", Icons.attendance "", "Oppmøte")
           ("/intern/boter/oversikt", Icons.fine "", "Bøter")
           ("/intern/lagliste", Icons.squadList "", "Lagliste") ]
-        |> List.map
-            (fun (href, icon, text) ->
-                li [] [
-                    a [ _href href ] [
-                        !!icon
-                        encodedText <| sprintf " %s" text
-                    ]
-                ])
+        |> List.map (fun (href, icon, text) ->
+            li [] [
+                a [ _href href ] [
+                    !!icon
+                    encodedText <| sprintf " %s" text
+                ]
+            ])
 
 
     type LayoutModel =
@@ -172,9 +170,7 @@ module Pages =
                                          @ (user.IsInRole [ Role.Admin
                                                             Role.Trener ]
                                             =? ([ hr [ _class "visible-xs submenu-divider" ]
-                                                  ((ul
-                                                      [ _class "nav navbar-nav submenu visible-xs adminMenu" ]
-                                                      coachMenuItems)) ],
+                                                  ((ul [ _class "nav navbar-nav submenu visible-xs adminMenu" ] coachMenuItems)) ],
                                                 [])))
 
                                         )
@@ -208,6 +204,14 @@ module Pages =
                        [ _id "main-container"
                          _class "container" ]
                        content
+
+                   footer [ _style "height:0;position: relative;" ] [
+                       a [ _href "/personvern"
+                           _style "position: absolute;bottom: 0;color: transparent !important;font-size: 5px;"
+                           _tabindex "-1" ] [
+                           str "Privacy"
+                       ]
+                   ]
 
                    script [ _src
                             <| sprintf "/compiled/lib/lib.bundle.js?v%s" assetHashes.LibJs ] []

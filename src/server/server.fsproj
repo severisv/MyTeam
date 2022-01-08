@@ -62,6 +62,7 @@
     <Compile Include="features/account/Login.fs" />
     <Compile Include="features/account/Signup.fs" />
     <Compile Include="features/account/ResetPassword.fs" />
+    <Compile Include="features/account/RequestDeletion.fs" />
     <Compile Include="features/admin/Pages.fs" />
     <Compile Include="features/attendance/Types.fs" />
     <Compile Include="features/attendance/Queries.fs" />
