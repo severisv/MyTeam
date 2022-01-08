@@ -3,6 +3,4 @@
 POST https://localhost:5001/konto/sletting
 Content-Type: application/x-www-form-urlencoded
 
-name=foo
-&password=bar
-&signed_request=1234.56789
+signed_request=jHIoU6Q5B1jc5fFMy3Jr7G1buQmQFF9mNiZRZW8ysCY.eyJ1c2VyX2lkIjoiMTAxNTU5ODcyNjMxMjA0MDgiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY0MTYzNzI3OH0=

@@ -12,57 +12,76 @@ open Shared.Domain
 open Giraffe.Core
 open System.IO
 
-let requestDeletion: HttpHandler = 
+let requestDeletion: HttpHandler =
     fun next (ctx: HttpContext) ->
 
-            let logger = Logger.get ctx.RequestServices
+        let logger = Logger.get ctx.RequestServices
 
 
-            let userId =
-                try
-                    let signed_request =
-                        ctx.Request.Form["signed_request"] |> string
+        let userId =
+            try
+                let signed_request =
+                    ctx.Request.Form["signed_request"] |> string
 
-                    let split = signed_request.Split('.')
-                    let dataRaw = split[1]
+                let fbUser =
+                    $"{signed_request.Split('.')[1]}"
+                    |> Convert.FromBase64String
+                    |> Encoding.UTF8.GetString
+                    |> JsonConvert.DeserializeObject<{| user_id: string |}>
 
-                    let dataBuffer = Convert.FromBase64String(dataRaw)
-                    let json = Encoding.UTF8.GetString(dataBuffer)
+                fbUser.user_id
+            with
+            | e ->
+                logger.LogError(EventId(), e, "Klarte ikke parse signed_request")
 
-                    let fbUser =
-                        JsonConvert.DeserializeObject<{| user_id: string |}>(json)
+                Guid.NewGuid() |> string
 
-                    fbUser.user_id
-                with
-                | e -> 
-                    logger.LogError(EventId(),e, "Klarte ikke parse signed_request")
+        logger.LogInformation(EventId(3), $"User {userId} requested deletion.")
 
-                    Guid.NewGuid() |> string
+        json
+            {| url = $"{ctx.Request.Scheme}://{ctx.Request.Host}/konto/sletting/{userId}"
+               confirmation_code = userId |}
+            next
+            ctx
 
 
 
-            let body = ctx.Request.Form |> Seq.map (fun kv -> $"{kv.Key}={kv.Value}") |> String.concat ","
-          
-            
-            logger.LogInformation(EventId(3), $"User {userId} requested deletion.")
-            logger.LogInformation(EventId(3), body )
-
-            json {| url = $"{ctx.Request.Scheme}://{ctx.Request.Host}/konto/sletting/{userId}"
-                    confirmation_code = userId |}
-                            next ctx
-
-    
-        
 
 let showStatus (club: Club) user userId (ctx: HttpContext) =
+
+    let db = ctx.Database
+
+    let u =
+        query {
+            for m in db.Members do
+                where (m.FacebookId = userId)
+                select (m.FirstName, m.LastName)
+        }
+
+        |> Seq.toList
+        |> List.map (fun (firstName, lastName) ->
+
+            {| FirstName = firstName
+               LastName = lastName |})
+        |> List.tryHead
+
+    let name =
+        u
+        |> Option.map (fun u -> u.FirstName + " " + u.LastName)
+        |> Option.defaultValue userId
 
     [ mtMain [] [
 
           div [ _class "mt-container" ] [
               p [ _style "font-weight: bold;" ] [
-                  encodedText $"Delete status for user {userId}"
+                  encodedText $"Delete status for user {name}"
               ]
-              p [] [ encodedText "Status: Deleted" ]
+              p [] [
+                  encodedText
+                      $"""Status: {u
+                                   |> Option.map (fun _ -> "Pending")
+                                   |> Option.defaultValue "Completed"}"""
+              ]
           ]
       ] ]
     |> layout club user (fun o -> { o with Title = "Sletting" }) ctx
