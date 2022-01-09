@@ -304,7 +304,7 @@ let element props children =
                                                            |> function
                                                                | Upcoming _ -> Open
                                                                | Previous _ -> Collapsed)
-                                                          [ str <| sprintf "Tropp (%O)" game.Squad.Length ]
+                                                          [ str $"Tropp ({game.Squad.Length})" ]
                                                           [ hr [ Class "sm" ]
                                                             div [ Class "event-attendees" ] [
                                                                 ul

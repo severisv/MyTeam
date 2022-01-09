@@ -115,34 +115,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                           ]
                       ]
                       hr []
-                      div [] [
-                          div [ _class "game-details-container" ] [
-                              div [ _class "game-details" ] [
-                                  div [] [
-                                      !!(Icons.calendar "")
-                                      (game.DateTime.Year < DateTime.Now.Year
-                                       =? (Date.formatLong, Date.format))
-                                          game.DateTime
-                                      |> encodedText
-                                  ]
-                                  div [] [
-                                      !!(Icons.time "Tidspunkt")
-                                      game.DateTime |> Date.formatTime |> encodedText
-                                  ]
-
-                                  div [] [
-                                      !!(Icons.gameType game.Type)
-                                      encodedText <| string game.Type
-                                  ]
-                                  div [] [
-                                      !!(Icons.mapMarker "Sted")
-                                      encodedText game.Location
-                                  ]
-                              ]
-
-
-                          ]
-                      ]
+                      div [] [ Common.gameDetails game ]
                       gameHasPassed
                       =? (Client.comp listGameEventsId { GameId = game.Id },
 

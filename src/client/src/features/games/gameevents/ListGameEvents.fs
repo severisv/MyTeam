@@ -9,60 +9,12 @@ open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
 open Client.Util
+open Client.Features.Games.Common
 
 let listGameEventsId = "list-game-events"
 
 
 type Props = { GameId: Guid }
-
-
-let playerLink (player: Member option) =
-    player
-    |> Option.map (fun player ->
-        Html.a [
-            prop.className "underline"
-            prop.href $"/spillere/vis/{player.UrlName}"
-            prop.title player.FullName
-            prop.children [ Html.text player.Name ]
-        ])
-
-    |> Option.defaultValue (Html.text "")
-
-
-let renderEvent (allPlayers: Member list) (gameEvent: GameEvent) =
-    let player =
-        allPlayers
-        |> List.tryFind (fun p -> Some p.Id = gameEvent.PlayerId)
-
-    let assistedBy =
-        allPlayers
-        |> List.tryFind (fun p -> Some p.Id = gameEvent.AssistedById)
-        |> Option.map (fun assistedBy ->
-            Html.span [
-                Html.text " ( "
-                Icons.assist "Assist"
-                Html.text " "
-                playerLink <| Some assistedBy
-                Html.text ")"
-            ])
-        |> Option.defaultValue (Html.text "")
-
-
-
-    Html.div [
-        prop.className "gameEvent"
-        prop.children [
-            Html.span [
-                prop.className "no-wrap"
-                prop.children [
-                    Icons.gameEvent gameEvent.Type
-                    Html.text " "
-                    playerLink player
-                    assistedBy
-                ]
-            ]
-        ]
-    ]
 
 
 
@@ -114,7 +66,6 @@ let ListGameEvents (props: Props) =
                         style.display.flex
                         style.flexDirection.column
                         style.alignItems.center
-                        style.marginTop 45
                     ]
                     prop.children [
                         Html.div [
@@ -126,7 +77,7 @@ let ListGameEvents (props: Props) =
                             )
                         ]
                         (match squad with
-                         | Some squad ->
+                         | Some squad when not squad.IsEmpty ->
                              Html.div [
                                  prop.className "u-fade-in-on-enter"
                                  prop.style [
@@ -151,6 +102,7 @@ let ListGameEvents (props: Props) =
                                      ]
                                  ]
                              ]
+                         | Some _ -> Html.text ""
                          | None -> Icons.spinner)
                     ]
                 ]
