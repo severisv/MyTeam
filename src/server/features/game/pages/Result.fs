@@ -2,14 +2,12 @@ module MyTeam.Games.Pages.Result
 
 open Giraffe.ViewEngine
 open MyTeam
-open Shared
 open Shared.Domain
 open MyTeam.Games
 open MyTeam.Views
 open Shared.Domain.Members
 open Shared.Components
-open System
-open MyTeam.Views.BaseComponents
+open Client.Features.Games.EditEvents
 
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
@@ -57,6 +55,8 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                       ]
                       hr []
                       div [] [ Common.gameDetails game ]
+                      (Client.comp editGameEventsId { GameId = game.Id })
+                      hr []
                       div [ _id "registerResult-addEvent"
                             attr "data-game-id" (string game.Id) ] []
                   ]

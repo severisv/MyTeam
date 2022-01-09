@@ -58,6 +58,7 @@
     <Compile Include="features/games/GameForm.fs" />
     <Compile Include="features/games/gameevents/Common.fs" />
     <Compile Include="features/games/gameevents/ListGameEvents.fs" />
+    <Compile Include="features/games/gameevents/EditGameEvents.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
     <Compile Include="features/events/Types.fs" />
     <Compile Include="features/events/SignupButtons.fs" />

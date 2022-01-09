@@ -1,13 +1,14 @@
 namespace Client
 
 module EntryPoint =
-    
+
     [ Features.Games.ListEvents.ListGameEvents |> ignore
+      Features.Games.EditEvents.EditGameEvents |> ignore
       Games.SelectSquad.element |> ignore
-      Features.Games.Form.element    |> ignore
-      Features.Trainings.Form.element    |> ignore
-      Features.Players.Form.element    |> ignore
-      Features.Players.Stats.element    |> ignore
+      Features.Games.Form.element |> ignore
+      Features.Trainings.Form.element |> ignore
+      Features.Players.Form.element |> ignore
+      Features.Players.Stats.element |> ignore
       GamePlan.View.element |> ignore
       Table.Edit.element |> ignore
       Table.Create.CreateTable |> ignore
@@ -16,6 +17,5 @@ module EntryPoint =
       Fines.RemedyRates.element |> ignore
       Fines.Payments.element |> ignore
       Events.List.element |> ignore
-      News.DeleteArticle.deleteArticle |> ignore ] 
+      News.DeleteArticle.deleteArticle |> ignore ]
     |> ignore
-    
