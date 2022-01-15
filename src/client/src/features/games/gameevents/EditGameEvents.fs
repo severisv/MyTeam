@@ -8,9 +8,12 @@ open Thoth.Json
 open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
+open Shared.Components.Forms
 open Client.Util
 open Client.Features.Games.Common
 open Fetch
+open Fable.React.Props
+open Fable.React.Extensions
 
 let editGameEventsId = "edit-game-events"
 
@@ -60,6 +63,8 @@ let EditGameEvents (props: Props) =
     React.useEffect (fetchAllPlayers, [||])
     React.useEffect (fetchSquad, [||])
 
+
+
     let togglePlayer (player: Member) (addOrRemove: AddOrRemove) _ =
         match squad with
         | Some squad ->
@@ -88,6 +93,32 @@ let EditGameEvents (props: Props) =
 
         | None -> ()
 
+
+    let (playerToAdd, setPlayerToAdd) = React.useState<string option> (None)
+
+
+    let selectablePlayers =
+        allPlayers
+        |> Option.defaultValue []
+        |> List.filter (fun p ->
+            (squad |> Option.defaultValue [])
+            |> List.contains p
+            |> not)
+
+    let addPlayer _ =
+        allPlayers
+        |> Option.defaultValue []
+        |> List.tryFind (fun p -> Some p.Id = (playerToAdd |> Option.bind Guid.tryParse))
+        |> function
+            | Some v -> Some v
+            | None -> (selectablePlayers |> List.tryHead)
+        |> function
+            | Some player ->
+                togglePlayer player Add ()
+                setPlayerToAdd None
+            | None -> ()
+
+
     match allPlayers with
     | Some allPlayers ->
         Html.div [
@@ -109,6 +140,8 @@ let EditGameEvents (props: Props) =
                         ]
                         (match squad with
                          | Some squad ->
+                             let squad = squad |> List.sortBy (fun p -> p.Name)
+
                              Html.div [
                                  prop.className "u-fade-in-on-enter"
                                  prop.style [
@@ -125,17 +158,49 @@ let EditGameEvents (props: Props) =
                                              squad
                                              |> List.map (fun p ->
                                                  Html.li [
-                                                     Icons.player ""
-                                                     Html.text " "
-                                                     playerLink <| Some p
-                                                     Html.button [
-                                                         prop.onClick <| togglePlayer p Remove
-                                                         prop.children [ Icons.delete ]
+                                                     prop.style [
+                                                         style.display.flex
+                                                         style.justifyContent.spaceBetween
+                                                         style.alignItems.center
+                                                         style.marginBottom 6
                                                      ]
-
-
-                                                     ])
+                                                     prop.children [
+                                                         Html.div [
+                                                             prop.children [
+                                                                 Icons.player ""
+                                                                 Html.text " "
+                                                                 playerLink <| Some p
+                                                             ]
+                                                         ]
+                                                         Html.a [
+                                                             prop.className "link link--red"
+                                                             prop.style [ style.marginLeft 20 ]
+                                                             prop.onClick <| togglePlayer p Remove
+                                                             prop.children [ Icons.remove ]
+                                                         ]
+                                                     ]
+                                                 ])
                                          )
+                                     ]
+                                     Html.div [
+                                         prop.style [
+                                             style.width (length.percent 100)
+                                         ]
+                                         prop.children [
+
+                                             selectInput
+                                                 [ Style [ MarginBottom "15px" ]
+                                                   OnChange (fun (e) ->
+                                                       let id = e.Value
+                                                       setPlayerToAdd <| Some id) ]
+                                                 (selectablePlayers
+                                                  |> List.map (fun p -> { Name = p.Name; Value = p.Id }))
+
+                                             btn [ Primary; OnClick addPlayer ] [
+                                                 Fable.React.Helpers.str "Legg til"
+
+                                             ]
+                                         ]
                                      ]
                                  ]
                              ]
