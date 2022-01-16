@@ -144,6 +144,11 @@ let view model (errors: ValidationError list) (club: Club) (user: User option) (
                           str "Glemt passordet?"
                       ]
                   ]
+                  p [ _class "col-md-offset-2 col-sm-offset-0" ] [
+                      a [ _href "/personvern" ] [
+                          str "Personvern"
+                      ]
+                  ]
               ]
           ] ]
         |> layout

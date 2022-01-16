@@ -17,7 +17,7 @@ type About = string
 
 type GetAbout = Database -> ClubId -> About
 
-let getAbout : GetAbout =
+let getAbout: GetAbout =
     fun db clubId ->
         let (ClubId clubId) = clubId
 
@@ -75,8 +75,8 @@ let edit (club: Club) (user: User option) (ctx: HttpContext) =
             user
             (fun o ->
                 { o with
-                      Title = "Om klubben"
-                      Scripts = MyTeam.News.Pages.Components.tinyMceScripts })
+                    Title = "Om klubben"
+                    Scripts = MyTeam.News.Pages.Components.tinyMceScripts })
             ctx
         |> OkResult
 
@@ -101,18 +101,25 @@ let editPost (club: Club) user (ctx: HttpContext) =
 
 
 let privacy club user (ctx: HttpContext) =
-    [ div [ _class "mt-container" ] [
+    [ div [ _class "mt-container"
+            _style "font-family: Arial;" ] [
         p [] [
             encodedText "Wamkam.no benytter seg av informasjonskapsler."
         ]
         br []
         p [] [
-            encodedText "For ikke innloggede brukere lagrer wamkam.no kun anonymisert data om bruksmønster."
+            encodedText "For ikke innloggede brukere lagrer wamkam.no kun anonymisert data om bruksmønster, vha. Google Analytics."
         ]
         br []
         p [] [
             encodedText
-                "For medlemmer lagres kontaktinformasjon, samt statistikk fra kamp og trening. For å fjerne all informasjon som er lagret om sin person, kontakt Severin Sverdvik (severin at sverdvik dot no)."
+                "For medlemmer lagres kontaktinformasjon, samt statistikk fra kamp og trening. Kontaktinformasjonen brukes slik at medlemmer i klubben kan kontakte hverandre. Informasjon om deltakelse på kamp og trening brukes kun til å vise hvem som er med på hva."
+        ]
+        p [] [
+            encodedText "Wam-Kam deler aldri persondata med tredjeparter."
+        ]
+        p [] [
+            encodedText "For å fjerne all informasjon som er lagret om sin person, kontakt Severin Sverdvik på e-post: severin at sverdvik dot no."
         ]
         br []
         p [] [

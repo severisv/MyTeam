@@ -1,0 +1,6 @@
+
+
+POST https://localhost:5001/konto/sletting
+Content-Type: application/x-www-form-urlencoded
+
+signed_request=jHIoU6Q5B1jc5fFMy3Jr7G1buQmQFF9mNiZRZW8ysCY.eyJ1c2VyX2lkIjoiMTAxNTU5ODcyNjMxMjA0MDgiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY0MTYzNzI3OH0=

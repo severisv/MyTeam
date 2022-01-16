@@ -70,18 +70,26 @@ module App =
                                       >=> (Account.ResetPassword.view None [] club user
                                            |> htmlGet)
                                       POST
-                                      >=> Antiforgery.validate
                                       >=> route "/glemt-passord"
+                                      >=> Antiforgery.validate
                                       >=> (Account.ResetPassword.post club user |> htmlPost)
                                       GET
                                       >=> route "/nullstill-passord"
                                       >=> (Account.ResetPassword.confirmView None [] club user
                                            |> htmlGet)
                                       POST
-                                      >=> Antiforgery.validate
                                       >=> route "/nullstill-passord"
+                                      >=> Antiforgery.validate
                                       >=> (Account.ResetPassword.confirmPost club user
-                                           |> htmlPost) ]
+                                           |> htmlPost)
+                                      GET
+                                      >=> (routef "/sletting/%s"
+                                           <| fun userId ->
+                                               (Account.RequestDeletion.showStatus club user userId
+                                                |> htmlGet))
+                                      POST
+                                      >=> route "/sletting"
+                                      >=> Account.RequestDeletion.requestDeletion ]
                           route "/404"
                           >=> setStatusCode 404
                           >=> Views.Error.notFound club user
