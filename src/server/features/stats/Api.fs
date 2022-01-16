@@ -19,8 +19,6 @@ type GameEvent =
 
 
 
-
-
 let listAllPlayerStats (club: Club) (playerId: Guid) (db: Database) =
 
     let teamIds = club.Teams |> List.map (fun t -> t.Id)
@@ -30,11 +28,13 @@ let listAllPlayerStats (club: Club) (playerId: Guid) (db: Database) =
 
     let events =
         let playerId = Nullable(playerId)
-        db.GameEvents.Include(fun ge -> ge.Game)
-          .Where(fun e ->
-          (e.PlayerId = playerId || e.AssistedById = playerId)
-          && e.Game.GameType
-          <> treningskamp)
+
+        db
+            .GameEvents
+            .Include(fun ge -> ge.Game)
+            .Where(fun e ->
+                (e.PlayerId = playerId || e.AssistedById = playerId)
+                && e.Game.GameType <> treningskamp)
         |> Seq.toList
 
 
@@ -44,13 +44,14 @@ let listAllPlayerStats (club: Club) (playerId: Guid) (db: Database) =
     let games =
         query {
             for ea in db.EventAttendances do
-                where
-                    (teamIds.Contains(ea.Event.TeamId.Value)
-                     && ea.Event.GameType
-                     <> treningskamp
-                     && ea.Event.DateTime < now
-                     && ea.MemberId = playerId
-                     && ea.IsSelected)
+                where (
+                    teamIds.Contains(ea.Event.TeamId.Value)
+                    && ea.Event.GameType <> treningskamp
+                    && ea.Event.DateTime < now
+                    && ea.MemberId = playerId
+                    && ea.IsSelected
+                )
+
                 select (ea.Event.TeamId.Value, ea.Event.DateTime)
         }
         |> Seq.toList
@@ -82,9 +83,9 @@ let listAllPlayerStats (club: Club) (playerId: Guid) (db: Database) =
         |> List.map (fun key ->
             {| Key = key
                Items =
-                   byTeamAndYear
-                   |> List.filter (fun (k, _) -> k = key)
-                   |> List.collect (fun (_, values) -> values) |})
+                byTeamAndYear
+                |> List.filter (fun (k, _) -> k = key)
+                |> List.collect (fun (_, values) -> values) |})
 
     let result =
         grouped
@@ -92,61 +93,62 @@ let listAllPlayerStats (club: Club) (playerId: Guid) (db: Database) =
         |> List.map (fun (year, values) ->
             { Year = year
               Teams =
-                  values
-                  |> List.map (fun group ->
+                values
+                |> List.map (fun group ->
 
-                      let gameEvents =
-                          group.Items
-                          |> List.map (fun ge ->
-                              { AssistedById = ge.AssistedById |> Option.fromNullable
-                                PlayerId = ge.PlayerId |> Option.fromNullable
-                                GameId = ge.Game.Id
-                                EventType = ge.Type |> int |> GameEventType.fromInt })
+                    let gameEvents =
+                        group.Items
+                        |> List.map (fun ge ->
+                            { AssistedById = ge.AssistedById |> Option.fromNullable
+                              PlayerId = ge.PlayerId |> Option.fromNullable
+                              GameId = ge.Game.Id
+                              EventType = ge.Type |> int |> GameEventType.fromInt })
 
-                      let goalCount =
-                          gameEvents
-                          |> List.filter (fun g -> g.PlayerId = Some playerId && g.EventType = Mål)
-                          |> List.length
+                    let goalCount =
+                        gameEvents
+                        |> List.filter (fun g -> g.PlayerId = Some playerId && g.EventType = Mål)
+                        |> List.length
 
-                      let assistCount =
-                          gameEvents
-                          |> List.filter (fun g -> g.AssistedById = Some playerId)
-                          |> List.length
+                    let assistCount =
+                        gameEvents
+                        |> List.filter (fun g -> g.AssistedById = Some playerId)
+                        |> List.length
 
-                      let yellowCards =
-                          gameEvents
-                          |> List.filter (fun g ->
-                              g.PlayerId = Some playerId
-                              && g.EventType = GameEventType.``Gult kort``)
-                          |> List.length
+                    let yellowCards =
+                        gameEvents
+                        |> List.filter (fun g ->
+                            g.PlayerId = Some playerId
+                            && g.EventType = GameEventType.``Gult kort``)
+                        |> List.length
 
-                      let redCards =
-                          gameEvents
-                          |> List.filter (fun g ->
-                              g.PlayerId = Some playerId
-                              && g.EventType = GameEventType.``Rødt kort``)
-                          |> List.length
+                    let redCards =
+                        gameEvents
+                        |> List.filter (fun g ->
+                            g.PlayerId = Some playerId
+                            && g.EventType = GameEventType.``Rødt kort``)
+                        |> List.length
 
 
-                      { TeamId = group.Key.TeamId
-                        TeamName =
-                            (club.Teams
-                             |> List.find (fun t -> t.Id = group.Key.TeamId)).ShortName
-                        Games =
-                            games
-                            |> List.filter (fun (teamId, datetime) ->
-                                teamId = group.Key.TeamId
-                                && (datetime.Year = group.Key.Year
-                                    || group.Key.Year = 0))
-                            |> List.length
-                        Goals = goalCount
-                        Assists = assistCount
-                        RedCards = redCards
-                        YellowCards = yellowCards })
-                  |> List.filter (fun t -> t.Games > 0 || t.YellowCards > 0 || t.RedCards > 0)      
-                  |> List.sortBy (fun t -> t.TeamName) }
+                    { TeamId = group.Key.TeamId
+                      TeamName =
+                        (club.Teams
+                         |> List.find (fun t -> t.Id = group.Key.TeamId))
+                            .ShortName
+                      Games =
+                        games
+                        |> List.filter (fun (teamId, datetime) ->
+                            teamId = group.Key.TeamId
+                            && (datetime.Year = group.Key.Year
+                                || group.Key.Year = 0))
+                        |> List.length
+                      Goals = goalCount
+                      Assists = assistCount
+                      RedCards = redCards
+                      YellowCards = yellowCards })
+                |> List.filter (fun t -> t.Games > 0 || t.YellowCards > 0 || t.RedCards > 0)
+                |> List.sortBy (fun t -> t.TeamName) }
 
-            )
+        )
         |> List.sortByDescending (fun p -> p.Year)
 
     OkResult result

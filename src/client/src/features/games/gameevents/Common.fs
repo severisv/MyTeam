@@ -20,7 +20,7 @@ let playerLink (player: Member option) =
             prop.children [ Html.text player.Name ]
         ])
 
-    |> Option.defaultValue (Html.text "")
+    |> Option.defaultValue (Html.text "Selvmål")
 
 
 let renderEvent (allPlayers: Member list) (gameEvent: GameEvent) =
