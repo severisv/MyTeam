@@ -56,9 +56,6 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                       hr []
                       div [] [ Common.gameDetails game ]
                       (Client.comp editGameEventsId { GameId = game.Id })
-                      hr []
-                      div [ _id "registerResult-addEvent"
-                            attr "data-game-id" (string game.Id) ] []
                   ]
               ]
 

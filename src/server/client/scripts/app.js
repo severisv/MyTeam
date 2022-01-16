@@ -6,7 +6,6 @@ import '../stylesheets/style.less'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ManagePlayers from './reactComponents/ManagePlayers/ManagePlayers'
-import ShowGame from './reactComponents/RegisterResult/ShowGame'
 
 import ajax from './ajaxHelpers'
 import global from './global'
@@ -24,4 +23,3 @@ const render = (Component, target) => {
 }
 
 render(ManagePlayers, 'manage-players')
-render(ShowGame, 'registerResult-addEvent')
