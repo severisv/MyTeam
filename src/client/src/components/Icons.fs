@@ -11,39 +11,46 @@ type IconSize =
 
 let fa name = sprintf "fa fa-%s" name
 
-let icon name title =
-    i [ Class name
-        Title title ] []
+let icon name title = i [ Class name; Title title ] []
 
 let eventIcon eventType size =
-    let className = sprintf "%s %s" (match eventType with
-                                     | EventType.Kamp -> fa "trophy"
-                                     | EventType.Trening -> "flaticon-couple40"
-                                     | EventType.Diverse -> fa "beer"
-                                     | _ -> fa "calendar") (match size with
-                                                            | Large -> "fa-2x"
-                                                            | ExtraLarge -> "fa-3x"
-                                                            | _ -> "")
+    let className =
+        sprintf
+            "%s %s"
+            (match eventType with
+             | EventType.Kamp -> fa "trophy"
+             | EventType.Trening -> "flaticon-couple40"
+             | EventType.Diverse -> fa "beer"
+             | _ -> fa "calendar")
+            (match size with
+             | Large -> "fa-2x"
+             | ExtraLarge -> "fa-3x"
+             | _ -> "")
+
     icon className (string eventType)
 
-let playerStatusIcon (status : PlayerStatus) =
+
+
+let playerStatusIcon (status: PlayerStatus) =
     let className =
         (match status with
          | PlayerStatus.Aktiv -> fa "user"
          | PlayerStatus.Veteran -> fa "trophy"
          | PlayerStatus.Trener -> "flaticon-football50"
          | _ -> fa "user-times")
+
     icon className (string status)
 
-let gameType (gameType : GameType) =
+let gameType (gameType: GameType) =
     let className =
         gameType
-        |> function 
-        | GameType.Treningskamp -> "icon-handshake"
-        | GameType.Seriekamp -> fa "trophy"
-        | GameType.Norgesmesterskapet -> "flaticon-football42"
-        | GameType.Kretsmesterskapet -> "flaticon-football33"
-        | GameType.``OBOS Cup`` -> "flaticon-trophy4"
+        |> function
+            | GameType.Treningskamp -> "icon-handshake"
+            | GameType.Seriekamp -> fa "trophy"
+            | GameType.Norgesmesterskapet -> "flaticon-football42"
+            | GameType.Kretsmesterskapet -> "flaticon-football33"
+            | GameType.``OBOS Cup`` -> "flaticon-trophy4"
+
     icon className (string gameType)
 
 let add = icon <| fa "plus"
@@ -83,6 +90,7 @@ let player = icon <| "flaticon-soccer18"
 let previous = icon <| fa "history"
 let refresh = icon <| fa "refresh"
 let redCard = icon <| "icon icon-card-red"
+let remove = icon (fa "times") "Fjern"
 let signup = icon <| fa "calendar"
 let squadList = icon <| fa "users"
 let spinner = icon (fa "spinner fa-spin") ""
@@ -97,3 +105,11 @@ let users = icon <| fa "users"
 let warning = icon (fa "exclamation-triangle") ""
 let whistle = icon <| "flaticon-football75"
 let yellowCard = icon <| "icon icon-card-yellow"
+
+
+let gameEvent eventType =
+    match eventType with
+    | Mål -> goal
+    | ``Gult kort`` -> yellowCard
+    | ``Rødt kort`` -> redCard
+    <| string eventType

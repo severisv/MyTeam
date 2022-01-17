@@ -17,8 +17,6 @@ open System.Linq
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
-
-
     let db = ctx.Database
     let (ClubId clubId) = club.Id
 
@@ -68,7 +66,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
             let recentAttendance =
                 Queries.getRecentAttendance db game.TeamId
 
-            [ Client.viewOld
+            [ Client.comp
                 clientView
                 { Game = game
                   Signups = signups

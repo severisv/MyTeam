@@ -76,7 +76,7 @@ module Table =
                                 (if (user
                                      |> Option.map (fun (user: User) -> user.IsInRole [ Role.Admin ])
                                      |> Option.defaultValue false) then
-                                     Client.viewOld
+                                     Client.comp
                                          editView
                                          { Title = t.Title
                                            Team = selectedTeam.ShortName
@@ -161,7 +161,7 @@ module Table =
                                            encodedText "Admin"
                                        ]
                                        li [] [
-                                           Client.viewOld createView { Team = selectedTeam.ShortName }
+                                           Client.comp createView { Team = selectedTeam.ShortName }
                                        ]
                                    ]
                                ]

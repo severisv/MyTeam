@@ -13,6 +13,8 @@ open System
 open Shared.Components
 open Shared.Components.Links
 open MyTeam.Views.BaseComponents
+open Client.Features.Games.ListEvents
+
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
@@ -36,17 +38,23 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                       user
                       => fun user ->
                           if
-                              user.IsInRole [ Role.Admin
-                                              Role.Trener ] then
-                              !!(editAnchor [ Href <| sprintf "/kamper/%O/endre" game.Id ])
+                              user.IsInRole [
+                                  Role.Admin
+                                  Role.Trener
+                              ] then
+                              !!(editAnchor [
+                                  Href <| sprintf "/kamper/%O/endre" game.Id
+                                 ])
                           else
                               empty
 
                       user
                       => fun user ->
-                          if user.IsInRole [ Role.Admin
-                                             Role.Trener
-                                             Role.Skribent ]
+                          if user.IsInRole [
+                              Role.Admin
+                              Role.Trener
+                              Role.Skribent
+                             ]
                              && gameHasPassed then
                               a [ _href <| sprintf "/kamper/%O/resultat" game.Id
                                   _class "edit-link pull-right" ] [
@@ -67,7 +75,10 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                               empty
 
                       h3 [ _class "game-header hidden-xs" ] [
-                          encodedText game.HomeTeam
+                          span [ _class "game-score-team"
+                                 _style "text-align:right;" ] [
+                              encodedText game.HomeTeam
+                          ]
                           span [ _class "game-score" ] [
                               encodedText
                               <| sprintf
@@ -79,7 +90,10 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                    |> Option.map string
                                    |> Option.defaultValue "")
                           ]
-                          encodedText game.AwayTeam
+                          span [ _class "game-score-team"
+                                 _style "text-align:left;" ] [
+                              encodedText game.AwayTeam
+                          ]
                       ]
 
                       HtmlElements.table [ _class "game-scoreTable visible-xs" ] [
@@ -101,49 +115,12 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                           ]
                       ]
                       hr []
-                      div [ _class "row game-details" ] [
-                          div [ _class "col-sm-9 col-sm-offset-2 col-xs-11 col-xs-offset-1 no-padding" ] [
-                              div [ _class "col-sm-5" ] [
-                                  p [ _class "col-sm-3 col-xs-2 game-details-icon" ] [
-                                      !!(Icons.calendar "")
-                                  ]
-                                  p [ _class "col-sm-9" ] [
-                                      (game.DateTime.Year < DateTime.Now.Year
-                                       =? (Date.formatLong, Date.format))
-                                          game.DateTime
-                                      |> encodedText
-                                  ]
-                                  p [ _class "col-sm-3 col-xs-2 game-details-icon" ] [
-                                      !!(Icons.time "Tidspunkt")
-                                  ]
-                                  p [ _class "col-sm-9" ] [
-                                      game.DateTime |> Date.formatTime |> encodedText
-                                  ]
-                              ]
-                              div [ _class "col-sm-7" ] [
-                                  p [ _class "col-sm-3 col-xs-2 game-details-icon" ] [
-                                      !!(Icons.gameType game.Type)
-                                  ]
-                                  p [ _class "col-sm-8" ] [
-                                      encodedText <| string game.Type
-                                  ]
-                                  p [ _class "col-sm-3 col-xs-2 game-details-icon" ] [
-                                      !!(Icons.mapMarker "Sted")
-                                  ]
-                                  p [ _class "col-sm-8" ] [
-                                      encodedText game.Location
-                                  ]
-                              ]
-                          ]
-                      ]
+                      div [] [ Common.gameDetails game ]
                       gameHasPassed
-                      =? (div [ _id "game-showEvents"
-                                attr "data-game-id" (string game.Id)
-                                attr "data-show-player-url" "/spillere/vis"
-                                attr "data-edit-mode" "false" ] [],
+                      =? (Client.comp listGameEventsId { GameId = game.Id },
+
                           empty)
                   ]
-
                   matchReport
                   => fun matchReport ->
                       block [ _class "u-fade-in-on-enter" ] [

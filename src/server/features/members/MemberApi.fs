@@ -1,4 +1,3 @@
-
 module MyTeam.Members.Api
 
 open Shared.Domain
@@ -19,7 +18,9 @@ let list clubId db = Members.list db clubId |> OkResult
 
 let listCompact clubId (db: Database) =
     let (ClubId clubId) = clubId
+
     Members.selectMembers (db.Members.Where(fun m -> m.ClubId = clubId))
+    |> Seq.toList
     |> OkResult
 
 
@@ -28,8 +29,10 @@ type SetStatus = { Status: string }
 
 let setStatus clubId id next (ctx: HttpContext) =
     let model = ctx.BindJson<SetStatus>()
+
     Persistence.setStatus ctx.Database clubId id (Enums.fromString model.Status)
     |> Tenant.clearUserCache ctx clubId
+
     next ctx
 
 [<CLIMutable>]
@@ -37,8 +40,10 @@ type ToggleRole = { Role: string }
 
 let toggleRole clubId id next (ctx: HttpContext) =
     let model = ctx.BindJson<ToggleRole>()
+
     Persistence.toggleRole ctx.Database clubId id (Enums.fromString model.Role)
     |> Tenant.clearUserCache ctx clubId
+
     next ctx
 
 [<CLIMutable>]
@@ -57,20 +62,22 @@ let add clubId (ctx: HttpContext) model =
 
             let memberDoesNotExist db _ form =
                 let members = Queries.members db clubId
+
                 if not <| Strings.hasValue form.``E-postadresse`` then
                     Ok()
                 else
                     (if form.FacebookId.HasValue then
-                        members.Where(fun m -> m.FacebookId = form.FacebookId)
-                        |> Seq.tryHead
+                         members.Where(fun m -> m.FacebookId = form.FacebookId)
+                         |> Seq.tryHead
                      else
                          None)
                     |> function
-                    | Some user -> Some user
-                    | None ->
-                        let email = form.``E-postadresse``
-                        members.Where(fun m -> m.UserName = email)
-                        |> Seq.tryHead
+                        | Some user -> Some user
+                        | None ->
+                            let email = form.``E-postadresse``
+
+                            members.Where(fun m -> m.UserName = email)
+                            |> Seq.tryHead
                     |> Option.map (fun _ -> Error "Brukeren er lagt til fra før")
                     |> Option.defaultValue (Ok())
 
@@ -78,13 +85,13 @@ let add clubId (ctx: HttpContext) model =
                 let (ClubId clubId) = clubId
 
                 let rec addNumberIfTaken str =
-                    if db.Members.Any(fun m -> m.ClubId = clubId && m.UrlName = str)
-                    then addNumberIfTaken <| sprintf "%s-1" str
-                    else str
+                    if db.Members.Any(fun m -> m.ClubId = clubId && m.UrlName = str) then
+                        addNumberIfTaken <| sprintf "%s-1" str
+                    else
+                        str
 
-                sprintf "%s%s%s-%s" form.Fornavn (form.Mellomnavn |> isNullOrEmpty =? ("", "-")) form.Mellomnavn
-                    form.Etternavn
-                |> Strings.toLower   
+                sprintf "%s%s%s-%s" form.Fornavn (form.Mellomnavn |> isNullOrEmpty =? ("", "-")) form.Mellomnavn form.Etternavn
+                |> Strings.toLower
                 |> replace "ø" "o"
                 |> replace "æ" "ae"
                 |> replace "å" "aa"
@@ -93,45 +100,51 @@ let add clubId (ctx: HttpContext) model =
                 |> addNumberIfTaken
 
 
-            combine
-                [ <@ form @> >- [ memberDoesNotExist db ]
-                  <@ form.``E-postadresse`` @>
-                  >- [ isRequired; isValidEmail ]
-                  <@ form.Fornavn @> >- [ isRequired ]
-                  <@ form.Etternavn @> >- [ isRequired ] ]
+            combine [ <@ form @> >- [ memberDoesNotExist db ]
+                      <@ form.``E-postadresse`` @>
+                      >- [ isRequired; isValidEmail ]
+                      <@ form.Fornavn @> >- [ isRequired ]
+                      <@ form.Etternavn @> >- [ isRequired ] ]
             |> function
-            | Ok () ->
-                let email = form.``E-postadresse``
-                let (ClubId clubId) = clubId
-                db.Members.Add
-                    (Member
-                        (ClubId = clubId,
-                         FirstName = form.Fornavn,
-                         MiddleName = form.Mellomnavn,
-                         LastName = form.Etternavn,
-                         FacebookId = form.FacebookId,
-                         UserName = email,
-                         UrlName = urlName form,
-                         MemberTeams =
-                             Enumerable.ToList
-                                 (club.Teams
-                                  |> Seq.map (fun team -> MemberTeam(TeamId = team.Id)))))
-                |> ignore
+                | Ok () ->
+                    let email = form.``E-postadresse``
+                    let (ClubId clubId) = clubId
 
-                db.MemberRequests.Where(fun mr -> mr.ClubId = clubId && mr.Email = email)
-                |> Seq.tryHead
-                |> Option.map (fun mr ->
-                    Email.send ctx.RequestServices mr.Email "Du er lagt til som spiller"
-                        (sprintf "Du er nå lagt til som spiller i %s!\nDu kan melde deg på kamper og treninger på http://wamkam.no/intern"
-                             club.Name)
-                    |> Async.AwaitTask
-                    |> Async.RunSynchronously
-                    db.MemberRequests.Remove mr)
-                |> ignore
+                    db.Members.Add(
+                        Member(
+                            ClubId = clubId,
+                            FirstName = form.Fornavn,
+                            MiddleName = form.Mellomnavn,
+                            LastName = form.Etternavn,
+                            FacebookId = form.FacebookId,
+                            UserName = email,
+                            UrlName = urlName form,
+                            MemberTeams =
+                                Enumerable.ToList(
+                                    club.Teams
+                                    |> Seq.map (fun team -> MemberTeam(TeamId = team.Id))
+                                )
+                        )
+                    )
+                    |> ignore
 
-                db.SaveChanges() |> ignore
-                Tenant.clearUserCache ctx club.Id (UserId email)
-                OkResult()
-            | Error e -> ValidationErrors e
+                    db.MemberRequests.Where(fun mr -> mr.ClubId = clubId && mr.Email = email)
+                    |> Seq.tryHead
+                    |> Option.map (fun mr ->
+                        Email.send
+                            ctx.RequestServices
+                            mr.Email
+                            "Du er lagt til som spiller"
+                            (sprintf "Du er nå lagt til som spiller i %s!\nDu kan melde deg på kamper og treninger på http://wamkam.no/intern" club.Name)
+                        |> Async.AwaitTask
+                        |> Async.RunSynchronously
+
+                        db.MemberRequests.Remove mr)
+                    |> ignore
+
+                    db.SaveChanges() |> ignore
+                    Tenant.clearUserCache ctx club.Id (UserId email)
+                    OkResult()
+                | Error e -> ValidationErrors e
 
     add ctx.Database clubId model

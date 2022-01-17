@@ -83,9 +83,12 @@
   padding: 0 1em;
   .r-under-xs({padding: 0 0.5em; font-size: 1.2em;});
 }
-.gameEvents {
-  margin-bottom: 1.5em;
+
+.game-score-team {
+  display: inline-block;
+  min-width: 7em;
 }
+
 .gameEvents .gameEvent {
   position: relative;
   font-size: 1.25em;
@@ -108,21 +111,49 @@
 .gameEvent .fa {
   margin-right: 0.15em;
 }
-.game-showEventsWrapper {
-  padding-top: 1em;
+
+.game-details-container {
+  max-width: 32em;
+  margin: 0 auto;
+  margin-bottom: 45px;
+  
+  .r-under-sm({ 
+    display: flex;
+    justify-content: center;
+  
+  });
 }
+
 .game-details {
-  color: @black-faded;
-  font-size: 0.9em;
-  margin-bottom: 1.5em;
-}
-.game-details-icon {
-  text-align: right;
-  & > i.fa {
-    font-size: 1.3em;
-    .r-under-sm({font-size: 1.2em;});
+  color: @blackNormal;
+  font-size: 1.1em;
+
+  display: grid;
+  grid-template-columns: 50% 50%;
+  .r-under-sm({ 
+    display: flex;
+    flex-direction: column;  
+  
+  });
+
+  &>div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
   }
+  
+  i.fa {
+    text-align: center;
+    margin-right: 0.5em;
+    min-width: 1.25em;
+    font-size: 1.75em;
+    color: fade(black, 70);
+  }
+
 }
+
+
+
 .game-squadList {
   line-height: 1.6em;
   font-size: 1.2em;

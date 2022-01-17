@@ -82,6 +82,7 @@
     <Compile Include="features/game/Persistence.fs" />
     <Compile Include="features/game/api/Insights.fs" />
     <Compile Include="features/game/GameApi.fs" />
+    <Compile Include="features/game/pages/Common.fs" />
     <Compile Include="features/game/pages/Show.fs" />
     <Compile Include="features/game/pages/List.fs" />
     <Compile Include="features/game/pages/Add.fs" />

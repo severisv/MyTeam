@@ -24,10 +24,16 @@ type Game =
       Type: GameType
       MatchReportName: string option }
     member g.HomeTeam =
-        if g.IsHomeTeam then g.Team.Name else g.Opponent
+        if g.IsHomeTeam then
+            g.Team.Name
+        else
+            g.Opponent
 
     member g.AwayTeam =
-        if g.IsHomeTeam then g.Opponent else g.Team.Name
+        if g.IsHomeTeam then
+            g.Opponent
+        else
+            g.Team.Name
 
     member g.LocationShort =
         g.Location
@@ -38,8 +44,7 @@ type Game =
     member g.Outcome =
         match (g.HomeScore, g.AwayScore) with
         | (Some homeScore, Some awayScore) ->
-            homeScore
-            - awayScore
+            homeScore - awayScore
             |> fun score ->
                 match (g.IsHomeTeam) with
                 | true when score > 0 -> Seier
@@ -55,6 +60,14 @@ type GameEventType =
     | Mål
     | ``Gult kort``
     | ``Rødt kort``
+
+
+type GameEvent =
+    { Id: Guid
+      Type: GameEventType
+      PlayerId: Guid option
+      AssistedById: Guid option }
+
 
 module GameEventType =
     let fromInt =

@@ -81,8 +81,7 @@ type SelectSquad(props) =
 
     override this.render() =
         let model =
-            { props with
-                  Game = { props.Game with Squad = this.state } }
+            { props with Game = { props.Game with Squad = this.state } }
 
         let getRecentAttendance memberId =
             model.RecentAttendance
@@ -96,23 +95,21 @@ type SelectSquad(props) =
 
         let players: Player list =
             model.Members
-            |> List.map
-                (fun m ->
-                    let s =
-                        model.Signups
-                        |> List.tryFind (fun s -> s.MemberId = m.Details.Id)
+            |> List.map (fun m ->
+                let s =
+                    model.Signups
+                    |> List.tryFind (fun s -> s.MemberId = m.Details.Id)
 
-                    (m, s))
+                (m, s))
 
         let handleSelectPlayer playerId isSelected =
-            this.setState
-                (fun state props ->
-                    { state with
-                          MemberIds =
-                              if isSelected then
-                                  state.MemberIds @ [ playerId ] |> List.distinct
-                              else
-                                  state.MemberIds |> List.except [ playerId ] })
+            this.setState (fun state props ->
+                { state with
+                    MemberIds =
+                        if isSelected then
+                            state.MemberIds @ [ playerId ] |> List.distinct
+                        else
+                            state.MemberIds |> List.except [ playerId ] })
 
 
 
@@ -128,40 +125,43 @@ type SelectSquad(props) =
                 [ ul
                     [ Class "list-users" ]
                     (players
-                     |> List.map
-                         (fun (m, s) ->
-                             let m = m.Details
+                     |> List.map (fun (m, s) ->
+                         let m = m.Details
 
-                             li [ Class "registerSquad-player" ] [
-                                 span [] [
-                                     img [ Class "hidden-xxs"
-                                           Src
-                                           <| Image.getMember
-                                               imageOptions
-                                               (fun opts ->
-                                                   { opts with
-                                                         Height = Some 50
-                                                         Width = Some 50 })
-                                               m.Image
-                                               m.FacebookId ]
-                                     str m.Name
+                         li [ Class "registerSquad-player" ] [
+                             span [] [
+                                 img [
+                                     Class "hidden-xxs"
+                                     Src
+                                     <| Image.getMember
+                                         imageOptions
+                                         (fun opts ->
+                                             { opts with
+                                                 Height = Some 50
+                                                 Width = Some 50 })
+                                         m.Image
+                                         m.FacebookId
                                  ]
-                                 span [ Style [ Display DisplayOptions.Flex
-                                                JustifyContent "flex-end"
-                                                AlignItems AlignItemsOptions.Center ] ] [
-                                     s
-                                     => fun s ->
-                                         Strings.hasValue s.Message
-                                         &? tooltip s.Message [ Class "registerSquad-messageIcon" ] [ Icons.comment ]
-                                     span [ Title "Oppmøte siste 8 uker" ] [
-                                         str <| getRecentAttendance m.Id
-                                     ]
-                                     Checkbox.render
-                                         { Value = game.Squad.MemberIds |> List.contains m.Id
-                                           Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
-                                           OnChange = handleSelectPlayer m.Id }
+                                 str m.Name
+                             ]
+                             span [ Style [
+                                        Display DisplayOptions.Flex
+                                        JustifyContent "flex-end"
+                                        AlignItems AlignItemsOptions.Center
+                                    ] ] [
+                                 s
+                                 => fun s ->
+                                     Strings.hasValue s.Message
+                                     &? tooltip s.Message [ Class "registerSquad-messageIcon" ] [ Icons.comment ]
+                                 span [ Title "Oppmøte siste 8 uker" ] [
+                                     str <| getRecentAttendance m.Id
                                  ]
-                             ]))
+                                 Checkbox.render
+                                     { Value = game.Squad.MemberIds |> List.contains m.Id
+                                       Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
+                                       OnChange = handleSelectPlayer m.Id }
+                             ]
+                         ]))
                   br [] ]
 
         let squad =
@@ -170,7 +170,9 @@ type SelectSquad(props) =
 
         mtMain [] [
             block [] [
-                editAnchor [ Href <| sprintf "/kamper/%O/endre" game.Id ]
+                editAnchor [
+                    Href <| sprintf "/kamper/%O/endre" game.Id
+                ]
                 a [ Href <| sprintf "/kamper/%O/bytteplan" game.Id
                     Class "registerSquad-gameplan-link pull-right"
                     Title "Bytteplan" ] [
@@ -222,14 +224,13 @@ type SelectSquad(props) =
 
                         div [] [
                             ul
-                                [ Class "list-unstyled squad-list" ]
+                                [ Class " squad-list" ]
                                 (squad
-                                 |> List.map
-                                     (fun (m, _) ->
-                                         li [] [
-                                             Icons.player ""
-                                             str <| sprintf " %s" m.Details.Name
-                                         ]))
+                                 |> List.map (fun (m, _) ->
+                                     li [] [
+                                         Icons.player ""
+                                         str <| sprintf " %s" m.Details.Name
+                                     ]))
                         ]
                         hr []
 
@@ -241,13 +242,12 @@ type SelectSquad(props) =
                                       Url = sprintf "/api/events/%O/description" game.Id }
                             ]
 
-                            Send.sendElement
-                                (fun o ->
-                                    { o with
-                                          IsSent = Some game.Squad.IsPublished
-                                          SendElement = btn, [ Lg; Primary ], [ str "Publiser tropp" ]
-                                          SentElement = btn, [ Lg; Success ], [ str "Publisert" ]
-                                          Endpoint = Send.Post(sprintf "/api/games/%O/squad/publish" game.Id, None) })
+                            Send.sendElement (fun o ->
+                                { o with
+                                    IsSent = Some game.Squad.IsPublished
+                                    SendElement = btn, [ Lg; Primary ], [ str "Publiser tropp" ]
+                                    SentElement = btn, [ Lg; Success ], [ str "Publisert" ]
+                                    Endpoint = Send.Post(sprintf "/api/games/%O/squad/publish" game.Id, None) })
                         ]
                     ]
                 ]

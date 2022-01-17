@@ -8,6 +8,7 @@
     <Compile Include="util/Http.fs" />
     <Compile Include="util/Strings.fs" />
     <Compile Include="util/Number.fs" />
+    <Compile Include="util/Guid.fs" />
     <Compile Include="util/Date.fs" />
     <Compile Include="util/Html.fs" />
     <Compile Include="util/Image.fs" />
@@ -56,6 +57,9 @@
     <Compile Include="features/news/DeleteArticle.fs" />
     <Compile Include="features/games/SelectSquad.fs" />
     <Compile Include="features/games/GameForm.fs" />
+    <Compile Include="features/games/gameevents/Common.fs" />
+    <Compile Include="features/games/gameevents/ListGameEvents.fs" />
+    <Compile Include="features/games/gameevents/EditGameEvents.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
     <Compile Include="features/events/Types.fs" />
     <Compile Include="features/events/SignupButtons.fs" />
