@@ -12,7 +12,6 @@
     <Compile Include="util/Date.fs" />
     <Compile Include="util/Html.fs" />
     <Compile Include="util/Image.fs" />
-    <Compile Include="util/Interop.fs" />
     <Compile Include="util/Validation.fs" />
     <Compile Include="util/ReactHelpers.fs" />
     <Compile Include="util\Ajax.fs" />
@@ -61,6 +60,7 @@
     <Compile Include="features/games/gameevents/ListGameEvents.fs" />
     <Compile Include="features/games/gameevents/EditGameEvents.fs" />
     <Compile Include="features/admin/AddPlayers.fs" />
+    <Compile Include="features/admin/ManagePlayers.fs" />
     <Compile Include="features/events/Types.fs" />
     <Compile Include="features/events/SignupButtons.fs" />
     <Compile Include="features/events/EventsList.fs" />

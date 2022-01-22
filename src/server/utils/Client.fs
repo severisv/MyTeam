@@ -3,18 +3,33 @@ module MyTeam.Client
 open Giraffe.ViewEngine
 open MyTeam
 open Shared
+open Shared.Util
+
+let propsVariableName = ReactHelpers.propsVariableName
+
 
 let comp id model =
+    let json = model |> Json.fableSerialize
+
     div [ _id id
-          attr Interop.modelAttributeName (model |> Json.fableSerialize) ] []
+
+         ] [
+        script [] [
+            rawText
+                $"""
+                var {propsVariableName id} = '{json}';
+                """
+        ]
+    ]
 
 let view containerId comp model =
     [ script [] [
         rawText (
             sprintf
                 """
-                    var __INIT_STATE__ = '%s'
+                    var %s = '%s'
                     """
+                (propsVariableName containerId)
                 (model
                  |> Json.fableSerialize
                  |> Strings.replace "\\" "\\\\"
@@ -34,8 +49,9 @@ let view2 containerId comp model =
         rawText (
             sprintf
                 """
-                    var __INIT_STATE__ = '%s'
+                    var %s = '%s'
                     """
+                (propsVariableName containerId)
                 (model
                  |> Json.fableSerialize
                  |> Strings.replace "\\" "\\\\"

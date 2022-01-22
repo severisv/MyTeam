@@ -4,67 +4,76 @@ open Fable.Import
 open Fable.React
 open Shared
 open Fable.Core
-open JsInterop   
+open JsInterop
+
+let propsVariableName = Strings.replace "-" "__"
+
 
 let render deserializeFn id comp =
+    let variableName = propsVariableName id
+
     Browser.Dom.document.getElementById id
     |> fun node ->
         if not <| isNull node then
-            node.getAttribute (Interop.modelAttributeName)
+            !!Browser.Dom.window?(variableName)
             |> deserializeFn
             |> function
-             | Ok model -> ReactDom.render (comp model [], node)
-             | Error e -> failwithf "Json deserialization failed: %O" e
+                | Ok model -> ReactDom.render (comp model [], node)
+                | Error e -> failwithf "Json deserialization failed: %O" e
 
 
 let render2 deserializeFn id comp =
+    let variableName = propsVariableName id
+
     Browser.Dom.document.getElementById id
-            |> fun node ->
-                if not <| isNull node then 
-                    node.getAttribute (Interop.modelAttributeName)
-                    |> deserializeFn
-                    |> function
-                    | Ok model -> ReactDom.render (comp(model), node)
-                    | Error e -> failwithf "Json deserialization failed: %O" e   
+    |> fun node ->
+        if not <| isNull node then
+            !!Browser.Dom.window?(variableName)
+            |> deserializeFn
+            |> function
+                | Ok model -> ReactDom.render (comp model, node)
+                | Error e -> failwithf "Json deserialization failed: %O" e
 
 let hydrate elementId deserializeFn comp =
     Browser.Dom.document.getElementById elementId
     |> fun node ->
-        if not <| isNull node then 
-            !!Browser.Dom.window?__INIT_STATE__     
+        if not <| isNull node then
+            !!Browser.Dom.window?(propsVariableName elementId)
             |> deserializeFn
             |> function
-             | Ok model -> ReactDom.hydrate (comp model [], node)
-             | Error e -> failwithf "Json deserialization failed: %O" e
+                | Ok model -> ReactDom.hydrate (comp model [], node)
+                | Error e -> failwithf "Json deserialization failed: %O" e
 
 let hydrate2 elementId deserializeFn comp =
-        #if FABLE_COMPILER
-        Browser.Dom.document.getElementById elementId
-        |> fun node ->
-            if not <| isNull node then 
-                !!Browser.Dom.window?__INIT_STATE__     
-                |> deserializeFn
-                |> function
-                 | Ok model -> ReactDom.hydrate (comp(model), node)
-                 | Error e -> failwithf "Json deserialization failed: %O" e   
-        #endif
-        ()        
+#if FABLE_COMPILER
+    Browser.Dom.document.getElementById elementId
+    |> fun node ->
+        if not <| isNull node then
+            !!Browser.Dom.window?(propsVariableName elementId)
+            |> deserializeFn
+            |> function
+                | Ok model -> ReactDom.hydrate (comp (model), node)
+                | Error e -> failwithf "Json deserialization failed: %O" e
+#endif
+    ()
 
 
-type OutProps<'Props, 'State> =
-    'Props * 'State * (('State -> 'Props -> 'State) -> unit)
+
+
+
+
+type OutProps<'Props, 'State> = 'Props * 'State * (('State -> 'Props -> 'State) -> unit)
 
 type UpdateFn<'TState> = 'TState -> 'TState
 
-type Lifecycles<'Props, 'State> = {
-    ComponentDidMount : OutProps<'Props, 'State> -> unit }
+type Lifecycles<'Props, 'State> =
+    { ComponentDidMount: OutProps<'Props, 'State> -> unit }
 
-type ComponentProps<'Props, 'State> = {
-    Props : 'Props
-    InitialState : 'State
-    Lifecycles : Lifecycles<'Props, 'State> option
-    Children : OutProps<'Props, 'State> -> ReactElement
- }
+type ComponentProps<'Props, 'State> =
+    { Props: 'Props
+      InitialState: 'State
+      Lifecycles: Lifecycles<'Props, 'State> option
+      Children: OutProps<'Props, 'State> -> ReactElement }
 
 type StateProvider<'Props, 'State>(props) =
     inherit Component<ComponentProps<'Props, 'State>, 'State>(props)
@@ -73,7 +82,7 @@ type StateProvider<'Props, 'State>(props) =
     override this.componentDidMount() =
         props.Lifecycles
         |> Option.map (fun l -> l.ComponentDidMount(this.props.Props, this.state, this.update))
-        |> Option.defaultValue()
+        |> Option.defaultValue ()
 
     member this.update updateFn =
         this.setState (fun state props -> updateFn state props.Props)
@@ -82,12 +91,10 @@ type StateProvider<'Props, 'State>(props) =
 
         props.Children(this.props.Props, this.state, this.update)
 
-let komponent<'Props, 'State> props initalState lifeCycles (children : OutProps<'Props, 'State> -> ReactElement) =
+let komponent<'Props, 'State> props initalState lifeCycles (children: OutProps<'Props, 'State> -> ReactElement) =
     ofType<StateProvider<'Props, 'State>, _, _>
-            {
-                Props = props
-                InitialState = initalState
-                Lifecycles = lifeCycles
-                Children = children
-            }
-            []
+        { Props = props
+          InitialState = initalState
+          Lifecycles = lifeCycles
+          Children = children }
+        []

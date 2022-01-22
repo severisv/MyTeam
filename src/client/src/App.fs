@@ -13,6 +13,8 @@ module EntryPoint =
       Table.Edit.element |> ignore
       Table.Create.CreateTable |> ignore
       Admin.AddPlayers.element |> ignore
+      Features.Admin.ManagePlayers.ManagePlayers
+      |> ignore
       Fines.List.element |> ignore
       Fines.RemedyRates.element |> ignore
       Fines.Payments.element |> ignore

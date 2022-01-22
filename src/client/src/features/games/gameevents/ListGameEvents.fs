@@ -13,10 +13,7 @@ open Client.Features.Games.Common
 
 let listGameEventsId = "list-game-events"
 
-
 type Props = { GameId: Guid }
-
-
 
 [<ReactComponent>]
 let ListGameEvents (props: Props) =
