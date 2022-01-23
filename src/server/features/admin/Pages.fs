@@ -33,8 +33,9 @@ let index (club: Club) user (ctx: HttpContext) =
         block [] [
             Client.comp
                 containerId
-                { Teams = club.Teams
-                  Members = members }
+                { Teams = club.Teams |> List.sortBy (fun t -> t.ShortName)
+                  Members = members
+                  ImageOptions = Images.getOptions ctx }
         ]
       ]
       (coachMenu [

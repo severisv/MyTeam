@@ -104,6 +104,9 @@ hr.sm {
 }
 
 .linkSelect {
+  -moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
   max-width: 9em;
   background: transparent;
   font-size: 1.25em;
@@ -112,6 +115,10 @@ hr.sm {
   color: @link-color;
   option {
     background: rgba(0, 0, 0, 0.1);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 1.5rem;
   }
   &:hover {
     border: 1px solid @link-color;
