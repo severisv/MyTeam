@@ -1,7 +1,5 @@
 module Client.Features.Admin.ManagePlayers
 
-
-
 open Shared.Util
 open Feliz
 open Shared
@@ -15,6 +13,7 @@ open Client.Features.Games.Common
 open Shared.Components.Tables
 open Shared.Components.Labels
 open Shared.Image
+open Fetch
 
 let containerId = "manage-players"
 
@@ -25,10 +24,35 @@ type Props =
       Teams: Team list
       ImageOptions: CloudinaryOptions }
 
+
+
+
+
 [<ReactComponent>]
 let ManagePlayers (props: Props) =
 
     let (members, setMembers) = React.useState (props.Members)
+
+    let toggleTeam playerId teamId _ =
+        let toggleTeam () =
+            setMembers (
+                members
+                |> List.mapWhen (fun m -> m.Details.Id = playerId) (fun m -> { m with Teams = m.Teams |> List.toggle teamId })
+            )
+
+        promise {
+            toggleTeam ()
+            let! res = Http.sendRecord HttpMethod.PUT $"api/members/{playerId}/toggleteam" {| TeamId = teamId |} []
+
+            if not res.Ok then
+                toggleTeam ()
+                failwithf "Received %O from server: %O" res.Status res.StatusText
+
+            ()
+        }
+        |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
+        |> Promise.start
+
 
     members
     |> List.groupBy (fun m -> m.Details.Status)
@@ -71,20 +95,29 @@ let ManagePlayers (props: Props) =
                     (members
                      |> List.map (fun m ->
                          tableRow [] [
-                             Html.img [
-                                 prop.src
-                                 <| Image.getMember
-                                     props.ImageOptions
-                                     (fun o ->
-                                         { o with
-                                             Height = Some 40
-                                             Width = Some 40 })
-                                     m.Details.Image
-                                     m.Details.FacebookId
+                             Html.a [
+                                 prop.href $"/spillere/vis/{m.Details.UrlName}"
+                                 prop.children [
+                                     Html.img [
+                                         prop.src
+                                         <| Image.getMember
+                                             props.ImageOptions
+                                             (fun o ->
+                                                 { o with
+                                                     Height = Some 40
+                                                     Width = Some 40 })
+                                             m.Details.Image
+                                             m.Details.FacebookId
+                                     ]
+                                 ]
                              ]
-
-                             Html.text m.Details.FullName
-
+                             Html.a [
+                                 prop.href $"/spillere/vis/{m.Details.UrlName}"
+                                 prop.className "black"
+                                 prop.children [
+                                     Html.text m.Details.FullName
+                                 ]
+                             ]
                              Html.div [
                                  prop.style [
                                      style.display.flex
@@ -100,7 +133,7 @@ let ManagePlayers (props: Props) =
                                                 |> Option.map (fun _ -> Primary)
                                                 |> Option.defaultValue Default)
                                                Sm
-                                               Fable.React.Props.OnClick(fun _ -> ()) ] [
+                                               Fable.React.Props.OnClick(toggleTeam m.Details.Id t.Id) ] [
                                              Html.text (t.ShortName)
                                          ]
 
@@ -144,22 +177,12 @@ let ManagePlayers (props: Props) =
                                    Fable.React.Props.OnClick(fun _ -> ()) ] [
                                  Icons.chevronDown
                              ]
-                             Html.a [
-                                 prop.href $"/spillere/endre/{m.Details.UrlName}"
-                                 prop.children [
-                                     Icons.edit "Rediger profil"
-                                 ]
-                             ]
                          ]))
 
 
                 ]
-        ]
-
-    )
+        ])
     |> Html.div
-
-
 
 
 ReactHelpers.render2 Decode.Auto.fromString<Props> containerId ManagePlayers
