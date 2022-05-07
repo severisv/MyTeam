@@ -27,10 +27,10 @@ type AddOrRemove =
 
 let gameEventTypes =
     let cases =
-        FSharp.Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
+        Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
 
     [ for c in cases do
-          yield FSharp.Reflection.FSharpValue.MakeUnion(c, [||]) :?> GameEventType ]
+          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> GameEventType ]
 
 type GameEventForm =
     { Type: GameEventType

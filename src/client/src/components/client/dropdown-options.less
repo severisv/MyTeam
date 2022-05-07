@@ -1,0 +1,45 @@
+
+
+
+.dropdown-options {
+
+    z-index: 5;
+    position: absolute;
+    top: 2em;
+    border-radius: 4px;
+    background: linear-gradient(
+      to bottom,
+      fade(lighten(@blue, 58), 85) 0,
+      fade(lighten(@blue, 58), 90) 100%
+    );
+    padding: 5px 0;
+
+  
+    & > button {
+        width: 100%;
+        padding: 5px 10px;
+        transition: all 0.2s ease-out;      
+        &:hover {
+            background-color: fade(@team-primary, 40);
+        }
+    }
+
+
+    @keyframes dropdown-options-enter {
+        0% {
+          transform: translate(0, -20%);
+          opacity: 0;
+        }
+        40% {
+          transform: translate(0, -20%);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(0, 0%);
+          opacity: 1;
+        }
+      }
+    
+      animation: dropdown-options-enter 0.1s ease-in-out forwards;
+
+}

@@ -14,6 +14,8 @@ open Shared.Components.Tables
 open Shared.Components.Labels
 open Shared.Image
 open Fetch
+open System.Threading
+open Client.Components.DropdownOptions
 
 let containerId = "manage-players"
 
@@ -26,6 +28,12 @@ type Props =
 
 
 
+let allRoles =
+    let cases =
+        Reflection.FSharpType.GetUnionCases(typeof<Role>)
+
+    [ for c in cases do
+          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> Role ]
 
 
 [<ReactComponent>]
@@ -34,18 +42,16 @@ let ManagePlayers (props: Props) =
     let (members, setMembers) = React.useState (props.Members)
 
     let toggleTeam playerId teamId _ =
-        let toggleTeam () =
+        promise {
             setMembers (
                 members
                 |> List.mapWhen (fun m -> m.Details.Id = playerId) (fun m -> { m with Teams = m.Teams |> List.toggle teamId })
             )
 
-        promise {
-            toggleTeam ()
             let! res = Http.sendRecord HttpMethod.PUT $"api/members/{playerId}/toggleteam" {| TeamId = teamId |} []
 
             if not res.Ok then
-                toggleTeam ()
+                setMembers members
                 failwithf "Received %O from server: %O" res.Status res.StatusText
 
             ()
@@ -53,6 +59,29 @@ let ManagePlayers (props: Props) =
         |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
         |> Promise.start
 
+
+    let toggleRole playerId role _ =
+        promise {
+            setMembers (
+                members
+                |> List.mapWhen (fun m -> m.Details.Id = playerId) (fun m -> { m with Roles = m.Roles |> List.toggle role })
+            )
+
+            let! res = Http.sendRecord HttpMethod.PUT $"api/members/{playerId}/togglerole" {| Role = role |} []
+
+            if not res.Ok then
+                setMembers members
+
+                printf
+                    $"{members
+                       |> List.filter (fun m -> m.Details.Id = playerId)}"
+
+                failwithf "Received %O from server: %O" res.Status res.StatusText
+
+            ()
+        }
+        |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
+        |> Promise.start
 
     members
     |> List.groupBy (fun m -> m.Details.Status)
@@ -155,18 +184,32 @@ let ManagePlayers (props: Props) =
                                               LightBlue
                                               [ Html.text (string role)
                                                 Html.text " "
-                                                Icons.remove ]))
-                                     @ [ Html.button [
-                                             prop.style [
-                                                 style.marginLeft (length.px 2)
-                                                 style.fontSize (length.px 10)
-                                                 style.minHeight (length.px 26)
-                                                 style.minWidth (length.px 26)
-                                             ]
-                                             prop.children [
-                                                 Icons.add "Tildel ny rolle"
-                                             ]
-                                         ] ]
+                                                Html.button [
+                                                    prop.onClick <| toggleRole m.Details.Id role
+                                                    prop.children [ Icons.remove ]
+                                                ] ]))
+                                     @ [ dropDownOptions
+                                             (allRoles
+                                              |> List.except m.Roles
+                                              |> List.map (fun role ->
+                                                  { Label = role |> string |> Html.text
+                                                    OnClick = toggleRole m.Details.Id role }))
+                                             (fun toggleOptions ->
+                                                 if allRoles |> List.except m.Roles |> List.isEmpty then
+                                                     Html.text ""
+                                                 else
+                                                     Html.button [
+                                                         prop.style [
+                                                             style.marginLeft (length.px 2)
+                                                             style.fontSize (length.px 10)
+                                                             style.minHeight (length.px 26)
+                                                             style.minWidth (length.px 26)
+                                                         ]
+                                                         prop.onClick toggleOptions
+                                                         prop.children [
+                                                             Icons.add "Tildel ny rolle"
+                                                         ]
+                                                     ]) ]
                                  )
                              ]
                              btn [ Default
