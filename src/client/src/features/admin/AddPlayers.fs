@@ -93,7 +93,10 @@ let element =
             h3 [] [
                 str "Medlemsforespørsler"
                 whitespace
-                tooltip "Nye spillere kan registrere seg på wamkam.no/blimed, så vil de dukke opp her. Når de er godkjent får til tilgang til internsidene." [] [ Icons.info "" ]
+                tooltip
+                    "Nye spillere kan registrere seg på wamkam.no/blimed, så vil de dukke opp her. Når de er godkjent får til tilgang til internsidene."
+                    []
+                    [ Icons.info "" ]
             ]
             ul
                 [ Class "list-users" ]
@@ -101,15 +104,17 @@ let element =
                  |> List.map (fun request ->
                      li [] [
                          span [] [
-                             img [ Src
-                                   <| Image.getMember
-                                       props.ImageOptions
-                                       (fun opts ->
-                                           { opts with
-                                               Height = Some 50
-                                               Width = Some 50 })
-                                       ""
-                                       request.FacebookId ]
+                             img [
+                                 Src
+                                 <| Image.getMember
+                                     props.ImageOptions
+                                     (fun opts ->
+                                         { opts with
+                                             Height = Some 50
+                                             Width = Some 50 })
+                                     ""
+                                     request.FacebookId
+                             ]
                              str (sprintf "%s %s %s" request.Fornavn request.Mellomnavn request.Etternavn)
                          ]
                          sendElement (fun o ->
@@ -124,7 +129,7 @@ let element =
                 h3 [] [ str "Legg til manuelt" ]
                 state.SuccessMessage => Alerts.success
                 formRow
-                    [ Horizontal 2; Class "text-danger" ]
+                    [ Horizontal 3; Class "text-danger" ]
                     []
                     [ ul
                           []
@@ -132,46 +137,54 @@ let element =
                            |> List.map (fun e -> li [] [ str e ])) ]
 
                 formRow
-                    [ Horizontal 2 ]
+                    [ Horizontal 3 ]
                     [ str "E-post" ]
-                    [ textInput [ Placeholder "hallvardthoresen@gmail.com"
-                                  OnChange (fun e ->
-                                      e.Value
-                                      |> (handleFormChange
-                                          <| fun form value -> { form with ``E-postadresse`` = value }))
-                                  Value state.Player.``E-postadresse`` ] ]
+                    [ textInput [
+                          Placeholder "hallvardthoresen@gmail.com"
+                          OnChange (fun e ->
+                              e.Value
+                              |> (handleFormChange
+                                  <| fun form value -> { form with ``E-postadresse`` = value }))
+                          Value state.Player.``E-postadresse``
+                      ] ]
                 formRow
-                    [ Horizontal 2 ]
+                    [ Horizontal 3 ]
                     [ str "Fornavn" ]
-                    [ textInput [ Placeholder "Hallvard"
-                                  OnChange (fun e ->
-                                      e.Value
-                                      |> (handleFormChange
-                                          <| fun form value -> { form with Fornavn = value }))
-                                  Value state.Player.Fornavn ] ]
+                    [ textInput [
+                          Placeholder "Hallvard"
+                          OnChange (fun e ->
+                              e.Value
+                              |> (handleFormChange
+                                  <| fun form value -> { form with Fornavn = value }))
+                          Value state.Player.Fornavn
+                      ] ]
 
                 formRow
-                    [ Horizontal 2 ]
+                    [ Horizontal 3 ]
                     [ str "Mellomnavn" ]
-                    [ textInput [ Placeholder "Jensen"
-                                  OnChange (fun e ->
-                                      e.Value
-                                      |> (handleFormChange
-                                          <| fun form value -> { form with Mellomnavn = value }))
-                                  Value state.Player.Mellomnavn ] ]
+                    [ textInput [
+                          Placeholder "Jensen"
+                          OnChange (fun e ->
+                              e.Value
+                              |> (handleFormChange
+                                  <| fun form value -> { form with Mellomnavn = value }))
+                          Value state.Player.Mellomnavn
+                      ] ]
 
                 formRow
-                    [ Horizontal 2 ]
+                    [ Horizontal 3 ]
                     [ str "Etternavn" ]
-                    [ textInput [ Placeholder "Thoresen"
-                                  OnChange (fun e ->
-                                      e.Value
-                                      |> (handleFormChange
-                                          <| fun form value -> { form with Etternavn = value }))
-                                  Value state.Player.Etternavn ] ]
+                    [ textInput [
+                          Placeholder "Thoresen"
+                          OnChange (fun e ->
+                              e.Value
+                              |> (handleFormChange
+                                  <| fun form value -> { form with Etternavn = value }))
+                          Value state.Player.Etternavn
+                      ] ]
 
                 formRow
-                    [ Horizontal 2 ]
+                    [ Horizontal 3 ]
                     []
                     [ Send.sendElement (fun o ->
                           { o with

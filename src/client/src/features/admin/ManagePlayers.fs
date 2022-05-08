@@ -9,12 +9,10 @@ open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
 open Client.Util
-open Client.Features.Games.Common
 open Shared.Components.Tables
 open Shared.Components.Labels
 open Shared.Image
 open Fetch
-open System.Threading
 open Client.Components.DropdownOptions
 
 let containerId = "manage-players"
@@ -27,20 +25,6 @@ type Props =
       ImageOptions: CloudinaryOptions }
 
 
-
-let allRoles =
-    let cases =
-        Reflection.FSharpType.GetUnionCases(typeof<Role>)
-
-    [ for c in cases do
-          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> Role ]
-
-let allStatuses =
-    let cases =
-        Reflection.FSharpType.GetUnionCases(typeof<PlayerStatus>)
-
-    [ for c in cases do
-          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> PlayerStatus ]
 
 [<ReactComponent>]
 let ManagePlayers (props: Props) =
@@ -234,7 +218,7 @@ let ManagePlayers (props: Props) =
                                  )
                              ]
                              dropDownOptions
-                                 (allStatuses
+                                 (PlayerStatus.all
                                   |> List.except [ m.Details.Status ]
                                   |> List.map (fun status ->
                                       { Label = status |> string |> Html.text
