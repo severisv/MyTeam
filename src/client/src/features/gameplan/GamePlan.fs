@@ -21,20 +21,6 @@ open System
 open Shared.Image
 open Fable.React.Props
 
-type Model =
-    { GameId: Guid
-      Team: string
-      Opponent: string
-      GamePlanIsPublished: bool
-      GamePlan: string option
-      Players: Member list
-      ImageOptions: CloudinaryOptions
-      Formation: Formations }
-
-let clientView = "gameplan"
-let modelAttribute = "model"
-
-
 type Time = int
 type LineupId = System.Guid
 
@@ -47,6 +33,20 @@ type GamePlanState =
     { Lineups: Lineup list
       Formation: Formations
       MatchLength: int }
+
+type Model =
+    { GameId: Guid
+      Team: string
+      Opponent: string
+      GamePlanIsPublished: bool
+      GamePlan: GamePlanState option
+      Players: Member list
+      ImageOptions: CloudinaryOptions
+      Formation: Formations }
+
+let clientView = "gameplan"
+
+
 
 type State =
     { GamePlan: GamePlanState
@@ -128,7 +128,7 @@ let duplicateLineup setState save lineupId =
             { state.GamePlan with
                 Lineups =
                     state.GamePlan.Lineups
-                    @ [ { Id = System.Guid.NewGuid()
+                    @ [ { Id = Guid.NewGuid()
                           Time = line.Time
                           Players = line.Players } ]
                     |> List.sortBy (fun line -> line.Time) }
@@ -171,11 +171,7 @@ type GamePlan(props) =
     do
         base.setInitState (
             (props.GamePlan
-             |> Option.bind (fun g ->
-                 Decode.Auto.fromString<GamePlanState> (g)
-                 |> function
-                     | Ok s -> Some s
-                     | Error e -> failwithf "%O" e)
+
              |> Option.defaultValue
                  { Lineups =
                      [ { Id = System.Guid.NewGuid()
@@ -342,13 +338,13 @@ type GamePlan(props) =
                                         str "min"
                                     ]
                                     div [ Class "clearfix" ] [
-                                        button [ Class "pull-right hidden-print"
-                                                 Disabled(state.GamePlan.Lineups.Length < 2)
-                                                 OnClick(fun _ -> removeLineup lineup.Id) ] [
+                                        btn [ Class "pull-right hidden-print"
+                                              Disabled(state.GamePlan.Lineups.Length < 2)
+                                              OnClick(fun _ -> removeLineup lineup.Id) ] [
                                             Icons.delete
                                         ]
-                                        button [ Class "pull-right hidden-print"
-                                                 OnClick(fun _ -> duplicateLineup lineup.Id) ] [
+                                        btn [ Class "pull-right hidden-print"
+                                              OnClick(fun _ -> duplicateLineup lineup.Id) ] [
                                             Icons.add ""
                                         ]
                                     ]
