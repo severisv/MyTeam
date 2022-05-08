@@ -5,19 +5,22 @@
 
     z-index: 5;
     position: absolute;
-    top: 2em;
+    top: 2.2em;
+    right: 0;
     border-radius: 4px;
     background: linear-gradient(
       to bottom,
-      fade(lighten(@blue, 58), 85) 0,
-      fade(lighten(@blue, 58), 90) 100%
+      fade(lighten(@blue, 58), 90) 0,
+      fade(lighten(@blue, 58), 95) 100%
     );
     padding: 5px 0;
+    width: min-content;
 
   
     & > button {
+        color: @black;
         width: 100%;
-        padding: 5px 10px;
+        padding: 5px 20px;
         transition: all 0.2s ease-out;      
         &:hover {
             background-color: fade(@team-primary, 40);

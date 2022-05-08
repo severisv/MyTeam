@@ -12,6 +12,8 @@ table.table {
       font-size: 0.9em;
       color: @black-faded;
       text-transform: uppercase;
+      font-weight: normal;
+      font-family: @fontBold;
     }
 
     td {
@@ -40,7 +42,7 @@ table.table > tbody > tr > td.table-td-image {
 }
 
 .table-td-image img {
-  border-radius: 2px;
+  border-radius: 4px;
   height: 3em;
   margin-right: 0.4em;
 }
@@ -69,7 +71,7 @@ table .team-primary {
   background: fade(@team-primary, 40) !important;
 }
 .table-table tr td:nth-of-type(2) {
-  font-weight: bold;
+  font-family: @fontBold;
 }
 .update-table-form label {
   line-height: 2.2em;

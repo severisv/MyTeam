@@ -35,6 +35,12 @@ let allRoles =
     [ for c in cases do
           yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> Role ]
 
+let allStatuses =
+    let cases =
+        Reflection.FSharpType.GetUnionCases(typeof<PlayerStatus>)
+
+    [ for c in cases do
+          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> PlayerStatus ]
 
 [<ReactComponent>]
 let ManagePlayers (props: Props) =
@@ -72,10 +78,6 @@ let ManagePlayers (props: Props) =
             if not res.Ok then
                 setMembers members
 
-                printf
-                    $"{members
-                       |> List.filter (fun m -> m.Details.Id = playerId)}"
-
                 failwithf "Received %O from server: %O" res.Status res.StatusText
 
             ()
@@ -83,12 +85,31 @@ let ManagePlayers (props: Props) =
         |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
         |> Promise.start
 
+
+    let setStatus playerId status _ =
+        promise {
+            setMembers (
+                members
+                |> List.mapWhen (fun m -> m.Details.Id = playerId) (fun m -> { m with Details = { m.Details with Status = status } })
+            )
+
+            let! res = Http.sendRecord HttpMethod.PUT $"api/members/{playerId}/status" {| Status = status |} []
+
+            if not res.Ok then
+                setMembers members
+                failwithf "Received %O from server: %O" res.Status res.StatusText
+
+            ()
+        }
+        |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
+        |> Promise.start
+
+
     members
     |> List.groupBy (fun m -> m.Details.Status)
     |> List.sortBy (fun (key, _) -> key)
     |> List.map (fun (key, members) ->
         Html.div [
-            prop.style [ style.overflowX.auto ]
             prop.children [
 
                 Html.h2 [
@@ -212,14 +233,20 @@ let ManagePlayers (props: Props) =
                                                      ]) ]
                                  )
                              ]
-                             btn [ Default
-                                   Sm
-                                   Fable.React.Props.Style [
-                                       Fable.React.Props.CSSProp.MarginRight "2px"
-                                   ]
-                                   Fable.React.Props.OnClick(fun _ -> ()) ] [
-                                 Icons.chevronDown
-                             ]
+                             dropDownOptions
+                                 (allStatuses
+                                  |> List.except [ m.Details.Status ]
+                                  |> List.map (fun status ->
+                                      { Label = status |> string |> Html.text
+                                        OnClick = setStatus m.Details.Id status }))
+                                 (fun toggleOptions ->
+                                     btn [ Default
+                                           Sm
+                                           Fable.React.Props.OnClick toggleOptions ] [
+                                         Icons.chevronDown
+                                     ])
+
+
                          ]))
 
 
