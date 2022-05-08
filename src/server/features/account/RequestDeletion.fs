@@ -21,10 +21,10 @@ let requestDeletion: HttpHandler =
         let userId =
             try
                 let signed_request =
-                    ctx.Request.Form["signed_request"] |> string
+                    ctx.Request.Form.["signed_request"] |> string
 
                 let fbUser =
-                    $"{signed_request.Split('.')[1]}="
+                    $"{signed_request.Split('.').[1]}="
                     |> Convert.FromBase64String
                     |> Encoding.UTF8.GetString
                     |> JsonConvert.DeserializeObject<{| user_id: string |}>
@@ -73,7 +73,7 @@ let showStatus (club: Club) user userId (ctx: HttpContext) =
     [ mtMain [] [
 
           div [ _class "mt-container" ] [
-              p [ _style "font-weight: bold;" ] [
+              p [ _class "text-bold" ] [
                   encodedText $"Delete status for user {name}"
               ]
               p [] [

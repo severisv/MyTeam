@@ -1,4 +1,33 @@
-﻿.link {
+﻿a {
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+    &:hover,
+    &:focus {
+      color: @link-color-hover;
+      text-decoration: none;
+    }
+  }
+
+a.black {
+    color: @black;
+    &:hover,
+    &:focus {
+      color: @black;
+    }
+}  
+
+a.underline {
+    border-bottom: 0.1em solid transparent;
+    &:hover,
+    &:focus {
+      border-bottom: 0.1em solid;
+    }
+}  
+
+
+
+
+.link {
     border: none;
     background: none;
     color: @link-color;
@@ -12,6 +41,9 @@
         color: @red;
     }    
 }
+
+
+  
 
 button.link {
     padding: 0;

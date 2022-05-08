@@ -42,6 +42,7 @@ div.mt-main--narrow + div.mt-sidebar {
 .mt-page-header {
 
   h1 {
+    margin-top: 20px;
     margin-bottom: 10px;
   }
 
@@ -75,23 +76,18 @@ div.mt-main--narrow + div.mt-sidebar {
 }
 
 .mt-container {
+  border-radius: 4px;
   background: linear-gradient(
     to bottom,
     fade(lighten(@blue, 60), 85) 0,
     fade(lighten(@blue, 60), 90) 100%
   );
-  &.mt-container--light {
-    background: linear-gradient(
-      to bottom,
-      fade(lighten(@blue, 60), 90) 0,
-      fade(lighten(@blue, 60), 92) 100%
-    );
-  }
+
   padding: 2.5em;
   .r-above-lg({padding: 2em;});
   .r-under-xxs({padding: 1em;});
   line-height: 1.6;
-  color: @blackNormal;
+  color: @black;
   margin-bottom: 1.25em;
 
   p {

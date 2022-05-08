@@ -9,7 +9,7 @@ open Shared
 open Shared.Domain
 open Shared.Domain.Members
 open Shared.Components
-
+open Client.Features.Admin.ManagePlayers
 
 let internal coachMenu children =
     sidebar [] [
@@ -25,35 +25,28 @@ let internal coachMenu children =
 
 
 
-let index club user ctx =
+let index (club: Club) user (ctx: HttpContext) =
+    let members =
+        Common.Features.Members.list (ctx.Database) club.Id
+
     [ mtMain [] [
         block [] [
-            div [ _id "manage-players"
-                  attr
-                      "data-statuses"
-                      (Enums.getValues<Status> ()
-                       |> List.map string
-                       |> Json.serialize)
-                  attr
-                      "data-roles"
-                      (Enums.getValues<Role> ()
-                       |> List.map string
-                       |> Json.serialize) ] []
+            Client.comp
+                containerId
+                { Teams = club.Teams |> List.sortBy (fun t -> t.ShortName)
+                  Members = members
+                  ImageOptions = Images.getOptions ctx }
         ]
       ]
-      (coachMenu [ li [] [
-                       a [ _href "/admin/spillerinvitasjon" ] [
-                           !!(Icons.add "")
-                           str "Legg til spiller"
-                       ]
-                   ] ]) ]
-    |> layout
-        club
-        user
-        (fun o ->
-            { o with
-                  Title = "Administrer spillere" })
-        ctx
+      (coachMenu [
+          li [] [
+              a [ _href "/admin/spillerinvitasjon" ] [
+                  !!(Icons.add "")
+                  str "Legg til spiller"
+              ]
+          ]
+       ]) ]
+    |> layout club user (fun o -> { o with Title = "Administrer spillere" }) ctx
     |> OkResult
 
 let invitePlayers (club: Club) user (ctx: HttpContext) =
@@ -68,13 +61,12 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
                 select (request.FirstName, request.MiddleName, request.LastName, request.Email, request.FacebookId)
         }
         |> Seq.toList
-        |> List.map
-            (fun (fornavn, mellomnavn, etternavn, epost, facebookId) ->
-                { Fornavn = Strings.defaultValue fornavn
-                  Etternavn = Strings.defaultValue etternavn
-                  Mellomnavn = Strings.defaultValue mellomnavn
-                  ``E-postadresse`` = Strings.defaultValue epost
-                  FacebookId = facebookId })
+        |> List.map (fun (fornavn, mellomnavn, etternavn, epost, facebookId) ->
+            { Fornavn = Strings.defaultValue fornavn
+              Etternavn = Strings.defaultValue etternavn
+              Mellomnavn = Strings.defaultValue mellomnavn
+              ``E-postadresse`` = Strings.defaultValue epost
+              FacebookId = facebookId })
 
     [ mtMain [ _class "mt-main--narrow" ] [
         Client.view2
@@ -83,11 +75,13 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
             { MemberRequests = memberRequests
               ImageOptions = Images.getOptions ctx }
       ]
-      (coachMenu [ li [] [
-                       a [ _href "/admin" ] [
-                           !!(Icons.users "")
-                           str "Administrer spillere"
-                       ]
-                   ] ]) ]
+      (coachMenu [
+          li [] [
+              a [ _href "/admin" ] [
+                  !!(Icons.users "")
+                  str "Administrer spillere"
+              ]
+          ]
+       ]) ]
     |> layout club user (fun o -> { o with Title = "Inviter spillere" }) ctx
     |> OkResult

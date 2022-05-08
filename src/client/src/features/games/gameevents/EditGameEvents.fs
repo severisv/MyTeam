@@ -27,10 +27,10 @@ type AddOrRemove =
 
 let gameEventTypes =
     let cases =
-        FSharp.Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
+        Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
 
     [ for c in cases do
-          yield FSharp.Reflection.FSharpValue.MakeUnion(c, [||]) :?> GameEventType ]
+          yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> GameEventType ]
 
 type GameEventForm =
     { Type: GameEventType
@@ -107,12 +107,7 @@ let EditGameEvents (props: Props) =
 
         | None -> ()
 
-
-
     let (playerToAdd, setPlayerToAdd) = React.useState<string option> (None)
-
-
-
 
     let addPlayer =
         function
@@ -120,8 +115,6 @@ let EditGameEvents (props: Props) =
             togglePlayer player Add ()
             setPlayerToAdd None
         | None -> ()
-
-
 
     let removeEvent (e: GameEvent) _ =
         promise {
@@ -137,8 +130,6 @@ let EditGameEvents (props: Props) =
         }
         |> Promise.catch (fun e -> Browser.Dom.console.error (sprintf "%O" e))
         |> Promise.start
-
-
 
     let defaultGameEvent =
         { AssistedById = None

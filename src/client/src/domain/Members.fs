@@ -43,10 +43,10 @@ module Members =
 
     type Role =
         | Admin
-        | Trener
-        | Skribent
-        | Oppmøte
         | Botsjef
+        | Oppmøte
+        | Skribent
+        | Trener
           
     type Member = {
         Id: MemberId

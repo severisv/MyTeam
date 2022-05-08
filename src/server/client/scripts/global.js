@@ -1,14 +1,7 @@
 ﻿import ajax from './ajaxHelpers'
 
-
-import ReactDOM from 'react-dom'
-import React from 'react'
-
 const ANIMATION_DURATON = 300
 const global = global || {}
-
-global.React = React
-global.ReactDOM = ReactDOM
 
 global.applyScopedJsComponents = function (selector) {
   const $scope = $(selector)

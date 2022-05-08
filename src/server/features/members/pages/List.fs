@@ -37,14 +37,13 @@ let view (club: Club) (user: User) status (ctx: HttpContext) =
                   ([ Status.Aktiv
                      Status.Veteran
                      Status.Inaktiv ]
-                   |> List.map
-                       (fun status ->
-                           { Text = status |> string
-                             ShortText = status |> string
-                             Url = memberListUrl (string status |> toLower)
-                             Icon =
-                                 Some
-                                 <| Shared.Components.Icons.playerStatusIcon status }))
+                   |> List.map (fun status ->
+                       { Text = status |> string
+                         ShortText = status |> string
+                         Url = memberListUrl (string status |> toLower)
+                         Icon =
+                           Some
+                           <| Shared.Components.Icons.playerStatusIcon status }))
                   isSelected)
               br []
 
@@ -65,28 +64,35 @@ let view (club: Club) (user: User) status (ctx: HttpContext) =
                     ] ]
                   (members
                    |> List.filter (fun m -> m.Details.Status = status)
-                   |> List.map
-                       (fun m ->
-                           tableRow [] [
-                               img [ _src
-                                     <| getImage
-                                         (fun o ->
-                                             { o with
-                                                   Height = Some 50
-                                                   Width = Some 50 })
-                                         m.Details.Image
-                                         m.Details.FacebookId ]
+                   |> List.map (fun m ->
+                       tableRow [] [
+                           a [ _href $"/spillere/vis/{m.Details.UrlName}" ] [
+                               img [
+                                   _src
+                                   <| getImage
+                                       (fun o ->
+                                           { o with
+                                               Height = Some 50
+                                               Width = Some 50 })
+                                       m.Details.Image
+                                       m.Details.FacebookId
+                               ]
+                           ]
+
+                           a [ _href $"/spillere/vis/{m.Details.UrlName}"
+                               _class "black" ] [
                                encodedText m.Details.FullName
+                           ]
 
-                               a [ _href <| sprintf "tel:%s" m.Phone ] [
-                                   encodedText m.Phone
-                               ]
+                           a [ _href <| sprintf "tel:%s" m.Phone ] [
+                               encodedText m.Phone
+                           ]
 
-                               a [ _href <| sprintf "mailto:%s" m.Email ] [
-                                   encodedText m.Email
-                               ]
-                               encodedText (m.BirthYear |> toString)
-                           ]))
+                           a [ _href <| sprintf "mailto:%s" m.Email ] [
+                               encodedText m.Email
+                           ]
+                           encodedText (m.BirthYear |> toString)
+                       ]))
           ]
       ] ]
     |> layout club (Some user) (fun o -> { o with Title = "Lagliste" }) ctx
