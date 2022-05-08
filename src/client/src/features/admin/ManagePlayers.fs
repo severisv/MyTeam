@@ -30,6 +30,7 @@ type Props =
 let ManagePlayers (props: Props) =
 
     let (members, setMembers) = React.useState (props.Members)
+    let (showSluttet, setShowSluttet) = React.useState false
 
     let toggleTeam playerId teamId _ =
         promise {
@@ -92,30 +93,59 @@ let ManagePlayers (props: Props) =
     members
     |> List.groupBy (fun m -> m.Details.Status)
     |> List.sortBy (fun (key, _) -> key)
-    |> List.map (fun (key, members) ->
+    |> List.map (fun (status, members) ->
         Html.div [
             prop.children [
-
                 Html.h2 [
-                    prop.style [ style.textAlign.left ]
+                    prop.style [
+                        style.textAlign.left
+                        style.display.flex
+                        style.alignItems.center
+                        style.gap (0, length.px 5)
+                    ]
                     prop.children [
-                        Html.text (string key)
+                        Html.text (string status)
                         Html.span [
                             prop.style [
                                 style.fontSize (length.px 22)
                             ]
                             prop.children [
-                                Html.text $" ({members.Length})"
+                                Html.text $"({members.Length})"
                             ]
                         ]
+                        (if status = Sluttet && not showSluttet then
+                             Html.button [
+                                 prop.className "link"
+                                 prop.style [
+                                     style.fontSize (length.px 18)
+                                     style.marginLeft (length.px 5)
+                                     style.marginTop (length.px 4)
+                                 ]
+                                 prop.onClick <| fun _ -> setShowSluttet true
+                                 prop.children [ Html.text "Vis" ]
+                             ]
+                         else
+                             Html.text "")
 
                         ]
                 ]
                 table
                     [ Striped
                       (Attribute(
+                          Fable.React.Props.ClassName(
+                              if status = Sluttet then
+                                  "u-fade-in-on-enter"
+                              else
+                                  ""
+                          )
+                      ))
+                      (Attribute(
                           Fable.React.Props.Style [
                               Fable.React.Props.CSSProp.MarginBottom "40px"
+                              if status <> Sluttet || showSluttet then
+                                  Fable.React.Props.CSSProp.Display Fable.React.Props.DisplayOptions.Table
+                              else
+                                  Fable.React.Props.CSSProp.Display Fable.React.Props.DisplayOptions.None
                           ]
                       )) ]
                     [ col [ CellType Image
