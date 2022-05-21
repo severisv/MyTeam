@@ -15,7 +15,8 @@ open PipelineHelpers
 module App =
 
     let (webApp: HttpHandler) =
-        removeTrailingSlash
+        applyTrollBlock
+        >=> removeTrailingSlash
         >=> fun next ctx ->
                 let (club, user) = Tenant.get ctx
                 let mustBeInRole = mustBeInRole user

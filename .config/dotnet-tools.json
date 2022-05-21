@@ -4,39 +4,27 @@
   "tools": {
     "fake-cli": {
       "version": "5.20.4",
-      "commands": [
-        "fake"
-      ]
+      "commands": ["fake"]
     },
     "paket": {
       "version": "6.0.6",
-      "commands": [
-        "paket"
-      ]
+      "commands": ["paket"]
     },
     "fable": {
       "version": "3.6.0",
-      "commands": [
-        "fable"
-      ]
+      "commands": ["fable"]
     },
     "femto": {
       "version": "0.12.0",
-      "commands": [
-        "femto"
-      ]
+      "commands": ["femto"]
     },
     "dotnet-ef": {
       "version": "6.0.0",
-      "commands": [
-        "dotnet-ef"
-      ]
+      "commands": ["dotnet-ef"]
     },
     "fantomas-tool": {
-      "version": "4.6.0-alpha-004",
-      "commands": [
-        "fantomas"
-      ]
+      "version": "4.7.9",
+      "commands": ["fantomas"]
     }
   }
 }
