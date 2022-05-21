@@ -69,6 +69,8 @@ let datePicker (props: IHTMLProp list) =
                          Date.tryParse <| string e
                          |> Option.map (fun d -> d.Date.ToUniversalTime())
 
+                     printf "%O" date
+
                      handleChange date
                      setState (fun state props -> { state with Value = date }))
                 ]
