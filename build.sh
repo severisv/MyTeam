@@ -1,5 +1,6 @@
 #!/bin/bash
 
+nvm use 16
 node -v
 gcloud -v
 dotnet --version
