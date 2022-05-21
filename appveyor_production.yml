@@ -1,5 +1,4 @@
-install:
-  - ps: Install-Product node 1
+stack: node 16
 environment:
   version: 1.0.0
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
