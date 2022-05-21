@@ -14,6 +14,7 @@
     "client/public": true,
     "**/bundle.*": true,
     "**/wwwroot/compiled/*": true,
+    "**/*.fs.js": true,
     "**/*.map": true,
     "**/.paket": true,
     "**/paket-files": true,
