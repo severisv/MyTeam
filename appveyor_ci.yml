@@ -1,8 +1,8 @@
+stack: node 16
 environment:
   version: 1.0.0
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   NUGET_XMLDOC_MODE: skip
-  nodejs_version: "16"
 assembly_info:
   patch: false
 branches:
