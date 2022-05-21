@@ -8,6 +8,8 @@ open MyTeam.Views
 open Shared.Domain.Members
 open Shared.Components
 open Client.Features.Games.EditEvents
+open Client.Components
+open Client.Components.AutoSync.Text
 
 
 let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
@@ -29,36 +31,36 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                           ]
                       ]
                       div [ _class "game-header" ] [
-                          span [ _class "registerResult-teamScore" ] [
+                          div [ _class "registerResult-teamScore" ] [
                               encodedText game.HomeTeam
-                              input [
-                                  _type "tel"
-                                  _class "registerResult-score ajax-update"
-                                  attr "data-href"
-                                  <| sprintf "/api/games/%O/score/home" game.Id
-                                  _value (toString game.HomeScore)
-                              ]
+                              Client.comp
+                                  AutoSync.Text.Element
+                                  { Value = (toString game.HomeScore)
+                                    Url = $"/api/games/{game.Id}/score/home"
+                                    OnChange = None }
+
+
                           ]
-                          span [ _class "hidden-xs" ] [
+                          div [ _class "hidden-xs" ] [
                               encodedText "-"
                           ]
-                          span [ _class "registerResult-teamScore" ] [
-                              input [
-                                  _type "tel"
-                                  _class "registerResult-score ajax-update"
-                                  attr "data-href"
-                                  <| sprintf "/api/games/%O/score/away" game.Id
-                                  _value (toString game.AwayScore)
-                              ]
+                          div [ _class "registerResult-teamScore" ] [
+                              Client.comp
+                                  AutoSync.Text.Element
+                                  { Value = (toString game.AwayScore)
+                                    Url = $"/api/games/{game.Id}/score/away"
+                                    OnChange = None }
+
+
                               encodedText game.AwayTeam
                           ]
                       ]
                       hr []
                       div [] [ Common.gameDetails game ]
-                      (Client.comp editGameEventsId { GameId = game.Id })
+                      (Client.clientView editGameEventsId { GameId = game.Id })
                   ]
               ]
 
-             ]
+              ]
             |> layout club user (fun o -> { o with Title = "Kamper" }) ctx
             |> OkResult

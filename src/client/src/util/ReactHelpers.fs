@@ -5,8 +5,12 @@ open Fable.React
 open Shared
 open Fable.Core
 open JsInterop
+open Browser.Dom
+open Browser.Types
+
 
 let propsVariableName = Strings.replace "-" "__"
+let componentDataAttribute = "data-props"
 
 
 let render deserializeFn id comp =
@@ -44,7 +48,7 @@ let hydrate elementId deserializeFn comp =
                 | Ok model -> ReactDom.hydrate (comp model [], node)
                 | Error e -> failwithf "Json deserialization failed: %O" e
 
-let hydrate2 elementId deserializeFn comp =
+let hydrateView elementId deserializeFn comp =
 #if FABLE_COMPILER
     Browser.Dom.document.getElementById elementId
     |> fun node ->
@@ -58,9 +62,27 @@ let hydrate2 elementId deserializeFn comp =
     ()
 
 
+let seqOfNodeList<'T> (nodes: Browser.Types.NodeListOf<'T>) =
+    seq {
+        for i in [ 0 .. nodes.length - 1 ] do
+            yield nodes.[i]
+    }
 
+let hydrateComponent className deserializeFn comp =
+    document.getElementsByClassName className
+    |> seqOfNodeList
+    |> Seq.iter (fun node ->
+        if not <| isNull node then
+            let parent = node.parentElement
 
+            parent.attributes.getNamedItem componentDataAttribute
+            |> fun a -> a.value
+            |> deserializeFn
+            |> function
+                | Ok model -> ReactDom.hydrate (comp (model), parent)
+                | Error e -> failwithf "Json deserialization failed: %O" e)
 
+    ()
 
 type OutProps<'Props, 'State> = 'Props * 'State * (('State -> 'Props -> 'State) -> unit)
 

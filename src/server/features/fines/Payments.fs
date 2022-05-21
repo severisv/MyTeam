@@ -62,18 +62,16 @@ let view (club: Club) (user: User) (year: string option) (selectedMember: Select
 
     let payments =
         payments
-        |> List.map
-            (fun (fineId, memberId, issued, amount, comment) ->
-                { Id = fineId
-                  Member = members |> List.find (fun m -> m.Id = memberId)
-                  Amount = amount
-                  Comment = !!comment
-                  Date = issued })
-        |> List.filter
-            (fun m ->
-                match selectedMember with
-                | Member memberId -> m.Member.Id = memberId
-                | AllMembers -> true)
+        |> List.map (fun (fineId, memberId, issued, amount, comment) ->
+            { Id = fineId
+              Member = members |> List.find (fun m -> m.Id = memberId)
+              Amount = amount
+              Comment = !!comment
+              Date = issued })
+        |> List.filter (fun m ->
+            match selectedMember with
+            | Member memberId -> m.Member.Id = memberId
+            | AllMembers -> true)
         |> List.sortByDescending (fun payment -> payment.Date)
 
 
@@ -86,7 +84,7 @@ let view (club: Club) (user: User) (year: string option) (selectedMember: Select
         |> Seq.tryHead
         |> Option.defaultValue ""
 
-    [ Client.view
+    [ Client.isomorphicViewOld
           paymentsView
           Client.Fines.Payments.element
           { Members = members

@@ -52,22 +52,20 @@ let view (club: Club) (user: User) (year: string option) (selectedMember: Select
 
     let fines =
         fines
-        |> List.map
-            (fun (fineId, memberId, issued, amount, rateName, comment) ->
-                { Id = fineId
-                  Member = members |> List.find (fun m -> m.Id = memberId)
-                  Amount = amount
-                  Description = rateName
-                  Comment = !!comment
-                  Issued = issued })
-        |> List.filter
-            (fun m ->
-                match selectedMember with
-                | Member memberId -> m.Member.Id = memberId
-                | AllMembers -> true)
+        |> List.map (fun (fineId, memberId, issued, amount, rateName, comment) ->
+            { Id = fineId
+              Member = members |> List.find (fun m -> m.Id = memberId)
+              Amount = amount
+              Description = rateName
+              Comment = !!comment
+              Issued = issued })
+        |> List.filter (fun m ->
+            match selectedMember with
+            | Member memberId -> m.Member.Id = memberId
+            | AllMembers -> true)
         |> List.sortByDescending (fun fine -> fine.Issued)
 
-    [ Client.view
+    [ Client.isomorphicViewOld
           Client.Fines.List.containerId
           Client.Fines.List.element
           { Members = members

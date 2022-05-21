@@ -83,10 +83,12 @@ let element =
         let state = state.current
 
         let validation =
-            Map [ "Date", validate "Dato" state.Date [ isSome ]
-                  "Opponent", validate "Motstander" state.Opponent [ isRequired ]
-                  "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
-                  "Location", validate "Sted" state.Location [ isRequired ] ]
+            Map [
+                "Date", validate "Dato" state.Date [ isSome ]
+                "Opponent", validate "Motstander" state.Opponent [ isRequired ]
+                "Time", validate "Klokkeslett" state.Time [ isRequired; isTimeString ]
+                "Location", validate "Sted" state.Location [ isRequired ]
+            ]
 
         let formLayout = Horizontal 2
 
@@ -151,38 +153,46 @@ let element =
                 formRow
                     [ formLayout ]
                     [ Icons.users "Motstander" ]
-                    [ textInput [ Validation validation.["Opponent"]
-                                  OnChange (fun e ->
-                                      let value = e.Value
-                                      setFormValue (fun form -> { form with Opponent = value }))
-                                  Placeholder "Mercantile SFK"
-                                  Value state.Opponent ] ]
+                    [ textInput [
+                          Validation validation.["Opponent"]
+                          OnChange (fun e ->
+                              let value = e.Value
+                              setFormValue (fun form -> { form with Opponent = value }))
+                          Placeholder "Mercantile SFK"
+                          Value state.Opponent
+                      ] ]
 
                 formRow
                     [ formLayout ]
                     [ Icons.calendar "Dato" ]
-                    [ dateInput [ Validation validation.["Date"]
-                                  Value state.Date
-                                  OnDateChange(fun date -> setFormValue (fun form -> { form with Date = date })) ] ]
+                    [ dateInput [
+                          Validation validation.["Date"]
+                          Value state.Date
+                          OnDateChange(fun date -> setFormValue (fun form -> { form with Date = date }))
+                      ] ]
                 formRow
                     [ formLayout ]
                     [ Icons.clock ]
-                    [ textInput [ Validation validation.["Time"]
-                                  OnChange (fun e ->
-                                      let value = e.Value
-                                      setFormValue (fun form -> { form with Time = value }))
-                                  Placeholder "18:30"
-                                  Value state.Time ] ]
+                    [ textInput [
+                          Validation validation.["Time"]
+                          OnChange (fun e ->
+                              let value = e.Value
+                              setFormValue (fun form -> { form with Time = value }))
+                          Placeholder "18:30"
+                          Value state.Time
+                      ] ]
 
                 formRow
                     [ formLayout ]
                     [ Icons.mapMarker "Sted" ]
-                    [ textInput [ Validation validation.["Location"]
-                                  OnChange (fun e ->
-                                      let value = e.Value
-                                      setFormValue (fun form -> { form with Location = value }))
-                                  Placeholder "Ekeberg 2"
-                                  Value state.Location ] ]
+                    [ textInput [
+                          Validation validation.["Location"]
+                          OnChange (fun e ->
+                              let value = e.Value
+                              setFormValue (fun form -> { form with Location = value }))
+                          Placeholder "Ekeberg 2"
+                          Value state.Location
+                      ] ]
 
                 formRow
                     [ formLayout ]
@@ -191,8 +201,7 @@ let element =
                           [ OnChange (fun e ->
                                 let s = e.Value
 
-                                setFormValue (fun form ->
-                                    { form with GameType = (Enums.fromString<GameType> typedefof<GameType> s) })) ]
+                                setFormValue (fun form -> { form with GameType = (Enums.fromString<GameType> typedefof<GameType> s) })) ]
                           (props.GameTypes
                            |> List.map (fun t -> { Name = string t; Value = t })) ]
 
@@ -202,12 +211,14 @@ let element =
                 formRow
                     [ formLayout ]
                     [ Icons.description ]
-                    [ textInput [ Validation []
-                                  OnChange (fun e ->
-                                      let value = e.Value
-                                      setFormValue (fun form -> { form with Description = value }))
-                                  Placeholder "Oppmøte 20 minutter før"
-                                  Value state.Description ] ]
+                    [ textInput [
+                          Validation []
+                          OnChange (fun e ->
+                              let value = e.Value
+                              setFormValue (fun form -> { form with Description = value }))
+                          Placeholder "Oppmøte 20 minutter før"
+                          Value state.Description
+                      ] ]
 
 
 
@@ -277,4 +288,4 @@ let element =
             ]
         ])
 
-hydrate2 containerId Decode.Auto.fromString<Props> element
+hydrateView containerId Decode.Auto.fromString<Props> element

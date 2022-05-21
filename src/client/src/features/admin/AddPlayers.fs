@@ -198,4 +198,4 @@ let element =
 
     )
 
-hydrate2 clientView Decode.Auto.fromString<Model> element
+hydrateView clientView Decode.Auto.fromString<Model> element

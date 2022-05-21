@@ -26,17 +26,16 @@ let internal coachMenu children =
 
 
 let index (club: Club) user (ctx: HttpContext) =
-    let members =
-        Common.Features.Members.list (ctx.Database) club.Id
+    let members = Common.Features.Members.list (ctx.Database) club.Id
 
     [ mtMain [] [
-        block [] [
-            Client.comp
-                containerId
-                { Teams = club.Teams |> List.sortBy (fun t -> t.ShortName)
-                  Members = members
-                  ImageOptions = Images.getOptions ctx }
-        ]
+          block [] [
+              Client.clientView
+                  containerId
+                  { Teams = club.Teams |> List.sortBy (fun t -> t.ShortName)
+                    Members = members
+                    ImageOptions = Images.getOptions ctx }
+          ]
       ]
       (coachMenu [
           li [] [
@@ -69,11 +68,11 @@ let invitePlayers (club: Club) user (ctx: HttpContext) =
               FacebookId = facebookId })
 
     [ mtMain [ _class "mt-main--narrow" ] [
-        Client.view2
-            clientView
-            element
-            { MemberRequests = memberRequests
-              ImageOptions = Images.getOptions ctx }
+          Client.isomorphicView
+              clientView
+              element
+              { MemberRequests = memberRequests
+                ImageOptions = Images.getOptions ctx }
       ]
       (coachMenu [
           li [] [

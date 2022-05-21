@@ -13,7 +13,7 @@ let view (club: Club) user (ctx: HttpContext) =
 
     [ mtMain [ _class "mt-main--narrow" ] [
           block [] [
-              Client.view2
+              Client.isomorphicView
                   Client.Features.Trainings.Form.containerId
                   Client.Features.Trainings.Form.element
                   { Teams = club.Teams; Training = None }

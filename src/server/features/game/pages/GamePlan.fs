@@ -70,6 +70,6 @@ let view (club: Club) (user: User) gameId (ctx: HttpContext) =
             ->
             NotFound
         | Some model ->
-            [ Client.comp clientView model ]
+            [ Client.clientView clientView model ]
             |> layout club (Some user) (fun o -> { o with Title = "Bytteplan" }) ctx
             |> OkResult

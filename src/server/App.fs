@@ -454,12 +454,11 @@ module App =
                                       route "/refresh" >=> Games.Refresh.run
 
                                       ]
-                              POST
-                              >=> mustBeInRole [
-                                      Role.Admin
-                                      Role.Trener
-                                      Role.Skribent
-                                  ]
+                              mustBeInRole [
+                                  Role.Admin
+                                  Role.Trener
+                                  Role.Skribent
+                              ]
                               >=> choose [
                                       routef "/%O/score/home" (Games.Api.setHomeScore club.Id >> jsonPost)
                                       routef "/%O/score/away" (Games.Api.setAwayScore club.Id >> jsonPost)

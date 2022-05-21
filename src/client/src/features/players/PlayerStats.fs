@@ -132,4 +132,4 @@ let element =
         else
             fr [] [])
 
-hydrate2 containerId Decode.Auto.fromString<Props> element
+hydrateView containerId Decode.Auto.fromString<Props> element

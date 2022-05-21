@@ -5,14 +5,6 @@ open Feliz
 open Fable.Core.JsInterop
 
 
-let listenForOutsideClicks isListening setListening (ref: IRefValue<option<Browser.Types.HTMLElement>>) setIsOpen _ =
-
-    setListening true
-
-
-
-
-
 type Options =
     { Label: ReactElement
       OnClick: Browser.Types.MouseEvent -> Unit }

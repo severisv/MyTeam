@@ -37,9 +37,9 @@
     <Compile Include="components/Tabs.fs" />
     <Compile Include="components/Navlist.fs" />
     <Compile Include="components/client/Modal.fs" />
-    <Compile Include="components/client/Checkbox.fs" />
-    <Compile Include="components/client/Textarea.fs" />
-    <Compile Include="components/client/Textinput.fs" />
+    <Compile Include="components/client/AutoSyncCheckbox.fs" />
+    <Compile Include="components/client/AutoSyncTextArea.fs" />
+    <Compile Include="components/client/AutoSyncText.fs" />
     <Compile Include="components/client/Send.fs" />
     <Compile Include="components/client/EditBlock.fs" />
     <Compile Include="components/client/DropdownOptions.fs" />

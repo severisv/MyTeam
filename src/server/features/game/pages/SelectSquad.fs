@@ -30,32 +30,30 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
     }
     |> Seq.toList
     |> List.groupBy (fun (game, _) -> game)
-    |> List.map
-        (fun ((gameId, date, location, description, squadIsPublished, teamId), attendees) ->
-            let attendees =
-                attendees
-                |> List.map (fun (_, a) -> a)
-                |> List.filter (isNull >> not)
+    |> List.map (fun ((gameId, date, location, description, squadIsPublished, teamId), attendees) ->
+        let attendees =
+            attendees
+            |> List.map (fun (_, a) -> a)
+            |> List.filter (isNull >> not)
 
-            ({ Id = gameId
-               Date = date
-               TimeString = Shared.Date.formatTime date
-               Location = location
-               Description = description =?? ""
-               TeamId = teamId.Value
-               Squad =
-                   { IsPublished = squadIsPublished
-                     MemberIds =
-                         attendees
-                         |> List.filter (fun a -> a.IsSelected)
-                         |> List.map (fun m -> m.MemberId)
-                         |> Seq.toList } },
-             (attendees
-              |> List.map
-                  (fun a ->
-                      { MemberId = a.MemberId
-                        IsAttending = a.IsAttending |> fromNullable
-                        Message = a.SignupMessage =?? "" }))))
+        ({ Id = gameId
+           Date = date
+           TimeString = Shared.Date.formatTime date
+           Location = location
+           Description = description =?? ""
+           TeamId = teamId.Value
+           Squad =
+             { IsPublished = squadIsPublished
+               MemberIds =
+                 attendees
+                 |> List.filter (fun a -> a.IsSelected)
+                 |> List.map (fun m -> m.MemberId)
+                 |> Seq.toList } },
+         (attendees
+          |> List.map (fun a ->
+              { MemberId = a.MemberId
+                IsAttending = a.IsAttending |> fromNullable
+                Message = a.SignupMessage =?? "" }))))
     |> Seq.tryHead
     |> function
         | None -> NotFound
@@ -63,32 +61,34 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
 
             let members = Members.list db club.Id
 
-            let recentAttendance =
-                Queries.getRecentAttendance db game.TeamId
+            let recentAttendance = Queries.getRecentAttendance db game.TeamId
 
-            [ Client.comp
-                clientView
-                { Game = game
-                  Signups = signups
-                  Members =
+            [ Client.clientView
+                  clientView
+                  { Game = game
+                    Signups = signups
+                    Members =
                       members
                       |> List.filter (fun m -> m.Details.Status <> Status.Sluttet)
-                  ImageOptions = Images.getOptions ctx
-                  RecentAttendance = recentAttendance }
+                    ImageOptions = Images.getOptions ctx
+                    RecentAttendance = recentAttendance }
 
               sidebar [] [
                   user
                   => fun user ->
-                      if user.IsInRole [ Role.Admin
-                                         Role.Trener ] then
+                      if
+                          user.IsInRole [
+                              Role.Admin
+                              Role.Trener
+                          ] then
                           block [] [
                               !!(navList
                                   { Header = "Admin"
                                     Items =
-                                        [ { Text =
-                                                [ Icons.add ""
-                                                  Fable.React.Helpers.str " Ny kamp" ]
-                                            Url = "/kamper/ny" } ]
+                                      [ { Text =
+                                            [ Icons.add ""
+                                              Fable.React.Helpers.str " Ny kamp" ]
+                                          Url = "/kamper/ny" } ]
                                     Footer = None
                                     IsSelected = never })
                           ]

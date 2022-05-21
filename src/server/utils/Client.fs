@@ -7,13 +7,18 @@ open Shared.Util
 
 let propsVariableName = ReactHelpers.propsVariableName
 
+let comp comp model =
+    span [ attr ReactHelpers.componentDataAttribute (model |> Json.fableSerialize) ] [
+        rawText
+        <| Fable.ReactServer.renderToString (comp model)
+    ]
 
-let comp id model =
+let clientView id model =
     let json = model |> Json.fableSerialize
 
     div [ _id id
 
-         ] [
+          ] [
         script [] [
             rawText
                 $"""
@@ -22,46 +27,30 @@ let comp id model =
         ]
     ]
 
-let view containerId comp model =
+
+
+let internal renderIsomorphic containerId comp model =
     [ script [] [
-        rawText (
-            sprintf
-                """
+          rawText (
+              sprintf
+                  """
                     var %s = '%s'
                     """
-                (propsVariableName containerId)
-                (model
-                 |> Json.fableSerialize
-                 |> Strings.replace "\\" "\\\\"
-                 |> Strings.replace "'" "")
-        )
+                  (propsVariableName containerId)
+                  (model |> Json.fableSerialize)
+          )
       ]
 
       div [ _id containerId ] [
-          rawText
-          <| Fable.ReactServer.renderToString (comp model [])
+          rawText <| Fable.ReactServer.renderToString comp
       ] ]
     |> RenderView.AsString.htmlNodes
     |> rawText
 
-let view2 containerId comp model =
-    [ script [] [
-        rawText (
-            sprintf
-                """
-                    var %s = '%s'
-                    """
-                (propsVariableName containerId)
-                (model
-                 |> Json.fableSerialize
-                 |> Strings.replace "\\" "\\\\"
-                 |> Strings.replace "'" "")
-        )
-      ]
 
-      div [ _id containerId ] [
-          rawText
-          <| Fable.ReactServer.renderToString (comp (model))
-      ] ]
-    |> RenderView.AsString.htmlNodes
-    |> rawText
+
+let isomorphicViewOld containerId comp model =
+    renderIsomorphic containerId ((comp model [])) model
+
+let isomorphicView containerId comp model =
+    renderIsomorphic containerId (comp model) model

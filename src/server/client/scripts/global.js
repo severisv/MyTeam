@@ -10,7 +10,6 @@ global.applyScopedJsComponents = function (selector) {
   $scope.find('a.mt-popover').popover({ trigger: 'hover' })
   applyActiveLinkSwapper($scope)
   applySelectLinkListeners($scope)
-  ajax.applyFormUpdateListener($scope)
   ajax.applyAjaxLinkListeners($scope)
 }
 

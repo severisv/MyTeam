@@ -117,7 +117,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                       hr []
                       div [] [ Common.gameDetails game ]
                       gameHasPassed
-                      =? (Client.comp listGameEventsId { GameId = game.Id },
+                      =? (Client.clientView listGameEventsId { GameId = game.Id },
 
                           empty)
                   ]

@@ -77,11 +77,10 @@ let getCategory teamId =
 
 type SelectSquad(props) =
     inherit Component<Model, Squad>(props)
-    do base.setInitState (props.Game.Squad)
+    do ``base``.setInitState (props.Game.Squad)
 
     override this.render() =
-        let model =
-            { props with Game = { props.Game with Squad = this.state } }
+        let model = { props with Game = { props.Game with Squad = this.state } }
 
         let getRecentAttendance memberId =
             model.RecentAttendance
@@ -123,45 +122,45 @@ type SelectSquad(props) =
                 [ str
                   <| sprintf "%s (%i)" (string category) players.Length ]
                 [ ul
-                    [ Class "list-users" ]
-                    (players
-                     |> List.map (fun (m, s) ->
-                         let m = m.Details
+                      [ Class "list-users" ]
+                      (players
+                       |> List.map (fun (m, s) ->
+                           let m = m.Details
 
-                         li [ Class "registerSquad-player" ] [
-                             span [] [
-                                 img [
-                                     Class "hidden-xxs"
-                                     Src
-                                     <| Image.getMember
-                                         imageOptions
-                                         (fun opts ->
-                                             { opts with
-                                                 Height = Some 50
-                                                 Width = Some 50 })
-                                         m.Image
-                                         m.FacebookId
-                                 ]
-                                 str m.Name
-                             ]
-                             span [ Style [
-                                        Display DisplayOptions.Flex
-                                        JustifyContent "flex-end"
-                                        AlignItems AlignItemsOptions.Center
-                                    ] ] [
-                                 s
-                                 => fun s ->
-                                     Strings.hasValue s.Message
-                                     &? tooltip s.Message [ Class "registerSquad-messageIcon" ] [ Icons.comment ]
-                                 span [ Title "Oppmøte siste 8 uker" ] [
-                                     str <| getRecentAttendance m.Id
-                                 ]
-                                 Checkbox.render
-                                     { Value = game.Squad.MemberIds |> List.contains m.Id
-                                       Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
-                                       OnChange = handleSelectPlayer m.Id }
-                             ]
-                         ]))
+                           li [ Class "registerSquad-player" ] [
+                               span [] [
+                                   img [
+                                       Class "hidden-xxs"
+                                       Src
+                                       <| Image.getMember
+                                           imageOptions
+                                           (fun opts ->
+                                               { opts with
+                                                   Height = Some 50
+                                                   Width = Some 50 })
+                                           m.Image
+                                           m.FacebookId
+                                   ]
+                                   str m.Name
+                               ]
+                               span [ Style [
+                                          Display DisplayOptions.Flex
+                                          JustifyContent "flex-end"
+                                          AlignItems AlignItemsOptions.Center
+                                      ] ] [
+                                   s
+                                   => fun s ->
+                                       Strings.hasValue s.Message
+                                       &? tooltip s.Message [ Class "registerSquad-messageIcon" ] [ Icons.comment ]
+                                   span [ Title "Oppmøte siste 8 uker" ] [
+                                       str <| getRecentAttendance m.Id
+                                   ]
+                                   AutoSync.Checkbox.render
+                                       { Value = game.Squad.MemberIds |> List.contains m.Id
+                                         Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
+                                         OnChange = handleSelectPlayer m.Id }
+                               ]
+                           ]))
                   br [] ]
 
         let squad =
@@ -236,7 +235,7 @@ type SelectSquad(props) =
 
                         div [ Class "registerSquad-publish" ] [
                             div [ Class "registerSquad-messageWrapper" ] [
-                                Textarea.render
+                                AutoSync.TextArea.render
                                     { Value = game.Description
                                       Placeholder = Some "Beskjed til spillerne"
                                       Url = sprintf "/api/events/%O/description" game.Id }
