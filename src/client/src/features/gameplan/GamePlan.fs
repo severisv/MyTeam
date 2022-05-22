@@ -75,7 +75,7 @@ let getName (players: Members.Member list) (player: Members.Member) =
         let hashName (p: Members.Member) =
             match numberOfLettersFromLastName with
             | 0 -> p.FirstName
-            | _ -> sprintf "%s %s" p.FirstName p.LastName.[0..numberOfLettersFromLastName - 1]
+            | _ -> sprintf "%s %s" p.FirstName p.LastName.[0 .. numberOfLettersFromLastName - 1]
 
         let name = hashName player
 
@@ -155,8 +155,7 @@ let removeLineup setState save lineupId =
 
 let setFormation setState save formation =
     setState (fun state props ->
-        let gamePlan =
-            { state.GamePlan with Formation = formation }
+        let gamePlan = { state.GamePlan with Formation = formation }
 
         save gamePlan
         { state with GamePlan = gamePlan })
@@ -169,14 +168,14 @@ type GamePlan(props) =
     inherit Component<Model, State>(props)
 
     do
-        base.setInitState (
+        ``base``.setInitState (
             (props.GamePlan
 
              |> Option.defaultValue
                  { Lineups =
                      [ { Id = System.Guid.NewGuid()
                          Time = 0
-                         Players = [ 0 .. 10 ] |> List.map (fun _ -> None) } ]
+                         Players = [ 0..10 ] |> List.map (fun _ -> None) } ]
                    Formation = props.Formation
                    MatchLength =
                      match props.Formation with
@@ -289,6 +288,53 @@ type GamePlan(props) =
                     ]
                 | None -> empty
 
+
+        let spilletid className =
+            div [ ClassName className ] [
+                h4 [ Style [
+                         TextAlign TextAlignOptions.Left
+                     ] ] [
+                    str "Spilletid"
+                ]
+                div
+                    []
+                    (let lineups =
+                        state.GamePlan.Lineups
+                        |> List.sortBy (fun line -> line.Time)
+
+                     lineups
+                     |> List.map (fun line ->
+                         line.Players
+                         |> List.choose id
+                         |> List.map (fun p ->
+                             let lineupIndex =
+                                 lineups
+                                 |> List.findIndex (fun l -> l.Id = line.Id)
+
+                             let nextTime =
+                                 if lineupIndex + 1 < lineups.Length then
+                                     let t = lineups.[lineupIndex + 1].Time
+                                     t
+                                 else
+                                     state.GamePlan.MatchLength
+
+                             (p, nextTime - line.Time)))
+                     |> List.reduce List.append
+                     |> List.append (
+                         state.Players
+                         |> List.map (fun p -> (p.FirstName, 0))
+                     )
+                     |> List.groupBy (fun (player, _) -> player)
+                     |> List.map (fun (key, values) -> (key, values |> List.sumBy (fun (_, time) -> time)))
+                     |> List.sortBy (fun (player, _) -> player)
+                     |> List.map (fun (player, time) ->
+                         div [] [
+                             str player
+                             str ": "
+                             b [] [ str <| string time ]
+                         ]))
+            ]
+
         fragment [] [
 
             mtMain [ Class "gameplan"
@@ -304,6 +350,7 @@ type GamePlan(props) =
                            <| sprintf "%s vs %s" model.Team model.Opponent
                        ]
                        br []
+                       spilletid "visible-xs visible-sm"
                        br []
                        div [ Style [
                                  TextAlign TextAlignOptions.Right
@@ -389,11 +436,11 @@ type GamePlan(props) =
                                     br []
                                     div
                                         [ Class "gameplan-field" ]
-                                        ([ 0 .. 5 ]
+                                        ([ 0..5 ]
                                          |> List.map (fun row ->
                                              div
                                                  []
-                                                 ([ 0 .. 4 ]
+                                                 ([ 0..4 ]
                                                   |> List.map (fun col ->
                                                       div [ Class "gp-square" ] [
                                                           square lineup.Players lineup.Id row col
@@ -410,48 +457,7 @@ type GamePlan(props) =
                                    Endpoint = Send.Post(sprintf "/api/games/%O/gameplan/publish" model.GameId, None) })
                        ] ])
             ]
-            sidebar [] [
-                block [] [
-                    h4 [] [ str "Spilletid" ]
-                    div
-                        []
-                        (let lineups =
-                            state.GamePlan.Lineups
-                            |> List.sortBy (fun line -> line.Time)
-
-                         lineups
-                         |> List.map (fun line ->
-                             line.Players
-                             |> List.choose id
-                             |> List.map (fun p ->
-                                 let lineupIndex =
-                                     lineups
-                                     |> List.findIndex (fun l -> l.Id = line.Id)
-
-                                 let nextTime =
-                                     if lineupIndex + 1 < lineups.Length then
-                                         let t = lineups.[lineupIndex + 1].Time
-                                         t
-                                     else
-                                         state.GamePlan.MatchLength
-
-                                 (p, nextTime - line.Time)))
-                         |> List.reduce List.append
-                         |> List.append (
-                             state.Players
-                             |> List.map (fun p -> (p.FirstName, 0))
-                         )
-                         |> List.groupBy (fun (player, _) -> player)
-                         |> List.map (fun (key, values) -> (key, values |> List.sumBy (fun (_, time) -> time)))
-                         |> List.sortBy (fun (player, _) -> player)
-                         |> List.map (fun (player, time) ->
-                             div [] [
-                                 str player
-                                 str ": "
-                                 b [] [ str <| string time ]
-                             ]))
-                ]
-            ]
+            sidebar [] [ block [] [ spilletid "" ] ]
         ]
 
 let element = ofType<GamePlan, _, _>
