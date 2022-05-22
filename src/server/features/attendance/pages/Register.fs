@@ -11,8 +11,8 @@ open Shared.Domain.Events
 open MyTeam.Views
 open MyTeam.Attendance.Queries
 open MyTeam.Attendance
-open MyTeam.Ajax
 open MyTeam.Views.BaseComponents
+open Client.Components
 
 module Register =
 
@@ -53,69 +53,73 @@ module Register =
         let getImage = Images.getMember ctx
 
         let editEventLink eventId =
-            !!(editAnchor [ Href <| sprintf "/treninger/%O/endre" eventId ])
+            !!(editAnchor [
+                Href <| sprintf "/treninger/%O/endre" eventId
+               ])
 
         let registerAttendancePlayerList header (players: PlayerAttendance list) (selectedEvent: Event) isCollapsed =
             collapsible
                 isCollapsed
                 [ encodedText
                   <| sprintf "%s (%i)" header players.Length ]
-                [ div [ _class "row" ] [
+                [ div [] [
                       ul
-                          [ _class "list-users col-xs-11 col-md-10" ]
+                          [ _class "list-users" ]
                           (players
-                           |> List.map
-                               (fun (p, didAttend, didWin) ->
-                                   li [ _class "register-attendance-item" ] [
-                                       span [] [
-                                           img [ _src
-                                                 <| getImage
-                                                     (fun o ->
-                                                         { o with
-                                                               Height = Some 50
-                                                               Width = Some 50 })
-                                                     p.Image
-                                                     p.FacebookId ]
-                                           encodedText p.Name
+                           |> List.map (fun (p, didAttend, didWin) ->
+                               li [ _class "register-attendance-item" ] [
+                                   span [] [
+                                       img [
+                                           _src
+                                           <| getImage
+                                               (fun o ->
+                                                   { o with
+                                                       Height = Some 50
+                                                       Width = Some 50 })
+                                               p.Image
+                                               p.FacebookId
                                        ]
-                                       //                   ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O/victory" selectedEvent.Id p.Id) didWin
-                                       //                       |> withClass "register-trainingVictory"
-                                       ajaxCheckbox
-                                           (sprintf "/api/attendance/%O/registrer/%O" selectedEvent.Id p.Id)
-                                           didAttend
-                                       ajaxSuccessIndicator
-                                   ]))
+                                       encodedText p.Name
+                                   ]
+                                   //                   ajaxCheckbox (sprintf "/api/attendance/%O/registrer/%O/victory" selectedEvent.Id p.Id) didWin
+                                   //                       |> withClass "register-trainingVictory"
+                                   Client.comp
+                                       AutoSync.Checkbox.Element
+                                       { Value = didAttend
+                                         Url = $"/api/attendance/{selectedEvent.Id}/registrer/{p.Id}"
+                                         OnChange = None }
+                               ]))
                   ] ]
 
         match model with
         | Some model ->
 
             [ mtMain [ _class "mt-main--narrow register-attendance" ] [
-                block
-                    []
-                    (model
-                     |> fun (training, players) ->
-                         [ editEventLink training.Id
-                           div [ _class "attendance-event" ] [
-                               !!(Icons.eventIcon EventType.Trening Icons.ExtraLarge)
-                               div [ _class "faded" ] [
-                                   p [] [
-                                       icon (fa "calendar") ""
-                                       whitespace
-                                       encodedText
-                                       <| (training.Date.ToString("ddd d MMMM"))
-                                   ]
-                                   p [] [
-                                       icon (fa "map-marker") ""
-                                       encodedText training.Location
-                                   ]
-                               ]
-                           ]
-                           registerAttendancePlayerList "Påmeldte spillere" players.Attending training Open
-                           br []
-                           registerAttendancePlayerList "Øvrige aktive" players.OthersActive training Collapsed
-                           br []
-                           registerAttendancePlayerList "Øvrige inaktive" players.OthersInactive training Collapsed ])
+                  block
+                      []
+                      (model
+                       |> fun (training, players) ->
+                           [ editEventLink training.Id
+                             div [ _class "attendance-event" ] [
+                                 !!(Icons.eventIcon EventType.Trening Icons.ExtraLarge)
+                                 div [ _class "faded" ] [
+                                     p [] [
+                                         icon (fa "calendar") ""
+                                         whitespace
+                                         encodedText
+                                         <| (training.Date.ToString("ddd d MMMM"))
+                                     ]
+                                     p [] [
+                                         icon (fa "map-marker") ""
+                                         encodedText training.Location
+                                     ]
+                                 ]
+                             ]
+                             registerAttendancePlayerList "Påmeldte spillere" players.Attending training Open
+                             br []
+                             registerAttendancePlayerList "Øvrige aktive" players.OthersActive training Collapsed
+                             br []
+                             registerAttendancePlayerList "Øvrige inaktive" players.OthersInactive training Collapsed ])
               ]
               sidebar [] [
                   (previousTrainings.Length > 0
@@ -123,15 +127,14 @@ module Register =
                            !!(Nav.navList (
                                { Header = "Siste treninger"
                                  Items =
-                                     previousTrainings
-                                     |> List.map
-                                         (fun training ->
-                                             { Text =
-                                                   [ Icons.calendar ""
-                                                     Base.whitespace
-                                                     Fable.React.Helpers.str
-                                                     <| (training.Date.ToString "ddd d MMMM") ]
-                                               Url = registerAttendanceUrl (Some training) })
+                                   previousTrainings
+                                   |> List.map (fun training ->
+                                       { Text =
+                                           [ Icons.calendar ""
+                                             Base.whitespace
+                                             Fable.React.Helpers.str
+                                             <| (training.Date.ToString "ddd d MMMM") ]
+                                         Url = registerAttendanceUrl (Some training) })
                                  Footer = None
                                  IsSelected = isSelected }
                            ))

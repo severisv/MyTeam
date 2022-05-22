@@ -1,6 +1,4 @@
-﻿import ajax from './ajaxHelpers'
-
-const ANIMATION_DURATON = 300
+﻿const ANIMATION_DURATON = 300
 const global = global || {}
 
 global.applyScopedJsComponents = function (selector) {
@@ -10,7 +8,6 @@ global.applyScopedJsComponents = function (selector) {
   $scope.find('a.mt-popover').popover({ trigger: 'hover' })
   applyActiveLinkSwapper($scope)
   applySelectLinkListeners($scope)
-  ajax.applyAjaxLinkListeners($scope)
 }
 
 global.applyJsComponents = function () {

@@ -8,28 +8,36 @@ open Fetch.Types
 open Shared.Components
 open Shared.Components.Input
 open Shared.Components.Base
+open Feliz
+open Shared.Util
 
-type CheckboxState = { CurrentValue: bool; Error: bool }
+type State = { CurrentValue: bool; Error: bool }
 
-type CheckboxProps =
+type Props =
     { Value: bool
       Url: string
-      OnChange: bool -> unit }
+      OnChange: (bool -> unit) option }
 
-type Checkbox(props) =
-    inherit Component<CheckboxProps, CheckboxState>(props)
+let internal componentId = "checkbox-auto-sync"
 
-    do
-        ``base``.setInitState (
-            { Error = false
-              CurrentValue = props.Value }
-        )
+[<ReactComponent>]
+let Element (props: Props) =
 
-    member this.handleChange isSelected =
-        let props = this.props
-        let state = this.state
-        props.OnChange isSelected
-        this.setState (fun state props -> { state with Error = false })
+    let initialState =
+        { CurrentValue = props.Value
+          Error = false }
+
+#if FABLE_COMPILER
+    let (state, setState) = React.useState initialState
+
+    let onChange value =
+        props.OnChange
+        |> Option.iter (fun onChange -> onChange value)
+
+    let handleChange isSelected =
+
+        onChange isSelected
+        setState ({ state with Error = false })
 
         promise {
             let! res = Http.sendRecord HttpMethod.POST props.Url { value = isSelected } []
@@ -37,29 +45,35 @@ type Checkbox(props) =
             if not res.Ok then
                 failwithf "Received %O from server: %O" res.Status res.StatusText
 
-            this.setState (fun state props -> { state with CurrentValue = isSelected })
-            props.OnChange isSelected
+            setState (
+                { state with
+                    CurrentValue = isSelected
+                    Error = false }
+            )
+
+            onChange isSelected
         }
         |> Promise.catch (fun e ->
             Browser.Dom.console.error (sprintf "%O" e)
-            this.setState (fun state props -> { state with Error = true })
-            props.OnChange state.CurrentValue)
+            setState ({ state with Error = true })
+            onChange state.CurrentValue)
         |> Promise.start
+#else
+    let state = initialState
+    let handleChange _ = ()
+#endif
 
-    override this.render() =
-        let state = this.state
-
-        span [ Class "input-checkbox" ] [
-            input [
-                Class "form-control"
-                Type "checkbox"
-                Checked state.CurrentValue
-                OnChange(fun input -> this.handleChange input.Checked)
-            ]
-            (if this.state.Error then
-                 Labels.error
-             else
-                 empty)
+    span [ Class $"input-checkbox {componentId}" ] [
+        input [
+            Class "form-control"
+            Type "checkbox"
+            Checked state.CurrentValue
+            OnChange(fun input -> handleChange input.Checked)
         ]
+        (if state.Error then
+             Labels.error
+         else
+             empty)
+    ]
 
-let render model = ofType<Checkbox, _, _> model []
+ReactHelpers.hydrateComponent componentId Thoth.Json.Decode.Auto.fromString<Props> Element

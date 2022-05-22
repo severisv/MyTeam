@@ -155,10 +155,10 @@ type SelectSquad(props) =
                                    span [ Title "Oppmøte siste 8 uker" ] [
                                        str <| getRecentAttendance m.Id
                                    ]
-                                   AutoSync.Checkbox.render
+                                   AutoSync.Checkbox.Element
                                        { Value = game.Squad.MemberIds |> List.contains m.Id
                                          Url = sprintf "/api/games/%O/squad/select/%O" game.Id m.Id
-                                         OnChange = handleSelectPlayer m.Id }
+                                         OnChange = Some <| handleSelectPlayer m.Id }
                                ]
                            ]))
                   br [] ]
@@ -215,7 +215,8 @@ type SelectSquad(props) =
                         listPlayers ``Øvrige ikke svart`` Collapsed
                     ]
 
-                    div [ Class "col-sm-6 col-xs-12 " ] [
+                    div [ Class "col-sm-6 col-xs-12 "
+                          Style [ MarginTop 20 ] ] [
                         h2 [] [
                             str <| sprintf "Tropp (%i)" squad.Length
                         ]

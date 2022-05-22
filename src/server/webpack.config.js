@@ -5,7 +5,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: [ 'whatwg-fetch', './client/scripts/app.js']
+    app: [ './client/scripts/app.js']
   },
 
   output: {

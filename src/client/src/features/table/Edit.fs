@@ -96,10 +96,12 @@ type EditTable(props) =
                                 ]
 
                                 formRow [ str "Oppdater tabell automatisk" ] [
-                                    Checkbox.render
+                                    Checkbox.Element
                                         { Value = props.AutoUpdateTable
                                           Url = sprintf "/api/tables/%s/%i/autoupdate" props.Team props.Year
-                                          OnChange = fun value -> update (fun state -> { state with AutoUpdateTable = value }) }
+                                          OnChange =
+                                            Some
+                                            <| fun value -> update (fun state -> { state with AutoUpdateTable = value }) }
                                 ]
 
                                 state.AutoUpdateTable
@@ -111,12 +113,13 @@ type EditTable(props) =
                                             Some
                                             <| fun value -> update (fun state -> { state with TableSourceUrl = value }) }
                                    ]
-
                                 formRow [ str "Oppdater kamper automatisk" ] [
-                                    Checkbox.render
+                                    Checkbox.Element
                                         { Value = props.AutoUpdateFixtures
                                           Url = sprintf "/api/tables/%s/%i/autoupdatefixtures" props.Team props.Year
-                                          OnChange = fun value -> update (fun state -> { state with AutoUpdateFixtures = value }) }
+                                          OnChange =
+                                            Some
+                                            <| fun value -> update (fun state -> { state with AutoUpdateFixtures = value }) }
                                 ]
 
                                 state.AutoUpdateFixtures
