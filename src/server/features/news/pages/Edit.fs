@@ -84,7 +84,7 @@ let private editView (ctx: HttpContext) (club: Club) user (name: string option) 
                                   _type "checkbox"
                                   _class "form-control"
                                   article.IsMatchReport =? (_checked, _empty)
-                                  attr "onclick" "window.checkbox.showHideAssociatedElement(this, '#GameIdWrapper')"
+                                  attr "onclick" "document.querySelector('#GameIdWrapper').hidden = !this.checked;"
                               ]
                           ]
                           div [ _class "flex-2" ] [

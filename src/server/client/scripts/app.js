@@ -4,5 +4,4 @@ import './lib/jquery.tablesorter.min'
 import '../stylesheets/style.less'
 
 import global from './global'
-window.checkbox = require('./checkbox')
 window.global = global
