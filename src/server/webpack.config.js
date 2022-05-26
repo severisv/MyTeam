@@ -13,7 +13,7 @@ module.exports = {
     filename: '[name].js',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    extensions: ['.js', '.css'],
     modules: [path.resolve('./node_modules'), path.resolve('./')],
   },
   devtool: 'source-map',
@@ -21,7 +21,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
