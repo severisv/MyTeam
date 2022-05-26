@@ -37,6 +37,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                   AutoSync.Text.Element
                                   { Value = (toString game.HomeScore)
                                     Url = $"/api/games/{game.Id}/score/home"
+                                    Type = Number
                                     OnChange = None }
 
 
@@ -49,6 +50,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                                   AutoSync.Text.Element
                                   { Value = (toString game.AwayScore)
                                     Url = $"/api/games/{game.Id}/score/away"
+                                    Type = Number
                                     OnChange = None }
 
 

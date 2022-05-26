@@ -23,14 +23,21 @@ let internal updateGame clubId gameId (db: Database) updateGame =
 let getSquad gameId db = Queries.getSquad db gameId |> OkResult
 
 
-[<CLIMutable>]
-type PostScore = { Value: int }
+let setHomeScore clubId gameId (ctx: HttpContext) (model: Components.Input.StringPayload) =
+    let value =
+        match model.Value with
+        | "" -> None
+        | v -> Number.tryParse v
 
-let setHomeScore clubId gameId (ctx: HttpContext) model =
-    updateGame clubId gameId ctx.Database (fun game -> game.HomeScore <- model.Value)
+    updateGame clubId gameId ctx.Database (fun game -> game.HomeScore <- value |> toNullable)
 
-let setAwayScore clubId gameId (ctx: HttpContext) model =
-    updateGame clubId gameId ctx.Database (fun game -> game.AwayScore <- model.Value)
+let setAwayScore clubId gameId (ctx: HttpContext) (model: Components.Input.StringPayload) =
+    let value =
+        match model.Value with
+        | "" -> None
+        | v -> Number.tryParse v
+
+    updateGame clubId gameId ctx.Database (fun game -> game.AwayScore <- value |> toNullable)
 
 
 [<CLIMutable>]

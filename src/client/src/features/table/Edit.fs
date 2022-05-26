@@ -90,6 +90,7 @@ type EditTable(props) =
                                     Text.Element
                                         { Value = state.Title
                                           Url = sprintf "/api/tables/%s/%i/title" props.Team props.Year
+                                          Type = Text.String
                                           OnChange =
                                             Some
                                             <| fun value -> update (fun state -> { state with Title = value }) }
@@ -109,6 +110,7 @@ type EditTable(props) =
                                     Text.Element
                                         { Value = state.TableSourceUrl
                                           Url = sprintf "/api/tables/%s/%i/sourceurl" props.Team props.Year
+                                          Type = Text.String
                                           OnChange =
                                             Some
                                             <| fun value -> update (fun state -> { state with TableSourceUrl = value }) }
@@ -126,6 +128,7 @@ type EditTable(props) =
                                 &? formRow [ str "Url til kamper på fotball.no" ] [
                                     Text.Element
                                         { Value = state.FixtureSourceUrl
+                                          Type = Text.String
                                           Url = sprintf "/api/tables/%s/%i/fixturesourceurl" props.Team props.Year
                                           OnChange =
                                             Some

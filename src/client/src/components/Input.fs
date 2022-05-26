@@ -2,7 +2,6 @@ module Shared.Components.Input
 
 open Fable.React
 open Fable.React.Props
-open Shared.Util.Html
 
 [<CLIMutable>]
 type CheckboxPayload =

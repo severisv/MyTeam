@@ -17,9 +17,15 @@ type State =
       IsTouched: bool
       Error: bool }
 
+
+type TextType =
+    | String
+    | Number
+
 type Props =
     { Value: string
       Url: string
+      Type: TextType
       OnChange: (string -> unit) option }
 
 let componentId = "text-auto-sync"
@@ -80,12 +86,26 @@ let Element (props: Props) =
 
 #endif
 
+
+
     div [ Class $"input-text {componentId}" ] [
         input [
             Class "form-control"
             Type "text"
             DefaultValue props.Value
-            OnChange(fun input -> handleChange input.Value)
+            OnChange (fun input ->
+                let value = input.Value
+
+                match props.Type with
+                | Number when
+                    not
+                        (
+                            Shared.Number.isNumber input.Value
+                            || System.String.IsNullOrEmpty value
+                        )
+                    ->
+                    ()
+                | _ -> handleChange value)
         ]
         (match state with
          | { IsPosting = true } -> Icons.spinner
