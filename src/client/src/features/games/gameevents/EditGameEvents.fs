@@ -26,8 +26,7 @@ type AddOrRemove =
 
 
 let gameEventTypes =
-    let cases =
-        Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
+    let cases = Reflection.FSharpType.GetUnionCases(typeof<GameEventType>)
 
     [ for c in cases do
           yield Reflection.FSharpValue.MakeUnion(c, [||]) :?> GameEventType ]
@@ -41,15 +40,12 @@ type GameEventForm =
 [<ReactComponent>]
 let EditGameEvents (props: Props) =
 
-    let (events, setEvents) =
-        React.useState<List<GameEvent> option> (None)
+    let (events, setEvents) = React.useState<List<GameEvent> option> (None)
 
 
-    let (squad, setSquad) =
-        React.useState<List<Member> option> (None)
+    let (squad, setSquad) = React.useState<List<Member> option> (None)
 
-    let (allPlayers, setAllPlayers) =
-        React.useState<List<Member> option> (None)
+    let (allPlayers, setAllPlayers) = React.useState<List<Member> option> (None)
 
 
     let fetchEvents () =
@@ -204,25 +200,19 @@ let EditGameEvents (props: Props) =
                                     Html.div (
                                         (events
                                          |> List.map (fun e ->
-                                             Html.div [
-                                                 prop.style [
-                                                     style.display.flex
-                                                     style.justifyContent.spaceBetween
-                                                     style.alignItems.center
-                                                 ]
-                                                 prop.children [
-                                                     renderEvent allPlayers e
-                                                     Html.a [
-                                                         prop.className "link link--red"
-                                                         prop.style [
-                                                             style.marginLeft 20
-                                                             style.fontSize 21
-                                                         ]
-                                                         prop.onClick <| removeEvent e
-                                                         prop.children [ Icons.remove ]
+                                             renderEvent
+                                                 (Html.a [
+                                                     prop.className "link link--red"
+                                                     prop.style [
+                                                         style.marginLeft 20
+                                                         style.fontSize 21
                                                      ]
-                                                 ]
-                                             ]))
+                                                     prop.onClick <| removeEvent e
+                                                     prop.children [ Icons.remove ]
+                                                  ]
+                                                  |> Some)
+                                                 allPlayers
+                                                 e))
                                         @ [ form [ Horizontal 12
                                                    Style [ MarginTop 30; MarginBottom 30 ] ] [
                                                 formRow
@@ -289,7 +279,7 @@ let EditGameEvents (props: Props) =
 
 
 
-                                         ]
+                                            ]
                                     )
                                 | None -> Icons.spinner
                             )

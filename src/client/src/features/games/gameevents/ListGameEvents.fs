@@ -18,15 +18,12 @@ type Props = { GameId: Guid }
 [<ReactComponent>]
 let ListGameEvents (props: Props) =
 
-    let (events, setEvents) =
-        React.useState<List<GameEvent> option> (None)
+    let (events, setEvents) = React.useState<List<GameEvent> option> (None)
 
 
-    let (squad, setSquad) =
-        React.useState<List<Member> option> (None)
+    let (squad, setSquad) = React.useState<List<Member> option> (None)
 
-    let (allPlayers, setAllPlayers) =
-        React.useState<List<Member> option> (None)
+    let (allPlayers, setAllPlayers) = React.useState<List<Member> option> (None)
 
 
     let fetchEvents () =
@@ -69,7 +66,7 @@ let ListGameEvents (props: Props) =
                             prop.className "gameEvents u-fade-in-on-enter"
                             prop.children (
                                 match events with
-                                | Some events -> Html.div (events |> List.map (renderEvent allPlayers))
+                                | Some events -> Html.div (events |> List.map (renderEvent None allPlayers))
                                 | None -> Icons.spinner
                             )
                         ]

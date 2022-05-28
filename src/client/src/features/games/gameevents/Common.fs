@@ -23,7 +23,7 @@ let playerLink (player: Member option) =
     |> Option.defaultValue (Html.text "Selvmål")
 
 
-let renderEvent (allPlayers: Member list) (gameEvent: GameEvent) =
+let renderEvent (children: ReactElement option) (allPlayers: Member list) (gameEvent: GameEvent) =
     let player =
         allPlayers
         |> List.tryFind (fun p -> Some p.Id = gameEvent.PlayerId)
@@ -55,5 +55,6 @@ let renderEvent (allPlayers: Member list) (gameEvent: GameEvent) =
                     assistedBy
                 ]
             ]
+            children |> Option.defaultValue (Html.text "")
         ]
     ]
