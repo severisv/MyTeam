@@ -18,6 +18,7 @@ open Giraffe
 open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Microsoft.AspNetCore.DataProtection
+open System.Globalization
 
 let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
     let env = ctx.HostingEnvironment
@@ -101,11 +102,9 @@ let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
 
 
 let configureApp (app: IApplicationBuilder) =
-    let env =
-        app.ApplicationServices.GetService<IWebHostEnvironment>()
+    let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
 
-    let dbContext =
-        app.ApplicationServices.GetService<ApplicationDbContext>()
+    let dbContext = app.ApplicationServices.GetService<ApplicationDbContext>()
 
     dbContext.Database.Migrate()
 
@@ -114,6 +113,11 @@ let configureApp (app: IApplicationBuilder) =
         .UseAuthentication()
         .UseAuthorization()
     |> ignore
+
+
+    let cultureInfo = new CultureInfo("nb-NO")
+    CultureInfo.DefaultThreadCurrentCulture <- cultureInfo
+    CultureInfo.DefaultThreadCurrentUICulture <- cultureInfo
 
     if env.EnvironmentName = "Development" then
         app.UseDeveloperExceptionPage() |> ignore
