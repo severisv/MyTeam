@@ -39,11 +39,11 @@ let getPlayerIndex formation row col =
             | (2, 1) -> Some 3
             | (2, 3) -> Some 4
             | (2, 4) -> Some 5
-            | (4, 0) -> Some 6
-            | (4, 1) -> Some 7
-            | (4, 3) -> Some 8
-            | (4, 4) -> Some 9
-            | (5, 2) -> Some 10
+            | (5, 0) -> Some 6
+            | (5, 1) -> Some 7
+            | (5, 3) -> Some 8
+            | (5, 4) -> Some 9
+            | (7, 2) -> Some 10
             | _ -> None
         | FourThreeThree ->
             match (row, col) with
@@ -53,25 +53,25 @@ let getPlayerIndex formation row col =
             | (2, 1) -> Some 3
             | (2, 3) -> Some 4
             | (3, 2) -> Some 5
-            | (4, 0) -> Some 6
-            | (4, 1) -> Some 7
-            | (4, 3) -> Some 8
-            | (4, 4) -> Some 9
-            | (5, 2) -> Some 10
+            | (5, 0) -> Some 6
+            | (5, 1) -> Some 7
+            | (5, 3) -> Some 8
+            | (5, 4) -> Some 9
+            | (7, 2) -> Some 10
             | _ -> None
         | FiveThreeTwo ->
             match (row, col) with
             | (0, 1) -> Some 0
             | (0, 3) -> Some 1
-            | (2, 1) -> Some 3
-            | (2, 3) -> Some 4
+            | (3, 1) -> Some 3
+            | (3, 3) -> Some 4
             | (3, 2) -> Some 5
-            | (3, 0) -> Some 2
-            | (3, 4) -> Some 6
-            | (4, 1) -> Some 7
-            | (4, 2) -> Some 8
-            | (4, 3) -> Some 9
-            | (5, 2) -> Some 10
+            | (4, 0) -> Some 2
+            | (4, 4) -> Some 6
+            | (5, 1) -> Some 7
+            | (5, 2) -> Some 8
+            | (5, 3) -> Some 9
+            | (7, 2) -> Some 10
             | _ -> None
     | Sjuer formation ->
         match formation with

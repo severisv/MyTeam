@@ -438,7 +438,7 @@ type GamePlan(props) =
                                     br []
                                     div
                                         [ Class "gameplan-field" ]
-                                        ([ 0..5 ]
+                                        ([ 0..7 ]
                                          |> List.map (fun row ->
                                              div
                                                  []
