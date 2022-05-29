@@ -360,7 +360,9 @@ type GamePlan(props) =
                                ((match props.Formation with
                                  | Sjuer _ -> [ ThreeTwoOne; TwoThreeOne ] |> List.map Sjuer
                                  | Ellever _ ->
-                                     [ FourFourTwo; FourThreeThree ]
+                                     [ FourFourTwo
+                                       FourThreeThree
+                                       FiveThreeTwo ]
                                      |> List.map Ellever)
                                 |> List.map (fun v -> { Label = string v; Value = v }))
                                (Some state.GamePlan.Formation)

@@ -58,6 +58,7 @@ let view (club: Club) (user: User) gameId (ctx: HttpContext) =
              | 0 -> Ellever FourThreeThree
              | 433 -> Ellever FourThreeThree
              | 442 -> Ellever FourFourTwo
+             | 532 -> Ellever FiveThreeTwo
              | 321 -> Sjuer ThreeTwoOne
              | 231 -> Sjuer TwoThreeOne
              | _ -> failwithf "Ukjent formasjon %O" formation }))
