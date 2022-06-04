@@ -12,7 +12,8 @@ open MyTeam
 
 module Email =
 
-    let send (serviceProvider: IServiceProvider) emailAddress subject message =
+    let send (serviceProvider: IServiceProvider) (emailAddress: string) subject message =
+        let emailAddress = emailAddress.Trim()
 
         task {
             let apiKey =
@@ -25,7 +26,7 @@ module Email =
             let message =
                 MailHelper.CreateSingleEmail(
                     from = EmailAddress("noreply@wamkam.no", "Wam-Kam FK"),
-                    ``to`` = EmailAddress emailAddress,
+                    ``to`` = EmailAddress(emailAddress),
                     subject = subject,
                     plainTextContent = "",
                     htmlContent = message
