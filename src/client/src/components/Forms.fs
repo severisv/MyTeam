@@ -74,13 +74,14 @@ type IsTouchedProps =
     | IsTouched of bool
     interface IHTMLProp
 
-let validationMessage2 (isValid, message) =
-    not isValid
-    &? (message
-        => fun message ->
-            span [ Class "input-validation-message" ] [
-                str message
-            ])
+let validationMessage2 =
+    function
+    | (false, Some message) ->
+        span [ Class "input-validation-message" ] [
+            str message
+        ]
+    | _ -> empty
+
 
 let (|IsInputPropsAttr|_|) (attr: IHTMLProp) =
     match attr with
@@ -116,7 +117,7 @@ let textInput (attr: IHTMLProp list) =
             attr
             |> List.tryPick (function
                 | IsIsTouchedProps (IsTouched v) -> Some v
-                | _ -> Some state.IsTouched)
+                | _ -> None)
             |> Option.defaultValue state.IsTouched
 
         let validation =
@@ -137,7 +138,9 @@ let textInput (attr: IHTMLProp list) =
         fragment [] [
             input (
                 attr
-                |> List.filter (fun p -> not <| p :? InputProps)
+                |> List.filter (fun p ->
+                    not <| p :? InputProps
+                    && not <| p :? IsTouchedProps)
                 |> mergeClasses [
                     OnBlur(fun _ -> setState (fun state props -> { state with IsTouched = true }))
                     Class
