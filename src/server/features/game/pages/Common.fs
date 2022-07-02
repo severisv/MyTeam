@@ -30,8 +30,14 @@ let gameDetails game =
                 encodedText <| string game.Type
             ]
             div [] [
-                !!(Icons.mapMarker "Sted")
-                encodedText game.Location
+                a [ _href $"""https://www.google.com/maps/search/{game.Location.Replace(" ", "+")}"""
+                    _target "_blank"
+                    _style "color:inherit;display:flex;align-items:center;" ] [
+                    !!(Icons.mapMarker "Sted")
+                    encodedText game.Location
+                ]
+
+
             ]
         ]
 

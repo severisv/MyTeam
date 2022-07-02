@@ -61,8 +61,7 @@ let internal updateAttendance clubId (user: User) eventId (ctx: HttpContext) upd
             |> function
                 | Some ea -> ea
                 | None ->
-                    let ea =
-                        MyTeam.Models.Domain.EventAttendance(MemberId = user.Id, EventId = eventId)
+                    let ea = MyTeam.Models.Domain.EventAttendance(MemberId = user.Id, EventId = eventId)
 
                     db.EventAttendances.Add ea |> ignore
                     ea
@@ -74,10 +73,9 @@ let internal updateAttendance clubId (user: User) eventId (ctx: HttpContext) upd
 
 let signup clubId (user: User) eventId (ctx: HttpContext) (model: Signup) =
     updateAttendance clubId user eventId ctx (fun ea -> ea.IsAttending <- Nullable model.IsAttending)
-    |> HttpResult.map
-        (fun result ->
-            Notifications.clearCacheForUser ctx clubId user
-            result)
+    |> HttpResult.map (fun result ->
+        Notifications.clearCacheForUser ctx clubId user
+        result)
 
 let signupMessage clubId (user: User) eventId (ctx: HttpContext) (model: StringPayload) =
     updateAttendance clubId user eventId ctx (fun ea -> ea.SignupMessage <- model.Value)
@@ -107,8 +105,7 @@ type DbM =
       IsSelected: Nullable<bool>
       DidAttend: Nullable<bool> }
 
-let treningskamp =
-    Nullable(int Models.Enums.GameType.Treningskamp)
+let treningskamp = Nullable(int Models.Enums.GameType.Treningskamp)
 
 
 let listEvents (club: Club) (user: User) period (db: Database) =
@@ -209,86 +206,81 @@ let listEvents (club: Club) (user: User) period (db: Database) =
         |> Seq.toList
 
     events
-    |> List.map
-        (fun (e, attendees) ->
-            let eventType = e.Type |> Events.eventTypeFromInt
+    |> List.map (fun (e, attendees) ->
+        let eventType = e.Type |> Events.eventTypeFromInt
 
-            let attendees =
-                attendees
-                |> List.filter (fun (_, a) -> a.Id.HasValue)
-                |> List.sortBy (fun (_, a) -> a.FirstName)
+        let attendees =
+            attendees
+            |> List.filter (fun (_, a) -> a.Id.HasValue)
+            |> List.sortBy (fun (_, a) -> a.FirstName)
 
-            { Id = e.Id
-              Description = !!e.Description
-              DateTime = e.DateTime
-              TimeString = Shared.Date.formatTime e.DateTime
-              Location = e.Location
-              Type = eventType
-              TeamIds =
-                  if e.TeamId.HasValue then
-                      [ e.TeamId.Value ]
-                  else
-                      teamIds
-                      |> List.filter (fun (eventId, _) -> eventId = e.Id)
-                      |> List.map (fun (_, teamId) -> teamId)
-              Signups =
-                  attendees
-                  |> List.map
-                      (fun (_, a) ->
-                          { FirstName = a.FirstName
-                            LastName = a.LastName
-                            UrlName = a.UrlName
-                            Id = a.Id.Value
-                            Message = !!a.Message
-                            IsAttending = a.IsAttending |> fromNullable
-                            DidAttend =
-                                if a.DidAttend.HasValue then
-                                    a.DidAttend.Value
-                                else
-                                    false })
-              Details =
-                  (match eventType with
-                   | Kamp ->
-                       let teamName =
-                           club.Teams
-                           |> List.tryFind (fun t -> Nullable t.Id = e.TeamId)
-                           |> Option.map (fun t -> t.ShortName)
-                           |> Option.defaultValue ""
+        { Id = e.Id
+          Description = !!e.Description
+          DateTime = e.DateTime
+          Location = e.Location
+          Type = eventType
+          TeamIds =
+            if e.TeamId.HasValue then
+                [ e.TeamId.Value ]
+            else
+                teamIds
+                |> List.filter (fun (eventId, _) -> eventId = e.Id)
+                |> List.map (fun (_, teamId) -> teamId)
+          Signups =
+            attendees
+            |> List.map (fun (_, a) ->
+                { FirstName = a.FirstName
+                  LastName = a.LastName
+                  UrlName = a.UrlName
+                  Id = a.Id.Value
+                  Message = !!a.Message
+                  IsAttending = a.IsAttending |> fromNullable
+                  DidAttend =
+                    if a.DidAttend.HasValue then
+                        a.DidAttend.Value
+                    else
+                        false })
+          Details =
+            (match eventType with
+             | Kamp ->
+                 let teamName =
+                     club.Teams
+                     |> List.tryFind (fun t -> Nullable t.Id = e.TeamId)
+                     |> Option.map (fun t -> t.ShortName)
+                     |> Option.defaultValue ""
 
-                       Game
-                           { Team = teamName
-                             Opponent = e.Opponent
-                             Type = Events.gameTypeFromInt e.GameType.Value
-                             SquadIsPublished = e.SquadIsPublished
-                             GamePlanIsPublished =
-                                 if e.GamePlanIsPublished.HasValue then
-                                     e.GamePlanIsPublished.Value
+                 Game
+                     { Team = teamName
+                       Opponent = e.Opponent
+                       Type = Events.gameTypeFromInt e.GameType.Value
+                       SquadIsPublished = e.SquadIsPublished
+                       GamePlanIsPublished =
+                         if e.GamePlanIsPublished.HasValue then
+                             e.GamePlanIsPublished.Value
+                         else
+                             false
+                       Squad =
+                         attendees
+                         |> List.filter (fun (_, a) -> a.IsSelected.Value)
+                         |> List.map (fun (_, a) ->
+                             { FirstName = a.FirstName
+                               LastName = a.LastName
+                               UrlName = a.UrlName
+                               Id = a.Id.Value
+                               Message = !!a.Message
+                               IsAttending = a.IsAttending |> fromNullable
+                               DidAttend =
+                                 if a.DidAttend.HasValue then
+                                     a.DidAttend.Value
                                  else
-                                     false
-                             Squad =
-                                 attendees
-                                 |> List.filter (fun (_, a) -> a.IsSelected.Value)
-                                 |> List.map
-                                     (fun (_, a) ->
-                                         { FirstName = a.FirstName
-                                           LastName = a.LastName
-                                           UrlName = a.UrlName
-                                           Id = a.Id.Value
-                                           Message = !!a.Message
-                                           IsAttending = a.IsAttending |> fromNullable
-                                           DidAttend =
-                                               if a.DidAttend.HasValue then
-                                                   a.DidAttend.Value
-                                               else
-                                                   false }) }
-                   | _ -> Training) })
-    |> List.filter
-        (fun e ->
-            user.PlaysForTeam e.TeamIds
-            || match e.Details with
-               | _ when user.IsInRole [ Admin; Trener ] -> true
-               | Game game -> game.SquadIsPublished
-               | Training -> false)
+                                     false }) }
+             | _ -> Training) })
+    |> List.filter (fun e ->
+        user.PlaysForTeam e.TeamIds
+        || match e.Details with
+           | _ when user.IsInRole [ Admin; Trener ] -> true
+           | Game game -> game.SquadIsPublished
+           | Training -> false)
     |> fun events ->
         match period with
         | Upcoming _ -> events |> List.sortBy (fun e -> e.DateTime)

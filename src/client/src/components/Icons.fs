@@ -45,7 +45,7 @@ let gameType (gameType: GameType) =
     let className =
         gameType
         |> function
-            | GameType.Treningskamp -> "icon-handshake"
+            | GameType.Treningskamp -> "fa fa-handshake-o"
             | GameType.Seriekamp -> fa "trophy"
             | GameType.Norgesmesterskapet -> "flaticon-football42"
             | GameType.Kretsmesterskapet -> "flaticon-football33"

@@ -15,47 +15,44 @@
         font-size: 4em;
         align-self: center;
         a i {
-            color: #222;
+            color: @black-faded;
         }
 
-
-        @media (max-width: 600px) {
-            font-size: 2em;
-        }
     }
+}
+
+.event-col-1 {
+    width: 14rem;
+    padding-right: 4rem;
+    .r-under-xs({display: none;});
+}
+
+.event-col-2 {
+    width: 20rem;
 }
 
 
 .event-signupButtons {
-    margin-left: 16%;
-  
+ 
     .btn { margin-right: 0.5em;}
 }
 
 .event-signup-listplayers {
-    margin-left: 16%;
+
+    margin-left: 14rem;
+    .r-under-xs({margin-left: 0;});
+
     margin-top: 1.5em;    
     margin-bottom: 2em;
-     .r-under-xs({
-        margin-left: 2em;
-    });
-      .r-under-xxs({
-        margin-left:1em;
-    });
 
-  a.collapse-link {
+    a.collapse-link {
     margin-bottom: 0;
     text-align: left;
     font-size: 1.2em;
     font-family: @fontRegular;
     display: flex;
     
-    &.collapsed:before {
-      left: -1.4em;
-    } 
-    &:before {
-      left: -1.5em;
-    }
+
   }
 
   li a.mt-popover {
@@ -67,25 +64,6 @@
 
 }
 
-
-.event-signup--kamp .event-signup-listplayers {
-    margin-right: 16%;
-      .r-under-xs({
-        margin-left: 10%;
-    });
-     .r-under-xxs({
-        margin-left: 10%;
-        margin-right: 0;
-    });
-
-}
-
-
-
-.show-event-container h3 {
-    margin-bottom: 0.5em;
-    text-align: left;
-}
 
 .attendee-links {
   
@@ -130,60 +108,11 @@
 }
 
 
-.event-col-3 {
-   padding-right: 6.5em;
+.show-event-container{
+    display:flex;
+    .r-under-xs({flex-direction: column;});
 }
 
-.r-above(@md-min, {
-
-    .show-event-container{
-        display:flex;
-    }
-    .event-col-1 {
-    flex: 1;
-}
-
-.event-col-2 {
-    flex: 2;
-}
-
-.event-col-3 {
-    flex: 3;
-}
-
-});
-
-
- .r-under(@sm-max,{
-     .event-col-1 {
-         width: 11rem;
-         float:left;
-     }
-
-     .event-col-2 {
-                  min-width: 12rem;
-                  float:left;
-
-     }
-     .event-col-3 {
-                  float:left;
-                  display:block;
-                  margin-left: 11rem;
-
-     }
- });
-   .r-under(@xxs-max,{
-     .event-col-1 {
-         width: 4rem;
-     }
-        .event-col-3 {
-                  float:left;
-                  display:block;
-                  margin-left: 4rem;
-
-     }
-
- });
 
 .event-opponentDivider {
       font-size: 0.8em;
@@ -221,7 +150,8 @@
 }
 
 .event-signupButtons {
-     padding-top: 20px;
+    display: flex;
+     margin-top: 20px;
     .loader, .label {
         display: none;
         vertical-align: 1.8em;

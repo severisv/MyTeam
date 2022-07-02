@@ -7,16 +7,17 @@
     font-family: KelsonBold;
     display:block;
     margin-bottom: 0.5em;
-    &:before {
-        content: "\f078";
+    &:after {
+        font-size: 0.8em;
+        content: "\f077";
         font-family: FontAwesome;
         position: absolute;
-        left: 0;
+        right: 0;
 
     }
 
-    &.collapsed:before {
-        content: "\f054";
+    &.collapsed:after {
+        content: "\f078";
     }
 
     &:hover {

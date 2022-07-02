@@ -157,8 +157,7 @@ let element props children =
                                      signups
                                      |> List.filter (fun ea -> ea.IsAttending = (Some false))
 
-                                 let didAttend =
-                                     signups |> List.filter (fun ea -> ea.DidAttend)
+                                 let didAttend = signups |> List.filter (fun ea -> ea.DidAttend)
 
                                  let userAttendance =
                                      signups
@@ -214,7 +213,7 @@ let element props children =
                                                  | (Game game, _) when user.IsInRole [ Trener ] ->
                                                      [ a [ Class "edit-link pull-right"
                                                            Href <| sprintf "/kamper/%O/bytteplan" event.Id ] [
-                                                         Icons.gamePlan
+                                                           Icons.gamePlan
                                                        ]
                                                        a [ Class "edit-link pull-right"
                                                            Href <| sprintf "/kamper/%O/laguttak" event.Id ] [
@@ -238,14 +237,32 @@ let element props children =
                                          div [ Id <| sprintf "event-%O" event.Id
                                                Class "hashlink-anchor" ] []
                                          div [ Class "show-event-container" ] [
+                                             h4
+                                                 [ Style [
+                                                       TextAlign TextAlignOptions.Left
+                                                   ]
+                                                   Class "visible-xs" ]
+                                                 (match event.Details with
+                                                  | Game game ->
+                                                      [ Icons.gameType game.Type
+                                                        whitespace
+                                                        str <| string game.Type ]
+                                                  | _ ->
+                                                      [ Icons.eventIcon event.Type IconSize.Normal
+                                                        whitespace
+                                                        str <| string event.Type ])
+
                                              div [ Class "event-col-1 event-icon" ] [
                                                  div [] [
                                                      a [ Href <| sprintf "#event-%O" event.Id ] [
-                                                         Icons.eventIcon event.Type IconSize.Normal
+                                                         match event.Details with
+                                                         | Game game -> Icons.gameType game.Type
+                                                         | _ -> Icons.eventIcon event.Type IconSize.Normal
                                                      ]
                                                  ]
                                              ]
                                              div [ Class "event-col-2" ] [
+
                                                  p [] [
                                                      Icons.calendar ""
                                                      whitespace
@@ -254,30 +271,31 @@ let element props children =
                                                  p [] [
                                                      Icons.time ""
                                                      whitespace
-                                                     //str <| Date.formatTime event.DateTime
-                                                     str event.TimeString
+                                                     str <| Date.formatTime event.DateTime
                                                  ]
                                                  p [] [
-                                                     Icons.mapMarker ""
-                                                     whitespace
-                                                     str event.Location
+                                                     a [ Href $"""https://www.google.com/maps/search/{event.Location.Replace(" ", "+")}"""
+                                                         Target "_blank"
+                                                         Style [ Color "inherit" ] ] [
+                                                         Icons.mapMarker ""
+                                                         whitespace
+                                                         str event.Location
+                                                     ]
                                                  ]
                                              ]
                                              div [ Class "event-col-3 " ] [
                                                  (match event.Details with
                                                   | Game game ->
                                                       fr [] [
-                                                          h3 [ Class "no-margin" ] [
+                                                          h3 [ Style [
+                                                                   MarginBottom "10px"
+                                                                   TextAlign TextAlignOptions.Left
+                                                               ] ] [
                                                               str <| sprintf "%s " game.Team
                                                               span [ Class "event-opponentDivider" ] [
                                                                   str "vs"
                                                               ]
                                                               str <| sprintf " %s" game.Opponent
-                                                          ]
-                                                          p [] [
-                                                              Icons.gameType game.Type
-                                                              whitespace
-                                                              str <| string game.Type
                                                           ]
                                                           str event.Description
                                                       ]
@@ -288,89 +306,88 @@ let element props children =
                                      div
                                          [ Class
                                            <| sprintf "event-signup--%s" (string event.Type |> Strings.toLower) ]
-                                         ([ div [ Class "clearfix" ] [] ]
-                                          @ match (event.Details, props.Period) with
-                                            | (_, Upcoming _) when not <| Event.signupHasOpened event -> []
-                                            | (Game game, Upcoming _) when not game.SquadIsPublished ->
-                                                [ user.PlaysForTeam event.TeamIds
-                                                  &? SignupButtons.element
-                                                      { Event = event
-                                                        UserAttendance = userAttendance
-                                                        HandleSignup = handleSignup } ]
-                                            | (Game game, _) ->
-                                                [ div [ Class "event-signup-listplayers" ] [
-                                                      Collapsible.collapsible
-                                                          (props.Period
-                                                           |> function
-                                                               | Upcoming _ -> Open
-                                                               | Previous _ -> Collapsed)
-                                                          [ str $"Tropp ({game.Squad.Length})" ]
-                                                          [ hr [ Class "sm" ]
-                                                            div [ Class "event-attendees" ] [
-                                                                ul
-                                                                    [ Class " flex-2" ]
-                                                                    (game.Squad
-                                                                     |> List.map (fun ea ->
-                                                                         li [] [
-                                                                             a [ Class
-                                                                                 <| sprintf
-                                                                                     "attendee underline %s"
-                                                                                     (if props.User.Id = ea.Id then
-                                                                                          "userPlayer"
-                                                                                      else
-                                                                                          "")
-                                                                                 Href <| sprintf "/spillere/vis/%s" ea.UrlName ] [
-                                                                                 Icons.player ""
-                                                                                 whitespace
-                                                                                 str ea.FirstName
-                                                                                 whitespace
-                                                                                 str ea.LastName
-                                                                             ]
-                                                                             (user.IsInRole [ Role.Trener ]
-                                                                              && Strings.hasValue ea.Message)
-                                                                             &? tooltip ea.Message [] [ Icons.comment ]
-                                                                         ]))
-                                                            ] ]
-                                                  ] ]
+                                         (match (event.Details, props.Period) with
+                                          | (_, Upcoming _) when not <| Event.signupHasOpened event -> []
+                                          | (Game game, Upcoming _) when not game.SquadIsPublished ->
+                                              [ user.PlaysForTeam event.TeamIds
+                                                &? SignupButtons.element
+                                                    { Event = event
+                                                      UserAttendance = userAttendance
+                                                      HandleSignup = handleSignup } ]
+                                          | (Game game, _) ->
+                                              [ div [ Class "event-signup-listplayers" ] [
+                                                    Collapsible.collapsible
+                                                        (props.Period
+                                                         |> function
+                                                             | Upcoming _ -> Open
+                                                             | Previous _ -> Collapsed)
+                                                        [ str $"Tropp ({game.Squad.Length})" ]
+                                                        [ hr [ Class "sm" ]
+                                                          div [ Class "event-attendees" ] [
+                                                              ul
+                                                                  [ Class " flex-2" ]
+                                                                  (game.Squad
+                                                                   |> List.map (fun ea ->
+                                                                       li [] [
+                                                                           a [ Class
+                                                                               <| sprintf
+                                                                                   "attendee underline %s"
+                                                                                   (if props.User.Id = ea.Id then
+                                                                                        "userPlayer"
+                                                                                    else
+                                                                                        "")
+                                                                               Href <| sprintf "/spillere/vis/%s" ea.UrlName ] [
+                                                                               Icons.player ""
+                                                                               whitespace
+                                                                               str ea.FirstName
+                                                                               whitespace
+                                                                               str ea.LastName
+                                                                           ]
+                                                                           (user.IsInRole [ Role.Trener ]
+                                                                            && Strings.hasValue ea.Message)
+                                                                           &? tooltip ea.Message [] [ Icons.comment ]
+                                                                       ]))
+                                                          ] ]
+                                                ] ]
 
-                                            | (Training, Upcoming _) ->
-                                                [ SignupButtons.element
+                                          | (Training, Upcoming _) ->
+                                              [ SignupButtons.element
                                                     { Event = event
                                                       UserAttendance = userAttendance
                                                       HandleSignup = handleSignup }
-                                                  div [ Class "event-signup-listplayers" ] [
-                                                      Collapsible.collapsible
-                                                          Collapsed
-                                                          [ span [ Class "flex-2" ] [
+                                                div [ Class "event-signup-listplayers" ] [
+                                                    Collapsible.collapsible
+                                                        Collapsed
+                                                        [ span [ Class "flex-2" ] [
                                                               str <| sprintf "Kommer (%i)" attending.Length
-                                                            ]
-                                                            span [ Class "flex-2" ] [
-                                                                str <| sprintf "Kan ikke (%i)" notAttending.Length
-                                                            ]
-                                                            span [ Class "flex-1 pull-right hidden-xs" ] [
-                                                                whitespace
-                                                            ] ]
-                                                          [ hr [ Class "sm" ]
-                                                            div [ Class "flex event-attendees " ] [
-                                                                ul [ Class " flex-2" ] (attending |> List.map (attendeeLink user))
-                                                                ul [ Class " flex-2" ] (notAttending |> List.map (attendeeLink user))
-                                                                div [ Class "flex-1 hidden-xs" ] [
-                                                                    whitespace
-                                                                ]
-                                                            ] ]
-                                                  ] ]
-                                            | (Training, Previous _) ->
-                                                [ div [ Class "event-signup-listplayers" ] [
-                                                      Collapsible.collapsible
-                                                          Collapsed
-                                                          [ span [ Class "flex-2" ] [
-                                                                str <| sprintf "Oppmøte (%i)" didAttend.Length
-                                                            ] ]
-                                                          [ div [ Class "event-attendees " ] [
-                                                                hr [ Class "sm" ]
-                                                                ul [ Class " flex-2" ] (didAttend |> List.map (attendeeLink user))
-                                                            ] ]
-                                                  ] ])
+                                                          ]
+                                                          span [ Class "flex-2" ] [
+                                                              str <| sprintf "Kan ikke (%i)" notAttending.Length
+                                                          ]
+                                                          span [ Class "flex-1 pull-right hidden-xs" ] [
+                                                              whitespace
+                                                          ] ]
+                                                        [ hr [ Class "sm" ]
+                                                          div [ Class "flex event-attendees " ] [
+                                                              ul [ Class " flex-2" ] (attending |> List.map (attendeeLink user))
+                                                              ul [ Class " flex-2" ] (notAttending |> List.map (attendeeLink user))
+                                                              div [ Class "flex-1 hidden-xs" ] [
+                                                                  whitespace
+                                                              ]
+                                                          ] ]
+                                                ] ]
+                                          | (Training, Previous _) ->
+                                              [ div [ Class "event-signup-listplayers" ] [
+                                                    Collapsible.collapsible
+                                                        Collapsed
+                                                        [ span [ Class "flex-2" ] [
+                                                              str <| sprintf "Oppmøte (%i)" didAttend.Length
+                                                          ] ]
+                                                        [ div [ Class "event-attendees " ] [
+                                                              hr [ Class "sm" ]
+                                                              ul [ Class " flex-2" ] (didAttend |> List.map (attendeeLink user))
+                                                          ] ]
+                                                ] ])
                                  ]))
 
                         props.Period = Upcoming NearFuture
