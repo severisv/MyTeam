@@ -33,9 +33,9 @@ let internal view (period: Period) (club: Club) (user: User) (ctx: HttpContext) 
 
     Events.Api.listEvents club user period ctx.Database
     |> HttpResult.map (fun events ->
-        [ Client.isomorphicViewOld
+        [ Client.isomorphicView
               containerId
-              element
+              EventsList
               { Events = events
                 Years = years
                 User = user
