@@ -47,7 +47,6 @@ let renderEvent (children: ReactElement option) (allPlayers: Member list) (gameE
         prop.className "gameEvent"
         prop.children [
             Html.span [
-                prop.className "no-wrap"
                 prop.children [
                     Icons.gameEvent gameEvent.Type
                     Html.text " "
