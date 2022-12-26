@@ -1,9 +1,16 @@
 name: Build
-on: [push]
+on: 
+  push:
+     branches:
+      - master
 
-steps:
-- uses: actions/checkout@v3
-- uses: actions/setup-dotnet@v3
-  with:
-    dotnet-version: '7.x.x'
-- run: ./build.sh
+jobs:
+  build-frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.x.x'
+    - run: ./build.sh
