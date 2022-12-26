@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "fake-cli": {
-      "version": "5.20.4",
+      "version": "5.23.1",
       "commands": [
         "fake"
       ]
@@ -15,13 +15,13 @@
       ]
     },
     "fable": {
-      "version": "3.6.0",
+      "version": "3.7.20",
       "commands": [
         "fable"
       ]
     },
     "femto": {
-      "version": "0.12.0",
+      "version": "0.16.0",
       "commands": [
         "femto"
       ]
