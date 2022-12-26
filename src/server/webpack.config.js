@@ -1,7 +1,7 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -30,9 +30,6 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {    
-              hmr: process.env.NODE_ENV === 'development'
-            },
           },
           'css-loader',
           { loader: 'less-loader', options: { sourceMap: true }}
@@ -40,30 +37,18 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              hash: 'sha512',
-              digest: 'hex',
-              name: 'images/[name].[ext]',
-            },
-          },
-        ],
+        type: 'asset/resource',
+        generator: {
+            filename: 'images/[name].[ext]',
+        }      
       },
       {
         test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              hash: 'sha512',
-              digest: 'hex',
-              name: 'fonts/[name].[ext]'
-            },
-          },
-        ],
-      },
+        type: 'asset/resource',
+        generator: {
+            filename: 'fonts/[name].[ext]'
+        }      
+      }
     ]
   },
   plugins: [
@@ -72,6 +57,6 @@ module.exports = {
     })
   ],
   optimization: {
-    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    minimizer: [new TerserJSPlugin({}),new CssMinimizerPlugin()],
   }
 }
