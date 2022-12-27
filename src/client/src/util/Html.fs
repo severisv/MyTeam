@@ -2,6 +2,7 @@ module Shared.Util.Html
 
 open Shared
 open Fable.React.Props
+open Fable.React
 
 let mergeClasses (a : IHTMLProp list) (b : IHTMLProp list) =
     let getClass (attr : IHTMLProp list) =
