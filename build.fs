@@ -40,6 +40,8 @@ let main argv =
         lazy
            (let credentials =
                 Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
+            
+            if String.IsNullOrWhiteSpace credentials then failwithf "env variable GCLOUD_CREDENTIALS not set"
 
             let bytes = Convert.FromBase64String(credentials)
             let fileName = "gcloud.json"
