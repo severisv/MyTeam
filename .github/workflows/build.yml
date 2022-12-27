@@ -5,8 +5,8 @@ on:
       - master
 
 jobs:
-  build-frontend:
-    name: Build frontend
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     env:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
