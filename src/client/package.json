@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "postinstall": "dotnet tool restore",
-    "build": "dotnet fable src && webpack -p --config ./webpack.prod.js",
+    "build": "dotnet fable src && webpack --mode production --config ./webpack.prod.js",
     "watch": "dotnet fable watch src --run webpack -w --config ./webpack.dev.js"
   },
   "devDependencies": {
