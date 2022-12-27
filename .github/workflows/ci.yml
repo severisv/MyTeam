@@ -1,18 +1,17 @@
-name: Build
+name: CI
 on: 
   push:
      branches:
-      - master
+      - '*'
+      - '!master'
 
 jobs:
-  deploy:
-    name: Deploy
+  build-frontend:
+    name: Build
     runs-on: ubuntu-latest
-    env:
-      GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.x.x'
-    - run: ./build.sh
+    - run: ./build.sh --target Publish
