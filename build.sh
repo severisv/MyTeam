@@ -3,4 +3,4 @@
 node -v
 gcloud -v
 dotnet --version
-dotnet run
+dotnet run $1 $2
