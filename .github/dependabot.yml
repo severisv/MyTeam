@@ -4,7 +4,13 @@ updates:
     directory: "/src/server"
     schedule:
       interval: "daily"
+  
   - package-ecosystem: "dotnet"
     directory: "/"
     schedule:
       interval: "daily"
+  
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
