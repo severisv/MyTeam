@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^9.1.0",
+    "babel-loader": "^9.1.2",
     "bootstrap": "^3.4.1",
     "copyfiles": "^2.4.1",
     "css-loader": "^6.7.3",
