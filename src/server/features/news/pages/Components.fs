@@ -106,13 +106,13 @@ let tinyMceScripts =
                 height: '480',
                 selector: '%s',
                 plugins: [
-                    'advlist autolink link image lists charmap hr anchor pagebreak',
-                    'wordcount visualblocks visualchars insertdatetime media nonbreaking',
-                    'save table contextmenu directionality template paste code codesample'
+                    'image',
+                    'link',
+                    'media',
+                    'code',
+                    'lists'
                 ],
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | ',
-                extended_valid_elements: 'script[language|type|src|async]',
-                convert_urls: false
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | ',
             });"
               elementId
       ] ]
