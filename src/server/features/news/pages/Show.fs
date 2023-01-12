@@ -12,7 +12,7 @@ open Server.Common.News
 open Server
 open Giraffe
 open System.Linq
-
+open MyTeam.Images
 
 let redirectFromOldUrl club user =
     fun next (ctx: HttpContext) ->
@@ -45,19 +45,19 @@ let view (club: Club) (user: User option) name (ctx: HttpContext) =
         | None -> NotFound
         | Some article ->
             [ mtMain [] [
-                block [] [
-                    Common.News.Components.showArticle
-                        ctx
-                        user
-                        article
-                        (article.GameId
-                         |> Option.map (fun gameId ->
-                             a [ _href <| sprintf "/kamper/%O" gameId
-                                 _class "pull-right u-font-normal" ] [
-                                 i [ _class "fa fa-info-circle" ] []
-                                 encodedText " Kampdetaljer"
-                             ]))
-                ]
+                  block [] [
+                      Common.News.Components.showArticle
+                          ctx
+                          user
+                          article
+                          (article.GameId
+                           |> Option.map (fun gameId ->
+                               a [ _href <| sprintf "/kamper/%O" gameId
+                                   _class "pull-right u-font-normal" ] [
+                                   i [ _class "fa fa-info-circle" ] []
+                                   encodedText " Kampdetaljer"
+                               ]))
+                  ]
               ]
               sidebar [] [
                   Components.articleNav db club
@@ -69,6 +69,15 @@ let view (club: Club) (user: User option) name (ctx: HttpContext) =
                 (fun o ->
                     { o with
                         MetaTitle = article.Details.Headline
+                        MetaImage =
+                            Images.getArticle
+                                ctx
+                                (fun o ->
+                                    { o with
+                                        Format = Some Jpg
+                                        Quality = 85
+                                        Width = Some 1280 })
+                                article.Details.Image
                         Title = "Nyheter"
                         Scripts = [ Components.twitterScript ] })
                 ctx
