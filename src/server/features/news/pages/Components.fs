@@ -13,27 +13,29 @@ let articleUrl (article: Article) = sprintf "/nyheter/vis/%O" article.Name
 
 let adminMenu (user: User option) =
     user
-    |> Option.bind
-        (fun user ->
-            if user.IsInRole [ Role.Admin
-                               Role.Skribent
-                               Role.Trener ] then
-                Some
-                <| block [] [
-                    ul [ _class "nav nav-list" ] [
-                        li [ _class "nav-header" ] [
-                            encodedText "Admin"
-                        ]
-                        li [] [
-                            a [ _href "/nyheter/ny" ] [
-                                i [ _class "fa fa-plus" ] []
-                                encodedText " Skriv ny artikkel"
-                            ]
+    |> Option.bind (fun user ->
+        if
+            user.IsInRole [
+                Role.Admin
+                Role.Skribent
+                Role.Trener
+            ] then
+            Some
+            <| block [] [
+                ul [ _class "nav nav-list" ] [
+                    li [ _class "nav-header" ] [
+                        encodedText "Admin"
+                    ]
+                    li [] [
+                        a [ _href "/nyheter/ny" ] [
+                            i [ _class "fa fa-plus" ] []
+                            encodedText " Skriv ny artikkel"
                         ]
                     ]
-                   ]
-            else
-                None)
+                ]
+               ]
+        else
+            None)
     |> Option.defaultValue empty
 
 let articleNav db (club: Club) =
@@ -45,27 +47,21 @@ let articleNav db (club: Club) =
         div
             [ _class "articleNav " ]
             (articles
-             |> List.groupBy
-                 (fun a ->
-                     sprintf
-                         "%s %i"
-                         (a.Published.ToString("MMMM", System.Globalization.CultureInfo.CurrentCulture))
-                         a.Published.Year)
-             |> List.map
-                 (fun (key, values) ->
-                     ul
-                         [ _class "nav nav-list" ]
-                         ([ li [ _class "nav-header" ] [
-                                encodedText <| string key
-                            ] ]
-                          @ (values
-                             |> List.map
-                                 (fun article ->
-                                     li [] [
-                                         a [ _href <| articleUrl article ] [
-                                             encodedText <| truncate 22 article.Headline
-                                         ]
-                                     ])))))
+             |> List.groupBy (fun a ->
+                 sprintf "%s %i" (a.Published.ToString("MMMM", System.Globalization.CultureInfo.CurrentCulture)) a.Published.Year)
+             |> List.map (fun (key, values) ->
+                 ul
+                     [ _class "nav nav-list" ]
+                     ([ li [ _class "nav-header" ] [
+                            encodedText <| string key
+                        ] ]
+                      @ (values
+                         |> List.map (fun article ->
+                             li [] [
+                                 a [ _href <| articleUrl article ] [
+                                     encodedText <| truncate 22 article.Headline
+                                 ]
+                             ])))))
     ]
 
 
@@ -109,7 +105,6 @@ let tinyMceScripts =
               "tinymce.init({
                 height: '480',
                 selector: '%s',
-                theme: 'modern',
                 plugins: [
                     'advlist autolink link image lists charmap hr anchor pagebreak',
                     'wordcount visualblocks visualchars insertdatetime media nonbreaking',
