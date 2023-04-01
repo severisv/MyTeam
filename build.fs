@@ -1,7 +1,6 @@
 open Fake.Core
-open Fake.Core.Globbing.Operators
+open Fake.IO.Globbing.Operators
 open Fake.Core.TargetOperators
-open Fake.DotNet
 open Fake.IO
 open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
@@ -27,39 +26,38 @@ let main argv =
     let gcpRegion =
         lazy
             (Environment.GetEnvironmentVariable "GCLOUD_REGION"
-            |> function
-                | s when not <| String.isNullOrWhiteSpace (s) -> s
-                | _ -> "europe-west1")
+             |> function
+                 | s when not <| String.isNullOrWhiteSpace (s) -> s
+                 | _ -> "europe-west1")
 
     let dockerRepository = $"eu.gcr.io/{gcpProjectName}/server"
 
-    let gcloudUsername =
-        "appveyor@breddefotball.iam.gserviceaccount.com"
+    let gcloudUsername = "appveyor@breddefotball.iam.gserviceaccount.com"
 
     let gcloudKeyFilename =
         lazy
-           (let credentials =
-                Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
-            
-            if String.IsNullOrWhiteSpace credentials then failwithf "env variable GCLOUD_CREDENTIALS not set"
+            (let credentials = Environment.GetEnvironmentVariable "GCLOUD_CREDENTIALS"
 
-            let bytes = Convert.FromBase64String(credentials)
-            let fileName = "gcloud.json"
-            File.writeBytes fileName <| bytes
-            fileName)
+             if String.IsNullOrWhiteSpace credentials then
+                 failwithf "env variable GCLOUD_CREDENTIALS not set"
+
+             let bytes = Convert.FromBase64String(credentials)
+             let fileName = "gcloud.json"
+             File.writeBytes fileName <| bytes
+             fileName)
 
     let commitSha =
         lazy
-           (let result =
+            (let result =
                 [ "rev-parse"; "HEAD" ]
                 |> CreateProcess.fromRawCommand "git"
                 |> CreateProcess.redirectOutput
                 |> Proc.run
 
-            if result.ExitCode <> 0 then
-                failwith "Failed getting git commit SHA"
+             if result.ExitCode <> 0 then
+                 failwith "Failed getting git commit SHA"
 
-            result.Result.Output.Trim())
+             result.Result.Output.Trim())
 
 
 
@@ -82,25 +80,23 @@ let main argv =
 
     Target.create "Clean"
     <| fun _ ->
-        Shell.cleanDirs [   publishDirectory
-                            artifactsDirectory ]
+        Shell.cleanDirs [
+            publishDirectory
+            artifactsDirectory
+        ]
 
-    let npmOptions =
-        (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir })
+    let npmOptions = (fun (p: Npm.NpmParams) -> { p with WorkingDirectory = webDir })
 
     Target.create "Restore-frontend"
     <| fun _ ->
         Npm.install npmOptions
-        DotNet.restore id (clientDir + "/src")
+        "dotnet" -- [ "restore"; (clientDir + "/src") ]
         Npm.install (fun p -> { p with WorkingDirectory = clientDir })
 
 
     Target.create "Copy-client-libs"
     <| fun _ ->
-        Shell.copyDir
-            (sprintf "%s/wwwroot/compiled/lib/tinymce" webDir)
-            (sprintf "%s/node_modules/tinymce" webDir)
-            (fun _ -> true)
+        Shell.copyDir (sprintf "%s/wwwroot/compiled/lib/tinymce" webDir) (sprintf "%s/node_modules/tinymce" webDir) (fun _ -> true)
 
         Npm.run "copy-libs" npmOptions
 
@@ -111,27 +107,35 @@ let main argv =
 
 
     Target.create "Restore-backend"
-    <| fun _ -> DotNet.restore id webDir
+    <| fun _ -> "dotnet" -- [ "restore"; webDir ]
 
     Target.create "Migrate-database"
     <| fun _ ->
-        DotNet.exec (fun o -> { o with WorkingDirectory = databaseDirectory }) "ef database update" ""
+        "dotnet"
+        -- [ "ef"
+             "database"
+             "update"
+             databaseDirectory ]
         |> ignore
 
 
     Target.create "Build-backend"
-    <| fun _ -> DotNet.build id webDir
+    <| fun _ -> "dotnet" -- [ "build"; webDir ]
 
 
     Target.create "Publish"
-    <| fun _ -> DotNet.publish (fun o -> { o with OutputPath = Some publishDirectory }) webDir
+    <| fun _ ->
+        "dotnet"
+        -- [ "publish"
+             "-o"
+             publishDirectory
+             webDir ]
 
     Target.create "Write-Asset-Hashes"
     <| fun _ ->
 
         let calculateFileHash path =
-            use hashImp =
-                System.Security.Cryptography.HashAlgorithm.Create("MD5")
+            use hashImp = System.Security.Cryptography.HashAlgorithm.Create("MD5")
 
             use stream = System.IO.File.OpenRead path
             let hash = hashImp.ComputeHash stream
@@ -149,10 +153,10 @@ let main argv =
                 System.IO.File.WriteAllText(appsettings, text.Replace(configValue "", configValue hash)))
 
 
-        [   ("MainCss", "site.bundle.css")
-            ("LibJs", "lib.bundle.js")
-            ("FableJs", "main.js")
-            ("MainJs", "app.js") ]
+        [ ("MainCss", "site.bundle.css")
+          ("LibJs", "lib.bundle.js")
+          ("FableJs", "main.js")
+          ("MainJs", "app.js") ]
         |> List.iter (fun (scriptName, fileName) ->
             !!(sprintf "%s/**/%s" publishDirectory fileName)
             |> Seq.iter (fun path ->
@@ -166,10 +170,10 @@ let main argv =
         let tag = commitSha.Value
 
         "docker"
-        -- ["build"
-            "-t"
-            $"{dockerRepository}:{tag}"
-            "." ]
+        -- [ "build"
+             "-t"
+             $"{dockerRepository}:{tag}"
+             "." ]
 
 
     Target.create "Push-docker-image"
@@ -177,16 +181,16 @@ let main argv =
         let tag = commitSha.Value
 
         "gcloud"
-        -- ["auth"
-            "activate-service-account"
-            gcloudUsername
-            $"--key-file={gcloudKeyFilename.Value}"
-            "--quiet" ]
+        -- [ "auth"
+             "activate-service-account"
+             gcloudUsername
+             $"--key-file={gcloudKeyFilename.Value}"
+             "--quiet" ]
 
         "gcloud"
-        -- ["auth"
-            "configure-docker"
-            "--quiet" ]
+        -- [ "auth"
+             "configure-docker"
+             "--quiet" ]
 
         "docker"
         -- [ "push"; $"{dockerRepository}:{tag}" ]
@@ -202,15 +206,15 @@ let main argv =
             System.IO.File.WriteAllText(serviceYaml, text.Replace("{IMAGE_TAG}", commitSha.Value)))
 
         "gcloud"
-        -- ["run"
-            "services"
-            "replace"
-            "service.yaml"
-            "--project"
-            gcpProjectName
-            "--region"
-            gcpRegion.Value
-            "--quiet" ]
+        -- [ "run"
+             "services"
+             "replace"
+             "service.yaml"
+             "--project"
+             gcpProjectName
+             "--region"
+             gcpRegion.Value
+             "--quiet" ]
 
 
     "Clean"
@@ -235,4 +239,3 @@ let main argv =
 
     Target.runOrDefault "Deploy"
     0
-

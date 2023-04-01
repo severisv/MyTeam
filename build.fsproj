@@ -10,11 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fake.Core.Globbing" Version="5.0.0-beta021" />
-    <PackageReference Include="Fake.Core.Process" Version="6.0.0-beta001" />
-    <PackageReference Include="Fake.Core.Target" Version="6.0.0-beta001" />
-    <PackageReference Include="Fake.DotNet.Cli" Version="6.0.0-beta001" />
-    <PackageReference Include="Fake.JavaScript.Npm" Version="6.0.0-beta001" />
+    <PackageReference Include="Fake.IO.Filesystem" Version="6" />
+    <PackageReference Include="Fake.Core.Process" Version="6" />
+    <PackageReference Include="Fake.Core.Target" Version="6" />
+    <PackageReference Include="Fake.JavaScript.Npm" Version="6" />
   </ItemGroup>
 
 </Project>
