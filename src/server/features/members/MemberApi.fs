@@ -100,11 +100,13 @@ let add clubId (ctx: HttpContext) model =
                 |> addNumberIfTaken
 
 
-            combine [ <@ form @> >- [ memberDoesNotExist db ]
-                      <@ form.``E-postadresse`` @>
-                      >- [ isRequired; isValidEmail ]
-                      <@ form.Fornavn @> >- [ isRequired ]
-                      <@ form.Etternavn @> >- [ isRequired ] ]
+            combine [
+                <@ form @> >- [ memberDoesNotExist db ]
+                <@ form.``E-postadresse`` @>
+                >- [ isRequired; isValidEmail ]
+                <@ form.Fornavn @> >- [ isRequired ]
+                <@ form.Etternavn @> >- [ isRequired ]
+            ]
             |> function
                 | Ok () ->
                     let email = form.``E-postadresse``
@@ -135,7 +137,9 @@ let add clubId (ctx: HttpContext) model =
                             ctx.RequestServices
                             mr.Email
                             "Du er lagt til som spiller"
-                            (sprintf "Du er nå lagt til som spiller i %s!\nDu kan melde deg på kamper og treninger på http://wamkam.no/intern" club.Name)
+                            (sprintf
+                                "Du er nå lagt til som spiller i %s!\nDu kan melde deg på kamper og treninger på http://wamkam.no/intern"
+                                club.Name)
                         |> Async.AwaitTask
                         |> Async.RunSynchronously
 
@@ -148,3 +152,17 @@ let add clubId (ctx: HttpContext) model =
                 | Error e -> ValidationErrors e
 
     add ctx.Database clubId model
+
+
+
+let deleteRequest clubId email next (ctx: HttpContext) =
+    let db = ctx.Database
+    let (ClubId clubId) = clubId
+
+    db.MemberRequests.Where(fun mr -> mr.ClubId = clubId && mr.Email = email)
+    |> Seq.tryHead
+    |> Option.iter (fun mr ->
+        db.MemberRequests.Remove mr |> ignore
+        db.SaveChanges() |> ignore)
+
+    next ctx

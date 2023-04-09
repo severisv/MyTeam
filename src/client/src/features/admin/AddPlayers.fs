@@ -39,7 +39,8 @@ type State =
     { Player: AddMemberForm
       Message: string option
       Errors: string list
-      SuccessMessage: string option }
+      SuccessMessage: string option
+      Requests: AddMemberForm list }
 
 let onFormError setState =
     function
@@ -79,7 +80,8 @@ let element =
                 { Player = defaultForm
                   Message = None
                   Errors = []
-                  SuccessMessage = None }
+                  SuccessMessage = None
+                  Requests = props.MemberRequests }
             )
 
         let setState fn =
@@ -100,7 +102,7 @@ let element =
             ]
             ul
                 [ Class "list-users" ]
-                (props.MemberRequests
+                (state.Requests
                  |> List.map (fun request ->
                      li [] [
                          span [] [
@@ -122,6 +124,26 @@ let element =
                                  SendElement = btn, [ Normal; Primary ], [ str "Legg til" ]
                                  SentElement = btn, [ Normal; Success ], [ str "Lagt til" ]
                                  Endpoint = Send.Post("/api/members", Some(fun () -> Encode.Auto.toString (0, request))) })
+                         sendElement (fun o ->
+                             { o with
+                                 SendElement =
+                                     button,
+                                     [ Style [ Padding "0.5em" ]
+                                       Class "link" ],
+                                     [ Icons.delete ]
+                                 SentElement =
+                                     button,
+                                     [ Style [ Padding "0.5em" ]
+                                       Disabled true ],
+                                     []
+                                 Endpoint = Send.Delete($"/api/members/requests/{request.``E-postadresse``}")
+                                 OnSubmit =
+                                     Some (fun _ ->
+                                         setState (fun prev model ->
+                                             { prev with
+                                                 Requests =
+                                                     prev.Requests
+                                                     |> List.filter (fun r -> r.``E-postadresse`` = request.``E-postadresse``) })) })
                      ]))
 
             br []

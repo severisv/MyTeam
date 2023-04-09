@@ -443,6 +443,12 @@ module App =
                               >=> choose [
                                       route "" >=> (Members.Api.add club |> jsonPost)
                                   ]
+                              DELETE
+                              >=> mustBeInRole [ Role.Admin; Role.Trener ]
+                              >=> choose [
+                                      routef "/requests/%s" (Members.Api.deleteRequest club.Id)
+
+                                      ]
                              ]
                           subRoute "/api/games"
                           <| choose [
@@ -481,7 +487,7 @@ module App =
                                       routef "/%O/gameplan" (Games.Api.setGamePlan club.Id)
                                       routef "/%O/gameplan/publish" (Games.Api.publishGamePlan club.Id >> jsonPost)
                                   ]
-                            ]
+                             ]
                           subRoute "/api/trainings"
                           <| choose [
                               POST
