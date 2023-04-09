@@ -16,9 +16,7 @@ let comp comp model =
 let clientView id model =
     let json = model |> Json.fableSerialize
 
-    div [ _id id
-
-          ] [
+    div [ _id id ] [
         script [] [
             rawText
                 $"""

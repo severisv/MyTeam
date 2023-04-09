@@ -5,6 +5,8 @@ open Newtonsoft.Json.Converters
 open Thoth.Json.Net
 
 module Json =
+    open Shared
+
     let serialize obj =
         let settings = JsonSerializerSettings()
         settings.ContractResolver <- Serialization.CamelCasePropertyNamesContractResolver()
@@ -13,6 +15,8 @@ module Json =
         settings.Converters.Add(StringEnumConverter())
         JsonConvert.SerializeObject(obj, settings)
 
-    let fableSerialize obj = Encode.Auto.toString (obj)
+    let fableSerialize obj =
+        Encode.Auto.toString (obj)
+        |> Strings.replace "'" "\\'"
 
     let fableDeserialize<'t> = Decode.Auto.fromString<'t>
