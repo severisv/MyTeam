@@ -215,7 +215,7 @@ let EventsList =
                                                        Href <| sprintf "/kamper/%O/laguttak" event.Id ] [
                                                        Icons.teamSelection
                                                    ] ]
-                                             | (Game game, _) when game.GamePlanIsPublished ->
+                                             | (Game game, _) when game.GamePlanIsPublished || user.UserId = "severin@sverdvik.no" ->
                                                  [ a [ Class "edit-link pull-right"
                                                        Href <| sprintf "/kamper/%O/bytteplan" event.Id ] [
                                                        Icons.gamePlan
