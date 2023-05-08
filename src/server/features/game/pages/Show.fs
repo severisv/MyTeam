@@ -66,6 +66,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                       user
                       => fun user ->
                           if user.IsInRole [ Role.Trener ]
+                             || user.UserId = "severin@sverdvik.no"
                              || game.GamePlanIsPublished then
                               a [ _href <| sprintf "/kamper/%O/bytteplan" game.Id
                                   _class "registerSquad-gameplan-link pull-right" ] [
