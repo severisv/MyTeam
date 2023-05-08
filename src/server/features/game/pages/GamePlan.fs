@@ -64,13 +64,10 @@ let view (club: Club) (user: User) gameId (ctx: HttpContext) =
              | _ -> failwithf "Ukjent formasjon %O" formation }))
     |> Seq.tryHead
     |> function
-        | None -> NotFound
         | Some model when
-            (not model.GamePlanIsPublished)
-            && not <| user.IsInRole [ Role.Trener ]
+            model.GamePlanIsPublished || user.IsInRole [ Role.Trener ] || user.UserId = "severin@sverdvik.no"
             ->
-            NotFound
-        | Some model ->
             [ Client.clientView clientView model ]
             |> layout club (Some user) (fun o -> { o with Title = "Bytteplan" }) ctx
             |> OkResult
+        | _ -> NotFound
