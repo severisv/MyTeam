@@ -1,15 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using MyTeam.Resources;
 
 namespace MyTeam.Models.Enums
 {
     public enum GameEventType
     {
-        [Display(Name = Res.Goal)]
+        [Display(Name = "Mål")]
         Goal = 0,
-        [Display(Name = Res.YellowCard)]
+        [Display(Name = "Gult kort")]
         YellowCard = 1,
-        [Display(Name = Res.RedCard)]
+        [Display(Name = "Rødt kort")]
         RedCard = 2
     }
 }

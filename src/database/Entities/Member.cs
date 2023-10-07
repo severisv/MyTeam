@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using MyTeam.Models.Enums;
-using MyTeam.Resources;
 using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
@@ -29,14 +26,14 @@ namespace MyTeam.Models.Domain
         public int Status { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = Res.BirthDate)]
+        [Display(Name = "Født")]
         public DateTime? BirthDate { get; set; }
         [DataType(DataType.Date)]
-        [Display(Name = Res.StartDate)]
+        [Display(Name = "Telefon")]
         public DateTime? StartDate { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = Res.Phone)]
+        [Display(Name = "Telefonnummer")]
         public string Phone { get; set; }
 
         public string ImageFull { get; set; }
