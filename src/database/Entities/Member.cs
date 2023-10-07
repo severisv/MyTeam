@@ -29,11 +29,11 @@ namespace MyTeam.Models.Domain
         [Display(Name = "Født")]
         public DateTime? BirthDate { get; set; }
         [DataType(DataType.Date)]
-        [Display(Name = "Telefon")]
+        [Display(Name = "Signerte for klubben")]
         public DateTime? StartDate { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Telefonnummer")]
+        [Display(Name = "Telefon")]
         public string Phone { get; set; }
 
         public string ImageFull { get; set; }
