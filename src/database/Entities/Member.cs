@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
 {
-    public class Member : Entity
+    public class Member : Entity, IMember
     {
         [Required]
         public string FirstName { get; set; }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using MyTeam.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Security.Claims;
+using MyTeam.Models.Shared;
 
 namespace MyTeam.Models.Domain
 {
