@@ -65,34 +65,32 @@ let articleNav db (club: Club) =
     ]
 
 
-let twitterFeed =
-    block [] [
-        h4 [] [
-            i [ _class "fa fa-twitter" ] []
-            whitespace
-            encodedText "Siste Tweets"
-        ]
-        a [ _class "twitter-timeline"
-            _href "https://twitter.com/WamKam"
-            attr "data-widget-id" "672159319203430401"
-            attr "data-tweet-limit" "4"
-            attr "data-chrome" "nofooter transparent noheader noborders noscrollbar" ] [
-            encodedText "Tweets av WamKam"
-        ]
-    ]
+let twitterFeed = div [] []
+    // block [_style "padding-left: 0; padding-right: 0;"] [
+    //     h4 [] [
+    //         i [ _class "fa fa-twitter" ] []
+    //         whitespace
+    //         encodedText "Siste Tweets"
+    //     ]
+    //     a [ 
+    //         _class "twitter-timeline"
+    //         _href """https://twitter.com/WamKam?ref_src=twsrc%5Etfw"""
+    //         attr "data-chrome" "nofooter transparent noheader noborders noscrollbar"
+
+    //         ] [
+    //         encodedText "Tweets av WamKam"
+    //     ]
+    // ]
+
+
 
 let twitterScript =
-    script [] [
-        rawText
-            "!function (d, s, id) {\
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ?\
-                'http' : 'https'; if (!d.getElementById(id)) {\
-                    js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js';\
-                    fjs.parentNode.insertBefore(js, fjs);\
-                }\
-                }(document, 'script', 'twitter-wjs');"
+    script [
+                _src "https://platform.twitter.com/widgets.js"
+                _charset "utf-8"
+                _async ] []
 
-    ]
+
 
 let tinyMceScripts =
     let elementId = ".tinymce"
