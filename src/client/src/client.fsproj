@@ -79,6 +79,6 @@
     <PackageReference Include="Fable.React" Version="9.1.0" />
     <PackageReference Include="Fable.React.Types" Version="18.1.0" />
     <PackageReference Include="Feliz" Version="2.3.0" />
-    <PackageReference Include="Thoth.Json" Version="9.0.0" />
+    <PackageReference Include="Thoth.Json" Version="10.2.0" />
   </ItemGroup>
 </Project>
