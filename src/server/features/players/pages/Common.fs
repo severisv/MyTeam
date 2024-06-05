@@ -49,6 +49,7 @@ let sidebar status (players: Member list) currentPlayerUrlName =
                 { Header =
                     match status with
                     | Veteran -> "Hall of Fame"
+                    | PlayerStatus.Trener -> "Trenere"
                     | status -> sprintf "%Oe Spillere" status
                   Items =
                     players
