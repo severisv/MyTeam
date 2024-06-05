@@ -19,6 +19,7 @@ open Newtonsoft.Json
 open Newtonsoft.Json.Converters
 open Microsoft.AspNetCore.DataProtection
 open System.Globalization
+open db.Tables
 
 let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
     let env = ctx.HostingEnvironment
@@ -29,6 +30,12 @@ let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
             .GetService<IConfiguration>()
 
     services.AddDbContext<ApplicationDbContext> (fun options ->
+        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+        |> ignore)
+    |> ignore
+
+
+    services.AddDbContext<DataContext> (fun options ->
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
         |> ignore)
     |> ignore

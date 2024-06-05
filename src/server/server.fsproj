@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\database\Migrations.csproj" />
     <ProjectReference Include="..\client\src\client.fsproj" />
+    <ProjectReference Include="..\db\db.fsproj" />
   </ItemGroup>
   <ItemGroup>
   <Compile Include="settings/Options.fs" />
@@ -90,6 +91,7 @@
     <Compile Include="features/game/pages/GamePlan.fs" />
     <Compile Include="features/game/Refresh.fs" />
     <Compile Include="features/players/PlayerApi.fs" />
+    <Compile Include="features/players/PlayerInsights.fs" />
     <Compile Include="features/players/pages/Common.fs" />
     <Compile Include="features/players/pages/List.fs" />
     <Compile Include="features/players/pages/Show.fs" />

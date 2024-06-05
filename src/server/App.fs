@@ -514,7 +514,9 @@ module App =
                                           | None -> false)
                                       accessDenied)
                                    >=> (Players.Api.update club playerId |> jsonPost)))
-
+                              GET
+                              >=> route "/insights"
+                              >=> (Players.Insights.get)
 
                               ]
                           subRoute "/api/fines"
