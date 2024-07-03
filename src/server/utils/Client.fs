@@ -17,8 +17,9 @@ let clientView id model =
     let json =
         model
         |> Json.fableSerialize
-        |> Strings.replace "'" ""
-        |> Strings.replace "\\n" ""
+        |> Strings.replace "\\" "\\\\"
+        |> Strings.replace "\n" "\\n"
+        |> Strings.replace "\r" "\\r"
 
 
     div [ _id id ] [
@@ -42,8 +43,9 @@ let internal renderIsomorphic containerId comp model =
                   (propsVariableName containerId)
                   (model
                    |> Json.fableSerialize
-                   |> Strings.replace "'" ""
-                   |> Strings.replace "\\n" "")
+                   |> Strings.replace "\\" "\\\\"
+                   |> Strings.replace "\n" "\\n"
+                   |> Strings.replace "\r" "\\r")
           )
       ]
 

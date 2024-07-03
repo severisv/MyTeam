@@ -46,7 +46,7 @@ let hydrate elementId deserializeFn comp =
             |> deserializeFn
             |> function
                 | Ok model -> ReactDom.hydrate (comp model [], node)
-                | Error e -> failwithf "Json deserialization failed: %O" e
+                | Error e -> failwithf "Json x deserialization failed: %O" e
 
 let hydrateView elementId deserializeFn comp =
 #if FABLE_COMPILER

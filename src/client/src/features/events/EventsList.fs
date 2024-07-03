@@ -215,7 +215,10 @@ let EventsList =
                                                        Href <| sprintf "/kamper/%O/laguttak" event.Id ] [
                                                        Icons.teamSelection
                                                    ] ]
-                                             | (Game game, _) when game.GamePlanIsPublished || user.UserId = "severin@sverdvik.no" ->
+                                             | (Game game, _) when
+                                                 game.GamePlanIsPublished
+                                                 || user.UserId = "severin@sverdvik.no"
+                                                 ->
                                                  [ a [ Class "edit-link pull-right"
                                                        Href <| sprintf "/kamper/%O/bytteplan" event.Id ] [
                                                        Icons.gamePlan
@@ -270,7 +273,11 @@ let EventsList =
                                                  str <| Date.formatTime event.DateTime
                                              ]
                                              p [] [
-                                                 a [ Href $"""https://www.google.com/maps/search/{event.Location.Replace(" ", "+")}"""
+                                                 a [ Href
+                                                         $"""https://www.google.com/maps/search/{event
+                                                                                                     .Location
+                                                                                                     .Replace(" kg", " kunstgress")
+                                                                                                     .Replace(" ", "+")}"""
                                                      Target "_blank"
                                                      Style [ Color "inherit" ] ] [
                                                      Icons.mapMarker ""
