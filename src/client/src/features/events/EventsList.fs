@@ -50,7 +50,7 @@ let mapsUrl location =
         |> Strings.replace " kunstgr." " kunstgress"
         |> Strings.replace " " "+"
         |> Strings.split '+'
-        |> List.take 2
+        |> List.truncate 2
         |> String.concat "+"
 
     $"https://www.google.com/maps/search/{location}"
