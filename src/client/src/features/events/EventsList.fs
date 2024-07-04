@@ -15,6 +15,7 @@ open Shared.Domain.Members
 open System
 open Client.Events
 open Client.Util
+open System.Text.RegularExpressions
 
 type Model =
     { User: User
@@ -39,6 +40,20 @@ let createUrl =
     | Previous (Some year) -> sprintf "/intern/arrangementer/tidligere/%i" year
     | Previous None -> "/intern/arrangementer/tidligere"
 
+
+let mapsUrl location =
+    let location = Regex.Replace(location, @"\d", "") // Remove numbers from location
+
+    let location =
+        location
+        |> Strings.replace " kg" " kunstgress"
+        |> Strings.replace " kunstgr." " kunstgress"
+        |> Strings.replace " " "+"
+        |> Strings.split '+'
+        |> List.take 2
+        |> String.concat "+"
+
+    $"https://www.google.com/maps/search/{location}"
 
 let attendeeLink (user: User) (ea: Attendee) =
     li [] [
@@ -273,11 +288,8 @@ let EventsList =
                                                  str <| Date.formatTime event.DateTime
                                              ]
                                              p [] [
-                                                 a [ Href
-                                                         $"""https://www.google.com/maps/search/{event
-                                                                                                     .Location
-                                                                                                     .Replace(" kg", " kunstgress")
-                                                                                                     .Replace(" ", "+")}"""
+                                                 a [ Href(mapsUrl event.Location)
+
                                                      Target "_blank"
                                                      Style [ Color "inherit" ] ] [
                                                      Icons.mapMarker ""
