@@ -20,7 +20,7 @@
     "less-loader": "^12.2.0",
     "mini-css-extract-plugin": "^2.9.0",
     "path": "^0.12.7",
-    "tinymce": "6.3.1",
+    "tinymce": "7.2.1",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
   }
