@@ -87,7 +87,11 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
 
                           table [ _class "table" ] [
                               tbody [] [
-                                  tableRow "Posisjon" (encodedText player.Positions)
+                                  tableRow
+                                      "Posisjon"
+                                      (match player.Status with
+                                       | PlayerStatus.Trener -> encodedText "Trener"
+                                       | _ -> encodedText player.Positions)
                                   tableRow
                                       "Signerte for klubben"
                                       (player.StartDate

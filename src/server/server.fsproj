@@ -137,11 +137,11 @@
     <PackageReference Include="Giraffe" Version="6.4.0" />
     <PackageReference Include="Google.Cloud.AspNetCore.DataProtection.Kms" Version="1.0.0-alpha04" />
     <PackageReference Include="Google.Cloud.AspNetCore.DataProtection.Storage" Version="1.0.0-alpha04" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
     <PackageReference Include="Sendgrid" Version="9.28.1" />
     <PackageReference Include="SlackLogger" Version="4.0.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="Thoth.Json.Net" Version="11.0.0" />
+    <PackageReference Include="Thoth.Json.Net" Version="12.0.0" />
   </ItemGroup>
 </Project>
