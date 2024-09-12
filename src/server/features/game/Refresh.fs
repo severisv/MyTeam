@@ -56,11 +56,36 @@ let run next (ctx: HttpContext)  =
                 |> Seq.toList
 
             let html = GamesHtml.Load(season.FixturesSourceUrl)
-            html.Tables.Table1.Rows
-            |> Array.filter (fun row ->                                                           
+
+            let table = html.Html.CssSelect("table") |> Seq.head
+
+            let headers = table.CssSelect("th") |> Seq.map (fun th -> th.InnerText().ToLowerInvariant()) |> Seq.toList
+
+            let indices = {|
+                Hjemmelag = headers |> List.findIndex (fun h -> h.Contains("hjemmelag"))
+                Bortelag = headers |> List.findIndex (fun h -> h.Contains("bortelag"))
+                Dato = headers |> List.findIndex (fun h -> h.Contains("dato"))
+                Tid = headers |> List.findIndex (fun h -> h.Contains("tid"))
+                Bane = headers |> List.findIndex (fun h -> h.Contains("bane"))
+            |}
+
+
+
+            table.CssSelect("tr")
+            |> List.skip 1
+            |> List.map (fun row -> 
+
+                ({|
+                Hjemmelag = (row.CssSelect("td").[indices.Hjemmelag]).InnerText() 
+                Bortelag = (row.CssSelect("td").[indices.Bortelag]).InnerText()
+                Dato = (row.CssSelect("td").[indices.Dato]).InnerText()
+                Tid = (row.CssSelect("td").[indices.Tid]).InnerText()
+                Bane = (row.CssSelect("td").[indices.Bane]).InnerText()
+            |}))
+            |> List.filter (fun row ->                                                           
                                 row.Hjemmelag |> isCurrentTeam || 
                                 row.Bortelag |> isCurrentTeam)
-            |> Array.iter (fun row -> 
+            |> List.iter (fun row -> 
                                 let isHomeTeam = isCurrentTeam row.Hjemmelag
                                 let opponent = if isHomeTeam then row.Bortelag else row.Hjemmelag 
                                                |> Strings.removeDoubleWhitespaces  
@@ -109,7 +134,7 @@ let run next (ctx: HttpContext)  =
                                                | r -> failwithf $"Klarte ikke parse tid: {r}"
                                                                                    
                                     game.DateTime <- (date.Date.Add time)
-                                    game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                            
+                                    game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                           
                         )
 
             season.FixturesUpdated <- Nullable now 
