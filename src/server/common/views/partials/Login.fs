@@ -6,6 +6,8 @@ open Shared
 open Shared.Domain.Members
 open Microsoft.AspNetCore.Http
 open MyTeam.Views.BaseComponents
+open Giraffe
+open System
 
 [<AutoOpen>]
 module Login =
@@ -32,7 +34,11 @@ module Login =
                  _class "nav navbar-nav navbar-right navbar-topRight--item" ] [
                 li [] [
                     a [ _href
-                        <| sprintf "/konto/innlogging?returnUrl=%s" (ctx.Request.Path + ctx.Request.QueryString) ] [
+                        <| sprintf
+                            "/konto/innlogging?returnUrl=%s"
+                            (match ctx.TryGetQueryStringValue "returnUrl" with
+                             | Some s when not (String.IsNullOrWhiteSpace s) -> s
+                             | _ -> (ctx.Request.Path + ctx.Request.QueryString)) ] [
                         icon <| fa "sign-in" <| "Logg inn"
                     ]
                 ]
@@ -50,14 +56,16 @@ module Login =
                     div [ _class "login-image-wrapper" ] [
                         a [ _title user.Name
                             _href <| "/spillere/vis/" + user.UrlName ] [
-                            img [ _src
-                                  <| getImage
-                                      (fun o ->
-                                          { o with
-                                                Height = Some 40
-                                                Width = Some 40 })
-                                      user.Image
-                                      user.FacebookId ]
+                            img [
+                                _src
+                                <| getImage
+                                    (fun o ->
+                                        { o with
+                                            Height = Some 40
+                                            Width = Some 40 })
+                                    user.Image
+                                    user.FacebookId
+                            ]
                         ]
                     ])
                 emptyText
