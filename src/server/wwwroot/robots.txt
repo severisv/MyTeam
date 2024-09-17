@@ -14,3 +14,6 @@ Disallow: /konto
 
 User-agent: meta-externalagent
 Disallow: /konto
+
+User-agent: BlexBot
+Disallow: /
