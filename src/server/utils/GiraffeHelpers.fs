@@ -84,6 +84,8 @@ module PipelineHelpers =
                   "Lynt.cz"
                   "DotBot"
                   "facebookexternalhit"
+                  "MJ12bot"
+                  "AhrefsBot"
                   "meta-externalagent"
                   "uptimebot" ]
                 |> Seq.exists
