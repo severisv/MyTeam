@@ -1,7 +1,16 @@
 # Group 1
 User-agent: Googlebot
-Disallow: /konto/
+Disallow: /konto
 
 # Group 2
 User-agent: *
 Allow: /
+
+User-agent: facebookexternalhit
+Disallow: /konto
+
+User-agent: Facebot
+Disallow: /konto
+
+User-agent: meta-externalagent
+Disallow: /konto
