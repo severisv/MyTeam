@@ -12,7 +12,9 @@ open Results
 open Authorization
 open PipelineHelpers
 
+
 module App =
+
 
     let (webApp: HttpHandler) =
         applyTrollBlock
@@ -35,64 +37,64 @@ module App =
                     redirectTo false $"/spillere/endre/%s{user.UrlName}" next ctx
                 | (Some club, _) ->
                     choose
-                        [ subRoute "/konto"
-                          <| choose [
-                              GET
-                              >=> route "/innlogging"
-                              >=> (Account.Login.view None [] club user |> htmlGet)
-                              POST
-                              >=> route "/innlogging"
-                              >=> Antiforgery.validate
-                              >=> (Account.Login.post club user |> htmlPost)
-                              POST
-                              >=> route "/utlogging"
-                              >=> Antiforgery.validate
-                              >=> (Account.Login.logOut club user |> htmlGet)
-                              POST
-                              >=> route "/innlogging/ekstern"
-                              >=> Antiforgery.validate
-                              >=> Account.Login.external
-                              GET
-                              >=> route "/innlogging/ekstern"
-                              >=> (Account.Login.externalCallback club user
-                                   |> htmlGet)
-                              POST
-                              >=> route "/innlogging/ekstern/ny"
-                              >=> Antiforgery.validate
-                              >=> (Account.Login.signupExternal club user |> htmlPost)
-                              GET
-                              >=> route "/ny"
-                              >=> (Account.Signup.view None [] club user |> htmlGet)
-                              POST
-                              >=> route "/ny"
-                              >=> Antiforgery.validate
-                              >=> (Account.Signup.post club user |> htmlPost)
-                              GET
-                              >=> route "/glemt-passord"
-                              >=> (Account.ResetPassword.view None [] club user
-                                   |> htmlGet)
-                              POST
-                              >=> route "/glemt-passord"
-                              >=> Antiforgery.validate
-                              >=> (Account.ResetPassword.post club user |> htmlPost)
-                              GET
-                              >=> route "/nullstill-passord"
-                              >=> (Account.ResetPassword.confirmView None [] club user
-                                   |> htmlGet)
-                              POST
-                              >=> route "/nullstill-passord"
-                              >=> Antiforgery.validate
-                              >=> (Account.ResetPassword.confirmPost club user
-                                   |> htmlPost)
-                              GET
-                              >=> (routef "/sletting/%s"
-                                   <| fun userId ->
-                                       (Account.RequestDeletion.showStatus club user userId
-                                        |> htmlGet))
-                              POST
-                              >=> route "/sletting"
-                              >=> Account.RequestDeletion.requestDeletion
-                             ]
+                        [ subRoute "/konto" <| denyCrawler
+                          >=> choose [
+                                  GET
+                                  >=> route "/innlogging"
+                                  >=> (Account.Login.view None [] club user |> htmlGet)
+                                  POST
+                                  >=> route "/innlogging"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.Login.post club user |> htmlPost)
+                                  POST
+                                  >=> route "/utlogging"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.Login.logOut club user |> htmlGet)
+                                  POST
+                                  >=> route "/innlogging/ekstern"
+                                  >=> Antiforgery.validate
+                                  >=> Account.Login.external
+                                  GET
+                                  >=> route "/innlogging/ekstern"
+                                  >=> (Account.Login.externalCallback club user
+                                       |> htmlGet)
+                                  POST
+                                  >=> route "/innlogging/ekstern/ny"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.Login.signupExternal club user |> htmlPost)
+                                  GET
+                                  >=> route "/ny"
+                                  >=> (Account.Signup.view None [] club user |> htmlGet)
+                                  POST
+                                  >=> route "/ny"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.Signup.post club user |> htmlPost)
+                                  GET
+                                  >=> route "/glemt-passord"
+                                  >=> (Account.ResetPassword.view None [] club user
+                                       |> htmlGet)
+                                  POST
+                                  >=> route "/glemt-passord"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.ResetPassword.post club user |> htmlPost)
+                                  GET
+                                  >=> route "/nullstill-passord"
+                                  >=> (Account.ResetPassword.confirmView None [] club user
+                                       |> htmlGet)
+                                  POST
+                                  >=> route "/nullstill-passord"
+                                  >=> Antiforgery.validate
+                                  >=> (Account.ResetPassword.confirmPost club user
+                                       |> htmlPost)
+                                  GET
+                                  >=> (routef "/sletting/%s"
+                                       <| fun userId ->
+                                           (Account.RequestDeletion.showStatus club user userId
+                                            |> htmlGet))
+                                  POST
+                                  >=> route "/sletting"
+                                  >=> Account.RequestDeletion.requestDeletion
+                              ]
                           route "/404"
                           >=> setStatusCode 404
                           >=> Views.Error.notFound club user

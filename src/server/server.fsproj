@@ -22,9 +22,9 @@
     <Compile Include="utils/json/UnionSerializer.fs" />
     <Compile Include="utils/Database.fs" />
     <Compile Include="utils/Sha1.fs" />
+    <Compile Include="utils/String.fs" />
     <Compile Include="utils/GiraffeHelpers.fs" />
     <Compile Include="utils/Helpers.fs" />
-    <Compile Include="utils/String.fs" />
     <Compile Include="utils/AntiForgery.fs" />
     <Compile Include="utils/Enums.fs" />
     <Compile Include="utils/Html.fs" />

@@ -3,6 +3,7 @@ namespace MyTeam
 open Giraffe
 open System.Threading.Tasks
 open Microsoft.AspNetCore
+open System
 
 [<AutoOpen>]
 module GiraffeHelpers =
@@ -69,6 +70,31 @@ module PipelineHelpers =
         fun next ctx ->
             if (ctx.Request.Headers["cf-ipcountry"] |> string) = "RU" then
                 text "NO WAR 🇺🇦" next ctx
+            else
+                next ctx
+
+    let denyCrawler: HttpHandler =
+        fun next ctx ->
+            if
+                [ "crawler"
+                  "bingbot"
+                  "SemrushBot"
+                  "BLEXBot"
+                  "Dataprovider.com"
+                  "Lynt.cz"
+                  "DotBot"
+                  "facebookexternalhit"
+                  "meta-externalagent"
+                  "uptimebot" ]
+                |> Seq.exists
+                    (
+                        ctx.Request.Headers.["User-Agent"]
+                        |> string
+                        |> contains
+                    )
+            then
+                ctx.SetStatusCode 403
+                text "No crawlers" next ctx
             else
                 next ctx
 
