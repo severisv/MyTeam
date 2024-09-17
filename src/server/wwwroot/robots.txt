@@ -17,3 +17,6 @@ Disallow: /konto
 
 User-agent: BlexBot
 Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
