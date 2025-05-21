@@ -10,7 +10,7 @@ open Microsoft.Extensions.Logging
 open System.Collections.Generic
 
 #if !DEBUG
-type GamesHtml = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/terminliste/?fiksId=158443">
+type GamesHtml = HtmlProvider<"https://www.fotball.no/fotballdata/lag/kamper/?fiksId=208259">
 #else
 type GamesHtml = HtmlProvider<"features/game/games.html">
 #endif
