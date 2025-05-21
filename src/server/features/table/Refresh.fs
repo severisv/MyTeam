@@ -8,7 +8,7 @@ open FSharp.Data
 open Microsoft.Extensions.Logging
 
 #if !DEBUG
-type TableHtml = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/tabell/?fiksId=192858">
+type TableHtml = HtmlProvider<"https://www.fotball.no/fotballdata/turnering/tabell/?fiksId=199029">
 #else
 type TableHtml = HtmlProvider<"features/table/table.html">
 #endif
@@ -34,7 +34,9 @@ let run next (ctx: HttpContext) =
         //try
         let html = TableHtml.Load(season.TableSourceUrl)
 
-        let table = html.Html.CssSelect("table") |> Seq.head
+        let table =
+            html.Html.CssSelect(".a_desktopOnly table")
+            |> Seq.head
 
         let indices =
             {| Plass = 0
@@ -44,6 +46,8 @@ let run next (ctx: HttpContext) =
                V = 11
                U = 12
                T = 13 |}
+
+        logger.LogInformation(sprintf "Found indices: %A" indices)
 
         let table =
             table.CssSelect("tr")
@@ -59,6 +63,8 @@ let run next (ctx: HttpContext) =
                     T = (row.CssSelect("td").[indices.T]).InnerText() |}))
             |> List.filter (fun row -> row.Plass |> Number.isNumber)
             |> List.map (fun row ->
+                logger.LogInformation(sprintf "Row: %O" row)
+
                 { Team = row.Lag
                   Position = row.Plass |> int
                   Points = row.Poeng |> int
