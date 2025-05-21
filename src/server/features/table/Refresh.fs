@@ -47,8 +47,6 @@ let run next (ctx: HttpContext) =
                    U = 12
                    T = 13 |}
 
-            logger.LogInformation(sprintf "Found indices: %A" indices)
-
             let table =
                 table.CssSelect("tr")
                 |> List.skip 2
