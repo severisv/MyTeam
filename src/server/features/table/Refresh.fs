@@ -61,8 +61,6 @@ let run next (ctx: HttpContext) =
                         T = (row.CssSelect("td").[indices.T]).InnerText() |}))
                 |> List.filter (fun row -> row.Plass |> Number.isNumber)
                 |> List.map (fun row ->
-                    logger.LogInformation(sprintf "Row: %O" row)
-
                     { Team = row.Lag
                       Position = row.Plass |> int
                       Points = row.Poeng |> int
