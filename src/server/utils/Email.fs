@@ -13,21 +13,16 @@ open MyTeam
 
 module Email =
 
-    type BrevoEmailSender = {
-        Name: string
-        Email: string
-    }
-
-    type BrevoEmailRecipient = {
-        Name: string option
-        Email: string
-    }
-
-    type BrevoEmailRequest = {
-        Sender: BrevoEmailSender
-        To: BrevoEmailRecipient list
+    [<JsonObject(NamingStrategyType = typeof<Newtonsoft.Json.Serialization.CamelCaseNamingStrategy>)>]
+    type ResendEmailRequest = {
+        [<JsonProperty("from")>]
+        From: string
+        [<JsonProperty("to")>]
+        To: string list
+        [<JsonProperty("subject")>]
         Subject: string
-        HtmlContent: string
+        [<JsonProperty("html")>]
+        Html: string
     }
 
     let send (serviceProvider: IServiceProvider) (emailAddress: string) subject message =
@@ -35,29 +30,30 @@ module Email =
 
         task {
             let apiKey =
-                serviceProvider.GetService<IConfiguration>().["Integration:Brevo:Key"]
+                serviceProvider.GetService<IConfiguration>().["Integration:Resend:Key"]
             
             let logger = Logger.get serviceProvider
             let httpClientFactory = serviceProvider.GetService<IHttpClientFactory>()
             let httpClient = httpClientFactory.CreateClient()
 
-            // Prepare Brevo API request
+            // Prepare Resend API request
             let emailRequest = {
-                Sender = { Name = "Wam-Kam FK"; Email = "post@wamkam.no" }
-                To = [{ Name = None; Email = emailAddress }]
+                From = "Wam-Kam FK <post@wamkam.no>"
+                To = [emailAddress]
                 Subject = subject
-                HtmlContent = message
+                Html = message
             }
 
             let json = JsonConvert.SerializeObject(emailRequest)
+            logger.LogInformation $"Sending email JSON: {json}"
             let content = new StringContent(json, Encoding.UTF8, "application/json")
 
-            // Set up HTTP client
-            httpClient.DefaultRequestHeaders.Add("api-key", apiKey)
-            httpClient.DefaultRequestHeaders.Add("accept", "application/json")
+            // Set up HTTP client headers for Resend
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}")
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "MyTeam/1.0")
 
-            // Send email via Brevo API
-            let! response = httpClient.PostAsync("https://api.brevo.com/v3/smtp/email", content)
+            // Send email via Resend API
+            let! response = httpClient.PostAsync("https://api.resend.com/emails", content)
             let! responseContent = response.Content.ReadAsStringAsync()
 
             if not response.IsSuccessStatusCode then
