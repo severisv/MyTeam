@@ -51,6 +51,7 @@ let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
         .AddMemoryCache()
         .AddAntiforgery()
         .AddGiraffe()
+        .AddHttpClient()
         .AddAuthorization()
         .AddIdentity<ApplicationUser, IdentityRole>(fun o ->
             o.Password.RequireDigit <- false
