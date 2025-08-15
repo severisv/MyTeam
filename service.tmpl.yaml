@@ -31,11 +31,11 @@ spec:
             secretKeyRef:
               key: latest
               name: Authentication__Facebook__AppId
-        - name: Integration__SendGrid__Key
+        - name: Integration__Resend__Key
           valueFrom:
             secretKeyRef:
               key: latest
-              name: Integration__SendGrid__Key
+              name: Integration__Resend__Key
         - name: Logging__Slack__WebhookUrl
           valueFrom:
             secretKeyRef:
