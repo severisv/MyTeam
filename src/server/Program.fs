@@ -22,11 +22,7 @@ open System.Globalization
 
 let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
     let env = ctx.HostingEnvironment
-
-    let configuration =
-        services
-            .BuildServiceProvider()
-            .GetService<IConfiguration>()
+    let configuration = ctx.Configuration
 
     services.AddDbContext<ApplicationDbContext> (fun options ->
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
@@ -105,8 +101,9 @@ let configureServices (ctx: HostBuilderContext) (services: IServiceCollection) =
 let configureApp (app: IApplicationBuilder) =
     let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
 
-    let dbContext = app.ApplicationServices.GetService<ApplicationDbContext>()
-
+    // Create a scope to resolve scoped services
+    use scope = app.ApplicationServices.CreateScope()
+    let dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>()
     dbContext.Database.Migrate()
 
     app
