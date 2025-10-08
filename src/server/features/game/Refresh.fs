@@ -8,6 +8,7 @@ open Giraffe
 open FSharp.Data
 open Microsoft.Extensions.Logging
 open System.Collections.Generic
+open System.Net
 
 #if !DEBUG
 type GamesHtml = HtmlProvider<"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=208259">
@@ -74,13 +75,29 @@ let run next (ctx: HttpContext)  =
             table.CssSelect("tr")
             |> List.skip 1
             |> List.map (fun row -> 
+                let tds = row.CssSelect("td")
+                let decodeCell idx = 
+                    let cell = tds.[idx]
+                    // Try to get anchor tag first, fallback to cell text
+                    let anchors = cell.CssSelect("a")
+                    let rawText = 
+                        if anchors.Length > 0 then
+                            anchors.[0].ToString()
+                        else
+                            cell.ToString()
+                    // Extract text between > and < tags and decode
+                    let textMatch = System.Text.RegularExpressions.Regex.Match(rawText, @">([^<]+)<")
+                    if textMatch.Success then
+                        textMatch.Groups.[1].Value |> WebUtility.HtmlDecode |> Strings.trim
+                    else
+                        cell.InnerText() |> WebUtility.HtmlDecode |> Strings.trim
 
                 ({|
-                Hjemmelag = (row.CssSelect("td").[indices.Hjemmelag]).InnerText() 
-                Bortelag = (row.CssSelect("td").[indices.Bortelag]).InnerText()
-                Dato = (row.CssSelect("td").[indices.Dato]).InnerText()
-                Tid = (row.CssSelect("td").[indices.Tid]).InnerText()
-                Bane = (row.CssSelect("td").[indices.Bane]).InnerText()
+                Hjemmelag = decodeCell indices.Hjemmelag
+                Bortelag = decodeCell indices.Bortelag
+                Dato = tds.[indices.Dato].InnerText()
+                Tid = tds.[indices.Tid].InnerText()
+                Bane = decodeCell indices.Bane
             |}))
             |> List.filter (fun row ->                                                           
                                 row.Hjemmelag |> isCurrentTeam || 
@@ -105,6 +122,8 @@ let run next (ctx: HttpContext)  =
                                         |> function
                                         | Some existingGame -> 
                                             db.Events.Attach(existingGame) |> ignore
+                                            // Update opponent name in case encoding was fixed
+                                            existingGame.Opponent <- opponent
                                             existingGame
                                         | None ->
                                                                              
@@ -124,13 +143,16 @@ let run next (ctx: HttpContext)  =
                                             db.Events.Add(g) |> ignore
                                             g                                            
 
-                                    let time = row.Tid 
-                                               |> string 
-                                               |> Strings.trim
-                                               |> Strings.split ':'
-                                               |> List.map float
-                                               |> function 
+                                    let time = 
+                                               let tidStr = row.Tid |> string |> Strings.trim
+                                               // Handle both ":" and "." as separators, and cases with just an hour
+                                               let parts = 
+                                                   if tidStr.Contains(":") then tidStr.Split(':')
+                                                   elif tidStr.Contains(".") then tidStr.Split('.')
+                                                   else [|tidStr|]
+                                               match parts |> Array.toList |> List.map float with
                                                | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
+                                               | [hr] -> TimeSpan.FromHours(hr)
                                                | r -> failwithf $"Klarte ikke parse tid: {r}"
                                                                                    
                                     game.DateTime <- (date.Date.Add time)

@@ -69,7 +69,7 @@ let view (club: Club) (user: User option) gameId (ctx: HttpContext) =
                              || user.UserId = "severin@sverdvik.no"
                              || game.GamePlanIsPublished then
                               a [ _href <| sprintf "/kamper/%O/bytteplan" game.Id
-                                  _class "registerSquad-gameplan-link pull-right" ] [
+                                  _class "edit-link registerSquad-gameplan-link pull-right" ] [
                                   !!Icons.gamePlan
                               ]
                           else
