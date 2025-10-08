@@ -58,7 +58,9 @@ let delete (club : Club) (teamName, year) (db : Database) =
     |> function 
     | None -> NotFound
     | Some team -> 
-        db.Seasons.Where(fun s -> s.TeamId = team.Id && s.StartDate.Year = year)
+        let startDate = DateTime(year, 01, 01)
+        let endDate = DateTime(year, 12, 31)
+        db.Seasons.Where(fun s -> s.TeamId = team.Id && s.StartDate >= startDate && s.StartDate <= endDate)
         |> Seq.tryHead 
         |> function 
         | None -> NotFound
