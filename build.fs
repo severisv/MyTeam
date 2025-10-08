@@ -115,7 +115,10 @@ let main argv =
         -- [ "ef"
              "database"
              "update"
-             databaseDirectory ]
+             "--project"
+             databaseDirectory
+             "--startup-project"
+             webDir ]
         |> ignore
 
 
