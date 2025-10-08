@@ -10,7 +10,7 @@ open Microsoft.Extensions.Logging
 open System.Collections.Generic
 
 #if !DEBUG
-type GamesHtml = HtmlProvider<"https://www.fotball.no/fotballdata/lag/kamper/?fiksId=208259">
+type GamesHtml = HtmlProvider<"https://www.fotball.no/fotballdata/lag/hjem/?fiksId=208259">
 #else
 type GamesHtml = HtmlProvider<"features/game/games.html">
 #endif
@@ -127,7 +127,7 @@ let run next (ctx: HttpContext)  =
                                     let time = row.Tid 
                                                |> string 
                                                |> Strings.trim
-                                               |> Strings.split '.'
+                                               |> Strings.split ':'
                                                |> List.map float
                                                |> function 
                                                | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
