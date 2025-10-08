@@ -73,7 +73,7 @@ let view (club: Club) (user: User option) getPaginationOptions (ctx: HttpContext
                           ]
                       ]
                       hr [ _class "sm" ]
-                      a [ _class "underline"
+                      a [ _class "underline link-blue"
                           _href <| articleUrl ] [
                           encodedText "Les hele"
                       ]
