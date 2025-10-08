@@ -27,7 +27,7 @@ let tabs attributes (items: Tab list) (isSelected: (string -> bool)) =
                                     ""
                             ) ] [
                            a [ Href t.Url ] [
-                               span [ Class "hidden-xs" ] [
+                               span [ Class "hidden-xs"; Style [ MarginRight "0.25em" ] ] [
                                    t.Icon |> Option.defaultValue empty
                                ]
                                span [ Class "hidden-xs" ] [
