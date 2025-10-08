@@ -1,34 +1,22 @@
-﻿
-@font-face {
-    font-family: Kelson;
-    src: url('../../fonts/Kelson Sans Regular.otf');
-}
+﻿// Plus Jakarta Sans - Modern geometric sans-serif
+// Import from Google Fonts: https://fonts.google.com/specimen/Plus+Jakarta+Sans
+// Add to your HTML: <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-@font-face {
-    font-family: KelsonBold;
-    src: url('../../fonts/Kelson Sans Bold.otf');
-}
-
-@font-face {
-    font-family: KelsonLight;
-    src: url('../../fonts/Kelson Sans Light.otf');
-}
-
-
-@fontRegular: Kelson;
-@fontBold: KelsonBold;
-@fontLight: KelsonLight;
+@fontRegular: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+@fontBold: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+@fontLight: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
 
 
 h1, h2, h3, h4, h5 {
-        font-family: 'KelsonBold', sans-serif;
-        font-weight: normal;
+        font-family: @fontBold;
+        font-weight: 700;
 
 }
 body {
-    font-family: 'Kelson', sans-serif;
-    letter-spacing: 0.025em;
+    font-family: @fontRegular;
+    font-weight: 400;
+    letter-spacing: 0.015em;
 }
 
 

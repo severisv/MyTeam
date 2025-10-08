@@ -99,6 +99,20 @@ module Pages =
                         =?? (sprintf "%s - %s" club.Name o.Title)
                     )
                 ]
+                // Google Fonts - Plus Jakarta Sans & Inter
+                link [
+                    _rel "preconnect"
+                    _href "https://fonts.googleapis.com"
+                ]
+                link [
+                    _rel "preconnect"
+                    _href "https://fonts.gstatic.com"
+                    attr "crossorigin" ""
+                ]
+                link [
+                    _rel "stylesheet"
+                    _href "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+                ]
                 link [
                     _rel "stylesheet"
                     _href

@@ -59,7 +59,7 @@ let articleNav db (club: Club) =
                          |> List.map (fun article ->
                              li [] [
                                  a [ _href <| articleUrl article ] [
-                                     encodedText <| truncate 22 article.Headline
+                                     encodedText <| truncate 50 article.Headline
                                  ]
                              ])))))
     ]

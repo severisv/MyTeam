@@ -102,7 +102,7 @@ let editPost (club: Club) user (ctx: HttpContext) =
 
 let privacy club user (ctx: HttpContext) =
     [ div [ _class "mt-container"
-            _style "font-family: Arial;" ] [
+            _style "font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;" ] [
         p [] [
             encodedText "Wamkam.no benytter seg av informasjonskapsler."
         ]
