@@ -51,8 +51,12 @@
             }
         }
 
-        background-color: fade(@team-secondary, 94);
+        background-color: @team-secondary;
         border-color: @team-secondary;
+
+        .navbar-nav > .active > a:focus {
+            background-color: @team-secondary;
+        }
 
         .navbar-toggle {
             .icon-bar {
@@ -82,11 +86,12 @@
             
 
             &:hover {
+                color: @black-faded;
                 background-color: fade(@team-primary, 40);
             }
 
             &:focus, &.active {
-                background-color: lighten(@blueLightSubtle, 18);
+                background-color: fade(@team-primary, 20);
             }
         }
 
@@ -111,6 +116,7 @@
 .nav-pills {
     li {
         a {
+            color: @blueLight;
             border-radius: 4px;
         }
     }
@@ -292,18 +298,18 @@ nav.nav-pagination {
 
 /*Colours*/
 .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
-    background-color: @blueLight;
+    background-color: @blueLightSubtle;
 }
 
 a {
-    color: @blueLight;
+    color: @black-faded;
 
     &:hover {
-        color: darken(@blueLight, 5);
+        color: @black;
     }
 
     &:focus {
-        color: darken(@blueLight, 5);
+        color: @black;
     }
 }
 
