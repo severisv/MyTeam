@@ -3,6 +3,7 @@ module MyTeam.Table.Refresh
 open MyTeam
 open Shared
 open System
+open System.Net
 open Giraffe
 open FSharp.Data
 open Microsoft.Extensions.Logging
@@ -36,6 +37,7 @@ let run next (ctx: HttpContext) =
 
             let table =
                 html.Html.CssSelect(".a_desktopOnly table")
+                |> Seq.skip 1 // Skip the simple table, use the extended table (2nd one)
                 |> Seq.head
 
             let indices =
@@ -50,15 +52,22 @@ let run next (ctx: HttpContext) =
             let table =
                 table.CssSelect("tr")
                 |> List.skip 2
+                |> List.filter (fun row ->
+                    // Only process rows with enough columns
+                    let cells = row.CssSelect("td")
+                    cells.Length > indices.Poeng)
                 |> List.map (fun row ->
+                    let cells = row.CssSelect("td")
 
-                    ({| Plass = (row.CssSelect("td").[indices.Plass]).InnerText()
-                        Lag = (row.CssSelect("td").[indices.Lag]).InnerText()
-                        Poeng = (row.CssSelect("td").[indices.Poeng]).InnerText()
-                        Mål = (row.CssSelect("td").[indices.Mål]).InnerText()
-                        V = (row.CssSelect("td").[indices.V]).InnerText()
-                        U = (row.CssSelect("td").[indices.U]).InnerText()
-                        T = (row.CssSelect("td").[indices.T]).InnerText() |}))
+                    ({| Plass = cells.[indices.Plass].InnerText()
+                        Lag =
+                         cells.[indices.Lag].InnerText()
+                         |> WebUtility.HtmlDecode
+                        Poeng = cells.[indices.Poeng].InnerText()
+                        Mål = cells.[indices.Mål].InnerText()
+                        V = cells.[indices.V].InnerText()
+                        U = cells.[indices.U].InnerText()
+                        T = cells.[indices.T].InnerText() |}))
                 |> List.filter (fun row -> row.Plass |> Number.isNumber)
                 |> List.map (fun row ->
                     { Team = row.Lag
