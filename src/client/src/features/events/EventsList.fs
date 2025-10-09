@@ -254,17 +254,22 @@ let EventsList =
                                          h4
                                              [ Style [
                                                    TextAlign TextAlignOptions.Left
+                                                   MarginBottom "0"
                                                ]
                                                Class "visible-xs" ]
                                              (match event.Details with
                                               | Game game ->
                                                   [ Icons.gameType game.Type
-                                                    whitespace
-                                                    str <| string game.Type ]
+
+                                                    span [ Style [ MarginLeft "5px" ] ] [
+                                                        str <| string game.Type
+                                                    ] ]
                                               | _ ->
                                                   [ Icons.eventIcon event.Type IconSize.Normal
-                                                    whitespace
-                                                    str <| string event.Type ])
+
+                                                    span [ Style [ MarginLeft "5px" ] ] [
+                                                        str <| string event.Type
+                                                    ] ])
 
                                          div [ Class "event-col-1 event-icon" ] [
                                              div [] [
@@ -336,7 +341,9 @@ let EventsList =
                                                      |> function
                                                          | Upcoming _ -> Open
                                                          | Previous _ -> Collapsed)
-                                                    [ str $"Tropp ({game.Squad.Length})" ]
+                                                    [ b [] [
+                                                          str $"Tropp ({game.Squad.Length})"
+                                                      ] ]
                                                     [ hr [ Class "sm" ]
                                                       div [ Class "event-attendees" ] [
                                                           ul
@@ -374,10 +381,14 @@ let EventsList =
                                                 Collapsible.collapsible
                                                     Collapsed
                                                     [ span [ Class "flex-2" ] [
-                                                          str <| sprintf "Kommer (%i)" attending.Length
+                                                          b [] [
+                                                              str <| sprintf "Kommer (%i)" attending.Length
+                                                          ]
                                                       ]
                                                       span [ Class "flex-2" ] [
-                                                          str <| sprintf "Kan ikke (%i)" notAttending.Length
+                                                          b [] [
+                                                              str <| sprintf "Kan ikke (%i)" notAttending.Length
+                                                          ]
                                                       ]
                                                       span [ Class "flex-1 pull-right hidden-xs" ] [
                                                           whitespace

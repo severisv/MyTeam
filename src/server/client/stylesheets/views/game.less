@@ -51,17 +51,17 @@
 .gameResult {
   white-space: nowrap;
   border-radius: 1em;
-  padding: 0.2em 0.65em;
+  padding: 0.5rem 1rem;
   margin: 0 0.5em;
 }
 .gameResult--Seier {
-  background: @greenLight;
+  background: @greenLightSubtle;
 }
 .gameResult--Uavgjort {
-  background: @yellowLight;
+  background: @yellowLightSubtle;
 }
 .gameResult--Tap {
-  background: @redLight;
+  background: @redLightSubtle;
 }
 .games-showGameLink {
   transition: all 0.25s ease-out;
@@ -165,6 +165,7 @@
   line-height: 1.6em;
   font-size: 1.2em;
   i {
+    margin-right: 2px;
     font-size: 1.25em;
   }
   .r-under-xxs({font-size: 1em; i {font-size: 1em;}});
