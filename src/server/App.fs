@@ -211,6 +211,14 @@ module App =
                               >=> choose [
                                       route ""
                                       >=> (Players.Pages.List.view club user "" |> htmlGet)
+                                      routef "/vis/%s/innsikt/%s"
+                                      <| fun (urlName, teamName) ->
+                                          Players.Pages.Insights.view club user urlName (Some teamName)
+                                          |> htmlGet
+                                      routef "/vis/%s/innsikt"
+                                      <| fun urlName ->
+                                          Players.Pages.Insights.view club user urlName None
+                                          |> htmlGet
                                       routef "/vis/%s" (Players.Pages.Show.view club user >> htmlGet)
                                       routef "/endre/%s" (Players.Pages.Edit.view club user >> htmlGet)
                                       routef "/%s" (Players.Pages.List.view club user >> htmlGet)

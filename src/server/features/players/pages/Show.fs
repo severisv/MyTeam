@@ -12,6 +12,7 @@ open System.Linq
 open Shared.Components.Links
 open Client.Features.Players
 open Common
+open Shared.Components
 
 
 let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
@@ -122,6 +123,15 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                               ]
                           ]
                           (Client.isomorphicView Stats.containerId Stats.element { PlayerId = player.Id })
+                          div [ _style "margin-top: 1.5rem;" ] [
+                              a [ _class "link-blue"
+                                  _style "margin-left: 0.5em;"
+                                  _href
+                                  <| sprintf "/spillere/vis/%s/innsikt" player.UrlName ] [
+                                  !!(Icons.lightbulb "")
+                                  encodedText " Innsikt"
+                              ]
+                          ]
                       ]
                   ]
               ]
