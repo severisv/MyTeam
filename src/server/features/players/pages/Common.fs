@@ -15,9 +15,17 @@ let listPlayersUrl =
     | Aktiv -> sprintf "/spillere"
     | status -> sprintf "/spillere/%O" status |> Strings.toLower
 
-let showPlayerUrl = Strings.toLower >> sprintf "/spillere/vis/%s"
+let showPlayerUrl urlName =
+    urlName
+    |> Strings.toLower
+    |> sprintf "/spillere/vis/%s"
 
-let sidebar status (players: Member list) currentPlayerUrlName =
+let showPlayerInsightsUrl urlName =
+    urlName
+    |> Strings.toLower
+    |> sprintf "/spillere/vis/%s/innsikt"
+
+let sidebar status (players: Member list) currentPlayerUrlName urlGenerator =
     sidebar [] [
         block [] [
             !!(navList
@@ -55,8 +63,8 @@ let sidebar status (players: Member list) currentPlayerUrlName =
                     players
                     |> List.map (fun player ->
                         { Text = [ (string >> Fable.React.Helpers.str) player.Name ]
-                          Url = showPlayerUrl player.UrlName })
+                          Url = urlGenerator player.UrlName })
                   Footer = None
-                  IsSelected = (=) (showPlayerUrl currentPlayerUrlName) })
+                  IsSelected = (=) (urlGenerator currentPlayerUrlName) })
         ]
     ]

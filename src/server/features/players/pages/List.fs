@@ -61,6 +61,6 @@ let view (club: Club) user status (ctx: HttpContext) =
           ]
       ]
 
-      sidebar status players "" ]
+      sidebar status players "" showPlayerUrl ]
     |> layout club user (fun o -> { o with Title = pageHeader }) ctx
     |> OkResult

@@ -546,8 +546,8 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                   ]
               ]
 
-              // Add sidebar with active players (same as Show page)
-              Common.sidebar player.Status players player.UrlName
+              // Add sidebar with active players (links to insights pages)
+              Common.sidebar player.Status players player.UrlName Common.showPlayerInsightsUrl
 
               emptyText ]
             |> layout club user (fun o -> { o with Title = player.FullName }) ctx

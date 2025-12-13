@@ -92,7 +92,7 @@ let view (club: Club) (user: User option) urlName (ctx: HttpContext) =
                   ]
               ]
           ]
-          sidebar player.Status players player.UrlName ]
+          Common.sidebar player.Status players player.UrlName Common.showPlayerUrl ]
         |> layout
             club
             user
