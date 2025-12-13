@@ -10,6 +10,7 @@ open Shared.Domain.Members
 open System.Linq
 open MyTeam.Models.Enums
 open MyTeam.Players
+open MyTeam.Players.Pages
 open MyTeam.Stats
 open Shared.Components
 open Shared.Components.Nav
@@ -23,6 +24,12 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
     let urlName = urlName |> Strings.toLower
 
     let (!!!) = Strings.defaultValue
+
+    // Helper function for winrate color
+    let winRateColorClass winRate =
+        if winRate < 40.0 then "red"
+        elif winRate <= 50.0 then "yellow"
+        else "green"
 
     match db.Members.Where(fun m -> m.ClubId = clubId && m.UrlName = urlName)
           |> Seq.toList
@@ -40,6 +47,14 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
         with
     | None -> NotFound
     | Some player ->
+
+        // Get active players for sidebar
+        let players =
+            let statusInt = (player.Status |> PlayerStatus.toInt)
+
+            (db.Members.Where(fun m -> m.ClubId = clubId && m.Status = statusInt))
+            |> Common.Features.Members.selectMembers
+            |> Seq.toList
 
         // Get teams where player has games (excluding treningskamp)
         let treningskamp = Nullable <| int Models.Enums.GameType.Treningskamp
@@ -221,7 +236,7 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                   tr [] [
                                                       td [] [ encodedText "Seiersprosent" ]
                                                       td [ _class "text-right" ] [
-                                                          strong [] [
+                                                          strong [ _class <| winRateColorClass data.WinRate ] [
                                                               encodedText
                                                               <| sprintf "%s%%" (formatDecimal data.WinRate 1)
                                                           ]
@@ -316,7 +331,12 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                           tbody [] [
                                                               for stat in relationships.MostPlayedWith do
                                                                   tr [] [
-                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [] [
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
+                                                                      ]
                                                                       td [ _class "text-right" ] [
                                                                           strong [] [
                                                                               encodedText <| sprintf "%d kamper" stat.Games
@@ -348,14 +368,17 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                               for stat in relationships.HighestWinrate do
                                                                   tr [] [
                                                                       td [] [
-                                                                          encodedText stat.PlayerName
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
                                                                           br []
                                                                           small [ _class "text-muted" ] [
                                                                               encodedText <| sprintf "%d kamper" stat.Games
                                                                           ]
                                                                       ]
                                                                       td [ _class "text-right" ] [
-                                                                          strong [] [
+                                                                          strong [ _class <| winRateColorClass stat.WinRate.Value ] [
                                                                               encodedText
                                                                               <| sprintf "%s%%" (formatDecimal stat.WinRate.Value 1)
                                                                           ]
@@ -386,14 +409,17 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                               for stat in relationships.LowestWinrate do
                                                                   tr [] [
                                                                       td [] [
-                                                                          encodedText stat.PlayerName
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
                                                                           br []
                                                                           small [ _class "text-muted" ] [
                                                                               encodedText <| sprintf "%d kamper" stat.Games
                                                                           ]
                                                                       ]
                                                                       td [ _class "text-right" ] [
-                                                                          strong [] [
+                                                                          strong [ _class <| winRateColorClass stat.WinRate.Value ] [
                                                                               encodedText
                                                                               <| sprintf "%s%%" (formatDecimal stat.WinRate.Value 1)
                                                                           ]
@@ -425,7 +451,12 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                           tbody [] [
                                                               for stat in relationships.MostAssistsTo do
                                                                   tr [] [
-                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [] [
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
+                                                                      ]
                                                                       td [ _class "text-right" ] [
                                                                           strong [] [
                                                                               encodedText
@@ -456,7 +487,12 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                           tbody [] [
                                                               for stat in relationships.MostAssistsFrom do
                                                                   tr [] [
-                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [] [
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
+                                                                      ]
                                                                       td [ _class "text-right" ] [
                                                                           strong [] [
                                                                               encodedText
@@ -487,7 +523,12 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                                           tbody [] [
                                                               for stat in relationships.BestFriends do
                                                                   tr [] [
-                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [] [
+                                                                          a [ _href
+                                                                              <| sprintf "/spillere/vis/%s/innsikt" stat.PlayerUrlName ] [
+                                                                              encodedText stat.PlayerName
+                                                                          ]
+                                                                      ]
                                                                       td [ _class "text-right" ] [
                                                                           strong [] [
                                                                               encodedText
@@ -504,6 +545,10 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                               ]
                   ]
               ]
+
+              // Add sidebar with active players (same as Show page)
+              Common.sidebar player.Status players player.UrlName
+
               emptyText ]
             |> layout club user (fun o -> { o with Title = player.FullName }) ctx
             |> OkResult

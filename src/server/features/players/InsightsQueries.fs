@@ -10,6 +10,7 @@ open Shared.Domain
 type PlayerRelationshipStat =
     { PlayerId: Guid
       PlayerName: string
+      PlayerUrlName: string
       Games: int
       Wins: int option
       WinRate: float option
@@ -248,19 +249,22 @@ module InsightsQueries =
                     query {
                         for m in db.Members do
                             where (allNeededPlayerIds.Contains(m.Id))
-                            select (m.Id, m.FirstName, m.LastName)
+                            select (m.Id, m.FirstName, m.LastName, m.UrlName)
                     }
                     |> Seq.toList
-                    |> List.map (fun (id, firstName, lastName) -> (id, sprintf "%s %s" firstName lastName))
+                    |> List.map (fun (id, firstName, lastName, urlName) -> (id, (sprintf "%s %s" firstName lastName, urlName)))
                     |> Map.ofList
 
             // Helper to convert ID data to PlayerRelationshipStat
             let toStat (memberId, games, wins, winRate, assists) =
-                { PlayerId = memberId
-                  PlayerName =
+                let (name, urlName) =
                     playerNames
                     |> Map.tryFind memberId
-                    |> Option.defaultValue "Unknown"
+                    |> Option.defaultValue ("Unknown", "")
+
+                { PlayerId = memberId
+                  PlayerName = name
+                  PlayerUrlName = urlName
                   Games = games
                   Wins = wins
                   WinRate = winRate
