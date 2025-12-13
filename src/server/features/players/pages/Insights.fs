@@ -284,6 +284,224 @@ let view (club: Club) (user: User option) urlName selectedTeamShortName (ctx: Ht
                                   ]
                               ]
                           ]
+
+                          // Player Relationships Section
+                          match data.Relationships with
+                          | None -> emptyText
+                          | Some relationships ->
+                              div [] [
+                                  br []
+                                  hr []
+                                  br []
+
+                                  h3 [] [ encodedText "Lagkamerater" ]
+                                  br []
+
+                                  // Most Played With
+                                  div [ _class "row" ] [
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Spilt mest med"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.MostPlayedWith.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.MostPlayedWith do
+                                                                  tr [] [
+                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText <| sprintf "%d kamper" stat.Games
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+
+                                      // Highest Winrate
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Høyest seiersprosent med"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.HighestWinrate.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig (min. 5 kamper)"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.HighestWinrate do
+                                                                  tr [] [
+                                                                      td [] [
+                                                                          encodedText stat.PlayerName
+                                                                          br []
+                                                                          small [ _class "text-muted" ] [
+                                                                              encodedText <| sprintf "%d kamper" stat.Games
+                                                                          ]
+                                                                      ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText
+                                                                              <| sprintf "%s%%" (formatDecimal stat.WinRate.Value 1)
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+
+                                      // Lowest Winrate
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Lavest seiersprosent med"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.LowestWinrate.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig (min. 5 kamper)"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.LowestWinrate do
+                                                                  tr [] [
+                                                                      td [] [
+                                                                          encodedText stat.PlayerName
+                                                                          br []
+                                                                          small [ _class "text-muted" ] [
+                                                                              encodedText <| sprintf "%d kamper" stat.Games
+                                                                          ]
+                                                                      ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText
+                                                                              <| sprintf "%s%%" (formatDecimal stat.WinRate.Value 1)
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+                                  ]
+
+                                  // Assist relationships row
+                                  div [ _class "row" ] [
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Flest assists til"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.MostAssistsTo.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.MostAssistsTo do
+                                                                  tr [] [
+                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText
+                                                                              <| sprintf "%d assists" stat.Assists.Value
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Flest assists fra"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.MostAssistsFrom.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.MostAssistsFrom do
+                                                                  tr [] [
+                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText
+                                                                              <| sprintf "%d assists" stat.Assists.Value
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+
+                                      div [ _class "col-md-4" ] [
+                                          div [ _class "panel panel-default" ] [
+                                              div [ _class "panel-heading" ] [
+                                                  h4 [ _class "panel-title" ] [
+                                                      encodedText "Bestevenner"
+                                                  ]
+                                              ]
+                                              div [ _class "panel-body" ] [
+                                                  if relationships.BestFriends.IsEmpty then
+                                                      div [ _class "text-muted" ] [
+                                                          encodedText "Ingen data tilgjengelig"
+                                                      ]
+                                                  else
+                                                      table [ _class "table table-condensed" ] [
+                                                          tbody [] [
+                                                              for stat in relationships.BestFriends do
+                                                                  tr [] [
+                                                                      td [] [ encodedText stat.PlayerName ]
+                                                                      td [ _class "text-right" ] [
+                                                                          strong [] [
+                                                                              encodedText
+                                                                              <| sprintf "%d assists" stat.Assists.Value
+                                                                          ]
+                                                                      ]
+                                                                  ]
+                                                          ]
+                                                      ]
+                                              ]
+                                          ]
+                                      ]
+                                  ]
+                              ]
                   ]
               ]
               emptyText ]
