@@ -153,7 +153,7 @@ let run next (ctx: HttpContext)  =
                                                match parts |> Array.toList |> List.map float with
                                                | [hr; minute] -> TimeSpan.FromHours(hr).Add(TimeSpan.FromMinutes minute)
                                                | [hr] -> TimeSpan.FromHours(hr)
-                                               | r -> failwithf $"Klarte ikke parse tid: {r}"
+                                               | r -> failwith $"Klarte ikke parse tid: {r}"
                                                                                    
                                     game.DateTime <- (date.Date.Add time)
                                     game.Location <- row.Bane |> Strings.removeDoubleWhitespaces                           
