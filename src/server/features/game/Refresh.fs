@@ -58,7 +58,7 @@ let run next (ctx: HttpContext)  =
 
             let html = GamesHtml.Load(season.FixturesSourceUrl)
 
-            let table = html.Html.CssSelect("table") |> Seq.head
+            let table = html.Html.CssSelect(".desktopTableWrapper table") |> Seq.head
 
             let headers = table.CssSelect("th") |> Seq.map (fun th -> th.InnerText().ToLowerInvariant()) |> Seq.toList
 
