@@ -18,6 +18,7 @@ let clientView id model =
         model
         |> Json.fableSerialize
         |> Strings.replace "\\" "\\\\"
+        |> Strings.replace "'" "\\'"
         |> Strings.replace "\n" "\\n"
         |> Strings.replace "\r" "\\r"
 
@@ -44,6 +45,7 @@ let internal renderIsomorphic containerId comp model =
                   (model
                    |> Json.fableSerialize
                    |> Strings.replace "\\" "\\\\"
+                   |> Strings.replace "'" "\\'"
                    |> Strings.replace "\n" "\\n"
                    |> Strings.replace "\r" "\\r")
           )
