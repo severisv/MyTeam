@@ -92,12 +92,22 @@ let run next (ctx: HttpContext)  =
                     else
                         cell.InnerText() |> WebUtility.HtmlDecode |> Strings.trim
 
+                let getFiksId (td: FSharp.Data.HtmlNode) =
+                    let anchors = td.CssSelect("a")
+                    if anchors.Length > 0 then
+                        let href = anchors.[0].AttributeValue("href")
+                        let m = System.Text.RegularExpressions.Regex.Match(href, @"fiksId=(\d+)")
+                        if m.Success then m.Groups.[1].Value |> int |> Some
+                        else None
+                    else None
+
                 ({|
                 Hjemmelag = decodeCell indices.Hjemmelag
                 Bortelag = decodeCell indices.Bortelag
                 Dato = tds.[indices.Dato].InnerText()
                 Tid = tds.[indices.Tid].InnerText()
                 Bane = decodeCell indices.Bane
+                FiksId = getFiksId tds.[indices.Dato]
             |}))
             |> List.filter (fun row ->                                                           
                                 row.Hjemmelag |> isCurrentTeam || 
@@ -116,17 +126,21 @@ let run next (ctx: HttpContext)  =
                                     ()
 
                                 else
-                                    let game = 
-                                        existingGames 
-                                        |> List.tryFind (fun game -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
+                                    let game =
+                                        existingGames
+                                        |> List.tryFind (fun game ->
+                                            match row.FiksId, game.FiksId |> Option.ofNullable with
+                                            | Some fid, Some gid -> fid = gid
+                                            | _ -> (game.Opponent |> isLike opponent) && game.IsHomeTeam = isHomeTeam)
                                         |> function
-                                        | Some existingGame -> 
+                                        | Some existingGame ->
                                             db.Events.Attach(existingGame) |> ignore
                                             // Update opponent name in case encoding was fixed
                                             existingGame.Opponent <- opponent
+                                            existingGame.FiksId <- row.FiksId |> Option.toNullable
                                             existingGame
                                         | None ->
-                                                                             
+
                                             let et = List<Models.Domain.EventTeam>()
                                             et.Add(Models.Domain.EventTeam( TeamId = season.TeamId ))
 
@@ -138,7 +152,8 @@ let run next (ctx: HttpContext)  =
                                                     EventTeams = et,
                                                     Type = Events.eventTypeToInt EventType.Kamp,
                                                     ClubId = team.ClubId,
-                                                    GameType = ((Events.gameTypeToInt GameType.Seriekamp) |> Nullable)
+                                                    GameType = ((Events.gameTypeToInt GameType.Seriekamp) |> Nullable),
+                                                    FiksId = (row.FiksId |> Option.toNullable)
                                                 )
                                             db.Events.Add(g) |> ignore
                                             g                                            
