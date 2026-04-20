@@ -85,6 +85,7 @@ let element props children =
                     &? fragment [] [
                         div [ Class "clearfix hidden-lg hidden-md u-margin-bottom" ] [
                             Add.addFine
+                                props.User
                                 (fun handleOpen ->
                                     btn [ OnClick handleOpen
                                           Primary
@@ -222,6 +223,7 @@ let element props children =
                 &? block [] [
                     navListBase [ Header <| str "Botsjef" ] [
                         Add.addFine
+                            props.User
                             (fun handleOpen ->
                                 linkButton [ OnClick handleOpen ] [
                                     Icons.add ""

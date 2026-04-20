@@ -40,10 +40,12 @@ type AddFine = {
 
 type AddFineState = {
     Players: MemberWithTeamsAndRoles list
+    Teams: Team list
+    SelectedTeamId: TeamId option
     Rates: RemedyRate list
     Form: AddFineForm
     Error: string option
-    AddedFines: AddFine list    
+    AddedFines: AddFine list
 }
 
 let getRateName state =
@@ -60,7 +62,7 @@ let getAmount state =
         +
         (Number.tryParse state.Form.ExtraRate |> Option.defaultValue 0) 
 
-let addFine openLink onAdd onDelete =
+let addFine user openLink onAdd onDelete =
     Modal.modal
         { OpenButton = openLink
           Content =
@@ -73,23 +75,32 @@ let addFine openLink onAdd onDelete =
                              RateId = None
                              ExtraRate = ""
                              Comment = ""  }
-                       Players = []; Rates = []; Error = None; AddedFines = [] }
+                       Players = []; Teams = []; SelectedTeamId = user.TeamIds |> List.tryHead; Rates = []; Error = None; AddedFines = [] }
                      (Some <| { ComponentDidMount =
                                     fun (_, _, setState) ->
                                         Http.get "/api/members" Decode.Auto.fromString<MemberWithTeamsAndRoles list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
                                                         let result = result |> List.filter(fun p -> p.Details.Status = PlayerStatus.Aktiv)
+                                                        let filteredForTeam =
+                                                            match state.SelectedTeamId with
+                                                            | Some teamId -> result |> List.filter (fun p -> p.Teams |> List.contains teamId)
+                                                            | None -> result
                                                         { state with Players = result
-                                                                     Form = { state.Form with MemberId = result |> List.map(fun r -> r.Details.Id) |> List.tryHead } } )                                                                                   
+                                                                     Form = { state.Form with MemberId = filteredForTeam |> List.map(fun r -> r.Details.Id) |> List.tryHead } } )
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting
                                                           av spillere. Prøv å laste siden på nytt" }) }
                                         Http.get "/api/remedyrates" Decode.Auto.fromString<RemedyRate list>
                                                   { OnSuccess = fun result -> setState (fun state props ->
-                                                        { state with Rates = result; Form = { state.Form with RateId = result |> List.map(fun r -> r.Id) |> List.tryHead } })                                                                                   
+                                                        { state with Rates = result; Form = { state.Form with RateId = result |> List.map(fun r -> r.Id) |> List.tryHead } })
                                                     OnError = fun _ -> setState (fun state props ->
                                                         { state with Error = Some "Noe gikk galt ved lasting av bøtesatser.
                                                           Prøv å laste siden på nytt" }) }
+                                        Http.get "/api/teams" Decode.Auto.fromString<Team list>
+                                                  { OnSuccess = fun result -> setState (fun state props ->
+                                                        { state with Teams = result })
+                                                    OnError = fun _ -> setState (fun state props ->
+                                                        { state with Error = Some "Noe gikk galt ved lasting av lag." }) }
                                      })
                      (fun (props, state, setState) ->
                         let setFormValue update =
@@ -111,6 +122,11 @@ let addFine openLink onAdd onDelete =
                             |> Option.defaultValue ""
                             
                         let colNoBorder attr = col ([Attr (Style [BorderBottom "0"]); NoSort] |> List.append attr) []
+
+                        let filteredPlayers =
+                            match state.SelectedTeamId with
+                            | Some teamId -> state.Players |> List.filter (fun p -> p.Teams |> List.contains teamId)
+                            | None -> state.Players
                         
                         fragment [] [
                             h4 [] [ str "Registrer bøter" ]                            
@@ -142,13 +158,25 @@ let addFine openLink onAdd onDelete =
                             form [Horizontal 3] [
                                 state.Error => Alerts.danger
                                 formRow [Horizontal 3]
+                                        [str "Lag"]
+                                        [selectInput [Value (state.SelectedTeamId |> Option.map string |> Option.defaultValue "")
+                                                      OnChange (fun e ->
+                                                                    let teamId = Guid.Parse e.Value
+                                                                    setState (fun state props ->
+                                                                        let filtered = state.Players |> List.filter (fun p -> p.Teams |> List.contains teamId)
+                                                                        { state with
+                                                                            SelectedTeamId = Some teamId
+                                                                            Form = { state.Form with MemberId = filtered |> List.map (fun p -> p.Details.Id) |> List.tryHead } }))]
+                                        (state.Teams |> List.map (fun t -> { Name = t.Name; Value = t.Id }))]
+                                formRow [Horizontal 3]
                                         [str "Hvem"]
-                                        [selectInput [OnChange (fun e ->
+                                        [selectInput [Value (state.Form.MemberId |> Option.map string |> Option.defaultValue "")
+                                                      OnChange (fun e ->
                                                                     let id = e.Value
                                                                     setFormValue (fun form ->
                                                                         { form with MemberId = Some <| Guid.Parse id }))]
-                                        (state.Players |> List.map (fun p ->
-                                            { Name = p.Details.Name; Value = p.Details.Id   })) ]
+                                        (filteredPlayers |> List.map (fun p ->
+                                            { Name = p.Details.Name; Value = p.Details.Id }))]
                                         
                                 formRow [Horizontal 3]
                                         [str "Dato" ]
